@@ -777,3 +777,92 @@ la arquitectura real sería algo así:
 
 
 
+
+
+arquitectura resumida:
+                 ┌──────────────────────┐
+                 │      VISUAL TDA      │
+                 └──────────┬───────────┘
+                            │
+                 ┌──────────▼──────────┐
+                 │   React + TypeScript │
+                 └──────────┬──────────┘
+                            │
+       ┌────────────────────┼─────────────────────┐
+       │                    │                     │
+       ▼                    ▼                     ▼
+ Exercise Engine        UI/UX Layer        Visualizers
+       │
+       ├── Problem
+       ├── Algorithm
+       ├── Validator
+       ├── Trace
+       ├── Theory
+       └── Complexity
+                            │
+                            ▼
+                     Pyodide Worker
+                            │
+                            ▼
+                         Python
+
+                    ┌───────────────┐
+                    │   GitHub      │
+                    └───────┬───────┘
+                            │
+                      Git push / PR
+                            │
+                            ▼
+                    GitHub Actions
+                            │
+                    ┌───────┴────────┐
+                    │                │
+                 Tests            Build
+                    │                │
+                    └───────┬────────┘
+                            ▼
+                       Cloudflare
+                            │
+                            ▼
+                    visual-tda.pages.dev
+
+
+
+
+y el plan maestro:
+Fase 0
+
+Congelar las bases.
+
+Fase 1
+
+N-Reinas vertical slice.
+
+Fase 2
+
+Generalizar el engine.
+
+Fase 3
+
+Agregar 3-4 problemas.
+
+Fase 4
+
+Testing + CI + deploy.
+
+Fase 5
+
+Contenido pedagógico.
+
+Fase 6
+
+Piloto con estudiantes/profesores.
+
+Fase 7
+
+Analytics / backend únicamente si aparece una necesidad real.
+
+Fase 8
+
+Más categorías.
+
