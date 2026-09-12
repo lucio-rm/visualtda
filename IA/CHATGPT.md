@@ -1697,3 +1697,209 @@ la arquitectura real sería algo así:
 
 lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ 
 
+
+
+
+
+
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ nvm --version
+0.40.3
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ # 1. Ve al directorio interno donde se aloja tu NVM actual
+cd ~/.nvm                                                                # 1. Ve al directorio interno donde se aloja tu NVM actual
+cd ~/.nvm
+# 2. Trae las etiquetas y actualizaciones más recientes desde el repositorio oficial
+# 2. Trae las etiquetas y actualizaciones más recientes desde el repositorio oficial
+git fetch --tags origin
+# 3. Cambia tu versión local a la v0.40.7 exacta
+# 3. Cambia tu versión local a la v0.40.7 exacta
+git checkout v0.40.7
+# 4. Regresa a la carpeta de tu proyecto
+# 4. Regresa a la carpeta de tu proyectovisual_tda
+cd ~/Documents/romerom_tardos_kleinberg/visual_tda
+# 5. Aplica los cambios en tu sesión actual
+# 5. Aplica los cambios en tu sesión actual
+source ~/.bashrc
+remote: Enumerating objects: 11048, done.
+remote: Counting objects: 100% (10782/10782), done.
+remote: Compressing objects: 100% (3652/3652), done.
+remote: Total 10492 (delta 7198), reused 10022 (delta 6748), pack-reused 0 (from 0)
+Receiving objects: 100% (10492/10492), 3.76 MiB | 5.48 MiB/s, done.
+Resolving deltas: 100% (7198/7198), completed with 237 local objects.
+From https://github.com/nvm-sh/nvm
+   630a01f..a4f801e  master     -> origin/master
+ * [new tag]         v0.0.1     -> v0.0.1
+ * [new tag]         v0.0.6     -> v0.0.6
+ * [new tag]         v0.1.0     -> v0.1.0
+ * [new tag]         v0.10.0    -> v0.10.0
+ * [new tag]         v0.11.0    -> v0.11.0
+ * [new tag]         v0.11.1    -> v0.11.1
+ * [new tag]         v0.11.2    -> v0.11.2
+ * [new tag]         v0.12.0    -> v0.12.0
+ * [new tag]         v0.12.1    -> v0.12.1
+ * [new tag]         v0.12.2    -> v0.12.2
+ * [new tag]         v0.13.0    -> v0.13.0
+ * [new tag]         v0.13.1    -> v0.13.1
+ * [new tag]         v0.14.0    -> v0.14.0
+ * [new tag]         v0.15.0    -> v0.15.0
+ * [new tag]         v0.16.0    -> v0.16.0
+ * [new tag]         v0.16.1    -> v0.16.1
+ * [new tag]         v0.17.0    -> v0.17.0
+ * [new tag]         v0.17.1    -> v0.17.1
+ * [new tag]         v0.17.2    -> v0.17.2
+ * [new tag]         v0.17.3    -> v0.17.3
+ * [new tag]         v0.18.0    -> v0.18.0
+ * [new tag]         v0.19.0    -> v0.19.0
+ * [new tag]         v0.2.0     -> v0.2.0
+ * [new tag]         v0.20.0    -> v0.20.0
+ * [new tag]         v0.21.0    -> v0.21.0
+ * [new tag]         v0.22.0    -> v0.22.0
+ * [new tag]         v0.22.1    -> v0.22.1
+ * [new tag]         v0.22.2    -> v0.22.2
+ * [new tag]         v0.23.0    -> v0.23.0
+ * [new tag]         v0.23.1    -> v0.23.1
+ * [new tag]         v0.23.2    -> v0.23.2
+ * [new tag]         v0.23.3    -> v0.23.3
+ * [new tag]         v0.24.0    -> v0.24.0
+ * [new tag]         v0.24.1    -> v0.24.1
+ * [new tag]         v0.24.2    -> v0.24.2
+ * [new tag]         v0.25.0    -> v0.25.0
+ * [new tag]         v0.25.1    -> v0.25.1
+ * [new tag]         v0.25.2    -> v0.25.2
+ * [new tag]         v0.25.3    -> v0.25.3
+ * [new tag]         v0.25.4    -> v0.25.4
+ * [new tag]         v0.26.0    -> v0.26.0
+ * [new tag]         v0.26.1    -> v0.26.1
+ * [new tag]         v0.27.0    -> v0.27.0
+ * [new tag]         v0.27.1    -> v0.27.1
+ * [new tag]         v0.28.0    -> v0.28.0
+ * [new tag]         v0.29.0    -> v0.29.0
+ * [new tag]         v0.3.0     -> v0.3.0
+ * [new tag]         v0.30.0    -> v0.30.0
+ * [new tag]         v0.30.1    -> v0.30.1
+ * [new tag]         v0.30.2    -> v0.30.2
+ * [new tag]         v0.31.0    -> v0.31.0
+ * [new tag]         v0.31.1    -> v0.31.1
+ * [new tag]         v0.31.2    -> v0.31.2
+ * [new tag]         v0.31.3    -> v0.31.3
+ * [new tag]         v0.31.4    -> v0.31.4
+ * [new tag]         v0.31.5    -> v0.31.5
+ * [new tag]         v0.31.6    -> v0.31.6
+ * [new tag]         v0.31.7    -> v0.31.7
+ * [new tag]         v0.32.0    -> v0.32.0
+ * [new tag]         v0.32.1    -> v0.32.1
+ * [new tag]         v0.33.0    -> v0.33.0
+ * [new tag]         v0.33.1    -> v0.33.1
+ * [new tag]         v0.33.10   -> v0.33.10
+ * [new tag]         v0.33.11   -> v0.33.11
+ * [new tag]         v0.33.2    -> v0.33.2
+ * [new tag]         v0.33.3    -> v0.33.3
+ * [new tag]         v0.33.4    -> v0.33.4
+ * [new tag]         v0.33.5    -> v0.33.5
+ * [new tag]         v0.33.6    -> v0.33.6
+ * [new tag]         v0.33.7    -> v0.33.7
+ * [new tag]         v0.33.8    -> v0.33.8
+ * [new tag]         v0.33.9    -> v0.33.9
+ * [new tag]         v0.34.0    -> v0.34.0
+ * [new tag]         v0.35.0    -> v0.35.0
+ * [new tag]         v0.35.1    -> v0.35.1
+ * [new tag]         v0.35.2    -> v0.35.2
+ * [new tag]         v0.35.3    -> v0.35.3
+ * [new tag]         v0.36.0    -> v0.36.0
+ * [new tag]         v0.37.0    -> v0.37.0
+ * [new tag]         v0.37.1    -> v0.37.1
+ * [new tag]         v0.37.2    -> v0.37.2
+ * [new tag]         v0.38.0    -> v0.38.0
+ * [new tag]         v0.39.0    -> v0.39.0
+ * [new tag]         v0.39.1    -> v0.39.1
+ * [new tag]         v0.39.2    -> v0.39.2
+ * [new tag]         v0.39.3    -> v0.39.3
+ * [new tag]         v0.39.4    -> v0.39.4
+ * [new tag]         v0.39.5    -> v0.39.5
+ * [new tag]         v0.39.6    -> v0.39.6
+ * [new tag]         v0.39.7    -> v0.39.7
+ * [new tag]         v0.4.0     -> v0.4.0
+ * [new tag]         v0.40.0    -> v0.40.0
+ * [new tag]         v0.40.1    -> v0.40.1
+ * [new tag]         v0.40.2    -> v0.40.2
+ * [new tag]         v0.40.4    -> v0.40.4
+ * [new tag]         v0.40.5    -> v0.40.5
+ * [new tag]         v0.40.6    -> v0.40.6
+ * [new tag]         v0.40.7    -> v0.40.7
+ * [new tag]         v0.5.0     -> v0.5.0
+ * [new tag]         v0.5.1     -> v0.5.1
+ * [new tag]         v0.6.0     -> v0.6.0
+ * [new tag]         v0.6.1     -> v0.6.1
+ * [new tag]         v0.7.0     -> v0.7.0
+ * [new tag]         v0.8.0     -> v0.8.0
+ * [new tag]         v0.9.0     -> v0.9.0
+Previous HEAD position was 977563e v0.40.3
+HEAD is now at f0b0c6b v0.40.7
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ source ~/.bashrc 
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ nvm --version
+0.40.7
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ source ~/.nvm/nvm.sh
+nvm install 24
+nvm use 24
+nvm alias default 24
+Downloading and installing node v24.21.0...
+Downloading https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.xz...
+############################################################################################################################################## 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v24.21.0 (npm v11.19.0)
+Now using node v24.21.0 (npm v11.19.0)
+default -> 24 (-> v24.21.0)
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ npm --version
+11.19.0
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git init
+Reinitialized existing Git repository in /home/lucio_romero_m/Documents/romerom_tardos_kleinberg/visual_tda/.git/
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git branch
+  feature
+  fix
+* main
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git brach -M main
+git: 'brach' is not a git command. See 'git --help'.
+
+The most similar command is
+	branch
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git branch -M main
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git add .
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git commit -m "inicializo visual TDA."
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ nano docs/proyecto.md 
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ echo "ahi agregue lo utlimo de la  arquitectura real. y lo de las fases."
+ahi agregue lo utlimo de la  arquitectura real. y lo de las fases.
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   docs/proyecto.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git add .
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ git commit -m "listo por hoy. day 1."
+[main 99cd9f2] listo por hoy. day 1.
+ 1 file changed, 89 insertions(+)
+lucio_romero_m@Patricio:~/Documents/romerom_tardos_kleinberg/visual_tda$ 
+
+
