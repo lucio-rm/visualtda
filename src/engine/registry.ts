@@ -195,6 +195,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['reductions', 'np-completeness', 'graphs', 'independent-set', 'vertex-cover', 'duality']
+  },
+  {
+    id: 'vertex-cover-approx',
+    problemId: 'minimum-vertex-cover',
+    techniqueId: 'approximation',
+    categoryId: 'approximation',
+    order: 1,
+    difficulty: 3,
+    title: {
+      es: '2-Aproximación de Cobertura de Vértices',
+      en: '2-Approximation for Vertex Cover'
+    },
+    subtitle: {
+      es: 'Algoritmo lineal voraz por matching maximal con garantía demostrable |C| <= 2 * |C*|',
+      en: 'Linear greedy algorithm via maximal matching with provable bound |C| <= 2 * |C*|'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['approximation', 'graphs', 'vertex-cover', 'maximal-matching', 'np-hard', 'lower-bound']
   }
 ];
 

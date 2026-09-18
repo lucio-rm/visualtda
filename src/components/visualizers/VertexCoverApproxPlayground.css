@@ -1,0 +1,77 @@
+.approx-playground-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.approx-playground-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.approx-interactive-svg {
+  width: 100%;
+  max-width: 580px;
+  height: 300px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+  display: block;
+}
+
+.interactive-edge {
+  cursor: pointer;
+}
+
+.interactive-edge:hover {
+  stroke: #f59e0b;
+  stroke-width: 6;
+}
+
+.approx-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.approx-stat-card {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.approx-stat-card h5 {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.approx-stat-card .stat-num {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.approx-theorem-banner {
+  padding: 0.85rem 1rem;
+  background-color: var(--bg);
+  border-left: 4px solid #10b981;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text);
+}

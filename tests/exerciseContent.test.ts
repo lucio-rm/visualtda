@@ -9,7 +9,8 @@ describe('ExerciseSolveContent Repository', () => {
     'knapsack-greedy',
     'merge-sort',
     'max-flow',
-    'vertex-cover-reduction'
+    'vertex-cover-reduction',
+    'vertex-cover-approx'
   ];
 
   it('provides dedicated solve content for all core registered exercises', () => {
@@ -77,6 +78,27 @@ describe('ExerciseSolveContent Repository', () => {
 
     def transformar_solucion_vc_a_is(vertices, cobertura):
         return [v for v in vertices if v not in set(cobertura)]
+    `;
+    const workingRes = await content.runTests(workingCode);
+    expect(workingRes.passed).toBe(true);
+    expect(workingRes.totalPassed).toBe(workingRes.totalTests);
+  });
+
+  it('evaluates passing vs incomplete code on vertex-cover-approx', async () => {
+    const content = EXERCISE_SOLVE_CONTENT['vertex-cover-approx'];
+    const incompleteRes = await content.runTests('def cobertura_vertices_2aprox(v, e):\n    pass\n');
+    expect(incompleteRes.passed).toBe(false);
+
+    const workingCode = `
+    def cobertura_vertices_2aprox(vertices, aristas):
+        cobertura = set()
+        matching = []
+        for u, v in aristas:
+            if u not in cobertura and v not in cobertura:
+                matching.append((u, v))
+                cobertura.add(u)
+                cobertura.add(v)
+        return sorted(list(cobertura)), matching
     `;
     const workingRes = await content.runTests(workingCode);
     expect(workingRes.passed).toBe(true);

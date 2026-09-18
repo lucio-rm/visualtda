@@ -1,0 +1,118 @@
+.approx-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.approx-metrics-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.approx-metric-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+}
+
+.approx-metric-badge.matching-badge {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.approx-metric-badge.cover-badge {
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.approx-metric-badge.ratio-badge {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.approx-graph-canvas {
+  width: 100%;
+  max-width: 580px;
+  height: 300px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+  display: block;
+}
+
+/* Edges */
+.approx-edge {
+  stroke: var(--border);
+  stroke-width: 2.5;
+  transition: all 0.25s ease;
+}
+
+.approx-edge.matched {
+  stroke: #f59e0b;
+  stroke-width: 5;
+}
+
+.approx-edge.covered {
+  stroke: #38bdf8;
+  stroke-width: 3;
+}
+
+.approx-edge.active {
+  stroke: #a855f7;
+  stroke-width: 4;
+  stroke-dasharray: 4 2;
+}
+
+/* Nodes */
+.approx-node {
+  transition: all 0.2s ease;
+}
+
+.approx-node-circle {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.approx-node.in-cover .approx-node-circle {
+  fill: #0284c7;
+  stroke: #0369a1;
+  stroke-width: 3;
+}
+
+.approx-node-text {
+  fill: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.approx-node.in-cover .approx-node-text {
+  fill: #ffffff;
+}
+
+.approx-explanation-box {
+  padding: 0.85rem 1rem;
+  background-color: var(--bg);
+  border-left: 4px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+}

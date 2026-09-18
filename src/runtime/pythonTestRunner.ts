@@ -6,6 +6,7 @@ import { knapsackDpValidator, KnapsackItem } from '../engine/algorithms/knapsack
 import { knapsackGreedyValidator, FractionalAssignment } from '../engine/algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from '../engine/algorithms/mergeSortValidator';
 import { maxFlowValidator, FlowNetworkInput } from '../engine/algorithms/maxFlowValidator';
+import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -453,6 +454,60 @@ export async function runPythonTests(
           passed: passRecovery,
           expected: 'S = {A, D}',
           actual: JSON.stringify(recoveredS)
+        });
+        break;
+      }
+
+      case 'vertex-cover-approx': {
+        const vertices = ['A', 'B', 'C', 'D', 'E', 'F'];
+        const edges: [string, string][] = [
+          ['A', 'B'],
+          ['A', 'C'],
+          ['B', 'D'],
+          ['C', 'D'],
+          ['D', 'E'],
+          ['D', 'F'],
+          ['E', 'F']
+        ];
+
+        const res = await service.executePython(code, 'cobertura_vertices_2aprox', [vertices, edges]);
+        if (res.stdout) capturedStdout += res.stdout + '\n';
+
+        if (!res.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'approx-exec-fail',
+              description: { es: 'Ejecución de cobertura_vertices_2aprox(...)', en: 'Execution of cobertura_vertices_2aprox(...)' },
+              passed: false,
+              message: res.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res.error,
+            executionTimeMs: res.executionTimeMs
+          };
+        }
+
+        const tupleRes = res.result as [string[], [string, string][]];
+        const cover = Array.isArray(tupleRes) && Array.isArray(tupleRes[0]) ? tupleRes[0] : [];
+        const matching = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
+
+        const validation = vertexCoverApproxValidator.validate(
+          { vertices, edges, optimalMinCoverSize: 3 },
+          { cover, matching }
+        );
+
+        results.push({
+          testId: 'py-approx-feasibility',
+          description: {
+            es: 'Factibilidad y ratio 2-aprox: C cubre todas las aristas y |C| <= 2·|C*|.',
+            en: 'Feasibility and 2-approx ratio: C covers all edges and |C| <= 2·|C*|.'
+          },
+          passed: validation.valid,
+          expected: 'Cobertura válida con ratio <= 2',
+          actual: validation.valid ? `|C| = ${cover.length}, |M| = ${matching.length}` : validation.errors.join('; ')
         });
         break;
       }

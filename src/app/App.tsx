@@ -15,6 +15,8 @@ import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualiz
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
 import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVcVisualizer';
 import { ReductionIsVcPlayground } from '../components/visualizers/ReductionIsVcPlayground';
+import { VertexCoverApproxVisualizer } from '../components/visualizers/VertexCoverApproxVisualizer';
+import { VertexCoverApproxPlayground } from '../components/visualizers/VertexCoverApproxPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -309,6 +311,33 @@ PROCEDIMIENTO Reconstruir_IS(V, Cobertura C):
 
 const REDUCTION_CORRECTNESS = `Teorema Fundamental de Complementariedad (Kleinberg & Tardos 8.1): Sea G = (V, E) un grafo y S un subconjunto de V. S es un Conjunto Independiente si y solo si V \\ S es una Cobertura de Vértices. Demostración (⟺): (⇒) Si S es independiente, ninguna arista tiene ambos extremos en S; por ende, toda arista tiene al menos un extremo en V \\ S, haciendo de V \\ S una cobertura. (⇐) Si V \\ S es una cobertura, toda arista tiene al menos un extremo fuera de S; por ende, ninguna arista une dos vértices de S, haciendo de S un conjunto independiente. Como la transformación toma tiempo O(|V| + |E|), se demuestra formalmente que Independent Set <=_P Vertex Cover y viceversa.`;
 
+// Vertex Cover 2-Approximation Content
+const APPROX_CANONICAL_PYTHON = `def cobertura_vertices_2aprox(vertices, aristas):
+    cobertura = set()
+    matching = []
+
+    for u, v in aristas:
+        if u not in cobertura and v not in cobertura:
+            matching.append((u, v))
+            cobertura.add(u)
+            cobertura.add(v)
+
+    return sorted(list(cobertura)), matching`;
+
+const APPROX_PSEUDOCODE = `ALGORITMO CoberturaVertices_2Aprox(Grafo G = (V, E)):
+    C ← ∅
+    M ← []
+
+    PARA CADA (u, v) EN E:
+        SI u ∉ C Y v ∉ C:
+            M.Agregar((u, v))
+            C.Agregar(u)
+            C.Agregar(v)
+
+    RETORNAR (C, M)`;
+
+const APPROX_CORRECTNESS = `Teorema de la Cota de 2-Aproximación (Kleinberg & Tardos 11.1): Sea M el matching maximal de aristas disjuntas seleccionado por el algoritmo y C la cobertura devuelta. Por construcción, |C| = 2·|M|. Como ninguna arista en M comparte vértices, cualquier cobertura óptima C* debe contener al menos un vértice distinto para cubrir cada arista de M, lo que impone la cota inferior estricta |C*| >= |M|. Multiplicando por 2: |C| = 2·|M| <= 2·|C*|. En consecuencia, el ratio de aproximación rho = |C| / |C*| <= 2 está formalmente garantizado en tiempo lineal O(|V| + |E|).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -417,6 +446,18 @@ const AppContent: React.FC = () => {
         pseudocode: REDUCTION_PSEUDOCODE,
         correctnessExplanation: REDUCTION_CORRECTNESS,
         timeComplexity: 'O(|V| + |E|) [Reducción Polinomial]',
+        spaceComplexity: 'O(|V| + |E|)'
+      };
+    }
+
+    if (selectedExercise.id === 'vertex-cover-approx') {
+      return {
+        visualizerSlot: <VertexCoverApproxVisualizer />,
+        discoverPlaygroundSlot: <VertexCoverApproxPlayground />,
+        canonicalPython: APPROX_CANONICAL_PYTHON,
+        pseudocode: APPROX_PSEUDOCODE,
+        correctnessExplanation: APPROX_CORRECTNESS,
+        timeComplexity: 'O(|V| + |E|) [2-Aproximación Lineal]',
         spaceComplexity: 'O(|V| + |E|)'
       };
     }
