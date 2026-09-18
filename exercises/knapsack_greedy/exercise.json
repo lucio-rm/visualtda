@@ -1,0 +1,22 @@
+{
+  "id": "knapsack-greedy",
+  "problemId": "knapsack",
+  "techniqueId": "greedy",
+  "categoryId": "greedy",
+  "order": 2,
+  "difficulty": 2,
+  "title": {
+    "es": "Mochila Fraccionaria (Greedy)",
+    "en": "Fractional Knapsack (Greedy)"
+  },
+  "subtitle": {
+    "es": "Ordenar ítems por valor/peso. Óptimo para versión fraccionaria; contraejemplo para 0/1",
+    "en": "Sort by value/weight ratio. Optimal for fractional version; counterexample for 0/1"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["greedy", "knapsack", "counterexample", "exchange-argument"],
+  "parameters": {
+    "defaultCapacity": 50,
+    "maxCapacity": 100
+  }
+}

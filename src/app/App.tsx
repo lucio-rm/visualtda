@@ -7,6 +7,8 @@ import { ExerciseView } from '../components/ExerciseView';
 import { NQueensVisualizer } from '../components/visualizers/NQueensVisualizer';
 import { NQueensPlayground } from '../components/visualizers/NQueensPlayground';
 import { IntervalSchedulingVisualizer } from '../components/visualizers/IntervalSchedulingVisualizer';
+import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
+import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -96,6 +98,89 @@ const INTERVALS_PSEUDOCODE = `ALGORITMO SeleccionIntervalos(I):
 
 const INTERVALS_CORRECTNESS = `Demostración por el lema 'Greedy Stays Ahead' (Greedy se mantiene adelante): Sean A = {a_1, ..., a_k} la solución voraz y O = {o_1, ..., o_m} una solución óptima cualquiera. Por inducción sobre r, se demuestra que fin(a_r) <= fin(o_r) para todo r <= k. Dado que el intervalo voraz termina siempre antes o igual que el intervalo óptimo correspondiente, deja tanto o más tiempo libre para el resto de las tareas, impidiendo que el óptimo pueda contener un elemento adicional (m > k). Por ende, k = m y la selección voraz es estrictamente óptima.`;
 
+// Knapsack DP Content
+const KNAPSACK_DP_CANONICAL_PYTHON = `def mochila_dp(items, capacidad):
+    n = len(items)
+    dp = [[0] * (capacidad + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        peso, valor = items[i - 1].peso, items[i - 1].valor
+        for w in range(capacidad + 1):
+            if peso <= w:
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - peso] + valor)
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    # Reconstrucción de items
+    seleccionados = []
+    w_restante = capacidad
+    for i in range(n, 0, -1):
+        if dp[i][w_restante] != dp[i - 1][w_restante]:
+            seleccionados.append(items[i - 1])
+            w_restante -= items[i - 1].peso
+
+    seleccionados.reverse()
+    return dp[n][capacidad], seleccionados`;
+
+const KNAPSACK_DP_PSEUDOCODE = `ALGORITMO Mochila01_DP(items, W):
+    n ← Longitud(items)
+    Crear tabla DP[(n + 1)][(W + 1)] en 0
+
+    PARA i DESDE 1 HASTA n:
+        PARA w DESDE 0 HASTA W:
+            SI items[i - 1].peso <= w:
+                DP[i][w] ← MAX(DP[i - 1][w], DP[i - 1][w - items[i - 1].peso] + items[i - 1].valor)
+            SINO:
+                DP[i][w] ← DP[i - 1][w]
+
+    RETORNAR DP[n][W] y ReconstruirSolucion(DP, items, W)`;
+
+const KNAPSACK_DP_CORRECTNESS = `Principio de Optimalidad de Bellman: Sea S* la solución óptima para los primeros i elementos y capacidad w. Para el elemento i, solo existen dos alternativas exhaustivas: o bien i no pertenece a S* (en cuyo caso S* debe ser óptimo para i-1 elementos y capacidad w), o bien i sí pertenece a S* (en cuyo caso S* \\ {i} debe ser óptimo para i-1 elementos con capacidad w - w_i). Cualquier desviación subóptima en los subproblemas contradiría la optimalidad de S* por el argumento clásico 'cut-and-paste'. Por inducción sobre las filas de la tabla, DP[n][W] contiene el óptimo global.`;
+
+// Knapsack Greedy Content
+const KNAPSACK_GREEDY_CANONICAL_PYTHON = `def mochila_fraccionaria_greedy(items, capacidad):
+    # 1. Ordenar decrecientemente por densidad (valor / peso)
+    ordenados = sorted(items, key=lambda it: it.valor / it.peso, reverse=True)
+
+    valor_total = 0.0
+    cap_restante = capacidad
+    asignaciones = []
+
+    for it in ordenados:
+        if cap_restante <= 0:
+            break
+        if it.peso <= cap_restante:
+            asignaciones.append((it, 1.0))
+            valor_total += it.valor
+            cap_restante -= it.peso
+        else:
+            fraccion = cap_restante / it.peso
+            asignaciones.append((it, fraccion))
+            valor_total += it.valor * fraccion
+            cap_restante = 0
+
+    return valor_total, asignaciones`;
+
+const KNAPSACK_GREEDY_PSEUDOCODE = `ALGORITMO MochilaFraccionaria_Greedy(items, W):
+    OrdenarPorDensidadDecreciente(items, clave = valor / peso)
+    valor_total ← 0, cap_restante ← W, asignaciones ← []
+
+    PARA CADA it EN items:
+        SI cap_restante <= 0: ROMPER
+        SI it.peso <= cap_restante:
+            asignaciones.Agregar(it, fraccion = 1.0)
+            valor_total ← valor_total + it.valor
+            cap_restante ← cap_restante - it.peso
+        SINO:
+            fraccion ← cap_restante / it.peso
+            asignaciones.Agregar(it, fraccion)
+            valor_total ← valor_total + it.valor * fraccion
+            cap_restante ← 0
+
+    RETORNAR (valor_total, asignaciones)`;
+
+const KNAPSACK_GREEDY_CORRECTNESS = `Demostración por Argumento de Intercambio (Exchange Argument): Si existiera una solución óptima O distinta de la voraz G, sea k el primer elemento donde difieren. Dado que G toma la mayor fracción posible del elemento disponible con mayor densidad r_k, O debe tener o_k < g_k y compensar peso con algún elemento posterior j > k donde r_j <= r_k. Reemplazando una fracción de j por k en O incrementa o mantiene el valor total, transformando O en G sin perder calidad. Para la mochila 0/1, este argumento no aplica porque la indivisibilidad de los objetos puede dejar 'huecos' de capacidad que no pueden rellenarse.`;
+
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('visual_tda_theme');
@@ -146,6 +231,28 @@ export const App: React.FC = () => {
         correctnessExplanation: INTERVALS_CORRECTNESS,
         timeComplexity: 'O(N log N)',
         spaceComplexity: 'O(N)'
+      };
+    }
+
+    if (selectedExercise.id === 'knapsack-dp') {
+      return {
+        visualizerSlot: <KnapsackDpVisualizer />,
+        canonicalPython: KNAPSACK_DP_CANONICAL_PYTHON,
+        pseudocode: KNAPSACK_DP_PSEUDOCODE,
+        correctnessExplanation: KNAPSACK_DP_CORRECTNESS,
+        timeComplexity: 'O(n · W) [Pseudo-polinomial]',
+        spaceComplexity: 'O(n · W)'
+      };
+    }
+
+    if (selectedExercise.id === 'knapsack-greedy') {
+      return {
+        visualizerSlot: <KnapsackGreedyVisualizer />,
+        canonicalPython: KNAPSACK_GREEDY_CANONICAL_PYTHON,
+        pseudocode: KNAPSACK_GREEDY_PSEUDOCODE,
+        correctnessExplanation: KNAPSACK_GREEDY_CORRECTNESS,
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(n)'
       };
     }
 

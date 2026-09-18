@@ -1,0 +1,23 @@
+{
+  "id": "knapsack-dp",
+  "problemId": "knapsack",
+  "techniqueId": "dynamic-programming",
+  "categoryId": "dynamic-programming",
+  "order": 1,
+  "difficulty": 3,
+  "title": {
+    "es": "Mochila 0/1 (Programación Dinámica)",
+    "en": "0/1 Knapsack (Dynamic Programming)"
+  },
+  "subtitle": {
+    "es": "Construir tabla 2D de subproblemas decidiendo incluir o excluir cada elemento",
+    "en": "Build 2D table of subproblems deciding whether to include or exclude each item"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["dynamic-programming", "knapsack", "memoization", "table"],
+  "parameters": {
+    "defaultCapacity": 7,
+    "maxCapacity": 12,
+    "maxItems": 6
+  }
+}
