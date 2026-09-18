@@ -5,6 +5,7 @@ import { intervalSchedulingValidator, Interval } from '../engine/algorithms/inte
 import { knapsackDpValidator, KnapsackItem } from '../engine/algorithms/knapsackDpValidator';
 import { knapsackGreedyValidator, FractionalAssignment } from '../engine/algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from '../engine/algorithms/mergeSortValidator';
+import { maxSubarrayValidator } from '../engine/algorithms/maxSubarrayValidator';
 import { maxFlowValidator, FlowNetworkInput } from '../engine/algorithms/maxFlowValidator';
 import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
 
@@ -326,6 +327,76 @@ export async function runPythonTests(
           passed: validation.valid,
           expected: '[3, 9, 10, 27, 38, 43, 82]',
           actual: JSON.stringify(sorted)
+        });
+        break;
+      }
+
+      case 'max-subarray-dyc': {
+        // Test 1: [5, 3, 2, 4, -1] -> [5, 3, 2, 4]
+        const arr1 = [5, 3, 2, 4, -1];
+        const res1 = await service.executePython(code, 'subarreglo_maxima_suma', [arr1]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'maxsub-exec-fail',
+              description: { es: 'Ejecución de subarreglo_maxima_suma(arr)', en: 'Execution of subarreglo_maxima_suma(arr)' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const out1 = res1.result as number[];
+        const val1 = maxSubarrayValidator.validate({ array: arr1 }, out1);
+        results.push({
+          testId: 'py-maxsub-case1',
+          description: {
+            es: 'Caso Cátedra 1: [5, 3, 2, 4, -1] -> subarreglo óptimo con suma 14.',
+            en: 'Course Case 1: [5, 3, 2, 4, -1] -> optimal subarray with sum 14.'
+          },
+          passed: val1.valid,
+          expected: '[5, 3, 2, 4] (Suma: 14)',
+          actual: `${JSON.stringify(out1)} (Suma: ${Array.isArray(out1) ? out1.reduce((a, b) => a + b, 0) : 'N/A'})`
+        });
+
+        // Test 2: [5, -4, 2, 4, -1] -> [5, -4, 2, 4] (sum 7)
+        const arr2 = [5, -4, 2, 4, -1];
+        const res2 = await service.executePython(code, 'subarreglo_maxima_suma', [arr2]);
+        const out2 = res2.result as number[];
+        const val2 = maxSubarrayValidator.validate({ array: arr2 }, out2);
+        results.push({
+          testId: 'py-maxsub-case2',
+          description: {
+            es: 'Caso Cátedra 2 (Cruzado supera ramas): [5, -4, 2, 4, -1] -> suma 7.',
+            en: 'Course Case 2 (Crossing beats branches): [5, -4, 2, 4, -1] -> sum 7.'
+          },
+          passed: val2.valid,
+          expected: '[5, -4, 2, 4] (Suma: 7)',
+          actual: `${JSON.stringify(out2)} (Suma: ${Array.isArray(out2) ? out2.reduce((a, b) => a + b, 0) : 'N/A'})`
+        });
+
+        // Test 3: All negative [-5, -2, -8] -> [-2] (sum -2)
+        const arr3 = [-5, -2, -8];
+        const res3 = await service.executePython(code, 'subarreglo_maxima_suma', [arr3]);
+        const out3 = res3.result as number[];
+        const val3 = maxSubarrayValidator.validate({ array: arr3 }, out3);
+        results.push({
+          testId: 'py-maxsub-case3-all-negative',
+          description: {
+            es: 'Caso con números negativos: [-5, -2, -8] -> subarreglo [-2] con suma -2.',
+            en: 'All negative array: [-5, -2, -8] -> subarray [-2] with sum -2.'
+          },
+          passed: val3.valid,
+          expected: '[-2] (Suma: -2)',
+          actual: `${JSON.stringify(out3)} (Suma: ${Array.isArray(out3) ? out3.reduce((a, b) => a + b, 0) : 'N/A'})`
         });
         break;
       }

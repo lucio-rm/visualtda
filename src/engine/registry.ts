@@ -116,6 +116,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['divide-and-conquer', 'sorting', 'recursion']
   },
   {
+    id: 'max-subarray-dyc',
+    problemId: 'max-subarray',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 2,
+    difficulty: 2,
+    title: { es: 'Subarreglo de Máxima Suma', en: 'Maximum Subarray (D&C)' },
+    subtitle: {
+      es: 'Encontrar el subarreglo contiguo de máxima suma combinando mitades con el subarreglo cruzado O(n)',
+      en: 'Find maximum sum contiguous subarray by combining halves with O(n) crossing subarray'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'recursion', 'master-theorem', 'arrays', 'optimization']
+  },
+  {
     id: 'interval-scheduling',
     problemId: 'interval-scheduling',
     techniqueId: 'greedy',

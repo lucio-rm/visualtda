@@ -1,0 +1,21 @@
+{
+  "id": "max-subarray-dyc",
+  "problemId": "max-subarray",
+  "techniqueId": "divide-and-conquer",
+  "categoryId": "divide-and-conquer",
+  "order": 2,
+  "difficulty": 2,
+  "title": {
+    "es": "Subarreglo de Máxima Suma (DyC)",
+    "en": "Maximum Subarray (Divide & Conquer)"
+  },
+  "subtitle": {
+    "es": "Encontrar el subarreglo contiguo de suma máxima dividiendo en mitades y combinando con el subarreglo cruzado",
+    "en": "Find contiguous subarray with maximum sum by halving and computing the crossing subarray"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["divide-and-conquer", "recursion", "master-theorem", "arrays", "optimization"],
+  "parameters": {
+    "defaultArray": [5, -4, 2, 4, -1]
+  }
+}

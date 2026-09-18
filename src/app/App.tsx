@@ -12,6 +12,8 @@ import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisual
 import { KnapsackPlayground } from '../components/visualizers/KnapsackPlayground';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
+import { MaxSubarrayVisualizer } from '../components/visualizers/MaxSubarrayVisualizer';
+import { MaxSubarrayPlayground } from '../components/visualizers/MaxSubarrayPlayground';
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
 import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVcVisualizer';
 import { ReductionIsVcPlayground } from '../components/visualizers/ReductionIsVcPlayground';
@@ -229,6 +231,78 @@ PROCEDIMIENTO Merge(A, p, q, r):
 
 const MERGE_SORT_CORRECTNESS = `Invariante del procedimiento Merge: al inicio de cada iteración, el arreglo resultado contiene los k elementos menores de ambos subarreglos en orden no decreciente, y los punteros i y j apuntan a las menores cabezas no consumidas. Dado que los subarreglos base de tamaño 1 están trivialmente ordenados, por inducción matemática sobre el tamaño de los subarreglos, la combinación garantiza que cada nivel de la recursión produce secuencias perfectamente ordenadas. La altura del árbol de recursión es log2(n) y en cada nivel se realizan O(n) operaciones lineales, resultando en complejidad óptima Theta(n log n).`;
 
+// Max Subarray (D&C) Content
+const MAX_SUBARRAY_CANONICAL_PYTHON = `def subarreglo_cruzado(arr: list[int]) -> list[int]:
+    med = len(arr) // 2
+
+    suma_parcial = 0
+    cruzado_izq = med - 1 if med > 0 else 0
+    suma_izq = -float('inf')
+    for i in range(med - 1, -1, -1):
+        suma_parcial += arr[i]
+        if suma_parcial > suma_izq:
+            suma_izq = suma_parcial
+            cruzado_izq = i
+
+    suma_parcial = 0
+    cruzado_der = med
+    suma_der = -float('inf')
+    for j in range(med, len(arr)):
+        suma_parcial += arr[j]
+        if suma_parcial > suma_der:
+            suma_der = suma_parcial
+            cruzado_der = j
+
+    return arr[cruzado_izq : cruzado_der + 1]
+
+def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
+    if len(arr) <= 1:
+        return list(arr)
+
+    med = len(arr) // 2
+    izq = subarreglo_maxima_suma(arr[:med])
+    der = subarreglo_maxima_suma(arr[med:])
+    cruzado = subarreglo_cruzado(arr)
+
+    sumas = (
+        sum(izq) if izq else -float('inf'),
+        sum(der) if der else -float('inf'),
+        sum(cruzado) if cruzado else -float('inf')
+    )
+    suma_maxima = max(sumas)
+
+    if suma_maxima == sumas[0]:
+        return izq
+    elif suma_maxima == sumas[1]:
+        return der
+    else:
+        return cruzado`;
+
+const MAX_SUBARRAY_PSEUDOCODE = `ALGORITMO SubarregloCruzado(A, bajo, medio, alto):
+    sumaIzq ← -∞, sumaParcial ← 0, maxIzq ← medio
+    PARA i DESDE medio HACIA bajo:
+        sumaParcial ← sumaParcial + A[i]
+        SI sumaParcial > sumaIzq: sumaIzq ← sumaParcial; maxIzq ← i
+
+    sumaDer ← -∞, sumaParcial ← 0, maxDer ← medio + 1
+    PARA j DESDE medio + 1 HASTA alto:
+        sumaParcial ← sumaParcial + A[j]
+        SI sumaParcial > sumaDer: sumaDer ← sumaParcial; maxDer ← j
+
+    RETORNAR (maxIzq, maxDer, sumaIzq + sumaDer)
+
+ALGORITMO MaxSubarregloDyC(A, bajo, alto):
+    SI bajo == alto: RETORNAR (bajo, alto, A[bajo])
+    medio ← ⌊(bajo + alto) / 2⌋
+    izq ← MaxSubarregloDyC(A, bajo, medio)
+    der ← MaxSubarregloDyC(A, medio + 1, alto)
+    cruzado ← SubarregloCruzado(A, bajo, medio, alto)
+    RETORNAR el de máxima suma entre (izq, der, cruzado)`;
+
+const MAX_SUBARRAY_CORRECTNESS = `Teorema de Descomposición Disjunta: Todo subarreglo contiguo A[i..j] en A[bajo..alto] cae en una de tres categorías exhaustivas y mutuamente excluyentes: (1) 100% contenido en la mitad izquierda A[bajo..medio], (2) 100% contenido en la mitad derecha A[medio+1..alto], o (3) cruzando el punto medio (i <= medio < j).
+Dado que el cálculo cruzado recorre independientemente hacia la izquierda y hacia la derecha en tiempo lineal O(n), y las llamadas recursivas resuelven los casos (1) y (2), la solución óptima es necesariamente el máximo de las 3 alternativas.
+Por el Teorema Maestro con a=2, b=2, c=1 (T(n) = 2T(n/2) + O(n)), dado que log2(2) = 1 = c, la complejidad temporal es Theta(n log n).`;
+
 // Max Flow Content
 const MAX_FLOW_CANONICAL_PYTHON = `from collections import deque
 
@@ -424,6 +498,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: MERGE_SORT_CORRECTNESS,
         timeComplexity: 'O(n log n)',
         spaceComplexity: 'O(n)'
+      };
+    }
+
+    if (selectedExercise.id === 'max-subarray-dyc') {
+      return {
+        visualizerSlot: <MaxSubarrayVisualizer />,
+        discoverPlaygroundSlot: <MaxSubarrayPlayground />,
+        canonicalPython: MAX_SUBARRAY_CANONICAL_PYTHON,
+        pseudocode: MAX_SUBARRAY_PSEUDOCODE,
+        correctnessExplanation: MAX_SUBARRAY_CORRECTNESS,
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(log n)'
       };
     }
 

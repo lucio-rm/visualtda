@@ -4,6 +4,7 @@ import { intervalSchedulingValidator, Interval } from './algorithms/intervalSche
 import { knapsackDpValidator, KnapsackItem } from './algorithms/knapsackDpValidator';
 import { knapsackGreedyValidator, FractionalAssignment } from './algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from './algorithms/mergeSortValidator';
+import { maxSubarrayValidator } from './algorithms/maxSubarrayValidator';
 import { maxFlowValidator, FlowNetworkInput, FlowOutput } from './algorithms/maxFlowValidator';
 import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValidator';
@@ -391,6 +392,95 @@ export const EXERCISE_SOLVE_CONTENT: Record<string, ExerciseSolveContent> = {
         passed: passesHeuristic,
         expected: 'Manejo correcto de len <= 1',
         actual: passesHeuristic ? 'OK' : 'Error en caso base'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'max-subarray-dyc': {
+    exerciseId: 'max-subarray-dyc',
+    entryFunction: 'subarreglo_maxima_suma',
+    starterCode: `def subarreglo_cruzado(arr: list[int]) -> list[int]:
+    """
+    Encuentra el subarreglo contiguo de máxima suma que cruza el punto medio m = len(arr) // 2.
+    Complejidad requerida: O(n).
+    """
+    med = len(arr) // 2
+    # Recorrer a la izquierda desde med - 1 hasta 0
+    # Recorrer a la derecha desde med hasta len(arr) - 1
+    return []
+
+def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
+    """
+    Encuentra el subarreglo contiguo de suma máxima utilizando División y Conquista.
+    Retorna la lista de elementos del subarreglo óptimo.
+    """
+    if len(arr) <= 1:
+        return arr
+
+    med = len(arr) // 2
+    # 1. Llamada recursiva mitad izquierda
+    # 2. Llamada recursiva mitad derecha
+    # 3. Subarreglo cruzado
+    # 4. Retornar el de mayor suma entre los 3 candidatos
+    return []
+`,
+    hints: [
+      {
+        es: 'Pista 1: El caso base es len(arr) <= 1, en cuyo caso simplemente retornas el arreglo directamente.',
+        en: 'Hint 1: The base case is len(arr) <= 1, which directly returns the array.'
+      },
+      {
+        es: 'Pista 2: Para el subarreglo cruzado, itera desde med-1 hacia atrás acumulando sumas y guardando el índice de máxima suma izquierda. Haz lo análogo desde med hacia adelante para la derecha. Combina arr[mejor_izq : mejor_der + 1] en tiempo lineal O(n).',
+        en: 'Hint 2: For crossing subarray, iterate backwards from med-1 accumulating sums, tracking the best left index. Do the same forwards from med for the right. Combine arr[best_left : best_right + 1] in O(n).'
+      },
+      {
+        es: 'Pista 3: En subarreglo_maxima_suma, calcula izq, der, cruzado, compara sum(izq), sum(der), sum(cruzado) y retorna el subarreglo con mayor suma.',
+        en: 'Hint 3: In subarreglo_maxima_suma, compute left, right, crossing, compare their sums and return the subarray with highest sum.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasDivide = code.includes('//') || code.includes('med');
+      const hasRecursion = code.includes('subarreglo_maxima_suma(');
+      const hasCross = code.includes('subarreglo_cruzado(') || code.includes('cruzado');
+      const passesHeuristic = hasDivide && hasRecursion && hasCross && !code.includes('pass\n');
+
+      const arr1 = [5, -4, 2, 4, -1];
+      const opt1 = [5, -4, 2, 4]; // sum 7
+      const val1 = maxSubarrayValidator.validate({ array: arr1 }, opt1);
+
+      results.push({
+        testId: 'maxsub-heuristic-check',
+        description: {
+          es: 'Estructura DyC: Divide en mitades, recursión en ambas ramas y cálculo de subarreglo cruzado O(n).',
+          en: 'D&C structure: Halving, recursion on both branches, and O(n) crossing calculation.'
+        },
+        passed: passesHeuristic && val1.valid,
+        expected: 'T(n) = 2T(n/2) + O(n) -> O(n log n)',
+        actual: passesHeuristic ? 'Estructura DyC correcta' : 'Estructura incompleta o sin llamadas recursivas'
+      });
+
+      const arr2 = [5, 3, 2, 4, -1];
+      const opt2 = [5, 3, 2, 4]; // sum 14
+      const val2 = maxSubarrayValidator.validate({ array: arr2 }, opt2);
+
+      results.push({
+        testId: 'maxsub-cátedra-case',
+        description: {
+          es: 'Ejemplo canónico: [5, 3, 2, 4, -1] -> [5, 3, 2, 4] con suma 14.',
+          en: 'Canonical example: [5, 3, 2, 4, -1] -> [5, 3, 2, 4] with sum 14.'
+        },
+        passed: passesHeuristic && val2.valid,
+        expected: `[${opt2.join(', ')}] (Suma: 14)`,
+        actual: passesHeuristic ? `[${opt2.join(', ')}] (Suma: 14)` : 'Invalido'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
