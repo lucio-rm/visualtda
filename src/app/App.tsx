@@ -6,10 +6,12 @@ import { ExerciseList } from '../components/ExerciseList';
 import { ExerciseView } from '../components/ExerciseView';
 import { NQueensVisualizer } from '../components/visualizers/NQueensVisualizer';
 import { NQueensPlayground } from '../components/visualizers/NQueensPlayground';
+import { IntervalSchedulingVisualizer } from '../components/visualizers/IntervalSchedulingVisualizer';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
+// N-Queens Content
 const N_QUEENS_CANONICAL_PYTHON = `def resolver_n_reinas(n: int) -> list[list[int]]:
     soluciones = []
     tablero = [-1] * n
@@ -64,6 +66,36 @@ const N_QUEENS_PSEUDOCODE = `ALGORITMO ResolverNReinas(n):
 
 const N_QUEENS_CORRECTNESS = `El algoritmo mantiene como invariante que, al ingresar a la llamada recursiva para la fila k, todas las k reinas colocadas en las filas 0..k-1 no se atacan entre sí. En cada paso, se evalúan únicamente casillas que preservan el invariante (poda de ramas inválidas). Dado que el árbol es finito y la profundidad está acotada por N, la inducción sobre las filas demuestra que toda solución alcanzada en fila=N es válida y que la búsqueda exhaustiva no omite ninguna configuración admisible.`;
 
+// Interval Scheduling Content
+const INTERVALS_CANONICAL_PYTHON = `def seleccion_intervalos(intervalos: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    # 1. Ordenar por tiempo de finalización (earliest finish time)
+    ordenados = sorted(intervalos, key=lambda x: x[1])
+
+    seleccionados = []
+    ultimo_fin = -float('inf')
+
+    # 2. Selección voraz (Greedy choice)
+    for inicio, fin in ordenados:
+        if inicio >= ultimo_fin:
+            seleccionados.append((inicio, fin))
+            ultimo_fin = fin
+
+    return seleccionados`;
+
+const INTERVALS_PSEUDOCODE = `ALGORITMO SeleccionIntervalos(I):
+    I_ordenados ← OrdenarPorTiempoDeFin(I)
+    S ← []
+    ultimoFin ← -Infinito
+
+    PARA CADA (inicio, fin) EN I_ordenados:
+        SI inicio >= ultimoFin:
+            S.Agregar((inicio, fin))
+            ultimoFin ← fin
+
+    RETORNAR S`;
+
+const INTERVALS_CORRECTNESS = `Demostración por el lema 'Greedy Stays Ahead' (Greedy se mantiene adelante): Sean A = {a_1, ..., a_k} la solución voraz y O = {o_1, ..., o_m} una solución óptima cualquiera. Por inducción sobre r, se demuestra que fin(a_r) <= fin(o_r) para todo r <= k. Dado que el intervalo voraz termina siempre antes o igual que el intervalo óptimo correspondiente, deja tanto o más tiempo libre para el resto de las tareas, impidiendo que el óptimo pueda contener un elemento adicional (m > k). Por ende, k = m y la selección voraz es estrictamente óptima.`;
+
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('visual_tda_theme');
@@ -89,6 +121,35 @@ export const App: React.FC = () => {
 
   const handleHomeClick = () => {
     setSelectedExerciseId(null);
+  };
+
+  const getExerciseProps = () => {
+    if (!selectedExercise) return {};
+
+    if (selectedExercise.id === 'n-queens') {
+      return {
+        visualizerSlot: <NQueensVisualizer />,
+        discoverPlaygroundSlot: <NQueensPlayground />,
+        canonicalPython: N_QUEENS_CANONICAL_PYTHON,
+        pseudocode: N_QUEENS_PSEUDOCODE,
+        correctnessExplanation: N_QUEENS_CORRECTNESS,
+        timeComplexity: 'O(N!)',
+        spaceComplexity: 'O(N)'
+      };
+    }
+
+    if (selectedExercise.id === 'interval-scheduling') {
+      return {
+        visualizerSlot: <IntervalSchedulingVisualizer />,
+        canonicalPython: INTERVALS_CANONICAL_PYTHON,
+        pseudocode: INTERVALS_PSEUDOCODE,
+        correctnessExplanation: INTERVALS_CORRECTNESS,
+        timeComplexity: 'O(N log N)',
+        spaceComplexity: 'O(N)'
+      };
+    }
+
+    return {};
   };
 
   return (
@@ -130,13 +191,7 @@ export const App: React.FC = () => {
           <ExerciseView
             exercise={selectedExercise}
             onBackToCatalog={handleHomeClick}
-            visualizerSlot={selectedExercise.id === 'n-queens' ? <NQueensVisualizer /> : undefined}
-            discoverPlaygroundSlot={selectedExercise.id === 'n-queens' ? <NQueensPlayground /> : undefined}
-            canonicalPython={selectedExercise.id === 'n-queens' ? N_QUEENS_CANONICAL_PYTHON : undefined}
-            pseudocode={selectedExercise.id === 'n-queens' ? N_QUEENS_PSEUDOCODE : undefined}
-            correctnessExplanation={selectedExercise.id === 'n-queens' ? N_QUEENS_CORRECTNESS : undefined}
-            timeComplexity={selectedExercise.id === 'n-queens' ? 'O(N!)' : undefined}
-            spaceComplexity={selectedExercise.id === 'n-queens' ? 'O(N)' : undefined}
+            {...getExerciseProps()}
           />
         )}
       </main>

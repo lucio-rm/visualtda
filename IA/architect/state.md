@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P5 (CI & Documentation Synchronization)
-- **CURRENT_TASK**: Finalizing CI workflow and architectural documentation
+- **CURRENT_PHASE**: P6 (Demonstrate Scalability with 2nd Exercise: Interval Scheduling)
+- **CURRENT_TASK**: Completed second vertical slice (Interval Scheduling) demonstrating exercise scalability
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -11,16 +11,20 @@
   - P0: Full toolchain bootstrap (Vite, React 19, TypeScript, Vitest, ESLint)
   - P1: Domain models (`src/types/`), Exercise Registry (`src/engine/registry.ts`), and App navigation shell
   - P2: 3-Phase exercise flow (`PhaseSwitcher`, `DiscoverView`, `SolveView`, `UnderstandView`, `ExerciseView`)
-  - P3 & P4: N-Queens vertical slice, trace engine, timeline controller, and visualizers:
-    - Canonical Python solution, theory, pseudocode, metadata, test runner
-    - TypeScript validator, trace generator, useTraceTimeline hook
-    - NQueensBoard SVG, NQueensVisualizer panel, NQueensPlayground sandbox
+  - P3 & P4: N-Queens complete vertical slice, trace engine, timeline controller, and visualizers
   - P5: GitHub Actions CI workflow (`.github/workflows/ci.yml`), README.md, docs/architecture.md, docs/roadmap.md
-  - 30 unit tests covering all components and algorithms
-- **IN_PROGRESS**:
-  - Preparing next milestone (Interval Scheduling / Knapsack exercises or Pyodide integration)
+  - P6: Interval Scheduling (Greedy) vertical slice:
+    - Canonical Python solution tested with Python 3
+    - Theory document with formal 'Greedy Stays Ahead' induction proof
+    - Pseudocode and exercise metadata
+    - TypeScript IntervalSchedulingValidator checking subset, compatibility, and optimality
+    - IntervalSchedulingTrace generating earliest finish time decisions
+    - IntervalSchedulingVisualizer SVG timeline chart
+    - Unit tests in `tests/intervalSchedulingValidator.test.ts` and `tests/intervalSchedulingTrace.test.ts`
+  - 36 unit tests passing 100% across 8 test files
+- **IN_PROGRESS**: Ready for user review or further milestones (Knapsack DP vs Greedy comparison, Pyodide worker, or a11y polish)
 - **BLOCKED**: None
-- **NEXT_TASK**: Second exercise vertical slice: Interval Scheduling (Greedy) to demonstrate multi-exercise scalability (P6)
+- **NEXT_TASK**: Pyodide Web Worker sandbox evaluation or Knapsack DP/Greedy contrast slice
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 30 tests)
-- **LAST_COMMIT**: `b945de7`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 36 tests)
+- **LAST_COMMIT**: `932849b`
