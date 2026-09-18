@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P13 (Advanced Algorithm Techniques & Problem Reductions)
-- **CURRENT_TASK**: NP-Completeness Problem Reductions (Kleinberg & Tardos Ch 8) & Approximation Algorithms
+- **CURRENT_PHASE**: P14 (Full 8-Technique Academic Coverage & Polish)
+- **CURRENT_TASK**: Randomized Algorithms & Linear Programming (Finalizing Kleinberg & Tardos Pillars)
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -21,12 +21,14 @@
   - P10: Exercise-specific Solve phase content, 3-level progressive hints, and per-test feedback cards
   - P11: Max Flow / Min Cut (Network Flow with Edmonds-Karp BFS, residual graph, augmenting paths, and min-cut cut-set partition)
   - P12: Pyodide Web Worker Execution Infrastructure (`workerProtocol.ts`, `pyodideWorker.ts`, `pythonExecutionService.ts` with 5s watchdog)
-  - Interactive Discover Phase Playgrounds (`NQueensPlayground`, `IntervalSchedulingPlayground`, `KnapsackPlayground`)
+  - Interactive Discover Phase Playgrounds across all exercises (`NQueensPlayground`, `IntervalSchedulingPlayground`, `KnapsackPlayground`, `ReductionIsVcPlayground`, `VertexCoverApproxPlayground`)
   - Real Python execution in browser via Pyodide Web Worker (`pythonTestRunner.ts` and `SolveView.tsx`) with stdout capture and execution benchmarking
-  - 68 unit tests passing 100% across 15 test files
-- **IN_PROGRESS**: Advancing through the Kleinberg & Tardos curriculum
+  - P13: Problem Reductions (`vertex-cover-reduction`: Independent Set $\le_P$ Vertex Cover, K&T 8.1 duality theorem, bidirectional proof, SVG graph, and interactive Discover playground)
+  - P14: Approximation Algorithms (`vertex-cover-approx`: 2-Approximation via Maximal Matching, K&T 11.1 lower-bound proof $|C^*| \ge |M|$, ratio metric, and interactive Discover playground)
+  - 85 unit tests passing 100% across 19 test files
+- **IN_PROGRESS**: Academic curriculum expansion
 - **BLOCKED**: None
-- **NEXT_TASK**: Implement NP-Completeness / Problem Reductions (e.g. 3-SAT to Independent Set / Vertex Cover) or Approximation Algorithms
+- **NEXT_TASK**: Randomized Algorithms (e.g. Monte Carlo Min-Cut / Randomized Quicksort or Linear Programming Duality)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 68 tests)
-- **LAST_COMMIT**: `5a3e878`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 85 tests)
+- **LAST_COMMIT**: `5b81ea0`
