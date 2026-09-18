@@ -9,6 +9,7 @@ import { NQueensPlayground } from '../components/visualizers/NQueensPlayground';
 import { IntervalSchedulingVisualizer } from '../components/visualizers/IntervalSchedulingVisualizer';
 import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
+import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -182,6 +183,45 @@ const KNAPSACK_GREEDY_PSEUDOCODE = `ALGORITMO MochilaFraccionaria_Greedy(items, 
 
 const KNAPSACK_GREEDY_CORRECTNESS = `Demostración por Argumento de Intercambio (Exchange Argument): Si existiera una solución óptima O distinta de la voraz G, sea k el primer elemento donde difieren. Dado que G toma la mayor fracción posible del elemento disponible con mayor densidad r_k, O debe tener o_k < g_k y compensar peso con algún elemento posterior j > k donde r_j <= r_k. Reemplazando una fracción de j por k en O incrementa o mantiene el valor total, transformando O en G sin perder calidad. Para la mochila 0/1, este argumento no aplica porque la indivisibilidad de los objetos puede dejar 'huecos' de capacidad que no pueden rellenarse.`;
 
+// Merge Sort Content
+const MERGE_SORT_CANONICAL_PYTHON = `def merge_sort(arr: list[int]) -> list[int]:
+    if len(arr) <= 1:
+        return list(arr)
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+
+    return merge(left, right)
+
+def merge(left: list[int], right: list[int]) -> list[int]:
+    result = []
+    i, j = 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result`;
+
+const MERGE_SORT_PSEUDOCODE = `ALGORITMO MergeSort(A, p, r):
+    SI p < r:
+        q ← ⌊(p + r) / 2⌋
+        MergeSort(A, p, q)
+        MergeSort(A, q + 1, r)
+        Merge(A, p, q, r)
+
+PROCEDIMIENTO Merge(A, p, q, r):
+    Crear arreglos L y R para ambas mitades
+    Intercalar elementos manteniendo orden L[i] <= R[j]
+    Copiar remanentes al subarreglo final A[p..r]`;
+
+const MERGE_SORT_CORRECTNESS = `Invariante del procedimiento Merge: al inicio de cada iteración, el arreglo resultado contiene los k elementos menores de ambos subarreglos en orden no decreciente, y los punteros i y j apuntan a las menores cabezas no consumidas. Dado que los subarreglos base de tamaño 1 están trivialmente ordenados, por inducción matemática sobre el tamaño de los subarreglos, la combinación garantiza que cada nivel de la recursión produce secuencias perfectamente ordenadas. La altura del árbol de recursión es log2(n) y en cada nivel se realizan O(n) operaciones lineales, resultando en complejidad óptima Theta(n log n).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -253,6 +293,17 @@ const AppContent: React.FC = () => {
         canonicalPython: KNAPSACK_GREEDY_CANONICAL_PYTHON,
         pseudocode: KNAPSACK_GREEDY_PSEUDOCODE,
         correctnessExplanation: KNAPSACK_GREEDY_CORRECTNESS,
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(n)'
+      };
+    }
+
+    if (selectedExercise.id === 'merge-sort') {
+      return {
+        visualizerSlot: <MergeSortVisualizer />,
+        canonicalPython: MERGE_SORT_CANONICAL_PYTHON,
+        pseudocode: MERGE_SORT_PSEUDOCODE,
+        correctnessExplanation: MERGE_SORT_CORRECTNESS,
         timeComplexity: 'O(n log n)',
         spaceComplexity: 'O(n)'
       };

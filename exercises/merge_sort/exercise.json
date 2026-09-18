@@ -1,0 +1,22 @@
+{
+  "id": "merge-sort",
+  "problemId": "merge-sort",
+  "techniqueId": "divide-and-conquer",
+  "categoryId": "divide-and-conquer",
+  "order": 1,
+  "difficulty": 1,
+  "title": {
+    "es": "Ordenamiento por Fusión (Merge Sort)",
+    "en": "Merge Sort"
+  },
+  "subtitle": {
+    "es": "Dividir arreglo a la mitad, ordenar recursivamente y combinar en tiempo lineal",
+    "en": "Divide array into halves, sort recursively, and merge in linear time"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["divide-and-conquer", "sorting", "recursion", "master-theorem"],
+  "parameters": {
+    "defaultSize": 8,
+    "maxSize": 16
+  }
+}
