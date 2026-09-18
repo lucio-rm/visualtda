@@ -39,4 +39,78 @@ describe('PythonExecutionService & Worker Protocol', () => {
     expect(response.result).toBe(42);
     expect(response.executionTimeMs).toBe(12);
   });
+
+  it('runs n-queens test suite with simulated mock Python execution', async () => {
+    const { runPythonTests } = await import('../src/runtime/pythonTestRunner');
+
+    const mockService = {
+      isSupported: true,
+      isReady: () => true,
+      initWorker: async () => true,
+      executePython: async (_code: string, fnName: string, args: unknown[]) => {
+        if (fnName === 'resolver_n_reinas') {
+          const n = args[0] as number;
+          if (n === 4) {
+            return {
+              id: 'mock-1',
+              type: 'run_result' as const,
+              success: true,
+              result: [
+                [1, 3, 0, 2],
+                [2, 0, 3, 1]
+              ],
+              stdout: 'Probando N=4\n',
+              executionTimeMs: 15
+            };
+          }
+          if (n === 1) {
+            return {
+              id: 'mock-2',
+              type: 'run_result' as const,
+              success: true,
+              result: [[0]],
+              executionTimeMs: 2
+            };
+          }
+        }
+        return {
+          id: 'mock-err',
+          type: 'run_result' as const,
+          success: false,
+          error: 'Function not found',
+          executionTimeMs: 0
+        };
+      }
+    } as unknown as PythonExecutionService;
+
+    const evalResult = await runPythonTests('n-queens', 'def resolver_n_reinas(n): pass', mockService);
+    expect(evalResult.passed).toBe(true);
+    expect(evalResult.totalPassed).toBe(2);
+    expect(evalResult.totalTests).toBe(2);
+    expect(evalResult.stdout).toContain('Probando N=4');
+  });
+
+  it('captures Python runtime syntax errors or exceptions cleanly', async () => {
+    const { runPythonTests } = await import('../src/runtime/pythonTestRunner');
+
+    const errorService = {
+      isSupported: true,
+      isReady: () => true,
+      initWorker: async () => true,
+      executePython: async () => {
+        return {
+          id: 'mock-err',
+          type: 'run_result' as const,
+          success: false,
+          error: 'SyntaxError: invalid syntax (solucion.py, line 3)',
+          executionTimeMs: 5
+        };
+      }
+    } as unknown as PythonExecutionService;
+
+    const evalResult = await runPythonTests('n-queens', 'def broken_code', errorService);
+    expect(evalResult.passed).toBe(false);
+    expect(evalResult.runtimeError).toContain('SyntaxError');
+  });
 });
+

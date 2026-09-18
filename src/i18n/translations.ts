@@ -20,6 +20,9 @@ export interface TranslationsDictionary {
   testsRunning: { es: string; en: string };
   testsSuccess: { es: string; en: string };
   testsPassed: { es: string; en: string };
+  runPyodideTests: { es: string; en: string };
+  pythonStdOutput: { es: string; en: string };
+  executionTime: { es: string; en: string };
   hintsTitle: { es: string; en: string };
   nextHint: { es: string; en: string };
   allHintsRevealed: { es: string; en: string };
@@ -112,6 +115,18 @@ export const TRANSLATIONS: TranslationsDictionary = {
   testsPassed: {
     es: 'Tests pasados',
     en: 'Tests passed'
+  },
+  runPyodideTests: {
+    es: '⚡ Ejecutar en Python (Web Worker)',
+    en: '⚡ Run in Python (Web Worker)'
+  },
+  pythonStdOutput: {
+    es: 'Salida de consola (stdout):',
+    en: 'Console output (stdout):'
+  },
+  executionTime: {
+    es: 'Tiempo de ejecución:',
+    en: 'Execution time:'
   },
   hintsTitle: {
     es: 'Pistas Progresivas',

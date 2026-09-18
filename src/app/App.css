@@ -574,6 +574,49 @@
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-fast-tests {
+  background-color: var(--surface-hover);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-fast-tests:hover:not(:disabled) {
+  background-color: var(--surface-active, var(--border));
+}
+
+.btn-pyodide {
+  background-color: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.btn-pyodide:hover:not(:disabled) {
+  background-color: #0369a1;
+}
+
+.btn-pyodide:disabled,
+.btn-fast-tests:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-run-tests {
@@ -594,6 +637,66 @@
 .btn-run-tests:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.test-meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+}
+
+.test-meta-badge {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.python-output-card {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.python-output-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.python-stdout-box,
+.python-error-box {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.python-stdout-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  border-left: 3px solid #0284c7;
+}
+
+.python-error-box {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-left: 3px solid #ef4444;
 }
 
 .test-feedback-card {
