@@ -1,0 +1,25 @@
+{
+  "id": "vertex-cover-reduction",
+  "problemId": "independent-set-vertex-cover",
+  "techniqueId": "reductions",
+  "categoryId": "reductions",
+  "order": 1,
+  "difficulty": 3,
+  "title": {
+    "es": "Reducción: Conjunto Independiente a Cobertura de Vértices",
+    "en": "Reduction: Independent Set to Vertex Cover"
+  },
+  "subtitle": {
+    "es": "Demostración constructiva de S es Conjunto Independiente si y solo si V \\ S es Cobertura de Vértices",
+    "en": "Constructive proof that S is an Independent Set if and only if V \\ S is a Vertex Cover"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": [
+    "reductions",
+    "np-completeness",
+    "graphs",
+    "independent-set",
+    "vertex-cover",
+    "duality"
+  ]
+}

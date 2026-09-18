@@ -2,7 +2,15 @@ import { describe, it, expect } from 'vitest';
 import { EXERCISE_SOLVE_CONTENT } from '../src/engine/exerciseContent';
 
 describe('ExerciseSolveContent Repository', () => {
-  const registeredIds = ['n-queens', 'interval-scheduling', 'knapsack-dp', 'knapsack-greedy', 'merge-sort'];
+  const registeredIds = [
+    'n-queens',
+    'interval-scheduling',
+    'knapsack-dp',
+    'knapsack-greedy',
+    'merge-sort',
+    'max-flow',
+    'vertex-cover-reduction'
+  ];
 
   it('provides dedicated solve content for all core registered exercises', () => {
     for (const id of registeredIds) {
@@ -55,5 +63,23 @@ describe('ExerciseSolveContent Repository', () => {
     `;
     const workingRes = await content.runTests(workingCode);
     expect(workingRes.passed).toBe(true);
+  });
+
+  it('evaluates passing vs incomplete code on vertex-cover-reduction', async () => {
+    const content = EXERCISE_SOLVE_CONTENT['vertex-cover-reduction'];
+    const incompleteRes = await content.runTests('def reducir_instancia_is_a_vc(v, e, k):\n    pass\n');
+    expect(incompleteRes.passed).toBe(false);
+
+    const workingCode = `
+    def reducir_instancia_is_a_vc(vertices, aristas, k):
+        k_prima = len(vertices) - k
+        return vertices, aristas, k_prima
+
+    def transformar_solucion_vc_a_is(vertices, cobertura):
+        return [v for v in vertices if v not in set(cobertura)]
+    `;
+    const workingRes = await content.runTests(workingCode);
+    expect(workingRes.passed).toBe(true);
+    expect(workingRes.totalPassed).toBe(workingRes.totalTests);
   });
 });

@@ -1,0 +1,154 @@
+.reduction-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.reduction-metrics-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.reduction-metric-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+}
+
+.reduction-metric-badge.is-badge {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.reduction-metric-badge.vc-badge {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
+
+.reduction-metric-badge.duality-badge {
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.reduction-graph-canvas {
+  width: 100%;
+  max-width: 580px;
+  height: 300px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+  display: block;
+}
+
+/* Edges */
+.graph-edge {
+  stroke: var(--border);
+  stroke-width: 2.5;
+  transition: all 0.25s ease;
+}
+
+.graph-edge.covered {
+  stroke: #8b5cf6;
+  stroke-width: 3.5;
+}
+
+.graph-edge.active {
+  stroke: #f59e0b;
+  stroke-width: 4.5;
+  stroke-dasharray: 4 2;
+}
+
+.graph-edge.conflict {
+  stroke: #ef4444;
+  stroke-width: 4;
+  stroke-dasharray: 6 3;
+}
+
+/* Nodes */
+.graph-node {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.node-circle {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.graph-node.in-is .node-circle {
+  fill: #10b981;
+  stroke: #059669;
+  stroke-width: 3;
+}
+
+.graph-node.in-vc .node-circle {
+  fill: #8b5cf6;
+  stroke: #7c3aed;
+  stroke-width: 3;
+}
+
+.graph-node.active-node .node-circle {
+  stroke: #f59e0b;
+  stroke-width: 4;
+}
+
+.graph-node.conflict-node .node-circle {
+  stroke: #ef4444;
+  stroke-width: 4;
+}
+
+.node-text {
+  fill: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.graph-node.in-is .node-text,
+.graph-node.in-vc .node-text {
+  fill: #ffffff;
+}
+
+.node-subtext {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.node-subtext.is-sub {
+  fill: #059669;
+}
+
+.node-subtext.vc-sub {
+  fill: #7c3aed;
+}
+
+.reduction-explanation-box {
+  padding: 0.85rem 1rem;
+  background-color: var(--bg);
+  border-left: 4px solid #8b5cf6;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+}

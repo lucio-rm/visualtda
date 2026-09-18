@@ -388,6 +388,75 @@ export async function runPythonTests(
         break;
       }
 
+      case 'vertex-cover-reduction': {
+        const vertices = ['A', 'B', 'C', 'D', 'E'];
+        const edges: [string, string][] = [
+          ['A', 'B'],
+          ['A', 'C'],
+          ['B', 'D'],
+          ['C', 'D'],
+          ['C', 'E'],
+          ['D', 'E']
+        ];
+        const k = 2;
+
+        const res = await service.executePython(code, 'reducir_instancia_is_a_vc', [vertices, edges, k]);
+        if (res.stdout) capturedStdout += res.stdout + '\n';
+
+        if (!res.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'reduction-exec-fail',
+              description: { es: 'Ejecución de reducir_instancia_is_a_vc(...)', en: 'Execution of reducir_instancia_is_a_vc(...)' },
+              passed: false,
+              message: res.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res.error,
+            executionTimeMs: res.executionTimeMs
+          };
+        }
+
+        const tupleRes = res.result as [string[], [string, string][], number];
+        const retVertices = Array.isArray(tupleRes) ? tupleRes[0] : [];
+        const retEdges = Array.isArray(tupleRes) ? tupleRes[1] : [];
+        const retKPrime = Array.isArray(tupleRes) ? tupleRes[2] : null;
+
+        const kPrimeExpected = vertices.length - k; // 3
+        const passKPrime = retKPrime === kPrimeExpected && retVertices.length === vertices.length && retEdges.length === edges.length;
+
+        results.push({
+          testId: 'py-reduction-kprime',
+          description: {
+            es: 'Reducción polinomial: Retorna G intacto con k\' = |V| - k = 3.',
+            en: 'Polynomial reduction: Returns identical G with k\' = |V| - k = 3.'
+          },
+          passed: passKPrime,
+          expected: `k' = ${kPrimeExpected}`,
+          actual: `k' = ${retKPrime}`
+        });
+
+        const resRecovery = await service.executePython(code, 'transformar_solucion_vc_a_is', [vertices, ['B', 'C', 'E']]);
+        const recoveredS = Array.isArray(resRecovery.result) ? resRecovery.result as string[] : [];
+        const isSet = new Set(recoveredS);
+        const passRecovery = resRecovery.success && isSet.size === 2 && isSet.has('A') && isSet.has('D');
+
+        results.push({
+          testId: 'py-reduction-recovery',
+          description: {
+            es: 'Recuperación de solución: Reconstruye S = {A, D} a partir de C = {B, C, E}.',
+            en: 'Solution recovery: Reconstructs S = {A, D} from C = {B, C, E}.'
+          },
+          passed: passRecovery,
+          expected: 'S = {A, D}',
+          actual: JSON.stringify(recoveredS)
+        });
+        break;
+      }
+
       default:
         return {
           passed: false,

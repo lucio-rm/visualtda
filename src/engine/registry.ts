@@ -177,6 +177,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['network-flow', 'graphs', 'residual-graph', 'bfs', 'min-cut', 'edmonds-karp']
+  },
+  {
+    id: 'vertex-cover-reduction',
+    problemId: 'independent-set-vertex-cover',
+    techniqueId: 'reductions',
+    categoryId: 'reductions',
+    order: 1,
+    difficulty: 3,
+    title: {
+      es: 'Reducción: Conjunto Independiente a Cobertura de Vértices',
+      en: 'Reduction: Independent Set to Vertex Cover'
+    },
+    subtitle: {
+      es: 'Demostración constructiva de dualidad complementaria: S es IS ⟺ V \\ S es VC',
+      en: 'Constructive proof of complementary duality: S is IS ⟺ V \\ S is VC'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['reductions', 'np-completeness', 'graphs', 'independent-set', 'vertex-cover', 'duality']
   }
 ];
 

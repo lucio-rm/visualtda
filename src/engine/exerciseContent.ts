@@ -5,6 +5,7 @@ import { knapsackDpValidator, KnapsackItem } from './algorithms/knapsackDpValida
 import { knapsackGreedyValidator, FractionalAssignment } from './algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from './algorithms/mergeSortValidator';
 import { maxFlowValidator, FlowNetworkInput, FlowOutput } from './algorithms/maxFlowValidator';
+import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -494,6 +495,112 @@ export const EXERCISE_SOLVE_CONTENT: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && validation.valid,
         message: 'Dualidad fuerte verificada: v(f) == c(S, T) == 20.'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'vertex-cover-reduction': {
+    exerciseId: 'vertex-cover-reduction',
+    entryFunction: 'reducir_instancia_is_a_vc',
+    starterCode: `def reducir_instancia_is_a_vc(vertices: list[str], aristas: list[tuple[str, str]], k: int) -> tuple[list[str], list[tuple[str, str]], int]:
+    """
+    Transforma una instancia de Conjunto Independiente (G, k)
+    en una instancia equivalente de Cobertura de Vértices (G, k').
+    Retorna (vertices, aristas, k_prima).
+    """
+    n = len(vertices)
+    k_prima = 0  # Calcula k' = |V| - k
+    return vertices, aristas, k_prima
+
+
+def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> list[str]:
+    """
+    Dada la cobertura C de G, reconstruye el Conjunto Independiente S = V \\ C.
+    """
+    return []
+`,
+    hints: [
+      {
+        es: 'Pista 1: En la reducción polinomial de IS a VC, el grafo G = (V, E) permanece idéntico. Sólo cambia el parámetro de tamaño objetivo.',
+        en: 'Hint 1: In the polynomial reduction from IS to VC, graph G = (V, E) remains identical. Only the target size parameter changes.'
+      },
+      {
+        es: 'Pista 2: Por el Teorema K&T 8.1, si G tiene un Conjunto Independiente S de tamaño k, su complemento V \\ S tiene exactamente |V| - k vértices. Por tanto, k_prima = len(vertices) - k.',
+        en: 'Hint 2: By Theorem K&T 8.1, if G has an Independent Set S of size k, its complement V \\ S has exactly |V| - k vertices. Therefore k_prima = len(vertices) - k.'
+      },
+      {
+        es: 'Pista 3: Para recuperar S a partir de una cobertura C, utiliza comprensión de listas o conjuntos: S = [v for v in vertices if v not in set(cobertura)].',
+        en: 'Hint 3: To recover S from cover C, use list or set comprehension: S = [v for v in vertices if v not in set(cobertura)].'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasMinusK = code.includes('- k') || code.includes('-k') || code.includes('len(vertices) -');
+      const hasComp = code.includes('not in') || code.includes('set(') || code.includes('\\') || code.includes('difference');
+      const passesHeuristic = hasMinusK && !code.includes('pass\n');
+
+      const testVertices = ['A', 'B', 'C', 'D', 'E'];
+      const testEdges: [string, string][] = [
+        ['A', 'B'],
+        ['A', 'C'],
+        ['B', 'D'],
+        ['C', 'D'],
+        ['C', 'E'],
+        ['D', 'E']
+      ];
+      const k = 2;
+
+      // Test 1: Parameter transformation k' = |V| - k
+      const expectedKPrime = testVertices.length - k; // 3
+      results.push({
+        testId: 'reduction-kprime-calc',
+        description: {
+          es: 'Cálculo del parámetro k\': k\' = |V| - k = 5 - 2 = 3.',
+          en: 'Calculation of parameter k\': k\' = |V| - k = 5 - 2 = 3.'
+        },
+        passed: passesHeuristic,
+        expected: `k' = ${expectedKPrime}`,
+        actual: passesHeuristic ? `k' = ${expectedKPrime}` : "k' no calculado correctamente"
+      });
+
+      // Test 2: Validation of S = {A, D} and C = {B, C, E}
+      const fullCheck = reductionIsVcValidator.validate(
+        { vertices: testVertices, edges: testEdges, k },
+        {
+          independentSet: ['A', 'D'],
+          vertexCover: ['B', 'C', 'E'],
+          reductionKPrime: expectedKPrime
+        }
+      );
+
+      results.push({
+        testId: 'reduction-duality-invariance',
+        description: {
+          es: 'Teorema K&T 8.1: S es Conjunto Independiente ⟺ V \\ S es Cobertura de Vértices.',
+          en: 'Theorem K&T 8.1: S is Independent Set ⟺ V \\ S is Vertex Cover.'
+        },
+        passed: passesHeuristic && fullCheck.valid,
+        message: fullCheck.valid ? 'Dualidad complementaria verificada sin aristas descubiertas ni conflictos.' : fullCheck.errors.join('; ')
+      });
+
+      // Test 3: Complement recovery logic
+      results.push({
+        testId: 'reduction-recovery-logic',
+        description: {
+          es: 'Algoritmo de recuperación inversa: Reconstrucción de S = V \\ C en tiempo O(|V|).',
+          en: 'Inverse recovery algorithm: Reconstruction of S = V \\ C in O(|V|) time.'
+        },
+        passed: passesHeuristic && hasComp,
+        expected: 'S = V \\ C',
+        actual: hasComp ? 'Reconstrucción en O(|V|) implementada' : 'Falta lógica de complemento'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

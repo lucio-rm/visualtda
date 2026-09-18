@@ -1,0 +1,110 @@
+.reduction-playground-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.reduction-playground-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.reduction-playground-inst {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.playground-button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reduction-duality-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.duality-panel {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.duality-panel.is-panel {
+  border-left: 4px solid #10b981;
+}
+
+.duality-panel.vc-panel {
+  border-left: 4px solid #8b5cf6;
+}
+
+.duality-panel h5 {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.duality-panel .panel-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.duality-panel .panel-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-ok {
+  color: #10b981;
+}
+
+.status-err {
+  color: #ef4444;
+}
+
+.reduction-interactive-svg {
+  width: 100%;
+  max-width: 580px;
+  height: 300px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+  display: block;
+}
+
+.interactive-node {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.interactive-node:hover circle {
+  filter: brightness(1.15);
+}
+
+.playground-theorem-callout {
+  padding: 0.85rem 1rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}

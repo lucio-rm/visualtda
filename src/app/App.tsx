@@ -13,6 +13,8 @@ import { KnapsackPlayground } from '../components/visualizers/KnapsackPlayground
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
+import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVcVisualizer';
+import { ReductionIsVcPlayground } from '../components/visualizers/ReductionIsVcPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -287,6 +289,26 @@ const MAX_FLOW_PSEUDOCODE = `ALGORITMO EdmondsKarp(G, s, t):
 
 const MAX_FLOW_CORRECTNESS = `Teorema Fundamental Max-Flow Min-Cut: Para cualquier flujo factible f y corte s-t (A, B), el lema de dualidad débil establece v(f) <= c(A, B). Cuando el algoritmo de Edmonds-Karp termina al no existir más caminos de aumento en la red residual G_f, sea A* el conjunto de vértices alcanzables desde s en G_f y B* = V \\ A*. Toda arista de A* a B* está saturada (f(e) = c(e)) y toda arista inversa está vacía (f(e') = 0). Por lo tanto, v(f) = c(A*, B*), demostrando simultáneamente que f es un flujo máximo y (A*, B*) es un corte mínimo (Dualidad Fuerte). Elegir caminos más cortos con BFS garantiza convergencia en O(V * E^2).`;
 
+// Reduction IS <=_P VC Content
+const REDUCTION_CANONICAL_PYTHON = `def reducir_instancia_is_a_vc(vertices, aristas, k):
+    # Transformación polinomial de la instancia: el grafo G se preserva y k' = |V| - k
+    k_prima = len(vertices) - k
+    return vertices, aristas, k_prima
+
+def transformar_solucion_vc_a_is(vertices, cobertura):
+    # Recuperación complementaria de la solución: S = V \\ C
+    set_c = set(cobertura)
+    return [v for v in vertices if v not in set_c]`;
+
+const REDUCTION_PSEUDOCODE = `ALGORITMO Reduccion_IS_a_VC(Grafo G = (V, E), k):
+    k' ← Longitud(V) - k
+    RETORNAR (G, k')
+
+PROCEDIMIENTO Reconstruir_IS(V, Cobertura C):
+    RETORNAR [v PARA v EN V SI v ∉ C]`;
+
+const REDUCTION_CORRECTNESS = `Teorema Fundamental de Complementariedad (Kleinberg & Tardos 8.1): Sea G = (V, E) un grafo y S un subconjunto de V. S es un Conjunto Independiente si y solo si V \\ S es una Cobertura de Vértices. Demostración (⟺): (⇒) Si S es independiente, ninguna arista tiene ambos extremos en S; por ende, toda arista tiene al menos un extremo en V \\ S, haciendo de V \\ S una cobertura. (⇐) Si V \\ S es una cobertura, toda arista tiene al menos un extremo fuera de S; por ende, ninguna arista une dos vértices de S, haciendo de S un conjunto independiente. Como la transformación toma tiempo O(|V| + |E|), se demuestra formalmente que Independent Set <=_P Vertex Cover y viceversa.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -384,6 +406,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: MAX_FLOW_CORRECTNESS,
         timeComplexity: 'O(V · E²)',
         spaceComplexity: 'O(V + E)'
+      };
+    }
+
+    if (selectedExercise.id === 'vertex-cover-reduction') {
+      return {
+        visualizerSlot: <ReductionIsVcVisualizer />,
+        discoverPlaygroundSlot: <ReductionIsVcPlayground />,
+        canonicalPython: REDUCTION_CANONICAL_PYTHON,
+        pseudocode: REDUCTION_PSEUDOCODE,
+        correctnessExplanation: REDUCTION_CORRECTNESS,
+        timeComplexity: 'O(|V| + |E|) [Reducción Polinomial]',
+        spaceComplexity: 'O(|V| + |E|)'
       };
     }
 
