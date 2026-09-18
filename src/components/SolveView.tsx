@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ExerciseMetadata } from '../types';
+import { useLanguage } from '../i18n/LanguageContext';
+import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseContent';
 
 interface SolveViewProps {
   exercise: ExerciseMetadata;
@@ -12,18 +14,35 @@ export const SolveView: React.FC<SolveViewProps> = ({
   exercise,
   onSuccess,
   onSkipToUnderstand,
-  starterCode = '# Escribe tu solución aquí en Python\ndef resolver(n):\n    pass\n'
+  starterCode
 }) => {
-  const [code, setCode] = useState(starterCode);
+  const { language, t, dict } = useLanguage();
+
+  const content = useMemo(() => {
+    return EXERCISE_SOLVE_CONTENT[exercise.id] || null;
+  }, [exercise.id]);
+
+  const initialCode = starterCode || content?.starterCode || '# Escribe tu solución aquí en Python\ndef resolver():\n    pass\n';
+  const [code, setCode] = useState(initialCode);
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
   const [showSkipModal, setShowSkipModal] = useState(false);
   const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
   const [testSummary, setTestSummary] = useState<string>('');
+  const [testResults, setTestResults] = useState<TestCaseResult[]>([]);
 
-  const hints = [
-    'Pista 1: Identifica qué información mínima necesitas recordar al avanzar de una etapa o fila a la siguiente.',
-    'Pista 2: Cada decisión restringe fuertemente las opciones futuras. Intenta podar tan pronto como se detecte una incompatibilidad.',
-    'Pista 3: Construye la solución de forma incremental. Si una rama no tiene salida válida, retrocede (backtrack) y prueba la siguiente alternativa.'
+  const hints = content?.hints || [
+    {
+      es: 'Pista 1: Identifica qué información mínima necesitas recordar al avanzar de una etapa a la siguiente.',
+      en: 'Hint 1: Identify what minimal information you need to maintain when advancing stages.'
+    },
+    {
+      es: 'Pista 2: Cada decisión restringe fuertemente las opciones futuras. Intenta podar tan pronto como se detecte una incompatibilidad.',
+      en: 'Hint 2: Early pruning: discard infeasible candidate decisions as soon as constraints are violated.'
+    },
+    {
+      es: 'Pista 3: Construye la solución de forma sistemática y verifica la corrección sobre casos base antes de generalizar.',
+      en: 'Hint 3: Construct solutions systematically and verify base cases before generalizing.'
+    }
   ];
 
   const toggleHint = (index: number) => {
@@ -34,30 +53,60 @@ export const SolveView: React.FC<SolveViewProps> = ({
     }
   };
 
-  const handleRunTests = () => {
+  const handleRunTests = async () => {
     setTestStatus('running');
-    setTimeout(() => {
-      // Mock validation execution (in P5/P6 we integrate real validator & Pyodide)
-      if (code.trim().length > 40 && !code.includes('pass')) {
+    setTestSummary(t(dict.testsRunning));
+
+    // Simulate async execution (with Pyodide/worker boundary)
+    await new Promise((resolve) => setTimeout(resolve, 350));
+
+    if (content?.runTests) {
+      const evaluation = await content.runTests(code);
+      setTestResults(evaluation.results);
+
+      if (evaluation.passed) {
         setTestStatus('passed');
-        setTestSummary('¡Excelente! 10 / 10 casos de prueba superados con éxito.');
+        setTestSummary(
+          language === 'es'
+            ? `✓ ¡Excelente! ${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
+            : `✓ Excellent! ${evaluation.totalPassed} / ${evaluation.totalTests} test cases passed successfully.`
+        );
         onSuccess();
       } else {
         setTestStatus('failed');
-        setTestSummary('2 / 10 pruebas superadas. Faltan casos bordes o la función devuelve None.');
+        setTestSummary(
+          language === 'es'
+            ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisa las condiciones que no cumplieron la validación.`
+            : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check conditions that failed validation.`
+        );
       }
-    }, 400);
+    } else {
+      // Fallback
+      if (code.trim().length > 40 && !code.includes('pass\n')) {
+        setTestStatus('passed');
+        setTestSummary(t(dict.testsSuccess));
+        onSuccess();
+      } else {
+        setTestStatus('failed');
+        setTestSummary(
+          language === 'es'
+            ? 'Prueba incompleta. La función aún contiene "pass" o falta implementar la lógica.'
+            : 'Incomplete test. Function still contains "pass" or missing implementation.'
+        );
+      }
+    }
   };
 
   return (
     <section className="phase-view solve-view" aria-labelledby="solve-heading">
       <div className="view-intro">
         <h3 id="solve-heading" className="view-title">
-          2. Resolver: Plantea tu Solución Algorítmica
+          {language === 'es' ? '2. Resolver: Plantea tu Solución Algorítmica' : '2. Solve: Formulate Your Algorithmic Solution'}
         </h3>
         <p className="view-lead">
-          Implementa el algoritmo para <strong>{exercise.title.es}</strong>. Si te trabas, puedes consultar pistas progresivas
-          o solicitar ver la solución canónica en cualquier momento.
+          {language === 'es'
+            ? <>Implementa el algoritmo para <strong>{t(exercise.title)}</strong>. Si te trabas, puedes consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.</>
+            : <>Implement the algorithm for <strong>{t(exercise.title)}</strong>. If you get stuck, use progressive hints or view the canonical solution at any time.</>}
         </p>
       </div>
 
@@ -72,8 +121,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
               className="code-editor-input"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              rows={12}
-              aria-label="Editor de código Python para tu solución"
+              rows={14}
+              aria-label={language === 'es' ? 'Editor de código Python para tu solución' : 'Python code editor for your solution'}
               spellCheck={false}
             />
             <div className="editor-actions">
@@ -83,22 +132,42 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 onClick={handleRunTests}
                 disabled={testStatus === 'running'}
               >
-                {testStatus === 'running' ? 'Ejecutando pruebas...' : '▶ Ejecutar pruebas locales'}
+                {testStatus === 'running' ? t(dict.testsRunning) : t(dict.runTests)}
               </button>
             </div>
           </div>
 
           {testStatus !== 'idle' && (
             <div className={`test-feedback-card ${testStatus}`}>
-              <h4>Resultado de la Evaluación</h4>
-              <p>{testSummary}</p>
+              <h4>{language === 'es' ? 'Resultado de la Evaluación' : 'Evaluation Result'}</h4>
+              <p className="test-summary-message">{testSummary}</p>
+
+              {testResults.length > 0 && (
+                <div className="test-case-results-list">
+                  {testResults.map((tr) => (
+                    <div key={tr.testId} className={`test-case-item ${tr.passed ? 'pass' : 'fail'}`}>
+                      <span className="test-case-badge">{tr.passed ? '✓ PASS' : '✗ FAIL'}</span>
+                      <div className="test-case-details">
+                        <span className="test-case-desc">{t(tr.description)}</span>
+                        {tr.message && <span className="test-case-msg">{tr.message}</span>}
+                        {tr.actual && !tr.passed && (
+                          <span className="test-case-actual">
+                            {language === 'es' ? 'Obtenido' : 'Actual'}: {tr.actual} | {language === 'es' ? 'Esperado' : 'Expected'}: {tr.expected}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {testStatus === 'passed' && (
                 <button
                   type="button"
                   className="btn-primary mt-2"
                   onClick={onSuccess}
                 >
-                  Continuar a Comprender la Solución &rarr;
+                  {language === 'es' ? 'Continuar a Comprender la Solución →' : 'Proceed to Understand Solution →'}
                 </button>
               )}
             </div>
@@ -107,10 +176,14 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
         <aside className="solve-sidebar">
           <div className="hints-card">
-            <h4>Pistas Progresivas (Máximo 3)</h4>
-            <p className="hints-desc">Descubre pistas sólo si las necesitas para desbloquear tu razonamiento:</p>
+            <h4>{t(dict.hintsTitle)} (Máximo 3)</h4>
+            <p className="hints-desc">
+              {language === 'es'
+                ? 'Descubre pistas sólo si las necesitas para desbloquear tu razonamiento:'
+                : 'Unlock hints only if you need guidance to unblock your reasoning:'}
+            </p>
             <div className="hints-list">
-              {hints.map((hintText, idx) => {
+              {hints.map((hint, idx) => {
                 const isRevealed = revealedHints.includes(idx);
                 return (
                   <div key={idx} className="hint-item">
@@ -120,9 +193,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
                       onClick={() => toggleHint(idx)}
                       aria-expanded={isRevealed}
                     >
-                      {isRevealed ? `▼ Pista ${idx + 1}` : `▶ Ver Pista ${idx + 1}`}
+                      {isRevealed
+                        ? `▼ ${language === 'es' ? 'Pista' : 'Hint'} ${idx + 1}`
+                        : `▶ ${language === 'es' ? 'Ver Pista' : 'View Hint'} ${idx + 1}`}
                     </button>
-                    {isRevealed && <div className="hint-content">{hintText}</div>}
+                    {isRevealed && <div className="hint-content">{t(hint)}</div>}
                   </div>
                 );
               })}
@@ -130,17 +205,18 @@ export const SolveView: React.FC<SolveViewProps> = ({
           </div>
 
           <div className="skip-solution-card">
-            <h4>¿Prefieres ver la solución directa?</h4>
+            <h4>{language === 'es' ? '¿Prefieres ver la solución directa?' : 'Prefer to see the solution directly?'}</h4>
             <p>
-              El objetivo es pedagógico. Puedes consultar la solución canónica comentada y el análisis
-              formal de complejidad sin ser bloqueado.
+              {language === 'es'
+                ? 'El objetivo es pedagógico. Puedes consultar la solución canónica comentada y el análisis formal sin ser bloqueado.'
+                : 'The goal is educational. You can view the canonical solution and formal analysis anytime without being blocked.'}
             </p>
             <button
               type="button"
               className="btn-secondary"
               onClick={() => setShowSkipModal(true)}
             >
-              Consultar solución canónica
+              {t(dict.viewCanonicalSolution)}
             </button>
           </div>
         </aside>
@@ -149,18 +225,15 @@ export const SolveView: React.FC<SolveViewProps> = ({
       {showSkipModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="skip-dialog-title">
           <div className="modal-card">
-            <h4 id="skip-dialog-title">¿Deseas pasar directamente a la Solución?</h4>
-            <p>
-              Te recomendamos intentar resolver el problema unos minutos más o usar las pistas.
-              Sin embargo, puedes desbloquear la explicación canónica completa de inmediato.
-            </p>
+            <h4 id="skip-dialog-title">{t(dict.skipModalTitle)}</h4>
+            <p>{t(dict.skipModalBody)}</p>
             <div className="modal-actions">
               <button
                 type="button"
                 className="btn-secondary"
                 onClick={() => setShowSkipModal(false)}
               >
-                Seguir intentando
+                {t(dict.skipModalCancel)}
               </button>
               <button
                 type="button"
@@ -170,7 +243,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   onSkipToUnderstand();
                 }}
               >
-                Ver solución canónica &rarr;
+                {t(dict.skipModalConfirm)} &rarr;
               </button>
             </div>
           </div>
