@@ -1,0 +1,22 @@
+{
+  "id": "subset-sum-backtracking",
+  "problemId": "subset-sum",
+  "techniqueId": "backtracking",
+  "categoryId": "backtracking",
+  "order": 2,
+  "difficulty": 2,
+  "title": {
+    "es": "Suma de Subconjuntos (Subset Sum con Podas)",
+    "en": "Subset Sum (Backtracking with Pruning)"
+  },
+  "subtitle": {
+    "es": "Encontrar todos los subconjuntos de enteros positivos que suman exactamente S explorando el árbol de decisiones con podas por exceso y cota superior",
+    "en": "Find all subsets of positive integers summing to exactly S exploring the decision tree with excess and upper-bound pruning"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["backtracking", "subset-sum", "pruning", "recursion", "decision-tree", "fiuba"],
+  "parameters": {
+    "defaultNumbers": [2, 3, 5, 7, 8],
+    "defaultTarget": 10
+  }
+}

@@ -12,6 +12,7 @@ import { linearProgrammingValidator } from '../engine/algorithms/linearProgrammi
 import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
 import { randomizedFairCoinValidator } from '../engine/algorithms/randomizedFairCoinValidator';
 import { roadAntennasValidator } from '../engine/algorithms/roadAntennasValidator';
+import { subsetSumValidator } from '../engine/algorithms/subsetSumValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -889,6 +890,75 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid,
           expected: 'Cobertura óptima válida',
           actual: val3.valid ? `${out3.length} antenas: [${out3.join(', ')}]` : val3.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'subset-sum-backtracking': {
+        // Test 1: Guía Ej. 11: [2, 3, 5, 7, 8], S = 10
+        const t1Nums = [2, 3, 5, 7, 8];
+        const res1 = await service.executePython(code, 'subconjuntos_que_suman', [t1Nums, 10]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'subset-exec-fail',
+              description: { es: 'Ejecución de subconjuntos_que_suman(numeros, objetivo)', en: 'Execution of subconjuntos_que_suman(numeros, objetivo)' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const out1 = (Array.isArray(res1.result) ? res1.result : []) as number[][];
+        const val1 = subsetSumValidator.validate({ numbers: t1Nums, target: 10 }, out1);
+        results.push({
+          testId: 'py-subset-guia-ej11',
+          description: {
+            es: 'Guía Ej. 11: [2, 3, 5, 7, 8] con S = 10 (halla los 3 subconjuntos válidos).',
+            en: 'Guide Ex. 11: [2, 3, 5, 7, 8] with S = 10 (finds all 3 valid subsets).'
+          },
+          passed: val1.valid && out1.length === 3,
+          expected: '3 subconjuntos válidos',
+          actual: val1.valid ? `${out1.length} subconjunto(s)` : val1.errors.join('; ')
+        });
+
+        // Test 2: Unreachable target: [2, 4, 6], S = 7
+        const t2Nums = [2, 4, 6];
+        const res2 = await service.executePython(code, 'subconjuntos_que_suman', [t2Nums, 7]);
+        const out2 = (Array.isArray(res2.result) ? res2.result : []) as number[][];
+        const val2 = subsetSumValidator.validate({ numbers: t2Nums, target: 7 }, out2);
+        results.push({
+          testId: 'py-subset-unreachable',
+          description: {
+            es: 'Objetivo inalcanzable [2, 4, 6] con S = 7 (retorna lista vacía).',
+            en: 'Unreachable target [2, 4, 6] with S = 7 (returns empty list).'
+          },
+          passed: val2.valid && out2.length === 0,
+          expected: '0 subconjuntos ([])',
+          actual: `${out2.length} subconjunto(s)`
+        });
+
+        // Test 3: Exact single element: [10, 20, 30], S = 10
+        const t3Nums = [10, 20, 30];
+        const res3 = await service.executePython(code, 'subconjuntos_que_suman', [t3Nums, 10]);
+        const out3 = (Array.isArray(res3.result) ? res3.result : []) as number[][];
+        const val3 = subsetSumValidator.validate({ numbers: t3Nums, target: 10 }, out3);
+        results.push({
+          testId: 'py-subset-single-match',
+          description: {
+            es: 'Coincidencia unitaria: [10, 20, 30] con S = 10 (retorna [[10]]).',
+            en: 'Single match: [10, 20, 30] with S = 10 (returns [[10]]).'
+          },
+          passed: val3.valid && out3.length === 1 && out3[0]?.[0] === 10,
+          expected: '[[10]]',
+          actual: JSON.stringify(out3)
         });
         break;
       }

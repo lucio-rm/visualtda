@@ -27,6 +27,8 @@ import { RandomizedFairCoinVisualizer } from '../components/visualizers/Randomiz
 import { RandomizedFairCoinPlayground } from '../components/visualizers/RandomizedFairCoinPlayground';
 import { RoadAntennasVisualizer } from '../components/visualizers/RoadAntennasVisualizer';
 import { RoadAntennasPlayground } from '../components/visualizers/RoadAntennasPlayground';
+import { SubsetSumVisualizer } from '../components/visualizers/SubsetSumVisualizer';
+import { SubsetSumPlayground } from '../components/visualizers/SubsetSumPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -568,6 +570,64 @@ const ROAD_ANTENNAS_PSEUDOCODE = `ALGORITMO ConstruirAntenas(casas, radio):
 
 const ROAD_ANTENNAS_CORRECTNESS = `Teorema de Optimalidad por Greedy Stays Ahead (Kleinberg & Tardos 4.2): Sean A = {a_1, ..., a_k} las posiciones ordenadas elegidas por Greedy y O* = {o_1, ..., o_m} cualquier solución óptima válida. Demostramos por inducción que a_j >= o_j para todo j. Caso base (j=1): la primera casa x_1 requiere o_1 <= x_1 + R. Como Greedy elige a_1 = x_1 + R, a_1 >= o_1. Paso inductivo: si a_j >= o_j, el alcance a_j + R >= o_j + R. La primera casa no cubierta x_sig está más allá de o_j + R, por lo que en O* debe cubrirse con o_{j+1} <= x_sig + R. Como Greedy elige a_{j+1} = x_sig + R >= o_{j+1}, la frontera de Greedy siempre está al menos tan a la derecha como la de O*. Por ende, k <= m y como O* es óptimo, k = m.`;
 
+// Subset Sum (Backtracking with Pruning) Content
+const SUBSET_SUM_CANONICAL_PYTHON = `def subconjuntos_que_suman(numeros: list[int], objetivo: int) -> list[list[int]]:
+    elementos = [x for x in numeros if 0 < x <= objetivo]
+    elementos.sort(reverse=True)
+    soluciones = []
+    actual = []
+
+    def backtrack(idx: int, suma_actual: int, remanente: int) -> None:
+        if suma_actual == objetivo:
+            soluciones.append(list(actual))
+            return
+        if idx >= len(elementos):
+            return
+
+        elem = elementos[idx]
+        nuevo_remanente = remanente - elem
+
+        # Poda por exceso: suma + elem <= objetivo
+        if suma_actual + elem <= objetivo:
+            actual.append(elem)
+            backtrack(idx + 1, suma_actual + elem, nuevo_remanente)
+            actual.pop()
+
+        # Poda por déficit: suma + nuevo_remanente >= objetivo
+        if suma_actual + nuevo_remanente >= objetivo:
+            backtrack(idx + 1, suma_actual, nuevo_remanente)
+
+    backtrack(0, 0, sum(elementos))
+    return soluciones`;
+
+const SUBSET_SUM_PSEUDOCODE = `ALGORITMO SubconjuntosQueSuman(numeros, objetivo):
+    elementos ← OrdenarDecreciente([x EN numeros SI x <= objetivo])
+    soluciones ← []
+    actual ← []
+
+    PROCEDIMIENTO Backtrack(idx, suma_actual, remanente):
+        SI suma_actual = objetivo:
+            soluciones.Agregar(Copia(actual))
+            RETORNAR
+        SI idx >= Longitud(elementos):
+            RETORNAR
+
+        elem ← elementos[idx]
+        nuevo_remanente ← remanente - elem
+
+        SI suma_actual + elem <= objetivo:  // Poda por Exceso
+            actual.Agregar(elem)
+            Backtrack(idx + 1, suma_actual + elem, nuevo_remanente)
+            actual.QuitarUltimo()
+
+        SI suma_actual + nuevo_remanente >= objetivo:  // Poda por Déficit
+            Backtrack(idx + 1, suma_actual, nuevo_remanente)
+
+    Backtrack(0, 0, Suma(elementos))
+    RETORNAR soluciones`;
+
+const SUBSET_SUM_CORRECTNESS = `Teorema de Correctitud de Backtracking con Podas: El algoritmo modela el espacio de 2^n subconjuntos como un árbol binario de decisiones (incluir o excluir cada elemento). Por ser números estrictamente positivos: (1) Invariante de exceso: si suma_actual + w_i > S, cualquier inclusión adicional en el subárbol solo aumentará la suma; por lo tanto, ninguna solución factible existe en ese subárbol (Poda segura). (2) Invariante de déficit: si suma_actual + sum_{k=i+1}^n w_k < S, incluso si se incluyeran todos los números restantes, la suma máxima alcanzable no llegará a S; ninguna solución factible es descartada (Poda segura). Al terminar la exploración, el conjunto de hojas no podadas contiene exactamente todas las soluciones válidas.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -749,6 +809,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: ROAD_ANTENNAS_CORRECTNESS,
         timeComplexity: 'O(n log n) [Ordenamiento] + O(n) [Escaneo lineal]',
         spaceComplexity: 'O(k) [k antenas construidas]'
+      };
+    }
+
+    if (selectedExercise.id === 'subset-sum-backtracking') {
+      return {
+        visualizerSlot: <SubsetSumVisualizer />,
+        discoverPlaygroundSlot: <SubsetSumPlayground />,
+        canonicalPython: SUBSET_SUM_CANONICAL_PYTHON,
+        pseudocode: SUBSET_SUM_PSEUDOCODE,
+        correctnessExplanation: SUBSET_SUM_CORRECTNESS,
+        timeComplexity: 'O(2^n) [Peor caso] / O(n) espacio con podas por exceso y cota superior',
+        spaceComplexity: 'O(n) [Profundidad del árbol de recursión]'
       };
     }
 

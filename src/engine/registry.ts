@@ -101,6 +101,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['backtracking', 'chess', 'recursion', 'pruning']
   },
   {
+    id: 'subset-sum-backtracking',
+    problemId: 'subset-sum',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 2,
+    difficulty: 2,
+    title: { es: 'Suma de Subconjuntos (Subset Sum)', en: 'Subset Sum' },
+    subtitle: {
+      es: 'Encontrar todos los subconjuntos que suman exactamente S con podas tempranas por exceso y cota superior',
+      en: 'Find all subsets summing to exactly S with early pruning by excess and upper-bound deficit'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'subset-sum', 'pruning', 'recursion', 'fiuba']
+  },
+  {
     id: 'merge-sort',
     problemId: 'merge-sort',
     techniqueId: 'divide-and-conquer',

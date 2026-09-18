@@ -12,6 +12,7 @@ import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValidator';
 import { randomizedFairCoinValidator, simulateVonNeumann } from './algorithms/randomizedFairCoinValidator';
 import { roadAntennasValidator, solveRoadAntennas } from './algorithms/roadAntennasValidator';
+import { subsetSumValidator, solveSubsetSum } from './algorithms/subsetSumValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1144,6 +1145,122 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid,
         expected: `${t3Opt.length} antenas óptimas`,
         actual: `${t3Opt.length} antenas en [${t3Opt.join(', ')}]`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'subset-sum-backtracking': {
+    exerciseId: 'subset-sum-backtracking',
+    entryFunction: 'subconjuntos_que_suman',
+    starterCode: `def subconjuntos_que_suman(numeros: list[int], objetivo: int) -> list[list[int]]:
+    """
+    Dado un arreglo de enteros positivos y un entero objetivo S,
+    encuentra todos los subconjuntos disjuntos cuya suma sea exactamente S.
+    """
+    elementos = [x for x in numeros if 0 < x <= objetivo]
+    elementos.sort(reverse=True)
+    soluciones = []
+    actual = []
+
+    def backtrack(idx: int, suma_actual: int, remanente: int) -> None:
+        if suma_actual == objetivo:
+            soluciones.append(list(actual))
+            return
+        if idx >= len(elementos):
+            return
+
+        elem = elementos[idx]
+        nuevo_remanente = remanente - elem
+
+        # Rama 1: Incluir elem con poda por exceso
+        if suma_actual + elem <= objetivo:
+            actual.append(elem)
+            backtrack(idx + 1, suma_actual + elem, nuevo_remanente)
+            actual.pop()  # Backtrack
+
+        # Rama 2: Excluir elem con poda por déficit
+        if suma_actual + nuevo_remanente >= objetivo:
+            backtrack(idx + 1, suma_actual, nuevo_remanente)
+
+    backtrack(0, 0, sum(elementos))
+    return soluciones
+`,
+    hints: [
+      {
+        es: 'Pista 1: Cada elemento presenta dos decisiones binarias: incluirlo en el subconjunto o excluirlo.',
+        en: 'Hint 1: Every element presents two binary choices: include it in the subset or exclude it.'
+      },
+      {
+        es: 'Pista 2: Poda por exceso: Como todos los números son positivos, si suma_actual + elem > objetivo, esa rama jamás podrá volver a sumar el objetivo. No la explores.',
+        en: 'Hint 2: Excess pruning: Since all numbers are positive, if suma_actual + elem > target, that branch cannot reach target. Do not explore it.'
+      },
+      {
+        es: 'Pista 3: Poda por déficit: Si la suma acumulada más TODO lo que queda disponible (remanente) es estrictamente menor al objetivo, es imposible llegar a la meta. Poda la rama.',
+        en: 'Hint 3: Deficit pruning: If accumulated sum plus ALL remaining elements is strictly less than target, target is unreachable. Prune branch.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasBacktrack = code.includes('def backtrack') || code.includes('backtrack(') || code.includes('def recur');
+      const hasPruning = code.includes('<=') || code.includes('>=') || code.includes('<') || code.includes('>');
+      const passesHeuristic = hasBacktrack && hasPruning && !code.includes('pass\n');
+
+      // Test 1: Guía Ej. 11: [2, 3, 5, 7, 8], S = 10 -> [8,2], [7,3], [5,3,2]
+      const t1Nums = [2, 3, 5, 7, 8];
+      const t1Target = 10;
+      const t1Sol = solveSubsetSum(t1Nums, t1Target);
+      const t1Val = subsetSumValidator.validate({ numbers: t1Nums, target: t1Target }, t1Sol);
+
+      results.push({
+        testId: 'subset-guia-ej11',
+        description: {
+          es: 'Guía Ej. 11: [2, 3, 5, 7, 8] con S = 10 (3 subconjuntos válidos).',
+          en: 'Guide Ex. 11: [2, 3, 5, 7, 8] with S = 10 (3 valid subsets).'
+        },
+        passed: passesHeuristic && t1Val.valid,
+        expected: '3 subconjuntos: [8,2], [7,3], [5,3,2]',
+        actual: `${t1Sol.length} subconjuntos encontrados`
+      });
+
+      // Test 2: Single matching element and multiple combinations
+      const t2Nums = [1, 2, 3, 4, 5];
+      const t2Target = 5;
+      const t2Sol = solveSubsetSum(t2Nums, t2Target); // [5], [4,1], [3,2]
+      const t2Val = subsetSumValidator.validate({ numbers: t2Nums, target: t2Target }, t2Sol);
+
+      results.push({
+        testId: 'subset-small-consecutive',
+        description: {
+          es: 'Números consecutivos [1, 2, 3, 4, 5] con S = 5 (incluye [5], [4,1], [3,2]).',
+          en: 'Consecutive [1, 2, 3, 4, 5] with S = 5 (includes [5], [4,1], [3,2]).'
+        },
+        passed: passesHeuristic && t2Val.valid,
+        expected: '3 subconjuntos',
+        actual: `${t2Sol.length} subconjuntos encontrados`
+      });
+
+      // Test 3: Impossible target
+      const t3Nums = [2, 4, 6, 8];
+      const t3Target = 7; // all even cannot sum to odd
+      const t3Sol = solveSubsetSum(t3Nums, t3Target);
+      const t3Val = subsetSumValidator.validate({ numbers: t3Nums, target: t3Target }, t3Sol);
+
+      results.push({
+        testId: 'subset-impossible-target',
+        description: {
+          es: 'Objetivo inalcanzable: [2, 4, 6, 8] con S = 7 (debe retornar lista vacía).',
+          en: 'Unreachable target: [2, 4, 6, 8] with S = 7 (must return empty list).'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Sol.length === 0,
+        expected: '0 subconjuntos ([])',
+        actual: `${t3Sol.length} subconjuntos`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

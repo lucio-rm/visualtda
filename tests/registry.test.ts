@@ -28,8 +28,9 @@ describe('ExerciseRegistry', () => {
 
   it('filters exercises by category correctly', () => {
     const btExercises = registry.getExercises('backtracking');
-    expect(btExercises.length).toBe(1);
-    expect(btExercises[0].id).toBe('n-queens');
+    expect(btExercises.length).toBe(2);
+    expect(btExercises.map((e) => e.id)).toContain('n-queens');
+    expect(btExercises.map((e) => e.id)).toContain('subset-sum-backtracking');
 
     const greedyExercises = registry.getExercises('greedy');
     expect(greedyExercises.length).toBe(3);
