@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P2 (Exercise Page & 3-Phase Flow)
-- **CURRENT_TASK**: Implementing PhaseSwitcher and views for Discover, Solve, and Understand
+- **CURRENT_PHASE**: P3 & P4 (N-Queens Vertical Slice, Trace Engine & Visualizer)
+- **CURRENT_TASK**: Implementing pure TypeScript N-Queens trace generator, timeline playback hook, and SVG chessboard visualizer
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -10,11 +10,12 @@
   - Gitignore and hygiene configuration
   - P0: Full toolchain bootstrap (Vite, React 19, TypeScript, Vitest, ESLint)
   - P1: Domain models (`src/types/`), Exercise Registry (`src/engine/registry.ts`), and App navigation shell
-  - P1 verification: `lint`, `typecheck`, `test` (10 tests), `build` passing 100%
+  - P2: 3-Phase exercise flow (`PhaseSwitcher`, `DiscoverView`, `SolveView`, `UnderstandView`, `ExerciseView`)
+  - P2 verification: `lint`, `typecheck`, `test` (15 tests), `build` passing 100%
 - **IN_PROGRESS**:
-  - P2: 3-Phase exercise flow (`src/components/PhaseSwitcher.tsx`, Discover / Solve / Understand views)
+  - P3 & P4: N-Queens canonical algorithm, trace engine, timeline controller, and SVG visualizer
 - **BLOCKED**: None
-- **NEXT_TASK**: Build 3-phase flow components and test phase transitions
-- **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`, none blocking P2)
+- **NEXT_TASK**: Implement N-Queens trace engine, `useTraceTimeline`, `NQueensVisualizer`, and `NQueensValidator` with tests
+- **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`, none blocking P3/P4)
 - **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS)
-- **LAST_COMMIT**: `2a3db0d`
+- **LAST_COMMIT**: `14e0446`

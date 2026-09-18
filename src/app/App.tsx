@@ -3,6 +3,7 @@ import { registry } from '../engine/registry';
 import { Header } from '../components/Header';
 import { CategoryNav } from '../components/CategoryNav';
 import { ExerciseList } from '../components/ExerciseList';
+import { ExerciseView } from '../components/ExerciseView';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -70,26 +71,10 @@ export const App: React.FC = () => {
             </section>
           </>
         ) : (
-          <div className="exercise-container">
-            <div className="exercise-header">
-              <button
-                type="button"
-                className="btn-back"
-                onClick={handleHomeClick}
-                aria-label="Volver al catálogo de ejercicios"
-              >
-                &larr; Volver al catálogo
-              </button>
-              <h2>{selectedExercise.title.es}</h2>
-              <p className="exercise-desc">{selectedExercise.subtitle.es}</p>
-            </div>
-            <div className="exercise-placeholder-card">
-              <p>
-                Ejercicio <strong>{selectedExercise.id}</strong> seleccionado.
-                El flujo de 3 fases (Descubrir, Resolver, Comprender) y el motor de visualización se cargan a continuación.
-              </p>
-            </div>
-          </div>
+          <ExerciseView
+            exercise={selectedExercise}
+            onBackToCatalog={handleHomeClick}
+          />
         )}
       </main>
 
