@@ -7,7 +7,9 @@ import { ExerciseView } from '../components/ExerciseView';
 import { NQueensVisualizer } from '../components/visualizers/NQueensVisualizer';
 import { NQueensPlayground } from '../components/visualizers/NQueensPlayground';
 import { IntervalSchedulingVisualizer } from '../components/visualizers/IntervalSchedulingVisualizer';
+import { IntervalSchedulingPlayground } from '../components/visualizers/IntervalSchedulingPlayground';
 import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
+import { KnapsackPlayground } from '../components/visualizers/KnapsackPlayground';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
@@ -331,6 +333,7 @@ const AppContent: React.FC = () => {
     if (selectedExercise.id === 'interval-scheduling') {
       return {
         visualizerSlot: <IntervalSchedulingVisualizer />,
+        discoverPlaygroundSlot: <IntervalSchedulingPlayground />,
         canonicalPython: INTERVALS_CANONICAL_PYTHON,
         pseudocode: INTERVALS_PSEUDOCODE,
         correctnessExplanation: INTERVALS_CORRECTNESS,
@@ -342,6 +345,7 @@ const AppContent: React.FC = () => {
     if (selectedExercise.id === 'knapsack-dp') {
       return {
         visualizerSlot: <KnapsackDpVisualizer />,
+        discoverPlaygroundSlot: <KnapsackPlayground />,
         canonicalPython: KNAPSACK_DP_CANONICAL_PYTHON,
         pseudocode: KNAPSACK_DP_PSEUDOCODE,
         correctnessExplanation: KNAPSACK_DP_CORRECTNESS,
