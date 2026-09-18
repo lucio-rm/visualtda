@@ -1,0 +1,18 @@
+{
+  "id": "max-flow",
+  "problemId": "max-flow",
+  "techniqueId": "network-flow",
+  "categoryId": "network-flow",
+  "order": 1,
+  "difficulty": 4,
+  "title": {
+    "es": "Flujo Máximo y Corte Mínimo (Edmonds-Karp)",
+    "en": "Maximum Flow and Minimum Cut (Edmonds-Karp)"
+  },
+  "subtitle": {
+    "es": "Calcular flujo máximo en redes de capacidad y corte mínimo mediante caminos de aumento BFS en la red residual",
+    "en": "Compute maximum flow in capacity networks and minimum cut via BFS augmenting paths in residual graph"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["network-flow", "graphs", "residual-graph", "bfs", "min-cut", "edmonds-karp"]
+}

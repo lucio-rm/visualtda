@@ -159,6 +159,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['dynamic-programming', 'knapsack', 'memoization']
+  },
+  {
+    id: 'max-flow',
+    problemId: 'max-flow',
+    techniqueId: 'network-flow',
+    categoryId: 'network-flow',
+    order: 1,
+    difficulty: 4,
+    title: {
+      es: 'Flujo Máximo y Corte Mínimo',
+      en: 'Maximum Flow and Minimum Cut'
+    },
+    subtitle: {
+      es: 'Calcular flujo máximo en redes de capacidad y corte mínimo mediante caminos de aumento BFS',
+      en: 'Compute maximum flow in capacity networks and minimum cut via BFS augmenting paths'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['network-flow', 'graphs', 'residual-graph', 'bfs', 'min-cut', 'edmonds-karp']
   }
 ];
 

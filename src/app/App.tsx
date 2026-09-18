@@ -10,6 +10,7 @@ import { IntervalSchedulingVisualizer } from '../components/visualizers/Interval
 import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
+import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -222,6 +223,68 @@ PROCEDIMIENTO Merge(A, p, q, r):
 
 const MERGE_SORT_CORRECTNESS = `Invariante del procedimiento Merge: al inicio de cada iteración, el arreglo resultado contiene los k elementos menores de ambos subarreglos en orden no decreciente, y los punteros i y j apuntan a las menores cabezas no consumidas. Dado que los subarreglos base de tamaño 1 están trivialmente ordenados, por inducción matemática sobre el tamaño de los subarreglos, la combinación garantiza que cada nivel de la recursión produce secuencias perfectamente ordenadas. La altura del árbol de recursión es log2(n) y en cada nivel se realizan O(n) operaciones lineales, resultando en complejidad óptima Theta(n log n).`;
 
+// Max Flow Content
+const MAX_FLOW_CANONICAL_PYTHON = `from collections import deque
+
+def edmonds_karp(vertices, aristas, fuente, sumidero):
+    residual = {v: {} for v in vertices}
+    for e in aristas:
+        residual[e['origen']][e['destino']] = e['capacidad']
+        residual[e['destino']][e['origen']] = 0
+
+    flujo_total = 0
+    while True:
+        padre = {}
+        cola = deque([fuente])
+        visitados = {fuente}
+
+        while cola:
+            u = cola.popleft()
+            if u == sumidero: break
+            for v, cap in residual[u].items():
+                if v not in visitados and cap > 0:
+                    visitados.add(v)
+                    padre[v] = u
+                    cola.append(v)
+
+        if sumidero not in padre: break
+
+        # Cuello de botella
+        delta = float('inf')
+        curr = sumidero
+        while curr != fuente:
+            p = padre[curr]
+            delta = min(delta, residual[p][curr])
+            curr = p
+
+        curr = sumidero
+        while curr != fuente:
+            p = padre[curr]
+            residual[p][curr] -= delta
+            residual[curr][p] += delta
+            curr = p
+
+        flujo_total += delta
+
+    return flujo_total`;
+
+const MAX_FLOW_PSEUDOCODE = `ALGORITMO EdmondsKarp(G, s, t):
+    flujo_total ← 0
+    Inicializar red residual G_f con capacidades originales
+
+    MIENTRAS exista camino simple P de s a t en G_f (encontrado con BFS):
+        Δ ← MIN{ c_f(u, v) : (u, v) ∈ P }
+        flujo_total ← flujo_total + Δ
+        PARA CADA (u, v) EN P:
+            c_f(u, v) ← c_f(u, v) - Δ
+            c_f(v, u) ← c_f(v, u) + Δ
+
+    A* ← { v alcanzable desde s en G_f final }
+    B* ← V \\ A*
+    RETORNAR (flujo_total, CorteMinimo = (A*, B*))`;
+
+const MAX_FLOW_CORRECTNESS = `Teorema Fundamental Max-Flow Min-Cut: Para cualquier flujo factible f y corte s-t (A, B), el lema de dualidad débil establece v(f) <= c(A, B). Cuando el algoritmo de Edmonds-Karp termina al no existir más caminos de aumento en la red residual G_f, sea A* el conjunto de vértices alcanzables desde s en G_f y B* = V \\ A*. Toda arista de A* a B* está saturada (f(e) = c(e)) y toda arista inversa está vacía (f(e') = 0). Por lo tanto, v(f) = c(A*, B*), demostrando simultáneamente que f es un flujo máximo y (A*, B*) es un corte mínimo (Dualidad Fuerte). Elegir caminos más cortos con BFS garantiza convergencia en O(V * E^2).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -306,6 +369,17 @@ const AppContent: React.FC = () => {
         correctnessExplanation: MERGE_SORT_CORRECTNESS,
         timeComplexity: 'O(n log n)',
         spaceComplexity: 'O(n)'
+      };
+    }
+
+    if (selectedExercise.id === 'max-flow') {
+      return {
+        visualizerSlot: <MaxFlowVisualizer />,
+        canonicalPython: MAX_FLOW_CANONICAL_PYTHON,
+        pseudocode: MAX_FLOW_PSEUDOCODE,
+        correctnessExplanation: MAX_FLOW_CORRECTNESS,
+        timeComplexity: 'O(V · E²)',
+        spaceComplexity: 'O(V + E)'
       };
     }
 
