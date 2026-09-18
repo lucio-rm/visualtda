@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P10 (Complete 4-Technique Core & Pedagogical Engine)
-- **CURRENT_TASK**: Exercise-specific solve phase, progressive hints, and test runners across all 5 canonical exercises
+- **CURRENT_PHASE**: P13 (Advanced Algorithm Techniques & Problem Reductions)
+- **CURRENT_TASK**: NP-Completeness Problem Reductions (Kleinberg & Tardos Ch 8) & Approximation Algorithms
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -19,10 +19,14 @@
   - P8: Internationalization (ES / EN) toggle, `LanguageProvider`, `useLanguage` hook, and bilingual UI components
   - P9: Merge Sort (Divide & Conquer) vertical slice, bar chart visualizer, recursion tree depth, and subproblem range inspector
   - P10: Exercise-specific Solve phase content, 3-level progressive hints, and per-test feedback cards
-  - 59 unit tests passing 100% across 13 test files
-- **IN_PROGRESS**: Ready for user review or further milestones
+  - P11: Max Flow / Min Cut (Network Flow with Edmonds-Karp BFS, residual graph, augmenting paths, and min-cut cut-set partition)
+  - P12: Pyodide Web Worker Execution Infrastructure (`workerProtocol.ts`, `pyodideWorker.ts`, `pythonExecutionService.ts` with 5s watchdog)
+  - Interactive Discover Phase Playgrounds (`NQueensPlayground`, `IntervalSchedulingPlayground`, `KnapsackPlayground`)
+  - Real Python execution in browser via Pyodide Web Worker (`pythonTestRunner.ts` and `SolveView.tsx`) with stdout capture and execution benchmarking
+  - 68 unit tests passing 100% across 15 test files
+- **IN_PROGRESS**: Advancing through the Kleinberg & Tardos curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Pyodide Web Worker execution sandbox for student Python execution or additional advanced techniques (Max Flow / Reductions)
+- **NEXT_TASK**: Implement NP-Completeness / Problem Reductions (e.g. 3-SAT to Independent Set / Vertex Cover) or Approximation Algorithms
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 59 tests)
-- **LAST_COMMIT**: `3697fec`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 68 tests)
+- **LAST_COMMIT**: `5a3e878`
