@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P5 & P6 (Validator Architecture & Student Execution Boundary)
-- **CURRENT_TASK**: Expanding general validator architecture and interactive feedback
+- **CURRENT_PHASE**: P5 (CI & Documentation Synchronization)
+- **CURRENT_TASK**: Finalizing CI workflow and architectural documentation
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -11,21 +11,16 @@
   - P0: Full toolchain bootstrap (Vite, React 19, TypeScript, Vitest, ESLint)
   - P1: Domain models (`src/types/`), Exercise Registry (`src/engine/registry.ts`), and App navigation shell
   - P2: 3-Phase exercise flow (`PhaseSwitcher`, `DiscoverView`, `SolveView`, `UnderstandView`, `ExerciseView`)
-  - P3 & P4: N-Queens complete vertical slice, trace engine, timeline controller, and visualizer:
-    - Canonical Python solution (`exercises/n_queens/solution.py`) tested and passing
-    - Theory document with formal correctness invariant and complexity analysis (`theory.md`)
-    - Pseudocode specification (`pseudocode.md`)
-    - TypeScript N-Queens validator with O(1) conflict detection (`nQueensValidator.ts`)
-    - Deterministic N-Queens trace generator (`nQueensTrace.ts`)
-    - Playback controller hook (`useTraceTimeline.ts`)
-    - Declarative SVG chessboard with conflict rays and queen glyphs (`NQueensBoard.tsx`)
-    - Complete timeline visualizer component with speed & step controls (`NQueensVisualizer.tsx`)
-    - Interactive sandbox playground for Discover phase (`NQueensPlayground.tsx`)
-    - 30 unit tests covering all components and algorithms
+  - P3 & P4: N-Queens vertical slice, trace engine, timeline controller, and visualizers:
+    - Canonical Python solution, theory, pseudocode, metadata, test runner
+    - TypeScript validator, trace generator, useTraceTimeline hook
+    - NQueensBoard SVG, NQueensVisualizer panel, NQueensPlayground sandbox
+  - P5: GitHub Actions CI workflow (`.github/workflows/ci.yml`), README.md, docs/architecture.md, docs/roadmap.md
+  - 30 unit tests covering all components and algorithms
 - **IN_PROGRESS**:
-  - CI workflow verification and GitHub Actions workflow
+  - Preparing next milestone (Interval Scheduling / Knapsack exercises or Pyodide integration)
 - **BLOCKED**: None
-- **NEXT_TASK**: Configure `.github/workflows/ci.yml` and test static preview
+- **NEXT_TASK**: Second exercise vertical slice: Interval Scheduling (Greedy) to demonstrate multi-exercise scalability (P6)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
 - **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 30 tests)
-- **LAST_COMMIT**: `c27f34c`
+- **LAST_COMMIT**: `b945de7`
