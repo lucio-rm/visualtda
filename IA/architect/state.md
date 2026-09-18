@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P7 & Accessibility Polish
-- **CURRENT_TASK**: Added global keyboard accessibility (ArrowLeft, ArrowRight, Space/k, r) to timeline visualizers
+- **CURRENT_PHASE**: P10 (Complete 4-Technique Core & Pedagogical Engine)
+- **CURRENT_TASK**: Exercise-specific solve phase, progressive hints, and test runners across all 5 canonical exercises
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -14,11 +14,15 @@
   - P3 & P4: N-Queens complete vertical slice, trace engine, timeline controller, and visualizers
   - P5: GitHub Actions CI workflow (`.github/workflows/ci.yml`), README.md, docs/architecture.md, docs/roadmap.md
   - P6: Interval Scheduling (Greedy) vertical slice with earliest finish time proof and timeline visualizer
-  - Accessibility & Interaction Polish: Keyboard shortcuts (ArrowLeft/ArrowRight for stepping, Space/k for play/pause, r for reset) enabled for all visualizers with input-focus guards
-  - 36 unit tests passing 100% across 8 test files
+  - Accessibility & Interaction Polish: Global keyboard shortcuts (ArrowLeft/ArrowRight, Space/k, r) for all timeline visualizers
+  - P7: Knapsack Dual Slice (0/1 DP 2D Table visualizer vs Fractional Greedy ratio sorting and 0/1 counterexample comparison card)
+  - P8: Internationalization (ES / EN) toggle, `LanguageProvider`, `useLanguage` hook, and bilingual UI components
+  - P9: Merge Sort (Divide & Conquer) vertical slice, bar chart visualizer, recursion tree depth, and subproblem range inspector
+  - P10: Exercise-specific Solve phase content, 3-level progressive hints, and per-test feedback cards
+  - 59 unit tests passing 100% across 13 test files
 - **IN_PROGRESS**: Ready for user review or further milestones
 - **BLOCKED**: None
-- **NEXT_TASK**: Knapsack comparative slice (Fractional Greedy vs 0/1 Dynamic Programming) or Pyodide Web Worker execution sandbox
+- **NEXT_TASK**: Pyodide Web Worker execution sandbox for student Python execution or additional advanced techniques (Max Flow / Reductions)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 36 tests)
-- **LAST_COMMIT**: `a86bba4`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 59 tests)
+- **LAST_COMMIT**: `3697fec`
