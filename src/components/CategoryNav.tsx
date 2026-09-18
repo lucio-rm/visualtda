@@ -1,5 +1,6 @@
 import React from 'react';
 import { Category } from '../types';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface CategoryNavProps {
   categories: Category[];
@@ -12,6 +13,8 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   activeCategoryId,
   onSelectCategory
 }) => {
+  const { t, dict } = useLanguage();
+
   return (
     <nav className="category-nav" aria-label="Categorías de algoritmos">
       <ul className="category-list" role="tablist">
@@ -23,7 +26,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
             className={`category-tab ${activeCategoryId === null ? 'active' : ''}`}
             onClick={() => onSelectCategory(null)}
           >
-            Todos
+            {t(dict.allCategoriesTab)}
           </button>
         </li>
         {categories.map((cat) => (
@@ -35,7 +38,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
               className={`category-tab ${activeCategoryId === cat.id ? 'active' : ''}`}
               onClick={() => onSelectCategory(cat.id)}
             >
-              {cat.title.es}
+              {t(cat.title)}
             </button>
           </li>
         ))}

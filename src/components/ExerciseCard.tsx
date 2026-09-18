@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExerciseMetadata } from '../types';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface ExerciseCardProps {
   exercise: ExerciseMetadata;
@@ -7,6 +8,10 @@ interface ExerciseCardProps {
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect }) => {
+  const { t, dict } = useLanguage();
+  const title = t(exercise.title);
+  const subtitle = t(exercise.subtitle);
+
   return (
     <article className="exercise-card">
       <div className="card-header">
@@ -16,17 +21,17 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect }
             {'★'.repeat(exercise.difficulty)}{'☆'.repeat(5 - exercise.difficulty)}
           </span>
         </div>
-        <h3 className="card-title">{exercise.title.es}</h3>
+        <h3 className="card-title">{title}</h3>
       </div>
-      <p className="card-subtitle">{exercise.subtitle.es}</p>
+      <p className="card-subtitle">{subtitle}</p>
       <div className="card-footer">
         <button
           type="button"
           className="btn-open-exercise"
           onClick={() => onSelect(exercise.id)}
-          aria-label={`Abrir ejercicio ${exercise.title.es}`}
+          aria-label={`${t(dict.exploreExercise)} ${title}`}
         >
-          Explorar ejercicio &rarr;
+          {t(dict.exploreExercise)}
         </button>
       </div>
     </article>

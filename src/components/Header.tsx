@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeMode } from '../app/App';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface HeaderProps {
   theme: ThemeMode;
@@ -14,6 +15,8 @@ export const Header: React.FC<HeaderProps> = ({
   onHomeClick,
   currentExerciseTitle
 }) => {
+  const { language, setLanguage, dict, t } = useLanguage();
+
   return (
     <header className="app-header">
       <div className="header-brand">
@@ -21,17 +24,17 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={onHomeClick}
           className="brand-button"
-          aria-label="Ir al inicio de Visual TDA"
+          aria-label={language === 'es' ? 'Ir al inicio de Visual TDA' : 'Go to Visual TDA home'}
         >
           <span className="brand-logo" aria-hidden="true">♟️</span>
           <div className="brand-text">
             <span className="brand-title">Visual TDA</span>
-            <span className="brand-subtitle">Teoría y Diseño de Algoritmos</span>
+            <span className="brand-subtitle">{t(dict.brandSubtitle)}</span>
           </div>
         </button>
 
         {currentExerciseTitle && (
-          <div className="header-breadcrumb" aria-label="Ruta actual">
+          <div className="header-breadcrumb" aria-label="Breadcrumb">
             <span className="breadcrumb-separator" aria-hidden="true">/</span>
             <span className="breadcrumb-current">{currentExerciseTitle}</span>
           </div>
@@ -39,6 +42,19 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="header-controls">
+        <label className="lang-toggle-label">
+          <span className="sr-only">Idioma / Language</span>
+          <select
+            className="theme-select lang-select"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as 'es' | 'en')}
+            aria-label="Seleccionar idioma / Select language"
+          >
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
+          </select>
+        </label>
+
         <label className="theme-toggle-label">
           <span className="sr-only">Tema visual</span>
           <select
@@ -47,9 +63,9 @@ export const Header: React.FC<HeaderProps> = ({
             onChange={(e) => onThemeChange(e.target.value as ThemeMode)}
             aria-label="Seleccionar tema visual"
           >
-            <option value="system">🌓 Sistema</option>
-            <option value="light">☀️ Claro</option>
-            <option value="dark">🌙 Oscuro</option>
+            <option value="system">{language === 'es' ? '🌓 Sistema' : '🌓 System'}</option>
+            <option value="light">{language === 'es' ? '☀️ Claro' : '☀️ Light'}</option>
+            <option value="dark">{language === 'es' ? '🌙 Oscuro' : '🌙 Dark'}</option>
           </select>
         </label>
       </div>

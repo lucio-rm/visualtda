@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExercisePhase } from '../types';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface PhaseSwitcherProps {
   currentPhase: ExercisePhase;
@@ -44,8 +45,10 @@ export const PhaseSwitcher: React.FC<PhaseSwitcherProps> = ({
   onPhaseChange,
   solutionUnlocked = false
 }) => {
+  const { language, t } = useLanguage();
+
   return (
-    <nav className="phase-switcher-container" aria-label="Fases pedagógicas del ejercicio">
+    <nav className="phase-switcher-container" aria-label={language === 'es' ? 'Fases pedagógicas del ejercicio' : 'Exercise pedagogical phases'}>
       <ol className="phase-steps" role="tablist">
         {PHASES.map((p) => {
           const isActive = currentPhase === p.id;
@@ -60,14 +63,14 @@ export const PhaseSwitcher: React.FC<PhaseSwitcherProps> = ({
               >
                 <div className="phase-step-badge">
                   <span className="phase-step-icon" aria-hidden="true">{p.icon}</span>
-                  <span className="phase-step-num">Fase {p.stepNumber}</span>
+                  <span className="phase-step-num">{language === 'es' ? `Fase ${p.stepNumber}` : `Phase ${p.stepNumber}`}</span>
                 </div>
                 <div className="phase-step-content">
-                  <span className="phase-step-title">{p.label.es}</span>
-                  <span className="phase-step-question">{p.question.es}</span>
+                  <span className="phase-step-title">{t(p.label)}</span>
+                  <span className="phase-step-question">{t(p.question)}</span>
                 </div>
                 {p.id === 'understand' && solutionUnlocked && (
-                  <span className="phase-unlocked-tag" title="Solución desbloqueada">✓</span>
+                  <span className="phase-unlocked-tag" title={language === 'es' ? 'Solución desbloqueada' : 'Solution unlocked'}>✓</span>
                 )}
               </button>
             </li>

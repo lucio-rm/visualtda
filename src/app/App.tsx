@@ -9,6 +9,7 @@ import { NQueensPlayground } from '../components/visualizers/NQueensPlayground';
 import { IntervalSchedulingVisualizer } from '../components/visualizers/IntervalSchedulingVisualizer';
 import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
+import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -181,7 +182,8 @@ const KNAPSACK_GREEDY_PSEUDOCODE = `ALGORITMO MochilaFraccionaria_Greedy(items, 
 
 const KNAPSACK_GREEDY_CORRECTNESS = `Demostración por Argumento de Intercambio (Exchange Argument): Si existiera una solución óptima O distinta de la voraz G, sea k el primer elemento donde difieren. Dado que G toma la mayor fracción posible del elemento disponible con mayor densidad r_k, O debe tener o_k < g_k y compensar peso con algún elemento posterior j > k donde r_j <= r_k. Reemplazando una fracción de j por k en O incrementa o mantiene el valor total, transformando O en G sin perder calidad. Para la mochila 0/1, este argumento no aplica porque la indivisibilidad de los objetos puede dejar 'huecos' de capacidad que no pueden rellenarse.`;
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('visual_tda_theme');
     return (saved as ThemeMode) || 'system';
@@ -265,23 +267,20 @@ export const App: React.FC = () => {
         theme={theme}
         onThemeChange={setTheme}
         onHomeClick={handleHomeClick}
-        currentExerciseTitle={selectedExercise?.title.es}
+        currentExerciseTitle={selectedExercise ? t(selectedExercise.title) : undefined}
       />
 
       <main className="app-main" id="main-content">
         {!selectedExercise ? (
           <>
             <section className="welcome-banner">
-              <h2>Diseño y Análisis de Algoritmos</h2>
-              <p>
-                Aprende algoritmos fundamentales de forma interactiva y rigurosa. Observa su ejecución,
-                comprende los invariantes de corrección y analiza su complejidad computacional.
-              </p>
+              <h2>{t(dict.welcomeTitle)}</h2>
+              <p>{t(dict.welcomeLead)}</p>
             </section>
 
             <section className="catalog-section">
               <div className="section-header">
-                <h3>Categorías y Técnicas</h3>
+                <h3>{t(dict.catalogTitle)}</h3>
               </div>
               <CategoryNav
                 categories={categories}
@@ -304,8 +303,14 @@ export const App: React.FC = () => {
       </main>
 
       <footer className="app-footer">
-        <p>Visual TDA — Principios: KISS · Separación Algoritmo/UI · Correctness Pedagógica</p>
+        <p>{t(dict.footerText)}</p>
       </footer>
     </div>
   );
 };
+
+export const App: React.FC = () => (
+  <LanguageProvider>
+    <AppContent />
+  </LanguageProvider>
+);

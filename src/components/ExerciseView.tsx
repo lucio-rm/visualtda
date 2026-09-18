@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ExerciseMetadata, ExercisePhase } from '../types';
+import { useLanguage } from '../i18n/LanguageContext';
 import { PhaseSwitcher } from './PhaseSwitcher';
 import { DiscoverView } from './DiscoverView';
 import { SolveView } from './SolveView';
@@ -29,6 +30,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   timeComplexity = 'O(N!)',
   spaceComplexity = 'O(N)'
 }) => {
+  const { t, dict } = useLanguage();
   const [phase, setPhase] = useState<ExercisePhase>('discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
 
@@ -49,9 +51,9 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
           type="button"
           className="btn-back"
           onClick={onBackToCatalog}
-          aria-label="Volver al catálogo"
+          aria-label={t(dict.backToCatalog)}
         >
-          &larr; Volver al catálogo de ejercicios
+          {t(dict.backToCatalog)}
         </button>
       </div>
 
@@ -62,8 +64,8 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
             {'★'.repeat(exercise.difficulty)}{'☆'.repeat(5 - exercise.difficulty)}
           </span>
         </div>
-        <h2 className="exercise-title">{exercise.title.es}</h2>
-        <p className="exercise-subtitle">{exercise.subtitle.es}</p>
+        <h2 className="exercise-title">{t(exercise.title)}</h2>
+        <p className="exercise-subtitle">{t(exercise.subtitle)}</p>
       </div>
 
       <PhaseSwitcher
