@@ -1,0 +1,33 @@
+{
+  "id": "n-queens",
+  "problemId": "n-queens",
+  "techniqueId": "backtracking",
+  "categoryId": "backtracking",
+  "order": 1,
+  "difficulty": 2,
+  "title": {
+    "es": "N-Reinas",
+    "en": "N-Queens"
+  },
+  "subtitle": {
+    "es": "Colocar N reinas en un tablero de N×N sin que se ataquen mutuamente",
+    "en": "Place N queens on an N×N chessboard such that no two queens threaten each other"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["backtracking", "chess", "recursion", "pruning"],
+  "parameters": {
+    "defaultN": 4,
+    "minN": 4,
+    "maxN": 8
+  },
+  "solutionsCount": {
+    "1": 1,
+    "2": 0,
+    "3": 0,
+    "4": 2,
+    "5": 10,
+    "6": 4,
+    "7": 40,
+    "8": 92
+  }
+}

@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P3 & P4 (N-Queens Vertical Slice, Trace Engine & Visualizer)
-- **CURRENT_TASK**: Implementing pure TypeScript N-Queens trace generator, timeline playback hook, and SVG chessboard visualizer
+- **CURRENT_PHASE**: P5 & P6 (Validator Architecture & Student Execution Boundary)
+- **CURRENT_TASK**: Expanding general validator architecture and interactive feedback
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -11,11 +11,21 @@
   - P0: Full toolchain bootstrap (Vite, React 19, TypeScript, Vitest, ESLint)
   - P1: Domain models (`src/types/`), Exercise Registry (`src/engine/registry.ts`), and App navigation shell
   - P2: 3-Phase exercise flow (`PhaseSwitcher`, `DiscoverView`, `SolveView`, `UnderstandView`, `ExerciseView`)
-  - P2 verification: `lint`, `typecheck`, `test` (15 tests), `build` passing 100%
+  - P3 & P4: N-Queens complete vertical slice, trace engine, timeline controller, and visualizer:
+    - Canonical Python solution (`exercises/n_queens/solution.py`) tested and passing
+    - Theory document with formal correctness invariant and complexity analysis (`theory.md`)
+    - Pseudocode specification (`pseudocode.md`)
+    - TypeScript N-Queens validator with O(1) conflict detection (`nQueensValidator.ts`)
+    - Deterministic N-Queens trace generator (`nQueensTrace.ts`)
+    - Playback controller hook (`useTraceTimeline.ts`)
+    - Declarative SVG chessboard with conflict rays and queen glyphs (`NQueensBoard.tsx`)
+    - Complete timeline visualizer component with speed & step controls (`NQueensVisualizer.tsx`)
+    - Interactive sandbox playground for Discover phase (`NQueensPlayground.tsx`)
+    - 30 unit tests covering all components and algorithms
 - **IN_PROGRESS**:
-  - P3 & P4: N-Queens canonical algorithm, trace engine, timeline controller, and SVG visualizer
+  - CI workflow verification and GitHub Actions workflow
 - **BLOCKED**: None
-- **NEXT_TASK**: Implement N-Queens trace engine, `useTraceTimeline`, `NQueensVisualizer`, and `NQueensValidator` with tests
-- **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`, none blocking P3/P4)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS)
-- **LAST_COMMIT**: `14e0446`
+- **NEXT_TASK**: Configure `.github/workflows/ci.yml` and test static preview
+- **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 30 tests)
+- **LAST_COMMIT**: `c27f34c`

@@ -1,0 +1,158 @@
+import React from 'react';
+import { NQueensConflictType } from '../../engine/algorithms/nQueensTrace';
+
+export interface NQueensBoardProps {
+  n: number;
+  board: number[]; // board[row] = col, or -1 if empty
+  currentRow?: number;
+  currentCol?: number;
+  conflictWith?: {
+    row: number;
+    col: number;
+    type: NQueensConflictType;
+  };
+  isSolution?: boolean;
+  onCellClick?: (row: number, col: number) => void;
+  interactive?: boolean;
+}
+
+export const NQueensBoard: React.FC<NQueensBoardProps> = ({
+  n,
+  board,
+  currentRow = -1,
+  currentCol = -1,
+  conflictWith,
+  isSolution = false,
+  onCellClick,
+  interactive = false
+}) => {
+  const cellSize = 50;
+  const boardPixelSize = n * cellSize;
+
+  return (
+    <div className={`nqueens-board-wrapper ${isSolution ? 'solution-board' : ''}`}>
+      <svg
+        viewBox={`0 0 ${boardPixelSize} ${boardPixelSize}`}
+        className="nqueens-board-svg"
+        aria-label={`Tablero de ajedrez ${n} por ${n}`}
+        role="img"
+      >
+        <defs>
+          <filter id="queen-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2563eb" floodOpacity="0.4" />
+          </filter>
+          <filter id="conflict-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#dc2626" floodOpacity="0.5" />
+          </filter>
+        </defs>
+
+        {/* Board squares */}
+        {Array.from({ length: n }).map((_, r) =>
+          Array.from({ length: n }).map((__, c) => {
+            const isDark = (r + c) % 2 === 1;
+            const isCandidate = r === currentRow && c === currentCol;
+            const isPlaced = board[r] === c;
+            const isConflictSource = conflictWith && conflictWith.row === r && conflictWith.col === c;
+            const isConflictedCandidate = isCandidate && !!conflictWith;
+
+            let cellClass = `board-cell ${isDark ? 'cell-dark' : 'cell-light'}`;
+            if (isSolution) cellClass += ' cell-solution';
+            if (isConflictSource) cellClass += ' cell-conflict-source';
+            if (isConflictedCandidate) cellClass += ' cell-conflict-target';
+            if (isCandidate && !conflictWith) cellClass += ' cell-candidate';
+
+            return (
+              <g
+                key={`${r}-${c}`}
+                onClick={() => interactive && onCellClick?.(r, c)}
+                style={{ cursor: interactive ? 'pointer' : 'default' }}
+              >
+                <rect
+                  x={c * cellSize}
+                  y={r * cellSize}
+                  width={cellSize}
+                  height={cellSize}
+                  className={cellClass}
+                />
+
+                {/* Coordinate indicators along borders */}
+                {c === 0 && (
+                  <text
+                    x={c * cellSize + 3}
+                    y={r * cellSize + 12}
+                    className="cell-coord-text"
+                    aria-hidden="true"
+                  >
+                    {r}
+                  </text>
+                )}
+                {r === n - 1 && (
+                  <text
+                    x={(c + 1) * cellSize - 10}
+                    y={(r + 1) * cellSize - 3}
+                    className="cell-coord-text"
+                    aria-hidden="true"
+                  >
+                    {c}
+                  </text>
+                )}
+
+                {/* Placed Queen */}
+                {isPlaced && (
+                  <g className="queen-glyph-group">
+                    <circle
+                      cx={c * cellSize + cellSize / 2}
+                      cy={r * cellSize + cellSize / 2}
+                      r={cellSize * 0.38}
+                      className={`queen-bg-circle ${isSolution ? 'solution-circle' : ''} ${isConflictSource ? 'conflict-circle' : ''}`}
+                    />
+                    <text
+                      x={c * cellSize + cellSize / 2}
+                      y={r * cellSize + cellSize / 2 + 7}
+                      className="queen-icon"
+                      textAnchor="middle"
+                      aria-label={`Reina en fila ${r}, columna ${c}`}
+                    >
+                      ♛
+                    </text>
+                  </g>
+                )}
+
+                {/* Candidate Queen being tested */}
+                {isCandidate && !isPlaced && (
+                  <g className="candidate-glyph-group">
+                    <circle
+                      cx={c * cellSize + cellSize / 2}
+                      cy={r * cellSize + cellSize / 2}
+                      r={cellSize * 0.36}
+                      className={`candidate-bg-circle ${conflictWith ? 'conflict-candidate-circle' : ''}`}
+                    />
+                    <text
+                      x={c * cellSize + cellSize / 2}
+                      y={r * cellSize + cellSize / 2 + 7}
+                      className="queen-icon candidate-icon"
+                      textAnchor="middle"
+                    >
+                      ♛
+                    </text>
+                  </g>
+                )}
+              </g>
+            );
+          })
+        )}
+
+        {/* Conflict Ray indicator connecting candidate and conflicting queen */}
+        {conflictWith && currentRow >= 0 && currentCol >= 0 && (
+          <line
+            x1={conflictWith.col * cellSize + cellSize / 2}
+            y1={conflictWith.row * cellSize + cellSize / 2}
+            x2={currentCol * cellSize + cellSize / 2}
+            y2={currentRow * cellSize + cellSize / 2}
+            className="conflict-ray-line"
+          />
+        )}
+      </svg>
+    </div>
+  );
+};
