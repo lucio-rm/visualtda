@@ -14,5 +14,13 @@ Estado y planificación de los hitos del proyecto:
 | **P3: N-Reinas Slice** | Código canónico en Python (`solution.py`), teoría con demostración de invariantes, pseudocódigo y metadatos. | ✅ **Completado** |
 | **P4: Motor de Trazas y Visualizador** | Generador determinístico de traza (`nQueensTrace.ts`), validador formal de restricciones, hook de línea de tiempo con velocidad/reproducción, tablero SVG con rayos de conflicto, y sandbox de descubrimiento. | ✅ **Completado** |
 | **P5: CI y Documentación** | Workflow de GitHub Actions y sincronización de arquitectura/README. | ✅ **Completado** |
-| **P6: Próximos Ejercicios** | Selección de Intervalos (Greedy) y Mochila (Greedy vs. Programación Dinámica). | 📋 **En backlog** |
-| **P7: Pyodide Web Worker** | Integración del runtime WebAssembly para ejecución local en el navegador del código del estudiante. | 📋 **En backlog** |
+| **P6: Selección de Intervalos** | Técnica Greedy con lema *Greedy Stays Ahead* y visualizador temporal de tareas. | ✅ **Completado** |
+| **P7: Mochila Dual (Greedy vs DP)** | Programación Dinámica con tabla 2D y recurrencia vs Greedy Fraccionario por densidad y contraejemplo 0/1. | ✅ **Completado** |
+| **P8: Internacionalización (i18n)** | Selector de idioma (`es` / `en`), `LanguageContext` y tipado estricto en catálogo y fases. | ✅ **Completado** |
+| **P9: Merge Sort (División y Conquista)** | Árbol de recursión, partición en mitades y procedimiento Merge lineal con gráfico de barras. | ✅ **Completado** |
+| **P10: Fase Resolver y Pistas** | Código inicial por ejercicio, pistas progresivas en 3 niveles y ejecución de pruebas con tarjetas PASS/FAIL. | ✅ **Completado** |
+| **P11: Redes de Flujo (Edmonds-Karp)** | Flujo Máximo y Corte Mínimo con red residual, caminos de aumento BFS y teorema Max-Flow Min-Cut. | ✅ **Completado** |
+| **P12: Pyodide Web Worker Sandbox** | Ejecución de Python 3 en navegador sin dependencias de backend, con captura de `stdout`, watchdog de bucles infinitos y visualización de trazas de error. | ✅ **Completado** |
+| **P13: Reducción de Problemas** | Demostración formal de $IS \le_P VC$ (Kleinberg & Tardos 8.1), grafo SVG y laboratorio interactivo de dualidad. | ✅ **Completado** |
+| **P14: Algoritmos de Aproximación** | 2-Aproximación voraz para Cobertura de Vértices vía Matching Maximal (K&T 11.1) con cota inferior $|C^*| \ge |M|$. | ✅ **Completado** |
+| **P15: Algoritmos Randomizados / PL** | Expansión del catálogo académico hacia Algoritmos Randomizados (Monte Carlo) y Programación Lineal. | 📋 **En backlog** |
