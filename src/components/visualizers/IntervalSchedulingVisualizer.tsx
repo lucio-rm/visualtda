@@ -21,7 +21,7 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
     goToStep,
     reset,
     setSpeed
-  } = useTraceTimeline<IntervalSchedulingStepData>(timeline, { baseIntervalMs: 800 });
+  } = useTraceTimeline<IntervalSchedulingStepData>(timeline, { baseIntervalMs: 800, enableKeyboardShortcuts: true });
 
   const data = currentEvent?.data;
   const intervals = data?.allIntervals || [];

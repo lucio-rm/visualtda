@@ -4,6 +4,7 @@ import { TraceTimeline, TraceEvent } from '../types/trace';
 export interface UseTraceTimelineOptions {
   baseIntervalMs?: number; // default interval in ms at 1x speed
   autoPlay?: boolean;
+  enableKeyboardShortcuts?: boolean;
 }
 
 export interface UseTraceTimelineReturn<T> {
@@ -118,6 +119,46 @@ export function useTraceTimeline<T>(
       window.clearTimeout(timerId);
     };
   }, [isPlaying, currentStepIndex, totalSteps, baseIntervalMs, playbackSpeed, stepForward]);
+
+  // Keyboard navigation effect
+  useEffect(() => {
+    if (!options.enableKeyboardShortcuts) {
+      return;
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Avoid intercepting input if active element is an input, select or textarea
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        stepForward();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        stepBackward();
+      } else if (e.key === ' ' || e.key === 'k') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === 'r') {
+        e.preventDefault();
+        reset();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [options.enableKeyboardShortcuts, stepForward, stepBackward, togglePlay, reset]);
 
   return {
     currentStepIndex,

@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P6 (Demonstrate Scalability with 2nd Exercise: Interval Scheduling)
-- **CURRENT_TASK**: Completed second vertical slice (Interval Scheduling) demonstrating exercise scalability
+- **CURRENT_PHASE**: P7 & Accessibility Polish
+- **CURRENT_TASK**: Added global keyboard accessibility (ArrowLeft, ArrowRight, Space/k, r) to timeline visualizers
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -13,18 +13,12 @@
   - P2: 3-Phase exercise flow (`PhaseSwitcher`, `DiscoverView`, `SolveView`, `UnderstandView`, `ExerciseView`)
   - P3 & P4: N-Queens complete vertical slice, trace engine, timeline controller, and visualizers
   - P5: GitHub Actions CI workflow (`.github/workflows/ci.yml`), README.md, docs/architecture.md, docs/roadmap.md
-  - P6: Interval Scheduling (Greedy) vertical slice:
-    - Canonical Python solution tested with Python 3
-    - Theory document with formal 'Greedy Stays Ahead' induction proof
-    - Pseudocode and exercise metadata
-    - TypeScript IntervalSchedulingValidator checking subset, compatibility, and optimality
-    - IntervalSchedulingTrace generating earliest finish time decisions
-    - IntervalSchedulingVisualizer SVG timeline chart
-    - Unit tests in `tests/intervalSchedulingValidator.test.ts` and `tests/intervalSchedulingTrace.test.ts`
+  - P6: Interval Scheduling (Greedy) vertical slice with earliest finish time proof and timeline visualizer
+  - Accessibility & Interaction Polish: Keyboard shortcuts (ArrowLeft/ArrowRight for stepping, Space/k for play/pause, r for reset) enabled for all visualizers with input-focus guards
   - 36 unit tests passing 100% across 8 test files
-- **IN_PROGRESS**: Ready for user review or further milestones (Knapsack DP vs Greedy comparison, Pyodide worker, or a11y polish)
+- **IN_PROGRESS**: Ready for user review or further milestones
 - **BLOCKED**: None
-- **NEXT_TASK**: Pyodide Web Worker sandbox evaluation or Knapsack DP/Greedy contrast slice
+- **NEXT_TASK**: Knapsack comparative slice (Fractional Greedy vs 0/1 Dynamic Programming) or Pyodide Web Worker execution sandbox
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
 - **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 36 tests)
-- **LAST_COMMIT**: `932849b`
+- **LAST_COMMIT**: `a86bba4`

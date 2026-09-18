@@ -28,7 +28,7 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
     goToStep,
     reset,
     setSpeed
-  } = useTraceTimeline<NQueensStepData>(timeline, { baseIntervalMs: 600 });
+  } = useTraceTimeline<NQueensStepData>(timeline, { baseIntervalMs: 600, enableKeyboardShortcuts: true });
 
   const currentData = currentEvent?.data;
   const board = currentData?.board || new Array(n).fill(-1);
