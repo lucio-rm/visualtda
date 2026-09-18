@@ -1,0 +1,347 @@
+.fair-coin-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.visualizer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.phase-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.phase-badge-label {
+  color: var(--text-muted);
+}
+
+.phase-badge-name {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.source-info code {
+  background-color: var(--bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.arena-box {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.arena-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.coins-stage {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.coin-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.coin-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.coin-disc {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  border: 4px solid var(--border);
+  background-color: var(--surface);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.coin-disc.face-0 {
+  background: radial-gradient(circle, #fcd34d, #f59e0b);
+  border-color: #d97706;
+  color: #78350f;
+  transform: scale(1.05);
+}
+
+.coin-disc.face-1 {
+  background: radial-gradient(circle, #60a5fa, #3b82f6);
+  border-color: #2563eb;
+  color: #1e3a8a;
+  transform: scale(1.05);
+}
+
+.coin-disc.empty {
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+.coin-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.pair-connector {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.symmetry-rule-box {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.rule-pair {
+  font-family: monospace;
+  font-weight: 700;
+  min-width: 65px;
+}
+
+.rule-arrow {
+  color: var(--text-muted);
+}
+
+.rule-res {
+  font-weight: 800;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.rule-res.res-0 {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.rule-res.res-1 {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+}
+
+.rule-res.res-discard {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.rule-prob {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.rounds-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.history-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.history-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.history-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+}
+
+.history-chip.chip-discard {
+  background-color: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.history-chip.chip-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  font-weight: 700;
+}
+
+.final-result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.final-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.final-bit-badge {
+  font-size: 2.75rem;
+  font-weight: 900;
+  color: #10b981;
+}
+
+.final-stats {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.final-stats code {
+  background-color: var(--bg);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.event-narrative {
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+}
+
+.narrative-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-control {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-control:hover:not(:disabled) {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn-control:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-play {
+  font-weight: bold;
+  min-width: 44px;
+}
+
+.timeline-slider-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 180px;
+}
+
+.timeline-slider {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+.step-counter {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.speed-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.speed-selector select {
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}

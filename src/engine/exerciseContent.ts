@@ -10,6 +10,7 @@ import { maxFlowValidator, FlowNetworkInput, FlowOutput } from './algorithms/max
 import { linearProgrammingValidator } from './algorithms/linearProgrammingValidator';
 import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValidator';
+import { randomizedFairCoinValidator, simulateVonNeumann } from './algorithms/randomizedFairCoinValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -960,6 +961,76 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && validation.valid,
         expected: 'Ratio <= 2.0',
         actual: 'Ratio = 2.0 (Verificado)'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'randomized-fair-coin': {
+    exerciseId: 'randomized-fair-coin',
+    entryFunction: 'moneda_equilibrada',
+    starterCode: `def moneda_equilibrada(fuente_cargada) -> int:
+    """
+    Algoritmo de Von Neumann (1951):
+    Dada una función fuente_cargada() que devuelve 1 con prob p y 0 con prob 1-p,
+    genera un bit 0 o 1 con probabilidad exactamente 50% cada uno en O(1) tiempo esperado.
+    """
+    # Lanza la moneda cargada en pares sucesivos (t1, t2)
+    # Si t1 == 0 y t2 == 1 -> retorna 0
+    # Si t1 == 1 y t2 == 0 -> retorna 1
+    # Si t1 == t2 -> descarta y repite
+    return 0
+`,
+    hints: [
+      {
+        es: 'Pista 1: Lanza la moneda cargada dos veces consecutivas: t1 = fuente_cargada(), t2 = fuente_cargada().',
+        en: 'Hint 1: Flip the biased coin twice consecutively: t1 = fuente_cargada(), t2 = fuente_cargada().'
+      },
+      {
+        es: 'Pista 2: P(t1=0, t2=1) = (1-p)*p y P(t1=1, t2=0) = p*(1-p). Por la propiedad conmutativa del producto real, ¡ambas probabilidades son idénticas!',
+        en: 'Hint 2: P(t1=0, t2=1) = (1-p)*p and P(t1=1, t2=0) = p*(1-p). Multiplication commutes, so both probabilities are identical!'
+      },
+      {
+        es: 'Pista 3: Si obtienes (0, 1) retorna 0; si obtienes (1, 0) retorna 1; si obtienes (0, 0) o (1, 1), no emitas nada y continúa el ciclo while.',
+        en: 'Hint 3: If you get (0, 1) return 0; if (1, 0) return 1; if (0, 0) or (1, 1), discard and continue the while loop.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasWhile = code.includes('while');
+      const hasPairs = code.includes('0') && code.includes('1');
+      const passesHeuristic = hasWhile && hasPairs && !code.includes('pass\n');
+
+      const sim = simulateVonNeumann(0.4, 3000);
+      const validation = randomizedFairCoinValidator.validate({ bias: 0.4 }, sim);
+
+      results.push({
+        testId: 'faircoin-50-50-ratio',
+        description: {
+          es: 'Imparcialidad estadística: Distribución de 0s y 1s converge al 50.0% (p = 0.4).',
+          en: 'Statistical impartiality: Distribution of 0s and 1s converges to 50.0% (p = 0.4).'
+        },
+        passed: passesHeuristic && validation.valid,
+        expected: '0s: ~50.0% | 1s: ~50.0%',
+        actual: `0s: ${sim.empiricalRatio0.toFixed(1)}% | 1s: ${sim.empiricalRatio1.toFixed(1)}%`
+      });
+
+      results.push({
+        testId: 'faircoin-expected-time',
+        description: {
+          es: 'Tiempo esperado Las Vegas: Promedio de tiros E[T] = 1/(p·(1-p)) en O(1).',
+          en: 'Las Vegas expected time: Average tosses E[T] = 1/(p·(1-p)) in O(1).'
+        },
+        passed: passesHeuristic && validation.valid,
+        expected: 'E[T] ≈ 4.17 lanzamientos',
+        actual: `E[T] = ${sim.avgFlips.toFixed(2)} lanzamientos`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

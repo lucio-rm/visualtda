@@ -261,6 +261,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['approximation', 'graphs', 'vertex-cover', 'maximal-matching', 'np-hard', 'lower-bound']
+  },
+  {
+    id: 'randomized-fair-coin',
+    problemId: 'randomized-fair-coin',
+    techniqueId: 'randomized',
+    categoryId: 'randomized',
+    order: 1,
+    difficulty: 2,
+    title: {
+      es: 'Moneda Equilibrada con Moneda Cargada',
+      en: 'Fair Coin from Biased Coin'
+    },
+    subtitle: {
+      es: 'Algoritmo de Von Neumann: extracción de aleatoriedad pura 50/50 en tiempo esperado O(1)',
+      en: 'Von Neumann algorithm: pure 50/50 randomness extraction in O(1) expected time'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['randomized', 'probability', 'las-vegas', 'von-neumann', 'bernoulli', 'expected-time']
   }
 ];
 

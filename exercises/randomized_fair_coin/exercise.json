@@ -1,0 +1,21 @@
+{
+  "id": "randomized-fair-coin",
+  "problemId": "randomized-fair-coin",
+  "techniqueId": "randomized",
+  "categoryId": "randomized",
+  "order": 1,
+  "difficulty": 2,
+  "title": {
+    "es": "Moneda Equilibrada con Moneda Cargada (Von Neumann)",
+    "en": "Fair Coin from Biased Coin (Von Neumann)"
+  },
+  "subtitle": {
+    "es": "Extracción de aleatoriedad pura 50/50 a partir de una fuente sesgada con probabilidad desconocida en tiempo esperado O(1)",
+    "en": "Pure 50/50 randomness extraction from an unknown biased source in O(1) expected time"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["randomized", "probability", "las-vegas", "von-neumann", "bernoulli", "expected-time"],
+  "parameters": {
+    "defaultBias": 0.4
+  }
+}

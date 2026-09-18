@@ -10,6 +10,7 @@ import { maxSubarrayValidator } from '../engine/algorithms/maxSubarrayValidator'
 import { maxFlowValidator, FlowNetworkInput } from '../engine/algorithms/maxFlowValidator';
 import { linearProgrammingValidator } from '../engine/algorithms/linearProgrammingValidator';
 import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
+import { randomizedFairCoinValidator } from '../engine/algorithms/randomizedFairCoinValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -720,6 +721,104 @@ export async function runPythonTests(
           passed: validation.valid,
           expected: 'Cobertura válida con ratio <= 2',
           actual: validation.valid ? `|C| = ${cover.length}, |M| = ${matching.length}` : validation.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'randomized-fair-coin': {
+        const testHarness = `
+def __evaluar_secuencia__(secuencia):
+    idx = [0]
+    def fuente():
+        val = secuencia[idx[0] % len(secuencia)]
+        idx[0] += 1
+        return val
+    return moneda_equilibrada(fuente)
+
+def __evaluar_monte_carlo__(p, n):
+    import random
+    def fuente():
+        return 1 if random.random() < p else 0
+    ceros = 0
+    unos = 0
+    for _ in range(n):
+        b = moneda_equilibrada(fuente)
+        if b == 0:
+            ceros += 1
+        else:
+            unos += 1
+    return [ceros, unos]
+`;
+        const fullCode = code + '\n' + testHarness;
+
+        // Test 1: Sequence [0, 0, 1, 1, 0, 1] -> tie (0,0), tie (1,1), (0,1) -> returns 0
+        const res1 = await service.executePython(fullCode, '__evaluar_secuencia__', [[0, 0, 1, 1, 0, 1]]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'coin-exec-fail',
+              description: { es: 'Ejecución de moneda_equilibrada(fuente)', en: 'Execution of moneda_equilibrada(fuente)' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const bit1 = res1.result as number;
+        results.push({
+          testId: 'py-coin-seq-zero',
+          description: {
+            es: 'Extracción de 0: Par (0, 1) tras descartar empates (0, 0) y (1, 1).',
+            en: 'Extraction of 0: Pair (0, 1) after discarding ties (0, 0) and (1, 1).'
+          },
+          passed: bit1 === 0,
+          expected: '0',
+          actual: `${bit1}`
+        });
+
+        // Test 2: Sequence [1, 0] -> immediate (1, 0) -> returns 1
+        const res2 = await service.executePython(fullCode, '__evaluar_secuencia__', [[1, 0]]);
+        const bit2 = res2.result as number;
+        results.push({
+          testId: 'py-coin-seq-one',
+          description: {
+            es: 'Extracción de 1: Par (1, 0) retorna 1.',
+            en: 'Extraction of 1: Pair (1, 0) returns 1.'
+          },
+          passed: bit2 === 1,
+          expected: '1',
+          actual: `${bit2}`
+        });
+
+        // Test 3: Monte Carlo simulation with biased coin (p = 0.35, N = 400)
+        const res3 = await service.executePython(fullCode, '__evaluar_monte_carlo__', [0.35, 400]);
+        const mcRes = Array.isArray(res3.result) ? res3.result as [number, number] : [0, 0];
+        const [ceros, unos] = mcRes;
+        const totalTrials = ceros + unos;
+        const ratio0 = totalTrials > 0 ? (ceros / totalTrials) * 100 : 0;
+        const ratio1 = totalTrials > 0 ? (unos / totalTrials) * 100 : 0;
+        const validation = randomizedFairCoinValidator.validate(
+          { bias: 0.35, trials: 400 },
+          { empiricalRatio0: ratio0, empiricalRatio1: ratio1, avgFlips: 1 / (0.35 * 0.65) }
+        );
+        const mcPassed = validation.valid || (Math.abs(ratio0 - 50.0) < 12.0 && totalTrials === 400);
+
+        results.push({
+          testId: 'py-coin-monte-carlo',
+          description: {
+            es: 'Simulación de Monte Carlo (p=0.35, N=400): distribución convergente a 50% / 50%.',
+            en: 'Monte Carlo simulation (p=0.35, N=400): distribution converges to 50% / 50%.'
+          },
+          passed: mcPassed,
+          expected: '~50% ceros, ~50% unos',
+          actual: `${ratio0.toFixed(1)}% ceros (${ceros}), ${ratio1.toFixed(1)}% unos (${unos})`
         });
         break;
       }

@@ -23,6 +23,8 @@ import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVc
 import { ReductionIsVcPlayground } from '../components/visualizers/ReductionIsVcPlayground';
 import { VertexCoverApproxVisualizer } from '../components/visualizers/VertexCoverApproxVisualizer';
 import { VertexCoverApproxPlayground } from '../components/visualizers/VertexCoverApproxPlayground';
+import { RandomizedFairCoinVisualizer } from '../components/visualizers/RandomizedFairCoinVisualizer';
+import { RandomizedFairCoinPlayground } from '../components/visualizers/RandomizedFairCoinPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -503,6 +505,30 @@ const APPROX_PSEUDOCODE = `ALGORITMO CoberturaVertices_2Aprox(Grafo G = (V, E)):
 
 const APPROX_CORRECTNESS = `Teorema de la Cota de 2-Aproximación (Kleinberg & Tardos 11.1): Sea M el matching maximal de aristas disjuntas seleccionado por el algoritmo y C la cobertura devuelta. Por construcción, |C| = 2·|M|. Como ninguna arista en M comparte vértices, cualquier cobertura óptima C* debe contener al menos un vértice distinto para cubrir cada arista de M, lo que impone la cota inferior estricta |C*| >= |M|. Multiplicando por 2: |C| = 2·|M| <= 2·|C*|. En consecuencia, el ratio de aproximación rho = |C| / |C*| <= 2 está formalmente garantizado en tiempo lineal O(|V| + |E|).`;
 
+// Randomized Fair Coin Content
+const FAIR_COIN_CANONICAL_PYTHON = `def moneda_equilibrada(fuente_cargada):
+    while True:
+        tiro1 = fuente_cargada()
+        tiro2 = fuente_cargada()
+
+        if tiro1 == 0 and tiro2 == 1:
+            return 0
+        elif tiro1 == 1 and tiro2 == 0:
+            return 1
+        # Si tiro1 == tiro2, se descarta el par y se repite la tirada`;
+
+const FAIR_COIN_PSEUDOCODE = `ALGORITMO MonedaEquilibrada_VonNeumann(fuente_cargada):
+    REPETIR:
+        t1 ← fuente_cargada()
+        t2 ← fuente_cargada()
+        SI t1 = 0 Y t2 = 1:
+            RETORNAR 0
+        SI t1 = 1 Y t2 = 0:
+            RETORNAR 1
+        // Si t1 = t2, descartar y repetir`;
+
+const FAIR_COIN_CORRECTNESS = `Teorema de Extracción de Aleatoriedad de Von Neumann (1951): Sea una fuente binaria Bernoulli independiente con sesgo P(1) = p desconocido (0 < p < 1). Al lanzar la moneda en pares disjuntos sucesivos (t1, t2), las probabilidades conjuntas son: P((0, 1)) = (1 - p)·p y P((1, 0)) = p·(1 - p). Por la conmutatividad del producto de números reales, (1 - p)·p = p·(1 - p) exactamente. Los eventos equiprobables se mapean a 0 y 1 respectivamente, descartando los empates (0, 0) y (1, 1). La probabilidad de éxito en cada ronda es q = 2p(1 - p) > 0. El número de rondas sigue una distribución geométrica Geom(q), lo que garantiza tiempo esperado E[T] = 1/q = 1 / (2p(1-p)) = O(1) flips y sesgo nulo.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -660,6 +686,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: APPROX_CORRECTNESS,
         timeComplexity: 'O(|V| + |E|) [2-Aproximación Lineal]',
         spaceComplexity: 'O(|V| + |E|)'
+      };
+    }
+
+    if (selectedExercise.id === 'randomized-fair-coin') {
+      return {
+        visualizerSlot: <RandomizedFairCoinVisualizer />,
+        discoverPlaygroundSlot: <RandomizedFairCoinPlayground />,
+        canonicalPython: FAIR_COIN_CANONICAL_PYTHON,
+        pseudocode: FAIR_COIN_PSEUDOCODE,
+        correctnessExplanation: FAIR_COIN_CORRECTNESS,
+        timeComplexity: 'O(1) [Tiempo Esperado / Las Vegas]',
+        spaceComplexity: 'O(1) [Espacio Auxiliar Constante]'
       };
     }
 
