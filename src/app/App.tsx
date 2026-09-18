@@ -17,6 +17,8 @@ import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualiz
 import { MaxSubarrayVisualizer } from '../components/visualizers/MaxSubarrayVisualizer';
 import { MaxSubarrayPlayground } from '../components/visualizers/MaxSubarrayPlayground';
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
+import { LinearProgrammingVisualizer } from '../components/visualizers/LinearProgrammingVisualizer';
+import { LinearProgrammingPlayground } from '../components/visualizers/LinearProgrammingPlayground';
 import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVcVisualizer';
 import { ReductionIsVcPlayground } from '../components/visualizers/ReductionIsVcPlayground';
 import { VertexCoverApproxVisualizer } from '../components/visualizers/VertexCoverApproxVisualizer';
@@ -416,6 +418,44 @@ const MAX_FLOW_PSEUDOCODE = `ALGORITMO EdmondsKarp(G, s, t):
 
 const MAX_FLOW_CORRECTNESS = `Teorema Fundamental Max-Flow Min-Cut: Para cualquier flujo factible f y corte s-t (A, B), el lema de dualidad débil establece v(f) <= c(A, B). Cuando el algoritmo de Edmonds-Karp termina al no existir más caminos de aumento en la red residual G_f, sea A* el conjunto de vértices alcanzables desde s en G_f y B* = V \\ A*. Toda arista de A* a B* está saturada (f(e) = c(e)) y toda arista inversa está vacía (f(e') = 0). Por lo tanto, v(f) = c(A*, B*), demostrando simultáneamente que f es un flujo máximo y (A*, B*) es un corte mínimo (Dualidad Fuerte). Elegir caminos más cortos con BFS garantiza convergencia en O(V * E^2).`;
 
+// Linear Programming Content
+const LP_CANONICAL_PYTHON = `def resolver_lp_2d(c: tuple[float, float], restricciones: list[tuple[float, float, float]]) -> dict:
+    todas = list(restricciones) + [(-1.0, 0.0, 0.0), (0.0, -1.0, 0.0)]
+    vertices = []
+    m = len(todas)
+
+    for i in range(m):
+        a1, b1, d1 = todas[i]
+        for j in range(i + 1, m):
+            a2, b2, d2 = todas[j]
+            det = a1 * b2 - a2 * b1
+            if abs(det) > 1e-9:
+                x = (d1 * b2 - d2 * b1) / det
+                y = (a1 * d2 - a2 * d1) / det
+                if all(ak * x + bk * y <= dk + 1e-7 for ak, bk, dk in todas):
+                    pt = (round(x, 5), round(y, 5))
+                    if pt not in vertices:
+                        vertices.append(pt)
+
+    mejor_pt = None
+    mejor_z = -float('inf')
+    for x, y in vertices:
+        z = c[0] * x + c[1] * y
+        if z > mejor_z:
+            mejor_z = z
+            mejor_pt = (x, y)
+
+    return {'optimo': mejor_pt, 'valor_maximo': mejor_z, 'vertices_factibles': vertices}`;
+
+const LP_PSEUDOCODE = `ALGORITMO ResolverLP2D(c, Restricciones):
+    R ← Restricciones ∪ { x ≥ 0, y ≥ 0 }
+    V ← { Interseccion(r1, r2) : r1, r2 ∈ R, factibles en R }
+    optimo ← argmax { c^T · v : v ∈ V }
+    RETORNAR (optimo, c^T · optimo)`;
+
+const LP_CORRECTNESS = `Teorema Fundamental de la Programación Lineal: La región factible F definida por un conjunto finito de semiespacios lineales es un conjunto convexo poliédrico. Si la función objetivo lineal z = c^T x tiene un valor óptimo finito sobre F, entonces existe al menos un vértice extremo (solución básica factible) en el que se alcanza dicho óptimo.
+Por convexidad, si un vértice v tiene un valor objetivo estrictamente mayor que todos sus vértices vecinos en el grafo de aristas del polítopo, entonces v es un óptimo global. Esto fundamenta el Algoritmo Simplex.`;
+
 // Reduction IS <=_P VC Content
 const REDUCTION_CANONICAL_PYTHON = `def reducir_instancia_is_a_vc(vertices, aristas, k):
     # Transformación polinomial de la instancia: el grafo G se preserva y k' = |V| - k
@@ -584,6 +624,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: MAX_FLOW_CORRECTNESS,
         timeComplexity: 'O(V · E²)',
         spaceComplexity: 'O(V + E)'
+      };
+    }
+
+    if (selectedExercise.id === 'linear-programming-formulation') {
+      return {
+        visualizerSlot: <LinearProgrammingVisualizer />,
+        discoverPlaygroundSlot: <LinearProgrammingPlayground />,
+        canonicalPython: LP_CANONICAL_PYTHON,
+        pseudocode: LP_PSEUDOCODE,
+        correctnessExplanation: LP_CORRECTNESS,
+        timeComplexity: 'O(m · n) [Polinomial]',
+        spaceComplexity: 'O(m · n)'
       };
     }
 

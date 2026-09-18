@@ -1,0 +1,239 @@
+.lp-playground {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.playground-intro h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent);
+}
+
+.playground-intro p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.playground-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  background-color: rgba(99, 102, 241, 0.12);
+  font-weight: 700;
+}
+
+.geometric-tab-content,
+.modeling-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.presets-row,
+.problem-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip-btn {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.85rem;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.chip-btn:hover {
+  border-color: var(--accent);
+}
+
+.chip-btn.selected {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.controls-card {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.sliders-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.slider-group {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.slider-group label {
+  font-size: 0.85rem;
+}
+
+.slider-group input[type='range'] {
+  accent-color: var(--accent);
+}
+
+.solution-summary-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.summary-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.stat-value.highlight {
+  color: #10b981;
+}
+
+.educational-note {
+  background-color: rgba(99, 102, 241, 0.08);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+}
+
+.educational-note h4 {
+  margin: 0 0 0.4rem 0;
+  color: var(--accent);
+}
+
+.educational-note p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.model-card {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.model-card h4 {
+  margin: 0;
+  color: var(--accent);
+}
+
+.math-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.85rem;
+}
+
+.math-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.math-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.math-row code {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.model-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}

@@ -209,6 +209,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['network-flow', 'graphs', 'residual-graph', 'bfs', 'min-cut', 'edmonds-karp']
   },
   {
+    id: 'linear-programming-formulation',
+    problemId: 'linear-programming',
+    techniqueId: 'linear-programming',
+    categoryId: 'linear-programming',
+    order: 1,
+    difficulty: 2,
+    title: {
+      es: 'Programación Lineal: Región Factible y Modelado',
+      en: 'Linear Programming: Feasible Region & Modeling'
+    },
+    subtitle: {
+      es: 'Geometría convexa, vértices extremos en 2D y formulación entera (ILP) de problemas clásicos',
+      en: 'Convex geometry, 2D extreme vertices, and integer modeling (ILP) of classic problems'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['linear-programming', 'optimization', 'simplex', 'polytope', 'ilp', 'relaxation']
+  },
+  {
     id: 'vertex-cover-reduction',
     problemId: 'independent-set-vertex-cover',
     techniqueId: 'reductions',

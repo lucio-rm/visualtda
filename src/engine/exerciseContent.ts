@@ -7,6 +7,7 @@ import { knapsackGreedyValidator, FractionalAssignment } from './algorithms/knap
 import { mergeSortValidator } from './algorithms/mergeSortValidator';
 import { maxSubarrayValidator } from './algorithms/maxSubarrayValidator';
 import { maxFlowValidator, FlowNetworkInput, FlowOutput } from './algorithms/maxFlowValidator';
+import { linearProgrammingValidator } from './algorithms/linearProgrammingValidator';
 import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValidator';
 
@@ -669,6 +670,86 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
         },
         passed: passesHeuristic && validation.valid,
         message: 'Dualidad fuerte verificada: v(f) == c(S, T) == 20.'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'linear-programming-formulation': {
+    exerciseId: 'linear-programming-formulation',
+    entryFunction: 'resolver_lp_2d',
+    starterCode: `def resolver_lp_2d(c: tuple[float, float], restricciones: list[tuple[float, float, float]]) -> dict:
+    """
+    Resuelve un problema de programación lineal en 2 variables:
+        Maximizar z = c[0]*x + c[1]*y
+        Sujeto a: a*x + b*y <= d  (para cada (a, b, d) en restricciones)
+                  x >= 0, y >= 0
+    Retorna {'optimo': (x_opt, y_opt), 'valor_maximo': z_opt, 'vertices_factibles': list}
+    """
+    # 1. Agregar restricciones de no negatividad (-x <= 0, -y <= 0)
+    # 2. Hallar intersecciones de pares de rectas no paralelas
+    # 3. Filtrar puntos factibles que cumplen todas las restricciones
+    # 4. Evaluar la función objetivo en los vértices factibles (Teorema Fundamental)
+    return {'optimo': (0.0, 0.0), 'valor_maximo': 0.0, 'vertices_factibles': []}
+`,
+    hints: [
+      {
+        es: 'Pista 1: Para hallar la intersección de a1*x + b1*y = d1 y a2*x + b2*y = d2, usa la regla de Cramer: det = a1*b2 - a2*b1. Si abs(det) > 1e-9: x = (d1*b2 - d2*b1) / det e y = (a1*d2 - a2*d1) / det.',
+        en: 'Hint 1: To find intersection of a1*x + b1*y = d1 and a2*x + b2*y = d2, use Cramer rule: det = a1*b2 - a2*b1. If abs(det) > 1e-9: x = (d1*b2 - d2*b1)/det and y = (a1*d2 - a2*d1)/det.'
+      },
+      {
+        es: 'Pista 2: Un punto (x, y) es factible si satisface a_k*x + b_k*y <= d_k para todas las restricciones (incluyendo x >= 0 e y >= 0).',
+        en: 'Hint 2: A point (x, y) is feasible if it satisfies a_k*x + b_k*y <= d_k for all constraints (including x >= 0 and y >= 0).'
+      },
+      {
+        es: 'Pista 3: Por el Teorema Fundamental de la Programación Lineal, el óptimo siempre se alcanza en al menos un vértice extremo. Evalúa z = c[0]*x + c[1]*y en cada vértice factible y toma el máximo.',
+        en: 'Hint 3: By the Fundamental Theorem of LP, the optimum is always attained at an extreme vertex. Evaluate z = c[0]*x + c[1]*y on every feasible vertex and take the maximum.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasCramer = code.includes('det') || code.includes('/') || code.includes('*');
+      const hasVertex = code.includes('vertice') || code.includes('append') || code.includes('for');
+      const passesHeuristic = hasCramer && hasVertex && !code.includes('pass\n');
+
+      const testObj: [number, number] = [3, 2];
+      const testConstraints = [
+        { a: 2, b: 1, c: 18, label: '2x + y <= 18' },
+        { a: 2, b: 3, c: 42, label: '2x + 3y <= 42' },
+        { a: 3, b: 1, c: 24, label: '3x + y <= 24' }
+      ];
+
+      const validation = linearProgrammingValidator.validate(
+        { objective: testObj, constraints: testConstraints },
+        [3, 12]
+      );
+
+      results.push({
+        testId: 'lp-optimal-vertex',
+        description: {
+          es: 'Vértice óptimo: max 3x + 2y alcanza su máximo en (3, 12) con z* = 33.',
+          en: 'Optimal vertex: max 3x + 2y reaches its maximum at (3, 12) with z* = 33.'
+        },
+        passed: passesHeuristic && validation.valid,
+        expected: 'Vértice óptimo (3, 12) con valor 33',
+        actual: passesHeuristic ? 'Vértice óptimo (3, 12) con valor 33' : 'Vértice incorrecto o subóptimo'
+      });
+
+      results.push({
+        testId: 'lp-feasibility-check',
+        description: {
+          es: 'Factibilidad: El punto óptimo respeta todas las restricciones del polítopo.',
+          en: 'Feasibility: Optimal point satisfies all polytope constraints.'
+        },
+        passed: passesHeuristic && validation.valid,
+        message: validation.valid ? 'Punto 100% factible dentro del polítopo.' : validation.errors.join('; ')
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

@@ -1,0 +1,342 @@
+import React, { useMemo } from 'react';
+import {
+  generateLinearProgrammingTrace,
+  LPStepData,
+  DEFAULT_LP_OBJECTIVE,
+  DEFAULT_LP_CONSTRAINTS
+} from '../../engine/algorithms/linearProgrammingTrace';
+import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
+import './LinearProgrammingVisualizer.css';
+
+export const LinearProgrammingVisualizer: React.FC = () => {
+  const { language } = useLanguage();
+  const timeline = useMemo(
+    () => generateLinearProgrammingTrace(DEFAULT_LP_OBJECTIVE, DEFAULT_LP_CONSTRAINTS),
+    []
+  );
+
+  const {
+    currentStepIndex,
+    totalSteps,
+    currentEvent,
+    isPlaying,
+    playbackSpeed,
+    togglePlay,
+    stepForward,
+    stepBackward,
+    goToStep,
+    reset,
+    setSpeed
+  } = useTraceTimeline<LPStepData>(timeline, {
+    baseIntervalMs: 850,
+    enableKeyboardShortcuts: true
+  });
+
+  const data = currentEvent?.data;
+  const objective = data?.objective || DEFAULT_LP_OBJECTIVE;
+  const constraints = data?.constraints || DEFAULT_LP_CONSTRAINTS;
+  const activeConstraintsCount = data?.activeConstraintsCount ?? 0;
+  const vertices = data?.vertices || [];
+  const currentVertexIndex = data?.currentVertexIndex;
+  const optimalPoint = data?.optimalPoint;
+  const optimalValue = data?.optimalValue;
+  const integerPoints = data?.integerPoints || [];
+  const phase = data?.phase || 'init';
+
+  // SVG coordinate transformation
+  // Model bounds: x in [0, 12], y in [0, 16]
+  const svgWidth = 500;
+  const svgHeight = 400;
+  const padding = 50;
+
+  const maxX = 12;
+  const maxY = 16;
+
+  const toSvgX = (x: number) => padding + (x / maxX) * (svgWidth - 2 * padding);
+  const toSvgY = (y: number) => svgHeight - padding - (y / maxY) * (svgHeight - 2 * padding);
+
+  // Polygon points string for feasible region
+  // Sort vertices counter-clockwise
+  const polygonPoints = useMemo(() => {
+    if (vertices.length < 3) return '';
+    // Centroid
+    const cx = vertices.reduce((s, v) => s + v[0], 0) / vertices.length;
+    const cy = vertices.reduce((s, v) => s + v[1], 0) / vertices.length;
+
+    const sorted = [...vertices].sort((a, b) => {
+      const angleA = Math.atan2(a[1] - cy, a[0] - cx);
+      const angleB = Math.atan2(b[1] - cy, b[0] - cx);
+      return angleA - angleB;
+    });
+
+    return sorted.map(([x, y]) => `${toSvgX(x)},${toSvgY(y)}`).join(' ');
+  }, [vertices]);
+
+  return (
+    <div className="lp-visualizer">
+      {/* Top Header */}
+      <div className="visualizer-header">
+        <div className="phase-indicator">
+          <span className="phase-badge-label">
+            {language === 'es' ? 'Fase LP:' : 'LP Phase:'}
+          </span>
+          <span className="phase-badge-name">{phase.replace(/_/g, ' ').toUpperCase()}</span>
+        </div>
+        <div className="objective-display">
+          {language === 'es' ? 'Función Objetivo:' : 'Objective Function:'}{' '}
+          <code>max z = {objective[0]}x + {objective[1]}y</code>
+          {optimalValue !== undefined && (
+            <span className="opt-val-tag">
+              {' '}| z* = <strong>{optimalValue}</strong>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* SVG Canvas for 2D Polytope */}
+      <div className="svg-container">
+        <svg
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          className="lp-svg"
+          aria-label="Plano cartesiano de programación lineal"
+        >
+          {/* Grid lines */}
+          {[0, 2, 4, 6, 8, 10, 12].map((gx) => (
+            <g key={`gx-${gx}`}>
+              <line
+                x1={toSvgX(gx)}
+                y1={toSvgY(0)}
+                x2={toSvgX(gx)}
+                y2={toSvgY(maxY)}
+                stroke="var(--border)"
+                strokeDasharray="2 3"
+                strokeWidth="1"
+              />
+              <text
+                x={toSvgX(gx)}
+                y={toSvgY(0) + 18}
+                fontSize="11"
+                textAnchor="middle"
+                fill="var(--text-muted)"
+              >
+                {gx}
+              </text>
+            </g>
+          ))}
+
+          {[0, 4, 8, 12, 16].map((gy) => (
+            <g key={`gy-${gy}`}>
+              <line
+                x1={toSvgX(0)}
+                y1={toSvgY(gy)}
+                x2={toSvgX(maxX)}
+                y2={toSvgY(gy)}
+                stroke="var(--border)"
+                strokeDasharray="2 3"
+                strokeWidth="1"
+              />
+              <text
+                x={toSvgX(0) - 10}
+                y={toSvgY(gy) + 4}
+                fontSize="11"
+                textAnchor="end"
+                fill="var(--text-muted)"
+              >
+                {gy}
+              </text>
+            </g>
+          ))}
+
+          {/* Axes */}
+          <line
+            x1={toSvgX(0)}
+            y1={toSvgY(0)}
+            x2={toSvgX(maxX)}
+            y2={toSvgY(0)}
+            stroke="var(--text)"
+            strokeWidth="2"
+          />
+          <line
+            x1={toSvgX(0)}
+            y1={toSvgY(0)}
+            x2={toSvgX(0)}
+            y2={toSvgY(maxY)}
+            stroke="var(--text)"
+            strokeWidth="2"
+          />
+
+          <text x={toSvgX(maxX) - 10} y={toSvgY(0) - 8} fontSize="12" fontWeight="bold" fill="var(--text)">
+            X
+          </text>
+          <text x={toSvgX(0) + 10} y={toSvgY(maxY) + 12} fontSize="12" fontWeight="bold" fill="var(--text)">
+            Y
+          </text>
+
+          {/* Feasible Polytope Polygon */}
+          {polygonPoints && activeConstraintsCount >= constraints.length && (
+            <polygon
+              points={polygonPoints}
+              fill="rgba(99, 102, 241, 0.2)"
+              stroke="#6366f1"
+              strokeWidth="2"
+            />
+          )}
+
+          {/* Constraint Lines */}
+          {constraints.slice(0, activeConstraintsCount).map((c, i) => {
+            // Find points where ax + by = c hits bounding box
+            // If x = 0 => y = c/b
+            // If y = 0 => x = c/a
+            const p1 = { x: 0, y: c.c / c.b };
+            const p2 = { x: c.c / c.a, y: 0 };
+
+            return (
+              <g key={i}>
+                <line
+                  x1={toSvgX(p1.x)}
+                  y1={toSvgY(p1.y)}
+                  x2={toSvgX(p2.x)}
+                  y2={toSvgY(p2.y)}
+                  stroke="#ec4899"
+                  strokeWidth="2.5"
+                  strokeDasharray="4 2"
+                />
+                <text
+                  x={toSvgX(p2.x / 2) + 10}
+                  y={toSvgY(p1.y / 2) - 8}
+                  fontSize="10"
+                  fontWeight="bold"
+                  fill="#ec4899"
+                >
+                  {c.label}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Integer points lattice (ILP comparison) */}
+          {phase === 'integer_points' &&
+            integerPoints.map(([ix, iy], idx) => (
+              <circle
+                key={`ip-${idx}`}
+                cx={toSvgX(ix)}
+                cy={toSvgY(iy)}
+                r="3.5"
+                fill="#f59e0b"
+                opacity="0.8"
+              />
+            ))}
+
+          {/* Polytope Extreme Vertices */}
+          {vertices.map(([vx, vy], idx) => {
+            const isOpt = optimalPoint && Math.abs(optimalPoint[0] - vx) < 1e-4 && Math.abs(optimalPoint[1] - vy) < 1e-4;
+            const isCurrent = currentVertexIndex === idx;
+
+            let fill = '#6366f1';
+            let r = 6;
+            if (isCurrent) {
+              fill = '#ec4899';
+              r = 8;
+            }
+            if (isOpt && (phase === 'optimal_found' || phase === 'complete')) {
+              fill = '#10b981';
+              r = 10;
+            }
+
+            return (
+              <g key={`v-${idx}`}>
+                <circle
+                  cx={toSvgX(vx)}
+                  cy={toSvgY(vy)}
+                  r={r}
+                  fill={fill}
+                  stroke="#ffffff"
+                  strokeWidth="2"
+                />
+                <text
+                  x={toSvgX(vx) + 8}
+                  y={toSvgY(vy) - 8}
+                  fontSize="11"
+                  fontWeight="bold"
+                  fill="var(--text)"
+                >
+                  ({vx}, {vy})
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Vertices and Values Card */}
+      <div className="vertices-panel">
+        <div className="panel-title">
+          {language === 'es'
+            ? '📌 Vértices Extremos (Soluciones Básicas Factibles)'
+            : '📌 Extreme Vertices (Basic Feasible Solutions)'}
+        </div>
+        <div className="vertices-grid">
+          {vertices.map(([vx, vy], idx) => {
+            const val = objective[0] * vx + objective[1] * vy;
+            const isOpt = optimalPoint && Math.abs(optimalPoint[0] - vx) < 1e-4 && Math.abs(optimalPoint[1] - vy) < 1e-4;
+            const isCurrent = currentVertexIndex === idx;
+
+            let cardClass = 'vertex-chip';
+            if (isCurrent) cardClass += ' current-eval';
+            if (isOpt && (phase === 'optimal_found' || phase === 'complete')) cardClass += ' is-optimal';
+
+            return (
+              <div key={idx} className={cardClass}>
+                <span className="v-coord">({vx}, {vy})</span>
+                <span className="v-val">z = {val}</span>
+                {isOpt && (phase === 'optimal_found' || phase === 'complete') && (
+                  <span className="opt-star">★ ÓPTIMO</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Event Narrative */}
+      <div className="event-narrative">
+        <p className="narrative-text">
+          {currentEvent?.message?.[language] || currentEvent?.message?.es}
+        </p>
+      </div>
+
+      {/* Controls Bar */}
+      <div className="controls-bar">
+        <button className="btn-control" onClick={reset} title="Reiniciar">⏮</button>
+        <button className="btn-control" onClick={stepBackward} disabled={currentStepIndex === 0} title="Paso Anterior">◀</button>
+        <button className="btn-control btn-play" onClick={togglePlay} title={isPlaying ? 'Pausa' : 'Reproducir'}>
+          {isPlaying ? '⏸' : '▶'}
+        </button>
+        <button className="btn-control" onClick={stepForward} disabled={currentStepIndex === totalSteps - 1} title="Paso Siguiente">▶</button>
+
+        <div className="timeline-slider-wrapper">
+          <input
+            type="range"
+            min={0}
+            max={totalSteps - 1}
+            value={currentStepIndex}
+            onChange={(e) => goToStep(Number(e.target.value))}
+            className="timeline-slider"
+          />
+          <span className="step-counter">{currentStepIndex + 1} / {totalSteps}</span>
+        </div>
+
+        <div className="speed-selector">
+          <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
+          <select value={playbackSpeed} onChange={(e) => setSpeed(Number(e.target.value))}>
+            <option value={0.5}>0.5x</option>
+            <option value={1}>1.0x</option>
+            <option value={1.5}>1.5x</option>
+            <option value={2}>2.0x</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -8,6 +8,7 @@ import { knapsackGreedyValidator, FractionalAssignment } from '../engine/algorit
 import { mergeSortValidator } from '../engine/algorithms/mergeSortValidator';
 import { maxSubarrayValidator } from '../engine/algorithms/maxSubarrayValidator';
 import { maxFlowValidator, FlowNetworkInput } from '../engine/algorithms/maxFlowValidator';
+import { linearProgrammingValidator } from '../engine/algorithms/linearProgrammingValidator';
 import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
 
 export interface PythonEvaluationResult {
@@ -530,6 +531,72 @@ export async function runPythonTests(
           passed: maxFlowVal === 15 || validation.valid,
           expected: 'Flujo = 15',
           actual: `Flujo = ${maxFlowVal}`
+        });
+        break;
+      }
+
+      case 'linear-programming-formulation': {
+        const c: [number, number] = [3, 2];
+        const restricciones = [
+          [2, 1, 18],
+          [2, 3, 42],
+          [3, 1, 24]
+        ];
+
+        const res = await service.executePython(code, 'resolver_lp_2d', [c, restricciones]);
+        if (res.stdout) capturedStdout += res.stdout + '\n';
+
+        if (!res.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'lp-exec-fail',
+              description: { es: 'Ejecución de resolver_lp_2d(c, restricciones)', en: 'Execution of resolver_lp_2d(c, restricciones)' },
+              passed: false,
+              message: res.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res.error,
+            executionTimeMs: res.executionTimeMs
+          };
+        }
+
+        const out = res.result as { optimo?: [number, number]; valor_maximo?: number };
+        const optPoint = out?.optimo || [0, 0];
+        const validation = linearProgrammingValidator.validate(
+          {
+            objective: [3, 2],
+            constraints: [
+              { a: 2, b: 1, c: 18, label: '2x + y <= 18' },
+              { a: 2, b: 3, c: 42, label: '2x + 3y <= 42' },
+              { a: 3, b: 1, c: 24, label: '3x + y <= 24' }
+            ]
+          },
+          optPoint
+        );
+
+        results.push({
+          testId: 'py-lp-optimal-point',
+          description: {
+            es: 'Vértice óptimo: max 3x + 2y alcanza su máximo en (3, 12).',
+            en: 'Optimal vertex: max 3x + 2y reaches maximum at (3, 12).'
+          },
+          passed: validation.valid,
+          expected: '(3, 12)',
+          actual: `(${optPoint[0]}, ${optPoint[1]})`
+        });
+
+        results.push({
+          testId: 'py-lp-max-value',
+          description: {
+            es: 'Valor óptimo z*: El valor máximo alcanzado es z* = 33.',
+            en: 'Optimal value z*: Maximum value reached is z* = 33.'
+          },
+          passed: Math.abs((out?.valor_maximo ?? 0) - 33) < 1e-3 || validation.valid,
+          expected: 'z* = 33',
+          actual: `z* = ${out?.valor_maximo ?? 'N/A'}`
         });
         break;
       }

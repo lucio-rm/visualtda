@@ -1,0 +1,26 @@
+{
+  "id": "linear-programming-formulation",
+  "problemId": "linear-programming",
+  "techniqueId": "linear-programming",
+  "categoryId": "linear-programming",
+  "order": 1,
+  "difficulty": 2,
+  "title": {
+    "es": "Programación Lineal: Región Factible y Modelado (LP/ILP)",
+    "en": "Linear Programming: Feasible Region & Modeling (LP/ILP)"
+  },
+  "subtitle": {
+    "es": "Geometría de la región factible, vértices extremos, relajación lineal y formulación entera de problemas de optimización",
+    "en": "Geometry of feasible region, extreme vertices, linear relaxation, and integer modeling of optimization problems"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["linear-programming", "optimization", "polytope", "simplex", "ilp", "relaxation"],
+  "parameters": {
+    "defaultObjective": [3, 2],
+    "defaultConstraints": [
+      { "a": 2, "b": 1, "c": 18, "label": "2x + y <= 18" },
+      { "a": 2, "b": 3, "c": 42, "label": "2x + 3y <= 42" },
+      { "a": 3, "b": 1, "c": 24, "label": "3x + y <= 24" }
+    ]
+  }
+}
