@@ -30,10 +30,11 @@
   - Linear Programming Core: `linear-programming-formulation` (Guía PL Ejercicios 1, 2, 3 ★, 2D polytope, convex polygon vertices, simplex level curves, ILP modeling)
   - Randomized Algorithms Core: `randomized-fair-coin` (Guía Algoritmos Randomizados Ejercicio 3 ★, Von Neumann 1951 Las Vegas Bernoulli pair extraction, equiprobability proof, expected time $O(1)$)
   - Greedy Interval Covering Core: `road-antennas-greedy` (Guía Greedy Ejercicio 13 ★★, Antenas en una Ruta, Greedy Stays Ahead exchange argument, interactive highway sandbox and challenge mode)
-  - 112 unit tests passing 100% across 24 test files
-- **IN_PROGRESS**: Selecting next iconic starred exercise from curriculum
+  - Backtracking Pruning Core: `subset-sum-backtracking` (Guía Backtracking Ejercicio 11 ★, Subconjuntos que suman S con podas duales por exceso y déficit remanente, interactive builder, and search space reduction comparator)
+  - 118 unit tests passing 100% across 25 test files
+- **IN_PROGRESS**: Expanding next fundamental starred problem from curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Backtracking: Subset Sum (Guía Backtracking Ejercicio 11 ★, Subconjuntos que suman S con podas por exceso y cota superior remanente)
+- **NEXT_TASK**: Dynamic Programming: Longest Common Subsequence (LCS / Subsecuencia Común Más Larga) or Weighted Interval Scheduling
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 112 tests)
-- **LAST_COMMIT**: `83af2a0`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 118 tests)
+- **LAST_COMMIT**: `92c6d82`
