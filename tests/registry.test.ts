@@ -32,9 +32,10 @@ describe('ExerciseRegistry', () => {
     expect(btExercises[0].id).toBe('n-queens');
 
     const greedyExercises = registry.getExercises('greedy');
-    expect(greedyExercises.length).toBe(2);
+    expect(greedyExercises.length).toBe(3);
     expect(greedyExercises.map((e) => e.id)).toContain('interval-scheduling');
     expect(greedyExercises.map((e) => e.id)).toContain('knapsack-greedy');
+    expect(greedyExercises.map((e) => e.id)).toContain('road-antennas-greedy');
   });
 
   it('retrieves specific exercise by ID', () => {

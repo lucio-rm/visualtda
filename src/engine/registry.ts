@@ -161,6 +161,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['greedy', 'knapsack', 'counterexample']
   },
   {
+    id: 'road-antennas-greedy',
+    problemId: 'road-antennas-greedy',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 3,
+    difficulty: 2,
+    title: { es: 'Antenas en una Ruta (Cobertura)', en: 'Highway Antennas (Covering)' },
+    subtitle: {
+      es: 'Ubicar la mínima cantidad de antenas de radio R para dar cobertura total a todas las casas sobre una ruta',
+      en: 'Place the minimum number of radius-R antennas to provide full coverage to all houses along a highway'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'interval-covering', 'sorting', 'exchange-argument', 'fiuba']
+  },
+  {
     id: 'knapsack-dp',
     problemId: 'knapsack',
     techniqueId: 'dynamic-programming',

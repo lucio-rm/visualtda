@@ -1,0 +1,408 @@
+import React, { useState, useMemo } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { solveRoadAntennas } from '../../engine/algorithms/roadAntennasValidator';
+import './RoadAntennasPlayground.css';
+
+interface Preset {
+  id: string;
+  name: { es: string; en: string };
+  houses: number[];
+  radius: number;
+}
+
+const PRESETS: Preset[] = [
+  {
+    id: 'ruta2',
+    name: {
+      es: 'Ruta 2 (Pueblos Guía Ej. 10: Lezama 156, Castelli 185, Sevigne 194, Guido 242, Maipú 270)',
+      en: 'Highway 2 (Towns: Lezama 156, Castelli 185, Sevigne 194, Guido 242, Maipú 270)'
+    },
+    houses: [156, 185, 194, 242, 270],
+    radius: 50
+  },
+  {
+    id: 'dispersas',
+    name: {
+      es: 'Casas Dispersas (9 casas, R = 10 km)',
+      en: 'Scattered Houses (9 houses, R = 10 km)'
+    },
+    houses: [4, 12, 18, 26, 32, 45, 60, 68, 75],
+    radius: 10
+  },
+  {
+    id: 'clusters',
+    name: {
+      es: 'Tres Clusters Aislados (R = 8 km)',
+      en: 'Three Isolated Clusters (R = 8 km)'
+    },
+    houses: [10, 14, 22, 50, 56, 62, 90, 95, 102],
+    radius: 8
+  }
+];
+
+export const RoadAntennasPlayground: React.FC = () => {
+  const { language, t } = useLanguage();
+
+  const [houses, setHouses] = useState<number[]>([4, 12, 18, 26, 32, 45, 60, 68, 75]);
+  const [radius, setRadius] = useState<number>(10);
+  const [userAntennas, setUserAntennas] = useState<number[]>([]);
+  const [showGreedySolution, setShowGreedySolution] = useState<boolean>(false);
+  const [activeTool, setActiveTool] = useState<'place_antenna' | 'place_house'>('place_antenna');
+
+  // Compute canonical greedy solution
+  const greedyAntennas = useMemo(() => {
+    return solveRoadAntennas(houses, radius);
+  }, [houses, radius]);
+
+  // Compute which houses are covered by user antennas
+  const userCoveredIndices = useMemo(() => {
+    const covered = new Set<number>();
+    houses.forEach((h, idx) => {
+      const isCov = userAntennas.some((a) => Math.abs(h - a) <= radius + 1e-4);
+      if (isCov) covered.add(idx);
+    });
+    return covered;
+  }, [houses, userAntennas, radius]);
+
+  const allCovered = userCoveredIndices.size === houses.length && houses.length > 0;
+  const isMinimal = allCovered && userAntennas.length <= greedyAntennas.length;
+  const isSuboptimal = allCovered && userAntennas.length > greedyAntennas.length;
+
+  // SVG scaling
+  const svgWidth = 840;
+  const svgHeight = 220;
+  const padX = 50;
+  const roadY = 135;
+
+  const maxKm = useMemo(() => {
+    const all = [...houses, ...userAntennas, ...greedyAntennas];
+    const m = all.length > 0 ? Math.max(...all) + radius + 10 : 100;
+    return Math.ceil(m / 10) * 10;
+  }, [houses, userAntennas, greedyAntennas, radius]);
+
+  const kmToX = (km: number) => {
+    return padX + (km / maxKm) * (svgWidth - 2 * padX);
+  };
+
+  const xToKm = (xPx: number) => {
+    const clamped = Math.max(padX, Math.min(svgWidth - padX, xPx));
+    const ratio = (clamped - padX) / (svgWidth - 2 * padX);
+    return Math.round(ratio * maxKm);
+  };
+
+  const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
+    const clickedKm = xToKm(clickX);
+
+    if (activeTool === 'place_antenna') {
+      // If clicking near an existing user antenna, remove it; else add it
+      const existingIdx = userAntennas.findIndex((a) => Math.abs(a - clickedKm) < Math.max(2, radius * 0.2));
+      if (existingIdx !== -1) {
+        setUserAntennas((prev) => prev.filter((_, idx) => idx !== existingIdx));
+      } else {
+        setUserAntennas((prev) => [...prev, clickedKm].sort((a, b) => a - b));
+      }
+    } else {
+      // Place or remove house
+      const existingHouseIdx = houses.findIndex((h) => Math.abs(h - clickedKm) < Math.max(2, maxKm * 0.02));
+      if (existingHouseIdx !== -1) {
+        setHouses((prev) => prev.filter((_, idx) => idx !== existingHouseIdx));
+      } else {
+        setHouses((prev) => [...prev, clickedKm].sort((a, b) => a - b));
+      }
+    }
+  };
+
+  return (
+    <div className="road-antennas-playground">
+      {/* Control Configuration Grid */}
+      <div className="playground-controls-grid">
+        <div className="playground-control-group">
+          <label>{language === 'es' ? 'Escenarios de prueba:' : 'Preset Scenarios:'}</label>
+          <div className="preset-buttons-row">
+            {PRESETS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className="preset-btn"
+                onClick={() => {
+                  setHouses(p.houses);
+                  setRadius(p.radius);
+                  setUserAntennas([]);
+                }}
+              >
+                {t(p.name)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="playground-control-group">
+          <label htmlFor="radius-slider">
+            {language === 'es' ? `Radio de cobertura R: ${radius} km` : `Coverage radius R: ${radius} km`}
+          </label>
+          <input
+            id="radius-slider"
+            type="range"
+            min="5"
+            max="60"
+            step="1"
+            value={radius}
+            onChange={(e) => setRadius(Number(e.target.value))}
+          />
+        </div>
+
+        <div className="playground-control-group">
+          <label>{language === 'es' ? 'Herramienta de clic en la ruta:' : 'Highway click tool:'}</label>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              type="button"
+              className={`preset-btn ${activeTool === 'place_antenna' ? 'active' : ''}`}
+              style={activeTool === 'place_antenna' ? { background: '#6366f1', color: '#fff' } : {}}
+              onClick={() => setActiveTool('place_antenna')}
+            >
+              📡 {language === 'es' ? 'Colocar / Quitar Antena' : 'Place / Remove Antenna'}
+            </button>
+            <button
+              type="button"
+              className={`preset-btn ${activeTool === 'place_house' ? 'active' : ''}`}
+              style={activeTool === 'place_house' ? { background: '#f59e0b', color: '#fff' } : {}}
+              onClick={() => setActiveTool('place_house')}
+            >
+              🏠 {language === 'es' ? 'Agregar / Quitar Casa' : 'Add / Remove House'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Challenge Status Bar */}
+      <div className="playground-challenge-card">
+        <div className="challenge-stats">
+          <div className="challenge-stat-item">
+            <span className="challenge-stat-label">{language === 'es' ? 'Casas Cubiertas' : 'Covered Houses'}</span>
+            <span className="challenge-stat-val">
+              {userCoveredIndices.size} / {houses.length}
+            </span>
+          </div>
+          <div className="challenge-stat-item">
+            <span className="challenge-stat-label">{language === 'es' ? 'Tus Antenas' : 'Your Antennas'}</span>
+            <span className="challenge-stat-val" style={{ color: '#6366f1' }}>
+              {userAntennas.length}
+            </span>
+          </div>
+          <div className="challenge-stat-item">
+            <span className="challenge-stat-label">{language === 'es' ? 'Mínimo Óptimo (Greedy)' : 'Greedy Optimal Min'}</span>
+            <span className="challenge-stat-val" style={{ color: '#10b981' }}>
+              {greedyAntennas.length}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            style={{ fontSize: '0.85rem' }}
+            onClick={() => setUserAntennas([])}
+          >
+            {language === 'es' ? 'Limpiar mis antenas' : 'Clear my antennas'}
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{ fontSize: '0.85rem' }}
+            onClick={() => setShowGreedySolution((prev) => !prev)}
+          >
+            {showGreedySolution
+              ? (language === 'es' ? 'Ocultar solución Greedy' : 'Hide Greedy solution')
+              : (language === 'es' ? '👁️ Ver solución Greedy' : '👁️ Show Greedy solution')}
+          </button>
+        </div>
+      </div>
+
+      {/* Feedback Banner */}
+      {isMinimal ? (
+        <div className="challenge-feedback-banner success">
+          🏆 {language === 'es'
+            ? `¡Excelente! Cubriste todas las ${houses.length} casas utilizando exactamente ${userAntennas.length} antena(s), igualando la cota mínima óptima de Greedy.`
+            : `Outstanding! You covered all ${houses.length} houses using exactly ${userAntennas.length} antenna(s), matching Greedy's optimal minimum.`}
+        </div>
+      ) : isSuboptimal ? (
+        <div className="challenge-feedback-banner suboptimal">
+          ⚠️ {language === 'es'
+            ? `Cobertura completa lograda, pero usaste ${userAntennas.length} antenas cuando el óptimo teórico requiere solo ${greedyAntennas.length}. ¿Podés lograrlo moviendo las antenas más hacia la derecha?`
+            : `Full coverage achieved, but you used ${userAntennas.length} antennas when optimal only needs ${greedyAntennas.length}. Can you improve by shifting antennas further right?`}
+        </div>
+      ) : (
+        <div className="challenge-feedback-banner incomplete">
+          💡 {language === 'es'
+            ? `Haz clic a lo largo de la ruta para colocar antenas y dar cobertura a las casas. Quedan ${houses.length - userCoveredIndices.size} casa(s) sin señal.`
+            : `Click along the highway to place antennas and cover the houses. ${houses.length - userCoveredIndices.size} house(s) remain without signal.`}
+        </div>
+      )}
+
+      {/* Interactive Road SVG */}
+      <div className="interactive-road-canvas-wrap">
+        <svg
+          className="interactive-road-svg"
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          width="100%"
+          height={svgHeight}
+          onClick={handleSvgClick}
+          aria-label="Carretera interactiva para colocar antenas"
+        >
+          {/* Background */}
+          <rect x="0" y="0" width={svgWidth} height={svgHeight} fill="transparent" />
+
+          {/* Kilometer tick marks along road */}
+          {Array.from({ length: Math.floor(maxKm / 10) + 1 }).map((_, idx) => {
+            const km = idx * 10;
+            const x = kmToX(km);
+            return (
+              <g key={`p-tick-${km}`}>
+                <line x1={x} y1={roadY - 6} x2={x} y2={roadY + 20} stroke="var(--color-border)" strokeWidth="1" />
+                <text
+                  x={x}
+                  y={roadY + 34}
+                  textAnchor="middle"
+                  fill="var(--color-text-muted)"
+                  fontSize="10"
+                  fontFamily="sans-serif"
+                >
+                  {km}k
+                </text>
+              </g>
+            );
+          })}
+
+          {/* The Road Surface */}
+          <rect
+            x={padX - 10}
+            y={roadY}
+            width={svgWidth - 2 * padX + 20}
+            height="14"
+            rx="3"
+            fill="#334155"
+          />
+          <line
+            x1={padX - 5}
+            y1={roadY + 7}
+            x2={svgWidth - padX + 5}
+            y2={roadY + 7}
+            stroke="#f8fafc"
+            strokeWidth="2"
+            strokeDasharray="8 6"
+          />
+
+          {/* User Antennas and Coverage Spans */}
+          {userAntennas.map((antKm, aIdx) => {
+            const antX = kmToX(antKm);
+            const spanLeft = kmToX(Math.max(0, antKm - radius));
+            const spanRight = kmToX(antKm + radius);
+            const spanWidth = Math.max(0, spanRight - spanLeft);
+
+            return (
+              <g key={`user-ant-${aIdx}`}>
+                <rect
+                  x={spanLeft}
+                  y={roadY - 45}
+                  width={spanWidth}
+                  height="55"
+                  rx="10"
+                  fill="rgba(99, 102, 241, 0.18)"
+                  stroke="#6366f1"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="#6366f1" strokeWidth="2.5" />
+                <circle cx={antX} cy={roadY - 65} r="4.5" fill="#6366f1" />
+                <text
+                  x={antX}
+                  y={roadY - 72}
+                  textAnchor="middle"
+                  fill="#6366f1"
+                  fontSize="10"
+                  fontWeight="bold"
+                >
+                  {antKm}k
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Optional Overlay: Canonical Greedy Antennas */}
+          {showGreedySolution &&
+            greedyAntennas.map((gKm, gIdx) => {
+              const gX = kmToX(gKm);
+              const spanLeft = kmToX(Math.max(0, gKm - radius));
+              const spanRight = kmToX(gKm + radius);
+              const spanWidth = Math.max(0, spanRight - spanLeft);
+
+              return (
+                <g key={`greedy-overlay-${gIdx}`}>
+                  <rect
+                    x={spanLeft}
+                    y={roadY - 50}
+                    width={spanWidth}
+                    height="60"
+                    rx="10"
+                    fill="rgba(16, 185, 129, 0.15)"
+                    stroke="#10b981"
+                    strokeWidth="2"
+                  />
+                  <line x1={gX} y1={roadY} x2={gX} y2={roadY - 80} stroke="#10b981" strokeWidth="2" strokeDasharray="3 3" />
+                  <circle cx={gX} cy={roadY - 80} r="5" fill="#10b981" />
+                  <text
+                    x={gX}
+                    y={roadY - 87}
+                    textAnchor="middle"
+                    fill="#10b981"
+                    fontSize="11"
+                    fontWeight="bold"
+                  >
+                    Opt: {gKm}k
+                  </text>
+                </g>
+              );
+            })}
+
+          {/* Houses */}
+          {houses.map((hKm, hIdx) => {
+            const hX = kmToX(hKm);
+            const isCovered = userCoveredIndices.has(hIdx);
+            const houseColor = isCovered ? '#10b981' : '#f59e0b';
+
+            return (
+              <g key={`house-${hIdx}`}>
+                <polygon
+                  points={`${hX - 8},${roadY - 14} ${hX + 8},${roadY - 14} ${hX},${roadY - 23}`}
+                  fill={houseColor}
+                />
+                <rect
+                  x={hX - 6}
+                  y={roadY - 14}
+                  width="12"
+                  height="11"
+                  fill={houseColor}
+                  stroke="#1e293b"
+                  strokeWidth="1"
+                />
+                <text
+                  x={hX}
+                  y={roadY - 26}
+                  textAnchor="middle"
+                  fill="var(--color-text)"
+                  fontSize="10"
+                  fontFamily="sans-serif"
+                >
+                  {hKm}k
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+};

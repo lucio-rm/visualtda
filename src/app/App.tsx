@@ -25,6 +25,8 @@ import { VertexCoverApproxVisualizer } from '../components/visualizers/VertexCov
 import { VertexCoverApproxPlayground } from '../components/visualizers/VertexCoverApproxPlayground';
 import { RandomizedFairCoinVisualizer } from '../components/visualizers/RandomizedFairCoinVisualizer';
 import { RandomizedFairCoinPlayground } from '../components/visualizers/RandomizedFairCoinPlayground';
+import { RoadAntennasVisualizer } from '../components/visualizers/RoadAntennasVisualizer';
+import { RoadAntennasPlayground } from '../components/visualizers/RoadAntennasPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -529,6 +531,43 @@ const FAIR_COIN_PSEUDOCODE = `ALGORITMO MonedaEquilibrada_VonNeumann(fuente_carg
 
 const FAIR_COIN_CORRECTNESS = `Teorema de Extracción de Aleatoriedad de Von Neumann (1951): Sea una fuente binaria Bernoulli independiente con sesgo P(1) = p desconocido (0 < p < 1). Al lanzar la moneda en pares disjuntos sucesivos (t1, t2), las probabilidades conjuntas son: P((0, 1)) = (1 - p)·p y P((1, 0)) = p·(1 - p). Por la conmutatividad del producto de números reales, (1 - p)·p = p·(1 - p) exactamente. Los eventos equiprobables se mapean a 0 y 1 respectivamente, descartando los empates (0, 0) y (1, 1). La probabilidad de éxito en cada ronda es q = 2p(1 - p) > 0. El número de rondas sigue una distribución geométrica Geom(q), lo que garantiza tiempo esperado E[T] = 1/q = 1 / (2p(1-p)) = O(1) flips y sesgo nulo.`;
 
+// Highway Antennas (Interval Covering) Content
+const ROAD_ANTENNAS_CANONICAL_PYTHON = `def construir_antenas(casas: list[float], radio: float) -> list[float]:
+    casas_ordenadas = sorted(casas)
+    antenas = []
+    i = 0
+    n = len(casas_ordenadas)
+
+    while i < n:
+        casa_sin_cubrir = casas_ordenadas[i]
+        posicion = casa_sin_cubrir + radio
+        antenas.append(posicion)
+
+        limite = posicion + radio
+        while i < n and casas_ordenadas[i] <= limite:
+            i += 1
+
+    return antenas`;
+
+const ROAD_ANTENNAS_PSEUDOCODE = `ALGORITMO ConstruirAntenas(casas, radio):
+    casas_ordenadas ← OrdenarAscendente(casas)
+    antenas ← []
+    i ← 0
+    n ← Longitud(casas_ordenadas)
+
+    MIENTRAS i < n:
+        casa_sin_cubrir ← casas_ordenadas[i]
+        posicion ← casa_sin_cubrir + radio
+        antenas.Agregar(posicion)
+        limite ← posicion + radio
+
+        MIENTRAS i < n Y casas_ordenadas[i] <= limite:
+            i ← i + 1
+
+    RETORNAR antenas`;
+
+const ROAD_ANTENNAS_CORRECTNESS = `Teorema de Optimalidad por Greedy Stays Ahead (Kleinberg & Tardos 4.2): Sean A = {a_1, ..., a_k} las posiciones ordenadas elegidas por Greedy y O* = {o_1, ..., o_m} cualquier solución óptima válida. Demostramos por inducción que a_j >= o_j para todo j. Caso base (j=1): la primera casa x_1 requiere o_1 <= x_1 + R. Como Greedy elige a_1 = x_1 + R, a_1 >= o_1. Paso inductivo: si a_j >= o_j, el alcance a_j + R >= o_j + R. La primera casa no cubierta x_sig está más allá de o_j + R, por lo que en O* debe cubrirse con o_{j+1} <= x_sig + R. Como Greedy elige a_{j+1} = x_sig + R >= o_{j+1}, la frontera de Greedy siempre está al menos tan a la derecha como la de O*. Por ende, k <= m y como O* es óptimo, k = m.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -698,6 +737,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: FAIR_COIN_CORRECTNESS,
         timeComplexity: 'O(1) [Tiempo Esperado / Las Vegas]',
         spaceComplexity: 'O(1) [Espacio Auxiliar Constante]'
+      };
+    }
+
+    if (selectedExercise.id === 'road-antennas-greedy') {
+      return {
+        visualizerSlot: <RoadAntennasVisualizer />,
+        discoverPlaygroundSlot: <RoadAntennasPlayground />,
+        canonicalPython: ROAD_ANTENNAS_CANONICAL_PYTHON,
+        pseudocode: ROAD_ANTENNAS_PSEUDOCODE,
+        correctnessExplanation: ROAD_ANTENNAS_CORRECTNESS,
+        timeComplexity: 'O(n log n) [Ordenamiento] + O(n) [Escaneo lineal]',
+        spaceComplexity: 'O(k) [k antenas construidas]'
       };
     }
 

@@ -11,6 +11,7 @@ import { linearProgrammingValidator } from './algorithms/linearProgrammingValida
 import { reductionIsVcValidator } from './algorithms/reductionIsVcValidator';
 import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValidator';
 import { randomizedFairCoinValidator, simulateVonNeumann } from './algorithms/randomizedFairCoinValidator';
+import { roadAntennasValidator, solveRoadAntennas } from './algorithms/roadAntennasValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1031,6 +1032,118 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && validation.valid,
         expected: 'E[T] ≈ 4.17 lanzamientos',
         actual: `E[T] = ${sim.avgFlips.toFixed(2)} lanzamientos`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'road-antennas-greedy': {
+    exerciseId: 'road-antennas-greedy',
+    entryFunction: 'construir_antenas',
+    starterCode: `def construir_antenas(casas: list[float], radio: float) -> list[float]:
+    """
+    Recibe:
+      - casas: lista desordenada de kilómetros donde hay casas
+      - radio: radio de cobertura R de cada antena
+    Retorna:
+      - lista con las posiciones (kilómetros) de las antenas construidas
+    """
+    # 1. Ordenar casas de izquierda a derecha
+    casas_ordenadas = sorted(casas)
+    antenas = []
+    i = 0
+    n = len(casas_ordenadas)
+
+    while i < n:
+        # Primera casa sin cobertura
+        casa_sin_cobertura = casas_ordenadas[i]
+
+        # Elección Greedy: ubicar la antena en casa_sin_cobertura + radio
+        posicion = casa_sin_cobertura + radio
+        antenas.append(posicion)
+
+        # Saltear todas las casas cubiertas por esta antena
+        limite = posicion + radio
+        while i < n and casas_ordenadas[i] <= limite:
+            i += 1
+
+    return antenas
+`,
+    hints: [
+      {
+        es: 'Pista 1: Si ordenas las casas por kilómetro ascendente, la primera casa x_1 debe tener cobertura obligatoria.',
+        en: 'Hint 1: If you sort houses ascendingly, the first house x_1 must be covered.'
+      },
+      {
+        es: 'Pista 2: Para cubrir x_1 y a la vez llegar lo más lejos posible hacia la derecha, la antena debe colocarse exactamente en x_1 + radio.',
+        en: 'Hint 2: To cover x_1 while reaching as far right as possible, place the antenna at x_1 + radio.'
+      },
+      {
+        es: 'Pista 3: Una vez colocada la antena en pos = x_1 + radio, avanza el puntero mientras las siguientes casas estén dentro de pos + radio (es decir, <= x_1 + 2*radio). Repite con la siguiente casa desprotegida.',
+        en: 'Hint 3: Once placed at pos = x_1 + radio, advance while subsequent houses are <= pos + radio. Repeat with next uncovered house.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasSort = code.includes('sort');
+      const hasWhileOrFor = code.includes('while') || code.includes('for');
+      const passesHeuristic = hasSort && hasWhileOrFor && !code.includes('pass\n');
+
+      // Test 1: Typical case with 9 houses
+      const t1Houses = [4, 12, 18, 26, 32, 45, 60, 68, 75];
+      const t1Radius = 10;
+      const t1Opt = solveRoadAntennas(t1Houses, t1Radius); // [14, 36, 70]
+      const t1Val = roadAntennasValidator.validate({ houses: t1Houses, radius: t1Radius }, t1Opt);
+
+      results.push({
+        testId: 'road-typical-9houses',
+        description: {
+          es: 'Caso típico: 9 casas dispersas con R = 10 km (3 antenas óptimas).',
+          en: 'Typical case: 9 scattered houses with R = 10 km (3 optimal antennas).'
+        },
+        passed: passesHeuristic && t1Val.valid,
+        expected: 'Antenas en [14, 36, 70]',
+        actual: t1Val.valid ? `Antenas en [${t1Opt.join(', ')}]` : t1Val.errors.join('; ')
+      });
+
+      // Test 2: Dense cluster (all within 2R)
+      const t2Houses = [10, 15, 20, 25, 30];
+      const t2Radius = 10;
+      const t2Opt = solveRoadAntennas(t2Houses, t2Radius); // [20]
+      const t2Val = roadAntennasValidator.validate({ houses: t2Houses, radius: t2Radius }, t2Opt);
+
+      results.push({
+        testId: 'road-dense-cluster',
+        description: {
+          es: 'Cluster denso: 5 casas dentro del alcance 2·R cubiertas por 1 sola antena.',
+          en: 'Dense cluster: 5 houses within reach 2·R covered by 1 single antenna.'
+        },
+        passed: passesHeuristic && t2Val.valid,
+        expected: '1 antena en km 20',
+        actual: t2Val.valid ? `Antenas en [${t2Opt.join(', ')}]` : t2Val.errors.join('; ')
+      });
+
+      // Test 3: Distant towns (Ruta 2: Lezama, Castelli, Sevigne, Guido, Maipú)
+      const t3Houses = [156, 185, 194, 242, 270];
+      const t3Radius = 50;
+      const t3Opt = solveRoadAntennas(t3Houses, t3Radius);
+      const t3Val = roadAntennasValidator.validate({ houses: t3Houses, radius: t3Radius }, t3Opt);
+
+      results.push({
+        testId: 'road-guia-ej10-pueblos',
+        description: {
+          es: 'Pueblos Ruta 2 (Guía Ej. 10): Castelli, Guido, Lezama, Maipú, Sevigne con R = 50 km.',
+          en: 'Highway 2 towns: Castelli, Guido, Lezama, Maipú, Sevigne with R = 50 km.'
+        },
+        passed: passesHeuristic && t3Val.valid,
+        expected: `${t3Opt.length} antenas óptimas`,
+        actual: `${t3Opt.length} antenas en [${t3Opt.join(', ')}]`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

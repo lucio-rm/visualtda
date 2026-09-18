@@ -11,6 +11,7 @@ import { maxFlowValidator, FlowNetworkInput } from '../engine/algorithms/maxFlow
 import { linearProgrammingValidator } from '../engine/algorithms/linearProgrammingValidator';
 import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverApproxValidator';
 import { randomizedFairCoinValidator } from '../engine/algorithms/randomizedFairCoinValidator';
+import { roadAntennasValidator } from '../engine/algorithms/roadAntennasValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -819,6 +820,75 @@ def __evaluar_monte_carlo__(p, n):
           passed: mcPassed,
           expected: '~50% ceros, ~50% unos',
           actual: `${ratio0.toFixed(1)}% ceros (${ceros}), ${ratio1.toFixed(1)}% unos (${unos})`
+        });
+        break;
+      }
+
+      case 'road-antennas-greedy': {
+        // Test 1: 9 houses with R = 10 -> [14, 36, 70]
+        const t1Houses = [4, 12, 18, 26, 32, 45, 60, 68, 75];
+        const res1 = await service.executePython(code, 'construir_antenas', [t1Houses, 10]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'antennas-exec-fail',
+              description: { es: 'Ejecución de construir_antenas(casas, radio)', en: 'Execution of construir_antenas(casas, radio)' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const out1 = (Array.isArray(res1.result) ? res1.result : []) as number[];
+        const val1 = roadAntennasValidator.validate({ houses: t1Houses, radius: 10 }, out1);
+        results.push({
+          testId: 'py-road-typical',
+          description: {
+            es: 'Caso típico (9 casas, R = 10 km): Cobertura completa y mínima con 3 antenas.',
+            en: 'Typical case (9 houses, R = 10 km): Complete and minimal coverage with 3 antennas.'
+          },
+          passed: val1.valid,
+          expected: '3 antenas ([14, 36, 70])',
+          actual: val1.valid ? `${out1.length} antenas: [${out1.join(', ')}]` : val1.errors.join('; ')
+        });
+
+        // Test 2: Dense cluster (R = 10 km) -> single antenna
+        const t2Houses = [10, 15, 20, 25, 30];
+        const res2 = await service.executePython(code, 'construir_antenas', [t2Houses, 10]);
+        const out2 = (Array.isArray(res2.result) ? res2.result : []) as number[];
+        const val2 = roadAntennasValidator.validate({ houses: t2Houses, radius: 10 }, out2);
+        results.push({
+          testId: 'py-road-dense',
+          description: {
+            es: 'Cluster denso (5 casas dentro de 2R): 1 sola antena óptima.',
+            en: 'Dense cluster (5 houses within 2R): 1 single optimal antenna.'
+          },
+          passed: val2.valid,
+          expected: '1 antena en km 20',
+          actual: val2.valid ? `${out2.length} antena(s): [${out2.join(', ')}]` : val2.errors.join('; ')
+        });
+
+        // Test 3: Unsorted input (Pueblos Ruta 2 desordenados, R = 50 km)
+        const t3Houses = [270, 156, 194, 242, 185];
+        const res3 = await service.executePython(code, 'construir_antenas', [t3Houses, 50]);
+        const out3 = (Array.isArray(res3.result) ? res3.result : []) as number[];
+        const val3 = roadAntennasValidator.validate({ houses: t3Houses, radius: 50 }, out3);
+        results.push({
+          testId: 'py-road-unsorted',
+          description: {
+            es: 'Casas desordenadas (Pueblos Ruta 2, R = 50 km): ordenamiento correcto y cobertura óptima.',
+            en: 'Unsorted houses (Highway 2 towns, R = 50 km): correct sorting and optimal coverage.'
+          },
+          passed: val3.valid,
+          expected: 'Cobertura óptima válida',
+          actual: val3.valid ? `${out3.length} antenas: [${out3.join(', ')}]` : val3.errors.join('; ')
         });
         break;
       }

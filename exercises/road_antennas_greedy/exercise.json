@@ -1,0 +1,22 @@
+{
+  "id": "road-antennas-greedy",
+  "problemId": "road-antennas-greedy",
+  "techniqueId": "greedy",
+  "categoryId": "greedy",
+  "order": 3,
+  "difficulty": 2,
+  "title": {
+    "es": "Antenas en una Ruta (Cobertura de Intervalos)",
+    "en": "Highway Antennas (Interval Covering)"
+  },
+  "subtitle": {
+    "es": "Ubicar la mínima cantidad de antenas de radio R para dar cobertura total a todas las casas sobre una ruta",
+    "en": "Place the minimum number of radius-R antennas to provide full coverage to all houses along a highway"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["greedy", "interval-covering", "sorting", "exchange-argument", "road", "fiuba"],
+  "parameters": {
+    "defaultHouses": [4, 12, 18, 26, 32, 45, 60, 68, 75],
+    "defaultRadius": 10
+  }
+}

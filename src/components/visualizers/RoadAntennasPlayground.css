@@ -1,0 +1,148 @@
+.road-antennas-playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.playground-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.playground-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.playground-control-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.preset-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.preset-btn {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.interactive-road-canvas-wrap {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  background: radial-gradient(circle at 50% 50%, rgba(var(--color-primary-rgb, 59, 130, 246), 0.05) 0%, transparent 80%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-2);
+}
+
+.interactive-road-svg {
+  display: block;
+  margin: 0 auto;
+  cursor: crosshair;
+  min-width: 600px;
+  max-width: 100%;
+}
+
+.playground-challenge-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.challenge-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.challenge-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.challenge-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.challenge-stat-val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.challenge-feedback-banner {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.challenge-feedback-banner.success {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+
+.challenge-feedback-banner.suboptimal {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid #f59e0b;
+  color: #92400e;
+}
+
+.challenge-feedback-banner.incomplete {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid #3b82f6;
+  color: #1e40af;
+}
+
+[data-theme='dark'] .challenge-feedback-banner.success {
+  color: #34d399;
+}
+
+[data-theme='dark'] .challenge-feedback-banner.suboptimal {
+  color: #fbbf24;
+}
+
+[data-theme='dark'] .challenge-feedback-banner.incomplete {
+  color: #93c5fd;
+}
