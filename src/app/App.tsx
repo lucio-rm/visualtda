@@ -10,6 +10,8 @@ import { IntervalSchedulingVisualizer } from '../components/visualizers/Interval
 import { IntervalSchedulingPlayground } from '../components/visualizers/IntervalSchedulingPlayground';
 import { KnapsackDpVisualizer } from '../components/visualizers/KnapsackDpVisualizer';
 import { KnapsackPlayground } from '../components/visualizers/KnapsackPlayground';
+import { JuanElVagoVisualizer } from '../components/visualizers/JuanElVagoVisualizer';
+import { JuanElVagoPlayground } from '../components/visualizers/JuanElVagoPlayground';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
 import { MaxSubarrayVisualizer } from '../components/visualizers/MaxSubarrayVisualizer';
@@ -147,6 +149,55 @@ const KNAPSACK_DP_PSEUDOCODE = `ALGORITMO Mochila01_DP(items, W):
     RETORNAR DP[n][W] y ReconstruirSolucion(DP, items, W)`;
 
 const KNAPSACK_DP_CORRECTNESS = `Principio de Optimalidad de Bellman: Sea S* la solución óptima para los primeros i elementos y capacidad w. Para el elemento i, solo existen dos alternativas exhaustivas: o bien i no pertenece a S* (en cuyo caso S* debe ser óptimo para i-1 elementos y capacidad w), o bien i sí pertenece a S* (en cuyo caso S* \\ {i} debe ser óptimo para i-1 elementos con capacidad w - w_i). Cualquier desviación subóptima en los subproblemas contradiría la optimalidad de S* por el argumento clásico 'cut-and-paste'. Por inducción sobre las filas de la tabla, DP[n][W] contiene el óptimo global.`;
+
+// Juan el Vago (1D DP) Content
+const JUAN_EL_VAGO_CANONICAL_PYTHON = `def juan_el_vago(ganancias: list[int]) -> tuple[int, list[int]]:
+    n = len(ganancias)
+    if n == 0: return 0, []
+    if n == 1: return ganancias[0], [0]
+
+    dp = [0] * n
+    dp[0] = ganancias[0]
+    dp[1] = max(ganancias[0], ganancias[1])
+
+    for i in range(2, n):
+        dp[i] = max(dp[i - 1], dp[i - 2] + ganancias[i])
+
+    # Reconstrucción
+    dias = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            dias.append(0); break
+        elif i == 1:
+            dias.append(1 if dp[1] == ganancias[1] else 0); break
+        else:
+            if dp[i] == dp[i - 1]:
+                i -= 1
+            else:
+                dias.append(i)
+                i -= 2
+
+    dias.reverse()
+    return dp[n - 1], dias`;
+
+const JUAN_EL_VAGO_PSEUDOCODE = `ALGORITMO JuanElVago(G):
+    n ← longitud(G)
+    SI n == 0: RETORNAR (0, [])
+    SI n == 1: RETORNAR (G[0], [0])
+
+    DP[0] ← G[0]
+    DP[1] ← MAX(G[0], G[1])
+
+    PARA i DESDE 2 HASTA n - 1:
+        DP[i] ← MAX(DP[i - 1], DP[i - 2] + G[i])
+
+    dias ← ReconstruirDias(DP, G, n - 1)
+    RETORNAR (DP[n - 1], dias)`;
+
+const JUAN_EL_VAGO_CORRECTNESS = `Subestructura Óptima: Consideremos el subconjunto óptimo S* de días trabajados hasta el día i. Si el día i no pertenece a S*, S* debe ser óptimo para los primeros i-1 días (DP[i-1]). Si el día i pertenece a S*, por la restricción de no trabajar días consecutivos, el día i-1 no puede pertenecer a S*, por lo que S* \\ {i} debe ser óptimo para los primeros i-2 días (DP[i-2] + G[i]).
+Cualquier otra elección menor violaría la optimalidad por contradicción (cut-and-paste).
+La tabla 1D se computa en tiempo lineal O(n) y la reconstrucción recorre hacia atrás a lo sumo n pasos O(n).`;
 
 // Knapsack Greedy Content
 const KNAPSACK_GREEDY_CANONICAL_PYTHON = `def mochila_fraccionaria_greedy(items, capacidad):
@@ -476,6 +527,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: KNAPSACK_DP_CORRECTNESS,
         timeComplexity: 'O(n · W) [Pseudo-polinomial]',
         spaceComplexity: 'O(n · W)'
+      };
+    }
+
+    if (selectedExercise.id === 'juan-el-vago') {
+      return {
+        visualizerSlot: <JuanElVagoVisualizer />,
+        discoverPlaygroundSlot: <JuanElVagoPlayground />,
+        canonicalPython: JUAN_EL_VAGO_CANONICAL_PYTHON,
+        pseudocode: JUAN_EL_VAGO_PSEUDOCODE,
+        correctnessExplanation: JUAN_EL_VAGO_CORRECTNESS,
+        timeComplexity: 'O(n) [Lineal]',
+        spaceComplexity: 'O(n) [O(1) sin reconstrucción]'
       };
     }
 

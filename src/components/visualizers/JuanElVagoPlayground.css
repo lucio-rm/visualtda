@@ -1,0 +1,242 @@
+.juan-vago-playground {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.playground-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent);
+}
+
+.playground-header p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.presets-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.presets-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip-button {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.35rem 0.75rem;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.chip-button:hover {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ganancias-field {
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  font-family: monospace;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+.interactive-schedule {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.btn-auto-opt {
+  background-color: rgba(99, 102, 241, 0.15);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.btn-auto-opt:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+.days-picker {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.picker-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 84px;
+  height: 98px;
+  background-color: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: var(--text);
+}
+
+.picker-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.picker-day {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.picker-gain {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.picker-status {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.picker-card.user-selected {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.12);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.picker-card.user-selected .picker-status {
+  color: #10b981;
+}
+
+.comparison-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.score-card {
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.score-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.score-number {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.score-card.valid .score-number {
+  color: #10b981;
+}
+
+.score-card.invalid .score-number {
+  color: #ef4444;
+}
+
+.score-card.optimal-card .score-number {
+  color: var(--accent);
+}
+
+.status-error {
+  color: #ef4444;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-success {
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.status-subopt {
+  color: #f59e0b;
+  font-size: 0.8rem;
+}
+
+.pedagogy-tip {
+  background-color: rgba(99, 102, 241, 0.08);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+}
+
+.pedagogy-tip h4 {
+  margin: 0 0 0.4rem 0;
+  color: var(--accent);
+}
+
+.pedagogy-tip p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text);
+}

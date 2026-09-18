@@ -3,6 +3,7 @@ import { TestCaseResult } from '../engine/exerciseContent';
 import { nQueensValidator } from '../engine/algorithms/nQueensValidator';
 import { intervalSchedulingValidator, Interval } from '../engine/algorithms/intervalSchedulingValidator';
 import { knapsackDpValidator, KnapsackItem } from '../engine/algorithms/knapsackDpValidator';
+import { juanElVagoValidator } from '../engine/algorithms/juanElVagoValidator';
 import { knapsackGreedyValidator, FractionalAssignment } from '../engine/algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from '../engine/algorithms/mergeSortValidator';
 import { maxSubarrayValidator } from '../engine/algorithms/maxSubarrayValidator';
@@ -228,6 +229,79 @@ export async function runPythonTests(
           },
           passed: validation.valid,
           message: validation.valid ? 'Restricción de capacidad satisfecha.' : validation.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'juan-el-vago': {
+        // Test 1: [10, 40, 20, 30, 50] -> (90, [1, 4])
+        const g1 = [10, 40, 20, 30, 50];
+        const res1 = await service.executePython(code, 'juan_el_vago', [g1]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'juan-exec-fail',
+              description: { es: 'Ejecución de juan_el_vago(ganancias)', en: 'Execution of juan_el_vago(ganancias)' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const out1 = res1.result as [number, number[]];
+        const val1 = juanElVagoValidator.validate({ ganancias: g1 }, out1);
+
+        results.push({
+          testId: 'py-juan-cátedra-case',
+          description: {
+            es: 'Caso Cátedra: [10, 40, 20, 30, 50] -> Ganancia $90 (Días [1, 4]).',
+            en: 'Course Case: [10, 40, 20, 30, 50] -> Profit $90 (Days [1, 4]).'
+          },
+          passed: val1.valid,
+          expected: 'Monto: $90, Días: [1, 4]',
+          actual: `Monto: $${Array.isArray(out1) ? out1[0] : '?'}, Días: [${Array.isArray(out1?.[1]) ? out1[1].join(', ') : ''}]`
+        });
+
+        // Test 2: [100, 10, 10, 100] -> (200, [0, 3])
+        const g2 = [100, 10, 10, 100];
+        const res2 = await service.executePython(code, 'juan_el_vago', [g2]);
+        const out2 = res2.result as [number, number[]];
+        const val2 = juanElVagoValidator.validate({ ganancias: g2 }, out2);
+
+        results.push({
+          testId: 'py-juan-greedy-trap',
+          description: {
+            es: 'Trampa Greedy: [100, 10, 10, 100] -> Ganancia $200 (Días [0, 3]).',
+            en: 'Greedy Trap: [100, 10, 10, 100] -> Profit $200 (Days [0, 3]).'
+          },
+          passed: val2.valid,
+          expected: 'Monto: $200, Días: [0, 3]',
+          actual: `Monto: $${Array.isArray(out2) ? out2[0] : '?'}, Días: [${Array.isArray(out2?.[1]) ? out2[1].join(', ') : ''}]`
+        });
+
+        // Test 3: [2, 7, 9, 3, 1] -> (12, [0, 2, 4])
+        const g3 = [2, 7, 9, 3, 1];
+        const res3 = await service.executePython(code, 'juan_el_vago', [g3]);
+        const out3 = res3.result as [number, number[]];
+        const val3 = juanElVagoValidator.validate({ ganancias: g3 }, out3);
+
+        results.push({
+          testId: 'py-juan-multi-days',
+          description: {
+            es: 'Múltiples días alternados: [2, 7, 9, 3, 1] -> Ganancia $12 (Días [0, 2, 4]).',
+            en: 'Multiple alternated days: [2, 7, 9, 3, 1] -> Profit $12 (Days [0, 2, 4]).'
+          },
+          passed: val3.valid,
+          expected: 'Monto: $12, Días: [0, 2, 4]',
+          actual: `Monto: $${Array.isArray(out3) ? out3[0] : '?'}, Días: [${Array.isArray(out3?.[1]) ? out3[1].join(', ') : ''}]`
         });
         break;
       }

@@ -176,6 +176,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['dynamic-programming', 'knapsack', 'memoization']
   },
   {
+    id: 'juan-el-vago',
+    problemId: 'juan-el-vago',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 2,
+    difficulty: 2,
+    title: { es: 'Juan el Vago (PD 1D)', en: 'Juan the Slacker (1D DP)' },
+    subtitle: {
+      es: 'Maximizar ganancias de ofertas diarias sin trabajar dos días seguidos con reconstrucción O(n)',
+      en: 'Maximize earnings without working consecutive days with linear reconstruction O(n)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', '1d-table', 'reconstruction', 'memoization', 'optimization']
+  },
+  {
     id: 'max-flow',
     problemId: 'max-flow',
     techniqueId: 'network-flow',

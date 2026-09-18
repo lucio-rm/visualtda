@@ -1,0 +1,21 @@
+{
+  "id": "juan-el-vago",
+  "problemId": "juan-el-vago",
+  "techniqueId": "dynamic-programming",
+  "categoryId": "dynamic-programming",
+  "order": 2,
+  "difficulty": 2,
+  "title": {
+    "es": "Juan el Vago (Programación Dinámica 1D)",
+    "en": "Juan the Slacker (1D Dynamic Programming)"
+  },
+  "subtitle": {
+    "es": "Maximizar ganancia con ofertas de trabajo diarias sabiendo que no aceptará trabajar dos días seguidos",
+    "en": "Maximize profit from daily job offers without ever working two consecutive days"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["dynamic-programming", "1d-table", "reconstruction", "memoization", "optimization"],
+  "parameters": {
+    "defaultGanancias": [10, 40, 20, 30, 50]
+  }
+}

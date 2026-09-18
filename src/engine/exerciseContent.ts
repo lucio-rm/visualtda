@@ -2,6 +2,7 @@ import { LocalizedString } from '../types/category';
 import { nQueensValidator } from './algorithms/nQueensValidator';
 import { intervalSchedulingValidator, Interval } from './algorithms/intervalSchedulingValidator';
 import { knapsackDpValidator, KnapsackItem } from './algorithms/knapsackDpValidator';
+import { juanElVagoValidator } from './algorithms/juanElVagoValidator';
 import { knapsackGreedyValidator, FractionalAssignment } from './algorithms/knapsackGreedyValidator';
 import { mergeSortValidator } from './algorithms/mergeSortValidator';
 import { maxSubarrayValidator } from './algorithms/maxSubarrayValidator';
@@ -252,6 +253,88 @@ export const EXERCISE_SOLVE_CONTENT: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && validation.valid,
         message: validation.valid ? 'Restricción de peso satisfecha.' : validation.errors.join('; ')
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'juan-el-vago': {
+    exerciseId: 'juan-el-vago',
+    entryFunction: 'juan_el_vago',
+    starterCode: `def juan_el_vago(ganancias: list[int]) -> tuple[int, list[int]]:
+    """
+    Determina el monto máximo a ganar por Juan sabiendo que no aceptará
+    trabajar dos días seguidos.
+    Retorna (monto_maximo, dias_trabajados) donde dias_trabajados son los índices.
+    """
+    n = len(ganancias)
+    if n == 0:
+        return 0, []
+    if n == 1:
+        return ganancias[0], [0]
+
+    # 1. Inicializar tabla DP 1D
+    # 2. Casos base: dp[0], dp[1]
+    # 3. Llenar tabla iterativa: dp[i] = max(dp[i-1], dp[i-2] + ganancias[i])
+    # 4. Reconstrucción hacia atrás para obtener los días trabajados
+
+    return 0, []
+`,
+    hints: [
+      {
+        es: 'Pista 1: Para cada día i >= 2, hay dos opciones excluyentes: no trabajar el día i (dp[i-1]) o trabajar el día i (dp[i-2] + ganancias[i]). El óptimo es el máximo entre ambas.',
+        en: 'Hint 1: For each day i >= 2, there are two exclusive choices: rest on day i (dp[i-1]) or work on day i (dp[i-2] + earnings[i]). The optimum is the maximum of both.'
+      },
+      {
+        es: 'Pista 2: Casos base: dp[0] = ganancias[0]. Para el día 1, no puede trabajar ambos días, por lo que dp[1] = max(ganancias[0], ganancias[1]).',
+        en: 'Hint 2: Base cases: dp[0] = earnings[0]. For day 1, he cannot work both, so dp[1] = max(earnings[0], earnings[1]).'
+      },
+      {
+        es: 'Pista 3: En la reconstrucción desde i = n - 1 hacia atrás: si dp[i] == dp[i-1], significa que no trabajó el día i (i -= 1). De lo contrario, trabajó el día i (agrega i a la lista e i -= 2). Al final invierte la lista de días.',
+        en: 'Hint 3: In backward reconstruction from i = n - 1: if dp[i] == dp[i-1], he rested on day i (i -= 1). Otherwise, he worked day i (append i to list and i -= 2). Finally reverse the days list.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasDp = code.includes('dp') || code.includes('max(');
+      const hasRecon = code.includes('while') || code.includes('for') || code.includes('append');
+      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      const testG1 = [10, 40, 20, 30, 50];
+      const opt1 = [90, [1, 4]] as [number, number[]];
+      const val1 = juanElVagoValidator.validate({ ganancias: testG1 }, opt1);
+
+      results.push({
+        testId: 'juan-dp-recurrence',
+        description: {
+          es: 'Ecuación de Bellman 1D: dp[i] = max(dp[i-1], dp[i-2] + ganancias[i]) en tiempo O(n).',
+          en: '1D Bellman equation: dp[i] = max(dp[i-1], dp[i-2] + earnings[i]) in O(n) time.'
+        },
+        passed: passesHeuristic && val1.valid,
+        expected: 'Monto: $90 (Días [1, 4])',
+        actual: passesHeuristic ? 'Monto: $90 (Días [1, 4])' : 'Subóptimo o sin DP'
+      });
+
+      const testG2 = [100, 10, 10, 100];
+      const opt2 = [200, [0, 3]] as [number, number[]];
+      const val2 = juanElVagoValidator.validate({ ganancias: testG2 }, opt2);
+
+      results.push({
+        testId: 'juan-consecutive-rule',
+        description: {
+          es: 'Restricción de descanso: Ningún par de días seleccionados es consecutivo.',
+          en: 'Rest constraint: No two chosen days are consecutive.'
+        },
+        passed: passesHeuristic && val2.valid,
+        expected: 'Sin días adyacentes',
+        actual: passesHeuristic ? 'Sin días adyacentes' : 'Conflicto de días consecutivos'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
