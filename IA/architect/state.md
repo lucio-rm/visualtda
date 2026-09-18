@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: P14 (Full 8-Technique Academic Coverage & Polish)
-- **CURRENT_TASK**: Randomized Algorithms & Linear Programming (Finalizing Kleinberg & Tardos Pillars)
+- **CURRENT_PHASE**: P15 (Curriculum Depth & Iconic Course Problems)
+- **CURRENT_TASK**: Prioritizing Core Fundamental Course Problems (Starred/Guía FIUBA & RW)
 - **COMPLETED**:
   - Initial repository audit
   - Multi-agent specifications in `.agents/agents/`
@@ -21,14 +21,18 @@
   - P10: Exercise-specific Solve phase content, 3-level progressive hints, and per-test feedback cards
   - P11: Max Flow / Min Cut (Network Flow with Edmonds-Karp BFS, residual graph, augmenting paths, and min-cut cut-set partition)
   - P12: Pyodide Web Worker Execution Infrastructure (`workerProtocol.ts`, `pyodideWorker.ts`, `pythonExecutionService.ts` with 5s watchdog)
-  - Interactive Discover Phase Playgrounds across all exercises (`NQueensPlayground`, `IntervalSchedulingPlayground`, `KnapsackPlayground`, `ReductionIsVcPlayground`, `VertexCoverApproxPlayground`)
+  - Interactive Discover Phase Playgrounds across all exercises (`NQueensPlayground`, `IntervalSchedulingPlayground`, `KnapsackPlayground`, `ReductionIsVcPlayground`, `VertexCoverApproxPlayground`, `MaxSubarrayPlayground`, `JuanElVagoPlayground`, `LinearProgrammingPlayground`, `RandomizedFairCoinPlayground`)
   - Real Python execution in browser via Pyodide Web Worker (`pythonTestRunner.ts` and `SolveView.tsx`) with stdout capture and execution benchmarking
   - P13: Problem Reductions (`vertex-cover-reduction`: Independent Set $\le_P$ Vertex Cover, K&T 8.1 duality theorem, bidirectional proof, SVG graph, and interactive Discover playground)
   - P14: Approximation Algorithms (`vertex-cover-approx`: 2-Approximation via Maximal Matching, K&T 11.1 lower-bound proof $|C^*| \ge |M|$, ratio metric, and interactive Discover playground)
-  - 85 unit tests passing 100% across 19 test files
-- **IN_PROGRESS**: Academic curriculum expansion
+  - Divide and Conquer Core: `max-subarray-dyc` (Guía DyC Ejercicio Resuelto ★, $O(n \log n)$ Master Theorem vs Kadane $O(n)$)
+  - Dynamic Programming 1D Core: `juan-el-vago` (Guía PD Ejercicio 4 ★, non-consecutive days recurrence $\text{OPT}(i) = \max(\text{OPT}(i-1), \text{OPT}(i-2) + g_i)$ with full reconstruction)
+  - Linear Programming Core: `linear-programming-formulation` (Guía PL Ejercicios 1, 2, 3 ★, 2D polytope, convex polygon vertices, simplex level curves, ILP modeling)
+  - Randomized Algorithms Core: `randomized-fair-coin` (Guía Algoritmos Randomizados Ejercicio 3 ★, Von Neumann 1951 Las Vegas Bernoulli pair extraction, equiprobability proof, expected time $O(1)$)
+  - 106 unit tests passing 100% across 23 test files
+- **IN_PROGRESS**: Selecting next iconic starred exercise from curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Randomized Algorithms (e.g. Monte Carlo Min-Cut / Randomized Quicksort or Linear Programming Duality)
+- **NEXT_TASK**: Backtracking / Greedy fundamental starred problems (e.g., Subset Sum / Subconjuntos que suman S or Antenas en la Ruta)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 85 tests)
-- **LAST_COMMIT**: `5b81ea0`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 106 tests)
+- **LAST_COMMIT**: `5f3a22d`
