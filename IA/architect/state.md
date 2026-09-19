@@ -39,4 +39,4 @@
 - **NEXT_TASK**: Dynamic Programming: Longest Common Subsequence (LCS / Subsecuencia Común Más Larga 2D, Guía PD Ejercicio 9 ★★★)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
 - **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 142 tests)
-- **LAST_COMMIT**: Pending feat(dyc) for peak-finding-dyc
+- **LAST_COMMIT**: `0ee4772`
