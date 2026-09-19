@@ -146,6 +146,11 @@
   transition: fill 0.15s ease;
 }
 
+g[role='button']:focus-visible rect {
+  stroke: var(--accent, #3b82f6);
+  stroke-width: 3px;
+}
+
 .cell-light {
   fill: #f1f5f9;
 }

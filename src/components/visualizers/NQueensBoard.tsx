@@ -64,8 +64,17 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
             return (
               <g
                 key={`${r}-${c}`}
+                role={interactive ? 'button' : undefined}
+                tabIndex={interactive ? 0 : undefined}
+                aria-label={interactive ? `Fila ${r}, Columna ${c}${isPlaced ? ', con reina' : ', vacía'}` : undefined}
                 onClick={() => interactive && onCellClick?.(r, c)}
-                style={{ cursor: interactive ? 'pointer' : 'default' }}
+                onKeyDown={(e) => {
+                  if (interactive && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    onCellClick?.(r, c);
+                  }
+                }}
+                style={{ cursor: interactive ? 'pointer' : 'default', outline: 'none' }}
               >
                 <rect
                   x={c * cellSize}

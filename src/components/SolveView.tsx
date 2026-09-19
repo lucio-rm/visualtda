@@ -24,8 +24,31 @@ export const SolveView: React.FC<SolveViewProps> = ({
     return EXERCISE_SOLVE_CONTENT[exercise.id] || null;
   }, [exercise.id]);
 
-  const initialCode = starterCode || content?.starterCode || '# Escribe tu solución aquí en Python\ndef resolver():\n    pass\n';
-  const [code, setCode] = useState(initialCode);
+  const storageKey = `visual_tda_code_${exercise.id}`;
+  const defaultCode = starterCode || content?.starterCode || '# Escribe tu solución aquí en Python\ndef resolver():\n    pass\n';
+
+  const [code, setCodeState] = useState<string>(() => {
+    try {
+      const saved = sessionStorage.getItem(storageKey);
+      return saved !== null ? saved : defaultCode;
+    } catch {
+      return defaultCode;
+    }
+  });
+
+  const setCode = (newCode: string) => {
+    setCodeState(newCode);
+    try {
+      sessionStorage.setItem(storageKey, newCode);
+    } catch {
+      // Ignore quota error
+    }
+  };
+
+  const handleResetCode = () => {
+    setCode(defaultCode);
+  };
+
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
   const [showSkipModal, setShowSkipModal] = useState(false);
   const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
@@ -170,8 +193,27 @@ export const SolveView: React.FC<SolveViewProps> = ({
         <div className="solve-editor-column">
           <div className="editor-card">
             <div className="editor-header">
-              <span className="editor-lang-badge">Python 3</span>
-              <span className="editor-filename">solucion.py</span>
+              <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="editor-lang-badge">Python 3</span>
+                <span className="editor-filename">solucion.py</span>
+              </div>
+              <button
+                type="button"
+                className="btn-reset-code"
+                onClick={handleResetCode}
+                title={language === 'es' ? 'Restaurar plantilla inicial del ejercicio' : 'Reset to initial exercise template'}
+                aria-label={language === 'es' ? 'Restaurar plantilla inicial' : 'Reset to template'}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-muted, #94a3b8)',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  padding: '0.25rem 0.5rem'
+                }}
+              >
+                ↺ {language === 'es' ? 'Reiniciar plantilla' : 'Reset template'}
+              </button>
             </div>
             <textarea
               className="code-editor-input"
