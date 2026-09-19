@@ -17,6 +17,7 @@ import { coinChangeValidator, solveCoinChange } from './algorithms/coinChangeVal
 import { peakFindingValidator, solvePeakFinding } from './algorithms/peakFindingValidator';
 import { lcsValidator, solveLcs } from './algorithms/lcsValidator';
 import { weightedIntervalValidator, solveWeightedIntervals, WeightedInterval } from './algorithms/weightedIntervalValidator';
+import { inversionCountingValidator, countInversions } from './algorithms/inversionCountingValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1670,6 +1671,97 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Optimal.length === 0,
         expected: '[]',
         actual: '[]'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'inversion-counting-dyc': {
+    exerciseId: 'inversion-counting-dyc',
+    entryFunction: 'contar_inversiones',
+    starterCode: `def contar_inversiones(arreglo: list[int]) -> int:
+    """
+    Cuenta el número total de inversiones en el arreglo dado:
+    pares de índices (i, j) tales que i < j y arreglo[i] > arreglo[j].
+
+    Complejidad Temporal requerida: O(n log n) mediante División y Conquista.
+    Retorna la cantidad total de inversiones (entero >= 0).
+    """
+    if len(arreglo) <= 1:
+        return 0
+
+    # Escribe tu implementación de División y Conquista (Merge and Count) aquí:
+
+    return 0
+`,
+    hints: [
+      {
+        es: 'Pista 1: Descompón el problema en tres tipos de inversiones: internas de la mitad izquierda, internas de la mitad derecha, e inversiones cruzadas (un elemento en la izquierda y otro en la derecha).',
+        en: 'Hint 1: Decompose the problem into three kinds of inversions: left-half internal, right-half internal, and split inversions (one element in left, one in right).'
+      },
+      {
+        es: 'Pista 2: Para contar las inversiones cruzadas eficientemente, aprovecha que ambas mitades ya vienen ordenadas recursivamente (igual que en Merge Sort).',
+        en: 'Hint 2: To count split inversions efficiently, exploit the fact that both halves are already sorted recursively (just like in Merge Sort).'
+      },
+      {
+        es: 'Pista 3: En el paso de intercalación, si der[j] < izq[i], entonces der[j] es estrictamente menor que todos los elementos restantes de la mitad izquierda. ¡Suma len(izq) - i de una sola vez en O(1)!',
+        en: 'Hint 3: In the merge step, if right[j] < left[i], then right[j] is strictly less than all remaining elements in the left half. Add len(left) - i in O(1) time!'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasMerge = code.includes('merge') || code.includes('// 2') || code.includes('medio');
+      const passesHeuristic = hasMerge && !code.includes('pass\n');
+
+      // Test 1: CLRS classic
+      const t1Arr = [2, 3, 8, 6, 1];
+      const t1Expected = countInversions(t1Arr);
+      const t1Val = inversionCountingValidator.validate({ array: t1Arr }, t1Expected);
+      results.push({
+        testId: 'inv-clrs-classic',
+        description: {
+          es: 'Instancia clásica CLRS [2, 3, 8, 6, 1]: exactamente 5 inversiones.',
+          en: 'Classic CLRS instance [2, 3, 8, 6, 1]: exactly 5 inversions.'
+        },
+        passed: passesHeuristic && t1Val.valid && t1Expected === 5,
+        expected: '5 inversiones',
+        actual: `${t1Expected} inversiones`
+      });
+
+      // Test 2: Reversed array
+      const t2Arr = [5, 4, 3, 2, 1];
+      const t2Expected = countInversions(t2Arr);
+      const t2Val = inversionCountingValidator.validate({ array: t2Arr }, t2Expected);
+      results.push({
+        testId: 'inv-strictly-reversed',
+        description: {
+          es: 'Arreglo decreciente [5, 4, 3, 2, 1]: n*(n-1)/2 = 10 inversiones.',
+          en: 'Decreasing array [5, 4, 3, 2, 1]: n*(n-1)/2 = 10 inversions.'
+        },
+        passed: passesHeuristic && t2Val.valid && t2Expected === 10,
+        expected: '10 inversiones',
+        actual: `${t2Expected} inversiones`
+      });
+
+      // Test 3: Already sorted
+      const t3Arr = [1, 2, 3, 4, 5, 6];
+      const t3Expected = countInversions(t3Arr);
+      const t3Val = inversionCountingValidator.validate({ array: t3Arr }, t3Expected);
+      results.push({
+        testId: 'inv-already-sorted',
+        description: {
+          es: 'Arreglo ya ordenado [1, 2, 3, 4, 5, 6]: exactamente 0 inversiones.',
+          en: 'Already sorted array [1, 2, 3, 4, 5, 6]: exactly 0 inversions.'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Expected === 0,
+        expected: '0 inversiones',
+        actual: `${t3Expected} inversiones`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

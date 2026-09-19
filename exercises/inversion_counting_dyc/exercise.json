@@ -1,0 +1,20 @@
+{
+  "id": "inversion-counting-dyc",
+  "problemId": "inversion-counting",
+  "techniqueId": "divide-and-conquer",
+  "category": "divide-and-conquer",
+  "difficulty": "medium",
+  "order": 4,
+  "title": {
+    "es": "Contar Inversiones en O(n log n)",
+    "en": "Inversion Counting in O(n log n)"
+  },
+  "description": {
+    "es": "Dado un arreglo numérico, calcula la cantidad total de pares invertidos (i < j con A[i] > A[j]) adaptando Merge Sort con un conteo acumulativo en el paso de intercalación.",
+    "en": "Given an array of numbers, compute the total number of inverted pairs (i < j with A[i] > A[j]) by adapting Merge Sort with cumulative counting during the merge step."
+  },
+  "tags": ["divide-and-conquer", "sorting", "merge-sort", "inversions", "master-theorem", "ranking"],
+  "starterFiles": {
+    "python": "solution.py"
+  }
+}

@@ -35,11 +35,13 @@
   - Divide & Conquer Core: `peak-finding-dyc` (Guía DyC Ejercicio 1 ★, Búsqueda de Pico en arreglo 1D con gradiente ascendente $O(\log n)$, Teorema Maestro $T(n) = T(n/2) + O(1)$, perfil de elevación montañoso interactivo y explorador de cumbres)
   - Dynamic Programming 2D Core: `lcs-dp` (Guía PD Ejercicio 9 ★★★, Subsecuencia Común Más Larga, subestructura óptima de Bellman $O(m \cdot n)$, tabla 2D con animaciones diagonales/ortogonales, reconstrucción de camino y simulador git diff)
   - Dynamic Programming Core: `weighted-interval-scheduling` (Guía PD Ejercicio 2 ★★★ / Kleinberg & Tardos 6.1, Intervalos Ponderados con precomputación de $p(j)$ vía búsqueda binaria en $O(n \log n)$, recurrencia de Bellman $\text{OPT}(j) = \max(\text{OPT}(j-1), v_j + \text{OPT}(p(j)))$, contraejemplo canónico contra Greedy que duplica el beneficio, y cronograma interactivo)
-  - 165 unit tests passing 100% across 29 test files
+  - Divide & Conquer Core: `inversion-counting-dyc` (Guía DyC Ejercicio 6 ★★★ / CLRS 2-4 / Kleinberg & Tardos 5.3, Contar Inversiones en $O(n \log n)$ adaptando Merge Sort con conteo acumulativo de inversiones cruzadas $+(\text{len} - i)$ en $O(1)$, visualizador de intercalación y laboratorio interactivo con índice de Kendall Tau)
+  - 175 unit tests passing 100% across 30 test files
 - **IN_PROGRESS**: Expanding next fundamental starred problem from curriculum
 - **BLOCKED**: None
 - **NEXT_TASK**: Greedy: Huffman Coding (Codificación de Huffman con Min-Heap, Guía Greedy Ejercicio 10 ★★★, CLRS 16.3 / K&T 4.8)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 165 tests)
-- **LAST_COMMIT**: `025a218`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 175 tests)
+- **LAST_COMMIT**: In progress
+
 

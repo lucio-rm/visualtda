@@ -37,6 +37,8 @@ import { LcsVisualizer } from '../components/visualizers/LcsVisualizer';
 import { LcsPlayground } from '../components/visualizers/LcsPlayground';
 import { WeightedIntervalVisualizer } from '../components/visualizers/WeightedIntervalVisualizer';
 import { WeightedIntervalPlayground } from '../components/visualizers/WeightedIntervalPlayground';
+import { InversionCountingVisualizer } from '../components/visualizers/InversionCountingVisualizer';
+import { InversionCountingPlayground } from '../components/visualizers/InversionCountingPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -876,6 +878,77 @@ const WEIGHTED_INTERVAL_PSEUDOCODE = `ALGORITMO PlanificarIntervalosPonderados(i
 
 const WEIGHTED_INTERVAL_CORRECTNESS = `Teorema de Bellman para Intervalos Ponderados (Kleinberg & Tardos 6.1): Considérese una solución óptima O para las primeras j tareas ordenadas por tiempo de finalización. Hay dos casos mutuamente excluyentes: (1) La tarea j no pertenece a O: entonces O es una solución óptima para el subproblema {1, ..., j-1}, con valor OPT(j-1). (2) La tarea j pertenece a O: entonces ninguna tarea entre p(j)+1 y j-1 puede pertenecer a O debido a incompatibilidad temporal con j. En consecuencia, O \\ {j} debe ser una solución óptima para el subproblema {1, ..., p(j)}, con valor v_j + OPT(p(j)). Si alguna de estas subsoluciones no fuera óptima, un argumento de intercambio (cut-and-paste) permitiría construir una solución superior a O, contradiciendo su optimalidad. Por inducción completa sobre j, OPT(j) = max(OPT(j-1), v_j + OPT(p(j))) computa exactamente el peso máximo obtenible.`;
 
+// Inversion Counting Content
+const INVERSION_COUNTING_CANONICAL_PYTHON = `def contar_inversiones(arreglo: list[int]) -> int:
+    def merge_and_count(izq: list[int], der: list[int]) -> tuple[int, list[int]]:
+        i = 0
+        j = 0
+        inversiones_cruzadas = 0
+        mezclado = []
+        len_izq = len(izq)
+        len_der = len(der)
+
+        while i < len_izq and j < len_der:
+            if izq[i] <= der[j]:
+                mezclado.append(izq[i])
+                i += 1
+            else:
+                mezclado.append(der[j])
+                # der[j] es menor que todos los elementos pendientes en izq
+                inversiones_cruzadas += (len_izq - i)
+                j += 1
+
+        mezclado.extend(izq[i:])
+        mezclado.extend(der[j:])
+        return inversiones_cruzadas, mezclado
+
+    def sort_and_count(arr: list[int]) -> tuple[int, list[int]]:
+        if len(arr) <= 1:
+            return 0, list(arr)
+
+        medio = len(arr) // 2
+        inv_izq, arr_izq = sort_and_count(arr[:medio])
+        inv_der, arr_der = sort_and_count(arr[medio:])
+        inv_cruzadas, arr_mezclado = merge_and_count(arr_izq, arr_der)
+
+        return (inv_izq + inv_der + inv_cruzadas), arr_mezclado
+
+    total, _ = sort_and_count(arreglo)
+    return total`;
+
+const INVERSION_COUNTING_PSEUDOCODE = `ALGORITMO ContarInversiones(A):
+    (totalInv, _) ← OrdenarYContar(A)
+    RETORNAR totalInv
+
+PROCEDIMIENTO OrdenarYContar(A):
+    n ← Longitud(A)
+    SI n <= 1:
+        RETORNAR (0, A)
+
+    medio ← ParteEntera(n / 2)
+    (invIzq, izqOrd) ← OrdenarYContar(A[0 ... medio - 1])
+    (invDer, derOrd) ← OrdenarYContar(A[medio ... n - 1])
+    (invCruzadas, mezclado) ← IntercalarYContar(izqOrd, derOrd)
+
+    RETORNAR (invIzq + invDer + invCruzadas, mezclado)
+
+PROCEDIMIENTO IntercalarYContar(izq, der):
+    i ← 0, j ← 0, invCruzadas ← 0, mezclado ← []
+    MIENTRAS i < Longitud(izq) Y j < Longitud(der):
+        SI izq[i] <= der[j]:
+            mezclado.Agregar(izq[i])
+            i ← i + 1
+        SINO:
+            mezclado.Agregar(der[j])
+            invCruzadas ← invCruzadas + (Longitud(izq) - i)
+            j ← j + 1
+
+    CopiarResto(izq, i, mezclado)
+    CopiarResto(der, j, mezclado)
+    RETORNAR (invCruzadas, mezclado)`;
+
+const INVERSION_COUNTING_CORRECTNESS = `Teorema de Partición Disjunta de Inversiones (Kleinberg & Tardos 5.3 / CLRS 2-4): Todo par de índices (i, j) con i < j pertenece exactamente a uno de tres conjuntos disjuntos: (1) i, j < medio (inversión interna en mitad izquierda), (2) i, j >= medio (inversión interna en mitad derecha), o (3) i < medio <= j (inversión cruzada / split inversion). Por hipótesis inductiva, las llamadas recursivas cuentan exhaustivamente todas las inversiones de tipo (1) y (2). En la intercalación, dado que izq y der están ordenados, cuando der[j] < izq[i], se cumple der[j] < izq[k] para todo k >= i por transitividad. Por tanto, sumar exactamente len(izq) - i en ese instante cuenta de forma biunívoca todas las inversiones cruzadas en las que participa der[j]. Por el Teorema Maestro, T(n) = 2T(n/2) + O(n) = Theta(n log n).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -1117,6 +1190,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: WEIGHTED_INTERVAL_CORRECTNESS,
         timeComplexity: 'O(n log n) [Ordenamiento inicial + n búsquedas binarias para p(j)]',
         spaceComplexity: 'O(n) [Arreglos OPT de memoización y punteros p(j)]'
+      };
+    }
+
+    if (selectedExercise.id === 'inversion-counting-dyc') {
+      return {
+        visualizerSlot: <InversionCountingVisualizer />,
+        discoverPlaygroundSlot: <InversionCountingPlayground />,
+        canonicalPython: INVERSION_COUNTING_CANONICAL_PYTHON,
+        pseudocode: INVERSION_COUNTING_PSEUDOCODE,
+        correctnessExplanation: INVERSION_COUNTING_CORRECTNESS,
+        timeComplexity: 'O(n log n) [Teorema Maestro T(n) = 2T(n/2) + O(n)]',
+        spaceComplexity: 'O(n) [Arreglos auxiliares de mezcla]'
       };
     }
 

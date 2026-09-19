@@ -161,6 +161,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['divide-and-conquer', 'binary-search', 'recursion', 'logarithmic-time', 'master-theorem', 'fiuba', 'rw']
   },
   {
+    id: 'inversion-counting-dyc',
+    problemId: 'inversion-counting',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 4,
+    difficulty: 2,
+    title: { es: 'Contar Inversiones en O(n log n)', en: 'Inversion Counting in O(n log n)' },
+    subtitle: {
+      es: 'Calcular el número total de pares desordenados i < j con A[i] > A[j] adaptando Merge Sort con conteo acumulado en O(1)',
+      en: 'Count total disordered pairs i < j with A[i] > A[j] by adapting Merge Sort with O(1) cumulative split counting'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'sorting', 'merge-sort', 'inversions', 'master-theorem', 'ranking', 'fiuba', 'rw']
+  },
+  {
     id: 'interval-scheduling',
     problemId: 'interval-scheduling',
     techniqueId: 'greedy',

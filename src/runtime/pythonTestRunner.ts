@@ -17,6 +17,7 @@ import { coinChangeValidator } from '../engine/algorithms/coinChangeValidator';
 import { peakFindingValidator } from '../engine/algorithms/peakFindingValidator';
 import { lcsValidator } from '../engine/algorithms/lcsValidator';
 import { weightedIntervalValidator, WeightedInterval } from '../engine/algorithms/weightedIntervalValidator';
+import { inversionCountingValidator } from '../engine/algorithms/inversionCountingValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1214,6 +1215,57 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid && totalW3 === 15 && outInt3.length === 1,
           expected: 'Peso 15 ([2, 8, 15])',
           actual: val3.valid ? `Peso ${totalW3} (${outInt3.map((i) => `[${i.start},${i.end},w=${i.weight}]`).join(', ')})` : val3.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'inversion-counting-dyc': {
+        // Test 1: CLRS classic
+        const t1Arr = [2, 3, 8, 6, 1];
+        const res1 = await service.executePython(code, 'contar_inversiones', [t1Arr]);
+        const out1 = typeof res1.result === 'number' ? res1.result : Number(res1.result);
+        const val1 = inversionCountingValidator.validate({ array: t1Arr }, out1);
+        results.push({
+          testId: 'py-inv-clrs-classic',
+          description: {
+            es: 'Caso clásico CLRS [2, 3, 8, 6, 1]: Exactamente 5 inversiones.',
+            en: 'Classic CLRS case [2, 3, 8, 6, 1]: Exactly 5 inversions.'
+          },
+          passed: val1.valid && out1 === 5,
+          expected: '5 inversiones',
+          actual: val1.valid ? `${out1} inversiones` : val1.errors.join('; ')
+        });
+
+        // Test 2: Decreasing strictly
+        const t2Arr = [5, 4, 3, 2, 1];
+        const res2 = await service.executePython(code, 'contar_inversiones', [t2Arr]);
+        const out2 = typeof res2.result === 'number' ? res2.result : Number(res2.result);
+        const val2 = inversionCountingValidator.validate({ array: t2Arr }, out2);
+        results.push({
+          testId: 'py-inv-strictly-reversed',
+          description: {
+            es: 'Arreglo decreciente [5, 4, 3, 2, 1]: n*(n-1)/2 = 10 inversiones.',
+            en: 'Decreasing array [5, 4, 3, 2, 1]: n*(n-1)/2 = 10 inversions.'
+          },
+          passed: val2.valid && out2 === 10,
+          expected: '10 inversiones',
+          actual: val2.valid ? `${out2} inversiones` : val2.errors.join('; ')
+        });
+
+        // Test 3: Already sorted
+        const t3Arr = [1, 2, 3, 4, 5, 6];
+        const res3 = await service.executePython(code, 'contar_inversiones', [t3Arr]);
+        const out3 = typeof res3.result === 'number' ? res3.result : Number(res3.result);
+        const val3 = inversionCountingValidator.validate({ array: t3Arr }, out3);
+        results.push({
+          testId: 'py-inv-already-sorted',
+          description: {
+            es: 'Arreglo ordenado [1, 2, 3, 4, 5, 6]: Exactamente 0 inversiones.',
+            en: 'Sorted array [1, 2, 3, 4, 5, 6]: Exactly 0 inversions.'
+          },
+          passed: val3.valid && out3 === 0,
+          expected: '0 inversiones',
+          actual: val3.valid ? `${out3} inversiones` : val3.errors.join('; ')
         });
         break;
       }
