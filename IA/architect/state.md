@@ -1,32 +1,35 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: PHASE-H-COMPLETE (Hardening & Academic Audit Complete, Quality Gates G1-G12 Verified)
-- **CURRENT_TASK**: Ready for Phase I (Next Fundamental Pedagogical Exercise Evaluation)
+- **CURRENT_PHASE**: COMPLETE (All Hardening Phases A through I Finished, All Quality Gates G1-G12 Verified, File Audit Clean)
+- **CURRENT_TASK**: STOP Protocol Execution & Session Documentation
 - **BASELINE_COMMIT**: `f58a453`
 - **EXPLICIT_COMPONENT_STATES**:
-  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6, React 19, TS 5.7, Vitest 3.2.7, ESLint 9 — 100% PASS across 33 test files, 215 tests)
+  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6, React 19, TS 5.7, Vitest 3.2.7, ESLint 9 — 100% PASS across 34 test files, 220 tests)
   - **Static Bundle Generation**: [VERIFIED] (`dist/` static assets output, zero backend runtime, all chunks < 230 KB)
-  - **Exercise Registry & Models**: [VERIFIED] (20 exercises cataloged with domain metadata across 9 paradigms)
+  - **Exercise Registry & Models**: [VERIFIED] (21 exercises cataloged with domain metadata across 9 paradigms)
   - **Trace Event Protocol**: [VERIFIED] (Deterministic step-by-step playback, bidirectional scrub, keyboard shortcuts)
-  - **TypeScript Validators**: [VERIFIED] (20 validators with descriptive feedback and independent combinatorial oracle verification)
+  - **TypeScript Validators**: [VERIFIED] (21 validators with descriptive feedback and independent combinatorial oracle verification)
   - **Pyodide Worker Security**: [VERIFIED] (Isolated Web Worker, 5000ms watchdog, 64 KB stdout limit, BaseException catching, worker error cleanup)
-  - **Independent Verification Oracles**: [VERIFIED] (Exhaustive combinatorial reference solvers in `tests/oracles/referenceSolvers.ts`, 13 property tests in `tests/adversarialAndOracles.test.ts`)
+  - **Independent Verification Oracles**: [VERIFIED] (Exhaustive combinatorial reference solvers in `tests/oracles/referenceSolvers.ts`, 13 property tests in `tests/adversarialAndOracles.test.ts`, brute-force graph coloring oracle)
   - **Browser E2E / User Journeys**: [VERIFIED] (15 core user journey integration tests passing 100% in `tests/userJourneys.test.tsx`)
-  - **Accessibility & UX**: [VERIFIED] (Skip-to-content, prefers-reduced-motion, student code persistence in `sessionStorage`, keyboard navigation with `:focus-visible` on visualizers)
+  - **Accessibility & UX**: [VERIFIED] (Skip-to-content, prefers-reduced-motion, student code persistence in `sessionStorage`, keyboard navigation with `:focus-visible` and SVG `tabIndex={0}`)
   - **Performance & Code Splitting**: [VERIFIED] (`vite.config.ts` manualChunks split into vendor-react, visualizers, and algorithm-engines; zero chunk warnings)
-  - **Architecture Decoupling**: [VERIFIED] (`src/app/App.tsx` de-bloated from 1,347 lines to 87 lines; visualizers and constants centralized in `src/engine/exerciseViewRegistry.tsx`)
-  - **Curriculum Academic Alignment**: [VERIFIED] (`docs/curriculum-audit.md` completed; all 20 exercises audited against Kleinberg & Tardos, CLRS, and FIUBA)
+  - **Architecture Decoupling**: [VERIFIED] (`src/app/App.tsx` de-bloated to 87 lines; visualizers and constants centralized in `src/engine/exerciseViewRegistry.tsx`)
+  - **Curriculum Academic Alignment**: [VERIFIED] (`docs/curriculum-audit.md` completed; all 21 exercises audited against Kleinberg & Tardos, CLRS, and FIUBA)
+  - **File Audit & Cleanliness**: [VERIFIED] (Zero filler code, zero obsolete stubs, all 21 exercise folders structurally uniform)
 - **COMPLETED**:
   - Phase A: Comprehensive Architecture, Security & Testing Audit (`IA/architect/audit-mvp.md`, `docs/security.md`, `docs/quality-gates.md`, `IA/architect/questions.md`)
   - Phase B: Pyodide Worker Security Hardening (64 KB stdout limit, BaseException catching, pending callback cleanup on worker crash, tested in `tests/pythonExecution.test.ts`)
   - Phase C: Independent Verification Oracles & Property Testing (brute-force combinatorial solvers for small instances, 13 property tests in `tests/adversarialAndOracles.test.ts`)
   - Phase D: Browser Integration / User Journey Verification (15 core user flows tested in `tests/userJourneys.test.tsx`)
   - Phase E: UX & Accessibility Polish (`sessionStorage` persistence for student code, keyboard navigation & focus rings on visualizers)
-  - Phase F: Performance & Code Splitting (`vite.config.ts` manualChunks configuration, chunks < 230 KB)
+  - Phase F: Performance & Code Splitting (`vite.config.ts` manualChunks configuration, all chunks < 230 KB)
   - Phase G: Architecture Decoupling (`src/engine/exerciseViewRegistry.tsx` eliminating God File `App.tsx` if-else ladder and duplicate constants)
-  - Phase H: Curriculum Academic Audit (`docs/curriculum-audit.md` with complete 20-exercise analysis against KT/CLRS/FIUBA)
-- **IN_PROGRESS**: Ready for Phase I (Next fundamental exercise selection)
+  - Phase H: Curriculum Academic Audit (`docs/curriculum-audit.md` with complete 21-exercise analysis against KT/CLRS/FIUBA)
+  - Phase I: Fundamental Exercise Implementation (Graph Coloring / $k$-Coloring vertical slice with independent oracle, playground, visualizer, hints, and tests)
+  - File Audit: Removed obsolete stubs in `exercises/n_queens/`, verified zero dead code, uniform structure across all 21 exercise directories.
+- **IN_PROGRESS**: None
 - **BLOCKED**: None
-- **NEXT_TASK**: Evaluate Phase I: Implementation of next starred foundational problem (e.g. Backtracking: Graph Coloring or Divide & Conquer: Closest Pair of Points)
+- **NEXT_TASK**: None (Awaiting user review or future roadmap priorities)
 - **OPEN_QUESTIONS**: None (ADR-001 through ADR-004 implemented and verified)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm test && npm run build` (All PASS: 0 lint errors, 0 typecheck errors, 33/33 test files, 215/215 tests pass, static build clean)
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm test && npm run build` (All PASS: 0 lint errors, 0 typecheck errors, 34/34 test files, 220/220 tests pass, static build clean in 1.2s)

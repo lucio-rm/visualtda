@@ -1,10 +1,10 @@
 # Hardening Backlog & Next Tasks
 
-Visual TDA has successfully completed **Phases A through H** of the architectural mandate. All 12 Quality Gates (G1–G12) have achieved **PASS** status.
+Visual TDA has successfully completed **all nine phases (Phases A through I)** of the architectural mandate. All 12 Quality Gates (G1–G12) have achieved **PASS** status.
 
 ---
 
-## 1. Hardening Phases Completed (Phases A – H)
+## 1. Hardening Phases Completed (Phases A – I)
 
 1. ✅ **PHASE A: Comprehensive Repository Audit & Governance**
    - Completed in commit `0ced0c2`.
@@ -47,9 +47,9 @@ Visual TDA has successfully completed **Phases A through H** of the architectura
    - Completed in commit `6c6e689`.
    - Configured `vite.config.ts` manualChunks:
      - `vendor-react` (~223 KB)
-     - `visualizers` (~213 KB)
-     - `algorithm-engines` (~110 KB)
-     - `index` (~154 KB)
+     - `visualizers` (~222 KB)
+     - `algorithm-engines` (~117 KB)
+     - `index` (~162 KB)
    - Eliminated single monolithic bundle; all chunks are now $< 230$ KB.
 
 7. ✅ **PHASE G: Architecture Cleanup (God File De-bloating)**
@@ -58,23 +58,32 @@ Visual TDA has successfully completed **Phases A through H** of the architectura
    - Refactored `src/app/App.tsx` from 1,347 lines down to 87 lines.
 
 8. ✅ **PHASE H: Curriculum Academic Audit**
-   - Completed in `docs/curriculum-audit.md`.
-   - Deep-dive academic verification for all 20 foundational exercises against Kleinberg & Tardos (*Algorithm Design*), CLRS (*Introduction to Algorithms*), and FIUBA course guides.
+   - Completed in `docs/curriculum-audit.md` (commit `61dea0d`).
+   - Deep-dive academic verification for all foundational exercises against Kleinberg & Tardos (*Algorithm Design*), CLRS (*Introduction to Algorithms*), and FIUBA course guides.
    - Documented learning objectives, key invariants, mathematical correctness proofs, and asymptotic complexities.
+
+9. ✅ **PHASE I: Foundational Curriculum Expansion (Graph Coloring)**
+   - Completed in commit `b1f02a3`.
+   - Implemented Graph Coloring ($k$-Coloring) vertical slice:
+     - Trace engine: `graphColoringTrace.ts` with conflict detection and backtrack animation
+     - Validator: `graphColoringValidator.ts` with pure validation
+     - Independent oracle: `bruteForceGraphColoring` in `referenceSolvers.ts`
+     - Visualizer: `GraphColoringVisualizer.tsx` with dynamic SVG graph and conflict pins
+     - Playground: `GraphColoringPlayground.tsx` with interactive vertex clicking, right-click uncoloring, and auto-solve
+     - Solvers & hints: `exerciseContent.ts` and `pythonTestRunner.ts`
+     - Unit tests: `tests/graphColoring.test.ts` (4 tests)
+
+10. ✅ **Clean File Audit & Uniformity**
+    - Completed in commit `3dba99b`.
+    - Removed obsolete prototype stubs in `exercises/n_queens/`.
+    - Verified all 21 exercises in `exercises/` have uniform documentation (`exercise.json`, `solution.py`, `pseudocode.md`, `theory.md`).
+    - Verified zero dead code or filler across `src/` and `tests/`.
 
 ---
 
-## 2. Next Phase: Phase I (Curriculum Expansion)
+## 2. Future Roadmap Candidates (Post-MVP)
 
-Visual TDA is now hardened, secure, testable, accessible, and high-performing. All subsequent feature development must follow the established quality standards:
-
-### Candidates for Phase I:
-1. **Backtracking: Coloreo de Grafos (Graph Coloring / $k$-Coloring)**
-   - Classic NP-complete problem with rich visual graph coloring and backtracking pruning.
-   - Reference: Kleinberg & Tardos 8.4 / FIUBA Guía de Backtracking.
-2. **Divide & Conquer: Par de Puntos Más Cercanos (Closest Pair of Points)**
-   - Geometric divide-and-conquer in $O(n \log n)$ demonstrating the 7-point strip theorem.
-   - Reference: Kleinberg & Tardos 5.4.
-3. **Dynamic Programming: Multiplicación Encadenada de Matrices (Matrix Chain Multiplication)**
-   - Classic 2D interval DP ($O(n^3)$) with parenthesization tree reconstruction.
-   - Reference: CLRS Chapter 15.2.
+Visual TDA is production-ready, verified across 34 test files (220 tests, 100% pass), and adheres to P1–P12. Future expansion may consider:
+1. **Divide & Conquer: Closest Pair of Points ($O(n \log n)$ 7-point strip theorem)**
+2. **Dynamic Programming: Matrix Chain Multiplication ($O(n^3)$)**
+3. **Graph Algorithms: Dijkstra's Shortest Path ($O((V+E)\log V)$ with min-heap)**
