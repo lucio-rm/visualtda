@@ -66,7 +66,14 @@ self.onmessage = async (event: MessageEvent<WorkerInboundMessage>) => {
     try {
       const pyodide = await ensurePyodide();
 
-      // Setup execution wrapper capturing stdout and serializing output via JSON
+      // Pass user inputs as Pyodide globals to avoid string interpolation injection.
+      // This prevents issues with triple-quotes, backslashes, or special characters
+      // in student code or function names breaking the Python wrapper script.
+      pyodide.globals.set('__user_code', msg.code);
+      pyodide.globals.set('__user_fn_name', msg.functionName);
+      pyodide.globals.set('__user_args_json', JSON.stringify(msg.args));
+
+      // Fixed wrapper script — no string interpolation of user inputs
       const wrapperScript = `
 import sys, io, json
 
@@ -78,16 +85,17 @@ __execution_error = None
 __raw_result = None
 
 try:
-    # 1. Ejecutar código del alumno
-    ${msg.code.split('\n').map((line) => '    ' + line).join('\n')}
+    # 1. Execute student code in an isolated namespace
+    __ns = {}
+    exec(__user_code, __ns)
 
-    # 2. Invocar la función con los argumentos provistos
-    if "${msg.functionName}" in locals():
-        __target_fn = locals()["${msg.functionName}"]
-        __args_parsed = json.loads('''${JSON.stringify(msg.args)}''')
+    # 2. Invoke the target function with provided arguments
+    if __user_fn_name in __ns:
+        __target_fn = __ns[__user_fn_name]
+        __args_parsed = json.loads(__user_args_json)
         __raw_result = __target_fn(*__args_parsed)
     else:
-        raise NameError("La función '${msg.functionName}' no fue definida en el código.")
+        raise NameError(f"La función '{__user_fn_name}' no fue definida en el código.")
 except Exception as e:
     import traceback
     __execution_error = traceback.format_exc()
@@ -106,6 +114,11 @@ __serialized_output = json.dumps({
       pyodide.runPython(wrapperScript);
       const serializedJson = pyodide.globals.get('__serialized_output');
       const parsed = JSON.parse(serializedJson);
+
+      // Clean up globals to prevent cross-execution leakage
+      pyodide.globals.delete('__user_code');
+      pyodide.globals.delete('__user_fn_name');
+      pyodide.globals.delete('__user_args_json');
 
       const endTime = performance.now();
       const response: WorkerRunResponse = {

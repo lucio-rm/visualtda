@@ -1290,6 +1290,9 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="app-layout">
+      <a href="#main-content" className="skip-to-content">
+        {t({ es: 'Saltar al contenido', en: 'Skip to content' })}
+      </a>
       <Header
         theme={theme}
         onThemeChange={setTheme}
