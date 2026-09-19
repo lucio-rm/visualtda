@@ -43,7 +43,8 @@
 - **NEXT_TASK**: Backtracking: Knight's Tour / Graph Coloring (Coloreo de Grafos) or Divide & Conquer: Closest Pair of Points
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
 - **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 184 tests)
-- **LAST_COMMIT**: In progress
+- **LAST_COMMIT**: `ce7bd76`
+
 
 
 
