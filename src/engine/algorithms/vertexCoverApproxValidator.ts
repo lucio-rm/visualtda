@@ -71,4 +71,23 @@ export class VertexCoverApproxValidator implements Validator<ApproxGraphInput, A
   }
 }
 
+export function solveVertexCoverApprox(graph: ApproxGraphInput): ApproxCoverOutput {
+  const { edges } = graph;
+  const cover = new Set<string>();
+  const matching: [string, string][] = [];
+
+  for (const [u, v] of edges) {
+    if (!cover.has(u) && !cover.has(v)) {
+      matching.push([u, v]);
+      cover.add(u);
+      cover.add(v);
+    }
+  }
+
+  return {
+    cover: Array.from(cover).sort(),
+    matching
+  };
+}
+
 export const vertexCoverApproxValidator = new VertexCoverApproxValidator();

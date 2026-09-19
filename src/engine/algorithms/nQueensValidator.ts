@@ -61,4 +61,38 @@ export class NQueensValidator implements Validator<{ n: number }, number[]> {
   }
 }
 
+export function solveNQueens(n: number): number[][] {
+  const solutions: number[][] = [];
+  const board: number[] = new Array(n).fill(-1);
+  const cols = new Set<number>();
+  const diagPrin = new Set<number>();
+  const diagSec = new Set<number>();
+
+  function backtrack(row: number) {
+    if (row === n) {
+      solutions.push([...board]);
+      return;
+    }
+    for (let col = 0; col < n; col++) {
+      if (cols.has(col) || diagPrin.has(row - col) || diagSec.has(row + col)) {
+        continue;
+      }
+      board[row] = col;
+      cols.add(col);
+      diagPrin.add(row - col);
+      diagSec.add(row + col);
+
+      backtrack(row + 1);
+
+      board[row] = -1;
+      cols.delete(col);
+      diagPrin.delete(row - col);
+      diagSec.delete(row + col);
+    }
+  }
+
+  backtrack(0);
+  return solutions;
+}
+
 export const nQueensValidator = new NQueensValidator();
