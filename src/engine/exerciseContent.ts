@@ -14,6 +14,7 @@ import { randomizedFairCoinValidator, simulateVonNeumann } from './algorithms/ra
 import { roadAntennasValidator, solveRoadAntennas } from './algorithms/roadAntennasValidator';
 import { subsetSumValidator, solveSubsetSum } from './algorithms/subsetSumValidator';
 import { coinChangeValidator, solveCoinChange } from './algorithms/coinChangeValidator';
+import { peakFindingValidator, solvePeakFinding } from './algorithms/peakFindingValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1363,6 +1364,103 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Sol.length === 0,
         expected: '0 monedas ([])',
         actual: `${t3Sol.length} monedas`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'peak-finding-dyc': {
+    exerciseId: 'peak-finding-dyc',
+    entryFunction: 'buscar_pico',
+    starterCode: `def buscar_pico(arreglo: list[int]) -> int:
+    """
+    Dado un arreglo de n enteros no ordenados, encuentra el índice de un pico.
+    Un elemento arreglo[i] es un pico si es mayor o igual a sus vecinos adyacentes:
+      - Si i > 0: arreglo[i] >= arreglo[i - 1]
+      - Si i < len(arreglo) - 1: arreglo[i] >= arreglo[i + 1]
+
+    Complejidad Temporal requerida: O(log n) por División y Conquista.
+    Retorna el índice i del pico. Si el arreglo está vacío, retorna -1.
+    """
+    if not arreglo:
+        return -1
+
+    # Escribe tu algoritmo de división y conquista aquí:
+
+    return 0
+`,
+    hints: [
+      {
+        es: 'Pista 1: Calcula el índice medio: medio = (inicio + fin) // 2. Compara arreglo[medio] con sus vecinos inmediato izquierdo (si existe) y derecho (si existe).',
+        en: 'Hint 1: Calculate midpoint: medio = (inicio + fin) // 2. Compare arreglo[medio] with its immediate left (if exists) and right (if exists) neighbors.'
+      },
+      {
+        es: 'Pista 2: Principio del gradiente ascendente: Si arreglo[medio] < arreglo[medio - 1], la montaña sube hacia la izquierda. Está matemáticamente demostrado que en la mitad izquierda DEBE existir al menos un pico.',
+        en: 'Hint 2: Uphill gradient principle: If arreglo[medio] < arreglo[medio - 1], the mountain goes up to the left. At least one peak is guaranteed in the left half.'
+      },
+      {
+        es: 'Pista 3: De forma análoga, si arreglo[medio] < arreglo[medio + 1], avanza a la mitad derecha (inicio = medio + 1). Si no es menor a ninguno de sus vecinos, ¡arreglo[medio] ya es un pico! Retorna medio.',
+        en: 'Hint 3: Similarly, if arreglo[medio] < arreglo[medio + 1], move to the right half (inicio = medio + 1). If not less than either neighbor, arreglo[medio] is already a peak! Return medio.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasDyc = code.includes('//') || code.includes('div') || code.includes('fin') || code.includes('inicio') || code.includes('mid');
+      const hasComparison = code.includes('<') || code.includes('>') || code.includes('<=') || code.includes('>=');
+      const passesHeuristic = hasDyc && hasComparison && !code.includes('pass\n');
+
+      // Test 1: Single central mountain [1, 3, 7, 12, 18, 14, 9, 2] -> index 4
+      const t1Arr = [1, 3, 7, 12, 18, 14, 9, 2];
+      const t1Peak = solvePeakFinding(t1Arr);
+      const t1Val = peakFindingValidator.validate({ array: t1Arr }, t1Peak);
+
+      results.push({
+        testId: 'peak-central-mountain',
+        description: {
+          es: 'Montaña central [1, 3, 7, 12, 18, 14, 9, 2]. Debe encontrar el pico en índice 4 (valor 18).',
+          en: 'Central mountain [1, 3, 7, 12, 18, 14, 9, 2]. Must find peak at index 4 (value 18).'
+        },
+        passed: passesHeuristic && t1Val.valid && t1Peak === 4,
+        expected: 'Índice 4 (valor 18)',
+        actual: `Índice ${t1Peak} (valor ${t1Arr[t1Peak]})`
+      });
+
+      // Test 2: Multiple peaks [4, 10, 5, 8, 15, 3, 11, 2]
+      const t2Arr = [4, 10, 5, 8, 15, 3, 11, 2];
+      const t2Peak = solvePeakFinding(t2Arr);
+      const t2Val = peakFindingValidator.validate({ array: t2Arr }, t2Peak);
+
+      results.push({
+        testId: 'peak-multiple-crests',
+        description: {
+          es: 'Cordillera con múltiples cumbres [4, 10, 5, 8, 15, 3, 11, 2]. Debe retornar un pico válido.',
+          en: 'Range with multiple crests [4, 10, 5, 8, 15, 3, 11, 2]. Must return a valid peak.'
+        },
+        passed: passesHeuristic && t2Val.valid,
+        expected: 'Cualquier pico local válido (1, 4 ó 6)',
+        actual: `Índice ${t2Peak} (valor ${t2Arr[t2Peak]})`
+      });
+
+      // Test 3: Monotonically increasing [2, 5, 9, 14, 21, 30] (Peak at rightmost edge)
+      const t3Arr = [2, 5, 9, 14, 21, 30];
+      const t3Peak = solvePeakFinding(t3Arr);
+      const t3Val = peakFindingValidator.validate({ array: t3Arr }, t3Peak);
+
+      results.push({
+        testId: 'peak-monotonic-increasing',
+        description: {
+          es: 'Monótonamente creciente [2, 5, 9, 14, 21, 30]. El pico está en el borde derecho (índice 5).',
+          en: 'Monotonically increasing [2, 5, 9, 14, 21, 30]. Peak is at right edge (index 5).'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Peak === 5,
+        expected: 'Índice 5 (valor 30)',
+        actual: `Índice ${t3Peak} (valor ${t3Arr[t3Peak]})`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

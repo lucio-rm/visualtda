@@ -32,10 +32,11 @@
   - Greedy Interval Covering Core: `road-antennas-greedy` (Guía Greedy Ejercicio 13 ★★, Antenas en una Ruta, Greedy Stays Ahead exchange argument, interactive highway sandbox and challenge mode)
   - Backtracking Pruning Core: `subset-sum-backtracking` (Guía Backtracking Ejercicio 11 ★, Subconjuntos que suman S con podas duales por exceso y déficit remanente, interactive builder, and search space reduction comparator)
   - Dynamic Programming Core: `coin-change-dp` (Guía PD Ejercicio 8 ★★, Cambio de Monedas con cantidad mínima, principio de Bellman $O(V \cdot |C|)$, reconstrucción por punteros, contraejemplo canónico Greedy $[1, 3, 4]$ target $6$, y caja registradora interactiva)
-  - 130 unit tests passing 100% across 26 test files
+  - Divide & Conquer Core: `peak-finding-dyc` (Guía DyC Ejercicio 1 ★, Búsqueda de Pico en arreglo 1D con gradiente ascendente $O(\log n)$, Teorema Maestro $T(n) = T(n/2) + O(1)$, perfil de elevación montañoso interactivo y explorador de cumbres)
+  - 142 unit tests passing 100% across 27 test files
 - **IN_PROGRESS**: Expanding next fundamental starred problem from curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Divide & Conquer: Peak Finding (Búsqueda de Pico en arreglo $O(\log n)$) or Dynamic Programming: Longest Common Subsequence (LCS)
+- **NEXT_TASK**: Dynamic Programming: Longest Common Subsequence (LCS / Subsecuencia Común Más Larga 2D, Guía PD Ejercicio 9 ★★★)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 130 tests)
-- **LAST_COMMIT**: Pending feat(dp) for coin-change-dp
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 142 tests)
+- **LAST_COMMIT**: Pending feat(dyc) for peak-finding-dyc

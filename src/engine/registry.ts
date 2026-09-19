@@ -146,6 +146,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['divide-and-conquer', 'recursion', 'master-theorem', 'arrays', 'optimization']
   },
   {
+    id: 'peak-finding-dyc',
+    problemId: 'peak-finding',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 3,
+    difficulty: 1,
+    title: { es: 'Búsqueda de un Pico (Peak Finding)', en: 'Peak Finding (O(log n))' },
+    subtitle: {
+      es: 'Hallar un elemento mayor o igual a sus vecinos en tiempo logarítmico O(log n) siguiendo el gradiente ascendente',
+      en: 'Find an element greater than or equal to its neighbors in O(log n) logarithmic time following the uphill gradient'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'binary-search', 'recursion', 'logarithmic-time', 'master-theorem', 'fiuba', 'rw']
+  },
+  {
     id: 'interval-scheduling',
     problemId: 'interval-scheduling',
     techniqueId: 'greedy',

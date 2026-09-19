@@ -31,6 +31,8 @@ import { SubsetSumVisualizer } from '../components/visualizers/SubsetSumVisualiz
 import { SubsetSumPlayground } from '../components/visualizers/SubsetSumPlayground';
 import { CoinChangeVisualizer } from '../components/visualizers/CoinChangeVisualizer';
 import { CoinChangePlayground } from '../components/visualizers/CoinChangePlayground';
+import { PeakFindingVisualizer } from '../components/visualizers/PeakFindingVisualizer';
+import { PeakFindingPlayground } from '../components/visualizers/PeakFindingPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -690,6 +692,47 @@ const COIN_CHANGE_PSEUDOCODE = `ALGORITMO CambioMonedasMinimo(monedas, objetivo)
 
 const COIN_CHANGE_CORRECTNESS = `Principio de Optimalidad de Bellman y Subestructura Óptima: Para cualquier solución óptima que devuelva cambio para un monto V utilizando k monedas {c_1, c_2, ..., c_k}, si retiramos una moneda c_1, el conjunto restante {c_2, ..., c_k} debe ser forzosamente una solución óptima para el subproblema de dar cambio a V - c_1 con k - 1 monedas. Si existiese una solución para V - c_1 con menos monedas, podríamos sumarle c_1 y obtener una solución para V con menos de k monedas, contradiciendo la optimalidad original. Al probar todas las monedas válidas c <= V y tomar el mínimo, el algoritmo explora la totalidad del espacio de elecciones de manera exhaustiva en tiempo O(V · |C|) y garantiza la solución global mínima.`;
 
+// Peak Finding (Divide & Conquer) Content
+const PEAK_FINDING_CANONICAL_PYTHON = `def buscar_pico(arreglo: list[int]) -> int:
+    if not arreglo:
+        return -1
+
+    inicio = 0
+    fin = len(arreglo) - 1
+
+    while inicio <= fin:
+        medio = (inicio + fin) // 2
+
+        if medio > 0 and arreglo[medio] < arreglo[medio - 1]:
+            fin = medio - 1
+        elif medio < len(arreglo) - 1 and arreglo[medio] < arreglo[medio + 1]:
+            inicio = medio + 1
+        else:
+            return medio
+
+    return inicio`;
+
+const PEAK_FINDING_PSEUDOCODE = `ALGORITMO BuscarPico(A):
+    SI Longitud(A) = 0:
+        RETORNAR -1
+
+    inicio ← 0
+    fin ← Longitud(A) - 1
+
+    MIENTRAS inicio <= fin:
+        medio ← (inicio + fin) DIV 2
+
+        SI medio > 0 Y A[medio] < A[medio - 1]:
+            fin ← medio - 1
+        SINO SI medio < Longitud(A) - 1 Y A[medio] < A[medio + 1]:
+            inicio ← medio + 1
+        SINO:
+            RETORNAR medio
+
+    RETORNAR inicio`;
+
+const PEAK_FINDING_CORRECTNESS = `Teorema del Gradiente Ascendente (Uphill Walk Invariant): Todo arreglo finito no vacío posee al menos un pico (el máximo global siempre es pico). Al tomar el centro m, si A[m] < A[m-1], la pendiente sube hacia la izquierda. Si recorremos hacia la izquierda, o bien los valores suben o se mantienen hasta llegar al extremo A[0] (el cual sería un pico por ser borde y A[0] >= A[1]), o bien encontramos un descenso en algún índice j tal que A[j] < A[j+1], en cuyo caso A[j+1] es un pico local. Por lo tanto, el subarreglo izquierdo contiene obligatoriamente al menos un pico. Análogamente para la derecha. Como T(n) = T(n/2) + O(1), por Teorema Maestro (caso 2, log_2 1 = 0 = d), la complejidad temporal es exactamente Theta(log n).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -895,6 +938,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: COIN_CHANGE_CORRECTNESS,
         timeComplexity: 'O(V · |C|) [V = monto objetivo, |C| = número de denominaciones]',
         spaceComplexity: 'O(V) [Tabla 1D dp y arreglo eleccion]'
+      };
+    }
+
+    if (selectedExercise.id === 'peak-finding-dyc') {
+      return {
+        visualizerSlot: <PeakFindingVisualizer />,
+        discoverPlaygroundSlot: <PeakFindingPlayground />,
+        canonicalPython: PEAK_FINDING_CANONICAL_PYTHON,
+        pseudocode: PEAK_FINDING_PSEUDOCODE,
+        correctnessExplanation: PEAK_FINDING_CORRECTNESS,
+        timeComplexity: 'O(log n) [División geométrica a la mitad por Teorema Maestro]',
+        spaceComplexity: 'O(1) [Iterativo] / O(log n) [Recursivo por stack]'
       };
     }
 

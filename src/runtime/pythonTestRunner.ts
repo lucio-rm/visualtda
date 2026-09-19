@@ -14,6 +14,7 @@ import { randomizedFairCoinValidator } from '../engine/algorithms/randomizedFair
 import { roadAntennasValidator } from '../engine/algorithms/roadAntennasValidator';
 import { subsetSumValidator } from '../engine/algorithms/subsetSumValidator';
 import { coinChangeValidator } from '../engine/algorithms/coinChangeValidator';
+import { peakFindingValidator } from '../engine/algorithms/peakFindingValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1011,6 +1012,57 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid && out3.length === 0,
           expected: '[]',
           actual: JSON.stringify(out3)
+        });
+        break;
+      }
+
+      case 'peak-finding-dyc': {
+        // Test 1: Single central mountain [1, 3, 7, 12, 18, 14, 9, 2] -> index 4
+        const t1Arr = [1, 3, 7, 12, 18, 14, 9, 2];
+        const res1 = await service.executePython(code, 'buscar_pico', [t1Arr]);
+        const out1 = Number(res1.result);
+        const val1 = peakFindingValidator.validate({ array: t1Arr }, out1);
+        results.push({
+          testId: 'py-peak-mountain',
+          description: {
+            es: 'Montaña única [1, 3, 7, 12, 18, 14, 9, 2]: Debe encontrar el pico en índice 4 (valor 18).',
+            en: 'Single mountain [1, 3, 7, 12, 18, 14, 9, 2]: Must find peak at index 4 (value 18).'
+          },
+          passed: val1.valid && out1 === 4,
+          expected: 'Índice 4 (valor 18)',
+          actual: val1.valid ? `Índice ${out1} (valor ${t1Arr[out1]})` : val1.errors.join('; ')
+        });
+
+        // Test 2: Multiple crests [4, 10, 5, 8, 15, 3, 11, 2]
+        const t2Arr = [4, 10, 5, 8, 15, 3, 11, 2];
+        const res2 = await service.executePython(code, 'buscar_pico', [t2Arr]);
+        const out2 = Number(res2.result);
+        const val2 = peakFindingValidator.validate({ array: t2Arr }, out2);
+        results.push({
+          testId: 'py-peak-crests',
+          description: {
+            es: 'Cordillera [4, 10, 5, 8, 15, 3, 11, 2]: Retorna un pico local válido en O(log n).',
+            en: 'Range [4, 10, 5, 8, 15, 3, 11, 2]: Returns a valid local peak in O(log n).'
+          },
+          passed: val2.valid,
+          expected: 'Cualquier pico local válido (1, 4 ó 6)',
+          actual: val2.valid ? `Índice ${out2} (valor ${t2Arr[out2]})` : val2.errors.join('; ')
+        });
+
+        // Test 3: Monotonically increasing [2, 5, 9, 14, 21, 30] -> index 5
+        const t3Arr = [2, 5, 9, 14, 21, 30];
+        const res3 = await service.executePython(code, 'buscar_pico', [t3Arr]);
+        const out3 = Number(res3.result);
+        const val3 = peakFindingValidator.validate({ array: t3Arr }, out3);
+        results.push({
+          testId: 'py-peak-increasing',
+          description: {
+            es: 'Monótonamente creciente [2, 5, 9, 14, 21, 30]: Pico en extremo derecho (índice 5).',
+            en: 'Monotonically increasing [2, 5, 9, 14, 21, 30]: Peak at right edge (index 5).'
+          },
+          passed: val3.valid && out3 === 5,
+          expected: 'Índice 5 (valor 30)',
+          actual: val3.valid ? `Índice ${out3} (valor ${t3Arr[out3]})` : val3.errors.join('; ')
         });
         break;
       }

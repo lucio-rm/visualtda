@@ -43,6 +43,12 @@ describe('ExerciseRegistry', () => {
     expect(dpExercises.map((e) => e.id)).toContain('knapsack-dp');
     expect(dpExercises.map((e) => e.id)).toContain('juan-el-vago');
     expect(dpExercises.map((e) => e.id)).toContain('coin-change-dp');
+
+    const dycExercises = registry.getExercises('divide-and-conquer');
+    expect(dycExercises.length).toBe(3);
+    expect(dycExercises.map((e) => e.id)).toContain('merge-sort');
+    expect(dycExercises.map((e) => e.id)).toContain('max-subarray-dyc');
+    expect(dycExercises.map((e) => e.id)).toContain('peak-finding-dyc');
   });
 
   it('retrieves specific exercise by ID', () => {
