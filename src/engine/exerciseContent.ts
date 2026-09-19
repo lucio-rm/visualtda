@@ -16,6 +16,7 @@ import { subsetSumValidator, solveSubsetSum } from './algorithms/subsetSumValida
 import { coinChangeValidator, solveCoinChange } from './algorithms/coinChangeValidator';
 import { peakFindingValidator, solvePeakFinding } from './algorithms/peakFindingValidator';
 import { lcsValidator, solveLcs } from './algorithms/lcsValidator';
+import { weightedIntervalValidator, solveWeightedIntervals, WeightedInterval } from './algorithms/weightedIntervalValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1562,6 +1563,113 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Res === '',
         expected: '""',
         actual: `"${t3Res}"`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'weighted-interval-scheduling': {
+    exerciseId: 'weighted-interval-scheduling',
+    entryFunction: 'planificar_intervalos_ponderados',
+    starterCode: `def planificar_intervalos_ponderados(intervalos: list[list[int]]) -> list[list[int]]:
+    """
+    Dado un conjunto de intervalos donde cada uno es [inicio, fin, peso],
+    encuentra un subconjunto mutuamente compatible de intervalos que maximice
+    la suma total de sus pesos.
+
+    Complejidad Temporal requerida: O(n log n) mediante ordenamiento + búsqueda binaria p(j).
+    Retorna la lista de intervalos seleccionados en el subconjunto óptimo.
+    """
+    if not intervalos:
+        return []
+
+    # Escribe tu solución de Programación Dinámica aquí:
+
+    return []
+`,
+    hints: [
+      {
+        es: 'Pista 1: Ordena los intervalos por tiempo de finalización creciente. Esto asegura que para cualquier tarea j, todas las tareas compatibles finalicen antes de que empiece.',
+        en: 'Hint 1: Sort intervals by ascending finish time. This ensures that for any task j, all compatible tasks finish before it starts.'
+      },
+      {
+        es: 'Pista 2: Para cada tarea j, calcula p(j) usando búsqueda binaria: el mayor índice i < j tal que fin[i] <= inicio[j]. Si no existe ninguna compatible, p(j) = 0.',
+        en: 'Hint 2: For each task j, compute p(j) using binary search: the largest index i < j such that end[i] <= start[j]. If none compatible, p(j) = 0.'
+      },
+      {
+        es: 'Pista 3: Ecuación de Bellman: OPT[j] = max(OPT[j - 1], peso_j + OPT[p(j)]). Para reconstruir, empieza en n y decide si incluir la tarea j (saltando a p(j)) o excluirla (pasando a j - 1).',
+        en: 'Hint 3: Bellman equation: OPT[j] = max(OPT[j - 1], weight_j + OPT[p(j)]). To reconstruct, start at n and decide to include (jump to p(j)) or exclude (step to j - 1).'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasSort = code.includes('sort') || code.includes('key=');
+      const hasDp = code.includes('opt') || code.includes('dp') || code.includes('max(');
+      const passesHeuristic = hasSort && hasDp && !code.includes('pass\n');
+
+      // Test 1: Classic trap
+      const t1Intervals: WeightedInterval[] = [
+        { id: 'T1', start: 0, end: 3, weight: 2 },
+        { id: 'T2', start: 1, end: 6, weight: 10 },
+        { id: 'T3', start: 4, end: 8, weight: 3 },
+        { id: 'T4', start: 7, end: 11, weight: 8 },
+        { id: 'T5', start: 9, end: 12, weight: 4 }
+      ];
+      const t1Optimal = solveWeightedIntervals(t1Intervals);
+      const t1Val = weightedIntervalValidator.validate({ intervals: t1Intervals }, t1Optimal);
+      const t1Weight = t1Optimal.reduce((sum, t) => sum + t.weight, 0);
+
+      results.push({
+        testId: 'weighted-classic-trap',
+        description: {
+          es: 'Instancia clásica con trampa greedy: debe elegir T2 y T4 con peso total de 18 (Greedy obtendría solo 9).',
+          en: 'Classic greedy trap instance: must choose T2 and T4 with total weight 18 (Greedy gets only 9).'
+        },
+        passed: passesHeuristic && t1Val.valid && t1Weight === 18,
+        expected: 'Peso total 18 ([T2, T4])',
+        actual: `Peso total ${t1Weight} (${t1Optimal.map((t) => t.id).join(', ')})`
+      });
+
+      // Test 2: Disjoint intervals
+      const t2Intervals: WeightedInterval[] = [
+        { id: 'A', start: 1, end: 3, weight: 5 },
+        { id: 'B', start: 4, end: 6, weight: 10 },
+        { id: 'C', start: 7, end: 9, weight: 15 }
+      ];
+      const t2Optimal = solveWeightedIntervals(t2Intervals);
+      const t2Val = weightedIntervalValidator.validate({ intervals: t2Intervals }, t2Optimal);
+      const t2Weight = t2Optimal.reduce((sum, t) => sum + t.weight, 0);
+
+      results.push({
+        testId: 'weighted-disjoint-all',
+        description: {
+          es: 'Intervalos disjuntos sin solapamiento: debe seleccionar todos (peso total 30).',
+          en: 'Disjoint non-overlapping intervals: must select all (total weight 30).'
+        },
+        passed: passesHeuristic && t2Val.valid && t2Weight === 30,
+        expected: 'Peso total 30',
+        actual: `Peso total ${t2Weight}`
+      });
+
+      // Test 3: Empty input
+      const t3Optimal = solveWeightedIntervals([]);
+      const t3Val = weightedIntervalValidator.validate({ intervals: [] }, t3Optimal);
+
+      results.push({
+        testId: 'weighted-empty',
+        description: {
+          es: 'Lista vacía de intervalos: debe retornar [] (peso total 0).',
+          en: 'Empty interval list: must return [] (total weight 0).'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Optimal.length === 0,
+        expected: '[]',
+        actual: '[]'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

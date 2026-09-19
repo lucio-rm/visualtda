@@ -35,6 +35,8 @@ import { PeakFindingVisualizer } from '../components/visualizers/PeakFindingVisu
 import { PeakFindingPlayground } from '../components/visualizers/PeakFindingPlayground';
 import { LcsVisualizer } from '../components/visualizers/LcsVisualizer';
 import { LcsPlayground } from '../components/visualizers/LcsPlayground';
+import { WeightedIntervalVisualizer } from '../components/visualizers/WeightedIntervalVisualizer';
+import { WeightedIntervalPlayground } from '../components/visualizers/WeightedIntervalPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -799,6 +801,81 @@ const LCS_PSEUDOCODE = `ALGORITMO SubsecuenciaComunMasLarga(X, Y):
 
 const LCS_CORRECTNESS = `Teorema de Subestructura Óptima de LCS (CLRS 15.4 / Kleinberg & Tardos 6.6): Sean X = <x_1, ..., x_m> e Y = <y_1, ..., y_n> secuencias y Z = <z_1, ..., z_k> cualquier LCS de X e Y. (1) Si x_m = y_n, forzosamente z_k = x_m = y_n y Z_{k-1} es un LCS de X_{m-1} e Y_{n-1}. Si existiera un LCS más largo para los prefijos, podríamos concatenarle x_m y contradecir la maximalidad de Z. (2) Si x_m != y_n y z_k != x_m, entonces Z es un LCS de X_{m-1} e Y. (3) Si x_m != y_n y z_k != y_n, Z es un LCS de X e Y_{n-1}. La recurrencia c[i,j] cubre de forma exhaustiva estas alternativas evaluando (m+1)(n+1) celdas en Theta(m*n), garantizando la longitud óptima global.`;
 
+// Weighted Interval Scheduling Content
+const WEIGHTED_INTERVAL_CANONICAL_PYTHON = `def planificar_intervalos_ponderados(intervalos: list[list[int]]) -> list[list[int]]:
+    if not intervalos:
+        return []
+
+    # 1. Ordenar por tiempo de fin ascendente
+    ordenados = sorted(intervalos, key=lambda x: x[1])
+    n = len(ordenados)
+
+    # 2. Precomputar p(j): el mayor i < j compatible (fin_i <= inicio_j)
+    p = [0] * (n + 1)
+    for j in range(1, n + 1):
+        inicio_j = ordenados[j - 1][0]
+        bajo, alto = 1, j - 1
+        mejor = 0
+        while bajo <= alto:
+            medio = (bajo + alto) // 2
+            if ordenados[medio - 1][1] <= inicio_j:
+                mejor = medio
+                bajo = medio + 1
+            else:
+                alto = medio - 1
+        p[j] = mejor
+
+    # 3. Llenar tabla DP con la ecuación de Bellman
+    opt = [0] * (n + 1)
+    for j in range(1, n + 1):
+        peso_j = ordenados[j - 1][2]
+        opt[j] = max(opt[j - 1], peso_j + opt[p[j]])
+
+    # 4. Reconstrucción de la solución óptima
+    seleccionados = []
+    curr = n
+    while curr > 0:
+        peso_curr = ordenados[curr - 1][2]
+        if peso_curr + opt[p[curr]] >= opt[curr - 1]:
+            seleccionados.append(ordenados[curr - 1])
+            curr = p[curr]
+        else:
+            curr -= 1
+
+    seleccionados.reverse()
+    return seleccionados`;
+
+const WEIGHTED_INTERVAL_PSEUDOCODE = `ALGORITMO PlanificarIntervalosPonderados(intervalos):
+    SI intervalos ESTÁ VACÍO:
+        RETORNAR []
+
+    ordenados ← OrdenarPorTiempoDeFin(intervalos)
+    n ← Longitud(ordenados)
+    p ← Arreglo(n + 1, 0)
+
+    // Precomputar p(j) con búsqueda binaria O(n log n)
+    PARA j ← 1 HASTA n:
+        p[j] ← BusquedaBinariaMayorFinMenorOIgual(ordenados, ordenados[j - 1].inicio)
+
+    // Recurrencia de Bellman
+    OPT ← Arreglo(n + 1, 0)
+    PARA j ← 1 HASTA n:
+        OPT[j] ← Maximo(OPT[j - 1], ordenados[j - 1].peso + OPT[p[j]])
+
+    // Reconstrucción del conjunto óptimo
+    seleccionados ← []
+    curr ← n
+    MIENTRAS curr > 0:
+        SI ordenados[curr - 1].peso + OPT[p[curr]] >= OPT[curr - 1]:
+            seleccionados.Agregar(ordenados[curr - 1])
+            curr ← p[curr]
+        SINO:
+            curr ← curr - 1
+
+    RETORNAR Invertir(seleccionados)`;
+
+const WEIGHTED_INTERVAL_CORRECTNESS = `Teorema de Bellman para Intervalos Ponderados (Kleinberg & Tardos 6.1): Considérese una solución óptima O para las primeras j tareas ordenadas por tiempo de finalización. Hay dos casos mutuamente excluyentes: (1) La tarea j no pertenece a O: entonces O es una solución óptima para el subproblema {1, ..., j-1}, con valor OPT(j-1). (2) La tarea j pertenece a O: entonces ninguna tarea entre p(j)+1 y j-1 puede pertenecer a O debido a incompatibilidad temporal con j. En consecuencia, O \\ {j} debe ser una solución óptima para el subproblema {1, ..., p(j)}, con valor v_j + OPT(p(j)). Si alguna de estas subsoluciones no fuera óptima, un argumento de intercambio (cut-and-paste) permitiría construir una solución superior a O, contradiciendo su optimalidad. Por inducción completa sobre j, OPT(j) = max(OPT(j-1), v_j + OPT(p(j))) computa exactamente el peso máximo obtenible.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -1028,6 +1105,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: LCS_CORRECTNESS,
         timeComplexity: 'O(m · n) [m = len(s1), n = len(s2)]',
         spaceComplexity: 'O(m · n) [Tabla 2D de estados y reconstrucción]'
+      };
+    }
+
+    if (selectedExercise.id === 'weighted-interval-scheduling') {
+      return {
+        visualizerSlot: <WeightedIntervalVisualizer />,
+        discoverPlaygroundSlot: <WeightedIntervalPlayground />,
+        canonicalPython: WEIGHTED_INTERVAL_CANONICAL_PYTHON,
+        pseudocode: WEIGHTED_INTERVAL_PSEUDOCODE,
+        correctnessExplanation: WEIGHTED_INTERVAL_CORRECTNESS,
+        timeComplexity: 'O(n log n) [Ordenamiento inicial + n búsquedas binarias para p(j)]',
+        spaceComplexity: 'O(n) [Arreglos OPT de memoización y punteros p(j)]'
       };
     }
 

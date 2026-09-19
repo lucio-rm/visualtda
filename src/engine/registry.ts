@@ -266,6 +266,24 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['dynamic-programming', '2d-table', 'strings', 'reconstruction', 'diff', 'bioinformatics', 'fiuba', 'rw']
   },
   {
+    id: 'weighted-interval-scheduling',
+    problemId: 'weighted-interval-scheduling',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 5,
+    difficulty: 3,
+    title: {
+      es: 'Intervalos Ponderados (Weighted Interval Scheduling)',
+      en: 'Weighted Interval Scheduling'
+    },
+    subtitle: {
+      es: 'Maximizar el valor total de tareas compatibles mediante ordenamiento, búsqueda binaria p(j) y PD O(n log n)',
+      en: 'Maximize total value of compatible jobs using sorting, binary search p(j), and O(n log n) DP'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', 'intervals', 'binary-search', 'kleinberg-tardos', 'memoization', 'fiuba', 'rw']
+  },
+  {
     id: 'max-flow',
     problemId: 'max-flow',
     techniqueId: 'network-flow',

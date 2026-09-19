@@ -16,6 +16,7 @@ import { subsetSumValidator } from '../engine/algorithms/subsetSumValidator';
 import { coinChangeValidator } from '../engine/algorithms/coinChangeValidator';
 import { peakFindingValidator } from '../engine/algorithms/peakFindingValidator';
 import { lcsValidator } from '../engine/algorithms/lcsValidator';
+import { weightedIntervalValidator, WeightedInterval } from '../engine/algorithms/weightedIntervalValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1112,6 +1113,107 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid && out3 === '',
           expected: '""',
           actual: `"${out3}"`
+        });
+        break;
+      }
+
+      case 'weighted-interval-scheduling': {
+        // Test 1: Greedy trap counterexample
+        const raw1 = [
+          [0, 3, 2],
+          [1, 6, 10],
+          [4, 8, 3],
+          [7, 11, 8],
+          [9, 12, 4]
+        ];
+        const intervals1: WeightedInterval[] = raw1.map(([s, e, w], idx) => ({
+          id: `T${idx + 1}`,
+          start: s,
+          end: e,
+          weight: w
+        }));
+        const res1 = await service.executePython(code, 'planificar_intervalos_ponderados', [raw1]);
+        const out1 = (Array.isArray(res1.result) ? res1.result : []) as number[][];
+        const outInt1: WeightedInterval[] = out1.map(([s, e, w], idx) => {
+          const matched = intervals1.find((item) => item.start === s && item.end === e && item.weight === w);
+          return matched ?? { id: `out-${idx}`, start: s, end: e, weight: w };
+        });
+        const val1 = weightedIntervalValidator.validate({ intervals: intervals1 }, outInt1);
+        const totalW1 = outInt1.reduce((sum, item) => sum + item.weight, 0);
+
+        results.push({
+          testId: 'py-weighted-greedy-trap',
+          description: {
+            es: 'Instancia con trampa greedy: debe elegir tareas compatibles con peso óptimo 18.',
+            en: 'Greedy trap instance: must choose compatible tasks with optimal weight 18.'
+          },
+          passed: val1.valid && totalW1 === 18,
+          expected: 'Peso 18 (tareas [1,6,10] y [7,11,8])',
+          actual: val1.valid ? `Peso ${totalW1} (${outInt1.map((i) => `[${i.start},${i.end},w=${i.weight}]`).join(', ')})` : val1.errors.join('; ')
+        });
+
+        // Test 2: Disjoint intervals (all can be selected)
+        const raw2 = [
+          [1, 3, 5],
+          [4, 6, 7],
+          [7, 9, 10]
+        ];
+        const intervals2: WeightedInterval[] = raw2.map(([s, e, w], idx) => ({
+          id: `T${idx + 1}`,
+          start: s,
+          end: e,
+          weight: w
+        }));
+        const res2 = await service.executePython(code, 'planificar_intervalos_ponderados', [raw2]);
+        const out2 = (Array.isArray(res2.result) ? res2.result : []) as number[][];
+        const outInt2: WeightedInterval[] = out2.map(([s, e, w], idx) => {
+          const matched = intervals2.find((item) => item.start === s && item.end === e && item.weight === w);
+          return matched ?? { id: `out-${idx}`, start: s, end: e, weight: w };
+        });
+        const val2 = weightedIntervalValidator.validate({ intervals: intervals2 }, outInt2);
+        const totalW2 = outInt2.reduce((sum, item) => sum + item.weight, 0);
+
+        results.push({
+          testId: 'py-weighted-disjoint',
+          description: {
+            es: 'Intervalos disjuntos: debe seleccionar todos los intervalos con peso total 22.',
+            en: 'Disjoint intervals: must select all intervals with total weight 22.'
+          },
+          passed: val2.valid && totalW2 === 22 && outInt2.length === 3,
+          expected: 'Peso 22 (3 intervalos)',
+          actual: val2.valid ? `Peso ${totalW2} (${outInt2.length} intervalos)` : val2.errors.join('; ')
+        });
+
+        // Test 3: Completely overlapping intervals (choose single max weight)
+        const raw3 = [
+          [1, 10, 4],
+          [2, 8, 15],
+          [3, 9, 8]
+        ];
+        const intervals3: WeightedInterval[] = raw3.map(([s, e, w], idx) => ({
+          id: `T${idx + 1}`,
+          start: s,
+          end: e,
+          weight: w
+        }));
+        const res3 = await service.executePython(code, 'planificar_intervalos_ponderados', [raw3]);
+        const out3 = (Array.isArray(res3.result) ? res3.result : []) as number[][];
+        const outInt3: WeightedInterval[] = out3.map(([s, e, w], idx) => {
+          const matched = intervals3.find((item) => item.start === s && item.end === e && item.weight === w);
+          return matched ?? { id: `out-${idx}`, start: s, end: e, weight: w };
+        });
+        const val3 = weightedIntervalValidator.validate({ intervals: intervals3 }, outInt3);
+        const totalW3 = outInt3.reduce((sum, item) => sum + item.weight, 0);
+
+        results.push({
+          testId: 'py-weighted-overlapping',
+          description: {
+            es: 'Todos los intervalos se superponen: debe elegir el único de mayor peso (15).',
+            en: 'All intervals overlap: must choose the single heaviest one (weight 15).'
+          },
+          passed: val3.valid && totalW3 === 15 && outInt3.length === 1,
+          expected: 'Peso 15 ([2, 8, 15])',
+          actual: val3.valid ? `Peso ${totalW3} (${outInt3.map((i) => `[${i.start},${i.end},w=${i.weight}]`).join(', ')})` : val3.errors.join('; ')
         });
         break;
       }
