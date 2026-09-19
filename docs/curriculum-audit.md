@@ -27,13 +27,13 @@ The 20 foundational exercises span 9 fundamental paradigms:
 | **Divide & Conquer** | 4 | Merge Sort, Maximum Subarray, Peak Finding, Inversion Counting |
 | **Greedy Algorithms** | 4 | Interval Scheduling, Fractional Knapsack, Highway Antennas, Huffman Coding |
 | **Dynamic Programming** | 5 | 0/1 Knapsack, Juan el Vago (MWIS path), Coin Change, Longest Common Subsequence, Weighted Interval Scheduling |
-| **Backtracking** | 2 | N-Queens, Subset Sum (with bounding prunings) |
+| **Backtracking** | 3 | N-Queens, Subset Sum (with bounding prunings), Graph Coloring (k-Coloring) |
 | **Network Flow** | 1 | Maximum Flow & Minimum Cut (Edmonds-Karp / Ford-Fulkerson) |
 | **Linear Programming** | 1 | Feasible Region Convex Polytope & Integer Modeling (ILP) |
 | **Problem Reductions** | 1 | Independent Set $\le_P$ Vertex Cover (NP-completeness duality) |
 | **Approximation Algorithms** | 1 | 2-Approximation for Vertex Cover (Maximal Matching bound) |
 | **Randomized Algorithms** | 1 | Fair Coin from Biased Coin (Von Neumann randomness extraction) |
-| **Total** | **20** | **Complete Core Undergraduate Syllabus** |
+| **Total** | **21** | **Complete Core Undergraduate Syllabus** |
 
 ---
 
@@ -529,10 +529,34 @@ The 20 foundational exercises span 9 fundamental paradigms:
 
 ---
 
+### Exercise 21: Coloreo de Grafos (`graph-coloring-backtracking`)
+- **Paradigm**: Backtracking / Constraint Satisfaction
+- **Textbook References**:
+  - Kleinberg & Tardos: Section 8.4 (NP-Completeness and Graph Coloring)
+  - CLRS: Chapter 34 & 35 (State-space search in constraint satisfaction)
+  - FIUBA: Guía de Backtracking — Problemas de Coloreo y Decisión
+- **Difficulty**: 3 / 5
+- **Learning Objectives**:
+  - Understand graph coloring as a constraint satisfaction problem (CSP) where variables are vertices and domains are color sets $\{1, \dots, k\}$.
+  - Apply immediate edge conflict pruning ($O(\text{deg}(v))$) to eliminate subtrees of size $k^{|V| - idx - 1}$.
+  - Recognize NP-completeness for $k \ge 3$ versus polynomial time for $k = 2$ (bipartite graphs).
+- **Formal Correctness & Key Invariant**:
+  - *Adjacency Invariant*: For all vertices assigned colors at recursion depth $idx$, no adjacent edge is monochromatic.
+  - *Pruning Completeness*: If a vertex cannot be safely colored with any color in $\{1, \dots, k\}$, the branch terminates and backtracks, restoring state. If all branches exhaust without reaching depth $|V|$, it is proven that $\chi(G) > k$.
+- **Asymptotic Complexity**:
+  - *Time Complexity*: $O(k^{|V|})$ worst case; dramatically accelerated on sparse/planar graphs by early pruning.
+  - *Space Complexity*: $O(|V|)$ auxiliary recursion stack and color map.
+- **Visualizer Pedagogical Value**:
+  - Interactive SVG canvas highlighting conflict edges in dashed red with dynamic conflict pins; color assignments update synchronously with backtracking pulses.
+- **Independent Verification Oracle**:
+  - Verified by independent combinatorial oracle in `tests/oracles/referenceSolvers.ts`.
+
+---
+
 ## 3. Curriculum Audit Summary & Quality Gate Status
 
 ### 3.1 Academic Balance
-All 20 foundational exercises have been rigorously mapped to their theoretical origins in Kleinberg & Tardos, CLRS, and FIUBA engineering coursework.
+All 21 foundational exercises have been rigorously mapped to their theoretical origins in Kleinberg & Tardos, CLRS, and FIUBA engineering coursework.
 - Every algorithm includes a formal inductive or exchange correctness proof.
 - Every algorithm includes exact asymptotic time and space bounds.
 - All algorithms are verified by independent reference oracles (`tests/oracles/referenceSolvers.ts`), property tests (`tests/adversarialAndOracles.test.ts`), and unit test suites.

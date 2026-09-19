@@ -1,0 +1,18 @@
+{
+  "id": "graph-coloring-backtracking",
+  "problemId": "graph-coloring",
+  "techniqueId": "backtracking",
+  "categoryId": "backtracking",
+  "order": 3,
+  "difficulty": 3,
+  "title": {
+    "es": "Coloreo de Grafos (k-Coloring)",
+    "en": "Graph Coloring (k-Coloring)"
+  },
+  "subtitle": {
+    "es": "Asignar a lo sumo k colores a los vértices de un grafo de forma que ningún par de vecinos comparta color",
+    "en": "Assign at most k colors to vertices such that no two adjacent vertices share the same color"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["backtracking", "graphs", "np-complete", "constraint-satisfaction", "pruning", "fiuba", "rw"]
+}
