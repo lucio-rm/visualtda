@@ -33,6 +33,8 @@ import { CoinChangeVisualizer } from '../components/visualizers/CoinChangeVisual
 import { CoinChangePlayground } from '../components/visualizers/CoinChangePlayground';
 import { PeakFindingVisualizer } from '../components/visualizers/PeakFindingVisualizer';
 import { PeakFindingPlayground } from '../components/visualizers/PeakFindingPlayground';
+import { LcsVisualizer } from '../components/visualizers/LcsVisualizer';
+import { LcsPlayground } from '../components/visualizers/LcsPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -733,6 +735,70 @@ const PEAK_FINDING_PSEUDOCODE = `ALGORITMO BuscarPico(A):
 
 const PEAK_FINDING_CORRECTNESS = `Teorema del Gradiente Ascendente (Uphill Walk Invariant): Todo arreglo finito no vacío posee al menos un pico (el máximo global siempre es pico). Al tomar el centro m, si A[m] < A[m-1], la pendiente sube hacia la izquierda. Si recorremos hacia la izquierda, o bien los valores suben o se mantienen hasta llegar al extremo A[0] (el cual sería un pico por ser borde y A[0] >= A[1]), o bien encontramos un descenso en algún índice j tal que A[j] < A[j+1], en cuyo caso A[j+1] es un pico local. Por lo tanto, el subarreglo izquierdo contiene obligatoriamente al menos un pico. Análogamente para la derecha. Como T(n) = T(n/2) + O(1), por Teorema Maestro (caso 2, log_2 1 = 0 = d), la complejidad temporal es exactamente Theta(log n).`;
 
+// Longest Common Subsequence (Dynamic Programming) Content
+const LCS_CANONICAL_PYTHON = `def subsecuencia_comun_mas_larga(s1: str, s2: str) -> str:
+    m = len(s1)
+    n = len(s2)
+    if m == 0 or n == 0:
+        return ""
+
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    resultado = []
+    i = m
+    j = n
+    while i > 0 and j > 0:
+        if s1[i - 1] == s2[j - 1]:
+            resultado.append(s1[i - 1])
+            i -= 1
+            j -= 1
+        elif dp[i - 1][j] >= dp[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+
+    resultado.reverse()
+    return "".join(resultado)`;
+
+const LCS_PSEUDOCODE = `ALGORITMO SubsecuenciaComunMasLarga(X, Y):
+    m ← Longitud(X)
+    n ← Longitud(Y)
+    SI m = 0 O n = 0:
+        RETORNAR ""
+
+    c ← Matriz(m + 1, n + 1, 0)
+
+    PARA i ← 1 HASTA m:
+        PARA j ← 1 HASTA n:
+            SI X[i - 1] = Y[j - 1]:
+                c[i, j] ← c[i - 1, j - 1] + 1
+            SINO:
+                c[i, j] ← Maximo(c[i - 1, j], c[i, j - 1])
+
+    resultado ← []
+    i ← m
+    j ← n
+    MIENTRAS i > 0 Y j > 0:
+        SI X[i - 1] = Y[j - 1]:
+            resultado.Agregar(X[i - 1])
+            i ← i - 1
+            j ← j - 1
+        SINO SI c[i - 1, j] >= c[i, j - 1]:
+            i ← i - 1
+        SINO:
+            j ← j - 1
+
+    RETORNAR Invertir(resultado)`;
+
+const LCS_CORRECTNESS = `Teorema de Subestructura Óptima de LCS (CLRS 15.4 / Kleinberg & Tardos 6.6): Sean X = <x_1, ..., x_m> e Y = <y_1, ..., y_n> secuencias y Z = <z_1, ..., z_k> cualquier LCS de X e Y. (1) Si x_m = y_n, forzosamente z_k = x_m = y_n y Z_{k-1} es un LCS de X_{m-1} e Y_{n-1}. Si existiera un LCS más largo para los prefijos, podríamos concatenarle x_m y contradecir la maximalidad de Z. (2) Si x_m != y_n y z_k != x_m, entonces Z es un LCS de X_{m-1} e Y. (3) Si x_m != y_n y z_k != y_n, Z es un LCS de X e Y_{n-1}. La recurrencia c[i,j] cubre de forma exhaustiva estas alternativas evaluando (m+1)(n+1) celdas en Theta(m*n), garantizando la longitud óptima global.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -950,6 +1016,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: PEAK_FINDING_CORRECTNESS,
         timeComplexity: 'O(log n) [División geométrica a la mitad por Teorema Maestro]',
         spaceComplexity: 'O(1) [Iterativo] / O(log n) [Recursivo por stack]'
+      };
+    }
+
+    if (selectedExercise.id === 'lcs-dp') {
+      return {
+        visualizerSlot: <LcsVisualizer />,
+        discoverPlaygroundSlot: <LcsPlayground />,
+        canonicalPython: LCS_CANONICAL_PYTHON,
+        pseudocode: LCS_PSEUDOCODE,
+        correctnessExplanation: LCS_CORRECTNESS,
+        timeComplexity: 'O(m · n) [m = len(s1), n = len(s2)]',
+        spaceComplexity: 'O(m · n) [Tabla 2D de estados y reconstrucción]'
       };
     }
 

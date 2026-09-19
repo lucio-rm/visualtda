@@ -1,0 +1,253 @@
+.lcs-playground {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.playground-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.playground-header p {
+  margin: 0;
+  color: var(--text-muted, #777);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.presets-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.presets-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted, #888);
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.chip-button {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.35rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip-button:hover {
+  background: var(--surface-hover, rgba(0, 0, 0, 0.05));
+  border-color: var(--accent);
+}
+
+.strings-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .strings-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input-field {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.user-guess-section {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-guess-section label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.guess-input-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.guess-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn-opt-load {
+  background: var(--surface);
+  border: 1px solid #10b981;
+  color: #059669;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-opt-load:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.comparison-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .comparison-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.score-card {
+  border-radius: 8px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.score-card.user-card {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.score-card.dp-card {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted, #777);
+  text-transform: uppercase;
+}
+
+.card-val {
+  font-size: 1.4rem;
+  font-weight: bold;
+  font-family: monospace;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.card-len {
+  font-size: 0.85rem;
+  color: var(--text-muted, #777);
+}
+
+.validation-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.check-line.valid {
+  color: #059669;
+}
+
+.check-line.invalid {
+  color: #dc2626;
+}
+
+.feedback-banner {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.status-opt {
+  color: #059669;
+  font-weight: 600;
+}
+
+.status-subopt {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.status-error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.prompt-text {
+  color: var(--text-muted, #777);
+  font-size: 0.85rem;
+}
+
+.card-explanation {
+  font-size: 0.85rem;
+  color: var(--text-muted, #777);
+}
+
+.pedagogy-tip {
+  background: rgba(59, 130, 246, 0.06);
+  border-left: 4px solid #3b82f6;
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.pedagogy-tip h4 {
+  margin: 0 0 0.5rem 0;
+  color: #2563eb;
+  font-size: 0.95rem;
+}
+
+.pedagogy-tip p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

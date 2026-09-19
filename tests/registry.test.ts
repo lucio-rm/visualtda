@@ -39,10 +39,11 @@ describe('ExerciseRegistry', () => {
     expect(greedyExercises.map((e) => e.id)).toContain('road-antennas-greedy');
 
     const dpExercises = registry.getExercises('dynamic-programming');
-    expect(dpExercises.length).toBe(3);
+    expect(dpExercises.length).toBe(4);
     expect(dpExercises.map((e) => e.id)).toContain('knapsack-dp');
     expect(dpExercises.map((e) => e.id)).toContain('juan-el-vago');
     expect(dpExercises.map((e) => e.id)).toContain('coin-change-dp');
+    expect(dpExercises.map((e) => e.id)).toContain('lcs-dp');
 
     const dycExercises = registry.getExercises('divide-and-conquer');
     expect(dycExercises.length).toBe(3);

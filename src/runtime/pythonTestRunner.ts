@@ -15,6 +15,7 @@ import { roadAntennasValidator } from '../engine/algorithms/roadAntennasValidato
 import { subsetSumValidator } from '../engine/algorithms/subsetSumValidator';
 import { coinChangeValidator } from '../engine/algorithms/coinChangeValidator';
 import { peakFindingValidator } from '../engine/algorithms/peakFindingValidator';
+import { lcsValidator } from '../engine/algorithms/lcsValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1063,6 +1064,54 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid && out3 === 5,
           expected: 'Índice 5 (valor 30)',
           actual: val3.valid ? `Índice ${out3} (valor ${t3Arr[out3]})` : val3.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'lcs-dp': {
+        // Test 1: Classic CLRS "ABCBDAB" and "BDCABA" -> length 4
+        const res1 = await service.executePython(code, 'subsecuencia_comun_mas_larga', ['ABCBDAB', 'BDCABA']);
+        const out1 = String(res1.result ?? '');
+        const val1 = lcsValidator.validate({ s1: 'ABCBDAB', s2: 'BDCABA' }, out1);
+        results.push({
+          testId: 'py-lcs-clrs',
+          description: {
+            es: 'Caso clásico CLRS "ABCBDAB" y "BDCABA": Longitud óptima 4.',
+            en: 'Classic CLRS case "ABCBDAB" and "BDCABA": Optimal length 4.'
+          },
+          passed: val1.valid && out1.length === 4,
+          expected: 'Longitud 4 (ej. "BCBA")',
+          actual: val1.valid ? `"${out1}"` : val1.errors.join('; ')
+        });
+
+        // Test 2: Identical strings
+        const res2 = await service.executePython(code, 'subsecuencia_comun_mas_larga', ['ALGORITMO', 'ALGORITMO']);
+        const out2 = String(res2.result ?? '');
+        const val2 = lcsValidator.validate({ s1: 'ALGORITMO', s2: 'ALGORITMO' }, out2);
+        results.push({
+          testId: 'py-lcs-identical',
+          description: {
+            es: 'Cadenas idénticas "ALGORITMO": Retorna "ALGORITMO".',
+            en: 'Identical strings "ALGORITMO": Returns "ALGORITMO".'
+          },
+          passed: val2.valid && out2 === 'ALGORITMO',
+          expected: '"ALGORITMO"',
+          actual: val2.valid ? `"${out2}"` : val2.errors.join('; ')
+        });
+
+        // Test 3: Disjoint strings
+        const res3 = await service.executePython(code, 'subsecuencia_comun_mas_larga', ['HOLA', 'TREN']);
+        const out3 = String(res3.result ?? '');
+        const val3 = lcsValidator.validate({ s1: 'HOLA', s2: 'TREN' }, out3);
+        results.push({
+          testId: 'py-lcs-disjoint',
+          description: {
+            es: 'Cadenas disjuntas "HOLA" y "TREN": Retorna cadena vacía "".',
+            en: 'Disjoint strings "HOLA" and "TREN": Returns empty string "".'
+          },
+          passed: val3.valid && out3 === '',
+          expected: '""',
+          actual: `"${out3}"`
         });
         break;
       }

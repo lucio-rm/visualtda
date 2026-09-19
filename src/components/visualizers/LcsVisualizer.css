@@ -1,0 +1,268 @@
+.lcs-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.visualizer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.phase-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.phase-badge-label {
+  font-size: 0.85rem;
+  color: var(--text-muted, #888);
+}
+
+.phase-badge-name {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.status-counter {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.lcs-highlight {
+  color: #10b981;
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+.length-tag {
+  color: var(--text-muted, #777);
+  font-size: 0.85rem;
+}
+
+.strings-banner {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.string-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pill-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted, #777);
+}
+
+.chars-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.char-box {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.char-box.char-active {
+  background: #3b82f6;
+  color: white;
+  border-color: #2563eb;
+  transform: scale(1.1);
+}
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.lcs-grid-container {
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.lcs-matrix {
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin: 0 auto;
+}
+
+.lcs-matrix th,
+.lcs-matrix td {
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid var(--border);
+}
+
+.th-corner {
+  background: var(--bg);
+  font-size: 0.75rem;
+  color: var(--text-muted, #888);
+}
+
+.th-char,
+.th-row-char {
+  background: var(--bg);
+  font-weight: bold;
+  position: relative;
+}
+
+.col-idx,
+.row-idx {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-muted, #888);
+  font-weight: normal;
+}
+
+.th-active {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #2563eb;
+}
+
+.lcs-cell {
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.lcs-cell.current-cell {
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid #3b82f6;
+  font-weight: bold;
+}
+
+.lcs-cell.match-cell {
+  background: rgba(16, 185, 129, 0.25);
+  color: #059669;
+  font-weight: bold;
+  border: 2px solid #10b981;
+}
+
+.lcs-cell.path-cell {
+  background: rgba(16, 185, 129, 0.2);
+  color: #059669;
+  font-weight: bold;
+  box-shadow: inset 0 0 0 1px #10b981;
+}
+
+.narrative-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.85rem 1.1rem;
+}
+
+.narrative-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-control {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-control:hover:not(:disabled) {
+  background: var(--surface-hover, rgba(0, 0, 0, 0.05));
+  border-color: var(--accent);
+}
+
+.btn-control:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-play {
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.timeline-slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.timeline-slider {
+  flex: 1;
+  cursor: pointer;
+}
+
+.step-counter {
+  font-size: 0.85rem;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.speed-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.speed-selector select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+}

@@ -251,6 +251,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['dynamic-programming', '1d-table', 'reconstruction', 'memoization', 'counterexample', 'fiuba']
   },
   {
+    id: 'lcs-dp',
+    problemId: 'longest-common-subsequence',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 4,
+    difficulty: 2,
+    title: { es: 'Subsecuencia Común Más Larga (LCS)', en: 'Longest Common Subsequence (LCS)' },
+    subtitle: {
+      es: 'Alineación óptima de secuencias en una tabla 2D con reconstrucción diagonal O(m·n)',
+      en: 'Optimal sequence alignment on a 2D table with diagonal reconstruction in O(m·n)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', '2d-table', 'strings', 'reconstruction', 'diff', 'bioinformatics', 'fiuba', 'rw']
+  },
+  {
     id: 'max-flow',
     problemId: 'max-flow',
     techniqueId: 'network-flow',

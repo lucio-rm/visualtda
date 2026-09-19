@@ -15,6 +15,7 @@ import { roadAntennasValidator, solveRoadAntennas } from './algorithms/roadAnten
 import { subsetSumValidator, solveSubsetSum } from './algorithms/subsetSumValidator';
 import { coinChangeValidator, solveCoinChange } from './algorithms/coinChangeValidator';
 import { peakFindingValidator, solvePeakFinding } from './algorithms/peakFindingValidator';
+import { lcsValidator, solveLcs } from './algorithms/lcsValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1461,6 +1462,106 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Peak === 5,
         expected: 'Índice 5 (valor 30)',
         actual: `Índice ${t3Peak} (valor ${t3Arr[t3Peak]})`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'lcs-dp': {
+    exerciseId: 'lcs-dp',
+    entryFunction: 'subsecuencia_comun_mas_larga',
+    starterCode: `def subsecuencia_comun_mas_larga(s1: str, s2: str) -> str:
+    """
+    Dadas dos cadenas s1 y s2, encuentra la subsecuencia común más larga (LCS).
+    Una subsecuencia no requiere ser contigua.
+
+    Complejidad Temporal requerida: O(m * n) mediante Programación Dinámica 2D.
+    Retorna la cadena correspondiente al LCS. Si no hay caracteres comunes, retorna "".
+    """
+    m = len(s1)
+    n = len(s2)
+    if m == 0 or n == 0:
+        return ""
+
+    # Escribe tu solución de Programación Dinámica con reconstrucción aquí:
+
+    return ""
+`,
+    hints: [
+      {
+        es: 'Pista 1: Define dp[i][j] como la longitud del LCS entre el prefijo s1[0...i-1] y s2[0...j-1]. Inicializa una matriz de (m+1) x (n+1) con ceros.',
+        en: 'Hint 1: Define dp[i][j] as the length of LCS between prefix s1[0...i-1] and s2[0...j-1]. Initialize an (m+1) x (n+1) matrix with zeros.'
+      },
+      {
+        es: 'Pista 2: Ecuación de recurrencia: Si s1[i-1] == s2[j-1], entonces dp[i][j] = dp[i-1][j-1] + 1 (coincidencia diagonal). Si son distintos, dp[i][j] = max(dp[i-1][j], dp[i][j-1]).',
+        en: 'Hint 2: Recurrence equation: If s1[i-1] == s2[j-1], then dp[i][j] = dp[i-1][j-1] + 1 (diagonal match). If different, dp[i][j] = max(dp[i-1][j], dp[i][j-1]).'
+      },
+      {
+        es: 'Pista 3: Para reconstruir la cadena, empieza en (m, n). Si s1[i-1] == s2[j-1], añade el carácter a tu lista y retrocede a (i-1, j-1). Si son distintos, retrocede en la dirección del valor máximo (arriba si dp[i-1][j] >= dp[i][j-1], o izquierda). Al final invierte la lista.',
+        en: 'Hint 3: To reconstruct, start at (m, n). If s1[i-1] == s2[j-1], append the char and step to (i-1, j-1). If different, step towards the maximum value (up or left). Invert at the end.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasDp = code.includes('dp') || code.includes('max(') || code.includes('for ');
+      const hasRecon = code.includes('while') || code.includes('append') || code.includes('reverse') || code.includes('[::-1]');
+      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      // Test 1: Classic CLRS "ABCBDAB" and "BDCABA" -> length 4
+      const t1S1 = 'ABCBDAB';
+      const t1S2 = 'BDCABA';
+      const t1Res = solveLcs(t1S1, t1S2);
+      const t1Val = lcsValidator.validate({ s1: t1S1, s2: t1S2 }, t1Res);
+
+      results.push({
+        testId: 'lcs-clrs-classic',
+        description: {
+          es: 'Caso clásico CLRS: "ABCBDAB" y "BDCABA" (LCS de longitud 4, ej. "BCBA" o "BDAB").',
+          en: 'Classic CLRS case: "ABCBDAB" and "BDCABA" (LCS length 4, e.g. "BCBA" or "BDAB").'
+        },
+        passed: passesHeuristic && t1Val.valid && t1Res.length === 4,
+        expected: 'Longitud 4 (ej. "BCBA")',
+        actual: `"${t1Res}" (longitud ${t1Res.length})`
+      });
+
+      // Test 2: Identical strings
+      const t2S1 = 'ALGORITMO';
+      const t2S2 = 'ALGORITMO';
+      const t2Res = solveLcs(t2S1, t2S2);
+      const t2Val = lcsValidator.validate({ s1: t2S1, s2: t2S2 }, t2Res);
+
+      results.push({
+        testId: 'lcs-identical',
+        description: {
+          es: 'Cadenas idénticas: "ALGORITMO" y "ALGORITMO" (retorna la cadena completa).',
+          en: 'Identical strings: "ALGORITMO" and "ALGORITMO" (returns full string).'
+        },
+        passed: passesHeuristic && t2Val.valid && t2Res === 'ALGORITMO',
+        expected: '"ALGORITMO"',
+        actual: `"${t2Res}"`
+      });
+
+      // Test 3: Disjoint strings
+      const t3S1 = 'HOLA';
+      const t3S2 = 'TREN';
+      const t3Res = solveLcs(t3S1, t3S2);
+      const t3Val = lcsValidator.validate({ s1: t3S1, s2: t3S2 }, t3Res);
+
+      results.push({
+        testId: 'lcs-disjoint',
+        description: {
+          es: 'Cadenas disjuntas sin letras en común: "HOLA" y "TREN" (debe retornar "").',
+          en: 'Disjoint strings: "HOLA" and "TREN" (must return "").'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Res === '',
+        expected: '""',
+        actual: `"${t3Res}"`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

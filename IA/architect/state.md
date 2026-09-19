@@ -33,10 +33,11 @@
   - Backtracking Pruning Core: `subset-sum-backtracking` (Guía Backtracking Ejercicio 11 ★, Subconjuntos que suman S con podas duales por exceso y déficit remanente, interactive builder, and search space reduction comparator)
   - Dynamic Programming Core: `coin-change-dp` (Guía PD Ejercicio 8 ★★, Cambio de Monedas con cantidad mínima, principio de Bellman $O(V \cdot |C|)$, reconstrucción por punteros, contraejemplo canónico Greedy $[1, 3, 4]$ target $6$, y caja registradora interactiva)
   - Divide & Conquer Core: `peak-finding-dyc` (Guía DyC Ejercicio 1 ★, Búsqueda de Pico en arreglo 1D con gradiente ascendente $O(\log n)$, Teorema Maestro $T(n) = T(n/2) + O(1)$, perfil de elevación montañoso interactivo y explorador de cumbres)
-  - 142 unit tests passing 100% across 27 test files
+  - Dynamic Programming 2D Core: `lcs-dp` (Guía PD Ejercicio 9 ★★★, Subsecuencia Común Más Larga, subestructura óptima de Bellman $O(m \cdot n)$, tabla 2D con animaciones diagonales/ortogonales, reconstrucción de camino y simulador git diff)
+  - 155 unit tests passing 100% across 28 test files
 - **IN_PROGRESS**: Expanding next fundamental starred problem from curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Dynamic Programming: Longest Common Subsequence (LCS / Subsecuencia Común Más Larga 2D, Guía PD Ejercicio 9 ★★★)
+- **NEXT_TASK**: Greedy: Huffman Coding (Codificación de Huffman con Min-Heap, Guía Greedy Ejercicio 10 ★★★) or Dynamic Programming: Weighted Interval Scheduling
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 142 tests)
-- **LAST_COMMIT**: `0ee4772`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 155 tests)
+- **LAST_COMMIT**: Pending feat(dp) for lcs-dp
