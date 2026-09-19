@@ -67,8 +67,6 @@ self.onmessage = async (event: MessageEvent<WorkerInboundMessage>) => {
       const pyodide = await ensurePyodide();
 
       // Pass user inputs as Pyodide globals to avoid string interpolation injection.
-      // This prevents issues with triple-quotes, backslashes, or special characters
-      // in student code or function names breaking the Python wrapper script.
       pyodide.globals.set('__user_code', msg.code);
       pyodide.globals.set('__user_fn_name', msg.functionName);
       pyodide.globals.set('__user_args_json', JSON.stringify(msg.args));
@@ -83,6 +81,7 @@ sys.stdout = __stdout_buffer
 
 __execution_error = None
 __raw_result = None
+__MAX_STDOUT_BYTES = 65536  # 64 KB pedagogical quota to prevent memory DoS
 
 try:
     # 1. Execute student code in an isolated namespace
@@ -96,42 +95,55 @@ try:
         __raw_result = __target_fn(*__args_parsed)
     else:
         raise NameError(f"La función '{__user_fn_name}' no fue definida en el código.")
-except Exception as e:
+except BaseException as e:
     import traceback
     __execution_error = traceback.format_exc()
 finally:
     sys.stdout = __old_stdout
     __captured_stdout = __stdout_buffer.getvalue()
+    if len(__captured_stdout) > __MAX_STDOUT_BYTES:
+        __captured_stdout = __captured_stdout[:__MAX_STDOUT_BYTES] + "\\n... [Salida truncada: límite pedagógico de 64 KB alcanzado] ..."
 
-__serialized_output = json.dumps({
-    "success": __execution_error is None,
-    "result": __raw_result,
-    "stdout": __captured_stdout,
-    "error": __execution_error
-})
+try:
+    __serialized_output = json.dumps({
+        "success": __execution_error is None,
+        "result": __raw_result,
+        "stdout": __captured_stdout,
+        "error": __execution_error
+    })
+except (TypeError, OverflowError) as __ser_err:
+    __serialized_output = json.dumps({
+        "success": False,
+        "result": None,
+        "stdout": __captured_stdout,
+        "error": f"Error de serialización: el valor retornado ({type(__raw_result).__name__}) no puede convertirse a JSON. Asegúrate de retornar estructuras estándar (listas, diccionarios, enteros, flotantes, cadenas o booleanos)."
+    })
 `;
 
-      pyodide.runPython(wrapperScript);
-      const serializedJson = pyodide.globals.get('__serialized_output');
-      const parsed = JSON.parse(serializedJson);
+      try {
+        pyodide.runPython(wrapperScript);
+        const serializedJson = pyodide.globals.get('__serialized_output');
+        const parsed = JSON.parse(serializedJson);
 
-      // Clean up globals to prevent cross-execution leakage
-      pyodide.globals.delete('__user_code');
-      pyodide.globals.delete('__user_fn_name');
-      pyodide.globals.delete('__user_args_json');
+        const endTime = performance.now();
+        const response: WorkerRunResponse = {
+          id: msg.id,
+          type: 'run_result',
+          success: parsed.success,
+          result: parsed.result,
+          stdout: parsed.stdout,
+          error: parsed.error,
+          executionTimeMs: Math.round(endTime - startTime)
+        };
 
-      const endTime = performance.now();
-      const response: WorkerRunResponse = {
-        id: msg.id,
-        type: 'run_result',
-        success: parsed.success,
-        result: parsed.result,
-        stdout: parsed.stdout,
-        error: parsed.error,
-        executionTimeMs: Math.round(endTime - startTime)
-      };
-
-      self.postMessage(response);
+        self.postMessage(response);
+      } finally {
+        // Clean up globals to prevent cross-execution leakage
+        pyodide.globals.delete('__user_code');
+        pyodide.globals.delete('__user_fn_name');
+        pyodide.globals.delete('__user_args_json');
+        pyodide.globals.delete('__serialized_output');
+      }
     } catch (err: unknown) {
       const endTime = performance.now();
       const response: WorkerRunResponse = {

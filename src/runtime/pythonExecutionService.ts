@@ -48,7 +48,26 @@ export class PythonExecutionService {
     };
 
     this.worker.onerror = (err) => {
-      console.error('Error en Pyodide Web Worker:', err);
+      console.error('Error crítico en Pyodide Web Worker:', err);
+      // Cleanly terminate worker and notify all pending callbacks
+      const errorMsg = 'El entorno de ejecución Python (Web Worker) falló inesperadamente debido a un error crítico o límite de memoria.';
+      const pending = Array.from(this.pendingCallbacks.values());
+      this.pendingCallbacks.clear();
+      if (this.worker) {
+        this.worker.terminate();
+        this.worker = null;
+      }
+      this.isReadyState = false;
+      this.isInitializing = false;
+      for (const cb of pending) {
+        cb({
+          id: 'error',
+          type: 'run_result',
+          success: false,
+          error: errorMsg,
+          executionTimeMs: 0
+        });
+      }
     };
 
     return this.worker;
@@ -107,6 +126,21 @@ export class PythonExecutionService {
           this.worker.terminate();
           this.worker = null;
           this.isReadyState = false;
+        }
+
+        // Notify any other pending callbacks that worker was terminated
+        if (this.pendingCallbacks.size > 0) {
+          const remaining = Array.from(this.pendingCallbacks.values());
+          this.pendingCallbacks.clear();
+          for (const cb of remaining) {
+            cb({
+              id: 'cancelled',
+              type: 'run_result',
+              success: false,
+              error: 'Ejecución cancelada debido a reinicio del entorno Web Worker por tiempo excedido.',
+              executionTimeMs: timeoutMs
+            });
+          }
         }
 
         resolve({

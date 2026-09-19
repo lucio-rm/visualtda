@@ -112,5 +112,74 @@ describe('PythonExecutionService & Worker Protocol', () => {
     expect(evalResult.passed).toBe(false);
     expect(evalResult.runtimeError).toContain('SyntaxError');
   });
+
+  it('handles worker timeout cancellation and returns pedagogical error message', async () => {
+    const { runPythonTests } = await import('../src/runtime/pythonTestRunner');
+
+    const timeoutService = {
+      isSupported: true,
+      isReady: () => true,
+      initWorker: async () => true,
+      executePython: async () => {
+        return {
+          id: 'timeout-err',
+          type: 'run_result' as const,
+          success: false,
+          error: 'Tiempo de ejecución excedido (5000 ms). Se canceló la ejecución para prevenir un bucle infinito.',
+          executionTimeMs: 5000
+        };
+      }
+    } as unknown as PythonExecutionService;
+
+    const evalResult = await runPythonTests('n-queens', 'while True: pass', timeoutService);
+    expect(evalResult.passed).toBe(false);
+    expect(evalResult.runtimeError).toContain('Tiempo de ejecución excedido');
+  });
+
+  it('handles BaseException and sys.exit cleanly without crashing', async () => {
+    const { runPythonTests } = await import('../src/runtime/pythonTestRunner');
+
+    const sysExitService = {
+      isSupported: true,
+      isReady: () => true,
+      initWorker: async () => true,
+      executePython: async () => {
+        return {
+          id: 'sysexit-err',
+          type: 'run_result' as const,
+          success: false,
+          error: 'SystemExit: 1\nTraceback (most recent call last):\n  File "<string>", line 2, in <module>\nSystemExit: 1',
+          executionTimeMs: 4
+        };
+      }
+    } as unknown as PythonExecutionService;
+
+    const evalResult = await runPythonTests('n-queens', 'import sys; sys.exit(1)', sysExitService);
+    expect(evalResult.passed).toBe(false);
+    expect(evalResult.runtimeError).toContain('SystemExit');
+  });
+
+  it('handles pedagogical stdout quota truncation gracefully', async () => {
+    const { runPythonTests } = await import('../src/runtime/pythonTestRunner');
+
+    const largeStdoutService = {
+      isSupported: true,
+      isReady: () => true,
+      initWorker: async () => true,
+      executePython: async () => {
+        return {
+          id: 'stdout-trunc',
+          type: 'run_result' as const,
+          success: true,
+          result: [[0]],
+          stdout: 'A'.repeat(65536) + '\n... [Salida truncada: límite pedagógico de 64 KB alcanzado] ...',
+          executionTimeMs: 18
+        };
+      }
+    } as unknown as PythonExecutionService;
+
+    const evalResult = await runPythonTests('n-queens', 'print("A" * 100000); def resolver_n_reinas(n): return [[0]]', largeStdoutService);
+    expect(evalResult.stdout).toContain('Salida truncada: límite pedagógico de 64 KB alcanzado');
+  });
 });
 
