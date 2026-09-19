@@ -29,6 +29,8 @@ import { RoadAntennasVisualizer } from '../components/visualizers/RoadAntennasVi
 import { RoadAntennasPlayground } from '../components/visualizers/RoadAntennasPlayground';
 import { SubsetSumVisualizer } from '../components/visualizers/SubsetSumVisualizer';
 import { SubsetSumPlayground } from '../components/visualizers/SubsetSumPlayground';
+import { CoinChangeVisualizer } from '../components/visualizers/CoinChangeVisualizer';
+import { CoinChangePlayground } from '../components/visualizers/CoinChangePlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -628,6 +630,66 @@ const SUBSET_SUM_PSEUDOCODE = `ALGORITMO SubconjuntosQueSuman(numeros, objetivo)
 
 const SUBSET_SUM_CORRECTNESS = `Teorema de Correctitud de Backtracking con Podas: El algoritmo modela el espacio de 2^n subconjuntos como un árbol binario de decisiones (incluir o excluir cada elemento). Por ser números estrictamente positivos: (1) Invariante de exceso: si suma_actual + w_i > S, cualquier inclusión adicional en el subárbol solo aumentará la suma; por lo tanto, ninguna solución factible existe en ese subárbol (Poda segura). (2) Invariante de déficit: si suma_actual + sum_{k=i+1}^n w_k < S, incluso si se incluyeran todos los números restantes, la suma máxima alcanzable no llegará a S; ninguna solución factible es descartada (Poda segura). Al terminar la exploración, el conjunto de hojas no podadas contiene exactamente todas las soluciones válidas.`;
 
+// Coin Change (Dynamic Programming) Content
+const COIN_CHANGE_CANONICAL_PYTHON = `def cambio_monedas_minimo(monedas: list[int], objetivo: int) -> list[int]:
+    if objetivo <= 0 or not monedas:
+        return []
+
+    inf = float('inf')
+    dp = [inf] * (objetivo + 1)
+    eleccion = [-1] * (objetivo + 1)
+    dp[0] = 0
+
+    monedas_validas = sorted([c for c in monedas if c > 0])
+
+    for v in range(1, objetivo + 1):
+        for c in monedas_validas:
+            if c <= v:
+                costo = dp[v - c] + 1
+                if costo < dp[v]:
+                    dp[v] = costo
+                    eleccion[v] = c
+
+    if dp[objetivo] == inf:
+        return []
+
+    resultado = []
+    actual = objetivo
+    while actual > 0:
+        c = eleccion[actual]
+        resultado.append(c)
+        actual -= c
+
+    return sorted(resultado, reverse=True)`;
+
+const COIN_CHANGE_PSEUDOCODE = `ALGORITMO CambioMonedasMinimo(monedas, objetivo):
+    SI objetivo <= 0 O monedas está vacío:
+        RETORNAR []
+
+    dp ← Arreglo(objetivo + 1, Infinito)
+    eleccion ← Arreglo(objetivo + 1, -1)
+    dp[0] ← 0
+
+    PARA v ← 1 HASTA objetivo:
+        PARA CADA c EN monedas:
+            SI c <= v Y dp[v - c] + 1 < dp[v]:
+                dp[v] ← dp[v - c] + 1
+                eleccion[v] ← c
+
+    SI dp[objetivo] = Infinito:
+        RETORNAR []
+
+    resultado ← []
+    actual ← objetivo
+    MIENTRAS actual > 0:
+        c ← eleccion[actual]
+        resultado.Agregar(c)
+        actual ← actual - c
+
+    RETORNAR resultado`;
+
+const COIN_CHANGE_CORRECTNESS = `Principio de Optimalidad de Bellman y Subestructura Óptima: Para cualquier solución óptima que devuelva cambio para un monto V utilizando k monedas {c_1, c_2, ..., c_k}, si retiramos una moneda c_1, el conjunto restante {c_2, ..., c_k} debe ser forzosamente una solución óptima para el subproblema de dar cambio a V - c_1 con k - 1 monedas. Si existiese una solución para V - c_1 con menos monedas, podríamos sumarle c_1 y obtener una solución para V con menos de k monedas, contradiciendo la optimalidad original. Al probar todas las monedas válidas c <= V y tomar el mínimo, el algoritmo explora la totalidad del espacio de elecciones de manera exhaustiva en tiempo O(V · |C|) y garantiza la solución global mínima.`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -821,6 +883,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: SUBSET_SUM_CORRECTNESS,
         timeComplexity: 'O(2^n) [Peor caso] / O(n) espacio con podas por exceso y cota superior',
         spaceComplexity: 'O(n) [Profundidad del árbol de recursión]'
+      };
+    }
+
+    if (selectedExercise.id === 'coin-change-dp') {
+      return {
+        visualizerSlot: <CoinChangeVisualizer />,
+        discoverPlaygroundSlot: <CoinChangePlayground />,
+        canonicalPython: COIN_CHANGE_CANONICAL_PYTHON,
+        pseudocode: COIN_CHANGE_PSEUDOCODE,
+        correctnessExplanation: COIN_CHANGE_CORRECTNESS,
+        timeComplexity: 'O(V · |C|) [V = monto objetivo, |C| = número de denominaciones]',
+        spaceComplexity: 'O(V) [Tabla 1D dp y arreglo eleccion]'
       };
     }
 

@@ -37,6 +37,12 @@ describe('ExerciseRegistry', () => {
     expect(greedyExercises.map((e) => e.id)).toContain('interval-scheduling');
     expect(greedyExercises.map((e) => e.id)).toContain('knapsack-greedy');
     expect(greedyExercises.map((e) => e.id)).toContain('road-antennas-greedy');
+
+    const dpExercises = registry.getExercises('dynamic-programming');
+    expect(dpExercises.length).toBe(3);
+    expect(dpExercises.map((e) => e.id)).toContain('knapsack-dp');
+    expect(dpExercises.map((e) => e.id)).toContain('juan-el-vago');
+    expect(dpExercises.map((e) => e.id)).toContain('coin-change-dp');
   });
 
   it('retrieves specific exercise by ID', () => {

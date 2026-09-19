@@ -31,10 +31,11 @@
   - Randomized Algorithms Core: `randomized-fair-coin` (Guía Algoritmos Randomizados Ejercicio 3 ★, Von Neumann 1951 Las Vegas Bernoulli pair extraction, equiprobability proof, expected time $O(1)$)
   - Greedy Interval Covering Core: `road-antennas-greedy` (Guía Greedy Ejercicio 13 ★★, Antenas en una Ruta, Greedy Stays Ahead exchange argument, interactive highway sandbox and challenge mode)
   - Backtracking Pruning Core: `subset-sum-backtracking` (Guía Backtracking Ejercicio 11 ★, Subconjuntos que suman S con podas duales por exceso y déficit remanente, interactive builder, and search space reduction comparator)
-  - 118 unit tests passing 100% across 25 test files
+  - Dynamic Programming Core: `coin-change-dp` (Guía PD Ejercicio 8 ★★, Cambio de Monedas con cantidad mínima, principio de Bellman $O(V \cdot |C|)$, reconstrucción por punteros, contraejemplo canónico Greedy $[1, 3, 4]$ target $6$, y caja registradora interactiva)
+  - 130 unit tests passing 100% across 26 test files
 - **IN_PROGRESS**: Expanding next fundamental starred problem from curriculum
 - **BLOCKED**: None
-- **NEXT_TASK**: Dynamic Programming: Longest Common Subsequence (LCS / Subsecuencia Común Más Larga) or Weighted Interval Scheduling
+- **NEXT_TASK**: Divide & Conquer: Peak Finding (Búsqueda de Pico en arreglo $O(\log n)$) or Dynamic Programming: Longest Common Subsequence (LCS)
 - **OPEN_QUESTIONS**: Q-001, Q-002, Q-003, Q-004 (recorded in `IA/architect/questions.md`)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 118 tests)
-- **LAST_COMMIT**: `92c6d82`
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 130 tests)
+- **LAST_COMMIT**: Pending feat(dp) for coin-change-dp

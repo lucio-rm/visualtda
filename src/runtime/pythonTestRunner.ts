@@ -13,6 +13,7 @@ import { vertexCoverApproxValidator } from '../engine/algorithms/vertexCoverAppr
 import { randomizedFairCoinValidator } from '../engine/algorithms/randomizedFairCoinValidator';
 import { roadAntennasValidator } from '../engine/algorithms/roadAntennasValidator';
 import { subsetSumValidator } from '../engine/algorithms/subsetSumValidator';
+import { coinChangeValidator } from '../engine/algorithms/coinChangeValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -958,6 +959,57 @@ def __evaluar_monte_carlo__(p, n):
           },
           passed: val3.valid && out3.length === 1 && out3[0]?.[0] === 10,
           expected: '[[10]]',
+          actual: JSON.stringify(out3)
+        });
+        break;
+      }
+
+      case 'coin-change-dp': {
+        // Test 1: Classic counterexample [1, 3, 4], target 6 -> [3, 3] (length 2)
+        const t1Coins = [1, 3, 4];
+        const res1 = await service.executePython(code, 'cambio_monedas_minimo', [t1Coins, 6]);
+        const out1 = (Array.isArray(res1.result) ? res1.result : []) as number[];
+        const val1 = coinChangeValidator.validate({ coins: t1Coins, target: 6 }, out1);
+        results.push({
+          testId: 'py-coin-counterexample',
+          description: {
+            es: 'Contraejemplo clásico [1, 3, 4] con target 6: Óptimo = 2 monedas [3, 3] (rechaza Greedy [4, 1, 1]).',
+            en: 'Classic counterexample [1, 3, 4] target 6: Optimal = 2 coins [3, 3] (rejects Greedy [4, 1, 1]).'
+          },
+          passed: val1.valid && out1.length === 2,
+          expected: '2 monedas ([3, 3])',
+          actual: val1.valid ? `${out1.length} monedas (${JSON.stringify(out1)})` : val1.errors.join('; ')
+        });
+
+        // Test 2: Greedy trap II [1, 5, 6, 9], target 11 -> [6, 5] (length 2)
+        const t2Coins = [1, 5, 6, 9];
+        const res2 = await service.executePython(code, 'cambio_monedas_minimo', [t2Coins, 11]);
+        const out2 = (Array.isArray(res2.result) ? res2.result : []) as number[];
+        const val2 = coinChangeValidator.validate({ coins: t2Coins, target: 11 }, out2);
+        results.push({
+          testId: 'py-coin-greedy-trap',
+          description: {
+            es: 'Trampa Greedy [1, 5, 6, 9] con target 11: Óptimo = 2 monedas [6, 5] (Greedy daría 3 monedas [9, 1, 1]).',
+            en: 'Greedy trap [1, 5, 6, 9] target 11: Optimal = 2 coins [6, 5] (Greedy would give 3 coins [9, 1, 1]).'
+          },
+          passed: val2.valid && out2.length === 2,
+          expected: '2 monedas ([6, 5])',
+          actual: val2.valid ? `${out2.length} monedas (${JSON.stringify(out2)})` : val2.errors.join('; ')
+        });
+
+        // Test 3: Impossible target [2, 4], target 5 -> []
+        const t3Coins = [2, 4];
+        const res3 = await service.executePython(code, 'cambio_monedas_minimo', [t3Coins, 5]);
+        const out3 = (Array.isArray(res3.result) ? res3.result : []) as number[];
+        const val3 = coinChangeValidator.validate({ coins: t3Coins, target: 5 }, out3);
+        results.push({
+          testId: 'py-coin-impossible',
+          description: {
+            es: 'Cambio imposible [2, 4] con target 5: Retorna lista vacía [].',
+            en: 'Impossible change [2, 4] target 5: Returns empty list [].'
+          },
+          passed: val3.valid && out3.length === 0,
+          expected: '[]',
           actual: JSON.stringify(out3)
         });
         break;

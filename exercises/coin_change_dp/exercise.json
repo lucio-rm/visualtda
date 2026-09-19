@@ -1,0 +1,22 @@
+{
+  "id": "coin-change-dp",
+  "problemId": "coin-change",
+  "techniqueId": "dynamic-programming",
+  "categoryId": "dynamic-programming",
+  "order": 3,
+  "difficulty": 2,
+  "title": {
+    "es": "Cambio de Monedas (Coin Change)",
+    "en": "Coin Change (Minimum Coins)"
+  },
+  "subtitle": {
+    "es": "Dar cambio exacto minimizando la cantidad de monedas mediante Programación Dinámica vs contraejemplo Greedy",
+    "en": "Make exact change minimizing coin count via Dynamic Programming vs Greedy counterexample"
+  },
+  "supportedPhases": ["discover", "solve", "understand"],
+  "tags": ["dynamic-programming", "memoization", "reconstruction", "unbounded-knapsack", "greedy-counterexample", "fiuba"],
+  "parameters": {
+    "defaultCoins": [1, 3, 4],
+    "defaultTarget": 6
+  }
+}

@@ -221,6 +221,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['dynamic-programming', '1d-table', 'reconstruction', 'memoization', 'optimization']
   },
   {
+    id: 'coin-change-dp',
+    problemId: 'coin-change',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 3,
+    difficulty: 2,
+    title: { es: 'Cambio de Monedas (Coin Change)', en: 'Coin Change (Fewest Coins)' },
+    subtitle: {
+      es: 'Minimizar cantidad de monedas para dar cambio exacto con reconstrucción O(V·|C|) y contraejemplo Greedy',
+      en: 'Minimize number of coins to give exact change with O(V·|C|) reconstruction and greedy counterexample'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', '1d-table', 'reconstruction', 'memoization', 'counterexample', 'fiuba']
+  },
+  {
     id: 'max-flow',
     problemId: 'max-flow',
     techniqueId: 'network-flow',

@@ -13,6 +13,7 @@ import { vertexCoverApproxValidator } from './algorithms/vertexCoverApproxValida
 import { randomizedFairCoinValidator, simulateVonNeumann } from './algorithms/randomizedFairCoinValidator';
 import { roadAntennasValidator, solveRoadAntennas } from './algorithms/roadAntennasValidator';
 import { subsetSumValidator, solveSubsetSum } from './algorithms/subsetSumValidator';
+import { coinChangeValidator, solveCoinChange } from './algorithms/coinChangeValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1261,6 +1262,107 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Sol.length === 0,
         expected: '0 subconjuntos ([])',
         actual: `${t3Sol.length} subconjuntos`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'coin-change-dp': {
+    exerciseId: 'coin-change-dp',
+    entryFunction: 'cambio_monedas_minimo',
+    starterCode: `def cambio_monedas_minimo(monedas: list[int], objetivo: int) -> list[int]:
+    """
+    Dado un conjunto de denominaciones 'monedas' y un monto 'objetivo',
+    retorna la lista de monedas que suman exactamente el objetivo
+    utilizando la menor cantidad posible de monedas.
+    Si no es posible formar el monto, retorna [].
+
+    Ejemplo:
+      monedas = [1, 3, 4], objetivo = 6
+      Retorno: [3, 3]  (Greedy devolvería [4, 1, 1], lo cual es subóptimo)
+    """
+    if objetivo <= 0 or not monedas:
+        return []
+
+    # Escribe tu solución de Programación Dinámica con reconstrucción aquí:
+
+    return []
+`,
+    hints: [
+      {
+        es: 'Pista 1: Define dp[v] como la cantidad mínima de monedas necesarias para formar el monto v. Caso base: dp[0] = 0. Para todo v >= 1, inicializa dp[v] = infinito.',
+        en: 'Hint 1: Define dp[v] as the minimum number of coins needed to make amount v. Base case: dp[0] = 0. For all v >= 1, initialize dp[v] = infinity.'
+      },
+      {
+        es: 'Pista 2: Ecuación de Bellman: Para cada monto v de 1 a objetivo, y para cada moneda c <= v: dp[v] = min(dp[v], dp[v - c] + 1).',
+        en: 'Hint 2: Bellman recurrence: For each amount v from 1 to target, and for each coin c <= v: dp[v] = min(dp[v], dp[v - c] + 1).'
+      },
+      {
+        es: 'Pista 3: Para reconstruir qué monedas se usaron, guarda un arreglo eleccion[v] = c cada vez que encuentres un nuevo mínimo para dp[v]. Al final, itera hacia atrás desde objetivo restando eleccion[v].',
+        en: 'Hint 3: To reconstruct the coins used, store an array choice[v] = c whenever a new minimum is found for dp[v]. Then backtrack from target subtracting choice[v].'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasDp = code.includes('dp') || code.includes('min(') || code.includes('for ');
+      const hasRecon = code.includes('eleccion') || code.includes('choice') || code.includes('append') || code.includes('while');
+      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      // Test 1: Classic Counterexample [1, 3, 4], target 6 -> [3, 3]
+      const t1Coins = [1, 3, 4];
+      const t1Target = 6;
+      const t1Sol = solveCoinChange(t1Coins, t1Target);
+      const t1Val = coinChangeValidator.validate({ coins: t1Coins, target: t1Target }, t1Sol);
+
+      results.push({
+        testId: 'coin-counterexample-1-3-4',
+        description: {
+          es: 'Contraejemplo Clásico: [1, 3, 4] con objetivo 6. Debe dar [3, 3] (2 monedas) y no el subóptimo Greedy [4, 1, 1] (3 monedas).',
+          en: 'Classic Counterexample: [1, 3, 4] with target 6. Must return [3, 3] (2 coins), not Greedy [4, 1, 1] (3 coins).'
+        },
+        passed: passesHeuristic && t1Val.valid && t1Sol.length === 2,
+        expected: '2 monedas ([3, 3])',
+        actual: `${t1Sol.length} monedas ([${t1Sol.join(', ')}])`
+      });
+
+      // Test 2: Greedy trap II [1, 5, 6, 9], target 11 -> [6, 5]
+      const t2Coins = [1, 5, 6, 9];
+      const t2Target = 11;
+      const t2Sol = solveCoinChange(t2Coins, t2Target);
+      const t2Val = coinChangeValidator.validate({ coins: t2Coins, target: t2Target }, t2Sol);
+
+      results.push({
+        testId: 'coin-greedy-trap-11',
+        description: {
+          es: 'Trampa Greedy II: [1, 5, 6, 9] con objetivo 11. Debe dar [6, 5] (2 monedas) en vez de [9, 1, 1] (3 monedas).',
+          en: 'Greedy Trap II: [1, 5, 6, 9] with target 11. Must return [6, 5] (2 coins) instead of [9, 1, 1] (3 coins).'
+        },
+        passed: passesHeuristic && t2Val.valid && t2Sol.length === 2,
+        expected: '2 monedas ([6, 5])',
+        actual: `${t2Sol.length} monedas ([${t2Sol.join(', ')}])`
+      });
+
+      // Test 3: Impossible target
+      const t3Coins = [2, 4];
+      const t3Target = 5;
+      const t3Sol = solveCoinChange(t3Coins, t3Target);
+      const t3Val = coinChangeValidator.validate({ coins: t3Coins, target: t3Target }, t3Sol);
+
+      results.push({
+        testId: 'coin-impossible-target',
+        description: {
+          es: 'Cambio imposible: [2, 4] con objetivo 5 (debe retornar lista vacía []).',
+          en: 'Impossible change: [2, 4] with target 5 (must return empty list []).'
+        },
+        passed: passesHeuristic && t3Val.valid && t3Sol.length === 0,
+        expected: '0 monedas ([])',
+        actual: `${t3Sol.length} monedas`
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
