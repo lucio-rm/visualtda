@@ -10,18 +10,18 @@
 
 | Gate | ID | Category | Verification Command / Method | Minimum Passing Standard | Current Status |
 |------|----|----------|-------------------------------|---------------------------|----------------|
-| **G1** | `GATE-BUILD` | Build System | `npm run build` | Zero errors, static assets output to `dist/`, zero backend runtime | **PASS** (Clean static build in 1.1s) |
+| **G1** | `GATE-BUILD` | Build System | `npm run build` | Zero errors, static assets output to `dist/`, zero backend runtime | **PASS** (Clean static build in 1.1s, static `dist/`) |
 | **G2** | `GATE-TYPES` | Type Safety | `npm run typecheck` (`tsc --noEmit`) | Zero TypeScript errors with strict mode enabled (`noImplicitAny`, `strictNullChecks`) | **PASS** (0 errors) |
 | **G3** | `GATE-LINT` | Code Quality | `npm run lint` (`eslint .`) | Zero ESLint warnings or errors across all files | **PASS** (0 warnings/errors) |
-| **G4** | `GATE-UNIT-TESTS` | Unit Testing | `npm run test` (`vitest run`) | 100% of domain, validator, trace, and algorithm unit tests pass | **PASS** (184/184 tests pass) |
-| **G5** | `GATE-INTEG-TESTS` | Integration Testing | Automated suite (`tests/*.test.ts`) | Cross-component flow tests pass: phase switching, timeline scrubber, i18n | **PASS** (Phases, registry, timeline verified) |
-| **G6** | `GATE-BROWSER-E2E` | User Journey Testing | Integration user flows (`tests/userJourneys.test.ts`) | All 15 core user flows verified against UI state machine | **IN PROGRESS** (Phase D) |
-| **G7** | `GATE-A11Y` | Accessibility | Automated + manual audit | WCAG 2.1 AA compliant, reduced-motion supported, skip link present, semantic HTML | **PARTIALLY VERIFIED** (Reduced-motion & skip link added; SVG focus polish ongoing) |
-| **G8** | `GATE-SECURITY` | Security & Sandboxing | Code audit + `npm audit` | Zero unsafe DOM APIs (`dangerouslySetInnerHTML`, `eval`), Pyodide worker isolated, zero secrets | **PASS** (Zero XSS vectors, worker globals hardened) |
-| **G9** | `GATE-PERF` | Performance | Bundle size & startup audit | Main JS bundle < 500 KB, zero Pyodide loading during initial catalog/discover phases | **IN PROGRESS** (Code splitting in Phase F) |
-| **G10** | `GATE-PY-RELIABILITY`| Python Execution | Watchdog & DoS tests | 5000ms timeout terminates stuck worker, 64KB stdout cap, graceful error handling | **IN PROGRESS** (Hardened in Phase B) |
-| **G11** | `GATE-CORRECTNESS` | Educational Correctness | Independent solver tests | Solutions verified against independent combinatorial/brute-force oracles and formal invariants | **IN PROGRESS** (Oracles in Phase C) |
-| **G12** | `GATE-DEPLOY-REPRO` | Deployment Reproducibility | CI pipeline run | Deterministic static build runs identically in clean Linux container with Node 24 | **PASS** (GitHub Actions CI green) |
+| **G4** | `GATE-UNIT-TESTS` | Unit Testing | `npm run test` (`vitest run`) | 100% of domain, validator, trace, and algorithm unit tests pass | **PASS** (33 test files, 215/215 tests pass) |
+| **G5** | `GATE-INTEG-TESTS` | Integration Testing | Automated suite (`tests/*.test.ts`) | Cross-component flow tests pass: phase switching, timeline scrubber, i18n | **PASS** (Phases, registry, timeline, i18n verified) |
+| **G6** | `GATE-BROWSER-E2E` | User Journey Testing | Integration user flows (`tests/userJourneys.test.tsx`) | All 15 core user flows verified against UI state machine | **PASS** (15/15 user journeys pass in happy-dom) |
+| **G7** | `GATE-A11Y` | Accessibility | Automated + manual audit | WCAG 2.1 AA compliant, reduced-motion supported, skip link present, semantic HTML | **PASS** (Reduced-motion, skip link, session persistence, SVG keyboard focus) |
+| **G8** | `GATE-SECURITY` | Security & Sandboxing | Code audit + `npm audit` | Zero unsafe DOM APIs (`dangerouslySetInnerHTML`, `eval`), Pyodide worker isolated, zero secrets | **PASS** (Zero XSS vectors, worker sandboxed, zero secrets) |
+| **G9** | `GATE-PERF` | Performance | Bundle size & startup audit | Main JS bundle < 500 KB, zero Pyodide loading during initial catalog/discover phases | **PASS** (Chunks code-split via manualChunks: all chunks < 230 KB) |
+| **G10** | `GATE-PY-RELIABILITY`| Python Execution | Watchdog & DoS tests | 5000ms timeout terminates stuck worker, 64KB stdout cap, graceful error handling | **PASS** (5s watchdog, 64KB stdout limit, BaseException catching, tested in `pythonExecution.test.ts`) |
+| **G11** | `GATE-CORRECTNESS` | Educational Correctness | Independent solver tests | Solutions verified against independent combinatorial/brute-force oracles and formal invariants | **PASS** (Independent combinatorial oracles in `referenceSolvers.ts`, adversarial tests, and `curriculum-audit.md`) |
+| **G12** | `GATE-DEPLOY-REPRO` | Deployment Reproducibility | CI pipeline run | Deterministic static build runs identically in clean Linux container with Node 24 | **PASS** (GitHub Actions CI workflow configured & clean static output) |
 
 ---
 

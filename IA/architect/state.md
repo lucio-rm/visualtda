@@ -1,33 +1,32 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: PHASE-AUDIT-AND-HARDENING (Phases A through H before adding any new exercises)
-- **CURRENT_TASK**: Production Hardening & Educational Reliability Verification
+- **CURRENT_PHASE**: PHASE-H-COMPLETE (Hardening & Academic Audit Complete, Quality Gates G1-G12 Verified)
+- **CURRENT_TASK**: Ready for Phase I (Next Fundamental Pedagogical Exercise Evaluation)
 - **BASELINE_COMMIT**: `f58a453`
 - **EXPLICIT_COMPONENT_STATES**:
-  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6, React 19, TS 5.7, Vitest 3.0.6, ESLint 9 — 100% PASS)
-  - **Static Bundle Generation**: [VERIFIED] (`dist/` static files generated, zero backend runtime)
-  - **Exercise Registry & Models**: [VERIFIED] (20 exercises cataloged with domain metadata)
-  - **Trace Event Protocol**: [VERIFIED] (Deterministic step-by-step playback, bidirectional scrub)
-  - **TypeScript Validators**: [VERIFIED] (20 validators with descriptive feedback)
-  - **Pyodide Worker Security**: [PARTIALLY VERIFIED] (Watchdog 5s active, code injection mitigated via globals; DoS stdout cap & BaseException handling undergoing hardening)
-  - **Independent Verification Oracles**: [UNVERIFIED] (Current tests use hardcoded values; brute-force reference solvers needed for optimization problems)
-  - **Browser E2E / User Journeys**: [UNVERIFIED] (No browser-level integration tests currently running in CI)
-  - **Accessibility**: [PARTIALLY VERIFIED] (Skip-to-content link and reduced motion media query active; keyboard focus on SVGs needs completion)
-  - **Performance / Code Splitting**: [PARTIALLY VERIFIED] (Single JS bundle is 717 KB; dynamic imports needed to meet <500 KB target)
-  - **Deployment Scalability**: [VERIFIED] (Static hosting scales infinitely on CDN; Pyodide caching required for classroom scale)
+  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6, React 19, TS 5.7, Vitest 3.2.7, ESLint 9 — 100% PASS across 33 test files, 215 tests)
+  - **Static Bundle Generation**: [VERIFIED] (`dist/` static assets output, zero backend runtime, all chunks < 230 KB)
+  - **Exercise Registry & Models**: [VERIFIED] (20 exercises cataloged with domain metadata across 9 paradigms)
+  - **Trace Event Protocol**: [VERIFIED] (Deterministic step-by-step playback, bidirectional scrub, keyboard shortcuts)
+  - **TypeScript Validators**: [VERIFIED] (20 validators with descriptive feedback and independent combinatorial oracle verification)
+  - **Pyodide Worker Security**: [VERIFIED] (Isolated Web Worker, 5000ms watchdog, 64 KB stdout limit, BaseException catching, worker error cleanup)
+  - **Independent Verification Oracles**: [VERIFIED] (Exhaustive combinatorial reference solvers in `tests/oracles/referenceSolvers.ts`, 13 property tests in `tests/adversarialAndOracles.test.ts`)
+  - **Browser E2E / User Journeys**: [VERIFIED] (15 core user journey integration tests passing 100% in `tests/userJourneys.test.tsx`)
+  - **Accessibility & UX**: [VERIFIED] (Skip-to-content, prefers-reduced-motion, student code persistence in `sessionStorage`, keyboard navigation with `:focus-visible` on visualizers)
+  - **Performance & Code Splitting**: [VERIFIED] (`vite.config.ts` manualChunks split into vendor-react, visualizers, and algorithm-engines; zero chunk warnings)
+  - **Architecture Decoupling**: [VERIFIED] (`src/app/App.tsx` de-bloated from 1,347 lines to 87 lines; visualizers and constants centralized in `src/engine/exerciseViewRegistry.tsx`)
+  - **Curriculum Academic Alignment**: [VERIFIED] (`docs/curriculum-audit.md` completed; all 20 exercises audited against Kleinberg & Tardos, CLRS, and FIUBA)
 - **COMPLETED**:
-  - Initial repository audit & AGENTS.md rules established
-  - P0–P14 Vertical slices implemented across 20 algorithms
-  - Bilingual internationalization (ES/EN) and Theme toggle
-  - Global trace keyboard shortcuts (`ArrowLeft`, `ArrowRight`, `Space`/`k`, `r`)
-  - Phase A Comprehensive Audit (`IA/architect/audit-mvp.md` with 15 categories)
-  - Security Specification (`docs/security.md`)
-  - Quality Gates Specification (`docs/quality-gates.md`, G1 through G12)
-  - Architectural Decisions recorded (`IA/architect/questions.md`, ADR-001 through ADR-004)
-  - Pyodide code injection mitigation via globals and isolated execution namespace
-  - Accessibility foundation: `prefers-reduced-motion` and `#main-content` skip link
-- **IN_PROGRESS**: Phase B (Pyodide DoS and Worker error resilience hardening)
+  - Phase A: Comprehensive Architecture, Security & Testing Audit (`IA/architect/audit-mvp.md`, `docs/security.md`, `docs/quality-gates.md`, `IA/architect/questions.md`)
+  - Phase B: Pyodide Worker Security Hardening (64 KB stdout limit, BaseException catching, pending callback cleanup on worker crash, tested in `tests/pythonExecution.test.ts`)
+  - Phase C: Independent Verification Oracles & Property Testing (brute-force combinatorial solvers for small instances, 13 property tests in `tests/adversarialAndOracles.test.ts`)
+  - Phase D: Browser Integration / User Journey Verification (15 core user flows tested in `tests/userJourneys.test.tsx`)
+  - Phase E: UX & Accessibility Polish (`sessionStorage` persistence for student code, keyboard navigation & focus rings on visualizers)
+  - Phase F: Performance & Code Splitting (`vite.config.ts` manualChunks configuration, chunks < 230 KB)
+  - Phase G: Architecture Decoupling (`src/engine/exerciseViewRegistry.tsx` eliminating God File `App.tsx` if-else ladder and duplicate constants)
+  - Phase H: Curriculum Academic Audit (`docs/curriculum-audit.md` with complete 20-exercise analysis against KT/CLRS/FIUBA)
+- **IN_PROGRESS**: Ready for Phase I (Next fundamental exercise selection)
 - **BLOCKED**: None
-- **NEXT_TASK**: Implement stdout byte limit, BaseException catching, and worker error cleanup in `pyodideWorker.ts` and `pythonExecutionService.ts`
-- **OPEN_QUESTIONS**: All answered (ADR-001 through ADR-004 adopted)
-- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm run test && npm run build` (All PASS, 184 tests)
+- **NEXT_TASK**: Evaluate Phase I: Implementation of next starred foundational problem (e.g. Backtracking: Graph Coloring or Divide & Conquer: Closest Pair of Points)
+- **OPEN_QUESTIONS**: None (ADR-001 through ADR-004 implemented and verified)
+- **LAST_VERIFIED**: `npm run lint && npm run typecheck && npm test && npm run build` (All PASS: 0 lint errors, 0 typecheck errors, 33/33 test files, 215/215 tests pass, static build clean)
