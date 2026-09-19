@@ -36,6 +36,8 @@ import { InversionCountingVisualizer } from '../components/visualizers/Inversion
 import { InversionCountingPlayground } from '../components/visualizers/InversionCountingPlayground';
 import { HuffmanVisualizer } from '../components/visualizers/HuffmanVisualizer';
 import { HuffmanPlayground } from '../components/visualizers/HuffmanPlayground';
+import { GraphColoringVisualizer } from '../components/visualizers/GraphColoringVisualizer';
+import { GraphColoringPlayground } from '../components/visualizers/GraphColoringPlayground';
 
 export interface ExerciseViewConfig {
   visualizerSlot?: React.ReactNode;
@@ -626,6 +628,67 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
     correctnessExplanation: `Optimalidad de Huffman CLRS 16.3 / K&T 4.8: Los dos símbolos de menor frecuencia son hermanos en la máxima profundidad. Fusionarlos vorazmente en un meta-nodo preserva la subestructura óptima.`,
     timeComplexity: 'O(k log k) [k fusiones voraces con Min-Heap priority queue]',
     spaceComplexity: 'O(k) [Árbol binario de prefijo y tabla de códigos]'
+  },
+
+  'graph-coloring-backtracking': {
+    visualizerSlot: <GraphColoringVisualizer />,
+    discoverPlaygroundSlot: <GraphColoringPlayground />,
+    canonicalPython: `def colorear_grafo(grafo: dict[str, list[str]], k: int) -> dict[str, int] | None:
+    vertices = list(grafo.keys())
+    colores = {}
+
+    def es_seguro(v: str, c: int) -> bool:
+        for vecino in grafo.get(v, []):
+            if colores.get(vecino) == c:
+                return False
+        return True
+
+    def backtrack(idx: int) -> bool:
+        if idx == len(vertices):
+            return True
+
+        v = vertices[idx]
+        for c in range(1, k + 1):
+            if es_seguro(v, c):
+                colores[v] = c
+                if backtrack(idx + 1):
+                    return True
+                del colores[v]  # Backtracking / desasignar
+
+        return False
+
+    return colores if backtrack(0) else None`,
+    pseudocode: `ALGORITMO ColorearGrafo(grafo, k):
+    vertices ← Claves(grafo)
+    colores ← MapaVacio()
+
+    FUNCION EsSeguro(v, c):
+        PARA CADA vecino EN grafo[v]:
+            SI colores[vecino] = c:
+                RETORNAR Falso
+        RETORNAR Verdadero
+
+    FUNCION Backtrack(idx):
+        SI idx = Longitud(vertices):
+            RETORNAR Verdadero
+
+        v ← vertices[idx]
+        PARA c DESDE 1 HASTA k:
+            SI EsSeguro(v, c):
+                colores[v] ← c
+                SI Backtrack(idx + 1):
+                    RETORNAR Verdadero
+                Eliminar(colores, v)  // Deshacer elección
+
+        RETORNAR Falso
+
+    SI Backtrack(0):
+        RETORNAR colores
+    SINO:
+        RETORNAR Nulo`,
+    correctnessExplanation: `Optimalidad y Poda en Coloreo de Grafos (Karp 1972 / K&T 8.4): En cada nivel de recursión idx, los primeros idx vértices están coloreados con valores válidos sin conflicto. La función EsSeguro poda inmediatamente cualquier rama que intente asignar a un vértice el mismo color que uno de sus vecinos adyacentes, evitando la exploración de los k^(|V|-idx) estados descendientes. Si la recursión finaliza sin éxito, se demuestra formalmente que χ(G) > k.`,
+    timeComplexity: 'O(k^|V|) [Peor caso exhaustivo] / Bounded Search Tree con poda temprana',
+    spaceComplexity: 'O(|V|) [Pila de llamadas de recursión y asignación de colores]'
   }
 };
 

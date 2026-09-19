@@ -19,6 +19,7 @@ import { lcsValidator, solveLcs } from './algorithms/lcsValidator';
 import { weightedIntervalValidator, solveWeightedIntervals, WeightedInterval } from './algorithms/weightedIntervalValidator';
 import { inversionCountingValidator, countInversions } from './algorithms/inversionCountingValidator';
 import { huffmanValidator, generateHuffmanCodes } from './algorithms/huffmanValidator';
+import { graphColoringValidator, solveGraphColoring } from './algorithms/graphColoringValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1860,6 +1861,117 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
         passed: passesHeuristic && t3Val.valid,
         expected: 'Códigos de 1 bit {"0": "0", "1": "1"} o inverso',
         actual: JSON.stringify(t3Optimal)
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+
+  'graph-coloring-backtracking': {
+    exerciseId: 'graph-coloring-backtracking',
+    entryFunction: 'colorear_grafo',
+    starterCode: `def colorear_grafo(grafo: dict[str, list[str]], k: int) -> dict[str, int] | None:
+    """
+    Determina si existe un k-coloreo válido para el grafo no dirigido.
+    Retorna un diccionario {vértice: color} con colores entre 1 y k,
+    o None si no es posible colorear el grafo con k colores.
+
+    Ejemplo:
+    grafo = {"A": ["B"], "B": ["A"]}
+    k = 2
+    -> {"A": 1, "B": 2}
+    """
+    vertices = list(grafo.keys())
+    colores = {}
+
+    # Escribe tu algoritmo de backtracking con podas aquí
+
+    return None
+`,
+    hints: [
+      {
+        es: 'Pista 1: Define una función auxiliar recursiva backtrack(indice). Si indice == len(vertices), has coloreado todos los vértices exitosamente.',
+        en: 'Hint 1: Define a recursive helper backtrack(index). If index == len(vertices), all vertices are colored successfully.'
+      },
+      {
+        es: 'Pista 2: Para podar la búsqueda tempranamente, define es_seguro(vertice, color) que verifique si algún vecino adyacente ya tiene asignado ese mismo color.',
+        en: 'Hint 2: For early pruning, define is_safe(vertex, color) checking if any adjacent neighbor already has that same color assigned.'
+      },
+      {
+        es: 'Pista 3: Itera colores c del 1 al k. Si es seguro, asigna colores[v] = c y recursa a indice + 1. Si falla, desasigna (del colores[v]) antes de probar el siguiente color.',
+        en: 'Hint 3: Iterate colors c from 1 to k. If safe, assign colors[v] = c and recurse to index + 1. If it fails, undo (del colors[v]) before trying the next color.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasStructure = code.includes('backtrack') || code.includes('colorear_grafo') || code.includes('def ');
+      const hasPruning = code.includes('in ') || code.includes('colores') || code.includes('grafo');
+
+      // Test 1: Bipartite path A - B - C with k=2
+      const g1 = {
+        vertices: ['A', 'B', 'C'],
+        edges: [['A', 'B'], ['B', 'C']] as [string, string][],
+        k: 2
+      };
+      const sol1 = solveGraphColoring(g1);
+      const val1 = graphColoringValidator.validate(g1, sol1);
+      const pass1 = hasStructure && hasPruning && val1.valid && !code.includes('pass\n');
+      results.push({
+        testId: 'gc-bipartite-k2',
+        description: {
+          es: 'Camino bipartito A-B-C con k=2: debe encontrar un 2-coloreo válido.',
+          en: 'Bipartite path A-B-C with k=2: must find a valid 2-coloring.'
+        },
+        passed: pass1,
+        expected: '2-coloreo sin conflictos en aristas',
+        actual: pass1 ? JSON.stringify(sol1) : 'Sin solución o conflicto detectado'
+      });
+
+      // Test 2: Triangle K3 with k=2 (unsolvable)
+      const g2 = {
+        vertices: ['1', '2', '3'],
+        edges: [['1', '2'], ['2', '3'], ['3', '1']] as [string, string][],
+        k: 2
+      };
+      const sol2 = solveGraphColoring(g2); // null
+      const val2 = graphColoringValidator.validate(g2, sol2);
+      results.push({
+        testId: 'gc-triangle-uncolorable',
+        description: {
+          es: 'Triángulo K3 con k=2: imposible (ciclo impar), debe retornar None.',
+          en: 'Triangle K3 with k=2: impossible (odd cycle), must return None.'
+        },
+        passed: pass1 && val2.valid,
+        expected: 'None',
+        actual: sol2 === null ? 'None' : 'Retornó asignación inválida'
+      });
+
+      // Test 3: Wheel graph with k=3
+      const g3 = {
+        vertices: ['A', 'B', 'C', 'D', 'E'],
+        edges: [
+          ['A', 'B'], ['B', 'C'], ['C', 'D'], ['D', 'E'], ['E', 'A'],
+          ['A', 'C'], ['A', 'D']
+        ] as [string, string][],
+        k: 3
+      };
+      const sol3 = solveGraphColoring(g3);
+      const val3 = graphColoringValidator.validate(g3, sol3);
+      results.push({
+        testId: 'gc-wheel-k3',
+        description: {
+          es: 'Grafo de 5 vértices con cuerdas y k=3: debe hallar un 3-coloreo válido.',
+          en: '5-vertex graph with chords and k=3: must find a valid 3-coloring.'
+        },
+        passed: pass1 && val3.valid,
+        expected: 'Asignación válida con 3 colores',
+        actual: pass1 && val3.valid ? JSON.stringify(sol3) : 'Error'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

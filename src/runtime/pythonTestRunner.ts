@@ -19,6 +19,7 @@ import { lcsValidator } from '../engine/algorithms/lcsValidator';
 import { weightedIntervalValidator, WeightedInterval } from '../engine/algorithms/weightedIntervalValidator';
 import { inversionCountingValidator } from '../engine/algorithms/inversionCountingValidator';
 import { huffmanValidator } from '../engine/algorithms/huffmanValidator';
+import { graphColoringValidator } from '../engine/algorithms/graphColoringValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1318,6 +1319,109 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid,
           expected: 'Códigos de 1 bit {"0": "0", "1": "1"} o inverso',
           actual: JSON.stringify(out3)
+        });
+        break;
+      }
+
+      case 'graph-coloring-backtracking': {
+        // Test 1: Bipartite path A - B - C with k=2
+        const g1 = {
+          vertices: ['A', 'B', 'C'],
+          edges: [['A', 'B'], ['B', 'C']] as [string, string][],
+          k: 2
+        };
+        const pyG1: Record<string, string[]> = {
+          A: ['B'],
+          B: ['A', 'C'],
+          C: ['B']
+        };
+        const res1 = await service.executePython(code, 'colorear_grafo', [pyG1, 2]);
+        if (res1.stdout) capturedStdout += res1.stdout + '\n';
+        if (!res1.success) {
+          return {
+            passed: false,
+            results: [{
+              testId: 'py-gc-exec-fail',
+              description: { es: 'Ejecución Python de colorear_grafo', en: 'Python execution of colorear_grafo' },
+              passed: false,
+              message: res1.error || 'Error durante la ejecución'
+            }],
+            totalPassed: 0,
+            totalTests: 1,
+            stdout: capturedStdout.trim(),
+            runtimeError: res1.error,
+            executionTimeMs: res1.executionTimeMs
+          };
+        }
+
+        const out1 = res1.result as Record<string, number> | null;
+        const val1 = graphColoringValidator.validate(g1, out1);
+        results.push({
+          testId: 'py-gc-bipartite',
+          description: {
+            es: 'Camino A-B-C con k=2: Retorna un 2-coloreo válido sin conflictos en aristas.',
+            en: 'Path A-B-C with k=2: Returns a valid 2-coloring with no edge conflicts.'
+          },
+          passed: val1.valid,
+          expected: 'Diccionario con 2 colores válidos',
+          actual: val1.valid ? JSON.stringify(out1) : (val1.message.es || 'Inválido')
+        });
+
+        // Test 2: Triangle K3 with k=2 (must return None)
+        const g2 = {
+          vertices: ['1', '2', '3'],
+          edges: [['1', '2'], ['2', '3'], ['3', '1']] as [string, string][],
+          k: 2
+        };
+        const pyG2: Record<string, string[]> = {
+          '1': ['2', '3'],
+          '2': ['1', '3'],
+          '3': ['1', '2']
+        };
+        const res2 = await service.executePython(code, 'colorear_grafo', [pyG2, 2]);
+        if (res2.stdout) capturedStdout += res2.stdout + '\n';
+        const out2 = res2.result as Record<string, number> | null;
+        const val2 = graphColoringValidator.validate(g2, out2);
+        results.push({
+          testId: 'py-gc-triangle-none',
+          description: {
+            es: 'Triángulo K3 con k=2: Grafo impar no admite 2-coloreo; debe retornar None.',
+            en: 'Triangle K3 with k=2: Odd graph does not admit 2-coloring; must return None.'
+          },
+          passed: val2.valid && (out2 === null || out2 === undefined),
+          expected: 'None',
+          actual: out2 === null || out2 === undefined ? 'None' : JSON.stringify(out2)
+        });
+
+        // Test 3: Wheel graph with k=3
+        const g3 = {
+          vertices: ['A', 'B', 'C', 'D', 'E'],
+          edges: [
+            ['A', 'B'], ['B', 'C'], ['C', 'D'], ['D', 'E'], ['E', 'A'],
+            ['A', 'C'], ['A', 'D']
+          ] as [string, string][],
+          k: 3
+        };
+        const pyG3: Record<string, string[]> = {
+          A: ['B', 'E', 'C', 'D'],
+          B: ['A', 'C'],
+          C: ['B', 'D', 'A'],
+          D: ['C', 'E', 'A'],
+          E: ['D', 'A']
+        };
+        const res3 = await service.executePython(code, 'colorear_grafo', [pyG3, 3]);
+        if (res3.stdout) capturedStdout += res3.stdout + '\n';
+        const out3 = res3.result as Record<string, number> | null;
+        const val3 = graphColoringValidator.validate(g3, out3);
+        results.push({
+          testId: 'py-gc-wheel-k3',
+          description: {
+            es: 'Grafo rueda con cuerdas y k=3: Encuentra una asignación válida de 3 colores.',
+            en: 'Wheel graph with chords and k=3: Finds a valid 3-coloring assignment.'
+          },
+          passed: val3.valid,
+          expected: 'Asignación de 3 colores válida',
+          actual: val3.valid ? JSON.stringify(out3) : (val3.message.es || 'Inválido')
         });
         break;
       }

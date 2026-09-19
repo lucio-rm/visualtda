@@ -10,7 +10,8 @@ describe('ExerciseSolveContent Repository', () => {
     'merge-sort',
     'max-flow',
     'vertex-cover-reduction',
-    'vertex-cover-approx'
+    'vertex-cover-approx',
+    'graph-coloring-backtracking'
   ];
 
   it('provides dedicated solve content for all core registered exercises', () => {
@@ -99,6 +100,33 @@ describe('ExerciseSolveContent Repository', () => {
                 cobertura.add(u)
                 cobertura.add(v)
         return sorted(list(cobertura)), matching
+    `;
+    const workingRes = await content.runTests(workingCode);
+    expect(workingRes.passed).toBe(true);
+    expect(workingRes.totalPassed).toBe(workingRes.totalTests);
+  });
+
+  it('evaluates passing vs incomplete code on graph-coloring-backtracking', async () => {
+    const content = EXERCISE_SOLVE_CONTENT['graph-coloring-backtracking'];
+    const incompleteRes = await content.runTests('def colorear_grafo(grafo, k):\n    pass\n');
+    expect(incompleteRes.passed).toBe(false);
+
+    const workingCode = `
+    def colorear_grafo(grafo, k):
+        vertices = list(grafo.keys())
+        colores = {}
+        def es_seguro(v, c):
+            return all(colores.get(vecino) != c for vecino in grafo.get(v, []))
+        def backtrack(idx):
+            if idx == len(vertices): return True
+            v = vertices[idx]
+            for c in range(1, k + 1):
+                if es_seguro(v, c):
+                    colores[v] = c
+                    if backtrack(idx + 1): return True
+                    del colores[v]
+            return False
+        return colores if backtrack(0) else None
     `;
     const workingRes = await content.runTests(workingCode);
     expect(workingRes.passed).toBe(true);

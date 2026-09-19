@@ -273,3 +273,38 @@ export function bruteForceMinVertexCover(
 
   return { minSize, cover: bestCover };
 }
+
+// ─── 9. Graph k-Coloring Brute-Force Oracle ─────────────────────────────────
+export function bruteForceGraphColoring(
+  vertices: string[],
+  edges: [string, string][],
+  k: number
+): Record<string, number> | null {
+  const n = vertices.length;
+  const total = Math.pow(k, n);
+
+  for (let config = 0; config < total; config++) {
+    const coloring: Record<string, number> = {};
+    let temp = config;
+    for (let i = 0; i < n; i++) {
+      coloring[vertices[i]] = (temp % k) + 1;
+      temp = Math.floor(temp / k);
+    }
+
+    // Check edge conflicts
+    let conflict = false;
+    for (const [u, v] of edges) {
+      if (coloring[u] === coloring[v]) {
+        conflict = true;
+        break;
+      }
+    }
+
+    if (!conflict) {
+      return coloring;
+    }
+  }
+
+  return null;
+}
+
