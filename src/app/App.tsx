@@ -39,6 +39,8 @@ import { WeightedIntervalVisualizer } from '../components/visualizers/WeightedIn
 import { WeightedIntervalPlayground } from '../components/visualizers/WeightedIntervalPlayground';
 import { InversionCountingVisualizer } from '../components/visualizers/InversionCountingVisualizer';
 import { InversionCountingPlayground } from '../components/visualizers/InversionCountingPlayground';
+import { HuffmanVisualizer } from '../components/visualizers/HuffmanVisualizer';
+import { HuffmanPlayground } from '../components/visualizers/HuffmanPlayground';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import './App.css';
 
@@ -949,6 +951,72 @@ PROCEDIMIENTO IntercalarYContar(izq, der):
 
 const INVERSION_COUNTING_CORRECTNESS = `Teorema de Partición Disjunta de Inversiones (Kleinberg & Tardos 5.3 / CLRS 2-4): Todo par de índices (i, j) con i < j pertenece exactamente a uno de tres conjuntos disjuntos: (1) i, j < medio (inversión interna en mitad izquierda), (2) i, j >= medio (inversión interna en mitad derecha), o (3) i < medio <= j (inversión cruzada / split inversion). Por hipótesis inductiva, las llamadas recursivas cuentan exhaustivamente todas las inversiones de tipo (1) y (2). En la intercalación, dado que izq y der están ordenados, cuando der[j] < izq[i], se cumple der[j] < izq[k] para todo k >= i por transitividad. Por tanto, sumar exactamente len(izq) - i en ese instante cuenta de forma biunívoca todas las inversiones cruzadas en las que participa der[j]. Por el Teorema Maestro, T(n) = 2T(n/2) + O(n) = Theta(n log n).`;
 
+// Huffman Coding Content
+const HUFFMAN_CANONICAL_PYTHON = `import heapq
+
+def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
+    if not frecuencias:
+        return {}
+
+    if len(frecuencias) == 1:
+        unico = next(iter(frecuencias))
+        return {unico: '0'}
+
+    heap = []
+    contador = 0
+    for char, freq in frecuencias.items():
+        heapq.heappush(heap, (freq, contador, char, None, None))
+        contador += 1
+
+    while len(heap) > 1:
+        freq1, _, char1, izq1, der1 = heapq.heappop(heap)
+        freq2, _, char2, izq2, der2 = heapq.heappop(heap)
+
+        nodo_izq = (freq1, char1, izq1, der1)
+        nodo_der = (freq2, char2, izq2, der2)
+        padre = (freq1 + freq2, contador, None, nodo_izq, nodo_der)
+        heapq.heappush(heap, padre)
+        contador += 1
+
+    raiz = heapq.heappop(heap)
+    codigos: dict[str, str] = {}
+
+    def asignar(nodo, prefijo: str):
+        char = nodo[2] if len(nodo) == 5 else nodo[1]
+        izq = nodo[3] if len(nodo) == 5 else nodo[2]
+        der = nodo[4] if len(nodo) == 5 else nodo[3]
+        if char is not None:
+            codigos[char] = prefijo
+            return
+        if izq is not None:
+            asignar(izq, prefijo + '0')
+        if der is not None:
+            asignar(der, prefijo + '1')
+
+    asignar(raiz, '')
+    return codigos`;
+
+const HUFFMAN_PSEUDOCODE = `ALGORITMO CodificarHuffman(frecuencias):
+    SI frecuencias ESTÁ VACÍO: RETORNAR {}
+    SI Longitud(frecuencias) = 1: RETORNAR { Primer(frecuencias): "0" }
+
+    Q ← MinHeapVacio()
+    PARA CADA (c, f) EN frecuencias:
+        Q.Insertar(prioridad = f, valor = NodoHoja(c, f))
+
+    MIENTRAS Q.Tamaño() > 1:
+        izq ← Q.ExtraerMinimo()
+        der ← Q.ExtraerMinimo()
+        padre ← CrearPadre(izq, der, freq = izq.freq + der.freq)
+        Q.Insertar(prioridad = padre.freq, valor = padre)
+
+    raiz ← Q.ExtraerMinimo()
+    codigos ← {}
+    RecorrerDFS(raiz, prefijo = "", codigos)
+    RETORNAR codigos`;
+
+const HUFFMAN_CORRECTNESS = `Teorema de Optimalidad de Huffman (CLRS 16.3 / Kleinberg & Tardos 4.8): Sean x e y dos símbolos del alfabeto C con las frecuencias más bajas. Existe un árbol binario de códigos de prefijo óptimo T' en el que x e y son hermanos en el nivel de profundidad máxima. Por el argumento de intercambio, si un árbol óptimo T asigna x e y a posiciones menos profundas que dos hermanos a y b, intercambiar x con a e y con b reduce o mantiene el costo total B(T) = sum f(c)*d(c), dado que (f(a) - f(x))*(d(a) - d(x)) >= 0. Por subestructura óptima, reemplazar x e y por un meta-símbolo z con f(z) = f(x) + f(y) preserva B(T) = B(T') + f(x) + f(y). Por inducción sobre k = |C|, el algoritmo voraz de Huffman construye un árbol estrictamente óptimo en O(k log k).`;
+
 const AppContent: React.FC = () => {
   const { t, dict } = useLanguage();
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -1202,6 +1270,18 @@ const AppContent: React.FC = () => {
         correctnessExplanation: INVERSION_COUNTING_CORRECTNESS,
         timeComplexity: 'O(n log n) [Teorema Maestro T(n) = 2T(n/2) + O(n)]',
         spaceComplexity: 'O(n) [Arreglos auxiliares de mezcla]'
+      };
+    }
+
+    if (selectedExercise.id === 'huffman-coding-greedy') {
+      return {
+        visualizerSlot: <HuffmanVisualizer />,
+        discoverPlaygroundSlot: <HuffmanPlayground />,
+        canonicalPython: HUFFMAN_CANONICAL_PYTHON,
+        pseudocode: HUFFMAN_PSEUDOCODE,
+        correctnessExplanation: HUFFMAN_CORRECTNESS,
+        timeComplexity: 'O(k log k) [k fusiones voraces con Min-Heap priority queue]',
+        spaceComplexity: 'O(k) [Árbol binario de prefijo y tabla de códigos]'
       };
     }
 

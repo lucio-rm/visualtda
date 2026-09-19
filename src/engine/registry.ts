@@ -221,6 +221,21 @@ export const EXERCISES: ExerciseMetadata[] = [
     tags: ['greedy', 'interval-covering', 'sorting', 'exchange-argument', 'fiuba']
   },
   {
+    id: 'huffman-coding-greedy',
+    problemId: 'huffman-coding',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 4,
+    difficulty: 2,
+    title: { es: 'Codificación de Huffman (Min-Heap)', en: 'Huffman Coding (Min-Heap)' },
+    subtitle: {
+      es: 'Construir códigos libres de prefijo de longitud variable óptimos fusionando vorazmente los nodos de menor frecuencia',
+      en: 'Construct optimal prefix-free variable-length codes by greedily merging the lowest frequency nodes'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'huffman', 'min-heap', 'compression', 'trees', 'prefix-free', 'information-theory', 'fiuba', 'rw']
+  },
+  {
     id: 'knapsack-dp',
     problemId: 'knapsack',
     techniqueId: 'dynamic-programming',

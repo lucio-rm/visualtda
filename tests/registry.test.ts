@@ -33,10 +33,11 @@ describe('ExerciseRegistry', () => {
     expect(btExercises.map((e) => e.id)).toContain('subset-sum-backtracking');
 
     const greedyExercises = registry.getExercises('greedy');
-    expect(greedyExercises.length).toBe(3);
+    expect(greedyExercises.length).toBe(4);
     expect(greedyExercises.map((e) => e.id)).toContain('interval-scheduling');
     expect(greedyExercises.map((e) => e.id)).toContain('knapsack-greedy');
     expect(greedyExercises.map((e) => e.id)).toContain('road-antennas-greedy');
+    expect(greedyExercises.map((e) => e.id)).toContain('huffman-coding-greedy');
 
     const dpExercises = registry.getExercises('dynamic-programming');
     expect(dpExercises.length).toBe(5);

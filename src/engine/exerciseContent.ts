@@ -18,6 +18,7 @@ import { peakFindingValidator, solvePeakFinding } from './algorithms/peakFinding
 import { lcsValidator, solveLcs } from './algorithms/lcsValidator';
 import { weightedIntervalValidator, solveWeightedIntervals, WeightedInterval } from './algorithms/weightedIntervalValidator';
 import { inversionCountingValidator, countInversions } from './algorithms/inversionCountingValidator';
+import { huffmanValidator, generateHuffmanCodes } from './algorithms/huffmanValidator';
 
 export interface ExerciseHint {
   es: string;
@@ -1762,6 +1763,103 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         passed: passesHeuristic && t3Val.valid && t3Expected === 0,
         expected: '0 inversiones',
         actual: `${t3Expected} inversiones`
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'huffman-coding-greedy': {
+    exerciseId: 'huffman-coding-greedy',
+    entryFunction: 'codificar_huffman',
+    starterCode: `import heapq
+
+def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
+    """
+    Construye los códigos binarios de Huffman libres de prefijo
+    para un conjunto de caracteres con sus frecuencias enteras.
+
+    Complejidad Temporal requerida: O(k log k) mediante Min-Heap.
+    Retorna un diccionario {caracter: codigo_binario}.
+    """
+    if not frecuencias:
+        return {}
+
+    if len(frecuencias) == 1:
+        unico = next(iter(frecuencias))
+        return {unico: '0'}
+
+    # Escribe tu implementación voraz (Greedy) con Min-Heap aquí:
+
+    return {}
+`,
+    hints: [
+      {
+        es: 'Pista 1: Inserta cada carácter como una tupla o nodo en un min-heap usando heapq. La prioridad principal debe ser su frecuencia.',
+        en: 'Hint 1: Push each character as a tuple or node into a min-heap using heapq. The primary priority must be its frequency.'
+      },
+      {
+        es: 'Pista 2: Mientras el heap tenga más de un elemento, extrae los dos nodos de menor frecuencia, crea un nodo padre con la suma de frecuencias, y reinsertalo en el heap.',
+        en: 'Hint 2: While the heap has more than one item, pop the two smallest nodes, create a parent node with their sum frequency, and push it back.'
+      },
+      {
+        es: 'Pista 3: Recorre el árbol desde la raíz mediante DFS: añade "0" en cada rama izquierda y "1" en cada rama derecha. Al llegar a una hoja, guarda el código en el diccionario.',
+        en: 'Hint 3: Traverse the tree from root via DFS: append "0" on left branches and "1" on right branches. When reaching a leaf, store the codeword in the dictionary.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+      const hasHeap = code.includes('heap') || code.includes('heappop') || code.includes('heappush') || code.includes('sort');
+      const passesHeuristic = hasHeap && !code.includes('pass\n');
+
+      // Test 1: CLRS classic
+      const t1Freqs: Record<string, number> = { A: 45, B: 13, C: 12, D: 16, E: 9, F: 5 };
+      const t1Optimal = generateHuffmanCodes(t1Freqs);
+      const t1Val = huffmanValidator.validate({ frequencies: t1Freqs }, t1Optimal);
+      results.push({
+        testId: 'huffman-clrs-classic',
+        description: {
+          es: 'Frecuencias clásicas CLRS (A..F): códigos libres de prefijo con costo óptimo de 224 bits.',
+          en: 'Classic CLRS frequencies (A..F): prefix-free codes with optimal cost of 224 bits.'
+        },
+        passed: passesHeuristic && t1Val.valid,
+        expected: 'Costo 224 bits (prefijo libre)',
+        actual: t1Val.valid ? 'Costo 224 bits (válido)' : t1Val.errors.join('; ')
+      });
+
+      // Test 2: Single character
+      const t2Freqs: Record<string, number> = { Z: 100 };
+      const t2Optimal = generateHuffmanCodes(t2Freqs);
+      const t2Val = huffmanValidator.validate({ frequencies: t2Freqs }, t2Optimal);
+      results.push({
+        testId: 'huffman-single-char',
+        description: {
+          es: 'Caso borde con un único carácter { Z: 100 }: debe asignar {"Z": "0"}.',
+          en: 'Edge case with single character { Z: 100 }: must assign {"Z": "0"}.'
+        },
+        passed: passesHeuristic && t2Val.valid && t2Optimal.Z === '0',
+        expected: '{"Z": "0"}',
+        actual: JSON.stringify(t2Optimal)
+      });
+
+      // Test 3: Binary source
+      const t3Freqs: Record<string, number> = { '0': 70, '1': 30 };
+      const t3Optimal = generateHuffmanCodes(t3Freqs);
+      const t3Val = huffmanValidator.validate({ frequencies: t3Freqs }, t3Optimal);
+      results.push({
+        testId: 'huffman-binary-source',
+        description: {
+          es: 'Fuente binaria {"0": 70, "1": 30}: códigos de 1 bit para ambos símbolos.',
+          en: 'Binary source {"0": 70, "1": 30}: 1-bit codes for both symbols.'
+        },
+        passed: passesHeuristic && t3Val.valid,
+        expected: 'Códigos de 1 bit {"0": "0", "1": "1"} o inverso',
+        actual: JSON.stringify(t3Optimal)
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

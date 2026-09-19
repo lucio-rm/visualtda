@@ -1,0 +1,20 @@
+{
+  "id": "huffman-coding-greedy",
+  "problemId": "huffman-coding",
+  "techniqueId": "greedy",
+  "category": "greedy",
+  "difficulty": "medium",
+  "order": 4,
+  "title": {
+    "es": "Codificación de Huffman (Min-Heap)",
+    "en": "Huffman Coding (Min-Heap)"
+  },
+  "description": {
+    "es": "Construye un árbol binario de códigos libres de prefijo de longitud variable que minimiza el costo ponderado de compresión utilizando una estrategia Greedy basada en una cola de prioridad (Min-Heap).",
+    "en": "Construct a prefix-free variable-length binary code tree that minimizes total weighted compression cost using a Greedy strategy powered by a Min-Heap priority queue."
+  },
+  "tags": ["greedy", "huffman", "min-heap", "compression", "trees", "prefix-free", "information-theory", "fiuba", "rw"],
+  "starterFiles": {
+    "python": "solution.py"
+  }
+}

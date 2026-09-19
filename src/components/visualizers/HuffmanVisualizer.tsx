@@ -1,0 +1,288 @@
+import React, { useState, useMemo } from 'react';
+import {
+  generateHuffmanTrace,
+  HuffmanStepData,
+  DEFAULT_HUFFMAN_FREQS
+} from '../../engine/algorithms/huffmanTrace';
+import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
+import './HuffmanVisualizer.css';
+
+interface HuffmanPreset {
+  id: string;
+  label: { es: string; en: string };
+  frequencies: Record<string, number>;
+}
+
+const PRESETS: HuffmanPreset[] = [
+  {
+    id: 'clrs',
+    label: { es: 'Clásico CLRS (A..F, 100 letras)', en: 'Classic CLRS (A..F, 100 chars)' },
+    frequencies: DEFAULT_HUFFMAN_FREQS
+  },
+  {
+    id: 'abracadabra',
+    label: { es: 'ABRACADABRA (11 letras)', en: 'ABRACADABRA (11 chars)' },
+    frequencies: { A: 5, B: 2, R: 2, C: 1, D: 1 }
+  },
+  {
+    id: 'vowels',
+    label: { es: 'Vocales (A, E, I, O, U)', en: 'Vowels (A, E, I, O, U)' },
+    frequencies: { A: 35, E: 40, I: 25, O: 28, U: 12 }
+  },
+  {
+    id: 'binary',
+    label: { es: 'Canal Binario {0: 70, 1: 30}', en: 'Binary Channel {0: 70, 1: 30}' },
+    frequencies: { '0': 70, '1': 30 }
+  }
+];
+
+export const HuffmanVisualizer: React.FC = () => {
+  const { language } = useLanguage();
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('clrs');
+  const activePreset = PRESETS.find((p) => p.id === selectedPresetId) || PRESETS[0];
+
+  const timeline = useMemo(
+    () => generateHuffmanTrace(activePreset.frequencies),
+    [activePreset.frequencies]
+  );
+
+  const {
+    currentStepIndex,
+    totalSteps,
+    currentEvent,
+    isPlaying,
+    playbackSpeed,
+    togglePlay,
+    stepForward,
+    stepBackward,
+    goToStep,
+    reset,
+    setSpeed
+  } = useTraceTimeline<HuffmanStepData>(timeline, {
+    baseIntervalMs: 750,
+    enableKeyboardShortcuts: true
+  });
+
+  const data = currentEvent?.data;
+  const action = data?.action || 'INIT';
+  const queue = data?.queue || [];
+  const selectedIds = data?.selectedIds || null;
+  const mergedParent = data?.mergedParent || null;
+  const codes = data?.codes || {};
+  const totalCost = data?.totalCostBits ?? 0;
+  const fixedCost = data?.fixedCostBits ?? 0;
+  const desc = data?.description ? data.description[language] : '';
+
+  const savings = fixedCost > 0 && totalCost > 0 ? Math.round(((fixedCost - totalCost) / fixedCost) * 100) : 0;
+
+  return (
+    <div className="huffman-visualizer">
+      {/* Preset Selector */}
+      <div className="huff-presets">
+        <span className="huff-presets-label">
+          {language === 'es' ? 'Frecuencias de Ejemplo:' : 'Sample Frequencies:'}
+        </span>
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            className={`huff-preset-btn ${p.id === selectedPresetId ? 'active' : ''}`}
+            onClick={() => {
+              setSelectedPresetId(p.id);
+              reset();
+            }}
+          >
+            {p.label[language]}
+          </button>
+        ))}
+      </div>
+
+      {/* Banner Summary */}
+      <div className="huff-banner-row">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span className={`huff-phase-pill ${action.toLowerCase()}`}>
+            {action.replace(/_/g, ' ')}
+          </span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)' }}>
+            {language === 'es' ? 'Tamaño del Min-Heap:' : 'Min-Heap Size:'}{' '}
+            <strong style={{ color: 'var(--text, #f8fafc)' }}>{queue.length} nodos</strong>
+          </span>
+        </div>
+
+        <div className="huff-metrics-summary">
+          <div className="huff-metric-badge">
+            <span className="label">
+              {language === 'es' ? 'Bits Huffman' : 'Huffman Bits'}
+            </span>
+            <span className="value highlight">{totalCost > 0 ? `${totalCost} b` : '---'}</span>
+          </div>
+          <div className="huff-metric-badge">
+            <span className="label">
+              {language === 'es' ? 'Bits ASCII (8b)' : 'ASCII Bits (8b)'}
+            </span>
+            <span className="value">{fixedCost} b</span>
+          </div>
+          {savings > 0 && (
+            <div className="huff-metric-badge">
+              <span className="label">
+                {language === 'es' ? 'Ahorro' : 'Savings'}
+              </span>
+              <span className="value highlight">{savings}%</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Priority Queue (Min-Heap) Section */}
+      <div className="huff-heap-section">
+        <div className="huff-heap-header">
+          <span>
+            {language === 'es'
+              ? 'Cola de Prioridad (Min-Heap ordenado por frecuencia):'
+              : 'Priority Queue (Min-Heap sorted by frequency):'}
+          </span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+            {language === 'es' ? 'Extracción Voraz de la izquierda' : 'Greedy extract from the left'}
+          </span>
+        </div>
+
+        <div className="huff-heap-nodes">
+          {queue.length === 0 ? (
+            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
+              {language === 'es' ? '(Cola vacía - árbol completado)' : '(Queue empty - tree complete)'}
+            </span>
+          ) : (
+            queue.map((node, idx) => {
+              const isSelectedMin1 = selectedIds && selectedIds[0] === node.id;
+              const isSelectedMin2 = selectedIds && selectedIds[1] === node.id;
+              const isMergedParent = mergedParent && mergedParent.id === node.id;
+
+              return (
+                <div
+                  key={node.id}
+                  className={`huff-node-card ${isSelectedMin1 || isSelectedMin2 ? 'selected-min' : ''} ${isMergedParent ? 'merged-new' : ''}`}
+                >
+                  {(isSelectedMin1 || isSelectedMin2) && (
+                    <span className="min-badge">
+                      {isSelectedMin1 ? 'Min 1' : 'Min 2'}
+                    </span>
+                  )}
+                  {isMergedParent && (
+                    <span className="min-badge" style={{ background: '#3b82f6', color: '#fff' }}>
+                      +
+                    </span>
+                  )}
+                  <span className="char">{node.char ?? `[${node.id}]`}</span>
+                  <span className="freq">
+                    freq: <strong>{node.freq}</strong>
+                  </span>
+                  <span style={{ fontSize: '0.65rem', color: '#64748b' }}>#{idx + 1}</span>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* Codebook Table (shown when codes are available) */}
+      {Object.keys(codes).length > 0 && (
+        <div className="huff-codebook-card">
+          <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent-light, #60a5fa)' }}>
+            {language === 'es' ? 'Tabla de Códigos de Huffman (Prefijo Libre):' : 'Huffman Codebook (Prefix-Free):'}
+          </div>
+          <table className="huff-table">
+            <thead>
+              <tr>
+                <th>{language === 'es' ? 'Símbolo' : 'Symbol'}</th>
+                <th>{language === 'es' ? 'Frecuencia' : 'Frequency'}</th>
+                <th>{language === 'es' ? 'Código Huffman' : 'Huffman Code'}</th>
+                <th>{language === 'es' ? 'Longitud (bits)' : 'Length (bits)'}</th>
+                <th>{language === 'es' ? 'Costo Ponderado' : 'Weighted Cost'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(codes).map(([c, code]) => {
+                const freq = activePreset.frequencies[c] ?? 0;
+                return (
+                  <tr key={c}>
+                    <td style={{ fontWeight: 800 }}>"{c}"</td>
+                    <td>{freq}</td>
+                    <td>
+                      <span className="huff-code-tag">{code}</span>
+                    </td>
+                    <td>{code.length}</td>
+                    <td>{freq * code.length} bits</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Step Explanation Card */}
+      <div className="huff-explanation-card">{desc}</div>
+
+      {/* Timeline Controls */}
+      <div className="timeline-controls" style={{ marginTop: '0.5rem' }}>
+        <button
+          onClick={stepBackward}
+          disabled={currentStepIndex === 0}
+          title={language === 'es' ? 'Paso Anterior' : 'Previous Step'}
+          className="timeline-btn"
+        >
+          ⏮
+        </button>
+        <button
+          onClick={togglePlay}
+          className="timeline-btn play-btn"
+          title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+        >
+          {isPlaying ? '⏸' : '▶'}
+        </button>
+        <button
+          onClick={stepForward}
+          disabled={currentStepIndex >= totalSteps - 1}
+          title={language === 'es' ? 'Paso Siguiente' : 'Next Step'}
+          className="timeline-btn"
+        >
+          ⏭
+        </button>
+        <button
+          onClick={reset}
+          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          className="timeline-btn"
+        >
+          🔄
+        </button>
+
+        <div className="timeline-scrubber" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+          <input
+            type="range"
+            min={0}
+            max={Math.max(0, totalSteps - 1)}
+            value={currentStepIndex}
+            onChange={(e) => goToStep(Number(e.target.value))}
+            style={{ width: '100%' }}
+          />
+          <span style={{ fontSize: '0.8rem', minWidth: '4rem', color: 'var(--text-muted, #94a3b8)' }}>
+            {currentStepIndex + 1} / {totalSteps}
+          </span>
+        </div>
+
+        <div className="speed-selector" style={{ display: 'flex', gap: '0.25rem' }}>
+          {[0.5, 1, 2].map((s) => (
+            <button
+              key={s}
+              className={`timeline-btn ${playbackSpeed === s ? 'active' : ''}`}
+              onClick={() => setSpeed(s)}
+              style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem' }}
+            >
+              {s}x
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};

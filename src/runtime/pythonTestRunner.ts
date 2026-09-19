@@ -18,6 +18,7 @@ import { peakFindingValidator } from '../engine/algorithms/peakFindingValidator'
 import { lcsValidator } from '../engine/algorithms/lcsValidator';
 import { weightedIntervalValidator, WeightedInterval } from '../engine/algorithms/weightedIntervalValidator';
 import { inversionCountingValidator } from '../engine/algorithms/inversionCountingValidator';
+import { huffmanValidator } from '../engine/algorithms/huffmanValidator';
 
 export interface PythonEvaluationResult {
   passed: boolean;
@@ -1266,6 +1267,57 @@ def __evaluar_monte_carlo__(p, n):
           passed: val3.valid && out3 === 0,
           expected: '0 inversiones',
           actual: val3.valid ? `${out3} inversiones` : val3.errors.join('; ')
+        });
+        break;
+      }
+
+      case 'huffman-coding-greedy': {
+        // Test 1: CLRS classic
+        const t1Freqs: Record<string, number> = { A: 45, B: 13, C: 12, D: 16, E: 9, F: 5 };
+        const res1 = await service.executePython(code, 'codificar_huffman', [t1Freqs]);
+        const out1 = (typeof res1.result === 'object' && res1.result !== null ? res1.result : {}) as Record<string, string>;
+        const val1 = huffmanValidator.validate({ frequencies: t1Freqs }, out1);
+        results.push({
+          testId: 'py-huffman-clrs',
+          description: {
+            es: 'Frecuencias clásicas CLRS: Códigos libres de prefijo con costo óptimo de 224 bits.',
+            en: 'Classic CLRS frequencies: Prefix-free codes with optimal cost of 224 bits.'
+          },
+          passed: val1.valid,
+          expected: 'Costo 224 bits (prefijo libre)',
+          actual: val1.valid ? 'Costo 224 bits (válido)' : val1.errors.join('; ')
+        });
+
+        // Test 2: Single character
+        const t2Freqs: Record<string, number> = { Z: 100 };
+        const res2 = await service.executePython(code, 'codificar_huffman', [t2Freqs]);
+        const out2 = (typeof res2.result === 'object' && res2.result !== null ? res2.result : {}) as Record<string, string>;
+        const val2 = huffmanValidator.validate({ frequencies: t2Freqs }, out2);
+        results.push({
+          testId: 'py-huffman-single-char',
+          description: {
+            es: 'Un único símbolo { Z: 100 }: Asigna código {"Z": "0"}.',
+            en: 'Single symbol { Z: 100 }: Assigns code {"Z": "0"}.'
+          },
+          passed: val2.valid && out2.Z === '0',
+          expected: '{"Z": "0"}',
+          actual: JSON.stringify(out2)
+        });
+
+        // Test 3: Binary source
+        const t3Freqs: Record<string, number> = { '0': 70, '1': 30 };
+        const res3 = await service.executePython(code, 'codificar_huffman', [t3Freqs]);
+        const out3 = (typeof res3.result === 'object' && res3.result !== null ? res3.result : {}) as Record<string, string>;
+        const val3 = huffmanValidator.validate({ frequencies: t3Freqs }, out3);
+        results.push({
+          testId: 'py-huffman-binary',
+          description: {
+            es: 'Fuente binaria {"0": 70, "1": 30}: Códigos de 1 bit para ambos símbolos.',
+            en: 'Binary source {"0": 70, "1": 30}: 1-bit codes for both symbols.'
+          },
+          passed: val3.valid,
+          expected: 'Códigos de 1 bit {"0": "0", "1": "1"} o inverso',
+          actual: JSON.stringify(out3)
         });
         break;
       }
