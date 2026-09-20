@@ -297,7 +297,7 @@ def merge(left: list[int], right: list[int]) -> list[int]:
         MergeSort(A, p, q)
         MergeSort(A, q + 1, r)
         Merge(A, p, q, r)`,
-    correctnessExplanation: `Invariante del procedimiento Merge: al inicio de cada iteración, el arreglo resultado contiene los k elementos menores de ambos subarreglos en orden no decreciente. La altura del árbol de recursión es log2(n) y en cada nivel se realizan O(n) operaciones lineales, resultando en Theta(n log n).`,
+    correctnessExplanation: `Invariante del procedimiento Merge: al inicio de cada iteración, el arreglo resultado contiene los k elementos menores de ambos subarreglos en orden no decreciente. La altura del árbol de recursión es log2(n) y en cada nivel se realizan O(n) operaciones lineales, resultando en Θ(n log n).`,
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)'
   },
@@ -321,7 +321,7 @@ def merge(left: list[int], right: list[int]) -> list[int]:
     der ← MaxSubarregloDyC(A, medio + 1, alto)
     cruzado ← SubarregloCruzado(A, bajo, medio, alto)
     RETORNAR el de máxima suma entre (izq, der, cruzado)`,
-    correctnessExplanation: `Teorema de Descomposición Disjunta: Todo subarreglo contiguo A[i..j] cae en una de tres categorías exhaustivas: (1) 100% en mitad izquierda, (2) 100% en mitad derecha, o (3) cruzando el punto medio. Por Teorema Maestro con a=2, b=2, c=1 (T(n) = 2T(n/2) + O(n)), la complejidad es Theta(n log n).`,
+    correctnessExplanation: `Teorema de Descomposición Disjunta: Todo subarreglo contiguo A[i..j] cae en una de tres categorías exhaustivas: (1) 100% en mitad izquierda, (2) 100% en mitad derecha, o (3) cruzando el punto medio. Por Teorema Maestro con a=2, b=2, c=1 (T(n) = 2T(n/2) + O(n)), la complejidad es Θ(n log n).`,
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)'
   },
@@ -478,7 +478,7 @@ def transformar_solucion_vc_a_is(vertices, cobertura):
     OrdenarDecreciente(numeros)
     Backtrack(idx=0, suma=0, remanente=SumaTotal)`,
     correctnessExplanation: `Invariantes de poda: (1) Si suma + elem > S, la suma futura solo aumentará (Poda por exceso). (2) Si suma + remanente < S, incluso tomando todo no se alcanza S (Poda por déficit).`,
-    timeComplexity: 'O(2^n) [Podas podan drásticamente el espacio práctico]',
+    timeComplexity: 'O(2ⁿ) [Podas podan drásticamente el espacio práctico]',
     spaceComplexity: 'O(n) [Pila de llamadas]'
   },
 
@@ -524,7 +524,7 @@ def transformar_solucion_vc_a_is(vertices, cobertura):
         SI A[med] < A[med - 1]: fin ← med - 1
         SINO SI A[med] < A[med + 1]: ini ← med + 1
         SINO: RETORNAR med`,
-    correctnessExplanation: `Gradiente Ascendente: Si el elemento central es menor que su vecino izquierdo, el gradiente sube hacia la izquierda; un pico está garantizado en esa mitad. T(n) = T(n/2) + O(1) = Theta(log n).`,
+    correctnessExplanation: `Gradiente Ascendente: Si el elemento central es menor que su vecino izquierdo, el gradiente sube hacia la izquierda; un pico está garantizado en esa mitad. T(n) = T(n/2) + O(1) = Θ(log n).`,
     timeComplexity: 'O(log n)',
     spaceComplexity: 'O(1)'
   },
@@ -550,7 +550,7 @@ def transformar_solucion_vc_a_is(vertices, cobertura):
         PARA j ← 1 HASTA n:
             c[i, j] ← c[i-1, j-1] + 1 SI X[i-1] = Y[j-1] SINO MAX(c[i-1, j], c[i, j-1])
     RETORNAR Reconstruir(c)`,
-    correctnessExplanation: `Subestructura óptima CLRS 15.4: Si x_m = y_n, z_k = x_m y Z_{k-1} es LCS de los prefijos. Si no, el LCS coincide con el mejor entre acortar X o Y. Complejidad Theta(m · n).`,
+    correctnessExplanation: `Subestructura óptima CLRS 15.4: Si x_m = y_n, z_k = x_m y Z_{k-1} es LCS de los prefijos. Si no, el LCS coincide con el mejor entre acortar X o Y. Complejidad Θ(m · n).`,
     timeComplexity: 'O(m · n)',
     spaceComplexity: 'O(m · n)'
   },
