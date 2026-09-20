@@ -29,6 +29,31 @@ export interface TranslationsDictionary {
   codeToggleLabel: { es: string; en: string };
   speedLabel: { es: string; en: string };
   footerText: { es: string; en: string };
+  understandTitle: { es: string; en: string };
+  solveTitle: { es: string; en: string };
+  solveLead: { es: string; en: string };
+  hintsDesc: { es: string; en: string };
+  hintLabel: { es: string; en: string };
+  viewHintLabel: { es: string; en: string };
+  skipSolutionTitle: { es: string; en: string };
+  skipSolutionDesc: { es: string; en: string };
+  evaluationResult: { es: string; en: string };
+  resetTemplate: { es: string; en: string };
+  codeEditorAriaLabel: { es: string; en: string };
+  resetTemplateAriaLabel: { es: string; en: string };
+  tsValidationTitle: { es: string; en: string };
+  pyodideValidationTitle: { es: string; en: string };
+  understandLead: { es: string; en: string };
+  understandVisualizerHeading: { es: string; en: string };
+  understandCanonicalHeading: { es: string; en: string };
+  understandPython3: { es: string; en: string };
+  understandPseudocode: { es: string; en: string };
+  understandCorrectnessHeading: { es: string; en: string };
+  understandTimeComplexity: { es: string; en: string };
+  understandSpaceComplexity: { es: string; en: string };
+  understandVisualizerPlaceholder: { es: string; en: string };
+  resetCode: { es: string; en: string };
+  proceedToUnderstand: { es: string; en: string };
 }
 
 export const TRANSLATIONS: TranslationsDictionary = {
@@ -151,5 +176,105 @@ export const TRANSLATIONS: TranslationsDictionary = {
   footerText: {
     es: 'Visual TDA — Principios: KISS · Separación Algoritmo/UI · Correctness Pedagógica',
     en: 'Visual TDA — Principles: KISS · Algorithm/UI Separation · Pedagogical Correctness'
+  },
+  solveTitle: {
+    es: '2. Resolver: Plantea tu Solución Algorítmica',
+    en: '2. Solve: Formulate Your Algorithmic Solution'
+  },
+  solveLead: {
+    es: 'Implementa el algoritmo. Si te trabas, puedes consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.',
+    en: 'Implement the algorithm. If you get stuck, use progressive hints or view the canonical solution at any time.'
+  },
+  hintsDesc: {
+    es: 'Descubre pistas sólo si las necesitas para desbloquear tu razonamiento:',
+    en: 'Unlock hints only if you need guidance to unblock your reasoning:'
+  },
+  hintLabel: {
+    es: 'Pista',
+    en: 'Hint'
+  },
+  viewHintLabel: {
+    es: 'Ver Pista',
+    en: 'View Hint'
+  },
+  skipSolutionTitle: {
+    es: '¿Prefieres ver la solución directa?',
+    en: 'Prefer to see the solution directly?'
+  },
+  skipSolutionDesc: {
+    es: 'El objetivo es pedagógico. Puedes consultar la solución canónica comentada y el análisis formal sin ser bloqueado.',
+    en: 'The goal is educational. You can view the canonical solution and formal analysis anytime without being blocked.'
+  },
+  evaluationResult: {
+    es: 'Resultado de la Evaluación',
+    en: 'Evaluation Result'
+  },
+  resetTemplate: {
+    es: '↺ Reiniciar plantilla',
+    en: '↺ Reset template'
+  },
+  codeEditorAriaLabel: {
+    es: 'Editor de código Python para tu solución',
+    en: 'Python code editor for your solution'
+  },
+  resetTemplateAriaLabel: {
+    es: 'Restaurar plantilla inicial del ejercicio',
+    en: 'Reset to initial exercise template'
+  },
+  tsValidationTitle: {
+    es: 'Validación inmediata en navegador (TypeScript)',
+    en: 'Instant client validation (TypeScript)'
+  },
+  pyodideValidationTitle: {
+    es: 'Ejecuta tu código en Python real compilado a WebAssembly en un Web Worker',
+    en: 'Runs your code in real Python compiled to WebAssembly inside a Web Worker'
+  },
+  understandTitle: {
+    es: '3. Comprender: Solución Canónica, Correctness y Complejidad',
+    en: '3. Understand: Canonical Solution, Correctness & Complexity'
+  },
+  understandLead: {
+    es: 'Analiza en detalle cómo opera el algoritmo óptimo. Observa la traza paso a paso y comprende la demostración de corrección.',
+    en: 'Analyze in detail how the optimal algorithm works. Observe the step-by-step trace and understand the correctness proof.'
+  },
+  understandVisualizerHeading: {
+    es: 'Ejecución Visual y Traza de Estados',
+    en: 'Visual Execution & State Trace'
+  },
+  understandCanonicalHeading: {
+    es: 'Implementación Canónica',
+    en: 'Canonical Implementation'
+  },
+  understandPython3: {
+    es: 'Python 3',
+    en: 'Python 3'
+  },
+  understandPseudocode: {
+    es: 'Pseudocódigo',
+    en: 'Pseudocode'
+  },
+  understandCorrectnessHeading: {
+    es: '¿Por qué funciona? (Invariante y Corrección)',
+    en: 'Why does it work? (Invariant & Correctness)'
+  },
+  understandTimeComplexity: {
+    es: 'Complejidad Temporal:',
+    en: 'Time Complexity:'
+  },
+  understandSpaceComplexity: {
+    es: 'Complejidad Espacial:',
+    en: 'Space Complexity:'
+  },
+  understandVisualizerPlaceholder: {
+    es: 'El visualizador interactivo se monta aquí.',
+    en: 'The interactive visualizer mounts here.'
+  },
+  resetCode: {
+    es: 'Reiniciar Código',
+    en: 'Reset Code'
+  },
+  proceedToUnderstand: {
+    es: 'Continuar a Comprender la Solución →',
+    en: 'Proceed to Understand Solution →'
   }
 };

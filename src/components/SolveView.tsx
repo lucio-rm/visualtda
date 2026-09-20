@@ -180,12 +180,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
     <section className="phase-view solve-view" aria-labelledby="solve-heading">
       <div className="view-intro">
         <h3 id="solve-heading" className="view-title">
-          {language === 'es' ? '2. Resolver: Plantea tu Solución Algorítmica' : '2. Solve: Formulate Your Algorithmic Solution'}
+          {t(dict.solveTitle)}
         </h3>
         <p className="view-lead">
-          {language === 'es'
-            ? <>Implementa el algoritmo para <strong>{t(exercise.title)}</strong>. Si te trabas, puedes consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.</>
-            : <>Implement the algorithm for <strong>{t(exercise.title)}</strong>. If you get stuck, use progressive hints or view the canonical solution at any time.</>}
+          {t(dict.solveLead)}
+          {' '}<strong>{t(exercise.title)}</strong>.
         </p>
       </div>
 
@@ -201,8 +200,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 type="button"
                 className="btn-reset-code"
                 onClick={handleResetCode}
-                title={language === 'es' ? 'Restaurar plantilla inicial del ejercicio' : 'Reset to initial exercise template'}
-                aria-label={language === 'es' ? 'Restaurar plantilla inicial' : 'Reset to template'}
+                title={t(dict.resetTemplateAriaLabel)}
+                aria-label={t(dict.resetTemplateAriaLabel)}
                 style={{
                   background: 'transparent',
                   border: 'none',
@@ -212,7 +211,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   padding: '0.25rem 0.5rem'
                 }}
               >
-                ↺ {language === 'es' ? 'Reiniciar plantilla' : 'Reset template'}
+                {t(dict.resetTemplate)}
               </button>
             </div>
             <textarea
@@ -220,7 +219,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
               value={code}
               onChange={(e) => setCode(e.target.value)}
               rows={14}
-              aria-label={language === 'es' ? 'Editor de código Python para tu solución' : 'Python code editor for your solution'}
+              aria-label={t(dict.codeEditorAriaLabel)}
               spellCheck={false}
             />
             <div className="editor-actions">
@@ -229,7 +228,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 className="btn-fast-tests"
                 onClick={handleRunTests}
                 disabled={testStatus === 'running'}
-                title={language === 'es' ? 'Validación inmediata en navegador (TypeScript)' : 'Instant client validation (TypeScript)'}
+                title={t(dict.tsValidationTitle)}
               >
                 {testStatus === 'running' && execEngine === 'ts' ? t(dict.testsRunning) : t(dict.runTests)}
               </button>
@@ -240,7 +239,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   className="btn-pyodide"
                   onClick={handleRunPyodide}
                   disabled={testStatus === 'running'}
-                  title={language === 'es' ? 'Ejecuta tu código en Python real compilado a WebAssembly en un Web Worker' : 'Runs your code in real Python compiled to WebAssembly inside a Web Worker'}
+                  title={t(dict.pyodideValidationTitle)}
                 >
                   {testStatus === 'running' && execEngine === 'pyodide' ? t(dict.testsRunning) : t(dict.runPyodideTests)}
                 </button>
@@ -251,7 +250,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
           {testStatus !== 'idle' && (
             <div className={`test-feedback-card ${testStatus}`}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ margin: 0 }}>{language === 'es' ? 'Resultado de la Evaluación' : 'Evaluation Result'}</h4>
+                <h4 style={{ margin: 0 }}>{t(dict.evaluationResult)}</h4>
                 {executionTimeMs !== null && (
                   <div className="test-meta-bar">
                     <span className="test-meta-badge">
@@ -305,7 +304,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   className="btn-primary mt-2"
                   onClick={onSuccess}
                 >
-                  {language === 'es' ? 'Continuar a Comprender la Solución →' : 'Proceed to Understand Solution →'}
+                  {t(dict.proceedToUnderstand)}
                 </button>
               )}
             </div>
@@ -314,11 +313,9 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
         <aside className="solve-sidebar">
           <div className="hints-card">
-            <h4>{t(dict.hintsTitle)} (Máximo 3)</h4>
+            <h4>{t(dict.hintsTitle)}</h4>
             <p className="hints-desc">
-              {language === 'es'
-                ? 'Descubre pistas sólo si las necesitas para desbloquear tu razonamiento:'
-                : 'Unlock hints only if you need guidance to unblock your reasoning:'}
+              {t(dict.hintsDesc)}
             </p>
             <div className="hints-list">
               {hints.map((hint, idx) => {
@@ -332,8 +329,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
                       aria-expanded={isRevealed}
                     >
                       {isRevealed
-                        ? `▼ ${language === 'es' ? 'Pista' : 'Hint'} ${idx + 1}`
-                        : `▶ ${language === 'es' ? 'Ver Pista' : 'View Hint'} ${idx + 1}`}
+                        ? `▼ ${t(dict.hintLabel)} ${idx + 1}`
+                        : `▶ ${t(dict.viewHintLabel)} ${idx + 1}`}
                     </button>
                     {isRevealed && <div className="hint-content">{t(hint)}</div>}
                   </div>
@@ -343,11 +340,9 @@ export const SolveView: React.FC<SolveViewProps> = ({
           </div>
 
           <div className="skip-solution-card">
-            <h4>{language === 'es' ? '¿Prefieres ver la solución directa?' : 'Prefer to see the solution directly?'}</h4>
+            <h4>{t(dict.skipSolutionTitle)}</h4>
             <p>
-              {language === 'es'
-                ? 'El objetivo es pedagógico. Puedes consultar la solución canónica comentada y el análisis formal sin ser bloqueado.'
-                : 'The goal is educational. You can view the canonical solution and formal analysis anytime without being blocked.'}
+              {t(dict.skipSolutionDesc)}
             </p>
             <button
               type="button"
