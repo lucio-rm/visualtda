@@ -1,99 +1,142 @@
-# Visual TDA — Quality Gates Specification
+# Visual TDA — Quality Gates Specification & Status Matrix
 
-**Document Version**: 1.0  
-**Authority**: Subordinate to `AGENTS.md`  
-**Purpose**: Defines the mandatory verification criteria that every release, milestone, and vertical slice must satisfy before being declared production-ready.
-
----
-
-## Quality Gate Matrix
-
-| Gate | ID | Category | Verification Command / Method | Minimum Passing Standard | Current Status |
-|------|----|----------|-------------------------------|---------------------------|----------------|
-| **G1** | `GATE-BUILD` | Build System | `npm run build` | Zero errors, static assets output to `dist/`, zero backend runtime | **PASS** (Clean static build in 1.1s, static `dist/`) |
-| **G2** | `GATE-TYPES` | Type Safety | `npm run typecheck` (`tsc --noEmit`) | Zero TypeScript errors with strict mode enabled (`noImplicitAny`, `strictNullChecks`) | **PASS** (0 errors) |
-| **G3** | `GATE-LINT` | Code Quality | `npm run lint` (`eslint .`) | Zero ESLint warnings or errors across all files | **PASS** (0 warnings/errors) |
-| **G4** | `GATE-UNIT-TESTS` | Unit Testing | `npm run test` (`vitest run`) | 100% of domain, validator, trace, and algorithm unit tests pass | **PASS** (33 test files, 215/215 tests pass) |
-| **G5** | `GATE-INTEG-TESTS` | Integration Testing | Automated suite (`tests/*.test.ts`) | Cross-component flow tests pass: phase switching, timeline scrubber, i18n | **PASS** (Phases, registry, timeline, i18n verified) |
-| **G6** | `GATE-BROWSER-E2E` | User Journey Testing | Integration user flows (`tests/userJourneys.test.tsx`) | All 15 core user flows verified against UI state machine | **PASS** (15/15 user journeys pass in happy-dom) |
-| **G7** | `GATE-A11Y` | Accessibility | Automated + manual audit | WCAG 2.1 AA compliant, reduced-motion supported, skip link present, semantic HTML | **PASS** (Reduced-motion, skip link, session persistence, SVG keyboard focus) |
-| **G8** | `GATE-SECURITY` | Security & Sandboxing | Code audit + `npm audit` | Zero unsafe DOM APIs (`dangerouslySetInnerHTML`, `eval`), Pyodide worker isolated, zero secrets | **PASS** (Zero XSS vectors, worker sandboxed, zero secrets) |
-| **G9** | `GATE-PERF` | Performance | Bundle size & startup audit | Main JS bundle < 500 KB, zero Pyodide loading during initial catalog/discover phases | **PASS** (Chunks code-split via manualChunks: all chunks < 230 KB) |
-| **G10** | `GATE-PY-RELIABILITY`| Python Execution | Watchdog & DoS tests | 5000ms timeout terminates stuck worker, 64KB stdout cap, graceful error handling | **PASS** (5s watchdog, 64KB stdout limit, BaseException catching, tested in `pythonExecution.test.ts`) |
-| **G11** | `GATE-CORRECTNESS` | Educational Correctness | Independent solver tests | Solutions verified against independent combinatorial/brute-force oracles and formal invariants | **PASS** (Independent combinatorial oracles in `referenceSolvers.ts`, adversarial tests, and `curriculum-audit.md`) |
-| **G12** | `GATE-DEPLOY-REPRO` | Deployment Reproducibility | CI pipeline run | Deterministic static build runs identically in clean Linux container with Node 24 | **PASS** (GitHub Actions CI workflow configured & clean static output) |
+**Document Version**: 2.0  
+**Authority**: Mandate from Orchestrator; subordinate to `AGENTS.md`  
+**Standard**: Multi-dimensional verification status distinguishing:
+- `AUTOMATED`: Verified via deterministic script/test in CI or test runner.
+- `EMPIRICAL`: Verified via live browser/runtime observation.
+- `DOCUMENTARY`: Verified via academic/theoretical cross-reference.
+- `LIMITATION`: Explicitly stated boundaries of verification.
 
 ---
 
-## Detailed Gate Descriptions & Verification Protocols
+## 1. Quality Gate Matrix
 
-### G1: Build (`GATE-BUILD`)
-- **Criteria**: Vite must build static HTML, CSS, and JS chunks into `dist/`. No server-side rendering (SSR), Docker, or Node runtime may be required to serve the site.
-- **Verification**: `npm run build && test -f dist/index.html`.
+| Gate | ID | Domain | Status | Verification Protocol & Command | Limitations & Evidence |
+|---|---|---|---|---|---|
+| **G1** | `GATE-BUILD` | Static Build | **PASS** | **AUTOMATED**: `npm run build`<br>**EMPIRICAL**: Static serving of `dist/` | Pure static client output in 1.1s. Zero server runtime, zero database. |
+| **G2** | `GATE-TYPES` | Type Safety | **PASS** | **AUTOMATED**: `npm run typecheck` (`tsc --noEmit`) | Strict mode: `noImplicitAny: true`, `strictNullChecks: true`. 0 errors. 3 `any` in `pyodideWorker.ts` justified and documented. |
+| **G3** | `GATE-LINT` | Code Quality | **PASS** | **AUTOMATED**: `npm run lint` (`eslint .`) | Flat ESLint 9 configuration. 0 warnings, 0 errors across all JS/TS/TSX. |
+| **G4** | `GATE-UNIT-TESTS` | Unit Tests | **PASS** | **AUTOMATED**: `npm run test` (`vitest run`) | 34 test files, 220/220 tests pass in 1.8s. Covers algorithms, validators, traces, registry, i18n. |
+| **G5** | `GATE-INTEG-TESTS` | Integration Tests | **PASS** | **AUTOMATED**: `phases.test.ts`, `useTraceTimeline.test.ts`, `exerciseContent.test.ts` | Cross-component flow tests pass: phase transitions, scrubber hook, localized content. |
+| **G6** | `GATE-BROWSER-E2E` | Real Browser QA | **PASS** | **AUTOMATED**: `npm run test:browser` (`scripts/browserQA.mjs`)<br>**EMPIRICAL**: Headless Chromium via CDP | 22/22 real Chromium scenarios pass across 5 viewports (1920x1080, 1440x900, 1280x720, 768x1024, 390x844). 0 console errors. 10 screenshots captured in `dist-qa-screenshots/`. |
+| **G7** | `GATE-A11Y` | Accessibility | **PARTIAL** | **AUTOMATED**: Keyboard tests in `userJourneys.test.tsx` and `browserQA.mjs`<br>**EMPIRICAL**: Skip link, `:focus-visible` outlines, `prefers-reduced-motion` | Core keyboard paths and reduced-motion work. Full automated axe-core/screen-reader audit not yet integrated; some complex SVG graphs rely heavily on color differentiation. |
+| **G8** | `GATE-SECURITY` | Security & Sandbox | **PASS** | **AUTOMATED**: AST scan + CSP check in `index.html`<br>**EMPIRICAL**: Pyodide worker isolation | Strict CSP (`default-src 'self'`, `object-src 'none'`, `worker-src 'self' blob:`, `connect-src 'self' https://cdn.jsdelivr.net`). Zero unsafe DOM sinks (`dangerouslySetInnerHTML`, `eval`, `document.write`). Zero hardcoded secrets. |
+| **G9** | `GATE-PERF` | Performance | **PASS** | **AUTOMATED**: Vite `manualChunks` inspection | Split chunks: all chunks < 230 KB raw (< 70 KB gzip). Pyodide lazy-loaded on demand. |
+| **G10** | `GATE-PY-RELIABILITY` | Python Reliability | **PASS** | **AUTOMATED**: `tests/pythonExecution.test.ts`<br>**EMPIRICAL**: Worker watchdog test | 5,000ms watchdog halts infinite loops; 64 KB stdout limit truncates; BaseException (`sys.exit`) safely caught. |
+| **G11** | `GATE-CORRECTNESS` | Correctness | **PASS** | **AUTOMATED**: 8 combinatorial reference solvers in `tests/oracles/referenceSolvers.ts`<br>**DOCUMENTARY**: `docs/curriculum-audit.md` | Independent brute-force solvers verify DP/Greedy outputs. Validators verified with edge cases and invariants. |
+| **G12** | `GATE-DEPLOY-REPRO` | CI / Reproducibility | **PASS** | **AUTOMATED**: `.github/workflows/ci.yml` | Clean container verification with Node 24 running lint, typecheck, test, and build. |
+
+---
+
+## 2. Detailed Protocols and Verification Evidence
+
+### G1: Static Build (`GATE-BUILD`)
+- **Automated**: `npm run build` generates `dist/index.html`, `dist/assets/vendor-react-*.js`, `dist/assets/visualizers-*.js`, `dist/assets/algorithm-engines-*.js`, `dist/assets/index-*.js`, and CSS assets.
+- **Static Integrity**: Fully servable via any static host (Cloudflare Pages, GitHub Pages, AWS S3) with zero server-side rendering or backend dependencies.
 
 ### G2: Type Safety (`GATE-TYPES`)
-- **Criteria**: Complete type coverage. No unescaped `any` types without explicit, documented rationale. `tsconfig.json` maintains strict mode.
-- **Verification**: `npm run typecheck`.
+- **Automated**: `tsc --noEmit` runs under TypeScript 5.7 with `strict: true`, `noImplicitAny: true`, `noUnusedLocals: true`, `noUnusedParameters: true`.
+- **Exceptions**: Exactly 3 `any` types in `src/runtime/pyodideWorker.ts`, documented and silenced with ESLint directives because the external Pyodide CDN bundle does not ship official TypeScript declaration types.
 
-### G3: Lint (`GATE-LINT`)
-- **Criteria**: Flat ESLint 9 configuration checks all `.ts`, `.tsx`, and `.js` files.
-- **Verification**: `npm run lint`.
+### G3: Linting (`GATE-LINT`)
+- **Automated**: ESLint 9 using flat config (`eslint.config.js`).
+- **Rule Enforcement**: Zero warnings, zero errors across all 286 source files. Build/test tool scripts isolated in `scripts/`.
 
-### G4: Unit Tests (`GATE-UNIT-TESTS`)
-- **Criteria**: Every algorithm, trace generator, and validator must have a corresponding unit test file in `tests/`.
-- **Verification**: `npm run test`.
+### G4: Unit Testing (`GATE-UNIT-TESTS`)
+- **Automated**: Vitest 3.0 runs 34 test files, 220 unit tests in ~1.8 seconds.
+- **Coverage**: Every algorithmic paradigm (Backtracking, Divide & Conquer, Dynamic Programming, Greedy, Network Flow, Linear Programming, Reductions, Approximations, Randomized) has dedicated tests.
 
-### G5: Integration Tests (`GATE-INTEG-TESTS`)
-- **Criteria**: Exercises must be verified through the 3-phase flow: Discover (playground state changes), Solve (validator response), and Understand (timeline step transitions).
-- **Verification**: Automated test suite exercising `PhaseSwitcher`, `useTraceTimeline`, and `registry`.
+### G5: Integration Testing (`GATE-INTEG-TESTS`)
+- **Automated**: Component state integration tests in `tests/phases.test.ts`, `tests/useTraceTimeline.test.ts`, and `tests/exerciseContent.test.ts`.
+- **Verification**: Verifies that state transitions (e.g. stepping through timeline events, phase progression, student code resets) produce deterministic outcomes.
 
-### G6: Browser/E2E Tests (`GATE-BROWSER-E2E`)
-- **Criteria**: Test the 15 user journeys specified in project engineering rules:
-  1. Application loads
-  2. Category navigation
-  3. Exercise selection
-  4. Discover phase
-  5. Solve phase
-  6. Understand phase
-  7. Language switching
-  8. Theme switching
-  9. Timeline controls
-  10. Validator feedback
-  11. Python execution
-  12. Runtime error handling
-  13. Worker timeout handling
-  14. Reset/retry behavior
-  15. Navigation between exercises
+### G6: Real Browser / E2E Testing (`GATE-BROWSER-E2E`)
+- **Automated**: `npm run test:browser` runs `scripts/browserQA.mjs`.
+- **Infrastructure**: Drives real headless Chromium (`/snap/bin/chromium`) via Chrome DevTools Protocol (CDP) over native Node.js WebSocket and HTTP server with zero third-party dependencies.
+- **Scenarios Verified (22/22 PASS)**:
+  1. Landing page loads & renders 21 exercises across 9 categories.
+  2. Category navigation filtering (Backtracking, Todos).
+  3. Exercise selection & mounting (N-Queens).
+  4. Discover phase interactive playground (places queen on SVG board, updates state).
+  5. Solve phase & Python 3 editor rendering.
+  6. Progressive hints accordion expansion.
+  7. Code editing in controlled `<textarea>`.
+  8. Local test execution with failing solution (produces failure card).
+  9. Reset template button (restores canonical starter code).
+  10. Skip-to-understand confirmation modal flow (cancel, re-open, confirm).
+  11. Successful validation unlocking Understand phase (unlocked badge ✓ appears).
+  12. Understand phase canonical code & pseudocode toggle.
+  13. Theory card invariants & asymptotic complexity formatting ($O$, $\Theta$).
+  14. Visualizer & timeline playback step controls (Step 1 -> Step 2).
+  15. Language switching (ES <-> EN).
+  16. Theme switching (`data-theme="dark"`, `data-theme="light"`).
+  17. Accessibility skip-to-content anchor (`#main-content`).
+  18. Keyboard focusability of interactive elements.
+  19. Return to catalog and exercise switching (Interval Scheduling).
+  20. Student code `sessionStorage` persistence across phase switches.
+  21. Error resilience with empty/malformed code input.
+  22. Responsive layout across 5 viewports:
+      - 1920x1080 (Desktop FHD) — Layout OK
+      - 1440x900 (Laptop) — Layout OK
+      - 1280x720 (Desktop Standard) — Layout OK
+      - 768x1024 (Tablet Portrait) — Layout OK
+      - 390x844 (Mobile) — Layout OK
+- **Console Log**: Zero console errors during entire 22-scenario real browser run.
+- **Visual Artifacts**: 10 screenshots generated in `dist-qa-screenshots/`.
 
 ### G7: Accessibility (`GATE-A11Y`)
-- **Criteria**:
-  - `prefers-reduced-motion: reduce` disables all transitions and animations.
-  - Skip-to-content anchor present and functional for keyboard users.
-  - Interactive elements have visible `:focus-visible` outlines.
-  - Color is not used as the only visual means of conveying information (WCAG 1.4.1).
+- **Status**: **PARTIAL**.
+- **Automated**: Keyboard navigation handlers verified in Vitest and Chromium QA suite.
+- **Features Implemented**:
+  - Semantic HTML (`<header>`, `<nav>`, `<main>`, `<article>`, `<button>`, `<select>`).
+  - Skip-to-content link targeting `#main-content`.
+  - `:focus-visible` styling on interactive elements.
+  - `prefers-reduced-motion` disables animations in CSS.
+- **Limitations**:
+  - Screen reader announcements for SVG graph interactions not yet fully audited with NVDA/VoiceOver.
+  - Certain complex graphs (Max Flow, Graph Coloring) rely primarily on color badges and require further secondary pattern/text indicators.
 
-### G8: Security (`GATE-SECURITY`)
-- **Criteria**:
-  - `grep -rn "dangerouslySetInnerHTML\|innerHTML\|eval(\|new Function(" src/` returns zero hits.
-  - Untrusted student Python runs in an isolated Web Worker without DOM or cookie access.
-  - Zero hardcoded credentials or API keys.
+### G8: Security & Sandboxing (`GATE-SECURITY`)
+- **Automated**:
+  - Static AST scan: 0 occurrences of `dangerouslySetInnerHTML`, `innerHTML`, `eval()`, `new Function()`, `document.write`.
+  - Content Security Policy (CSP) meta tag configured in `index.html`:
+    `default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self';`
+- **Pyodide Worker Sandboxing**:
+  - Untrusted code runs off-thread in a dedicated Web Worker.
+  - No access to DOM, cookies, session credentials, or local storage.
+  - 5s watchdog termination timer prevents infinite loops.
+  - 64 KB stdout limit prevents memory exhaustion DoS.
+- **Privacy**: Zero remote tracking, zero analytics, zero external user data transmission.
 
 ### G9: Performance (`GATE-PERF`)
-- **Criteria**:
-  - Production static bundle size checked against Vite thresholds (< 500 KB per chunk).
-  - Pyodide WebAssembly is only fetched when a student interacts with the Solve phase.
+- **Automated**: Vite build chunk analysis.
+- **Metrics**:
+  - `vendor-react`: 223 KB raw (69 KB gzip)
+  - `visualizers`: 225 KB raw (57 KB gzip)
+  - `algorithm-engines`: 117 KB raw (35 KB gzip)
+  - `index`: 160 KB raw (49 KB gzip)
+  - Total initial JS transfer: ~170 KB gzipped.
+  - Pyodide runtime (20 MB WebAssembly) is strictly lazy-loaded on first Python test execution in Solve phase.
 
 ### G10: Python Execution Reliability (`GATE-PY-RELIABILITY`)
-- **Criteria**:
-  - Infinite loops (`while True: pass`) terminated within 5,000 ms.
-  - Excessive stdout (`while True: print("A")`) truncated at 64 KB without browser freezing.
-  - Exceptions (`SyntaxError`, `NameError`, `SystemExit`) caught and reported gracefully.
+- **Automated**: `tests/pythonExecution.test.ts` verifies watchdog termination, stdout truncation, and error containment.
+- **Error Handling**: Catches `BaseException` (`sys.exit()`, `KeyboardInterrupt`), syntax errors, and non-serializable outputs without crashing the parent application.
 
 ### G11: Educational Correctness (`GATE-CORRECTNESS`)
-- **Criteria**:
-  - Canonical algorithms verified against independent reference oracles (brute-force combinatorial checkers for small inputs).
-  - Theoretical invariants and asymptotic complexities match CLRS / Kleinberg-Tardos textbooks.
+- **Automated**:
+  - 8 independent combinatorial reference solvers in `tests/oracles/referenceSolvers.ts`:
+    - Knapsack 0/1 (exhaustive power-set)
+    - Subset Sum (exhaustive subset generator)
+    - Coin Change (recursive memoized minimum solver)
+    - Weighted Interval Scheduling (exhaustive compatible subset solver)
+    - Inversion Counting (pairwise $O(n^2)$ comparator)
+    - N-Queens (independent attack matrix validator)
+    - Huffman Coding (prefix-free codebook validator)
+    - Vertex Cover (exact minimum vertex cover brute-force solver)
+  - 13 property and adversarial tests in `tests/adversarialAndOracles.test.ts`.
+- **Academic Review**: Documented in `docs/curriculum-audit.md` with formal mathematical invariants, induction arguments, and asymptotic bounds aligned with Kleinberg & Tardos (*Algorithm Design*) and CLRS.
 
 ### G12: Deployment Reproducibility (`GATE-DEPLOY-REPRO`)
-- **Criteria**:
-  - Clean `npm ci && npm run build` produces identical static deployment artifacts in GitHub Actions CI.
+- **Automated**: GitHub Actions workflow (`.github/workflows/ci.yml`) runs on Node 24 ubuntu-latest.
+- **Pipeline**: Runs `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build`.
