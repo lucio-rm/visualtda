@@ -88,3 +88,42 @@ Cada ejercicio se describe mediante:
 4. **Implementación Canónica** (`solution.py`): Código Python legible y optimizado.
 5. **Validador** (`tests.ts` / `validator.ts`): Comprobador formal de restricciones.
 6. **Visualizador** (`visualizer.tsx` / `visualizer.ts`): Componente interactivo que consume trazas.
+
+---
+
+## 5. Patrón Strategy & Registry para Evaluadores Python (`src/runtime/runners/`)
+
+Para evitar la aparición de archivos monolíticos ("God Files") con sentencias `switch` gigantescas, los evaluadores de Python implementan el patrón Strategy:
+
+```typescript
+export type PythonTestStrategy = (
+  code: string,
+  service: PythonExecutionService
+) => Promise<PythonStrategyResult>;
+```
+
+Cada paradigma algorítmico agrupa sus estrategias en módulos dedicados:
+- `backtrackingRunners.ts`
+- `greedyRunners.ts`
+- `dpRunners.ts`
+- `divideAndConquerRunners.ts`
+- `advancedRunners.ts`
+
+El orquestador central `pythonTestRunner.ts` no contiene lógica ramificada (`switch/case`), sino que despacha la ejecución dinámicamente mediante el diccionario central `PYTHON_TEST_STRATEGIES[exerciseId]`, cumpliendo estrictamente con el principio Open/Closed (OCP).
+
+---
+
+## 6. Patrón Registro Modular de Contenidos Didácticos (`src/engine/content/`)
+
+De forma análoga, el contenido didáctico de la fase Resolver (código inicial, pistas progresivas y tests heurísticos en el cliente) se organiza en módulos por paradigma bajo `src/engine/content/`, eliminando duplicaciones y reduciendo `src/engine/exerciseContent.ts` a un punto de reexportación limpio y fuertemente tipado.
+
+---
+
+## 7. Aislamiento y Seguridad de Pyodide (Web Worker)
+
+El entorno de ejecución de Python proporcionado por Pyodide corre en un Web Worker dedicado (`src/runtime/pyodideWorker.ts`):
+- **Cero acceso al DOM**: El worker no tiene acceso a `window`, `document`, `localStorage` ni cookies de sesión.
+- **Watchdog de 5.000 ms**: Interrumpe bucles infinitos o cálculos no convergentes mediante terminación del worker.
+- **Límite de salida (64 KB)**: El flujo `sys.stdout` está acotado para prevenir saturación de memoria en el navegador.
+- **Captura de `BaseException`**: Captura llamadas a `sys.exit()` o excepciones críticas en Python sin romper el protocolo de mensajería.
+
