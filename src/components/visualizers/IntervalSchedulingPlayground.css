@@ -50,6 +50,16 @@
   filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
 }
 
+.task-bar-interactive:focus-visible {
+  outline: 2px solid var(--color-primary, #3b82f6);
+  outline-offset: 2px;
+}
+
+.task-bar-interactive:focus-visible rect {
+  stroke: var(--color-primary, #3b82f6);
+  stroke-width: 2.5;
+}
+
 .playground-feedback-panel {
   display: flex;
   flex-direction: column;

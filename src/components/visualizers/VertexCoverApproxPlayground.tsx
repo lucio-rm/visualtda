@@ -121,6 +121,39 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         </div>
       </div>
 
+      {/* Accessible Edge Keyboard Controls */}
+      <div className="approx-edge-buttons-bar" role="group" aria-label={language === 'es' ? 'Controles de aristas del grafo' : 'Graph edge controls'}>
+        <span className="approx-edge-buttons-label">
+          {language === 'es' ? 'Aristas (Matching / Cobertura):' : 'Edges (Matching / Cover):'}
+        </span>
+        <div className="approx-edge-chips">
+          {edges.map(([u, v]) => {
+            const isMatched = matching.some(
+              (m) => (m[0] === u && m[1] === v) || (m[0] === v && m[1] === u)
+            );
+            const isCovered = coverSet.has(u) || coverSet.has(v);
+            const edgeStatus = isMatched
+              ? (language === 'es' ? 'en matching' : 'in matching')
+              : isCovered
+                ? (language === 'es' ? 'cubierta' : 'covered')
+                : (language === 'es' ? 'no cubierta' : 'uncovered');
+
+            return (
+              <button
+                key={`btn-edge-${u}-${v}`}
+                type="button"
+                className={`approx-edge-btn ${isMatched ? 'matched' : isCovered ? 'covered' : ''}`}
+                onClick={() => toggleEdge(u, v)}
+                aria-pressed={isMatched}
+                aria-label={`Arista ${u}-${v}: ${edgeStatus}`}
+              >
+                {isMatched ? '★ ' : isCovered ? '✓ ' : '○ '}{u}—{v}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* SVG Canvas */}
       <svg
         className="approx-interactive-svg"
@@ -143,16 +176,46 @@ export const VertexCoverApproxPlayground: React.FC = () => {
             if (isMatched) edgeClass += ' matched';
             else if (isCovered) edgeClass += ' covered';
 
+            const edgeStatus = isMatched
+              ? (language === 'es' ? 'en matching' : 'in matching')
+              : isCovered
+                ? (language === 'es' ? 'cubierta' : 'covered')
+                : (language === 'es' ? 'no cubierta' : 'uncovered');
+
             return (
-              <line
+              <g
                 key={`${u}-${v}`}
-                x1={p1.x}
-                y1={p1.y}
-                x2={p2.x}
-                y2={p2.y}
-                className={edgeClass}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isMatched}
+                aria-label={`Arista entre ${u} y ${v}, ${edgeStatus}`}
                 onClick={() => toggleEdge(u, v)}
-              />
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleEdge(u, v);
+                  }
+                }}
+                className="interactive-edge-group"
+                style={{ cursor: 'pointer', outline: 'none' }}
+              >
+                {/* Invisible wide hit area for easy clicking / touch */}
+                <line
+                  x1={p1.x}
+                  y1={p1.y}
+                  x2={p2.x}
+                  y2={p2.y}
+                  stroke="transparent"
+                  strokeWidth="24"
+                />
+                <line
+                  x1={p1.x}
+                  y1={p1.y}
+                  x2={p2.x}
+                  y2={p2.y}
+                  className={edgeClass}
+                />
+              </g>
             );
           })}
         </g>

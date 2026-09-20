@@ -48,6 +48,8 @@ export const RoadAntennasPlayground: React.FC = () => {
   const [userAntennas, setUserAntennas] = useState<number[]>([]);
   const [showGreedySolution, setShowGreedySolution] = useState<boolean>(false);
   const [activeTool, setActiveTool] = useState<'place_antenna' | 'place_house'>('place_antenna');
+  const [cursorKm, setCursorKm] = useState<number>(30);
+  const [inputKm, setInputKm] = useState<string>('30');
 
   // Compute canonical greedy solution
   const greedyAntennas = useMemo(() => {
@@ -90,28 +92,32 @@ export const RoadAntennasPlayground: React.FC = () => {
     return Math.round(ratio * maxKm);
   };
 
+  const handleApplyActionAtKm = (targetKm: number) => {
+    const clampedKm = Math.max(0, Math.min(maxKm, Math.round(targetKm)));
+    if (activeTool === 'place_antenna') {
+      const existingIdx = userAntennas.findIndex((a) => Math.abs(a - clampedKm) < Math.max(2, radius * 0.2));
+      if (existingIdx !== -1) {
+        setUserAntennas((prev) => prev.filter((_, idx) => idx !== existingIdx));
+      } else {
+        setUserAntennas((prev) => [...prev, clampedKm].sort((a, b) => a - b));
+      }
+    } else {
+      const existingHouseIdx = houses.findIndex((h) => Math.abs(h - clampedKm) < Math.max(2, maxKm * 0.02));
+      if (existingHouseIdx !== -1) {
+        setHouses((prev) => prev.filter((_, idx) => idx !== existingHouseIdx));
+      } else {
+        setHouses((prev) => [...prev, clampedKm].sort((a, b) => a - b));
+      }
+    }
+  };
+
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
     const clickedKm = xToKm(clickX);
-
-    if (activeTool === 'place_antenna') {
-      // If clicking near an existing user antenna, remove it; else add it
-      const existingIdx = userAntennas.findIndex((a) => Math.abs(a - clickedKm) < Math.max(2, radius * 0.2));
-      if (existingIdx !== -1) {
-        setUserAntennas((prev) => prev.filter((_, idx) => idx !== existingIdx));
-      } else {
-        setUserAntennas((prev) => [...prev, clickedKm].sort((a, b) => a - b));
-      }
-    } else {
-      // Place or remove house
-      const existingHouseIdx = houses.findIndex((h) => Math.abs(h - clickedKm) < Math.max(2, maxKm * 0.02));
-      if (existingHouseIdx !== -1) {
-        setHouses((prev) => prev.filter((_, idx) => idx !== existingHouseIdx));
-      } else {
-        setHouses((prev) => [...prev, clickedKm].sort((a, b) => a - b));
-      }
-    }
+    setCursorKm(clickedKm);
+    setInputKm(String(clickedKm));
+    handleApplyActionAtKm(clickedKm);
   };
 
   return (
@@ -171,6 +177,48 @@ export const RoadAntennasPlayground: React.FC = () => {
               onClick={() => setActiveTool('place_house')}
             >
               🏠 {language === 'es' ? 'Agregar / Quitar Casa' : 'Add / Remove House'}
+            </button>
+          </div>
+        </div>
+
+        <div className="playground-control-group">
+          <label htmlFor="km-direct-input">
+            {language === 'es' ? 'Ingreso numérico directo (km):' : 'Direct numeric entry (km):'}
+          </label>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <input
+              id="km-direct-input"
+              type="number"
+              min="0"
+              max={maxKm}
+              value={inputKm}
+              onChange={(e) => setInputKm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const val = Number(inputKm);
+                  if (!isNaN(val)) {
+                    handleApplyActionAtKm(val);
+                    setCursorKm(Math.max(0, Math.min(maxKm, Math.round(val))));
+                  }
+                }
+              }}
+              style={{ width: '80px', padding: '5px 8px', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)' }}
+            />
+            <button
+              type="button"
+              className="preset-btn"
+              onClick={() => {
+                const val = Number(inputKm);
+                if (!isNaN(val)) {
+                  handleApplyActionAtKm(val);
+                  setCursorKm(Math.max(0, Math.min(maxKm, Math.round(val))));
+                }
+              }}
+            >
+              {activeTool === 'place_antenna'
+                ? (language === 'es' ? '📡 Colocar / Quitar en km' : '📡 Place / Remove at km')
+                : (language === 'es' ? '🏠 Colocar / Quitar casa' : '🏠 Place / Remove house')}
             </button>
           </div>
         </div>
@@ -250,10 +298,62 @@ export const RoadAntennasPlayground: React.FC = () => {
           width="100%"
           height={svgHeight}
           onClick={handleSvgClick}
-          aria-label="Carretera interactiva para colocar antenas"
+          tabIndex={0}
+          role="region"
+          aria-label={
+            language === 'es'
+              ? `Carretera interactiva. Cursor en ${cursorKm} km. Flechas izquierda y derecha para moverte, Enter o Espacio para ${activeTool === 'place_antenna' ? 'colocar o quitar antena' : 'colocar o quitar casa'}.`
+              : `Interactive highway. Cursor at ${cursorKm} km. Left and right arrow keys to navigate, Enter or Space to ${activeTool === 'place_antenna' ? 'place or remove antenna' : 'place or remove house'}.`
+          }
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              const step = e.shiftKey ? 1 : 5;
+              const nextKm = Math.max(0, cursorKm - step);
+              setCursorKm(nextKm);
+              setInputKm(String(nextKm));
+            } else if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              const step = e.shiftKey ? 1 : 5;
+              const nextKm = Math.min(maxKm, cursorKm + step);
+              setCursorKm(nextKm);
+              setInputKm(String(nextKm));
+            } else if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleApplyActionAtKm(cursorKm);
+            }
+          }}
+          style={{ outline: 'none' }}
         >
           {/* Background */}
           <rect x="0" y="0" width={svgWidth} height={svgHeight} fill="transparent" />
+
+          {/* Accessible Keyboard & Mouse Cursor Marker */}
+          <g className="road-cursor-marker" aria-hidden="true">
+            <line
+              x1={kmToX(cursorKm)}
+              y1={roadY - 20}
+              x2={kmToX(cursorKm)}
+              y2={roadY + 24}
+              stroke="#f59e0b"
+              strokeWidth="2"
+              strokeDasharray="3 3"
+            />
+            <polygon
+              points={`${kmToX(cursorKm)},${roadY - 2} ${kmToX(cursorKm) - 5},${roadY - 12} ${kmToX(cursorKm) + 5},${roadY - 12}`}
+              fill="#f59e0b"
+            />
+            <text
+              x={kmToX(cursorKm)}
+              y={roadY - 18}
+              textAnchor="middle"
+              fill="#f59e0b"
+              fontSize="10"
+              fontWeight="700"
+            >
+              {cursorKm}k
+            </text>
+          </g>
 
           {/* Kilometer tick marks along road */}
           {Array.from({ length: Math.floor(maxKm / 10) + 1 }).map((_, idx) => {
@@ -403,6 +503,30 @@ export const RoadAntennasPlayground: React.FC = () => {
           })}
         </svg>
       </div>
+
+      {/* Accessible List of User Placed Antennas */}
+      {userAntennas.length > 0 && (
+        <div className="placed-antennas-bar">
+          <span className="placed-antennas-label">
+            {language === 'es' ? 'Tus antenas instaladas:' : 'Your placed antennas:'}
+          </span>
+          <div className="placed-antennas-chips">
+            {userAntennas.map((antKm, idx) => (
+              <span key={`chip-${antKm}-${idx}`} className="antenna-chip">
+                📡 {antKm}k [{Math.max(0, antKm - radius)}–{Math.min(maxKm, antKm + radius)}k]
+                <button
+                  type="button"
+                  className="antenna-chip-remove"
+                  aria-label={language === 'es' ? `Eliminar antena en km ${antKm}` : `Remove antenna at km ${antKm}`}
+                  onClick={() => setUserAntennas((prev) => prev.filter((_, i) => i !== idx))}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

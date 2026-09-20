@@ -113,11 +113,28 @@ export const IntervalSchedulingPlayground: React.FC = () => {
           if (isConflict) barFill = '#ef4444';
           else if (isSelected) barFill = '#10b981';
 
+          const statusDesc = isConflict
+            ? (language === 'es' ? 'en conflicto' : 'conflicted')
+            : isSelected
+              ? (language === 'es' ? 'seleccionada' : 'selected')
+              : (language === 'es' ? 'no seleccionada' : 'not selected');
+
           return (
             <g
               key={task.id}
               onClick={() => toggleTask(task.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleTask(task.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-pressed={isSelected}
+              aria-label={`Tarea ${task.id}, ${task.start} a ${task.end} horas, ${statusDesc}`}
               className={`task-bar-interactive ${isSelected ? 'selected' : ''} ${isConflict ? 'conflict' : ''}`}
+              style={{ cursor: 'pointer', outline: 'none' }}
             >
               <rect
                 x={x1}
@@ -135,7 +152,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 fontWeight="600"
                 fontFamily="var(--font-sans)"
               >
-                {task.id} [{task.start}-{task.end}]
+                {isConflict ? '⚠ ' : isSelected ? '✓ ' : ''}{task.id} [{task.start}-{task.end}]
               </text>
             </g>
           );

@@ -75,3 +75,60 @@
   line-height: 1.5;
   color: var(--text);
 }
+
+.approx-edge-buttons-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.approx-edge-buttons-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.approx-edge-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.approx-edge-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full, 9999px);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.approx-edge-btn:hover {
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.approx-edge-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #3b82f6);
+  outline-offset: 2px;
+}
+
+.approx-edge-btn.matched {
+  background-color: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.approx-edge-btn.covered {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.interactive-edge-group:focus-visible line.approx-edge {
+  stroke: #3b82f6 !important;
+  stroke-width: 6 !important;
+  stroke-dasharray: 4 2;
+}

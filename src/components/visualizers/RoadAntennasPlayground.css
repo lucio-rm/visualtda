@@ -146,3 +146,62 @@
 [data-theme='dark'] .challenge-feedback-banner.incomplete {
   color: #93c5fd;
 }
+
+.interactive-road-svg:focus-visible {
+  outline: 2px solid var(--color-primary, #6366f1);
+  outline-offset: 4px;
+}
+
+.placed-antennas-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+  padding: var(--space-3, 12px);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.placed-antennas-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.placed-antennas-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.antenna-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid #6366f1;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.antenna-chip-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.antenna-chip-remove:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.antenna-chip-remove:focus-visible {
+  outline: 2px solid #ef4444;
+}
