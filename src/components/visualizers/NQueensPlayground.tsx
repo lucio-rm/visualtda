@@ -27,10 +27,11 @@ export const NQueensPlayground: React.FC = () => {
     setBoard(new Array(newN).fill(-1));
   };
 
-  // Live validation of current manual board
+  // Live partial validation of current manual board
   const placedQueensCount = board.filter((c) => c !== -1).length;
-  const validationResult = nQueensValidator.validate({ n }, board);
-  const isCompleteSolution = placedQueensCount === n && validationResult.valid;
+  const partialValidation = nQueensValidator.validatePartial({ n }, board);
+  const isCompleteSolution = placedQueensCount === n && partialValidation.valid;
+  const activeConflict = partialValidation.conflict;
 
   return (
     <div className="nqueens-playground-box">
@@ -70,6 +71,17 @@ export const NQueensPlayground: React.FC = () => {
           interactive={true}
           onCellClick={handleCellClick}
           isSolution={isCompleteSolution}
+          conflictWith={
+            activeConflict
+              ? {
+                  row: activeConflict.row1,
+                  col: activeConflict.col1,
+                  type: activeConflict.type
+                }
+              : undefined
+          }
+          currentRow={activeConflict ? activeConflict.row2 : -1}
+          currentCol={activeConflict ? activeConflict.col2 : -1}
         />
       </div>
 
@@ -81,9 +93,9 @@ export const NQueensPlayground: React.FC = () => {
           <div className="playground-success-banner">
             🎉 ¡Felicitaciones! Has descubierto una solución válida sin conflictos.
           </div>
-        ) : validationResult.errors.length > 0 && placedQueensCount > 1 ? (
+        ) : !partialValidation.valid && partialValidation.errors.length > 0 ? (
           <div className="playground-warning-banner">
-            ⚠️ Conflicto detectado: {validationResult.errors[0]}
+            ⚠️ Conflicto detectado: {partialValidation.errors[0]}
           </div>
         ) : (
           <div className="playground-hint-text">

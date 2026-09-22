@@ -53,12 +53,13 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
             const isCandidate = r === currentRow && c === currentCol;
             const isPlaced = board[r] === c;
             const isConflictSource = conflictWith && conflictWith.row === r && conflictWith.col === c;
+            const isConflictTarget = conflictWith && currentRow === r && currentCol === c;
             const isConflictedCandidate = isCandidate && !!conflictWith;
 
             let cellClass = `board-cell ${isDark ? 'cell-dark' : 'cell-light'}`;
             if (isSolution) cellClass += ' cell-solution';
-            if (isConflictSource) cellClass += ' cell-conflict-source';
-            if (isConflictedCandidate) cellClass += ' cell-conflict-target';
+            if (isConflictSource || isConflictTarget) cellClass += ' cell-conflict-source';
+            if (isConflictedCandidate && !isPlaced) cellClass += ' cell-conflict-target';
             if (isCandidate && !conflictWith) cellClass += ' cell-candidate';
 
             return (
@@ -113,7 +114,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                       cx={c * cellSize + cellSize / 2}
                       cy={r * cellSize + cellSize / 2}
                       r={cellSize * 0.38}
-                      className={`queen-bg-circle ${isSolution ? 'solution-circle' : ''} ${isConflictSource ? 'conflict-circle' : ''}`}
+                      className={`queen-bg-circle ${isSolution ? 'solution-circle' : ''} ${isConflictSource || isConflictTarget ? 'conflict-circle' : ''}`}
                     />
                     <text
                       x={c * cellSize + cellSize / 2}

@@ -1,5 +1,42 @@
 import { ValidationResult, Validator } from '../../types/validation';
 
+export type NQueensConflictKind = 'column' | 'diag_main' | 'diag_sec';
+
+export interface NQueensConflict {
+  row1: number;
+  col1: number;
+  row2: number;
+  col2: number;
+  type: NQueensConflictKind;
+  message: string;
+}
+
+export interface NQueensPartialValidationResult extends ValidationResult {
+  conflict?: NQueensConflict;
+  conflicts: NQueensConflict[];
+}
+
+export function areQueensAttacking(r1: number, c1: number, r2: number, c2: number): boolean {
+  if (r1 === r2 && c1 === c2) return false;
+  if (r1 === r2) return true;
+  if (c1 === c2) return true;
+  return Math.abs(r1 - r2) === Math.abs(c1 - c2);
+}
+
+export function getQueenConflictType(
+  r1: number,
+  c1: number,
+  r2: number,
+  c2: number
+): NQueensConflictKind | 'row' | null {
+  if (r1 === r2 && c1 === c2) return null;
+  if (r1 === r2) return 'row';
+  if (c1 === c2) return 'column';
+  if (r1 - c1 === r2 - c2) return 'diag_main';
+  if (r1 + c1 === r2 + c2) return 'diag_sec';
+  return null;
+}
+
 export class NQueensValidator implements Validator<{ n: number }, number[]> {
   validate(input: { n: number }, board: number[]): ValidationResult {
     const { n } = input;
@@ -57,6 +94,86 @@ export class NQueensValidator implements Validator<{ n: number }, number[]> {
     return {
       valid: errors.length === 0,
       errors
+    };
+  }
+
+  /**
+   * Validates a partial manual board state where unplaced rows are denoted by -1.
+   * Only checks pairwise collisions between actually placed queens.
+   */
+  validatePartial(input: { n: number }, board: number[]): NQueensPartialValidationResult {
+    const { n } = input;
+    const errors: string[] = [];
+    const conflicts: NQueensConflict[] = [];
+
+    if (!Array.isArray(board)) {
+      return {
+        valid: false,
+        errors: ['El tablero debe ser un arreglo de enteros.'],
+        conflicts: []
+      };
+    }
+
+    const placed: Array<{ row: number; col: number }> = [];
+    for (let r = 0; r < board.length && r < n; r++) {
+      const c = board[r];
+      if (c === -1 || c === null || c === undefined) {
+        continue;
+      }
+      if (!Number.isInteger(c) || c < 0 || c >= n) {
+        errors.push(`Posición inválida en la fila ${r}: columna ${c} fuera de rango [0, ${n - 1}].`);
+        continue;
+      }
+      placed.push({ row: r, col: c });
+    }
+
+    for (let i = 0; i < placed.length; i++) {
+      for (let j = i + 1; j < placed.length; j++) {
+        const q1 = placed[i];
+        const q2 = placed[j];
+
+        if (q1.col === q2.col) {
+          const message = `Conflicto de columna: las reinas en fila ${q1.row} y fila ${q2.row} comparten la columna ${q1.col}.`;
+          errors.push(message);
+          conflicts.push({
+            row1: q1.row,
+            col1: q1.col,
+            row2: q2.row,
+            col2: q2.col,
+            type: 'column',
+            message
+          });
+        } else if (q1.row - q1.col === q2.row - q2.col) {
+          const message = `Conflicto diagonal principal: reina en (${q1.row}, ${q1.col}) y reina en (${q2.row}, ${q2.col}).`;
+          errors.push(message);
+          conflicts.push({
+            row1: q1.row,
+            col1: q1.col,
+            row2: q2.row,
+            col2: q2.col,
+            type: 'diag_main',
+            message
+          });
+        } else if (q1.row + q1.col === q2.row + q2.col) {
+          const message = `Conflicto diagonal secundaria: reina en (${q1.row}, ${q1.col}) y reina en (${q2.row}, ${q2.col}).`;
+          errors.push(message);
+          conflicts.push({
+            row1: q1.row,
+            col1: q1.col,
+            row2: q2.row,
+            col2: q2.col,
+            type: 'diag_sec',
+            message
+          });
+        }
+      }
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+      conflict: conflicts[0],
+      conflicts
     };
   }
 }
