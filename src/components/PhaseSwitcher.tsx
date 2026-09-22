@@ -69,8 +69,12 @@ export const PhaseSwitcher: React.FC<PhaseSwitcherProps> = ({
                   <span className="phase-step-title">{t(p.label)}</span>
                   <span className="phase-step-question">{t(p.question)}</span>
                 </div>
-                {p.id === 'understand' && solutionUnlocked && (
-                  <span className="phase-unlocked-tag" title={language === 'es' ? 'Solución desbloqueada' : 'Solution unlocked'}>✓</span>
+                {p.id === 'understand' && (
+                  solutionUnlocked ? (
+                    <span className="phase-unlocked-tag" title={language === 'es' ? 'Solución desbloqueada' : 'Solution unlocked'}>✓</span>
+                  ) : (
+                    <span className="phase-locked-tag" title={language === 'es' ? 'Requiere resolver o confirmar' : 'Requires solve or confirm'}>🔒</span>
+                  )
                 )}
               </button>
             </li>

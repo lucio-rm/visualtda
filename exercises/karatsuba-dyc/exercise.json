@@ -1,0 +1,27 @@
+{
+  "id": "karatsuba-dyc",
+  "problemId": "karatsuba",
+  "techniqueId": "divide-and-conquer",
+  "category": "divide-and-conquer",
+  "difficulty": "medium",
+  "order": 6,
+  "title": {
+    "es": "Multiplicaci\u00f3n de Karatsuba",
+    "en": "Karatsuba Fast Multiplication"
+  },
+  "subtitle": {
+    "es": "Multiplicaci\u00f3n de enteros grandes en O(n^{1.585}) reduciendo 4 llamadas recursivas a 3",
+    "en": "Large integer multiplication in O(n^{1.585}) reducing 4 multiplications to 3"
+  },
+  "description": {
+    "es": "Aprovecha la identidad (x1 + x0)(y1 + y0) - x1*y1 - x0*y0 = x1*y0 + x0*y1 para calcular el producto de enteros grandes con s\u00f3lo 3 multiplicaciones de la mitad del tama\u00f1o.",
+    "en": "Exploits the algebraic identity to multiply big integers with only 3 half-size subproblem multiplications."
+  },
+  "tags": [
+    "divide-and-conquer",
+    "arithmetic",
+    "master-theorem",
+    "algebra",
+    "kleinberg-tardos"
+  ]
+}

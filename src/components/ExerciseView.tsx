@@ -35,8 +35,16 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   const { isInstructorMode } = useInstructorMode();
   const [phase, setPhase] = useState<ExercisePhase>('discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
-
   const isEffectiveUnlocked = solutionUnlocked || isInstructorMode;
+  const [showFrictionModal, setShowFrictionModal] = useState(false);
+
+  const handlePhaseChange = (newPhase: ExercisePhase) => {
+    if (newPhase === 'understand' && !isEffectiveUnlocked) {
+      setShowFrictionModal(true);
+      return;
+    }
+    setPhase(newPhase);
+  };
 
   const handleSolveSuccess = () => {
     setSolutionUnlocked(true);
@@ -80,7 +88,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
       <PhaseSwitcher
         currentPhase={phase}
-        onPhaseChange={setPhase}
+        onPhaseChange={handlePhaseChange}
         solutionUnlocked={isEffectiveUnlocked}
       />
 
@@ -114,6 +122,37 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
           />
         )}
       </div>
+
+      {showFrictionModal && (
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="phase-friction-title">
+          <div className="modal-card">
+            <h4 id="phase-friction-title">{t(dict.skipModalTitle)}</h4>
+            <p>{t(dict.skipModalBody)}</p>
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => {
+                  setShowFrictionModal(false);
+                  setPhase('solve');
+                }}
+              >
+                {t({ es: 'Ir a Resolver primero', en: 'Go to Solve first' })}
+              </button>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={() => {
+                  setShowFrictionModal(false);
+                  handleSkipToUnderstand();
+                }}
+              >
+                {t(dict.skipModalConfirm)} &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

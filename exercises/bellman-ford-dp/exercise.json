@@ -1,0 +1,27 @@
+{
+  "id": "bellman-ford-dp",
+  "problemId": "bellman-ford",
+  "techniqueId": "dynamic-programming",
+  "category": "dynamic-programming",
+  "difficulty": "hard",
+  "order": 8,
+  "title": {
+    "es": "Caminos M\u00ednimos con Bellman-Ford",
+    "en": "Bellman-Ford Shortest Paths"
+  },
+  "subtitle": {
+    "es": "Caminos m\u00ednimos en grafos con aristas negativas y detecci\u00f3n de ciclos negativos en O(V \u00b7 E)",
+    "en": "Shortest paths with negative weights and negative cycle detection in O(V \u00b7 E)"
+  },
+  "description": {
+    "es": "Define OPT(i, v) como el camino m\u00ednimo hacia v usando a lo sumo i aristas. Relaja todas las aristas |V|-1 veces y detecta ciclos negativos si la distancia sigue disminuyendo.",
+    "en": "Defines OPT(i, v) using at most i edges. Relaxes edges |V|-1 times and detects negative cycles."
+  },
+  "tags": [
+    "dynamic-programming",
+    "graphs",
+    "negative-weights",
+    "shortest-path",
+    "kleinberg-tardos"
+  ]
+}

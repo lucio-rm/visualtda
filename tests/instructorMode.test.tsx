@@ -130,4 +130,47 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     expect(modal?.textContent).toContain('sin penalización');
     expect(modal?.textContent).toContain('retención y comprensión profunda');
   });
+
+  it('intercepts direct click on Understand phase in PhaseSwitcher when locked and displays friction modal', async () => {
+    await act(async () => {
+      root.render(<App />);
+    });
+
+    const openBtn = container.querySelector('.exercise-card .btn-open-exercise') as HTMLButtonElement;
+    await act(async () => {
+      openBtn.click();
+    });
+
+    // Directly click Phase 3 (Understand) from Discover view without solving
+    const phaseButtons = Array.from(container.querySelectorAll('.phase-button')) as HTMLButtonElement[];
+    expect(phaseButtons.length).toBe(3);
+
+    // Verify lock icon is present on phase 3 tab
+    const lockedTag = container.querySelector('.phase-locked-tag');
+    expect(lockedTag).not.toBeNull();
+
+    await act(async () => {
+      phaseButtons[2].click();
+    });
+
+    // Understand view should NOT be rendered yet
+    expect(container.querySelector('.understand-view')).toBeNull();
+
+    // Friction modal should be displayed
+    const modal = container.querySelector('.modal-card');
+    expect(modal).not.toBeNull();
+    expect(modal?.textContent).toContain('¿Revelar la solución canónica?');
+
+    // Clicking confirm in modal unlocks Understand phase
+    const confirmBtn = container.querySelector('.modal-actions .btn-primary') as HTMLButtonElement;
+    expect(confirmBtn).not.toBeNull();
+
+    await act(async () => {
+      confirmBtn.click();
+    });
+
+    // Now Understand view is rendered
+    expect(container.querySelector('.understand-view')).not.toBeNull();
+    expect(container.textContent).toContain('Solución Canónica');
+  });
 });

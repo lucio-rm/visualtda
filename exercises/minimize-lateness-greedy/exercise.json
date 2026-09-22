@@ -1,0 +1,27 @@
+{
+  "id": "minimize-lateness-greedy",
+  "problemId": "minimize-lateness",
+  "techniqueId": "greedy",
+  "category": "greedy",
+  "difficulty": "medium",
+  "order": 6,
+  "title": {
+    "es": "Minimizar Retraso M\u00e1ximo (Scheduling)",
+    "en": "Scheduling to Minimize Lateness"
+  },
+  "subtitle": {
+    "es": "Planificar tareas con duraciones y fechas l\u00edmite minimizando el retraso m\u00e1ximo",
+    "en": "Schedule jobs with lengths and deadlines to minimize maximum lateness"
+  },
+  "description": {
+    "es": "Regla Earliest Deadline First (EDF). Ordena las tareas por fecha l\u00edmite d_i creciente. Demuestra optimalidad mediante un argumento de intercambio de inversiones.",
+    "en": "Earliest Deadline First (EDF) rule. Orders jobs by deadline d_i. Optimality proven via inversion exchange argument."
+  },
+  "tags": [
+    "greedy",
+    "scheduling",
+    "exchange-argument",
+    "inversion",
+    "kleinberg-tardos"
+  ]
+}

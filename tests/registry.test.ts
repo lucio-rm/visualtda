@@ -28,20 +28,20 @@ describe('ExerciseRegistry', () => {
 
   it('filters exercises by category correctly', () => {
     const btExercises = registry.getExercises('backtracking');
-    expect(btExercises.length).toBe(3);
+    expect(btExercises.length).toBe(8);
     expect(btExercises.map((e) => e.id)).toContain('n-queens');
     expect(btExercises.map((e) => e.id)).toContain('subset-sum-backtracking');
     expect(btExercises.map((e) => e.id)).toContain('graph-coloring-backtracking');
 
     const greedyExercises = registry.getExercises('greedy');
-    expect(greedyExercises.length).toBe(4);
+    expect(greedyExercises.length).toBe(8);
     expect(greedyExercises.map((e) => e.id)).toContain('interval-scheduling');
     expect(greedyExercises.map((e) => e.id)).toContain('knapsack-greedy');
     expect(greedyExercises.map((e) => e.id)).toContain('road-antennas-greedy');
     expect(greedyExercises.map((e) => e.id)).toContain('huffman-coding-greedy');
 
     const dpExercises = registry.getExercises('dynamic-programming');
-    expect(dpExercises.length).toBe(5);
+    expect(dpExercises.length).toBe(8);
     expect(dpExercises.map((e) => e.id)).toContain('knapsack-dp');
     expect(dpExercises.map((e) => e.id)).toContain('juan-el-vago');
     expect(dpExercises.map((e) => e.id)).toContain('coin-change-dp');
@@ -49,7 +49,7 @@ describe('ExerciseRegistry', () => {
     expect(dpExercises.map((e) => e.id)).toContain('weighted-interval-scheduling');
 
     const dycExercises = registry.getExercises('divide-and-conquer');
-    expect(dycExercises.length).toBe(4);
+    expect(dycExercises.length).toBe(8);
     expect(dycExercises.map((e) => e.id)).toContain('merge-sort');
     expect(dycExercises.map((e) => e.id)).toContain('max-subarray-dyc');
     expect(dycExercises.map((e) => e.id)).toContain('peak-finding-dyc');

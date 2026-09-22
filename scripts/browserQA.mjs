@@ -245,8 +245,8 @@ server.listen(PORT, async () => {
         throw new Error(`Expected at least 9 category tabs, found ${categoryTabs}`);
       }
       const exerciseCards = await evaluate('document.querySelectorAll(".exercise-card").length');
-      if (exerciseCards !== 21) {
-        throw new Error(`Expected exactly 21 exercises in catalog, found ${exerciseCards}`);
+      if (exerciseCards !== 37) {
+        throw new Error(`Expected exactly 37 exercises in catalog, found ${exerciseCards}`);
       }
       await captureScreenshot('01-landing-page-desktop.png');
     });
@@ -265,8 +265,8 @@ server.listen(PORT, async () => {
       await new Promise((r) => setTimeout(r, 200));
 
       const btCount = await evaluate('document.querySelectorAll(".exercise-card").length');
-      if (btCount !== 3) {
-        throw new Error(`Expected 3 Backtracking exercises, found ${btCount}`);
+      if (btCount !== 8) {
+        throw new Error(`Expected 8 Backtracking exercises, found ${btCount}`);
       }
 
       // Click 'Todos' tab
@@ -279,8 +279,8 @@ server.listen(PORT, async () => {
       await new Promise((r) => setTimeout(r, 200));
 
       const allCount = await evaluate('document.querySelectorAll(".exercise-card").length');
-      if (allCount !== 21) {
-        throw new Error(`Expected 21 exercises after resetting to Todos, found ${allCount}`);
+      if (allCount !== 37) {
+        throw new Error(`Expected 37 exercises after resetting to Todos, found ${allCount}`);
       }
     });
 

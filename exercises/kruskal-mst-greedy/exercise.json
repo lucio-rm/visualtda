@@ -1,0 +1,28 @@
+{
+  "id": "kruskal-mst-greedy",
+  "problemId": "kruskal-mst",
+  "techniqueId": "greedy",
+  "category": "greedy",
+  "difficulty": "medium",
+  "order": 8,
+  "title": {
+    "es": "\u00c1rbol Generador M\u00ednimo (Kruskal)",
+    "en": "Kruskal Minimum Spanning Tree"
+  },
+  "subtitle": {
+    "es": "Conectar todos los v\u00e9rtices con costo total m\u00ednimo mediante selecci\u00f3n voraz de aristas y Union-Find",
+    "en": "Connect all vertices with minimal total cost using greedy edge selection and Disjoint-Set"
+  },
+  "description": {
+    "es": "Ordena las aristas por peso creciente. Agrega una arista si y s\u00f3lo si conecta dos componentes conexas distintas, verificado en tiempo casi constante mediante Union-Find.",
+    "en": "Sorts edges by weight. Greedily adds edge if it connects distinct components via Union-Find."
+  },
+  "tags": [
+    "greedy",
+    "mst",
+    "graphs",
+    "union-find",
+    "cut-property",
+    "kleinberg-tardos"
+  ]
+}

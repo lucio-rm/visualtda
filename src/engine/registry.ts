@@ -417,6 +417,254 @@ export const EXERCISES: ExerciseMetadata[] = [
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['randomized', 'probability', 'las-vegas', 'von-neumann', 'bernoulli', 'expected-time']
+  },
+  // --- Additional Foundational Exercises (Kleinberg & Tardos Syllabus Expansion) ---
+  // Divide & Conquer (Orders 5-8)
+  {
+    id: 'closest-pair-dyc',
+    problemId: 'closest-pair',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 5,
+    difficulty: 3,
+    title: { es: 'Par de Puntos Más Cercano (Closest Pair)', en: 'Closest Pair of Points' },
+    subtitle: {
+      es: 'Encontrar la mínima distancia euclídea entre n puntos en el plano en O(n log n)',
+      en: 'Find minimal Euclidean distance among n 2D points in O(n log n)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'geometry', 'euclidean-distance', 'master-theorem', 'fiuba', 'kleinberg-tardos']
+  },
+  {
+    id: 'karatsuba-dyc',
+    problemId: 'karatsuba',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 6,
+    difficulty: 2,
+    title: { es: 'Multiplicación de Karatsuba', en: 'Karatsuba Fast Multiplication' },
+    subtitle: {
+      es: 'Multiplicación de enteros grandes en O(n^{1.585}) reduciendo 4 llamadas recursivas a 3',
+      en: 'Large integer multiplication in O(n^{1.585}) reducing 4 multiplications to 3'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'arithmetic', 'master-theorem', 'algebra', 'kleinberg-tardos']
+  },
+  {
+    id: 'median-of-medians-dyc',
+    problemId: 'median-of-medians',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 7,
+    difficulty: 3,
+    title: { es: 'Selección en Tiempo Lineal (Mediana de Medianas)', en: 'Median of Medians (Linear Selection)' },
+    subtitle: {
+      es: 'Encontrar el k-ésimo menor elemento de un arreglo con cota determinística O(n)',
+      en: 'Find k-th smallest element with guaranteed deterministic O(n) worst-case bound'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'selection', 'order-statistics', 'master-theorem', 'clrs', 'kleinberg-tardos']
+  },
+  {
+    id: 'majority-element-dyc',
+    problemId: 'majority-element',
+    techniqueId: 'divide-and-conquer',
+    categoryId: 'divide-and-conquer',
+    order: 8,
+    difficulty: 1,
+    title: { es: 'Elemento Mayoritario', en: 'Majority Element (D&C)' },
+    subtitle: {
+      es: 'Hallar el elemento que aparece estrictamente más de n/2 veces en O(n log n)',
+      en: 'Find element appearing strictly more than n/2 times in O(n log n)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['divide-and-conquer', 'frequency', 'master-theorem', 'fiuba']
+  },
+
+  // Greedy (Orders 5-8)
+  {
+    id: 'interval-partitioning-greedy',
+    problemId: 'interval-partitioning',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 5,
+    difficulty: 2,
+    title: { es: 'Partición de Intervalos (Asignación de Aulas)', en: 'Interval Partitioning (Classroom Scheduling)' },
+    subtitle: {
+      es: 'Minimizar la cantidad de aulas necesarias para albergar todas las clases sin superposiciones',
+      en: 'Minimize number of classrooms to schedule all lectures without conflicts'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'intervals', 'scheduling', 'min-heap', 'exchange-argument', 'kleinberg-tardos']
+  },
+  {
+    id: 'minimize-lateness-greedy',
+    problemId: 'minimize-lateness',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 6,
+    difficulty: 2,
+    title: { es: 'Minimizar Retraso Máximo (Scheduling)', en: 'Scheduling to Minimize Lateness' },
+    subtitle: {
+      es: 'Planificar tareas con duraciones y fechas límite minimizando el retraso máximo',
+      en: 'Schedule jobs with lengths and deadlines to minimize maximum lateness'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'scheduling', 'exchange-argument', 'inversion', 'kleinberg-tardos']
+  },
+  {
+    id: 'dijkstra-greedy',
+    problemId: 'dijkstra',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 7,
+    difficulty: 2,
+    title: { es: 'Caminos Mínimos de Dijkstra', en: 'Dijkstra Shortest Path' },
+    subtitle: {
+      es: 'Calcular la distancia mínima desde un vértice origen hacia todos los demás en grafos con pesos no negativos',
+      en: 'Compute shortest path distances from source to all vertices on non-negative weighted graphs'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'graphs', 'shortest-path', 'min-heap', 'priority-queue', 'kleinberg-tardos']
+  },
+  {
+    id: 'kruskal-mst-greedy',
+    problemId: 'kruskal-mst',
+    techniqueId: 'greedy',
+    categoryId: 'greedy',
+    order: 8,
+    difficulty: 2,
+    title: { es: 'Árbol Generador Mínimo (Kruskal)', en: 'Kruskal Minimum Spanning Tree' },
+    subtitle: {
+      es: 'Conectar todos los vértices con costo total mínimo mediante selección voraz de aristas y Union-Find',
+      en: 'Connect all vertices with minimal total cost using greedy edge selection and Disjoint-Set'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['greedy', 'mst', 'graphs', 'union-find', 'cut-property', 'kleinberg-tardos']
+  },
+
+  // Dynamic Programming (Orders 6-8)
+  {
+    id: 'segmented-least-squares-dp',
+    problemId: 'segmented-least-squares',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 6,
+    difficulty: 3,
+    title: { es: 'Mínimos Cuadrados Segmentados', en: 'Segmented Least Squares' },
+    subtitle: {
+      es: 'Particionar n puntos en segmentos lineales óptimos balanceando error cuadrático y costo de penalización C',
+      en: 'Partition n 2D points into linear segments balancing SSE and penalty cost C'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', 'regression', 'optimization', 'recurrence', 'kleinberg-tardos']
+  },
+  {
+    id: 'rna-secondary-structure-dp',
+    problemId: 'rna-secondary-structure',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 7,
+    difficulty: 3,
+    title: { es: 'Estructura Secundaria de ARN', en: 'RNA Secondary Structure' },
+    subtitle: {
+      es: 'Maximizar pares de bases complementarias sin cruces sobre intervalos (i, j)',
+      en: 'Maximize non-crossing Watson-Crick base pairs on interval (i, j)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', 'bioinformatics', 'interval-dp', 'recurrence', 'kleinberg-tardos']
+  },
+  {
+    id: 'bellman-ford-dp',
+    problemId: 'bellman-ford',
+    techniqueId: 'dynamic-programming',
+    categoryId: 'dynamic-programming',
+    order: 8,
+    difficulty: 3,
+    title: { es: 'Caminos Mínimos con Bellman-Ford', en: 'Bellman-Ford Shortest Paths' },
+    subtitle: {
+      es: 'Caminos mínimos en grafos con aristas negativas y detección de ciclos negativos en O(V · E)',
+      en: 'Shortest paths with negative weights and negative cycle detection in O(V · E)'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['dynamic-programming', 'graphs', 'negative-weights', 'shortest-path', 'kleinberg-tardos']
+  },
+
+  // Backtracking (Orders 4-8)
+  {
+    id: 'sudoku-backtracking',
+    problemId: 'sudoku',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 4,
+    difficulty: 2,
+    title: { es: 'Sudoku Solver (Poda de Restricciones)', en: 'Sudoku Constraint Backtracking' },
+    subtitle: {
+      es: 'Resolver cuadrículas 9×9 respetando restricciones de fila, columna y caja 3×3 con poda MRV',
+      en: 'Solve 9x9 Sudoku grids satisfying row, column, and box constraints with MRV pruning'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'constraint-satisfaction', 'heuristics', 'mrv', 'pruning']
+  },
+  {
+    id: 'hamiltonian-cycle-backtracking',
+    problemId: 'hamiltonian-cycle',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 5,
+    difficulty: 3,
+    title: { es: 'Ciclo Hamiltoniano', en: 'Hamiltonian Cycle' },
+    subtitle: {
+      es: 'Hallar un ciclo cerrado simple que visite cada vértice exactamente una vez',
+      en: 'Find a closed simple cycle that visits every vertex exactly once'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'graphs', 'np-complete', 'permutations', 'pruning', 'kleinberg-tardos']
+  },
+  {
+    id: 'tsp-branch-and-bound',
+    problemId: 'tsp',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 6,
+    difficulty: 3,
+    title: { es: 'Viajante de Comercio (TSP Branch & Bound)', en: 'Traveling Salesperson (Branch & Bound)' },
+    subtitle: {
+      es: 'Encontrar el tour de costo mínimo podando ramas con la cota inferior del Árbol Generador Mínimo (MST)',
+      en: 'Find minimal cost tour pruning branches via Minimum Spanning Tree lower bound'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'branch-and-bound', 'tsp', 'mst', 'np-hard', 'optimization']
+  },
+  {
+    id: 'knapsack-branch-and-bound',
+    problemId: 'knapsack-bb',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 7,
+    difficulty: 3,
+    title: { es: 'Mochila 0/1 por Branch & Bound', en: '0/1 Knapsack Branch & Bound' },
+    subtitle: {
+      es: 'Resolver la mochila 0/1 mediante poda con la cota superior de la relajación lineal continua',
+      en: 'Solve 0/1 Knapsack pruning branches via fractional linear relaxation upper bound'
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'branch-and-bound', 'knapsack', 'linear-relaxation', 'optimization']
+  },
+  {
+    id: 'knights-tour-backtracking',
+    problemId: 'knights-tour',
+    techniqueId: 'backtracking',
+    categoryId: 'backtracking',
+    order: 8,
+    difficulty: 3,
+    title: { es: 'Recorrido del Caballo de Ajedrez', en: "Knight's Tour (Warnsdorff Heuristic)" },
+    subtitle: {
+      es: 'Recorrer todas las casillas de un tablero N×N exactamente una vez con movimientos válidos de caballo',
+      en: "Traverse all N×N chessboard squares once using valid knight moves and Warnsdorff's rule"
+    },
+    supportedPhases: ['discover', 'solve', 'understand'],
+    tags: ['backtracking', 'chess', 'heuristics', 'warnsdorff', 'hamiltonian-path']
   }
 ];
 

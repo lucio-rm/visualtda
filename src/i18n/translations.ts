@@ -80,7 +80,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Algorithm Design and Analysis'
   },
   welcomeLead: {
-    es: 'Aprende algoritmos fundamentales de forma interactiva y rigurosa. Observa su ejecución, comprende los invariantes de corrección y analiza su complejidad computacional.',
+    es: 'Aprendé algoritmos fundamentales de forma interactiva y rigurosa. Observá su ejecución, comprendé los invariantes de corrección y analizá su complejidad computacional.',
     en: 'Learn fundamental algorithms interactively and rigorously. Observe step execution, understand correctness invariants, and analyze computational complexity.'
   },
   catalogTitle: {
@@ -116,7 +116,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: '▶ Run Local Tests'
   },
   startImplementation: {
-    es: 'Comenzar a Resolver →',
+    es: 'Empezar a Resolver →',
     en: 'Start Solving →'
   },
   viewCanonicalSolution: {
@@ -132,7 +132,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Reveal the canonical solution?'
   },
   skipModalBody: {
-    es: 'Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: puedes consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización.',
+    es: 'Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: podés consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización.',
     en: 'Attempting the problem on your own maximizes retention and deep comprehension. However, Visual TDA is dedicated to honest learning: you can consult the canonical solution, step-by-step trace, and formal proof at any time without penalty.'
   },
   skipModalCancel: {
@@ -148,7 +148,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Running test suite...'
   },
   testsSuccess: {
-    es: '✓ ¡Todos los tests pasaron exitosamente! Has desbloqueado la fase de comprensión.',
+    es: '✓ ¡Todos los tests pasaron exitosamente! Desbloqueaste la fase de comprensión.',
     en: '✓ All tests passed successfully! You unlocked the understand phase.'
   },
   testsPassed: {
@@ -188,19 +188,19 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Speed:'
   },
   footerText: {
-    es: 'Visual TDA — Principios: KISS · Separación Algoritmo/UI · Correctness Pedagógica',
-    en: 'Visual TDA — Principles: KISS · Algorithm/UI Separation · Pedagogical Correctness'
+    es: 'Visual TDA — Principios: KISS · Separación Algoritmo/UI · Correctness Pedagógica · FIUBA',
+    en: 'Visual TDA — Principles: KISS · Algorithm/UI Separation · Pedagogical Correctness · FIUBA'
   },
   solveTitle: {
-    es: '2. Resolver: Plantea tu Solución Algorítmica',
+    es: '2. Resolver: Planteá tu Solución Algorítmica',
     en: '2. Solve: Formulate Your Algorithmic Solution'
   },
   solveLead: {
-    es: 'Implementa el algoritmo. Si te trabas, puedes consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.',
+    es: 'Implementá el algoritmo. Si te trabás, podés consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.',
     en: 'Implement the algorithm. If you get stuck, use progressive hints or view the canonical solution at any time.'
   },
   hintsDesc: {
-    es: 'Descubre pistas sólo si las necesitas para desbloquear tu razonamiento:',
+    es: 'Descubrí pistas sólo si las necesitás para destrabar tu razonamiento:',
     en: 'Unlock hints only if you need guidance to unblock your reasoning:'
   },
   hintLabel: {
@@ -212,11 +212,11 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'View Hint'
   },
   skipSolutionTitle: {
-    es: '¿Prefieres ver la solución directa?',
+    es: '¿Preferís ver la solución directa?',
     en: 'Prefer to see the solution directly?'
   },
   skipSolutionDesc: {
-    es: 'El objetivo es pedagógico. Puedes consultar la solución canónica comentada y el análisis formal sin ser bloqueado.',
+    es: 'El objetivo es pedagógico. Podés consultar la solución canónica comentada y el análisis formal sin penalización.',
     en: 'The goal is educational. You can view the canonical solution and formal analysis anytime without being blocked.'
   },
   evaluationResult: {
@@ -240,7 +240,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Instant client validation (TypeScript)'
   },
   pyodideValidationTitle: {
-    es: 'Ejecuta tu código en Python real compilado a WebAssembly en un Web Worker',
+    es: 'Ejecutá tu código en Python real compilado a WebAssembly en un Web Worker',
     en: 'Runs your code in real Python compiled to WebAssembly inside a Web Worker'
   },
   understandTitle: {
@@ -248,7 +248,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: '3. Understand: Canonical Solution, Correctness & Complexity'
   },
   understandLead: {
-    es: 'Analiza en detalle cómo opera el algoritmo óptimo. Observa la traza paso a paso y comprende la demostración de corrección.',
+    es: 'Analizá en detalle cómo opera el algoritmo óptimo. Observá la traza paso a paso y comprendé la demostración de corrección formal.',
     en: 'Analyze in detail how the optimal algorithm works. Observe the step-by-step trace and understand the correctness proof.'
   },
   understandVisualizerHeading: {
@@ -312,7 +312,7 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: '1. Discover: Intuition & Problem Setup'
   },
   discoverLead: {
-    es: 'Antes de escribir código o pensar en algoritmos complejos, explora cómo se comporta el problema. Manipula las variables, observa qué situaciones generan conflictos o inviabilidades, y construye tu intuición.',
+    es: 'Antes de escribir código o pensar en algoritmos complejos, explorá cómo se comporta el problema. Manipulá las variables, observá qué situaciones generan conflictos o inviabilidades, y construí tu intuición.',
     en: 'Before writing code or jumping to complex algorithms, explore how the problem behaves. Manipulate the variables, observe what creates conflicts or infeasibilities, and build your intuition.'
   },
   discoverProblemStatement: {

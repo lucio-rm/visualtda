@@ -1,0 +1,26 @@
+{
+  "id": "majority-element-dyc",
+  "problemId": "majority-element",
+  "techniqueId": "divide-and-conquer",
+  "category": "divide-and-conquer",
+  "difficulty": "easy",
+  "order": 8,
+  "title": {
+    "es": "Elemento Mayoritario",
+    "en": "Majority Element (D&C)"
+  },
+  "subtitle": {
+    "es": "Hallar el elemento que aparece estrictamente m\u00e1s de n/2 veces en O(n log n)",
+    "en": "Find element appearing strictly more than n/2 times in O(n log n)"
+  },
+  "description": {
+    "es": "Si un elemento es mayoritario en el arreglo total, debe ser mayoritario en al menos una de las dos mitades. Resuelve recursivamente y verifica en tiempo lineal.",
+    "en": "If an element is a majority element, it must be the majority element in at least one half. Solve recursively and verify in linear time."
+  },
+  "tags": [
+    "divide-and-conquer",
+    "frequency",
+    "master-theorem",
+    "fiuba"
+  ]
+}

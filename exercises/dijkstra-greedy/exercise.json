@@ -1,0 +1,28 @@
+{
+  "id": "dijkstra-greedy",
+  "problemId": "dijkstra",
+  "techniqueId": "greedy",
+  "category": "greedy",
+  "difficulty": "medium",
+  "order": 7,
+  "title": {
+    "es": "Caminos M\u00ednimos de Dijkstra",
+    "en": "Dijkstra Shortest Path"
+  },
+  "subtitle": {
+    "es": "Calcular la distancia m\u00ednima desde un v\u00e9rtice origen hacia todos los dem\u00e1s en grafos con pesos no negativos",
+    "en": "Compute shortest path distances from source to all vertices on non-negative weighted graphs"
+  },
+  "description": {
+    "es": "Mantiene un conjunto de v\u00e9rtices explorados S. En cada paso selecciona greedy el v\u00e9rtice con menor distancia tentativa usando una cola de prioridad.",
+    "en": "Maintains explored set S. Greedily extracts vertex with minimal tentative distance using a priority queue."
+  },
+  "tags": [
+    "greedy",
+    "graphs",
+    "shortest-path",
+    "min-heap",
+    "priority-queue",
+    "kleinberg-tardos"
+  ]
+}

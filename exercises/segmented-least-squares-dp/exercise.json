@@ -1,0 +1,27 @@
+{
+  "id": "segmented-least-squares-dp",
+  "problemId": "segmented-least-squares",
+  "techniqueId": "dynamic-programming",
+  "category": "dynamic-programming",
+  "difficulty": "hard",
+  "order": 6,
+  "title": {
+    "es": "M\u00ednimos Cuadrados Segmentados",
+    "en": "Segmented Least Squares"
+  },
+  "subtitle": {
+    "es": "Particionar n puntos en segmentos lineales \u00f3ptimos balanceando error cuadr\u00e1tico y costo de penalizaci\u00f3n C",
+    "en": "Partition n 2D points into linear segments balancing SSE and penalty cost C"
+  },
+  "description": {
+    "es": "Calcula OPT(j) = min_{1 <= i <= j} (e_{i,j} + C + OPT(i-1)), donde e_{i,j} es el error cuadr\u00e1tico de la recta de mejor ajuste para los puntos p_i...p_j.",
+    "en": "Computes OPT(j) = min_{1 <= i <= j} (e_{i,j} + C + OPT(i-1)) balancing fit error with segment count penalty."
+  },
+  "tags": [
+    "dynamic-programming",
+    "regression",
+    "optimization",
+    "recurrence",
+    "kleinberg-tardos"
+  ]
+}

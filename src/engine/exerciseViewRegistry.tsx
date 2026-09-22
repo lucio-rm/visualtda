@@ -130,12 +130,12 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
     spaceComplexity: 'O(V + E) para la red residual'
   },
 
-  'linear-programming-formulation': {
+  'linear-programming': {
     visualizerSlot: <LinearProgrammingVisualizer />,
     discoverPlaygroundSlot: <LinearProgrammingPlayground />,
-    canonicalPython: RAW_EXERCISE_ASSETS['linear-programming-formulation'].solution,
-    pseudocode: RAW_EXERCISE_ASSETS['linear-programming-formulation'].pseudocode,
-    correctnessExplanation: RAW_EXERCISE_ASSETS['linear-programming-formulation'].theory,
+    canonicalPython: RAW_EXERCISE_ASSETS['linear-programming'].solution,
+    pseudocode: RAW_EXERCISE_ASSETS['linear-programming'].pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['linear-programming'].theory,
     timeComplexity: 'O(2^m · poly(n)) Simplex en peor caso / O(poly(n)) métodos de punto interior',
     spaceComplexity: 'O(m · n) matriz del tablero Simplex'
   },
@@ -262,5 +262,15 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
 };
 
 export function getExerciseViewConfig(exerciseId: string): ExerciseViewConfig {
-  return EXERCISE_VIEW_REGISTRY[exerciseId] || {};
+  const specific = EXERCISE_VIEW_REGISTRY[exerciseId] || {};
+  const raw = RAW_EXERCISE_ASSETS[exerciseId];
+  if (!raw) return specific;
+  return {
+    ...specific,
+    canonicalPython: specific.canonicalPython || raw.solution,
+    pseudocode: specific.pseudocode || raw.pseudocode,
+    correctnessExplanation: specific.correctnessExplanation || raw.theory,
+    timeComplexity: specific.timeComplexity || 'O(n log n) / O(n)',
+    spaceComplexity: specific.spaceComplexity || 'O(n)'
+  };
 }

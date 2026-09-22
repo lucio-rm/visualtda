@@ -1,0 +1,27 @@
+{
+  "id": "rna-secondary-structure-dp",
+  "problemId": "rna-secondary-structure",
+  "techniqueId": "dynamic-programming",
+  "category": "dynamic-programming",
+  "difficulty": "hard",
+  "order": 7,
+  "title": {
+    "es": "Estructura Secundaria de ARN",
+    "en": "RNA Secondary Structure"
+  },
+  "subtitle": {
+    "es": "Maximizar pares de bases complementarias sin cruces sobre intervalos (i, j)",
+    "en": "Maximize non-crossing Watson-Crick base pairs on interval (i, j)"
+  },
+  "description": {
+    "es": "Programaci\u00f3n din\u00e1mica sobre intervalos: OPT(i, j) = max(OPT(i, j-1), max_t (1 + OPT(i, t-1) + OPT(t+1, j-1))) para pares v\u00e1lidos con separaci\u00f3n >= 4.",
+    "en": "Interval DP: OPT(i, j) maximizing base pairs satisfying no-crossing and separation >= 4."
+  },
+  "tags": [
+    "dynamic-programming",
+    "bioinformatics",
+    "interval-dp",
+    "recurrence",
+    "kleinberg-tardos"
+  ]
+}

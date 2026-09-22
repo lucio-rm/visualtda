@@ -1,0 +1,28 @@
+{
+  "id": "median-of-medians-dyc",
+  "problemId": "median-of-medians",
+  "techniqueId": "divide-and-conquer",
+  "category": "divide-and-conquer",
+  "difficulty": "hard",
+  "order": 7,
+  "title": {
+    "es": "Selecci\u00f3n en Tiempo Lineal (Mediana de Medianas)",
+    "en": "Median of Medians (Linear Selection)"
+  },
+  "subtitle": {
+    "es": "Encontrar el k-\u00e9simo menor elemento de un arreglo con cota determin\u00edstica O(n)",
+    "en": "Find k-th smallest element with guaranteed deterministic O(n) worst-case bound"
+  },
+  "description": {
+    "es": "Divide el arreglo en bloques de 5 elementos, halla sus medianas y elige la mediana de esas medianas como pivote garantizando descartar al menos el 30% del arreglo en cada paso.",
+    "en": "Divides array into groups of 5, finds their medians, and uses median-of-medians as pivot to guarantee pruning 30% per step."
+  },
+  "tags": [
+    "divide-and-conquer",
+    "selection",
+    "order-statistics",
+    "master-theorem",
+    "clrs",
+    "kleinberg-tardos"
+  ]
+}

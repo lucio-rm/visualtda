@@ -1,0 +1,27 @@
+{
+  "id": "sudoku-backtracking",
+  "problemId": "sudoku",
+  "techniqueId": "backtracking",
+  "category": "backtracking",
+  "difficulty": "medium",
+  "order": 4,
+  "title": {
+    "es": "Sudoku Solver (Poda de Restricciones)",
+    "en": "Sudoku Constraint Backtracking"
+  },
+  "subtitle": {
+    "es": "Resolver cuadr\u00edculas 9\u00d79 respetando restricciones de fila, columna y caja 3\u00d73 con poda MRV",
+    "en": "Solve 9x9 Sudoku grids satisfying row, column, and box constraints with MRV pruning"
+  },
+  "description": {
+    "es": "B\u00fasqueda exhaustiva con propagaci\u00f3n de restricciones. Utiliza la heur\u00edstica Minimum Remaining Values (MRV) para elegir primero la celda con menos d\u00edgitos viables.",
+    "en": "Exhaustive search with constraint propagation using MRV heuristic to explore constrained cells first."
+  },
+  "tags": [
+    "backtracking",
+    "constraint-satisfaction",
+    "heuristics",
+    "mrv",
+    "pruning"
+  ]
+}

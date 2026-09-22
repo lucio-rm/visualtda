@@ -1,0 +1,28 @@
+{
+  "id": "tsp-branch-and-bound",
+  "problemId": "tsp",
+  "techniqueId": "backtracking",
+  "category": "backtracking",
+  "difficulty": "hard",
+  "order": 6,
+  "title": {
+    "es": "Viajante de Comercio (TSP Branch & Bound)",
+    "en": "Traveling Salesperson (Branch & Bound)"
+  },
+  "subtitle": {
+    "es": "Encontrar el tour de costo m\u00ednimo podando ramas con la cota inferior del \u00c1rbol Generador M\u00ednimo (MST)",
+    "en": "Find minimal cost tour pruning branches via Minimum Spanning Tree lower bound"
+  },
+  "description": {
+    "es": "Branch and Bound con cota 1-tree: para cualquier camino parcial, la cota inferior es costo(actual) + MST(v\u00e9rtices restantes) + 2 aristas de conexi\u00f3n.",
+    "en": "Branch & Bound with 1-tree bound: partial cost + MST(unvisited) + min connection edges."
+  },
+  "tags": [
+    "backtracking",
+    "branch-and-bound",
+    "tsp",
+    "mst",
+    "np-hard",
+    "optimization"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "interval-partitioning-greedy",
+  "problemId": "interval-partitioning",
+  "techniqueId": "greedy",
+  "category": "greedy",
+  "difficulty": "medium",
+  "order": 5,
+  "title": {
+    "es": "Partici\u00f3n de Intervalos (Asignaci\u00f3n de Aulas)",
+    "en": "Interval Partitioning (Classroom Scheduling)"
+  },
+  "subtitle": {
+    "es": "Minimizar la cantidad de aulas necesarias para albergar todas las clases sin superposiciones",
+    "en": "Minimize number of classrooms to schedule all lectures without conflicts"
+  },
+  "description": {
+    "es": "Ordena los intervalos por tiempo de inicio. Asigna cada charla a un aula libre usando un min-heap de tiempos de fin. La cantidad final de aulas es exactamente igual a la profundidad m\u00e1xima (d).",
+    "en": "Sorts intervals by start time and schedules using a min-heap of classroom finish times. The total classrooms equals depth d."
+  },
+  "tags": [
+    "greedy",
+    "intervals",
+    "scheduling",
+    "min-heap",
+    "exchange-argument",
+    "kleinberg-tardos"
+  ]
+}

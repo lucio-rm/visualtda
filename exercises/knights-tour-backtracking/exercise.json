@@ -1,0 +1,27 @@
+{
+  "id": "knights-tour-backtracking",
+  "problemId": "knights-tour",
+  "techniqueId": "backtracking",
+  "category": "backtracking",
+  "difficulty": "hard",
+  "order": 8,
+  "title": {
+    "es": "Recorrido del Caballo de Ajedrez",
+    "en": "Knight's Tour (Warnsdorff Heuristic)"
+  },
+  "subtitle": {
+    "es": "Recorrer todas las casillas de un tablero N\u00d7N exactamente una vez con movimientos v\u00e1lidos de caballo",
+    "en": "Traverse all N\u00d7N chessboard squares once using valid knight moves and Warnsdorff's rule"
+  },
+  "description": {
+    "es": "B\u00fasqueda exhaustiva guiada por la heur\u00edstica de Warnsdorff: desde la casilla actual, moverse siempre a la casilla accesible que tenga el menor grado de salida.",
+    "en": "Exhaustive search guided by Warnsdorff's heuristic: choose next cell with minimal outgoing degree."
+  },
+  "tags": [
+    "backtracking",
+    "chess",
+    "heuristics",
+    "warnsdorff",
+    "hamiltonian-path"
+  ]
+}

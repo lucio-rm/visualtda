@@ -1,0 +1,28 @@
+{
+  "id": "closest-pair-dyc",
+  "problemId": "closest-pair",
+  "techniqueId": "divide-and-conquer",
+  "category": "divide-and-conquer",
+  "difficulty": "hard",
+  "order": 5,
+  "title": {
+    "es": "Par de Puntos M\u00e1s Cercano (Closest Pair)",
+    "en": "Closest Pair of Points"
+  },
+  "subtitle": {
+    "es": "Encontrar la m\u00ednima distancia eucl\u00eddea entre n puntos en el plano en O(n log n)",
+    "en": "Find minimal Euclidean distance among n 2D points in O(n log n)"
+  },
+  "description": {
+    "es": "Divide el plano con una recta vertical x = x_med. Resuelve recursivamente en ambas mitades y busca puntos en la franja central |x - x_med| < delta verificando a lo sumo 7 candidatos ordenados por Y.",
+    "en": "Divides plane along vertical line x = x_mid. Recursively solves halves and checks the central strip with at most 7 candidates sorted by Y."
+  },
+  "tags": [
+    "divide-and-conquer",
+    "geometry",
+    "euclidean-distance",
+    "master-theorem",
+    "fiuba",
+    "kleinberg-tardos"
+  ]
+}

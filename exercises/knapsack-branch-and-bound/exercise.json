@@ -1,0 +1,27 @@
+{
+  "id": "knapsack-branch-and-bound",
+  "problemId": "knapsack-bb",
+  "techniqueId": "backtracking",
+  "category": "backtracking",
+  "difficulty": "hard",
+  "order": 7,
+  "title": {
+    "es": "Mochila 0/1 por Branch & Bound",
+    "en": "0/1 Knapsack Branch & Bound"
+  },
+  "subtitle": {
+    "es": "Resolver la mochila 0/1 mediante poda con la cota superior de la relajaci\u00f3n lineal continua",
+    "en": "Solve 0/1 Knapsack pruning branches via fractional linear relaxation upper bound"
+  },
+  "description": {
+    "es": "Ordena \u00edtems por v_i / w_i. En cada nodo calcula la cota superior permitiendo fraccionar el pr\u00f3ximo \u00edtem. Si cota <= mejor_valor_entero, poda la rama.",
+    "en": "Orders items by density. Prunes branches when continuous relaxation upper bound cannot beat best integer value."
+  },
+  "tags": [
+    "backtracking",
+    "branch-and-bound",
+    "knapsack",
+    "linear-relaxation",
+    "optimization"
+  ]
+}
