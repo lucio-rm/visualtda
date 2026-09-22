@@ -65,8 +65,14 @@ export const KnapsackPlayground: React.FC = () => {
               className={`item-pick-card ${inPack ? 'in-pack' : ''}`}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && toggleItem(it.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleItem(it.id);
+                }
+              }}
               aria-pressed={inPack}
+              aria-label={`${it.name}, ${it.weight} kg, $${it.value}, ${inPack ? (language === 'es' ? 'guardado en mochila' : 'in backpack') : (language === 'es' ? 'disponible' : 'available')}`}
             >
               <div className="item-pick-header">
                 <span className="item-pick-name">{it.name}</span>

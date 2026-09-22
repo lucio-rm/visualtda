@@ -164,6 +164,8 @@ export const SubsetSumPlayground: React.FC = () => {
                 type="button"
                 className={`clickable-chip ${isSelected ? 'selected' : ''}`}
                 onClick={() => toggleNumber(idx)}
+                aria-pressed={isSelected}
+                aria-label={`${val}, ${isSelected ? (language === 'es' ? 'en suma' : 'in sum') : (language === 'es' ? 'disponible' : 'available')}`}
               >
                 <span className="chip-sub">{isSelected ? (language === 'es' ? 'En suma' : 'Chosen') : (language === 'es' ? 'Sumar' : 'Add')}</span>
                 <span>{val}</span>
