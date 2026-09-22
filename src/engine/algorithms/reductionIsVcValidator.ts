@@ -145,4 +145,17 @@ export class ReductionIsVcValidator implements Validator<ReductionInput, Reducti
   }
 }
 
+export function reduceIndependentSetToVertexCover(
+  input: ReductionInput,
+  independentSet: string[]
+): ReductionOutput {
+  const sSet = new Set(independentSet);
+  const vertexCover = input.vertices.filter((v) => !sSet.has(v));
+  return {
+    independentSet,
+    vertexCover,
+    reductionKPrime: input.vertices.length - input.k
+  };
+}
+
 export const reductionIsVcValidator = new ReductionIsVcValidator();

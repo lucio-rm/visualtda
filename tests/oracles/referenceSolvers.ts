@@ -308,3 +308,278 @@ export function bruteForceGraphColoring(
   return null;
 }
 
+// ─── 10. Interval Scheduling Brute-Force 2^N Oracle ──────────────────────────
+export function bruteForceIntervalScheduling(
+  intervals: Array<{ start: number; end: number }>
+): number {
+  const n = intervals.length;
+  let maxCount = 0;
+  const total = 1 << n;
+
+  for (let mask = 0; mask < total; mask++) {
+    const subset: Array<{ start: number; end: number }> = [];
+    for (let i = 0; i < n; i++) {
+      if ((mask & (1 << i)) !== 0) {
+        subset.push(intervals[i]);
+      }
+    }
+
+    // Check mutual compatibility: for any two intervals i and j, no overlap
+    let compatible = true;
+    for (let i = 0; i < subset.length; i++) {
+      for (let j = i + 1; j < subset.length; j++) {
+        const a = subset[i];
+        const b = subset[j];
+        if (a.start < b.end && b.start < a.end) {
+          compatible = false;
+          break;
+        }
+      }
+      if (!compatible) break;
+    }
+
+    if (compatible && subset.length > maxCount) {
+      maxCount = subset.length;
+    }
+  }
+
+  return maxCount;
+}
+
+// ─── 11. Maximum Subarray Brute-Force O(N^2) Oracle ─────────────────────────
+export function bruteForceMaxSubarray(arr: number[]): {
+  maxSum: number;
+  startIndex: number;
+  endIndex: number;
+} {
+  if (arr.length === 0) return { maxSum: 0, startIndex: -1, endIndex: -1 };
+
+  let maxSum = -Infinity;
+  let start = 0;
+  let end = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    let currentSum = 0;
+    for (let j = i; j < arr.length; j++) {
+      currentSum += arr[j];
+      if (currentSum > maxSum) {
+        maxSum = currentSum;
+        start = i;
+        end = j;
+      }
+    }
+  }
+
+  return { maxSum, startIndex: start, endIndex: end };
+}
+
+// ─── 12. Juan el Vago (Non-consecutive Day Selection) Brute-Force Oracle ────
+export function bruteForceJuanElVago(pago: number[]): number {
+  const n = pago.length;
+  let maxPay = 0;
+  const total = 1 << n;
+
+  for (let mask = 0; mask < total; mask++) {
+    // Check non-consecutive constraint: no two adjacent bits 1
+    if ((mask & (mask >> 1)) !== 0) continue;
+
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+      if ((mask & (1 << i)) !== 0) {
+        sum += pago[i];
+      }
+    }
+    if (sum > maxPay) {
+      maxPay = sum;
+    }
+  }
+
+  return maxPay;
+}
+
+// ─── 13. Road Antennas Coverage Verifier Oracle ─────────────────────────────
+export function verifyAntennaCoverage(
+  houses: number[],
+  antennas: number[],
+  radius: number
+): { coversAll: boolean; uncoveredHouses: number[] } {
+  const uncovered: number[] = [];
+  for (const house of houses) {
+    const covered = antennas.some((ant) => Math.abs(house - ant) <= radius);
+    if (!covered) {
+      uncovered.push(house);
+    }
+  }
+  return {
+    coversAll: uncovered.length === 0,
+    uncoveredHouses: uncovered
+  };
+}
+
+// ─── 14. Longest Common Subsequence (LCS) Exhaustive Search Oracle ───────────
+export function bruteForceLcs(s1: string, s2: string): number {
+  function isSubseq(sub: string, full: string): boolean {
+    let i = 0;
+    let j = 0;
+    while (i < sub.length && j < full.length) {
+      if (sub[i] === full[j]) i++;
+      j++;
+    }
+    return i === sub.length;
+  }
+
+  const n = s1.length;
+  let maxLen = 0;
+  const total = 1 << n;
+
+  for (let mask = 0; mask < total; mask++) {
+    let sub = '';
+    for (let i = 0; i < n; i++) {
+      if ((mask & (1 << i)) !== 0) {
+        sub += s1[i];
+      }
+    }
+    if (sub.length > maxLen && isSubseq(sub, s2)) {
+      maxLen = sub.length;
+    }
+  }
+
+  return maxLen;
+}
+
+// ─── 15. Peak Finding Mathematical Invariant Oracle ──────────────────────────
+export function verifyPeakCondition(arr: number[], index: number): boolean {
+  if (index < 0 || index >= arr.length) return false;
+  const leftValid = index === 0 || arr[index] >= arr[index - 1];
+  const rightValid = index === arr.length - 1 || arr[index] >= arr[index + 1];
+  return leftValid && rightValid;
+}
+
+// ─── 16. Max Flow Conservation & Capacity Constraints Oracle ─────────────────
+export function verifyFlowConservation(
+  nodes: string[],
+  capacities: Record<string, Record<string, number>>,
+  flows: Record<string, Record<string, number>>,
+  source: string,
+  sink: string
+): { valid: boolean; netFlow: number; violations: string[] } {
+  const violations: string[] = [];
+
+  // Capacity constraints: 0 <= flow(u,v) <= capacity(u,v)
+  for (const u of nodes) {
+    for (const v of nodes) {
+      const cap = capacities[u]?.[v] || 0;
+      const fl = flows[u]?.[v] || 0;
+      if (fl < 0) {
+        violations.push(`Flujo negativo en arista (${u}, ${v}): ${fl}`);
+      }
+      if (fl > cap) {
+        violations.push(`Violación de capacidad en (${u}, ${v}): flujo ${fl} > cap ${cap}`);
+      }
+    }
+  }
+
+  // Conservation: sum_v flow(u,v) - sum_v flow(v,u) == 0 for u not in {s, t}
+  for (const u of nodes) {
+    if (u === source || u === sink) continue;
+    let outflow = 0;
+    let inflow = 0;
+    for (const v of nodes) {
+      outflow += flows[u]?.[v] || 0;
+      inflow += flows[v]?.[u] || 0;
+    }
+    if (outflow !== inflow) {
+      violations.push(`Violación de conservación de flujo en nodo ${u}: entrada ${inflow} != salida ${outflow}`);
+    }
+  }
+
+  // Net flow out of source
+  let netSourceFlow = 0;
+  for (const v of nodes) {
+    netSourceFlow += (flows[source]?.[v] || 0) - (flows[v]?.[source] || 0);
+  }
+
+  return {
+    valid: violations.length === 0,
+    netFlow: netSourceFlow,
+    violations
+  };
+}
+
+// ─── 17. Reduction IS -> VC Duality Invariant Oracle ─────────────────────────
+export function verifyReductionDuality(
+  vertices: string[],
+  edges: [string, string][],
+  independentSet: string[],
+  vertexCover: string[]
+): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  const vSet = new Set(vertices);
+  const isSet = new Set(independentSet);
+  const vcSet = new Set(vertexCover);
+
+  // Invariant 1: Disjoint partition of V
+  if (isSet.size + vcSet.size !== vSet.size) {
+    errors.push(`Tamaño no complementario: |IS| (${isSet.size}) + |VC| (${vcSet.size}) != |V| (${vSet.size})`);
+  }
+
+  for (const v of vertices) {
+    const inIS = isSet.has(v);
+    const inVC = vcSet.has(v);
+    if (inIS === inVC) {
+      errors.push(`Vértice ${v} no satisface partición complementaria (inIS=${inIS}, inVC=${inVC})`);
+    }
+  }
+
+  // Invariant 2: No two vertices in IS share an edge
+  for (const [u, v] of edges) {
+    if (isSet.has(u) && isSet.has(v)) {
+      errors.push(`Arista (${u}, ${v}) contenida en el conjunto independiente IS`);
+    }
+  }
+
+  // Invariant 3: Every edge is covered by at least one vertex in VC
+  for (const [u, v] of edges) {
+    if (!vcSet.has(u) && !vcSet.has(v)) {
+      errors.push(`Arista (${u}, ${v}) no cubierta por la cubierta de vértices VC`);
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+// ─── 18. Randomized Fair Coin von Neumann Oracle ─────────────────────────────
+export function simulateVonNeumannCoin(
+  biasP: number,
+  pairsCount: number
+): { fairZero: number; fairOne: number; discarded: number } {
+  let fairZero = 0;
+  let fairOne = 0;
+  let discarded = 0;
+
+  // LCG for reproducible pseudo-random coin tosses
+  let seed = 42;
+  function toss(): number {
+    seed = (seed * 1664525 + 1013904223) % 4294967296;
+    return seed / 4294967296 < biasP ? 1 : 0;
+  }
+
+  for (let i = 0; i < pairsCount; i++) {
+    const t1 = toss();
+    const t2 = toss();
+    if (t1 === 0 && t2 === 1) {
+      fairZero++;
+    } else if (t1 === 1 && t2 === 0) {
+      fairOne++;
+    } else {
+      discarded++;
+    }
+  }
+
+  return { fairZero, fairOne, discarded };
+}
+
+

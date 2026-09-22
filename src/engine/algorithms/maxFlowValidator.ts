@@ -183,4 +183,81 @@ export class MaxFlowValidator implements Validator<FlowNetworkInput, FlowOutput>
   }
 }
 
+export function solveMaxFlow(input: FlowNetworkInput): FlowOutput {
+  const { vertices, edges, source, sink } = input;
+  const residual: Record<string, Record<string, number>> = {};
+  for (const v of vertices) residual[v] = {};
+
+  for (const e of edges) {
+    residual[e.u][e.v] = e.capacity;
+    if (residual[e.v][e.u] === undefined) residual[e.v][e.u] = 0;
+  }
+
+  let totalFlow = 0;
+
+  while (true) {
+    const parent: Record<string, string> = {};
+    const queue: string[] = [source];
+    const visited = new Set<string>([source]);
+
+    while (queue.length > 0) {
+      const curr = queue.shift()!;
+      if (curr === sink) break;
+
+      for (const [neighbor, cap] of Object.entries(residual[curr])) {
+        if (!visited.has(neighbor) && cap > 0) {
+          visited.add(neighbor);
+          parent[neighbor] = curr;
+          queue.push(neighbor);
+        }
+      }
+    }
+
+    if (!parent[sink]) break;
+
+    let bottleneck = Infinity;
+    let curr = sink;
+    while (curr !== source) {
+      const p = parent[curr];
+      bottleneck = Math.min(bottleneck, residual[p][curr]);
+      curr = p;
+    }
+
+    curr = sink;
+    while (curr !== source) {
+      const p = parent[curr];
+      residual[p][curr] -= bottleneck;
+      residual[curr][p] += bottleneck;
+      curr = p;
+    }
+
+    totalFlow += bottleneck;
+  }
+
+  const edgeFlows: Record<string, number> = {};
+  for (const e of edges) {
+    const forwardRem = residual[e.u][e.v] ?? 0;
+    edgeFlows[`${e.u}->${e.v}`] = Math.max(0, e.capacity - forwardRem);
+  }
+
+  const reachable = new Set<string>([source]);
+  const q = [source];
+  while (q.length > 0) {
+    const u = q.shift()!;
+    for (const [v, cap] of Object.entries(residual[u])) {
+      if (!reachable.has(v) && cap > 0) {
+        reachable.add(v);
+        q.push(v);
+      }
+    }
+  }
+
+  return {
+    maxFlow: totalFlow,
+    edgeFlows,
+    minCutS: Array.from(reachable),
+    minCutT: vertices.filter(v => !reachable.has(v))
+  };
+}
+
 export const maxFlowValidator = new MaxFlowValidator();
