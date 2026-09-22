@@ -58,6 +58,16 @@ export interface TranslationsDictionary {
   instructorModeActive: { es: string; en: string };
   instructorModeTooltip: { es: string; en: string };
   instructorModeBanner: { es: string; en: string };
+  discoverTitle: { es: string; en: string };
+  discoverLead: { es: string; en: string };
+  discoverProblemStatement: { es: string; en: string };
+  discoverRulesHeading: { es: string; en: string };
+  discoverRule1: { es: string; en: string };
+  discoverRule2: { es: string; en: string };
+  discoverRule3: { es: string; en: string };
+  discoverPlaygroundHeading: { es: string; en: string };
+  discoverPlaygroundPlaceholder: { es: string; en: string };
+  discoverProceedBtn: { es: string; en: string };
 }
 
 export const TRANSLATIONS: TranslationsDictionary = {
@@ -296,5 +306,45 @@ export const TRANSLATIONS: TranslationsDictionary = {
   instructorModeBanner: {
     es: '🎓 Modo Docente activo: Demostración de soluciones y trazas desbloqueada en todo el catálogo.',
     en: '🎓 Instructor Mode active: Solution demonstration and traces unlocked across the entire catalog.'
+  },
+  discoverTitle: {
+    es: '1. Descubrir: Intuición y Planteo del Problema',
+    en: '1. Discover: Intuition & Problem Setup'
+  },
+  discoverLead: {
+    es: 'Antes de escribir código o pensar en algoritmos complejos, explora cómo se comporta el problema. Manipula las variables, observa qué situaciones generan conflictos o inviabilidades, y construye tu intuición.',
+    en: 'Before writing code or jumping to complex algorithms, explore how the problem behaves. Manipulate the variables, observe what creates conflicts or infeasibilities, and build your intuition.'
+  },
+  discoverProblemStatement: {
+    es: 'Planteo del Problema',
+    en: 'Problem Statement'
+  },
+  discoverRulesHeading: {
+    es: 'Restricciones Fundamentales:',
+    en: 'Fundamental Constraints:'
+  },
+  discoverRule1: {
+    es: 'Todas las decisiones deben cumplir con las reglas del dominio sin violar restricciones.',
+    en: 'All decisions must comply with domain rules without violating constraints.'
+  },
+  discoverRule2: {
+    es: 'Existen múltiples estados intermedios y configuraciones posibles.',
+    en: 'There are multiple intermediate states and candidate configurations.'
+  },
+  discoverRule3: {
+    es: 'El objetivo es encontrar una configuración válida o la óptima según corresponda.',
+    en: 'The objective is to find a valid or optimal configuration as required.'
+  },
+  discoverPlaygroundHeading: {
+    es: 'Espacio de Exploración Interactiva',
+    en: 'Interactive Exploration Playground'
+  },
+  discoverPlaygroundPlaceholder: {
+    es: 'Manipulador interactivo del estado del problema.',
+    en: 'Interactive manipulator of the problem state.'
+  },
+  discoverProceedBtn: {
+    es: 'Tengo una idea: Pasar a Resolver →',
+    en: 'I have an idea: Proceed to Solve →'
   }
 };
