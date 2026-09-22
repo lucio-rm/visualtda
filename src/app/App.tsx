@@ -6,6 +6,7 @@ import { ExerciseList } from '../components/ExerciseList';
 import { ExerciseView } from '../components/ExerciseView';
 import { getExerciseViewConfig } from '../engine/exerciseViewRegistry';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
+import { InstructorModeProvider } from '../context/InstructorModeContext';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -93,6 +94,8 @@ const AppContent: React.FC = () => {
 
 export const App: React.FC = () => (
   <LanguageProvider>
-    <AppContent />
+    <InstructorModeProvider>
+      <AppContent />
+    </InstructorModeProvider>
   </LanguageProvider>
 );

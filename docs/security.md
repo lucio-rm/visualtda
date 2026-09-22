@@ -124,3 +124,21 @@ To maintain honest, transparent engineering standards, the following limitations
    - *Mitigation for fully offline deployments*: Future enterprise versions can self-host the Pyodide WebAssembly binaries in `public/pyodide/`.
 3. **No DRM or Student Cheating Prevention**:
    - Visual TDA is an open educational platform. Canonical solutions and validators are client-side. A tech-savvy student can inspect developer tools or network requests to read canonical algorithms. This is intentional: the pedagogy emphasizes voluntary discovery and understanding, not adversarial anti-cheat exams.
+
+---
+
+## 8. Instructor Mode & Honest Skip Modal Architecture
+
+### 8.1 Instructor Mode (`Modo Docente`)
+- **Purpose**: A local display preference enabling university faculty, teaching assistants, and demonstrators to present canonical solutions, interactive visual traces, and formal proofs without having to solve code exercises in live lectures.
+- **Persistence**: Stored exclusively in the user's browser via `localStorage.getItem('visual_tda_instructor_mode') === 'true'`.
+- **Honest Engineering Stance**: Instructor Mode is **NOT a security gate, authentication system, or role-based access control (RBAC)**.
+  - There are NO fake passwords, hidden master keys, obfuscated client-side hashes, or deceptive security modals.
+  - Because Visual TDA is a pure client-side static application with zero backend, all algorithms and solutions exist on the client by architectural design.
+  - Claiming client-side code hiding as "security" would violate Principle P9 (*No Hidden Magic*) and honest software engineering standards.
+
+### 8.2 Honest Friction Skip Modal
+- **Purpose**: When a student encounters a challenging exercise in the *Solve* phase, the application provides a skip mechanism to reach the *Understand* phase.
+- **Pedagogical Cognitive Friction**: The modal communicates why solving independently is cognitively advantageous:
+  > *"Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: puedes consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización."*
+- **No Dark Patterns or Penalties**: The student is never locked out, mocked, or penalized for choosing to reveal the solution. Autonomous self-direction is preserved at all times.

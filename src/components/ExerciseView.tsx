@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ExerciseMetadata, ExercisePhase } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useInstructorMode } from '../context/InstructorModeContext';
 import { PhaseSwitcher } from './PhaseSwitcher';
 import { DiscoverView } from './DiscoverView';
 import { SolveView } from './SolveView';
@@ -31,8 +32,11 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   spaceComplexity = 'O(N)'
 }) => {
   const { t, dict } = useLanguage();
+  const { isInstructorMode } = useInstructorMode();
   const [phase, setPhase] = useState<ExercisePhase>('discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
+
+  const isEffectiveUnlocked = solutionUnlocked || isInstructorMode;
 
   const handleSolveSuccess = () => {
     setSolutionUnlocked(true);
@@ -57,6 +61,12 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
         </button>
       </div>
 
+      {isInstructorMode && (
+        <div className="instructor-banner" role="status">
+          {t(dict.instructorModeBanner)}
+        </div>
+      )}
+
       <div className="exercise-view-header">
         <div className="exercise-meta-row">
           <span className="badge badge-technique">{exercise.techniqueId}</span>
@@ -71,7 +81,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
       <PhaseSwitcher
         currentPhase={phase}
         onPhaseChange={setPhase}
-        solutionUnlocked={solutionUnlocked}
+        solutionUnlocked={isEffectiveUnlocked}
       />
 
       <div className="phase-content-container">

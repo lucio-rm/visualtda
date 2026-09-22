@@ -54,6 +54,10 @@ export interface TranslationsDictionary {
   understandVisualizerPlaceholder: { es: string; en: string };
   resetCode: { es: string; en: string };
   proceedToUnderstand: { es: string; en: string };
+  instructorMode: { es: string; en: string };
+  instructorModeActive: { es: string; en: string };
+  instructorModeTooltip: { es: string; en: string };
+  instructorModeBanner: { es: string; en: string };
 }
 
 export const TRANSLATIONS: TranslationsDictionary = {
@@ -114,20 +118,20 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Skip to explained solution'
   },
   skipModalTitle: {
-    es: '¿Ver la solución ahora?',
-    en: 'View the solution now?'
+    es: '¿Revelar la solución canónica?',
+    en: 'Reveal the canonical solution?'
   },
   skipModalBody: {
-    es: 'Se desbloqueará la solución canónica oficial y el análisis formal. Puedes intentar resolverlo tú mismo primero, o acceder directamente si deseas estudiar la técnica.',
-    en: 'The official canonical solution and formal analysis will be unlocked. You can try solving it yourself first, or proceed directly to study the technique.'
+    es: 'Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: puedes consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización.',
+    en: 'Attempting the problem on your own maximizes retention and deep comprehension. However, Visual TDA is dedicated to honest learning: you can consult the canonical solution, step-by-step trace, and formal proof at any time without penalty.'
   },
   skipModalCancel: {
     es: 'Seguir intentando',
     en: 'Keep trying'
   },
   skipModalConfirm: {
-    es: 'Ver solución oficial',
-    en: 'View official solution'
+    es: 'Revelar solución oficial',
+    en: 'Reveal official solution'
   },
   testsRunning: {
     es: 'Ejecutando suite de pruebas...',
@@ -276,5 +280,21 @@ export const TRANSLATIONS: TranslationsDictionary = {
   proceedToUnderstand: {
     es: 'Continuar a Comprender la Solución →',
     en: 'Proceed to Understand Solution →'
+  },
+  instructorMode: {
+    es: 'Modo Docente',
+    en: 'Instructor Mode'
+  },
+  instructorModeActive: {
+    es: 'Modo Docente Activo',
+    en: 'Instructor Mode Active'
+  },
+  instructorModeTooltip: {
+    es: 'Modo Docente (Demostración): acceso libre e inmediato a todas las fases y soluciones.',
+    en: 'Instructor Mode (Demo): free and immediate access to all phases and solutions.'
+  },
+  instructorModeBanner: {
+    es: '🎓 Modo Docente activo: Demostración de soluciones y trazas desbloqueada en todo el catálogo.',
+    en: '🎓 Instructor Mode active: Solution demonstration and traces unlocked across the entire catalog.'
   }
 };

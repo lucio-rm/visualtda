@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeMode } from '../app/App';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useInstructorMode } from '../context/InstructorModeContext';
 
 interface HeaderProps {
   theme: ThemeMode;
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentExerciseTitle
 }) => {
   const { language, setLanguage, dict, t } = useLanguage();
+  const { isInstructorMode, toggleInstructorMode } = useInstructorMode();
 
   return (
     <header className="app-header">
@@ -42,6 +44,18 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="header-controls">
+        <button
+          type="button"
+          className={`instructor-mode-toggle ${isInstructorMode ? 'active' : ''}`}
+          onClick={toggleInstructorMode}
+          title={t(dict.instructorModeTooltip)}
+          aria-pressed={isInstructorMode}
+          aria-label={t(dict.instructorMode)}
+        >
+          <span className="instructor-icon" aria-hidden="true">🎓</span>
+          <span className="instructor-text">{t(dict.instructorMode)}</span>
+        </button>
+
         <label className="lang-toggle-label">
           <span className="sr-only">Idioma / Language</span>
           <select
