@@ -26,6 +26,8 @@ export interface HuffmanStepData {
   fixedCostBits: number;
   action: HuffmanAction;
   description: LocalizedString;
+  allNodes: Record<string, HuffmanTraceItem>;
+  forestRoots: string[];
 }
 
 export const DEFAULT_HUFFMAN_FREQS: Record<string, number> = {
@@ -73,6 +75,11 @@ export function generateHuffmanTrace(
     rightId: n.right ? n.right.id : undefined
   });
 
+  const allNodes: Record<string, HuffmanTraceItem> = {};
+  for (const n of initialNodes) {
+    allNodes[n.id] = toTraceItem(n);
+  }
+
   // Step 0: INIT
   events.push({
     step: stepIndex++,
@@ -89,6 +96,8 @@ export function generateHuffmanTrace(
       totalCostBits: 0,
       fixedCostBits: fixedCost,
       action: 'INIT',
+      allNodes: { ...allNodes },
+      forestRoots: initialNodes.map((n) => n.id),
       description: {
         es: `Inicio: Cargamos cada carácter como un nodo hoja en el Min-Heap ordenado por frecuencia ascendente.`,
         en: `Start: Each character is enqueued into the Min-Heap sorted by ascending frequency.`
@@ -115,6 +124,8 @@ export function generateHuffmanTrace(
         totalCostBits: cost,
         fixedCostBits: fixedCost,
         action: 'COMPLETE',
+        allNodes: { ...allNodes },
+        forestRoots: initialNodes.map((n) => n.id),
         description: {
           es: `Caso borde con un solo símbolo: asignamos código trivial "0".`,
           en: `Single symbol edge case: assign trivial "0" code.`
@@ -149,6 +160,8 @@ export function generateHuffmanTrace(
         totalCostBits: 0,
         fixedCostBits: fixedCost,
         action: 'SELECT_TWO_MIN',
+        allNodes: { ...allNodes },
+        forestRoots: queue.map((n) => n.id),
         description: {
           es: `Estrategia Voraz: Extraemos los dos mínimos del heap: "${left.char ?? left.id}" (freq ${left.freq}) e "${right.char ?? right.id}" (freq ${right.freq}).`,
           en: `Greedy Choice: Pop the two smallest items: "${left.char ?? left.id}" (${left.freq}) and "${right.char ?? right.id}" (${right.freq}).`
@@ -167,6 +180,8 @@ export function generateHuffmanTrace(
       left,
       right
     };
+
+    allNodes[parent.id] = toTraceItem(parent);
 
     // Insert maintaining sorted order
     let insertIdx = 0;
@@ -191,6 +206,8 @@ export function generateHuffmanTrace(
         totalCostBits: 0,
         fixedCostBits: fixedCost,
         action: 'MERGE_NODES',
+        allNodes: { ...allNodes },
+        forestRoots: queue.map((n) => n.id),
         description: {
           es: `Unión binaria: Rama izquierda '0' (${left.char ?? left.id}) y rama derecha '1' (${right.char ?? right.id}). Nueva frecuencia combinada: ${parent.freq}.`,
           en: `Binary union: Left branch '0' (${left.char ?? left.id}) and right branch '1' (${right.char ?? right.id}). New combined frequency: ${parent.freq}.`
@@ -232,6 +249,8 @@ export function generateHuffmanTrace(
       totalCostBits: optimalCost,
       fixedCostBits: fixedCost,
       action: 'GENERATE_CODES',
+      allNodes: { ...allNodes },
+      forestRoots: queue.map((n) => n.id),
       description: {
         es: `Recorrido DFS: Asignamos '0' a cada arista izquierda y '1' a cada arista derecha hasta alcanzar cada hoja.`,
         en: `DFS Traversal: Assign '0' to each left edge and '1' to each right edge down to every leaf.`
@@ -256,6 +275,8 @@ export function generateHuffmanTrace(
       totalCostBits: optimalCost,
       fixedCostBits: fixedCost,
       action: 'COMPLETE',
+      allNodes: { ...allNodes },
+      forestRoots: queue.map((n) => n.id),
       description: {
         es: `¡Codificación Óptima Completada! Costo total: ${optimalCost} bits (vs ${fixedCost} bits en ASCII de 8 bits). Se redujo el tamaño en un ${savings}%.`,
         en: `Optimal Huffman Coding Complete! Total cost: ${optimalCost} bits (vs ${fixedCost} bits in 8-bit ASCII). Size reduced by ${savings}%.`

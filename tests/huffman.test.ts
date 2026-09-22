@@ -113,4 +113,44 @@ describe('Huffman Trace Generator', () => {
     expect(lastEvent.data.totalCostBits).toBe(224);
     expect(lastEvent.data.fixedCostBits).toBe(800);
   });
+
+  it('populates allNodes and forestRoots across all steps for visual tree rendering (Defect 3.2 Fix)', () => {
+    const timeline = generateHuffmanTrace(DEFAULT_HUFFMAN_FREQS);
+
+    for (const evt of timeline.events) {
+      expect(evt.data.allNodes).toBeDefined();
+      expect(Object.keys(evt.data.allNodes).length).toBeGreaterThanOrEqual(6);
+      expect(evt.data.forestRoots).toBeDefined();
+      expect(evt.data.forestRoots.length).toBeGreaterThan(0);
+    }
+
+    // At step 0: 6 disjoint single-leaf trees in the forest
+    expect(timeline.events[0].data.forestRoots).toHaveLength(6);
+
+    // At final step: exactly 1 unified root node in the forest
+    const finalEvent = timeline.events[timeline.events.length - 1];
+    expect(finalEvent.data.forestRoots).toHaveLength(1);
+
+    const rootId = finalEvent.data.forestRoots[0];
+    const rootNode = finalEvent.data.allNodes[rootId];
+    expect(rootNode).toBeDefined();
+    expect(rootNode.freq).toBe(100);
+    expect(rootNode.leftId).toBeDefined();
+    expect(rootNode.rightId).toBeDefined();
+
+    // Verify all 6 original characters are reachable leaves
+    const reachedChars: string[] = [];
+    function collectLeaves(id: string) {
+      const node = finalEvent.data.allNodes[id];
+      if (!node) return;
+      if (node.char !== null) {
+        reachedChars.push(node.char);
+        return;
+      }
+      if (node.leftId) collectLeaves(node.leftId);
+      if (node.rightId) collectLeaves(node.rightId);
+    }
+    collectLeaves(rootId);
+    expect(reachedChars.sort()).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
+  });
 });

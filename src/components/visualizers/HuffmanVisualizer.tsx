@@ -6,6 +6,7 @@ import {
 } from '../../engine/algorithms/huffmanTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { HuffmanTreeSvg } from './HuffmanTreeSvg';
 import './HuffmanVisualizer.css';
 
 interface HuffmanPreset {
@@ -73,6 +74,8 @@ export const HuffmanVisualizer: React.FC = () => {
   const totalCost = data?.totalCostBits ?? 0;
   const fixedCost = data?.fixedCostBits ?? 0;
   const desc = data?.description ? data.description[language] : '';
+  const allNodes = data?.allNodes || {};
+  const forestRoots = data?.forestRoots || queue.map((q) => q.id);
 
   const savings = fixedCost > 0 && totalCost > 0 ? Math.round(((fixedCost - totalCost) / fixedCost) * 100) : 0;
 
@@ -183,6 +186,16 @@ export const HuffmanVisualizer: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Visual Binary Tree / Forest Section */}
+      <HuffmanTreeSvg
+        forestRoots={forestRoots}
+        allNodes={allNodes}
+        selectedIds={selectedIds}
+        mergedParentId={mergedParent?.id}
+        codes={codes}
+        language={language}
+      />
 
       {/* Codebook Table (shown when codes are available) */}
       {Object.keys(codes).length > 0 && (
