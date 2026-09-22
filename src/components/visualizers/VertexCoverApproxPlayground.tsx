@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import {
   DEFAULT_APPROX_GRAPH,
   DEFAULT_APPROX_LAYOUT
 } from '../../engine/algorithms/vertexCoverApproxTrace';
-import { useLanguage } from '../../i18n/LanguageContext';
 import './VertexCoverApproxPlayground.css';
-import './VertexCoverApproxVisualizer.css';
 
 export const VertexCoverApproxPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const [matching, setMatching] = useState<[string, string][]>([]);
-
+  const { markCompleted } = useStudentProgress();
   const { vertices, edges } = DEFAULT_APPROX_GRAPH;
 
-  // Cover is always the union of endpoints of edges in matching
-  const cover = React.useMemo(() => {
+  // Selected matching M (array of edges [u, v])
+  const [matching, setMatching] = useState<[string, string][]>([]);
+
+  // Derived vertex cover C (endpoints of M)
+  const cover = useMemo(() => {
     const s = new Set<string>();
     for (const [u, v] of matching) {
       s.add(u);
@@ -28,6 +30,12 @@ export const VertexCoverApproxPlayground: React.FC = () => {
   // Check which edges are covered
   const coveredCount = edges.filter(([u, v]) => coverSet.has(u) || coverSet.has(v)).length;
   const isAllCovered = coveredCount === edges.length;
+
+  useEffect(() => {
+    if (isAllCovered && matching.length > 0) {
+      markCompleted('vertex-cover-approx');
+    }
+  }, [isAllCovered, matching.length, markCompleted]);
 
   const toggleEdge = (u: string, v: string) => {
     const isAlreadyMatched = matching.some(
@@ -53,20 +61,6 @@ export const VertexCoverApproxPlayground: React.FC = () => {
     setMatching([]);
   };
 
-  const handleGreedyAuto = () => {
-    // Canonical greedy matching
-    const curC = new Set<string>();
-    const m: [string, string][] = [];
-    for (const [u, v] of edges) {
-      if (!curC.has(u) && !curC.has(v)) {
-        m.push([u, v]);
-        curC.add(u);
-        curC.add(v);
-      }
-    }
-    setMatching(m);
-  };
-
   return (
     <div className="approx-playground-box">
       <div className="approx-playground-header">
@@ -83,9 +77,6 @@ export const VertexCoverApproxPlayground: React.FC = () => {
           </p>
         </div>
         <div className="playground-button-group">
-          <button type="button" className="btn-secondary" onClick={handleGreedyAuto}>
-            {language === 'es' ? 'Solución Greedy' : 'Greedy Solution'}
-          </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}
           </button>

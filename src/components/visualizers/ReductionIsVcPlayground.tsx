@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   DEFAULT_REDUCTION_GRAPH,
   DEFAULT_GRAPH_LAYOUT
 } from '../../engine/algorithms/reductionIsVcTrace';
 import { reductionIsVcValidator } from '../../engine/algorithms/reductionIsVcValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './ReductionIsVcPlayground.css';
 import './ReductionIsVcVisualizer.css';
 
 export const ReductionIsVcPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [selectedIS, setSelectedIS] = useState<string[]>([]);
 
   const { vertices, edges, k } = DEFAULT_REDUCTION_GRAPH;
@@ -24,10 +26,6 @@ export const ReductionIsVcPlayground: React.FC = () => {
 
   const handleClear = () => {
     setSelectedIS([]);
-  };
-
-  const handleSampleSolution = () => {
-    setSelectedIS(['A', 'D']);
   };
 
   // Complement C = V \ S
@@ -51,6 +49,12 @@ export const ReductionIsVcPlayground: React.FC = () => {
   const hasConflict = conflictEdges.length > 0;
   const isOptimal = isValidation.valid && selectedIS.length >= k;
 
+  useEffect(() => {
+    if (isOptimal) {
+      markCompleted('vertex-cover-reduction');
+    }
+  }, [isOptimal, markCompleted]);
+
   return (
     <div className="reduction-playground-box">
       <div className="reduction-playground-header">
@@ -67,9 +71,6 @@ export const ReductionIsVcPlayground: React.FC = () => {
           </p>
         </div>
         <div className="playground-button-group">
-          <button type="button" className="btn-secondary" onClick={handleSampleSolution}>
-            {language === 'es' ? 'Solución {A, D}' : 'Solution {A, D}'}
-          </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}
           </button>

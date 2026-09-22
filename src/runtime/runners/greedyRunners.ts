@@ -276,4 +276,256 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
       stdout: capturedStdout.trim() || undefined
     };
   },
+  'interval-partitioning-greedy': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Test 1: 3 tasks overlapping depth 2
+    const int1: [number, number][] = [[1, 4], [2, 5], [6, 8]];
+    const res1 = await service.executePython(code, 'particionar_intervalos', [int1]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-partitioning-exec-fail',
+          description: { es: 'Ejecución en Python de particionar_intervalos', en: 'Python execution of particionar_intervalos' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const classrooms1 = Number(res1.result);
+    results.push({
+      testId: 'py-partitioning-depth-2',
+      description: {
+        es: 'Intervalos [[1,4], [2,5], [6,8]]: Solapamiento máximo = 2 aulas.',
+        en: 'Intervals [[1,4], [2,5], [6,8]]: Maximum overlap = 2 classrooms.'
+      },
+      passed: classrooms1 === 2,
+      expected: '2',
+      actual: String(classrooms1)
+    });
+
+    // Test 2: Mutually overlapping (depth 3)
+    const int2: [number, number][] = [[1, 10], [2, 6], [3, 7]];
+    const res2 = await service.executePython(code, 'particionar_intervalos', [int2]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const classrooms2 = Number(res2.result);
+    results.push({
+      testId: 'py-partitioning-depth-3',
+      description: {
+        es: '3 tareas mutuamente solapadas: Requiere exactamente 3 aulas.',
+        en: '3 mutually overlapping tasks: Requires exactly 3 classrooms.'
+      },
+      passed: classrooms2 === 3,
+      expected: '3',
+      actual: String(classrooms2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'minimize-lateness-greedy': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Test 1: No lateness achievable: [(3, 6), (2, 8), (1, 9)] -> lateness 0
+    const jobs1: [number, number][] = [[3, 6], [2, 8], [1, 9]];
+    const res1 = await service.executePython(code, 'minimizar_retraso_maximo', [jobs1]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-lateness-exec-fail',
+          description: { es: 'Ejecución en Python de minimizar_retraso_maximo', en: 'Python execution of minimizar_retraso_maximo' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const lateness1 = Number(res1.result);
+    results.push({
+      testId: 'py-lateness-zero',
+      description: {
+        es: 'Tareas compatibles sin retraso: Retorna 0.',
+        en: 'Jobs compatible without lateness: Returns 0.'
+      },
+      passed: lateness1 === 0,
+      expected: '0',
+      actual: String(lateness1)
+    });
+
+    // Test 2: Inevitable lateness: (3, 2) and (2, 4) -> start 0, job1 finishes at 3 (deadline 2 -> lateness 1), job2 finishes at 5 (deadline 4 -> lateness 1) -> max lateness = 1
+    const jobs2: [number, number][] = [[3, 2], [2, 4]];
+    const res2 = await service.executePython(code, 'minimizar_retraso_maximo', [jobs2]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const lateness2 = Number(res2.result);
+    results.push({
+      testId: 'py-lateness-inevitable',
+      description: {
+        es: 'Tareas con retraso inevitable: Retraso máximo óptimo = 1.',
+        en: 'Jobs with inevitable lateness: Optimal maximum lateness = 1.'
+      },
+      passed: lateness2 === 1,
+      expected: '1',
+      actual: String(lateness2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'dijkstra-greedy': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    const graph1: Record<string, [string, number][]> = {
+      A: [['B', 1], ['C', 4]],
+      B: [['C', 2], ['D', 5]],
+      C: [['D', 1]],
+      D: []
+    };
+    const res1 = await service.executePython(code, 'dijkstra', [graph1, 'A']);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-dijkstra-exec-fail',
+          description: { es: 'Ejecución en Python de dijkstra(grafo, origen)', en: 'Python execution of dijkstra(grafo, origen)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const dists = res1.result as Record<string, number>;
+    const pass1 = dists && dists['A'] === 0 && dists['B'] === 1 && dists['C'] === 3 && dists['D'] === 4;
+
+    results.push({
+      testId: 'py-dijkstra-4nodes',
+      description: {
+        es: 'Grafo 4 nodos: Distancias mínimas desde A: A=0, B=1, C=3, D=4.',
+        en: '4-node graph: Minimal distances from A: A=0, B=1, C=3, D=4.'
+      },
+      passed: Boolean(pass1),
+      expected: '{"A": 0, "B": 1, "C": 3, "D": 4}',
+      actual: JSON.stringify(dists)
+    });
+
+    // Test 2: Source to itself
+    results.push({
+      testId: 'py-dijkstra-source-zero',
+      description: {
+        es: 'Distancia origen hacia sí mismo es estrictamente 0.',
+        en: 'Distance from source to itself is strictly 0.'
+      },
+      passed: dists && dists['A'] === 0,
+      expected: '0',
+      actual: String(dists ? dists['A'] : 'undefined')
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'kruskal-mst-greedy': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Triangle graph: 3 vertices, edges (0,1,1), (1,2,2), (0,2,3) -> MST cost = 3
+    const edges1: [number, number, number][] = [
+      [0, 1, 1],
+      [1, 2, 2],
+      [0, 2, 3]
+    ];
+    const res1 = await service.executePython(code, 'kruskal_mst', [3, edges1]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-kruskal-exec-fail',
+          description: { es: 'Ejecución en Python de kruskal_mst(num_v, aristas)', en: 'Python execution of kruskal_mst(num_v, aristas)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const tupleRes = res1.result as [number, unknown[]];
+    const totalCost = Array.isArray(tupleRes) ? tupleRes[0] : Number(tupleRes);
+    const mstEdges = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
+
+    results.push({
+      testId: 'py-kruskal-triangle-cost',
+      description: {
+        es: 'Triángulo 3 vértices: Costo total del Árbol Generador Mínimo = 3.',
+        en: 'Triangle 3 vertices: Total cost of Minimum Spanning Tree = 3.'
+      },
+      passed: totalCost === 3,
+      expected: '3',
+      actual: String(totalCost)
+    });
+
+    results.push({
+      testId: 'py-kruskal-edge-count',
+      description: {
+        es: 'Invariante de MST: Un árbol generador de V vértices contiene exactamente V - 1 aristas (2 aristas).',
+        en: 'MST invariant: Spanning tree of V vertices contains exactly V - 1 edges (2 edges).'
+      },
+      passed: mstEdges.length === 2,
+      expected: '2 aristas',
+      actual: `${mstEdges.length} aristas`
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  }
 };

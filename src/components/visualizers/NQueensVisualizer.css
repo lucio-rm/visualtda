@@ -248,10 +248,11 @@ g[role='button']:focus-visible rect {
 /* Conflict Ray Line */
 .conflict-ray-line {
   stroke: #ef4444;
-  stroke-width: 3;
+  stroke-width: 3.5;
   stroke-linecap: round;
   stroke-dasharray: 6 4;
   animation: pulse-ray 1s infinite alternate;
+  pointer-events: none;
 }
 
 @keyframes pulse-ray {

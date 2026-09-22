@@ -215,6 +215,11 @@ export const RAW_EXERCISE_ASSETS: Record<string, ExerciseRawAssets> = {
     pseudocode: linearProgrammingPseudocode,
     theory: linearProgrammingTheory
   },
+  'linear-programming-formulation': {
+    solution: linearProgrammingSolution,
+    pseudocode: linearProgrammingPseudocode,
+    theory: linearProgrammingTheory
+  },
   'majority-element-dyc': {
     solution: majorityElementDycSolution,
     pseudocode: majorityElementDycPseudocode,

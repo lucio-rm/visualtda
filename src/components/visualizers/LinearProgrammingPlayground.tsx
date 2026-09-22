@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solveLP2D, LinearConstraint } from '../../engine/algorithms/linearProgrammingValidator';
 import './LinearProgrammingPlayground.css';
 
@@ -41,6 +42,7 @@ const PRESETS: LPPreset[] = [
 
 export const LinearProgrammingPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [activeTab, setActiveTab] = useState<'geometric' | 'modeling'>('geometric');
   const [modelingProblem, setModelingProblem] = useState<'juan' | 'mochila' | 'vertex-cover'>('juan');
 
@@ -51,6 +53,12 @@ export const LinearProgrammingPlayground: React.FC = () => {
   const solution = useMemo(() => {
     return solveLP2D([c1, c2], activePreset.constraints);
   }, [c1, c2, activePreset]);
+
+  useEffect(() => {
+    if (solution && solution.optimalPoint) {
+      markCompleted('linear-programming-formulation');
+    }
+  }, [solution, markCompleted]);
 
   const handlePresetSelect = (p: LPPreset) => {
     setActivePreset(p);

@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import {
   WeightedInterval,
   solveWeightedIntervals,
   solveWeightedIntervalsGreedy
 } from '../../engine/algorithms/weightedIntervalValidator';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './WeightedIntervalPlayground.css';
 
 interface Preset {
@@ -56,6 +57,7 @@ const PRESETS: Preset[] = [
 
 export const WeightedIntervalPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [intervals, setIntervals] = useState<WeightedInterval[]>(PRESETS[0].intervals);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -107,14 +109,16 @@ export const WeightedIntervalPlayground: React.FC = () => {
     };
   }, [intervals, selectedIds, optimalWeight]);
 
+  useEffect(() => {
+    if (userStatus.isOptimal) {
+      markCompleted('weighted-interval-scheduling');
+    }
+  }, [userStatus.isOptimal]);
+
   const toggleTask = (id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
-  };
-
-  const loadOptimal = () => {
-    setSelectedIds(optimalSolution.map((t) => t.id));
   };
 
   const loadGreedy = () => {
@@ -164,11 +168,8 @@ export const WeightedIntervalPlayground: React.FC = () => {
         <div className="tracks-header">
           <span>{language === 'es' ? 'Toca las tareas para activar/desactivar:' : 'Click tasks to toggle:'}</span>
           <div className="quick-buttons">
-            <button className="btn-load opt-load" onClick={loadOptimal}>
-              {language === 'es' ? '⚡ Ver Óptimo (DP)' : '⚡ Show DP Optimal'}
-            </button>
             <button className="btn-load greedy-load" onClick={loadGreedy}>
-              {language === 'es' ? '👉 Ver Greedy' : '👉 Show Greedy'}
+              {language === 'es' ? '👉 Probar Heurística Greedy' : '👉 Test Greedy Heuristic'}
             </button>
             <button
               className="btn-load clear-load"
@@ -261,7 +262,13 @@ export const WeightedIntervalPlayground: React.FC = () => {
           </div>
           <div className="card-main">
             <span className="main-stat">${optimalWeight}</span>
-            <span className="main-items">[{optimalSolution.map((t) => t.id).join(', ')}]</span>
+            <span className="main-items">
+              {userStatus.isOptimal
+                ? `[${optimalSolution.map((t) => t.id).join(', ')}]`
+                : language === 'es'
+                ? '[??? ¡Encontrá el conjunto!]'
+                : '[??? Find the set!]'}
+            </span>
           </div>
           <div className="card-feedback status-ok">
             {language === 'es'

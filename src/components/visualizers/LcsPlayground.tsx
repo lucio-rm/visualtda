@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solveLcs, lcsValidator, isSubsequence } from '../../engine/algorithms/lcsValidator';
 import './LcsPlayground.css';
 
@@ -34,6 +35,7 @@ const PRESETS: Preset[] = [
 
 export const LcsPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [s1, setS1] = useState<string>('ABCBDAB');
   const [s2, setS2] = useState<string>('BDCABA');
   const [userGuess, setUserGuess] = useState<string>('');
@@ -54,6 +56,12 @@ export const LcsPlayground: React.FC = () => {
       errors: val.errors
     };
   }, [userGuess, s1, s2]);
+
+  useEffect(() => {
+    if (userValidation?.isOptimal) {
+      markCompleted('lcs-dp');
+    }
+  }, [userValidation, markCompleted]);
 
   const handlePreset = (p: Preset) => {
     setS1(p.s1);
@@ -147,12 +155,6 @@ export const LcsPlayground: React.FC = () => {
             onChange={(e) => setUserGuess(e.target.value.toUpperCase())}
             className="input-field guess-field"
           />
-          <button
-            className="btn-opt-load"
-            onClick={() => setUserGuess(optimalLcs)}
-          >
-            {language === 'es' ? '⚡ Cargar Óptimo DP' : '⚡ Load DP Optimal'}
-          </button>
         </div>
       </div>
 
@@ -211,8 +213,16 @@ export const LcsPlayground: React.FC = () => {
             {language === 'es' ? 'Óptimo (Programación Dinámica)' : 'Optimal (Dynamic Programming)'}
           </div>
           <div className="card-val">
-            "{optimalLcs || '∅'}"
-            <span className="card-len">({optimalLcs.length} chars)</span>
+            {userValidation?.isOptimal ? (
+              <>
+                "{optimalLcs || '∅'}"
+                <span className="card-len">({optimalLcs.length} chars)</span>
+              </>
+            ) : (
+              <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
+                {language === 'es' ? '🔒 Longitud óptima:' : '🔒 Optimal length:'} {optimalLcs.length} chars
+              </span>
+            )}
           </div>
           <div className="card-explanation">
             {language === 'es'

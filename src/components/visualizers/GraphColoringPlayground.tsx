@@ -4,12 +4,14 @@ import {
   DEFAULT_COLORING_LAYOUT,
   COLOR_PALETTE
 } from '../../engine/algorithms/graphColoringTrace';
-import { solveGraphColoring, graphColoringValidator } from '../../engine/algorithms/graphColoringValidator';
+import { graphColoringValidator } from '../../engine/algorithms/graphColoringValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './GraphColoringPlayground.css';
 
 export const GraphColoringPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [k, setK] = useState<number>(3);
   const [coloring, setColoring] = useState<Record<string, number>>({});
   const [feedback, setFeedback] = useState<{ valid: boolean; text: string } | null>(null);
@@ -50,25 +52,7 @@ export const GraphColoringPlayground: React.FC = () => {
     setFeedback(null);
   };
 
-  const handleAutoSolve = () => {
-    const sol = solveGraphColoring({ vertices, edges, k });
-    if (sol) {
-      setColoring(sol);
-      setFeedback({
-        valid: true,
-        text: language === 'es'
-          ? `¡Solución automática encontrada con k = ${k} colores!`
-          : `Automatic solution found with k = ${k} colors!`
-      });
-    } else {
-      setFeedback({
-        valid: false,
-        text: language === 'es'
-          ? `Imposible: El grafo no admite un coloreo válido con k = ${k}.`
-          : `Impossible: The graph does not admit a valid coloring with k = ${k}.`
-      });
-    }
-  };
+  const coloredCount = Object.keys(coloring).length;
 
   const handleValidate = () => {
     const result = graphColoringValidator.validate({ vertices, edges, k }, coloring);
@@ -76,6 +60,9 @@ export const GraphColoringPlayground: React.FC = () => {
       valid: result.valid,
       text: language === 'es' ? result.message.es : result.message.en
     });
+    if (result.valid && coloredCount === vertices.length) {
+      markCompleted('graph-coloring-backtracking');
+    }
   };
 
   const isEdgeInConflict = (u: string, v: string) => {
@@ -83,8 +70,6 @@ export const GraphColoringPlayground: React.FC = () => {
       ([x, y]) => (x === u && y === v) || (x === v && y === u)
     );
   };
-
-  const coloredCount = Object.keys(coloring).length;
 
   return (
     <div className="gc-playground" role="region" aria-label="Playground de Coloreo de Grafos">
@@ -136,9 +121,6 @@ export const GraphColoringPlayground: React.FC = () => {
         <div className="gc-playground-action-buttons">
           <button className="btn btn-secondary btn-sm" onClick={handleClear}>
             {language === 'es' ? 'Limpiar' : 'Clear'}
-          </button>
-          <button className="btn btn-secondary btn-sm" onClick={handleAutoSolve}>
-            {language === 'es' ? 'Resolver con Backtracking' : 'Auto-Solve with Backtracking'}
           </button>
           <button className="btn btn-primary btn-sm" onClick={handleValidate}>
             {language === 'es' ? 'Verificar Coloreo' : 'Check Coloring'}

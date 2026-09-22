@@ -258,4 +258,256 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
       stdout: capturedStdout.trim() || undefined
     };
   },
+  'closest-pair-dyc': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    const pts1 = [[0, 0], [3, 4], [1, 1]];
+    const res1 = await service.executePython(code, 'par_mas_cercano', [pts1]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-closest-pair-exec-fail',
+          description: { es: 'Ejecución en Python de par_mas_cercano(puntos)', en: 'Python execution of par_mas_cercano(puntos)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const dist1 = typeof res1.result === 'number' ? res1.result : NaN;
+    const pass1 = Math.abs(dist1 - Math.SQRT2) < 0.001;
+
+    results.push({
+      testId: 'py-closest-pair-triangle',
+      description: {
+        es: 'Triángulo [(0,0), (3,4), (1,1)]: Distancia mínima calculada ≈ 1.4142.',
+        en: 'Triangle [(0,0), (3,4), (1,1)]: Minimal distance ≈ 1.4142.'
+      },
+      passed: pass1,
+      expected: '1.4142',
+      actual: String(dist1)
+    });
+
+    // Test 2: Horizontal strip split
+    const pts2 = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]];
+    const res2 = await service.executePython(code, 'par_mas_cercano', [pts2]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const dist2 = typeof res2.result === 'number' ? res2.result : NaN;
+    const pass2 = Math.abs(dist2 - Math.SQRT2) < 0.001;
+
+    results.push({
+      testId: 'py-closest-pair-strip',
+      description: {
+        es: 'Puntos cruzando la franja: Distancia mínima ≈ 1.4142 entre (2,3) y (3,4).',
+        en: 'Points crossing central strip: Minimal distance ≈ 1.4142.'
+      },
+      passed: pass2,
+      expected: '1.4142',
+      actual: String(dist2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'karatsuba-dyc': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    const res1 = await service.executePython(code, 'multiplicar_karatsuba', [1234, 5678]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-karatsuba-exec-fail',
+          description: { es: 'Ejecución en Python de multiplicar_karatsuba(x, y)', en: 'Python execution of multiplicar_karatsuba(x, y)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const val1 = Number(res1.result);
+    const pass1 = val1 === 1234 * 5678;
+
+    results.push({
+      testId: 'py-karatsuba-4digits',
+      description: {
+        es: 'Producto 1234 × 5678 = 7006652.',
+        en: 'Product 1234 × 5678 = 7006652.'
+      },
+      passed: pass1,
+      expected: '7006652',
+      actual: String(val1)
+    });
+
+    // Test 2: Base case
+    const res2 = await service.executePython(code, 'multiplicar_karatsuba', [6, 7]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const val2 = Number(res2.result);
+
+    results.push({
+      testId: 'py-karatsuba-base-case',
+      description: {
+        es: 'Caso base un dígito: 6 × 7 = 42.',
+        en: 'Base case single digit: 6 × 7 = 42.'
+      },
+      passed: val2 === 42,
+      expected: '42',
+      actual: String(val2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'median-of-medians-dyc': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    const arr1 = [12, 3, 5, 7, 4, 19, 26];
+    const res1 = await service.executePython(code, 'k_esimo_elemento', [arr1, 0]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-mom-exec-fail',
+          description: { es: 'Ejecución en Python de k_esimo_elemento(arr, k)', en: 'Python execution of k_esimo_elemento(arr, k)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const val1 = Number(res1.result);
+
+    results.push({
+      testId: 'py-mom-min',
+      description: {
+        es: 'Elemento mínimo (k = 0) en [12, 3, 5, 7, 4, 19, 26]: Retorna 3.',
+        en: 'Minimum element (k = 0) in [12, 3, 5, 7, 4, 19, 26]: Returns 3.'
+      },
+      passed: val1 === 3,
+      expected: '3',
+      actual: String(val1)
+    });
+
+    // Test 2: Median (k = 3)
+    const res2 = await service.executePython(code, 'k_esimo_elemento', [arr1, 3]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const val2 = Number(res2.result);
+
+    results.push({
+      testId: 'py-mom-median',
+      description: {
+        es: 'Mediana (k = 3) en [12, 3, 5, 7, 4, 19, 26]: Retorna 7.',
+        en: 'Median (k = 3) in [12, 3, 5, 7, 4, 19, 26]: Returns 7.'
+      },
+      passed: val2 === 7,
+      expected: '7',
+      actual: String(val2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'majority-element-dyc': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    const arr1 = [3, 3, 4, 2, 4, 4, 2, 4, 4];
+    const res1 = await service.executePython(code, 'elemento_mayoritario', [arr1]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-majority-exec-fail',
+          description: { es: 'Ejecución en Python de elemento_mayoritario(arr)', en: 'Python execution of elemento_mayoritario(arr)' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const val1 = res1.result as number | null;
+
+    results.push({
+      testId: 'py-majority-winner',
+      description: {
+        es: 'Arreglo [3, 3, 4, 2, 4, 4, 2, 4, 4]: Mayoritario absoluto es 4 (5 apariciones de 9).',
+        en: 'Array [3, 3, 4, 2, 4, 4, 2, 4, 4]: Absolute majority is 4.'
+      },
+      passed: val1 === 4,
+      expected: '4',
+      actual: String(val1)
+    });
+
+    // Test 2: No majority
+    const arr2 = [1, 2, 3, 4, 5];
+    const res2 = await service.executePython(code, 'elemento_mayoritario', [arr2]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const val2 = res2.result as number | null;
+
+    results.push({
+      testId: 'py-majority-none',
+      description: {
+        es: 'Arreglo sin ganador [1, 2, 3, 4, 5]: Debe retornar None.',
+        en: 'Array without winner [1, 2, 3, 4, 5]: Must return None.'
+      },
+      passed: val2 === null || val2 === undefined,
+      expected: 'None',
+      actual: val2 === null || val2 === undefined ? 'None' : String(val2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  }
 };

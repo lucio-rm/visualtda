@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solveRoadAntennas } from '../../engine/algorithms/roadAntennasValidator';
 import './RoadAntennasPlayground.css';
 
@@ -42,11 +43,11 @@ const PRESETS: Preset[] = [
 
 export const RoadAntennasPlayground: React.FC = () => {
   const { language, t } = useLanguage();
+  const { markCompleted } = useStudentProgress();
 
   const [houses, setHouses] = useState<number[]>([4, 12, 18, 26, 32, 45, 60, 68, 75]);
   const [radius, setRadius] = useState<number>(10);
   const [userAntennas, setUserAntennas] = useState<number[]>([]);
-  const [showGreedySolution, setShowGreedySolution] = useState<boolean>(false);
   const [activeTool, setActiveTool] = useState<'place_antenna' | 'place_house'>('place_antenna');
   const [cursorKm, setCursorKm] = useState<number>(30);
   const [inputKm, setInputKm] = useState<string>('30');
@@ -69,6 +70,12 @@ export const RoadAntennasPlayground: React.FC = () => {
   const allCovered = userCoveredIndices.size === houses.length && houses.length > 0;
   const isMinimal = allCovered && userAntennas.length <= greedyAntennas.length;
   const isSuboptimal = allCovered && userAntennas.length > greedyAntennas.length;
+
+  useEffect(() => {
+    if (isMinimal) {
+      markCompleted('road-antennas-greedy');
+    }
+  }, [isMinimal, markCompleted]);
 
   // SVG scaling
   const svgWidth = 840;
@@ -256,16 +263,6 @@ export const RoadAntennasPlayground: React.FC = () => {
           >
             {language === 'es' ? 'Limpiar mis antenas' : 'Clear my antennas'}
           </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            style={{ fontSize: '0.85rem' }}
-            onClick={() => setShowGreedySolution((prev) => !prev)}
-          >
-            {showGreedySolution
-              ? (language === 'es' ? 'Ocultar solución Greedy' : 'Hide Greedy solution')
-              : (language === 'es' ? '👁️ Ver solución Greedy' : '👁️ Show Greedy solution')}
-          </button>
         </div>
       </div>
 
@@ -432,7 +429,7 @@ export const RoadAntennasPlayground: React.FC = () => {
           })}
 
           {/* Optional Overlay: Canonical Greedy Antennas */}
-          {showGreedySolution &&
+          {isMinimal &&
             greedyAntennas.map((gKm, gIdx) => {
               const gX = kmToX(gKm);
               const spanLeft = kmToX(Math.max(0, gKm - radius));

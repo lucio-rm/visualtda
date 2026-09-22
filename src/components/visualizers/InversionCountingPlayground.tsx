@@ -1,57 +1,136 @@
-import React, { useState } from 'react';
-import {
-  countInversions,
-  getInversionPairs
-} from '../../engine/algorithms/inversionCountingValidator';
+import React, { useState, useMemo, useEffect } from 'react';
+import { countInversions } from '../../engine/algorithms/inversionCountingValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './InversionCountingPlayground.css';
 
 const DEFAULT_ARRAY = [2, 3, 8, 6, 1];
 
+interface DiscoveredInversion {
+  i: number;
+  j: number;
+  valI: number;
+  valJ: number;
+}
+
 export const InversionCountingPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [array, setArray] = useState<number[]>(DEFAULT_ARRAY);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-  const [guess, setGuess] = useState<string>('');
+  const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
+  const [discoveredPairs, setDiscoveredPairs] = useState<DiscoveredInversion[]>([]);
+  const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'info' | 'error' } | null>(null);
+  const [guessInput, setGuessInput] = useState<string>('');
   const [guessFeedback, setGuessFeedback] = useState<string | null>(null);
+  const [showDivideExplanation, setShowDivideExplanation] = useState<boolean>(false);
 
-  const totalInversions = countInversions(array);
-  const pairs = getInversionPairs(array);
+  // Secret calculation for verification (not revealed to student prematurely)
+  const trueTotalInversions = useMemo(() => countInversions(array), [array]);
   const n = array.length;
-  const maxInversions = (n * (n - 1)) / 2;
-  const disorderPercent = maxInversions > 0 ? Math.round((totalInversions / maxInversions) * 100) : 0;
+  const maxPossibleInversions = (n * (n - 1)) / 2;
 
-  const handleSwapOrSelect = (idx: number) => {
-    if (selectedIdx === null) {
-      setSelectedIdx(idx);
-    } else if (selectedIdx === idx) {
-      setSelectedIdx(null);
+  // Reset discovery when array changes
+  useEffect(() => {
+    setFirstSelectedIdx(null);
+    setDiscoveredPairs([]);
+    setFeedbackMsg(null);
+    setGuessFeedback(null);
+  }, [array]);
+
+  const allInversionsDiscovered = discoveredPairs.length === trueTotalInversions && trueTotalInversions > 0;
+  const isZeroDisorder = trueTotalInversions === 0;
+
+  // Trigger mastery completion when student discovers all inversions
+  useEffect(() => {
+    if (allInversionsDiscovered || (isZeroDisorder && discoveredPairs.length === 0)) {
+      markCompleted('inversion-counting-dyc');
+    }
+  }, [allInversionsDiscovered, isZeroDisorder]);
+
+  // Student clicks an element
+  const handleBarClick = (idx: number) => {
+    if (firstSelectedIdx === null) {
+      setFirstSelectedIdx(idx);
+      setFeedbackMsg({
+        text: language === 'es'
+          ? `Elemento seleccionado: A[${idx}] = ${array[idx]}. Ahora seleccioná otro elemento para comparar.`
+          : `Selected item: A[${idx}] = ${array[idx]}. Now select another element to compare.`,
+        type: 'info'
+      });
+      return;
+    }
+
+    if (firstSelectedIdx === idx) {
+      setFirstSelectedIdx(null);
+      setFeedbackMsg(null);
+      return;
+    }
+
+    // Determine left (i) and right (j) with i < j
+    const i = Math.min(firstSelectedIdx, idx);
+    const j = Math.max(firstSelectedIdx, idx);
+    const valI = array[i];
+    const valJ = array[j];
+    setFirstSelectedIdx(null);
+
+    // Check inversion condition: i < j and A[i] > A[j]
+    if (valI > valJ) {
+      const alreadyFound = discoveredPairs.some((p) => p.i === i && p.j === j);
+      if (alreadyFound) {
+        setFeedbackMsg({
+          text: language === 'es'
+            ? `Ya habías descubierto esta inversión: A[${i}]=${valI} > A[${j}]=${valJ}.`
+            : `You already discovered this inversion: A[${i}]=${valI} > A[${j}]=${valJ}.`,
+          type: 'info'
+        });
+      } else {
+        const newPair: DiscoveredInversion = { i, j, valI, valJ };
+        setDiscoveredPairs((prev) => [...prev, newPair]);
+        setFeedbackMsg({
+          text: language === 'es'
+            ? `🎉 ¡Inversión encontrada! A[${i}]=${valI} > A[${j}]=${valJ} (con índice ${i} < ${j}).`
+            : `🎉 Inversion found! A[${i}]=${valI} > A[${j}]=${valJ} (with index ${i} < ${j}).`,
+          type: 'success'
+        });
+      }
     } else {
-      // Swap elements
-      const next = [...array];
-      const tmp = next[selectedIdx];
-      next[selectedIdx] = next[idx];
-      next[idx] = tmp;
-      setArray(next);
-      setSelectedIdx(null);
-      setGuessFeedback(null);
+      setFeedbackMsg({
+        text: language === 'es'
+          ? `✗ No es inversión: A[${i}]=${valI} ≤ A[${j}]=${valJ}. El par está en orden relativo correcto.`
+          : `✗ Not an inversion: A[${i}]=${valI} ≤ A[${j}]=${valJ}. Relative order is already sorted.`,
+        type: 'error'
+      });
     }
   };
 
-  const handleShift = (idx: number, dir: -1 | 1) => {
-    const target = idx + dir;
-    if (target < 0 || target >= array.length) return;
-    const next = [...array];
-    const tmp = next[idx];
-    next[idx] = next[target];
-    next[target] = tmp;
-    setArray(next);
-    setSelectedIdx(null);
-    setGuessFeedback(null);
+  const handleVerifyGuess = () => {
+    const num = parseInt(guessInput.trim(), 10);
+    if (isNaN(num)) return;
+
+    if (num === trueTotalInversions) {
+      setGuessFeedback(
+        language === 'es'
+          ? `🎉 ¡Exacto! El arreglo tiene exactamente ${trueTotalInversions} inversiones. Has demostrado dominio de conteo.`
+          : `🎉 Exact! The array contains exactly ${trueTotalInversions} inversions. You proved mastery.`
+      );
+      markCompleted('inversion-counting-dyc');
+    } else if (num < trueTotalInversions) {
+      setGuessFeedback(
+        language === 'es'
+          ? `🔍 Tu estimación (${num}) es inferior al número real. Hay más pares desordenados en el arreglo.`
+          : `🔍 Your estimate (${num}) is too low. There are more out-of-order pairs.`
+      );
+    } else {
+      setGuessFeedback(
+        language === 'es'
+          ? `⚠️ Tu estimación (${num}) supera el número real. Recordá que solo se cuentan pares (i, j) con i < j y A[i] > A[j].`
+          : `⚠️ Your estimate (${num}) is too high. Remember only pairs (i, j) with i < j and A[i] > A[j] count.`
+      );
+    }
   };
 
   const handleRandomize = () => {
-    const len = 6;
+    const len = 5;
     const randoms: number[] = [];
     while (randoms.length < len) {
       const val = Math.floor(Math.random() * 20) + 1;
@@ -60,84 +139,43 @@ export const InversionCountingPlayground: React.FC = () => {
       }
     }
     setArray(randoms);
-    setSelectedIdx(null);
-    setGuessFeedback(null);
-  };
-
-  const handleCheckGuess = () => {
-    const num = parseInt(guess, 10);
-    if (isNaN(num)) return;
-    if (num === totalInversions) {
-      setGuessFeedback(
-        language === 'es'
-          ? `🎉 ¡Brillante! El arreglo tiene exactamente ${totalInversions} inversiones.`
-          : `🎉 Brilliant! The array has exactly ${totalInversions} inversions.`
-      );
-    } else if (num < totalInversions) {
-      const diff = totalInversions - num;
-      setGuessFeedback(
-        language === 'es'
-          ? `🔍 Te faltaron contar ${diff} inversiones (el total real es ${totalInversions}).`
-          : `🔍 You missed ${diff} inversions (actual total is ${totalInversions}).`
-      );
-    } else {
-      const diff = num - totalInversions;
-      setGuessFeedback(
-        language === 'es'
-          ? `⚠️ Contaste de más (+${diff}). El número real de inversiones es ${totalInversions}.`
-          : `⚠️ You overcounted by ${diff}. The true number of inversions is ${totalInversions}.`
-      );
-    }
   };
 
   return (
     <div className="inversion-playground">
-      {/* Playground Workspace */}
       <div className="inv-pg-card">
         <div className="inv-pg-header">
           <div>
             <div className="inv-pg-title">
               {language === 'es'
-                ? 'Laboratorio Interactivo de Inversiones'
-                : 'Interactive Inversion Sandbox'}
+                ? 'Laboratorio Interactivo: Descubrimiento de Inversiones'
+                : 'Interactive Inversion Discovery Sandbox'}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted, #94a3b8)' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)' }}>
               {language === 'es'
-                ? 'Haz clic en dos números para intercambiarlos o usa las flechas para moverlos.'
-                : 'Click two numbers to swap them or use the arrows to shift positions.'}
+                ? 'Hacé clic en dos casillas para comparar sus valores. Descubrí vos mismo cuántos pares violan el orden ascendente.'
+                : 'Click two slots to compare values. Discover how many pairs violate ascending order yourself.'}
             </div>
           </div>
 
           <div className="inv-pg-actions">
             <button
               className="inv-pg-btn"
-              onClick={() => {
-                setArray([2, 3, 8, 6, 1]);
-                setSelectedIdx(null);
-                setGuessFeedback(null);
-              }}
+              onClick={() => setArray([2, 3, 8, 6, 1])}
             >
               CLRS [2, 3, 8, 6, 1]
             </button>
             <button
               className="inv-pg-btn"
-              onClick={() => {
-                setArray([6, 5, 4, 3, 2, 1]);
-                setSelectedIdx(null);
-                setGuessFeedback(null);
-              }}
+              onClick={() => setArray([5, 4, 3, 2, 1])}
             >
-              {language === 'es' ? 'Invertido Total' : 'Fully Reversed'}
+              {language === 'es' ? 'Invertido [5, 4, 3, 2, 1]' : 'Reversed [5, 4, 3, 2, 1]'}
             </button>
             <button
               className="inv-pg-btn"
-              onClick={() => {
-                setArray([1, 2, 3, 4, 5, 6]);
-                setSelectedIdx(null);
-                setGuessFeedback(null);
-              }}
+              onClick={() => setArray([1, 2, 3, 4, 5])}
             >
-              {language === 'es' ? 'Ordenado' : 'Sorted'}
+              {language === 'es' ? 'Ordenado [1, 2, 3, 4, 5]' : 'Sorted [1, 2, 3, 4, 5]'}
             </button>
             <button className="inv-pg-btn accent" onClick={handleRandomize}>
               🎲 {language === 'es' ? 'Aleatorio' : 'Randomize'}
@@ -145,159 +183,163 @@ export const InversionCountingPlayground: React.FC = () => {
           </div>
         </div>
 
-        {/* Array visualizer with click to swap */}
+        {/* Array Visualization */}
         <div className="inv-pg-array-display">
           {array.map((val, idx) => {
-            const isSelected = selectedIdx === idx;
+            const isSelected = firstSelectedIdx === idx;
+            const isInvolvedInDiscovered = discoveredPairs.some((p) => p.i === idx || p.j === idx);
+
             return (
               <div key={idx} className="inv-pg-item">
                 <button
-                  className={`inv-pg-bar ${isSelected ? 'selected-left' : ''}`}
-                  onClick={() => handleSwapOrSelect(idx)}
-                  title={
-                    language === 'es'
-                      ? 'Haz clic para seleccionar o intercambiar'
-                      : 'Click to select or swap'
-                  }
+                  type="button"
+                  className={`inv-pg-bar ${isSelected ? 'selected-left' : ''} ${isInvolvedInDiscovered ? 'has-inversions' : ''}`}
+                  onClick={() => handleBarClick(idx)}
+                  title={`Índice i=${idx}, Valor=${val}`}
                 >
                   {val}
                 </button>
-                <span className="inv-pg-bar-idx">i={idx}</span>
-                <div className="inv-pg-shift-btns">
-                  <button
-                    className="inv-pg-shift-btn"
-                    disabled={idx === 0}
-                    onClick={() => handleShift(idx, -1)}
-                    title="Mover a la izquierda"
-                  >
-                    ◀
-                  </button>
-                  <button
-                    className="inv-pg-shift-btn"
-                    disabled={idx === array.length - 1}
-                    onClick={() => handleShift(idx, 1)}
-                    title="Mover a la derecha"
-                  >
-                    ▶
-                  </button>
-                </div>
+                <span className="inv-pg-bar-idx">pos={idx}</span>
               </div>
             );
           })}
         </div>
 
-        {/* Stats Grid */}
-        <div className="inv-pg-stats-grid">
-          <div className="inv-stat-card">
-            <span className="inv-stat-label">
-              {language === 'es' ? 'Inversiones Totales' : 'Total Inversions'}
-            </span>
-            <span className={`inv-stat-value ${totalInversions > 0 ? 'warn' : ''}`}>
-              {totalInversions}
-            </span>
-            <span className="inv-stat-desc">
-              {language === 'es'
-                ? `De un máximo de ${maxInversions} pares posibles`
-                : `Out of ${maxInversions} max possible pairs`}
-            </span>
+        {/* Immediate Feedback Banner */}
+        {feedbackMsg && (
+          <div className={`inv-feedback-banner ${feedbackMsg.type}`} role="status">
+            {feedbackMsg.text}
           </div>
+        )}
 
-          <div className="inv-stat-card">
-            <span className="inv-stat-label">
-              {language === 'es' ? 'Índice de Desorden (Kendall)' : 'Disorder Index (Kendall)'}
-            </span>
-            <span className="inv-stat-value">{disorderPercent}%</span>
-            <span className="inv-stat-desc">
-              {language === 'es'
-                ? totalInversions === 0
-                  ? 'Arreglo perfectamente ordenado'
-                  : totalInversions === maxInversions
-                  ? 'Peor caso posible (orden decreciente)'
-                  : 'Desorden intermedio'
-                : totalInversions === 0
-                ? 'Perfectly sorted array'
-                : totalInversions === maxInversions
-                ? 'Worst-case strictly reversed'
-                : 'Intermediate disorder'}
-            </span>
-          </div>
-
-          <div className="inv-stat-card">
-            <span className="inv-stat-label">
-              {language === 'es' ? 'Comparaciones Fuerza Bruta' : 'Brute Force Comparisons'}
-            </span>
-            <span className="inv-stat-value">{maxInversions}</span>
-            <span className="inv-stat-desc">
-              {language === 'es'
-                ? 'Fórmula n(n-1)/2 en tiempo O(n²)'
-                : 'Formula n(n-1)/2 in O(n²) time'}
-            </span>
-          </div>
-
-          <div className="inv-stat-card">
-            <span className="inv-stat-label">
-              {language === 'es' ? 'Operaciones DyC' : 'D&C Operations'}
-            </span>
-            <span className="inv-stat-value" style={{ color: '#34d399' }}>
-              ~{Math.round(n * Math.log2(Math.max(2, n)))}
-            </span>
-            <span className="inv-stat-desc">
-              {language === 'es'
-                ? 'Teorema Maestro O(n log n)'
-                : 'Master Theorem O(n log n)'}
-            </span>
-          </div>
-        </div>
-
-        {/* Inverted Pairs List */}
-        <div>
-          <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-            {language === 'es'
-              ? `Listado de Pares Invertidos (${pairs.length}):`
-              : `List of Inverted Pairs (${pairs.length}):`}
-          </div>
-          {pairs.length === 0 ? (
-            <div style={{ fontSize: '0.8rem', color: '#10b981', fontStyle: 'italic' }}>
-              {language === 'es'
-                ? '¡No hay inversiones! El arreglo ya está en orden no decreciente.'
-                : 'No inversions! The array is already in non-decreasing order.'}
+        {/* Victory Card */}
+        {allInversionsDiscovered && (
+          <div className="inv-victory-card" role="status">
+            <span style={{ fontSize: '1.4rem' }}>🏆</span>
+            <div>
+              <strong>
+                {language === 'es'
+                  ? `¡Excelente deducción! Descubriste las ${trueTotalInversions} inversiones del arreglo.`
+                  : `Brilliant deduction! You found all ${trueTotalInversions} inversions in the array.`}
+              </strong>
+              <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
+                {language === 'es'
+                  ? `El número total de inversiones representa la cantidad mínima de intercambios adyacentes necesarios para ordenar el arreglo (Kendall tau). Has desbloqueado el ejercicio con maestría.`
+                  : `Total inversions represent the minimum adjacent swaps required to sort the array. You have mastered this exercise.`}
+              </p>
             </div>
-          ) : (
+          </div>
+        )}
+
+        {isZeroDisorder && (
+          <div className="inv-victory-card" role="status">
+            <span style={{ fontSize: '1.4rem' }}>✓</span>
+            <div>
+              <strong>
+                {language === 'es'
+                  ? 'Arreglo ordenado: 0 inversiones.'
+                  : 'Sorted array: 0 inversions.'}
+              </strong>
+              <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
+                {language === 'es'
+                  ? 'Todos los pares (i, j) con i < j satisfacen A[i] ≤ A[j]. Desorden nulo.'
+                  : 'All pairs (i, j) with i < j satisfy A[i] ≤ A[j].'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Progress & Discovered Inversions */}
+        <div className="inv-pg-discovery-panel">
+          <div className="inv-discovery-header">
+            <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>
+              {language === 'es' ? 'Inversiones descubiertas:' : 'Discovered inversions:'}
+            </span>
+            <span className="inv-discovery-counter">
+              <strong>{discoveredPairs.length}</strong> {language === 'es' ? 'pares encontrados' : 'pairs found'}
+            </span>
+          </div>
+
+          {discoveredPairs.length > 0 ? (
             <div className="inv-pairs-list">
-              {pairs.map(([i, j], pIdx) => (
-                <span key={pIdx} className="inv-pair-pill">
-                  ({i}, {j}) [{array[i]} &gt; {array[j]}]
+              {discoveredPairs.map((p, idx) => (
+                <span key={idx} className="inv-pair-pill">
+                  (A[{p.i}]={p.valI} &gt; A[{p.j}]={p.valJ})
                 </span>
               ))}
+            </div>
+          ) : (
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Aún no has descubierto ninguna inversión. Hacé clic en casillas para explorar pares.'
+                : 'No inversions discovered yet. Click cells to explore pairs.'}
             </div>
           )}
         </div>
 
-        {/* Interactive Challenge */}
+        {/* Challenge Guessing Box */}
         <div className="inv-challenge-box">
-          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--accent-light, #60a5fa)' }}>
-            🎯 {language === 'es' ? 'Desafío Mental de Estimación:' : 'Mental Estimation Challenge:'}
+          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text)' }}>
+            🎯 {language === 'es' ? 'Desafío de Estimación Matemática:' : 'Mathematical Estimation Challenge:'}
           </div>
-          <div style={{ fontSize: '0.82rem', color: 'var(--text-muted, #94a3b8)' }}>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es'
-              ? 'Antes de mirar la solución, inspecciona el arreglo visual y estima cuántas inversiones contiene.'
-              : 'Before looking at the solution, inspect the array and estimate how many inversions it contains.'}
-          </div>
+              ? `¿Cuántas inversiones totales creés que tiene este arreglo de tamaño ${n} (máximo posible: ${maxPossibleInversions})?`
+              : `How many total inversions do you think this size-${n} array has (max possible: ${maxPossibleInversions})?`}
+          </p>
           <div className="inv-challenge-input-row">
             <input
               type="number"
               className="inv-challenge-input"
+              value={guessInput}
+              onChange={(e) => setGuessInput(e.target.value)}
               placeholder="0"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
+              min={0}
+              max={maxPossibleInversions}
             />
-            <button className="inv-pg-btn accent" onClick={handleCheckGuess}>
-              {language === 'es' ? 'Verificar Estimación' : 'Check Guess'}
+            <button
+              type="button"
+              className="inv-pg-btn accent"
+              onClick={handleVerifyGuess}
+            >
+              {language === 'es' ? 'Verificar Hipótesis' : 'Verify Guess'}
             </button>
           </div>
           {guessFeedback && (
-            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fef08a' }}>
+            <div className="inv-guess-feedback" role="status">
               {guessFeedback}
+            </div>
+          )}
+        </div>
+
+        {/* Divide and Conquer Pedagogical Explanation */}
+        <div className="inv-dnc-toggle-card">
+          <button
+            type="button"
+            className="btn-toggle-dnc"
+            onClick={() => setShowDivideExplanation(!showDivideExplanation)}
+          >
+            {showDivideExplanation ? '▲ Ocultar' : '▼ Ver'} {language === 'es' ? 'Fundamento Teórico: ¿Por qué O(N log N) con Merge Sort?' : 'Theoretical Insight: Why O(N log N) with Merge Sort?'}
+          </button>
+
+          {showDivideExplanation && (
+            <div className="inv-dnc-explanation-content">
+              <h4>{language === 'es' ? 'Principio de División y Conquista (Kleinberg & Tardos, Cap. 5.3)' : 'Divide & Conquer Principle (Kleinberg & Tardos, Ch. 5.3)'}</h4>
+              <p>
+                {language === 'es'
+                  ? 'Una búsqueda exhaustiva por pares compara cada elemento con los demás en tiempo O(N²). Merge Sort cuenta las inversiones cruzadas en tiempo lineal O(N) durante la mezcla:'
+                  : 'Exhaustive pairwise search checks every pair in O(N²) time. Merge Sort counts cross-inversions in linear O(N) time during merge:'}
+              </p>
+              <div className="inv-dnc-math-box">
+                <code>
+                  Inversiones(A) = Inversiones(Izq) + Inversiones(Der) + InversionesCruzadas(Izq, Der)
+                </code>
+              </div>
+              <p>
+                {language === 'es'
+                  ? 'Cuando el puntero de la mitad derecha avanza porque Der[j] < Izq[i], automáticamente Der[j] es menor que Izq[i] y que TODOS los elementos restantes de la mitad izquierda. Se suman (mid - i + 1) inversiones en O(1) tiempo constante, logrando una cota asintótica global de O(N log N).'
+                  : 'When right pointer advances because Right[j] < Left[i], Right[j] is smaller than Left[i] and ALL remaining items in Left. We add (mid - i + 1) inversions in O(1), achieving O(N log N) overall.'}
+              </p>
             </div>
           )}
         </div>

@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { computeOptimalMaxSubarray } from '../../engine/algorithms/maxSubarrayValidator';
 import './MaxSubarrayPlayground.css';
 
@@ -33,7 +34,10 @@ const PRESETS: Preset[] = [
 
 export const MaxSubarrayPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [arrayStr, setArrayStr] = useState<string>('5, -4, 2, 4, -1');
+  const [userStart, setUserStart] = useState<number | null>(null);
+  const [userEnd, setUserEnd] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const parsedArray = useMemo(() => {
@@ -62,13 +66,54 @@ export const MaxSubarrayPlayground: React.FC = () => {
     return computeOptimalMaxSubarray(parsedArray);
   }, [parsedArray]);
 
+  const userSum = useMemo(() => {
+    if (userStart === null || userEnd === null || parsedArray.length === 0) return null;
+    let s = 0;
+    for (let i = userStart; i <= userEnd; i++) {
+      s += parsedArray[i];
+    }
+    return s;
+  }, [userStart, userEnd, parsedArray]);
+
+  const isOptimal = optimal !== null && userSum !== null && userSum === optimal.maxSum;
+
+  useEffect(() => {
+    if (isOptimal) {
+      markCompleted('max-subarray-dyc');
+    }
+  }, [isOptimal, markCompleted]);
+
+  const handleItemClick = (idx: number) => {
+    if (userStart === null) {
+      setUserStart(idx);
+      setUserEnd(idx);
+    } else if (userEnd === userStart) {
+      const start = Math.min(userStart, idx);
+      const end = Math.max(userStart, idx);
+      setUserStart(start);
+      setUserEnd(end);
+    } else {
+      setUserStart(idx);
+      setUserEnd(idx);
+    }
+  };
+
+  const handleClearSelection = () => {
+    setUserStart(null);
+    setUserEnd(null);
+  };
+
   const handlePresetSelect = (preset: Preset) => {
     setArrayStr(preset.array.join(', '));
+    setUserStart(null);
+    setUserEnd(null);
     setError(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setArrayStr(e.target.value);
+    setUserStart(null);
+    setUserEnd(null);
     setError(null);
   };
 
@@ -82,8 +127,8 @@ export const MaxSubarrayPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Experimenta con diferentes configuraciones numéricas. Observa cómo la presencia de negativos altera los límites óptimos y cómo el subarreglo cruzado en el punto medio captura la solución óptima global.'
-            : 'Experiment with different arrays. Notice how negative values shift optimal boundaries and how the crossing subarray at the midpoint captures the global optimum.'}
+            ? 'Haz clic en los elementos para definir un subarreglo contiguo [inicio..fin]. ¿Logras encontrar la subsecuencia contigua que produce la máxima suma posible?'
+            : 'Click elements to select a contiguous subarray [start..end]. Can you find the contiguous slice yielding the absolute maximum sum?'}
         </p>
       </div>
 
@@ -126,28 +171,57 @@ export const MaxSubarrayPlayground: React.FC = () => {
       {/* Visual Array Presentation */}
       {parsedArray.length > 0 && (
         <div className="array-visualization-box">
-          <div className="box-title">
-            {language === 'es' ? 'Elementos y Subarreglo Óptimo' : 'Elements & Optimal Subarray'}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span className="box-title">
+              {language === 'es'
+                ? 'Toca dos índices para marcar el rango contiguo [i..j]:'
+                : 'Click two items to select range [i..j]:'}
+            </span>
+            <button
+              className="chip-btn"
+              onClick={handleClearSelection}
+              disabled={userStart === null}
+            >
+              {language === 'es' ? 'Limpiar Selección' : 'Clear Selection'}
+            </button>
           </div>
 
           <div className="items-row">
             {parsedArray.map((val, idx) => {
-              const isSelected =
-                optimal &&
-                idx >= optimal.startIndex &&
-                idx <= optimal.endIndex;
+              const isUserSelected =
+                userStart !== null &&
+                userEnd !== null &&
+                idx >= userStart &&
+                idx <= userEnd;
+
               return (
                 <div
                   key={idx}
-                  className={`item-card ${isSelected ? 'selected' : 'unselected'}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleItemClick(idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleItemClick(idx);
+                    }
+                  }}
+                  className={`item-card ${isUserSelected ? 'selected' : 'unselected'}`}
+                  style={{ cursor: 'pointer' }}
                 >
                   <span className="item-idx">i={idx}</span>
                   <span className={`item-val ${val >= 0 ? 'pos' : 'neg'}`}>
                     {val}
                   </span>
-                  {isSelected && (
+                  {isUserSelected && (
                     <span className="opt-tag">
-                      {language === 'es' ? 'ÓPTIMO' : 'OPTIMAL'}
+                      {idx === userStart && idx === userEnd
+                        ? '[i, j]'
+                        : idx === userStart
+                        ? '[inicio]'
+                        : idx === userEnd
+                        ? '[fin]'
+                        : '•'}
                     </span>
                   )}
                 </div>
@@ -155,32 +229,59 @@ export const MaxSubarrayPlayground: React.FC = () => {
             })}
           </div>
 
-          {optimal && (
-            <div className="optimal-summary-card">
-              <div className="summary-stat">
-                <span className="stat-label">
-                  {language === 'es' ? 'Suma Máxima:' : 'Maximum Sum:'}
-                </span>
-                <span className="stat-value highlight">{optimal.maxSum}</span>
-              </div>
-              <div className="summary-stat">
-                <span className="stat-label">
-                  {language === 'es' ? 'Subarreglo contiguo:' : 'Contiguous subarray:'}
-                </span>
-                <span className="stat-value">
-                  [{optimal.subarray.join(', ')}]
-                </span>
-              </div>
-              <div className="summary-stat">
-                <span className="stat-label">
-                  {language === 'es' ? 'Rango de índices:' : 'Index range:'}
-                </span>
-                <span className="stat-value">
-                  <code>[{optimal.startIndex}..{optimal.endIndex}]</code>
-                </span>
-              </div>
+          {/* User selection score banner */}
+          <div className="optimal-summary-card">
+            <div className="summary-stat">
+              <span className="stat-label">
+                {language === 'es' ? 'Tu Selección:' : 'Your Selection:'}
+              </span>
+              <span className="stat-value">
+                {userStart !== null && userEnd !== null
+                  ? `[${userStart}..${userEnd}] → Suma: ${userSum}`
+                  : language === 'es'
+                  ? 'Toca elementos para armar un rango'
+                  : 'Click elements to select a range'}
+              </span>
             </div>
-          )}
+
+            <div className="summary-stat">
+              <span className="stat-label">
+                {language === 'es' ? 'Estado del intento:' : 'Attempt status:'}
+              </span>
+              <span className="stat-value">
+                {isOptimal ? (
+                  <span style={{ color: '#10b981', fontWeight: 800 }}>
+                    🎉 {language === 'es' ? '¡ÓPTIMO ALCANZADO!' : 'OPTIMAL REACHED!'}
+                  </span>
+                ) : userSum !== null ? (
+                  <span style={{ color: '#f59e0b' }}>
+                    {language === 'es'
+                      ? `Suma actual ${userSum}. ¿Puedes superarla?`
+                      : `Current sum ${userSum}. Can you beat it?`}
+                  </span>
+                ) : (
+                  '—'
+                )}
+              </span>
+            </div>
+
+            {optimal && (
+              <div className="summary-stat">
+                <span className="stat-label">
+                  {language === 'es' ? 'Cota Máxima Posible:' : 'Theoretical Maximum:'}
+                </span>
+                <span className="stat-value highlight">
+                  {isOptimal ? (
+                    `${optimal.maxSum} (Rango [${optimal.startIndex}..${optimal.endIndex}])`
+                  ) : (
+                    <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
+                      {language === 'es' ? '🔒 ??? (¡descúbrelo tú mismo!)' : '🔒 ??? (discover it yourself!)'}
+                    </span>
+                  )}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

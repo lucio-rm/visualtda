@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import {
   solveCoinChange,
   solveCoinChangeGreedy
@@ -49,6 +50,7 @@ const PRESETS: Preset[] = [
 
 export const CoinChangePlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [coinsStr, setCoinsStr] = useState<string>('1, 3, 4');
   const [target, setTarget] = useState<number>(6);
   const [userCoinsCount, setUserCoinsCount] = useState<Record<number, number>>({});
@@ -136,23 +138,6 @@ export const CoinChangePlayground: React.FC = () => {
     setError(null);
   };
 
-  const loadOptimal = () => {
-    const counts: Record<number, number> = {};
-    for (const c of optimalSolution) {
-      counts[c] = (counts[c] || 0) + 1;
-    }
-    setUserCoinsCount(counts);
-  };
-
-  const loadGreedy = () => {
-    if (!greedySolution) return;
-    const counts: Record<number, number> = {};
-    for (const c of greedySolution) {
-      counts[c] = (counts[c] || 0) + 1;
-    }
-    setUserCoinsCount(counts);
-  };
-
   const isExactSum = userTotal === target;
   const isOptimal =
     isExactSum &&
@@ -162,6 +147,12 @@ export const CoinChangePlayground: React.FC = () => {
     isExactSum &&
     optimalSolution.length > 0 &&
     userCoinsList.length > optimalSolution.length;
+
+  useEffect(() => {
+    if (isOptimal) {
+      markCompleted('coin-change-dp');
+    }
+  }, [isOptimal, markCompleted]);
 
   return (
     <div className="coin-change-playground">
@@ -244,20 +235,6 @@ export const CoinChangePlayground: React.FC = () => {
             {language === 'es' ? '🪙 Dispensador de Monedas' : '🪙 Coin Dispenser'}
           </span>
           <div className="quick-actions">
-            <button
-              className="btn-quick opt-btn"
-              onClick={loadOptimal}
-              disabled={optimalSolution.length === 0}
-            >
-              {language === 'es' ? '⚡ Cargar Óptimo (DP)' : '⚡ Load Optimal (DP)'}
-            </button>
-            <button
-              className="btn-quick greedy-btn"
-              onClick={loadGreedy}
-              disabled={!greedySolution}
-            >
-              {language === 'es' ? '👉 Cargar Greedy' : '👉 Load Greedy'}
-            </button>
             <button
               className="btn-quick clear-btn"
               onClick={clearSelection}
@@ -376,8 +353,12 @@ export const CoinChangePlayground: React.FC = () => {
             </span>
           </div>
           <div className="card-bag">
-            {optimalSolution.length > 0 ? (
+            {isOptimal ? (
               <code>[{optimalSolution.join(', ')}]</code>
+            ) : optimalSolution.length > 0 ? (
+              <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
+                {language === 'es' ? '🔒 ??? (¡descúbrelo tú mismo!)' : '🔒 ??? (discover it yourself!)'}
+              </span>
             ) : (
               <em>{language === 'es' ? 'No existe combinación' : 'No combination exists'}</em>
             )}

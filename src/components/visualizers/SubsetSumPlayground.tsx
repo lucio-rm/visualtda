@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { solveSubsetSum } from '../../engine/algorithms/subsetSumValidator';
 import { generateSubsetSumTrace } from '../../engine/algorithms/subsetSumTrace';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './SubsetSumPlayground.css';
 
 interface Preset {
@@ -43,6 +44,7 @@ const PRESETS: Preset[] = [
 
 export const SubsetSumPlayground: React.FC = () => {
   const { language, t } = useLanguage();
+  const { markCompleted } = useStudentProgress();
 
   const [numbers, setNumbers] = useState<number[]>([2, 3, 5, 7, 8]);
   const [target, setTarget] = useState<number>(10);
@@ -90,6 +92,12 @@ export const SubsetSumPlayground: React.FC = () => {
 
   const isExactMatch = userSelectedSum === target;
   const isOverflow = userSelectedSum > target;
+
+  useEffect(() => {
+    if (isExactMatch && selectedIndices.size > 0) {
+      markCompleted('subset-sum-backtracking');
+    }
+  }, [isExactMatch, selectedIndices]);
 
   return (
     <div className="subset-sum-playground">

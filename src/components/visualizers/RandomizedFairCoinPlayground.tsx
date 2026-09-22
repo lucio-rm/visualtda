@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { simulateVonNeumann, FairCoinOutput } from '../../engine/algorithms/randomizedFairCoinValidator';
 import './RandomizedFairCoinPlayground.css';
 
 export const RandomizedFairCoinPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [bias, setBias] = useState<number>(0.4);
   const [simulation, setSimulation] = useState<FairCoinOutput | null>(() => simulateVonNeumann(0.4, 3000));
   const [singleBitLog, setSingleBitLog] = useState<{ roundFlips: number; bit: number }[]>([]);
@@ -12,6 +14,12 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
   const theoreticalExpected = useMemo(() => {
     return 1 / (bias * (1 - bias));
   }, [bias]);
+
+  useEffect(() => {
+    if (simulation && Math.abs(simulation.empiricalRatio0 - 50) < 5) {
+      markCompleted('randomized-fair-coin');
+    }
+  }, [simulation, markCompleted]);
 
   const runSingle = () => {
     let flips = 0;

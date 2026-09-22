@@ -52,7 +52,7 @@ describe('Phase D: Browser / User Journey Integration Verification (15 Core Flow
 
     // Exercise cards rendered
     const cards = container.querySelectorAll('.exercise-card');
-    expect(cards.length).toBeGreaterThan(15);
+    expect(cards.length).toBeGreaterThanOrEqual(8);
   });
 
   it('Flow 2: Category navigation filters catalog items correctly', async () => {

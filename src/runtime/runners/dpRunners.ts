@@ -402,4 +402,213 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
       stdout: capturedStdout.trim() || undefined
     };
   },
+  'segmented-least-squares-dp': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Test 1: Collinear points with C=5.0
+    const pts1: [number, number][] = [[1, 1], [2, 2], [3, 3]];
+    const res1 = await service.executePython(code, 'minimos_cuadrados_segmentados', [pts1, 5.0]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-sls-exec-fail',
+          description: { es: 'Ejecución en Python de minimos_cuadrados_segmentados', en: 'Python execution of minimos_cuadrados_segmentados' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const tupleRes1 = res1.result as [number, number[]];
+    const cost1 = Array.isArray(tupleRes1) ? tupleRes1[0] : Number(tupleRes1);
+
+    results.push({
+      testId: 'py-sls-collinear',
+      description: {
+        es: 'Puntos colineales [(1,1), (2,2), (3,3)] con C=5.0: Costo óptimo = 5.0 (1 recta sin error).',
+        en: 'Collinear points with C=5.0: Optimal cost = 5.0.'
+      },
+      passed: Math.abs(cost1 - 5.0) < 0.01,
+      expected: '5.0',
+      actual: String(cost1)
+    });
+
+    // Test 2: Two horizontal step levels with C=1.0 -> 2 lines, error=0 -> cost = 2.0
+    const pts2: [number, number][] = [[0, 0], [1, 0], [2, 10], [3, 10]];
+    const res2 = await service.executePython(code, 'minimos_cuadrados_segmentados', [pts2, 1.0]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const tupleRes2 = res2.result as [number, number[]];
+    const cost2 = Array.isArray(tupleRes2) ? tupleRes2[0] : Number(tupleRes2);
+
+    results.push({
+      testId: 'py-sls-two-steps',
+      description: {
+        es: 'Dos escalones horizontales [(0,0),(1,0),(2,10),(3,10)] con C=1.0: Costo = 2.0.',
+        en: 'Two horizontal steps with C=1.0: Cost = 2.0.'
+      },
+      passed: Math.abs(cost2 - 2.0) < 0.01,
+      expected: '2.0',
+      actual: String(cost2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'rna-secondary-structure-dp': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Test 1: Hairpin "ACCCCU" (gap = 5 > 4) -> 1 pair
+    const res1 = await service.executePython(code, 'estructura_secundaria_arn', ['ACCCCU']);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-rna-exec-fail',
+          description: { es: 'Ejecución en Python de estructura_secundaria_arn', en: 'Python execution of estructura_secundaria_arn' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const pairs1 = Number(res1.result);
+    results.push({
+      testId: 'py-rna-hairpin',
+      description: {
+        es: 'Horquilla "ACCCCU": Par A(0)-U(5) con separación 5 > 4: 1 par óptimo.',
+        en: 'Hairpin "ACCCCU": Pair A(0)-U(5) with gap 5 > 4: 1 optimal pair.'
+      },
+      passed: pairs1 === 1,
+      expected: '1',
+      actual: String(pairs1)
+    });
+
+    // Test 2: Sequence too short "ACGU" (< 5) -> 0 pairs
+    const res2 = await service.executePython(code, 'estructura_secundaria_arn', ['ACGU']);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const pairs2 = Number(res2.result);
+    results.push({
+      testId: 'py-rna-short',
+      description: {
+        es: 'Secuencia corta "ACGU": Separación insuficiente para formar horquillas (0 pares).',
+        en: 'Short sequence "ACGU": Insufficient separation for hairpins (0 pairs).'
+      },
+      passed: pairs2 === 0,
+      expected: '0',
+      actual: String(pairs2)
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  },
+  'bellman-ford-dp': async (code, service) => {
+    const results: TestCaseResult[] = [];
+    let capturedStdout = '';
+
+    // Test 1: Graph with negative weight but no negative cycle: 0 -> 1 (w=-1), 1 -> 2 (w=3), 0 -> 2 (w=4)
+    // Shortest paths from 0: 0->0=0, 0->1=-1, 0->2=2
+    const edges1: [number, number, number][] = [
+      [0, 1, -1],
+      [1, 2, 3],
+      [0, 2, 4]
+    ];
+    const res1 = await service.executePython(code, 'bellman_ford', [3, edges1, 0]);
+    if (res1.stdout) capturedStdout += res1.stdout + '\n';
+    if (!res1.success) {
+      return {
+        passed: false,
+        results: [{
+          testId: 'py-bf-exec-fail',
+          description: { es: 'Ejecución en Python de bellman_ford', en: 'Python execution of bellman_ford' },
+          passed: false,
+          message: res1.error || 'Error durante la ejecución'
+        }],
+        totalPassed: 0,
+        totalTests: 1,
+        stdout: capturedStdout.trim(),
+        runtimeError: res1.error,
+        executionTimeMs: res1.executionTimeMs
+      };
+    }
+
+    const tupleRes1 = res1.result as [Record<string, number>, boolean];
+    const dists1 = Array.isArray(tupleRes1) ? tupleRes1[0] : null;
+    const hasNegCycle1 = Array.isArray(tupleRes1) ? tupleRes1[1] : false;
+
+    const pass1 =
+      dists1 !== null &&
+      Number(dists1['0']) === 0 &&
+      Number(dists1['1']) === -1 &&
+      Number(dists1['2']) === 2 &&
+      hasNegCycle1 === false;
+
+    results.push({
+      testId: 'py-bf-negative-edge-correct',
+      description: {
+        es: 'Grafo con arista negativa sin ciclo: Distancias desde 0: {0: 0, 1: -1, 2: 2}, ciclo=False.',
+        en: 'Graph with negative edge and no cycle: Distances from 0: {0: 0, 1: -1, 2: 2}, cycle=False.'
+      },
+      passed: Boolean(pass1),
+      expected: 'dist[2] == 2 y tiene_ciclo == False',
+      actual: `dist: ${JSON.stringify(dists1)}, ciclo_negativo: ${hasNegCycle1}`
+    });
+
+    // Test 2: Graph with negative cycle: 0 -> 1 (1), 1 -> 2 (-3), 2 -> 0 (-1) -> sum = -3 < 0
+    const edges2: [number, number, number][] = [
+      [0, 1, 1],
+      [1, 2, -3],
+      [2, 0, -1]
+    ];
+    const res2 = await service.executePython(code, 'bellman_ford', [3, edges2, 0]);
+    if (res2.stdout) capturedStdout += res2.stdout + '\n';
+    const tupleRes2 = res2.result as [Record<string, number>, boolean];
+    const hasNegCycle2 = Array.isArray(tupleRes2) ? tupleRes2[1] : false;
+
+    results.push({
+      testId: 'py-bf-detects-negative-cycle',
+      description: {
+        es: 'Detección de ciclo de costo negativo: Debe retornar tiene_ciclo_negativo == True.',
+        en: 'Negative cycle detection: Must return has_negative_cycle == True.'
+      },
+      passed: hasNegCycle2 === true,
+      expected: 'tiene_ciclo_negativo == True',
+      actual: `tiene_ciclo_negativo == ${hasNegCycle2}`
+    });
+
+    const totalPassed = results.filter((r) => r.passed).length;
+    return {
+      passed: totalPassed === results.length && results.length > 0,
+      results,
+      totalPassed,
+      totalTests: results.length,
+      stdout: capturedStdout.trim() || undefined
+    };
+  }
 };

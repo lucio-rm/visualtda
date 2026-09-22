@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ExerciseMetadata, ExercisePhase } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
+import { useStudentProgress } from '../context/StudentProgressContext';
 import { PhaseSwitcher } from './PhaseSwitcher';
 import { DiscoverView } from './DiscoverView';
 import { SolveView } from './SolveView';
@@ -31,11 +32,13 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   timeComplexity = 'O(N!)',
   spaceComplexity = 'O(N)'
 }) => {
-  const { t, dict } = useLanguage();
+  const { t, dict, language } = useLanguage();
   const { isInstructorMode } = useInstructorMode();
+  const { isCompleted, markCompleted } = useStudentProgress();
+  const exerciseCompleted = isCompleted(exercise.id);
   const [phase, setPhase] = useState<ExercisePhase>('discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
-  const isEffectiveUnlocked = solutionUnlocked || isInstructorMode;
+  const isEffectiveUnlocked = exerciseCompleted || solutionUnlocked || isInstructorMode;
   const [showFrictionModal, setShowFrictionModal] = useState(false);
 
   const handlePhaseChange = (newPhase: ExercisePhase) => {
@@ -48,6 +51,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
   const handleSolveSuccess = () => {
     setSolutionUnlocked(true);
+    markCompleted(exercise.id);
   };
 
   const handleSkipToUnderstand = () => {
@@ -79,6 +83,11 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
           <span className="badge badge-difficulty">
             {'★'.repeat(exercise.difficulty)}{'☆'.repeat(5 - exercise.difficulty)}
           </span>
+          {exerciseCompleted && (
+            <span className="badge badge-completed">
+              ✓ {language === 'es' ? 'Completado' : 'Completed'}
+            </span>
+          )}
         </div>
         <h2 className="exercise-title">{t(exercise.title)}</h2>
         <p className="exercise-subtitle">{t(exercise.subtitle)}</p>
@@ -118,7 +127,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
             timeComplexity={timeComplexity}
             spaceComplexity={spaceComplexity}
             visualizerSlot={visualizerSlot}
-            solutionUnlocked={solutionUnlocked}
+            solutionUnlocked={exerciseCompleted || solutionUnlocked}
             onGoToSolve={() => setPhase('solve')}
           />
         )}

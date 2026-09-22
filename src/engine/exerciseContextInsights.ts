@@ -25,7 +25,7 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'While brute force evaluates C(N², N) states (over 4.4 billion for N=8), Backtracking prunes entire subtrees upon the first diagonal or column collision, visiting only 2,057 states.'
     },
     naiveTrapWarning: {
-      es: 'Una estrategia puramente voraz o miope suele quedar atrapada en callejones sin salida en los niveles intermedios, demostrando la necesidad imperiosa del retroceso sistemático (backtrack).',
+      es: 'Una estrategia puramente greedy o miope suele quedar atrapada en callejones sin salida en los niveles intermedios, demostrando la necesidad imperiosa del retroceso sistemático (backtrack).',
       en: 'A purely greedy choice gets trapped in dead ends at intermediate rows, demonstrating the necessity of systematic backtracking.'
     }
   },

@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solvePeakFinding, peakFindingValidator } from '../../engine/algorithms/peakFindingValidator';
 import './PeakFindingPlayground.css';
 
@@ -33,8 +34,10 @@ const PRESETS: Preset[] = [
 
 export const PeakFindingPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [arrayStr, setArrayStr] = useState<string>('4, 10, 5, 8, 15, 3, 11, 2');
   const [userSelectedIndex, setUserSelectedIndex] = useState<number | null>(null);
+  const [discoveredPeaks, setDiscoveredPeaks] = useState<Set<number>>(new Set());
   const [error, setError] = useState<string | null>(null);
 
   const array = useMemo(() => {
@@ -84,11 +87,25 @@ export const PeakFindingPlayground: React.FC = () => {
 
   const handleBarClick = (idx: number) => {
     setUserSelectedIndex(idx);
+    if (allPeaks.includes(idx)) {
+      setDiscoveredPeaks((prev) => {
+        const next = new Set(prev);
+        next.add(idx);
+        return next;
+      });
+    }
   };
+
+  useEffect(() => {
+    if (userValidation?.valid) {
+      markCompleted('peak-finding-dyc');
+    }
+  }, [userValidation, markCompleted]);
 
   const handlePreset = (preset: Preset) => {
     setArrayStr(preset.array.join(', '));
     setUserSelectedIndex(null);
+    setDiscoveredPeaks(new Set());
     setError(null);
   };
 
@@ -100,6 +117,7 @@ export const PeakFindingPlayground: React.FC = () => {
     }
     setArrayStr(randoms.join(', '));
     setUserSelectedIndex(null);
+    setDiscoveredPeaks(new Set());
     setError(null);
   };
 
@@ -151,6 +169,7 @@ export const PeakFindingPlayground: React.FC = () => {
           onChange={(e) => {
             setArrayStr(e.target.value);
             setUserSelectedIndex(null);
+            setDiscoveredPeaks(new Set());
             setError(null);
           }}
           className="array-input"
@@ -169,23 +188,21 @@ export const PeakFindingPlayground: React.FC = () => {
             </span>
             <span className="peaks-count-tag">
               {language === 'es'
-                ? `Total de picos existentes: ${allPeaks.length}`
-                : `Total existing peaks: ${allPeaks.length}`}
+                ? `Picos descubiertos: ${discoveredPeaks.size} / ${allPeaks.length}`
+                : `Discovered peaks: ${discoveredPeaks.size} / ${allPeaks.length}`}
             </span>
           </div>
 
           <div className="interactive-bars-strip">
             {array.map((val, idx) => {
               const isSelected = userSelectedIndex === idx;
-              const isActualPeak = allPeaks.includes(idx);
-              const isDycPick = dycPeakIndex === idx;
+              const isFoundPeak = discoveredPeaks.has(idx);
 
               const heightPct = Math.max(15, Math.round((val / maxVal) * 100));
 
               let colClass = 'clickable-bar-col';
               if (isSelected) colClass += ' selected';
-              if (isActualPeak) colClass += ' is-peak';
-              if (isDycPick) colClass += ' dyc-chosen';
+              if (isFoundPeak) colClass += ' is-peak';
 
               return (
                 <button
@@ -194,7 +211,7 @@ export const PeakFindingPlayground: React.FC = () => {
                   className={colClass}
                   onClick={() => handleBarClick(idx)}
                 >
-                  {isActualPeak && <span className="peak-indicator-badge">▲</span>}
+                  {isFoundPeak && <span className="peak-indicator-badge">▲</span>}
                   <div className="clickable-bar-val">{val}</div>
                   <div
                     className="clickable-bar-fill"

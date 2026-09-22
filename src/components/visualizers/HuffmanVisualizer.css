@@ -214,12 +214,18 @@
 }
 
 .huff-code-tag {
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid #3b82f6;
-  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid var(--accent, #2563eb);
+  color: var(--accent, #2563eb);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
   font-weight: 700;
+}
+
+[data-theme='dark'] .huff-code-tag {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #3b82f6;
+  color: #93c5fd;
 }
 
 .huff-explanation-card {

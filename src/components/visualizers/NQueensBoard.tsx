@@ -1,5 +1,6 @@
 import React from 'react';
 import { NQueensConflictType } from '../../engine/algorithms/nQueensTrace';
+import './NQueensVisualizer.css';
 
 export type BoardConflictType = NQueensConflictType | 'row' | 'col' | 'diag';
 
@@ -137,6 +138,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                       cy={r * cellSize + cellSize / 2}
                       r={cellSize * 0.38}
                       className={`queen-bg-circle ${isSolution ? 'solution-circle' : ''} ${isConflictSource || isConflictTarget ? 'conflict-circle' : ''}`}
+                      filter={isConflictSource || isConflictTarget ? 'url(#conflict-glow)' : 'url(#queen-glow)'}
                     />
                     <text
                       x={c * cellSize + cellSize / 2}
@@ -147,6 +149,16 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                     >
                       ♛
                     </text>
+                    {(isConflictSource || isConflictTarget) && (
+                      <circle
+                        cx={c * cellSize + cellSize - 8}
+                        cy={r * cellSize + 8}
+                        r={5}
+                        fill="#ef4444"
+                        stroke="#ffffff"
+                        strokeWidth={1.5}
+                      />
+                    )}
                   </g>
                 )}
 
@@ -183,6 +195,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
             x2={cf.col2 * cellSize + cellSize / 2}
             y2={cf.row2 * cellSize + cellSize / 2}
             className="conflict-ray-line"
+            style={{ pointerEvents: 'none' }}
           />
         ))}
 
@@ -194,6 +207,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
             x2={currentCol * cellSize + cellSize / 2}
             y2={currentRow * cellSize + cellSize / 2}
             className="conflict-ray-line"
+            style={{ pointerEvents: 'none' }}
           />
         )}
       </svg>

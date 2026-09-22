@@ -139,6 +139,15 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
     timeComplexity: 'O(2^m · poly(n)) Simplex en peor caso / O(poly(n)) métodos de punto interior',
     spaceComplexity: 'O(m · n) matriz del tablero Simplex'
   },
+  'linear-programming-formulation': {
+    visualizerSlot: <LinearProgrammingVisualizer />,
+    discoverPlaygroundSlot: <LinearProgrammingPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['linear-programming'].solution,
+    pseudocode: RAW_EXERCISE_ASSETS['linear-programming'].pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['linear-programming'].theory,
+    timeComplexity: 'O(2^m · poly(n)) Simplex en peor caso / O(poly(n)) métodos de punto interior',
+    spaceComplexity: 'O(m · n) matriz del tablero Simplex'
+  },
 
   'vertex-cover-reduction': {
     visualizerSlot: <ReductionIsVcVisualizer />,

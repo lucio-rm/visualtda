@@ -154,19 +154,36 @@ export const SolveView: React.FC<SolveViewProps> = ({
     setStdout(evalResult.stdout || null);
     setRuntimeError(evalResult.runtimeError || null);
     setExecutionTimeMs(evalResult.executionTimeMs);
-    setTestResults(evalResult.results);
+
+    const effectiveResults: TestCaseResult[] =
+      evalResult.results && evalResult.results.length > 0
+        ? evalResult.results
+        : [
+            {
+              testId: 'py-runtime-error',
+              description: {
+                es: 'Compilación y Ejecución en Entorno Python',
+                en: 'Compilation and Execution in Python Environment'
+              },
+              passed: false,
+              message: evalResult.runtimeError || (language === 'es' ? 'El código no pudo ejecutarse correctamente.' : 'Code failed to execute cleanly.'),
+              expected: language === 'es' ? 'Ejecución limpia sin excepciones' : 'Clean execution without exceptions',
+              actual: evalResult.runtimeError
+                ? (language === 'es' ? 'Excepción / Error en ejecución' : 'Exception / Runtime error')
+                : (language === 'es' ? 'Fallo en la ejecución' : 'Execution failure')
+            }
+          ];
+
+    setTestResults(effectiveResults);
 
     if (evalResult.runtimeError) {
       setTestStatus('failed');
       setTestSummary(
         language === 'es'
-          ? 'Error detectado durante la ejecución en Python. Revisa la traza abajo.'
-          : 'Error detected during Python execution. Check the traceback below.'
+          ? 'Error detectado durante la ejecución en Python. Revisa la traza abajo y los casos fallidos.'
+          : 'Error detected during Python execution. Check the traceback and failed test cases below.'
       );
-      return;
-    }
-
-    if (evalResult.passed) {
+    } else if (evalResult.passed) {
       setTestStatus('passed');
       setTestSummary(
         language === 'es'
@@ -178,8 +195,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
       setTestStatus('failed');
       setTestSummary(
         language === 'es'
-          ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas. Revisa los casos fallidos.`
-          : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed. Check failed test cases.`
+          ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas. Revisa los casos fallidos en la tabla.`
+          : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed. Check failed test cases in table.`
       );
     }
   };

@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { solveJuanElVago } from '../../engine/algorithms/juanElVagoValidator';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './JuanElVagoPlayground.css';
 
 interface Preset {
@@ -29,6 +30,7 @@ const PRESETS: Preset[] = [
 
 export const JuanElVagoPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [gananciasStr, setGananciasStr] = useState<string>('10, 40, 20, 30, 50');
   const [manualSelection, setManualSelection] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +82,12 @@ export const JuanElVagoPlayground: React.FC = () => {
     };
   }, [manualSelection, ganancias, optimal]);
 
+  useEffect(() => {
+    if (manualStatus.isOptimal && manualSelection.length > 0) {
+      markCompleted('juan-el-vago');
+    }
+  }, [manualStatus.isOptimal, manualSelection]);
+
   const toggleDay = (dayIndex: number) => {
     setManualSelection((prev) =>
       prev.includes(dayIndex) ? prev.filter((d) => d !== dayIndex) : [...prev, dayIndex]
@@ -90,12 +98,6 @@ export const JuanElVagoPlayground: React.FC = () => {
     setGananciasStr(preset.ganancias.join(', '));
     setManualSelection([]);
     setError(null);
-  };
-
-  const selectOptimal = () => {
-    if (optimal) {
-      setManualSelection([...optimal.dias]);
-    }
   };
 
   return (
@@ -154,10 +156,7 @@ export const JuanElVagoPlayground: React.FC = () => {
       {ganancias.length > 0 && (
         <div className="interactive-schedule">
           <div className="schedule-header">
-            <span>{language === 'es' ? 'Toca los días para contratar a Juan:' : 'Click days to hire Juan:'}</span>
-            <button className="btn-auto-opt" onClick={selectOptimal}>
-              {language === 'es' ? '⚡ Ver Solución Óptima' : '⚡ Show Optimal'}
-            </button>
+            <span>{language === 'es' ? 'Toca los días para contratar a Juan (sin días consecutivos):' : 'Click days to hire Juan (no consecutive days):'}</span>
           </div>
 
           <div className="days-picker">

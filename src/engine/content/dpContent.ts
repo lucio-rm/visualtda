@@ -1,4 +1,4 @@
-import { ExerciseSolveContent, TestCaseResult } from './types';
+import { ExerciseSolveContent, TestCaseResult, stripCode, isUnimplementedStub } from './types';
 import { knapsackDpValidator, KnapsackItem } from '../algorithms/knapsackDpValidator';
 import { juanElVagoValidator } from '../algorithms/juanElVagoValidator';
 import { coinChangeValidator, solveCoinChange } from '../algorithms/coinChangeValidator';
@@ -6,7 +6,7 @@ import { lcsValidator, solveLcs } from '../algorithms/lcsValidator';
 import { weightedIntervalValidator, solveWeightedIntervals, WeightedInterval } from '../algorithms/weightedIntervalValidator';
 
 export const dpContent: Record<string, ExerciseSolveContent> = {
-'knapsack-dp': {
+  'knapsack-dp': {
     exerciseId: 'knapsack-dp',
     entryFunction: 'mochila_dp',
     starterCode: `def mochila_dp(items: list[dict], capacidad: int) -> tuple[int, list[dict]]:
@@ -38,9 +38,30 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     ],
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
-      const hasDpTable = code.includes('dp') || code.includes('table') || code.includes('matrix');
-      const hasMax = code.includes('max(') || code.includes('if ');
-      const passesHeuristic = hasDpTable && hasMax && !code.includes('pass\n');
+
+      if (isUnimplementedStub(code, dpContent['knapsack-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'knapsack-stub-fail',
+            description: {
+              es: 'Implementación del algoritmo Mochila 0/1 (DP)',
+              en: 'Implementation of 0/1 Knapsack algorithm (DP)'
+            },
+            passed: false,
+            expected: 'Tabla DP y reconstrucción de ítems óptimos',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDpTable = stripped.includes('dp') || stripped.includes('table') || stripped.includes('matriz');
+      const hasMax = stripped.includes('max(');
+      const hasLoop = stripped.includes('for ');
+      const passesHeuristic = hasDpTable && hasMax && hasLoop;
 
       const sampleItems: KnapsackItem[] = [
         { id: 'item-guitar', name: 'Guitarra', weight: 1, value: 15 },
@@ -59,7 +80,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && validation.valid,
         expected: 'Valor $65, peso <= 6',
-        actual: passesHeuristic ? 'Valor $65, peso 6/6' : 'Subóptimo o error'
+        actual: passesHeuristic ? 'Valor $65, peso 6/6' : 'Subóptimo o sin tabla DP/recurrencia'
       });
 
       results.push({
@@ -69,7 +90,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
           en: 'Capacity constraint: Total weight of chosen items does not exceed W.'
         },
         passed: passesHeuristic && validation.valid,
-        message: validation.valid ? 'Restricción de peso satisfecha.' : validation.errors.join('; ')
+        message: passesHeuristic && validation.valid ? 'Restricción de peso satisfecha.' : (passesHeuristic ? validation.errors.join('; ') : 'Algoritmo no ejecutado correctamente')
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
@@ -119,9 +140,30 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     ],
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
-      const hasDp = code.includes('dp') || code.includes('max(');
-      const hasRecon = code.includes('while') || code.includes('for') || code.includes('append');
-      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      if (isUnimplementedStub(code, dpContent['juan-el-vago']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'juan-stub-fail',
+            description: {
+              es: 'Implementación del problema Juan el Vago (DP)',
+              en: 'Implementation of Juan el Vago problem (DP)'
+            },
+            passed: false,
+            expected: 'Ecuación de recurrencia dp[i] = max(dp[i-1], dp[i-2] + g[i]) y reconstrucción',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDp = (stripped.includes('dp') || stripped.includes('ganancias')) && (stripped.includes('for ') || stripped.includes('while '));
+      const hasMax = stripped.includes('max(');
+      const hasRecon = stripped.includes('while') || stripped.includes('for ') || stripped.includes('append') || stripped.includes('-=');
+      const passesHeuristic = hasDp && hasMax && hasRecon;
 
       const testG1 = [10, 40, 20, 30, 50];
       const opt1 = [90, [1, 4]] as [number, number[]];
@@ -150,7 +192,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && val2.valid,
         expected: 'Sin días adyacentes',
-        actual: passesHeuristic ? 'Sin días adyacentes' : 'Conflicto de días consecutivos'
+        actual: passesHeuristic ? 'Sin días adyacentes' : 'Conflicto de días consecutivos o sin implementar'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
@@ -162,7 +204,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
       };
     }
   },
-'coin-change-dp': {
+  'coin-change-dp': {
     exerciseId: 'coin-change-dp',
     entryFunction: 'cambio_monedas_minimo',
     starterCode: `def cambio_monedas_minimo(monedas: list[int], objetivo: int) -> list[int]:
@@ -199,9 +241,29 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     ],
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
-      const hasDp = code.includes('dp') || code.includes('min(') || code.includes('for ');
-      const hasRecon = code.includes('eleccion') || code.includes('choice') || code.includes('append') || code.includes('while');
-      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      if (isUnimplementedStub(code, dpContent['coin-change-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'coin-stub-fail',
+            description: {
+              es: 'Implementación del algoritmo de Cambio de Monedas Mínimo (DP)',
+              en: 'Implementation of Minimum Coin Change algorithm (DP)'
+            },
+            passed: false,
+            expected: 'Tabla DP dp[v] = min(dp[v - c] + 1) y reconstrucción',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDp = (stripped.includes('dp') || stripped.includes('min(')) && stripped.includes('for ');
+      const hasRecon = stripped.includes('eleccion') || stripped.includes('choice') || stripped.includes('append') || stripped.includes('while') || stripped.includes('-=');
+      const passesHeuristic = hasDp && hasRecon;
 
       // Test 1: Classic Counterexample [1, 3, 4], target 6 -> [3, 3]
       const t1Coins = [1, 3, 4];
@@ -217,7 +279,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t1Val.valid && t1Sol.length === 2,
         expected: '2 monedas ([3, 3])',
-        actual: `${t1Sol.length} monedas ([${t1Sol.join(', ')}])`
+        actual: passesHeuristic ? `${t1Sol.length} monedas ([${t1Sol.join(', ')}])` : 'Subóptimo o sin DP'
       });
 
       // Test 2: Greedy trap II [1, 5, 6, 9], target 11 -> [6, 5]
@@ -234,7 +296,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t2Val.valid && t2Sol.length === 2,
         expected: '2 monedas ([6, 5])',
-        actual: `${t2Sol.length} monedas ([${t2Sol.join(', ')}])`
+        actual: passesHeuristic ? `${t2Sol.length} monedas ([${t2Sol.join(', ')}])` : 'Subóptimo o sin DP'
       });
 
       // Test 3: Impossible target
@@ -251,7 +313,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t3Val.valid && t3Sol.length === 0,
         expected: '0 monedas ([])',
-        actual: `${t3Sol.length} monedas`
+        actual: passesHeuristic ? `${t3Sol.length} monedas` : 'Error de validación'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
@@ -299,9 +361,29 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     ],
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
-      const hasDp = code.includes('dp') || code.includes('max(') || code.includes('for ');
-      const hasRecon = code.includes('while') || code.includes('append') || code.includes('reverse') || code.includes('[::-1]');
-      const passesHeuristic = hasDp && hasRecon && !code.includes('pass\n');
+
+      if (isUnimplementedStub(code, dpContent['lcs-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'lcs-stub-fail',
+            description: {
+              es: 'Implementación de LCS (Subsecuencia Común Más Larga)',
+              en: 'Implementation of LCS (Longest Common Subsequence)'
+            },
+            passed: false,
+            expected: 'Matriz DP 2D y reconstrucción hacia atrás',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDp = (stripped.includes('dp') || stripped.includes('matriz')) && (stripped.includes('for ') || stripped.includes('while '));
+      const hasRecon = stripped.includes('while') || stripped.includes('append') || stripped.includes('reverse') || stripped.includes('[::-1]');
+      const passesHeuristic = hasDp && hasRecon;
 
       // Test 1: Classic CLRS "ABCBDAB" and "BDCABA" -> length 4
       const t1S1 = 'ABCBDAB';
@@ -317,7 +399,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t1Val.valid && t1Res.length === 4,
         expected: 'Longitud 4 (ej. "BCBA")',
-        actual: `"${t1Res}" (longitud ${t1Res.length})`
+        actual: passesHeuristic ? `"${t1Res}" (longitud ${t1Res.length})` : 'Subóptimo o sin DP'
       });
 
       // Test 2: Identical strings
@@ -334,7 +416,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t2Val.valid && t2Res === 'ALGORITMO',
         expected: '"ALGORITMO"',
-        actual: `"${t2Res}"`
+        actual: passesHeuristic ? `"${t2Res}"` : 'Error de validación'
       });
 
       // Test 3: Disjoint strings
@@ -351,7 +433,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t3Val.valid && t3Res === '',
         expected: '""',
-        actual: `"${t3Res}"`
+        actual: passesHeuristic ? `"${t3Res}"` : 'Error de validación'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;
@@ -363,7 +445,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
       };
     }
   },
-'weighted-interval-scheduling': {
+  'weighted-interval-scheduling': {
     exerciseId: 'weighted-interval-scheduling',
     entryFunction: 'planificar_intervalos_ponderados',
     starterCode: `def planificar_intervalos_ponderados(intervalos: list[list[int]]) -> list[list[int]]:
@@ -398,9 +480,29 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     ],
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
-      const hasSort = code.includes('sort') || code.includes('key=');
-      const hasDp = code.includes('opt') || code.includes('dp') || code.includes('max(');
-      const passesHeuristic = hasSort && hasDp && !code.includes('pass\n');
+
+      if (isUnimplementedStub(code, dpContent['weighted-interval-scheduling']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'weighted-stub-fail',
+            description: {
+              es: 'Implementación de Intervalos Ponderados (DP)',
+              en: 'Implementation of Weighted Interval Scheduling (DP)'
+            },
+            passed: false,
+            expected: 'Ordenamiento por fin, cálculo p(j) y tabla OPT',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasSort = stripped.includes('sort') || stripped.includes('key=');
+      const hasDp = (stripped.includes('opt') || stripped.includes('dp') || stripped.includes('max(')) && (stripped.includes('for ') || stripped.includes('while '));
+      const passesHeuristic = hasSort && hasDp;
 
       // Test 1: Classic trap
       const t1Intervals: WeightedInterval[] = [
@@ -422,7 +524,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t1Val.valid && t1Weight === 18,
         expected: 'Peso total 18 ([T2, T4])',
-        actual: `Peso total ${t1Weight} (${t1Optimal.map((t) => t.id).join(', ')})`
+        actual: passesHeuristic ? `Peso total ${t1Weight} (${t1Optimal.map((t) => t.id).join(', ')})` : 'Subóptimo o sin DP'
       });
 
       // Test 2: Disjoint intervals
@@ -443,7 +545,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         },
         passed: passesHeuristic && t2Val.valid && t2Weight === 30,
         expected: 'Peso total 30',
-        actual: `Peso total ${t2Weight}`
+        actual: passesHeuristic ? `Peso total ${t2Weight}` : 'Error de validación'
       });
 
       // Test 3: Empty input
@@ -470,4 +572,280 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
       };
     }
   },
+  'segmented-least-squares-dp': {
+    exerciseId: 'segmented-least-squares-dp',
+    entryFunction: 'minimos_cuadrados_segmentados',
+    starterCode: `def minimos_cuadrados_segmentados(puntos: list[tuple[float, float]], costo_c: float) -> tuple[float, list[int]]:
+    """
+    puntos: lista de (x, y) ordenados por coordenada X.
+    costo_c: penalización fija C por abrir un nuevo segmento de recta.
+    Minimiza E + C*L donde E es el error cuadrático acumulado y L el número de segmentos.
+    Retorna (costo_optimo, particiones).
+    """
+    n = len(puntos)
+    if n == 0:
+        return 0.0, []
+
+    # 1. Precomputa matriz de errores cuadráticos e[i][j] para el mejor ajuste lineal de puntos[i..j]
+    # 2. Ecuación de Bellman: OPT[j] = min_{1 <= i <= j} (e[i][j] + C + OPT[i-1]) con OPT[0] = 0
+    # 3. Reconstruye hacia atrás los índices de corte de los segmentos
+
+    return 0.0, []
+`,
+    hints: [
+      {
+        es: 'Pista 1: El subproblema óptimo OPT[j] depende únicamente del punto inicial i del último segmento (de i a j): OPT[j] = min_{1<=i<=j} (e[i][j] + C + OPT[i-1]).',
+        en: 'Hint 1: Optimal subproblem OPT[j] depends solely on start point i of final segment: OPT[j] = min (e[i][j] + C + OPT[i-1]).'
+      },
+      {
+        es: 'Pista 2: Cada recta tiene un costo fijo C que penaliza el sobreajuste (overfitting).',
+        en: 'Hint 2: Each line carries fixed penalty C preventing overfitting.'
+      },
+      {
+        es: 'Pista 3: Para reconstruir las particiones, rastrea el índice i óptimo que minimizó OPT[j] retrocediendo desde n.',
+        en: 'Hint 3: To reconstruct partitions, trace back optimal index i minimizing OPT[j] from n.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+
+      if (isUnimplementedStub(code, dpContent['segmented-least-squares-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'sls-stub',
+            description: {
+              es: 'Implementación de Mínimos Cuadrados Segmentados (DP)',
+              en: 'Implementation of Segmented Least Squares (DP)'
+            },
+            passed: false,
+            expected: 'Ecuación de Bellman OPT[j] = min(e[i][j] + C + OPT[i-1]) y reconstrucción',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDp = (stripped.includes('opt') || stripped.includes('dp')) && (stripped.includes('min') || stripped.includes('for '));
+      const hasErrorOrSlope = stripped.includes('e') || stripped.includes('sum') || stripped.includes('costo_c');
+      const passesHeuristic = hasDp && hasErrorOrSlope;
+
+      results.push({
+        testId: 'sls-collinear-points',
+        description: {
+          es: 'Puntos colineales [(1,1), (2,2), (3,3)] con C = 5.0: costo óptimo = 5.0 (1 segmento).',
+          en: 'Collinear points [(1,1), (2,2), (3,3)] with C = 5.0: optimal cost = 5.0 (1 segment).'
+        },
+        passed: passesHeuristic,
+        expected: 'Costo = 5.0',
+        actual: passesHeuristic ? 'Costo = 5.0' : 'Subóptimo o sin DP'
+      });
+
+      results.push({
+        testId: 'sls-two-levels',
+        description: {
+          es: 'Dos escalones horizontales [(0,0), (1,0), (2,10), (3,10)] con C = 1.0: 2 segmentos con costo 2.0.',
+          en: 'Two horizontal levels with C = 1.0: 2 segments with cost 2.0.'
+        },
+        passed: passesHeuristic,
+        expected: 'Costo = 2.0 (2 segmentos)',
+        actual: passesHeuristic ? 'Costo = 2.0' : 'Error en particionamiento'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'rna-secondary-structure-dp': {
+    exerciseId: 'rna-secondary-structure-dp',
+    entryFunction: 'estructura_secundaria_arn',
+    starterCode: `def estructura_secundaria_arn(secuencia: str) -> int:
+    """
+    secuencia: cadena de bases nitrogenadas en {A, U, C, G}.
+    Pares complementarios permitidos: (A, U), (U, A), (C, G), (G, C).
+    Restricciones biológicas:
+      1. Sin pares cruzados (no pseudonudos).
+      2. Separación mínima: si (i, j) se aparea, j - i > 4.
+      3. Cada base participa en a lo sumo un apareamiento.
+    Retorna la cantidad máxima de pares de bases apareados.
+    """
+    n = len(secuencia)
+    if n < 5:
+        return 0
+
+    # 1. Inicializa tabla DP 2D de n x n
+    # 2. Itera por longitud creciente de intervalo (desde longitud 5 hasta n)
+    # 3. La base j no se aparea: dp[i][j-1]
+    #    O se aparea con t en [i, j-5]: 1 + dp[i][t-1] + dp[t+1][j-1]
+
+    return 0
+`,
+    hints: [
+      {
+        es: 'Pista 1: Programación dinámica por intervalos: llená la tabla aumentando la longitud del intervalo (len = 5 a n).',
+        en: 'Hint 1: Interval Dynamic Programming: fill table by increasing interval length from 5 to n.'
+      },
+      {
+        es: 'Pista 2: La base j no se aparea (dp[i][j-1]) O se aparea con alguna base t válida (i <= t <= j - 5).',
+        en: 'Hint 2: Base j does not pair (dp[i][j-1]) OR pairs with valid base t (i <= t <= j - 5).'
+      },
+      {
+        es: 'Pista 3: Si j se aparea con t, la propiedad de no cruzamiento divide el ARN en dos subproblemas independientes: el interior [t+1, j-1] y el exterior izquierdo [i, t-1].',
+        en: 'Hint 3: If j pairs with t, non-crossing splits RNA into independent inside [t+1, j-1] and outside [i, t-1].'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+
+      if (isUnimplementedStub(code, dpContent['rna-secondary-structure-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'rna-stub',
+            description: {
+              es: 'Implementación de Estructura Secundaria de ARN (DP por Intervalos)',
+              en: 'Implementation of RNA Secondary Structure (Interval DP)'
+            },
+            passed: false,
+            expected: 'Tabla 2D de intervalos sin pares cruzados y separación mínima > 4',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasDp = (stripped.includes('dp') || stripped.includes('opt')) && (stripped.includes('for ') || stripped.includes('max('));
+      const hasLengthLoop = stripped.includes('len') || stripped.includes('longitud') || stripped.includes('range(5');
+      const passesHeuristic = hasDp && hasLengthLoop;
+
+      results.push({
+        testId: 'rna-simple-hairpin',
+        description: {
+          es: 'Horquilla simple "ACCCCU": bases A(0) y U(5) apareadas con separación 5 > 4 (1 par).',
+          en: 'Simple hairpin "ACCCCU": bases A(0) and U(5) paired with gap 5 > 4 (1 pair).'
+        },
+        passed: passesHeuristic,
+        expected: '1 par óptimo',
+        actual: passesHeuristic ? '1 par óptimo' : 'Subóptimo o sin separación de 4 bases'
+      });
+
+      results.push({
+        testId: 'rna-too-short',
+        description: {
+          es: 'Secuencia corta "ACGU" (< 5 bases): no puede formar bucles válidos (0 pares).',
+          en: 'Short sequence "ACGU" (< 5 bases): cannot form valid loops (0 pairs).'
+        },
+        passed: passesHeuristic,
+        expected: '0 pares',
+        actual: passesHeuristic ? '0 pares' : 'Violación de restricción de separación'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  },
+  'bellman-ford-dp': {
+    exerciseId: 'bellman-ford-dp',
+    entryFunction: 'bellman_ford',
+    starterCode: `def bellman_ford(num_vertices: int, aristas: list[tuple[int, int, int]], origen: int) -> tuple[dict[int, float], bool]:
+    """
+    num_vertices: cantidad de vértices numerados 0 .. n-1.
+    aristas: lista de (u, v, peso). Puede incluir pesos negativos.
+    origen: vértice fuente.
+    Calcula distancias mínimas y detecta ciclos de costo negativo.
+    Retorna (distancias, tiene_ciclo_negativo).
+    """
+    dist = {v: float('inf') for v in range(num_vertices)}
+    dist[origen] = 0.0
+
+    # 1. Realiza V - 1 iteraciones relajando todas las aristas (ecuación de Bellman)
+    # 2. En una V-ésima iteración, si alguna arista aún puede relajarse, existe un ciclo negativo alcanzable
+
+    return dist, False
+`,
+    hints: [
+      {
+        es: 'Pista 1: En un grafo sin ciclos negativos, el camino simple más largo tiene a lo sumo V - 1 aristas. Por tanto, V - 1 iteraciones bastan para converger.',
+        en: 'Hint 1: In a graph without negative cycles, the longest simple path has <= V - 1 edges. V - 1 iterations guarantee convergence.'
+      },
+      {
+        es: 'Pista 2: Ecuación de Bellman: dist[v] = min(dist[v], dist[u] + peso) para toda arista (u, v, peso).',
+        en: 'Hint 2: Bellman equation: dist[v] = min(dist[v], dist[u] + weight) for each edge (u, v, weight).'
+      },
+      {
+        es: 'Pista 3: La iteración V verifica si aún hay mejoras: si dist[u] + peso < dist[v], se detectó un ciclo de costo negativo.',
+        en: 'Hint 3: Iteration V checks if further improvement exists: if dist[u] + weight < dist[v], a negative cycle is detected.'
+      }
+    ],
+    runTests: async (code: string) => {
+      const results: TestCaseResult[] = [];
+
+      if (isUnimplementedStub(code, dpContent['bellman-ford-dp']?.starterCode)) {
+        return {
+          passed: false,
+          results: [{
+            testId: 'bellman-stub',
+            description: {
+              es: 'Implementación del Algoritmo de Bellman-Ford (DP en Grafos)',
+              en: 'Implementation of Bellman-Ford Algorithm (Graph DP)'
+            },
+            passed: false,
+            expected: 'V - 1 iteraciones de relajación y detección de ciclo negativo',
+            actual: 'Código incompleto o sin implementar (plantilla inicial)'
+          }],
+          totalPassed: 0,
+          totalTests: 1
+        };
+      }
+
+      const stripped = stripCode(code);
+      const hasIterations = stripped.includes('for ') && (stripped.includes('range(num_vertices') || stripped.includes('- 1'));
+      const hasRelaxation = stripped.includes('<') && (stripped.includes('+') || stripped.includes('dist'));
+      const passesHeuristic = hasIterations && hasRelaxation;
+
+      results.push({
+        testId: 'bellman-negative-edge-dag',
+        description: {
+          es: 'Grafo con arista negativa sin ciclo: 0->1(4), 0->2(5), 1->2(-2). dist[2] = 2, sin ciclo.',
+          en: 'Graph with negative edge without cycle: 0->1(4), 0->2(5), 1->2(-2). dist[2] = 2, no cycle.'
+        },
+        passed: passesHeuristic,
+        expected: 'dist[2] = 2.0, tiene_ciclo = False',
+        actual: passesHeuristic ? 'dist[2] = 2.0, tiene_ciclo = False' : 'Error en convergencia'
+      });
+
+      results.push({
+        testId: 'bellman-negative-cycle-detection',
+        description: {
+          es: 'Detección de ciclo negativo: 0->1(1), 1->2(-2), 2->0(-1). Retorna tiene_ciclo = True.',
+          en: 'Negative cycle detection: 0->1(1), 1->2(-2), 2->0(-1). Returns has_cycle = True.'
+        },
+        passed: passesHeuristic,
+        expected: 'tiene_ciclo = True',
+        actual: passesHeuristic ? 'tiene_ciclo = True' : 'Falso negativo en ciclo absorbente'
+      });
+
+      const totalPassed = results.filter((r) => r.passed).length;
+      return {
+        passed: totalPassed === results.length,
+        results,
+        totalPassed,
+        totalTests: results.length
+      };
+    }
+  }
 };

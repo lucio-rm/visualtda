@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { DEFAULT_INTERVALS, IntervalItem } from '../../engine/algorithms/intervalSchedulingTrace';
 import { intervalSchedulingValidator, Interval } from '../../engine/algorithms/intervalSchedulingValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './IntervalSchedulingPlayground.css';
 
 export const IntervalSchedulingPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
 
   const allTasks: IntervalItem[] = useMemo(() => {
     return DEFAULT_INTERVALS.map(([start, end], idx) => ({
@@ -42,6 +44,12 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
   const hasOverlap = validation.errors.some((e) => e.includes('Solapamiento'));
   const isOptimal = validation.valid && selectedIds.length === 3;
+
+  useEffect(() => {
+    if (isOptimal) {
+      markCompleted('interval-scheduling');
+    }
+  }, [isOptimal]);
 
   // SVG coordinate mapping
   const svgWidth = 540;

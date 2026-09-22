@@ -7,18 +7,20 @@ import { ExerciseView } from '../components/ExerciseView';
 import { getExerciseViewConfig } from '../engine/exerciseViewRegistry';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import { InstructorModeProvider } from '../context/InstructorModeContext';
+import { StudentProgressProvider, useStudentProgress } from '../context/StudentProgressContext';
 import './App.css';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
 const AppContent: React.FC = () => {
-  const { t, dict } = useLanguage();
+  const { t, dict, language } = useLanguage();
+  const { completedCount, totalExercisesCount } = useStudentProgress();
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('visual_tda_theme');
-    return (saved as ThemeMode) || 'system';
+    return (saved as ThemeMode) || 'dark';
   });
 
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>('backtracking');
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ const AppContent: React.FC = () => {
   };
 
   const exerciseConfig = selectedExercise ? getExerciseViewConfig(selectedExercise.id) : {};
+  const progressPercent = totalExercisesCount > 0 ? Math.round((completedCount / totalExercisesCount) * 100) : 0;
 
   return (
     <div className="app-layout">
@@ -59,6 +62,42 @@ const AppContent: React.FC = () => {
             <section className="welcome-banner">
               <h2>{t(dict.welcomeTitle)}</h2>
               <p>{t(dict.welcomeLead)}</p>
+
+              {/* Student Progress Bar */}
+              <div className="student-overall-progress-card">
+                <div className="progress-header-row">
+                  <span className="progress-title">
+                    🎓 {language === 'es' ? 'Progreso de Dominio Académico' : 'Academic Mastery Progress'}:
+                  </span>
+                  <span className="progress-stats">
+                    <strong>{completedCount}</strong> / {totalExercisesCount} {language === 'es' ? 'ejercicios completados' : 'exercises completed'} ({progressPercent}%)
+                  </span>
+                </div>
+                <div className="progress-track" role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+                </div>
+              </div>
+
+              {completedCount === 0 && (
+                <div className="recommended-start-card">
+                  <div className="recommended-text">
+                    <span className="recommended-tag">{language === 'es' ? 'PUNTO DE PARTIDA SUGERIDO' : 'RECOMMENDED START'}</span>
+                    <h4>{language === 'es' ? 'Las N-Reinas (Backtracking con Poda)' : 'N-Queens (Backtracking with Pruning)'}</h4>
+                    <p>
+                      {language === 'es'
+                        ? 'Explora la búsqueda exhaustiva sistemática, experimenta con colisiones diagonales y verifica el invariante antes de pasar a la programación formal.'
+                        : 'Explore systematic exhaustive search, experiment with diagonal conflicts, and verify invariants before code.'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-start-recommended"
+                    onClick={() => setSelectedExerciseId('n-queens')}
+                  >
+                    {language === 'es' ? 'Comenzar con N-Reinas →' : 'Start with N-Queens →'}
+                  </button>
+                </div>
+              )}
             </section>
 
             <section className="catalog-section">
@@ -72,6 +111,7 @@ const AppContent: React.FC = () => {
               />
               <ExerciseList
                 exercises={exercises}
+                activeCategoryId={activeCategoryId}
                 onSelectExercise={(id) => setSelectedExerciseId(id)}
               />
             </section>
@@ -95,7 +135,9 @@ const AppContent: React.FC = () => {
 export const App: React.FC = () => (
   <LanguageProvider>
     <InstructorModeProvider>
-      <AppContent />
+      <StudentProgressProvider>
+        <AppContent />
+      </StudentProgressProvider>
     </InstructorModeProvider>
   </LanguageProvider>
 );

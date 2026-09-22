@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DEFAULT_DP_ITEMS, DEFAULT_DP_CAPACITY } from '../../engine/algorithms/knapsackDpTrace';
 import { knapsackDpValidator, KnapsackItem } from '../../engine/algorithms/knapsackDpValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useStudentProgress } from '../../context/StudentProgressContext';
 import './KnapsackPlayground.css';
 
 export const KnapsackPlayground: React.FC = () => {
   const { language } = useLanguage();
+  const { markCompleted } = useStudentProgress();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleItem = (id: string) => {
@@ -35,6 +37,12 @@ export const KnapsackPlayground: React.FC = () => {
   );
 
   const isOptimal = validation.valid && totalValue === 65;
+
+  useEffect(() => {
+    if (isOptimal) {
+      markCompleted('knapsack-dp');
+    }
+  }, [isOptimal]);
 
   return (
     <div className="knapsack-playground-box">
