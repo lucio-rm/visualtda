@@ -10,7 +10,7 @@
     "en": "2-Approximation for Vertex Cover"
   },
   "subtitle": {
-    "es": "Algoritmo lineal voraz por matching maximal con garantía demostrable |C| <= 2 * |C*|",
+    "es": "Algoritmo lineal greedy por matching maximal con garantía demostrable |C| <= 2 * |C*|",
     "en": "Linear greedy algorithm via maximal matching with provable bound |C| <= 2 * |C*|"
   },
   "supportedPhases": ["discover", "solve", "understand"],

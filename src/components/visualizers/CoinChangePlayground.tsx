@@ -23,7 +23,7 @@ const PRESETS: Preset[] = [
   },
   {
     name: {
-      es: 'Trampa Voraz II [1, 5, 6, 9] (V = 11)',
+      es: 'Trampa Greedy II [1, 5, 6, 9] (V = 11)',
       en: 'Greedy Trap II [1, 5, 6, 9] (V = 11)'
     },
     coins: [1, 5, 6, 9],
@@ -392,7 +392,7 @@ export const CoinChangePlayground: React.FC = () => {
         {/* Greedy Card */}
         <div className="score-card card-benchmark greedy-benchmark">
           <div className="card-header-label">
-            {language === 'es' ? 'Heurística Greedy (Voraz)' : 'Greedy Heuristic'}
+            {language === 'es' ? 'Heurística Greedy (Greedy)' : 'Greedy Heuristic'}
           </div>
           <div className="card-main-stat">
             <span className="benchmark-coins">
@@ -414,7 +414,7 @@ export const CoinChangePlayground: React.FC = () => {
             {greedySolution && greedySolution.length > optimalSolution.length ? (
               <span className="greedy-subopt-warning">
                 {language === 'es'
-                  ? 'Falla la propiedad de elección voraz: usa más monedas.'
+                  ? 'Falla la propiedad de elección greedy: usa más monedas.'
                   : 'Fails greedy choice property: uses more coins.'}
               </span>
             ) : greedySolution ? (
@@ -443,7 +443,7 @@ export const CoinChangePlayground: React.FC = () => {
         </h4>
         <p>
           {language === 'es'
-            ? 'Los sistemas monetarios del mundo real (como el Peso Argentino o el Dólar Estadounidense) están especialmente diseñados como "sistemas canónicos" donde la elección voraz siempre coincide con el óptimo global. Sin embargo, en cuanto introducimos monedas arbitrarias (como [1, 3, 4] o [1, 5, 6, 9]), el algoritmo voraz pierde su garantía matemática. Por eso la Programación Dinámica es el método general indispensable en Ciencias de la Computación.'
+            ? 'Los sistemas monetarios del mundo real (como el Peso Argentino o el Dólar Estadounidense) están especialmente diseñados como "sistemas canónicos" donde la elección greedy siempre coincide con el óptimo global. Sin embargo, en cuanto introducimos monedas arbitrarias (como [1, 3, 4] o [1, 5, 6, 9]), el algoritmo greedy pierde su garantía matemática. Por eso la Programación Dinámica es el método general indispensable en Ciencias de la Computación.'
             : 'Real-world currency systems are specifically engineered as "canonical coin systems" where greedy choice always achieves global optimality. However, with arbitrary denominations (like [1, 3, 4] or [1, 5, 6, 9]), greedy breaks down. Dynamic programming remains the robust general-purpose algorithm.'}
         </p>
       </div>

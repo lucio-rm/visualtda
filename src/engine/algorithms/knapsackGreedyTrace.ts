@@ -78,7 +78,7 @@ export function generateKnapsackGreedyTrace(
     step: stepIndex++,
     type: 'sort',
     message: {
-      es: 'Regla Voraz: Calculando densidades (valor / peso) y ordenando de mayor a menor.',
+      es: 'Regla Greedy: Calculando densidades (valor / peso) y ordenando de mayor a menor.',
       en: 'Greedy Choice: Calculating value/weight density and sorting descending.'
     },
     data: {

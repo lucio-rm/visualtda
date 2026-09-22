@@ -1296,3 +1296,101 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Theory Markdown & Mathematical Typography */
+.theory-markdown-container {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.theory-h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.75rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.35rem;
+}
+
+.theory-h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--text);
+}
+
+.theory-h3 {
+  font-size: 1.025rem;
+  font-weight: 600;
+  margin: 1rem 0 0.4rem;
+  color: var(--text);
+}
+
+.theory-paragraph {
+  margin-bottom: 0.85rem;
+}
+
+.theory-ul,
+.theory-ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.theory-ul li,
+.theory-ol li {
+  margin-bottom: 0.35rem;
+}
+
+.theory-block-equation {
+  background-color: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  margin: 1rem 0;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.theory-math-inline {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--accent);
+  background-color: var(--surface-hover);
+  padding: 0.1rem 0.3rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.9em;
+}
+
+.theory-inline-code {
+  font-family: var(--font-mono);
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875em;
+}
+
+.theory-code-block {
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.theory-divider {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}

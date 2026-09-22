@@ -45,7 +45,7 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
   return (
     <div className="interval-visualizer-card">
       <div className="visualizer-header-bar">
-        <h4>Programación Voraz por Fin Más Temprano</h4>
+        <h4>Programación Greedy por Fin Más Temprano</h4>
         <div className="stats-badges">
           <span className="stat-badge stat-solution">
             <span className="stat-num">{selectedIds.length}</span>

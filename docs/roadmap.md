@@ -22,5 +22,5 @@ Estado y planificación de los hitos del proyecto:
 | **P11: Redes de Flujo (Edmonds-Karp)** | Flujo Máximo y Corte Mínimo con red residual, caminos de aumento BFS y teorema Max-Flow Min-Cut. | ✅ **Completado** |
 | **P12: Pyodide Web Worker Sandbox** | Ejecución de Python 3 en navegador sin dependencias de backend, con captura de `stdout`, watchdog de bucles infinitos y visualización de trazas de error. | ✅ **Completado** |
 | **P13: Reducción de Problemas** | Demostración formal de $IS \le_P VC$ (Kleinberg & Tardos 8.1), grafo SVG y laboratorio interactivo de dualidad. | ✅ **Completado** |
-| **P14: Algoritmos de Aproximación** | 2-Aproximación voraz para Cobertura de Vértices vía Matching Maximal (K&T 11.1) con cota inferior $|C^*| \ge |M|$. | ✅ **Completado** |
+| **P14: Algoritmos de Aproximación** | 2-Aproximación greedy para Cobertura de Vértices vía Matching Maximal (K&T 11.1) con cota inferior $|C^*| \ge |M|$. | ✅ **Completado** |
 | **P15: Algoritmos Randomizados / PL** | Expansión del catálogo académico hacia Algoritmos Randomizados (Monte Carlo) y Programación Lineal. | 📋 **En backlog** |

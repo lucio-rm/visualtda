@@ -1,13 +1,13 @@
 """
-Problema de la Mochila Fraccionaria y Heurística Voraz (Greedy)
-Técnica: Algoritmos Greedy (Voraces)
+Problema de la Mochila Fraccionaria y Heurística Greedy (Greedy)
+Técnica: Algoritmos Greedy (Greedy)
 
 Para la Mochila Fraccionaria:
-  El algoritmo voraz ordenando por densidad de valor (valor / peso) es ESTRICTAMENTE ÓPTIMO.
+  El algoritmo greedy ordenando por densidad de valor (valor / peso) es ESTRICTAMENTE ÓPTIMO.
   Complejidad: O(n log n) por el ordenamiento.
 
 Para la Mochila 0/1:
-  La heurística voraz NO garantiza la solución óptima (contraejemplo clásico).
+  La heurística greedy NO garantiza la solución óptima (contraejemplo clásico).
 """
 
 from typing import NamedTuple
@@ -32,7 +32,7 @@ class AsignacionItem(NamedTuple):
 
 def mochila_fraccionaria_greedy(items: list[Item], capacidad: float) -> tuple[float, list[AsignacionItem]]:
     """
-    Resuelve la mochila fraccionaria seleccionando vorazmente por mayor densidad (valor / peso).
+    Resuelve la mochila fraccionaria seleccionando mediante Greedy por mayor densidad (valor / peso).
     Demostrablemente óptimo mediante argumento de intercambio (Exchange Argument).
     """
     # 1. Ordenar por densidad decreciente

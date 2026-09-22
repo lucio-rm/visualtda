@@ -130,8 +130,8 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
       results.push({
         testId: 'juan-dp-recurrence',
         description: {
-          es: 'Ecuación de Bellman 1D: dp[i] = max(dp[i-1], dp[i-2] + ganancias[i]) en tiempo O(n).',
-          en: '1D Bellman equation: dp[i] = max(dp[i-1], dp[i-2] + earnings[i]) in O(n) time.'
+          es: 'Caso general: Arreglo de ganancias [10, 40, 20, 30, 50].',
+          en: 'General case: Earnings array [10, 40, 20, 30, 50].'
         },
         passed: passesHeuristic && val1.valid,
         expected: 'Monto: $90 (Días [1, 4])',

@@ -16,7 +16,7 @@ ALGORITMO CodificarHuffman(frecuencias):
         nodo ← CrearNodo(caracter, freq, izq = NULO, der = NULO)
         Q.Insertar(prioridad = freq, valor = nodo)
 
-    // 2. Proceso Voraz (Greedy): fusionar los dos menores
+    // 2. Proceso Greedy (Greedy): fusionar los dos menores
     MIENTRAS Q.Tamaño() > 1:
         izq ← Q.ExtraerMinimo()
         der ← Q.ExtraerMinimo()

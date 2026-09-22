@@ -244,7 +244,7 @@ export const EXERCISES: ExerciseMetadata[] = [
     difficulty: 2,
     title: { es: 'Codificación de Huffman (Min-Heap)', en: 'Huffman Coding (Min-Heap)' },
     subtitle: {
-      es: 'Construir códigos libres de prefijo de longitud variable óptimos fusionando vorazmente los nodos de menor frecuencia',
+      es: 'Construir códigos libres de prefijo de longitud variable óptimos fusionando mediante Greedy los nodos de menor frecuencia',
       en: 'Construct optimal prefix-free variable-length codes by greedily merging the lowest frequency nodes'
     },
     supportedPhases: ['discover', 'solve', 'understand'],
@@ -394,7 +394,7 @@ export const EXERCISES: ExerciseMetadata[] = [
       en: '2-Approximation for Vertex Cover'
     },
     subtitle: {
-      es: 'Algoritmo lineal voraz por matching maximal con garantía demostrable |C| <= 2 * |C*|',
+      es: 'Algoritmo lineal greedy por matching maximal con garantía demostrable |C| <= 2 * |C*|',
       en: 'Linear greedy algorithm via maximal matching with provable bound |C| <= 2 * |C*|'
     },
     supportedPhases: ['discover', 'solve', 'understand'],
@@ -536,7 +536,7 @@ export const EXERCISES: ExerciseMetadata[] = [
     difficulty: 2,
     title: { es: 'Árbol Generador Mínimo (Kruskal)', en: 'Kruskal Minimum Spanning Tree' },
     subtitle: {
-      es: 'Conectar todos los vértices con costo total mínimo mediante selección voraz de aristas y Union-Find',
+      es: 'Conectar todos los vértices con costo total mínimo mediante selección greedy de aristas y Union-Find',
       en: 'Connect all vertices with minimal total cost using greedy edge selection and Disjoint-Set'
     },
     supportedPhases: ['discover', 'solve', 'understand'],

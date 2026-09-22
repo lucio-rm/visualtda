@@ -10,7 +10,7 @@
     "en": "Kruskal Minimum Spanning Tree"
   },
   "subtitle": {
-    "es": "Conectar todos los v\u00e9rtices con costo total m\u00ednimo mediante selecci\u00f3n voraz de aristas y Union-Find",
+    "es": "Conectar todos los v\u00e9rtices con costo total m\u00ednimo mediante selecci\u00f3n greedy de aristas y Union-Find",
     "en": "Connect all vertices with minimal total cost using greedy edge selection and Disjoint-Set"
   },
   "description": {

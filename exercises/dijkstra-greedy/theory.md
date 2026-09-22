@@ -1,4 +1,4 @@
-## Caminos Mínimos de Dijkstra (Algoritmo Voraz)
+## Caminos Mínimos de Dijkstra (Algoritmo Greedy)
 ### Referencia: Kleinberg & Tardos, Capítulo 4.4
 
 ### 1. Invariante de Corrección

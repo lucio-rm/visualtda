@@ -15,7 +15,7 @@ interface Preset {
 const PRESETS: Preset[] = [
   {
     name: {
-      es: '★ Trampa Voraz (Greedy pierde por mucho)',
+      es: '★ Trampa Greedy (Greedy pierde por mucho)',
       en: '★ Greedy Trap (Greedy falls far behind)'
     },
     intervals: [

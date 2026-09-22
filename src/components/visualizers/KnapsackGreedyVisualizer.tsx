@@ -43,7 +43,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
     <div className="knapsack-greedy-visualizer">
       {/* Header & Badges */}
       <div className="greedy-header-bar">
-        <h4>Mochila Fraccionaria: Selección Voraz por Densidad</h4>
+        <h4>Mochila Fraccionaria: Selección Greedy por Densidad</h4>
         <div className="knapsack-stats-group">
           <span className="stat-badge stat-highlight">
             <span className="stat-num">${totalValue.toFixed(1)}</span>
@@ -70,7 +70,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
           Paso {currentStepIndex + 1} / {totalSteps}
         </span>
         <p className="step-message-text">
-          {currentEvent?.message?.es || 'Iniciando evaluación voraz...'}
+          {currentEvent?.message?.es || 'Iniciando evaluación greedy...'}
         </p>
       </div>
 
@@ -130,7 +130,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
             ⚠️ ¿Por qué la estrategia Greedy falla si la mochila es 0/1 (sin fracciones)?
           </div>
           <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
-            En la mochila 0/1 no podemos fraccionar los elementos. Observa cómo la misma regla voraz
+            En la mochila 0/1 no podemos fraccionar los elementos. Observa cómo la misma regla greedy
             queda atrapada con un espacio vacío que no puede llenar:
           </p>
           <div className="counterexample-comparison-grid">

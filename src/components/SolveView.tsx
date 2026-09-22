@@ -8,6 +8,7 @@ import { pythonService } from '../runtime/pythonExecutionService';
 interface SolveViewProps {
   exercise: ExerciseMetadata;
   onSuccess: () => void;
+  onAdvanceToUnderstand?: () => void;
   onSkipToUnderstand: () => void;
   starterCode?: string;
 }
@@ -15,6 +16,7 @@ interface SolveViewProps {
 export const SolveView: React.FC<SolveViewProps> = ({
   exercise,
   onSuccess,
+  onAdvanceToUnderstand,
   onSkipToUnderstand,
   starterCode
 }) => {
@@ -25,7 +27,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
   }, [exercise.id]);
 
   const storageKey = `visual_tda_code_${exercise.id}`;
-  const defaultCode = starterCode || content?.starterCode || '# Escribe tu solución aquí en Python\ndef resolver():\n    pass\n';
+  const defaultCode = starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n';
 
   const [code, setCodeState] = useState<string>(() => {
     try {
@@ -61,16 +63,16 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
   const hints = content?.hints || [
     {
-      es: 'Pista 1: Identifica qué información mínima necesitas recordar al avanzar de una etapa a la siguiente.',
-      en: 'Hint 1: Identify what minimal information you need to maintain when advancing stages.'
+      es: 'Pista 1: Identificá qué subproblemas se repiten o qué propiedad invariante debe mantenerse en cada paso.',
+      en: 'Hint 1: Identify repeating subproblems or invariant properties that must hold at each step.'
     },
     {
-      es: 'Pista 2: Cada decisión restringe fuertemente las opciones futuras. Intenta podar tan pronto como se detecte una incompatibilidad.',
-      en: 'Hint 2: Early pruning: discard infeasible candidate decisions as soon as constraints are violated.'
+      es: 'Pista 2: Analizá si podés podar ramas inviables tempranamente o si una elección local miope conduce al óptimo.',
+      en: 'Hint 2: Analyze early pruning of infeasible branches or whether a greedy choice leads to global optimality.'
     },
     {
-      es: 'Pista 3: Construye la solución de forma sistemática y verifica la corrección sobre casos base antes de generalizar.',
-      en: 'Hint 3: Construct solutions systematically and verify base cases before generalizing.'
+      es: 'Pista 3: Comprobá los casos base antes de generalizar el paso recursivo o inductivo.',
+      en: 'Hint 3: Verify base cases before generalizing the recursive or inductive step.'
     }
   ];
 
@@ -101,30 +103,36 @@ export const SolveView: React.FC<SolveViewProps> = ({
         setTestStatus('passed');
         setTestSummary(
           language === 'es'
-            ? `✓ ¡Excelente! ${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
-            : `✓ Excellent! ${evaluation.totalPassed} / ${evaluation.totalTests} test cases passed successfully.`
+            ? `✓ ${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
+            : `✓ ${evaluation.totalPassed} / ${evaluation.totalTests} test cases passed successfully.`
         );
         onSuccess();
       } else {
         setTestStatus('failed');
         setTestSummary(
           language === 'es'
-            ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisa las condiciones que no cumplieron la validación.`
-            : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check conditions that failed validation.`
+            ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisá las condiciones y salidas fallidas en la tabla de abajo.`
+            : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check failed conditions and outputs below.`
         );
       }
     } else {
-      // Fallback
-      if (code.trim().length > 40 && !code.includes('pass\n')) {
+      // Evaluate against Python test runner with real test cases
+      const evalResult = await runPythonTests(exercise.id, code);
+      setTestResults(evalResult.results);
+      if (evalResult.passed) {
         setTestStatus('passed');
-        setTestSummary(t(dict.testsSuccess));
+        setTestSummary(
+          language === 'es'
+            ? `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} casos de prueba superados con éxito.`
+            : `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} test cases passed successfully.`
+        );
         onSuccess();
       } else {
         setTestStatus('failed');
         setTestSummary(
           language === 'es'
-            ? 'Prueba incompleta. La función aún contiene "pass" o falta implementar la lógica.'
-            : 'Incomplete test. Function still contains "pass" or missing implementation.'
+            ? `${evalResult.totalPassed} / ${evalResult.totalTests} casos superados. El código no satisfizo todas las restricciones o contiene errores.`
+            : `${evalResult.totalPassed} / ${evalResult.totalTests} passed. Code did not satisfy all constraints or contains errors.`
         );
       }
     }
@@ -302,7 +310,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 <button
                   type="button"
                   className="btn-primary mt-2"
-                  onClick={onSuccess}
+                  onClick={onAdvanceToUnderstand || onSuccess}
                 >
                   {t(dict.proceedToUnderstand)}
                 </button>

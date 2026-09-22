@@ -192,7 +192,7 @@ export const CoinChangeVisualizer: React.FC = () => {
 
         <div className="strategy-card greedy-card">
           <div className="strategy-badge greedy-badge">
-            {language === 'es' ? 'Heurística Voraz (Greedy)' : 'Greedy Heuristic'}
+            {language === 'es' ? 'Heurística Greedy (Greedy)' : 'Greedy Heuristic'}
           </div>
           <div className="strategy-result">
             {greedyCoins ? (

@@ -1,6 +1,6 @@
 """
 Selección de Intervalos (Interval Scheduling) — Implementación Canónica Educativa
-Técnica: Algoritmo Greedy (Selección voraz por tiempo de fin más temprano)
+Técnica: Algoritmo Greedy (Selección greedy por tiempo de fin más temprano)
 Complejidad Temporal: O(N log N) por el ordenamiento inicial
 Complejidad Espacial: O(N) para la lista de intervalos seleccionados
 """
@@ -38,7 +38,7 @@ def seleccion_intervalos(intervalos: List[Tuple[int, int]]) -> List[Tuple[int, i
     seleccionados: List[Tuple[int, int]] = []
     ultimo_fin = -float("inf")
 
-    # 2. Selección voraz (Greedy choice)
+    # 2. Selección greedy (Greedy choice)
     for inicio, fin in ordenados:
         if inicio >= ultimo_fin:
             seleccionados.append((inicio, fin))

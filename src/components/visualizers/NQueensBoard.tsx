@@ -1,9 +1,20 @@
 import React from 'react';
 import { NQueensConflictType } from '../../engine/algorithms/nQueensTrace';
 
+export type BoardConflictType = NQueensConflictType | 'row' | 'col' | 'diag';
+
+export interface QueenConflictPair {
+  row1: number;
+  col1: number;
+  row2: number;
+  col2: number;
+  type: BoardConflictType;
+}
+
 export interface NQueensBoardProps {
   n: number;
-  board: number[]; // board[row] = col, or -1 if empty
+  board?: number[]; // board[row] = col, or -1 if empty (legacy/trace mode)
+  queens?: Array<{ row: number; col: number }>; // Free manual placement coordinates
   currentRow?: number;
   currentCol?: number;
   conflictWith?: {
@@ -11,6 +22,7 @@ export interface NQueensBoardProps {
     col: number;
     type: NQueensConflictType;
   };
+  conflicts?: QueenConflictPair[]; // Multiple collision laser rays
   isSolution?: boolean;
   onCellClick?: (row: number, col: number) => void;
   interactive?: boolean;
@@ -19,9 +31,11 @@ export interface NQueensBoardProps {
 export const NQueensBoard: React.FC<NQueensBoardProps> = ({
   n,
   board,
+  queens,
   currentRow = -1,
   currentCol = -1,
   conflictWith,
+  conflicts = [],
   isSolution = false,
   onCellClick,
   interactive = false
@@ -51,8 +65,16 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
           Array.from({ length: n }).map((__, c) => {
             const isDark = (r + c) % 2 === 1;
             const isCandidate = r === currentRow && c === currentCol;
-            const isPlaced = board[r] === c;
-            const isConflictSource = conflictWith && conflictWith.row === r && conflictWith.col === c;
+            const isPlaced = queens
+              ? queens.some((q) => q.row === r && q.col === c)
+              : board
+                ? board[r] === c
+                : false;
+            const inConflictList = conflicts.some(
+              (cf) => (cf.row1 === r && cf.col1 === c) || (cf.row2 === r && cf.col2 === c)
+            );
+            const isConflictSource =
+              (conflictWith && conflictWith.row === r && conflictWith.col === c) || inConflictList;
             const isConflictTarget = conflictWith && currentRow === r && currentCol === c;
             const isConflictedCandidate = isCandidate && !!conflictWith;
 
@@ -152,7 +174,19 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
           })
         )}
 
-        {/* Conflict Ray indicator connecting candidate and conflicting queen */}
+        {/* Multiple Conflict Rays (for free interactive placement) */}
+        {conflicts.map((cf, idx) => (
+          <line
+            key={`cf-ray-${idx}-${cf.row1}-${cf.col1}-${cf.row2}-${cf.col2}`}
+            x1={cf.col1 * cellSize + cellSize / 2}
+            y1={cf.row1 * cellSize + cellSize / 2}
+            x2={cf.col2 * cellSize + cellSize / 2}
+            y2={cf.row2 * cellSize + cellSize / 2}
+            className="conflict-ray-line"
+          />
+        ))}
+
+        {/* Conflict Ray indicator connecting candidate and conflicting queen (trace mode) */}
         {conflictWith && currentRow >= 0 && currentCol >= 0 && (
           <line
             x1={conflictWith.col * cellSize + cellSize / 2}

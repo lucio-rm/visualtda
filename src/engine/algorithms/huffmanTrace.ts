@@ -149,7 +149,7 @@ export function generateHuffmanTrace(
       step: stepIndex++,
       type: 'SELECT_TWO_MIN',
       message: {
-        es: `Selección voraz: extraemos los dos nodos de menor frecuencia "${left.char ?? left.id}" (${left.freq}) y "${right.char ?? right.id}" (${right.freq}).`,
+        es: `Selección greedy: extraemos los dos nodos de menor frecuencia "${left.char ?? left.id}" (${left.freq}) y "${right.char ?? right.id}" (${right.freq}).`,
         en: `Greedy choice: extract the two lowest frequency nodes "${left.char ?? left.id}" (${left.freq}) and "${right.char ?? right.id}" (${right.freq}).`
       },
       data: {
@@ -163,7 +163,7 @@ export function generateHuffmanTrace(
         allNodes: { ...allNodes },
         forestRoots: queue.map((n) => n.id),
         description: {
-          es: `Estrategia Voraz: Extraemos los dos mínimos del heap: "${left.char ?? left.id}" (freq ${left.freq}) e "${right.char ?? right.id}" (freq ${right.freq}).`,
+          es: `Estrategia Greedy: Extraemos los dos mínimos del heap: "${left.char ?? left.id}" (freq ${left.freq}) e "${right.char ?? right.id}" (freq ${right.freq}).`,
           en: `Greedy Choice: Pop the two smallest items: "${left.char ?? left.id}" (${left.freq}) and "${right.char ?? right.id}" (${right.freq}).`
         }
       }

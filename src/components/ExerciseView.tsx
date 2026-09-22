@@ -48,11 +48,9 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
   const handleSolveSuccess = () => {
     setSolutionUnlocked(true);
-    setPhase('understand');
   };
 
   const handleSkipToUnderstand = () => {
-    setSolutionUnlocked(true);
     setPhase('understand');
   };
 
@@ -106,6 +104,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
           <SolveView
             exercise={exercise}
             onSuccess={handleSolveSuccess}
+            onAdvanceToUnderstand={() => setPhase('understand')}
             onSkipToUnderstand={handleSkipToUnderstand}
           />
         )}
@@ -119,6 +118,8 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
             timeComplexity={timeComplexity}
             spaceComplexity={spaceComplexity}
             visualizerSlot={visualizerSlot}
+            solutionUnlocked={solutionUnlocked}
+            onGoToSolve={() => setPhase('solve')}
           />
         )}
       </div>
@@ -144,10 +145,10 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
                 className="btn-primary"
                 onClick={() => {
                   setShowFrictionModal(false);
-                  handleSkipToUnderstand();
+                  setPhase('understand');
                 }}
               >
-                {t(dict.skipModalConfirm)} &rarr;
+                {t({ es: 'Explorar Traza y Teoría (Solución Python protegida)', en: 'Explore Trace & Theory (Python Solution Protected)' })}
               </button>
             </div>
           </div>

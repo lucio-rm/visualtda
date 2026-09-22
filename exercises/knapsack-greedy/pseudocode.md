@@ -12,7 +12,7 @@ ALGORITMO MochilaFraccionaria_Greedy(items, W):
     capacidad_restante ← W
     asignaciones ← []
 
-    // 2. Selección Voraz
+    // 2. Selección Greedy
     PARA CADA item EN items_ordenados:
         SI capacidad_restante <= 0:
             ROMPER

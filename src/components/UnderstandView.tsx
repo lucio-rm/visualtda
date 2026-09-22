@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ExerciseMetadata } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useInstructorMode } from '../context/InstructorModeContext';
+import { TheoryMarkdown } from './common/TheoryMarkdown';
 
 interface UnderstandViewProps {
   exercise: ExerciseMetadata;
@@ -10,6 +12,8 @@ interface UnderstandViewProps {
   timeComplexity: string;
   spaceComplexity: string;
   visualizerSlot?: React.ReactNode;
+  solutionUnlocked?: boolean;
+  onGoToSolve?: () => void;
 }
 
 export const UnderstandView: React.FC<UnderstandViewProps> = ({
@@ -19,10 +23,15 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   correctnessExplanation,
   timeComplexity,
   spaceComplexity,
-  visualizerSlot
+  visualizerSlot,
+  solutionUnlocked = false,
+  onGoToSolve
 }) => {
   const { t, dict } = useLanguage();
+  const { isInstructorMode } = useInstructorMode();
   const [codeMode, setCodeMode] = useState<'python' | 'pseudocode'>('python');
+
+  const canViewCanonicalPython = solutionUnlocked || isInstructorMode;
 
   return (
     <section className="phase-view understand-view" aria-labelledby="understand-heading">
@@ -74,9 +83,24 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
               </div>
             </div>
 
-            <pre className="canonical-code-display">
-              <code>{codeMode === 'python' ? canonicalPython : pseudocode}</code>
-            </pre>
+            {codeMode === 'python' && !canViewCanonicalPython ? (
+              <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🔒</div>
+                <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>Solución Canónica en Python Bloqueada</h4>
+                <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                  Para acceder a la implementación de referencia oficial en Python, primero debés superar los casos de prueba automatizados en la fase <strong>Resolver</strong> (o activar el <strong>Modo Docente 🎓</strong> en la barra superior).
+                </p>
+                {onGoToSolve && (
+                  <button type="button" className="btn-primary" onClick={onGoToSolve}>
+                    Ir a Resolver el Ejercicio →
+                  </button>
+                )}
+              </div>
+            ) : (
+              <pre className="canonical-code-display">
+                <code>{codeMode === 'python' ? canonicalPython : pseudocode}</code>
+              </pre>
+            )}
           </div>
         </div>
 
@@ -85,12 +109,12 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           <div className="card-panel theory-card">
             <h4>{t(dict.understandCorrectnessHeading)}</h4>
             <div className="theory-body">
-              <p>{correctnessExplanation}</p>
+              <TheoryMarkdown content={correctnessExplanation} />
             </div>
           </div>
 
           <div className="card-panel complexity-card">
-            <h4>{t({ es: 'Análisis de Complejidad', en: 'Complexity Analysis' })}</h4>
+            <h4>{t({ es: 'Análisis de Complejidad y Cotas', en: 'Complexity Analysis & Bounds' })}</h4>
             <div className="complexity-grid">
               <div className="complexity-item">
                 <span className="complexity-label">{t(dict.understandTimeComplexity)}</span>

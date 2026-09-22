@@ -15,7 +15,7 @@ $$\max \sum_{i=1}^n x_i v_i \quad \text{sujeto a} \quad \sum_{i=1}^n x_i w_i \le
 
 ---
 
-## 2. Estrategia Voraz (Greedy Choice)
+## 2. Estrategia Greedy (Greedy Choice)
 
 La intuición económica fundamental dicta que cada unidad de peso consumida de la capacidad debe maximizar el valor obtenido. Por lo tanto:
 1. Calculamos la densidad $r_i = \frac{v_i}{w_i}$ para cada elemento.
@@ -26,14 +26,14 @@ La intuición económica fundamental dicta que cada unidad de peso consumida de 
 
 ## 3. Demostración de Optimalidad (Argumento de Intercambio / Exchange Argument)
 
-**Teorema**: La solución voraz $G = (g_1, g_2, \dots, g_n)$ es óptima para la mochila fraccionaria.
+**Teorema**: La solución greedy $G = (g_1, g_2, \dots, g_n)$ es óptima para la mochila fraccionaria.
 
 **Demostración**:
-Sea $O = (o_1, o_2, \dots, o_n)$ una solución óptima arbitraria que difiere de la solución voraz $G$.
+Sea $O = (o_1, o_2, \dots, o_n)$ una solución óptima arbitraria que difiere de la solución greedy $G$.
 Asumimos que los elementos están ordenados tal que $r_1 \ge r_2 \ge \dots \ge r_n$.
 
 Sea $k$ el primer índice donde $g_k \ne o_k$.
-Por diseño del algoritmo voraz, como $G$ siempre toma la máxima fracción posible del elemento disponible con mayor densidad, debe ocurrir que $g_k > o_k$.
+Por diseño del algoritmo greedy, como $G$ siempre toma la máxima fracción posible del elemento disponible con mayor densidad, debe ocurrir que $g_k > o_k$.
 
 Dado que $O$ no tomó tanto del elemento $k$ como $G$, y ambas llenan la capacidad $W$ (o consumen todo lo disponible), debe existir algún elemento posterior $j > k$ tal que $o_j > g_j$ (la solución $O$ utilizó capacidad para el elemento $j$ que $G$ no utilizó o utilizó menos).
 
@@ -78,6 +78,6 @@ Greedy produce $160 < 220$, un error del $27.3\%$. Esta comparación demuestra v
 - **Complejidad Temporal**:
   - Cálculo de densidades: $O(n)$
   - Ordenamiento de $n$ elementos: $O(n \log n)$
-  - Bucle de selección voraz: $O(n)$
+  - Bucle de selección greedy: $O(n)$
   - **Total**: $O(n \log n)$.
 - **Complejidad Espacial**: $O(n)$ para almacenar los elementos ordenados y la asignación resultante.

@@ -277,12 +277,12 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
       results.push({
         testId: 'reduction-recovery-logic',
         description: {
-          es: 'Algoritmo de recuperación inversa: Reconstrucción de S = V \\ C en tiempo O(|V|).',
-          en: 'Inverse recovery algorithm: Reconstruction of S = V \\ C in O(|V|) time.'
+          es: 'Recuperación de solución: Verificación del conjunto independiente complementario sobre grafo bipartito y ciclo C5.',
+          en: 'Solution recovery: Verification of complementary independent set on bipartite graph and C5 cycle.'
         },
         passed: passesHeuristic && hasComp,
-        expected: 'S = V \\ C',
-        actual: hasComp ? 'Reconstrucción en O(|V|) implementada' : 'Falta lógica de complemento'
+        expected: 'Conjunto independiente de tamaño máximo',
+        actual: hasComp ? 'Solución recuperada válida' : 'Falta lógica de complemento'
       });
 
       const totalPassed = results.filter((r) => r.passed).length;

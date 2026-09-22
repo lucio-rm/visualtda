@@ -39,7 +39,7 @@ En lugar de construir el árbol de arriba hacia abajo (Top-Down, como Shannon-Fa
 
 ## 4. Demostración de Correctitud (Argumento de Intercambio / Cut-and-Paste)
 
-### Lema 1 (Propiedad de Elección Voraz — CLRS 16.3 / K&T 4.8)
+### Lema 1 (Propiedad de Elección Greedy — CLRS 16.3 / K&T 4.8)
 *Sean $x$ e $y$ dos símbolos con las frecuencias más bajas en $C$. Existe un árbol de prefijo óptimo para $C$ en el cual $x$ e $y$ son hermanos en el nivel más profundo.*
 
 **Demostración**:

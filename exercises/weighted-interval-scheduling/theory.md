@@ -2,9 +2,9 @@
 
 ## 1. Motivación: El Puente entre Greedy y Programación Dinámica
 
-En el problema de **Selección de Intervalos no ponderado** (Kleinberg & Tardos 4.1), una regla voraz (*Greedy*) tan simple como elegir siempre la tarea de fin más temprano garantiza encontrar la máxima cantidad de tareas compatibles.
+En el problema de **Selección de Intervalos no ponderado** (Kleinberg & Tardos 4.1), una regla greedy (*Greedy*) tan simple como elegir siempre la tarea de fin más temprano garantiza encontrar la máxima cantidad de tareas compatibles.
 
-Sin embargo, en el mundo real las tareas no valen lo mismo: cada tarea $j$ posee un valor o ganancia $v_j > 0$. En esta versión general ponderada, **cualquier heurística voraz fracasa**:
+Sin embargo, en el mundo real las tareas no valen lo mismo: cada tarea $j$ posee un valor o ganancia $v_j > 0$. En esta versión general ponderada, **cualquier heurística greedy fracasa**:
 - Elegir por fin más temprano puede tomar una tarea de valor $1$ que bloquea una de valor $1000$.
 - Elegir por mayor peso puede tomar una tarea gigantesca de valor $10$ que bloquea 20 tareas de valor $9$ (total $180$).
 - Elegir por ratio valor/duración puede caer en trampas similares.

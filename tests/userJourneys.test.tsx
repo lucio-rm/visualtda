@@ -64,7 +64,7 @@ describe('Phase D: Browser / User Journey Integration Verification (15 Core Flow
     expect(categoryButtons.length).toBeGreaterThan(0);
 
     // Find "Greedy" category tab
-    const greedyBtn = categoryButtons.find((btn) => btn.textContent?.includes('Greedy') || btn.textContent?.includes('Voraces'));
+    const greedyBtn = categoryButtons.find((btn) => btn.textContent?.includes('Greedy') || btn.textContent?.includes('Greedy'));
     expect(greedyBtn).toBeDefined();
 
     await act(async () => {

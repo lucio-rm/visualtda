@@ -84,7 +84,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         </div>
         <div className="playground-button-group">
           <button type="button" className="btn-secondary" onClick={handleGreedyAuto}>
-            {language === 'es' ? 'Solución Voraz' : 'Greedy Solution'}
+            {language === 'es' ? 'Solución Greedy' : 'Greedy Solution'}
           </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}

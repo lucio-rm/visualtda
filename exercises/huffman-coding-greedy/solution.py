@@ -25,7 +25,7 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
         heapq.heappush(heap, (freq, contador, char, None, None))
         contador += 1
 
-    # Bucle voraz (Greedy): fusionar los dos nodos de menor frecuencia
+    # Bucle greedy (Greedy): fusionar los dos nodos de menor frecuencia
     while len(heap) > 1:
         freq1, _, char1, izq1, der1 = heapq.heappop(heap)
         freq2, _, char2, izq2, der2 = heapq.heappop(heap)

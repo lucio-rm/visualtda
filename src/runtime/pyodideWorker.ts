@@ -2,7 +2,6 @@ import { WorkerInboundMessage, WorkerRunResponse, WorkerInitResponse } from './w
 
 // Declaration for Pyodide in Worker global context
 declare function importScripts(...urls: string[]): void;
-declare const loadPyodide: (options?: { indexURL?: string }) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 let pyodideInstance: any = null; // eslint-disable-line @typescript-eslint/no-explicit-any
 let isInitializing = false;
@@ -21,8 +20,25 @@ async function ensurePyodide(): Promise<any> { // eslint-disable-line @typescrip
 
   isInitializing = true;
   try {
-    importScripts(`${PYODIDE_CDN_URL}pyodide.js`);
-    pyodideInstance = await loadPyodide({
+    let loader: ((options?: { indexURL?: string }) => Promise<any>) | null = null; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+    // 1. Primary: ES Module dynamic import for modern module workers
+    try {
+      const pyodideModule = await import(/* @vite-ignore */ `${PYODIDE_CDN_URL}pyodide.mjs`);
+      loader = pyodideModule.loadPyodide;
+    } catch {
+      // 2. Fallback: Classic worker importScripts
+      if (typeof importScripts === 'function') {
+        importScripts(`${PYODIDE_CDN_URL}pyodide.js`);
+        loader = (self as any).loadPyodide; // eslint-disable-line @typescript-eslint/no-explicit-any
+      }
+    }
+
+    if (!loader) {
+      throw new Error('El cargador de Pyodide no está disponible en este entorno.');
+    }
+
+    pyodideInstance = await loader({
       indexURL: PYODIDE_CDN_URL
     });
     isInitializing = false;

@@ -145,7 +145,7 @@ export const HuffmanVisualizer: React.FC = () => {
               : 'Priority Queue (Min-Heap sorted by frequency):'}
           </span>
           <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-            {language === 'es' ? 'Extracción Voraz de la izquierda' : 'Greedy extract from the left'}
+            {language === 'es' ? 'Extracción Greedy de la izquierda' : 'Greedy extract from the left'}
           </span>
         </div>
 

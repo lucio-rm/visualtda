@@ -10,7 +10,7 @@ ALGORITMO SeleccionIntervalos(I):
     S ← ListaVacia()
     ultimoFin ← -Infinito
     
-    // 2. Selección voraz
+    // 2. Selección greedy
     PARA CADA intervalo (s_i, f_i) EN I_ordenados HACER:
         SI s_i >= ultimoFin ENTONCES:
             S.Agregar((s_i, f_i))

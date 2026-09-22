@@ -22,7 +22,7 @@ export const greedyContent: Record<string, ExerciseSolveContent> = {
 `,
     hints: [
       {
-        es: 'Pista 1: Probar ordenar por tiempo de inicio o duración más corta falla con contraejemplos. La decisión voraz debe maximizar el tiempo libre restante hacia el futuro.',
+        es: 'Pista 1: Probar ordenar por tiempo de inicio o duración más corta falla con contraejemplos. La decisión greedy debe maximizar el tiempo libre restante hacia el futuro.',
         en: 'Hint 1: Sorting by start time or shortest duration fails with counterexamples. The greedy choice must leave maximum remaining time for future tasks.'
       },
       {
@@ -79,7 +79,7 @@ export const greedyContent: Record<string, ExerciseSolveContent> = {
     entryFunction: 'mochila_fraccionaria',
     starterCode: `def mochila_fraccionaria(items: list[dict], capacidad: float) -> tuple[float, list[dict]]:
     """
-    Resuelve la mochila fraccionaria seleccionando vorazmente por densidad (valor / peso).
+    Resuelve la mochila fraccionaria seleccionando mediante Greedy por densidad (valor / peso).
     Retorna (valor_total, asignaciones_con_fraccion).
     """
     # 1. Calcula densidad para cada elemento
@@ -272,7 +272,7 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
         unico = next(iter(frecuencias))
         return {unico: '0'}
 
-    # Escribe tu implementación voraz (Greedy) con Min-Heap aquí:
+    # Escribe tu implementación greedy (Greedy) con Min-Heap aquí:
 
     return {}
 `,

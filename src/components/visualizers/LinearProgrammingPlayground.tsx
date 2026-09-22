@@ -260,7 +260,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               </div>
               <p className="model-desc">
                 {language === 'es'
-                  ? 'Si relajamos x_i ∈ [0, 1], obtenemos la versión de la mochila fraccionaria (resoluble vorazmente en O(n log n)). La solución fraccionaria otorga una cota superior estricta para la solución entera.'
+                  ? 'Si relajamos x_i ∈ [0, 1], obtenemos la versión de la mochila fraccionaria (resoluble mediante Greedy en O(n log n)). La solución fraccionaria otorga una cota superior estricta para la solución entera.'
                   : 'Relaxing to x_i ∈ [0, 1] yields fractional knapsack (solvable greedily in O(n log n)). The fractional solution provides an upper bound for the integer optimum.'}
               </p>
             </div>

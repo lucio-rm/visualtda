@@ -235,11 +235,11 @@ export const JuanElVagoPlayground: React.FC = () => {
       {/* Educational takeaway */}
       <div className="pedagogy-tip">
         <h4>
-          {language === 'es' ? '💡 ¿Por qué falla el enfoque voraz (Greedy)?' : '💡 Why does Greedy fail here?'}
+          {language === 'es' ? '💡 ¿Por qué falla el enfoque greedy (Greedy)?' : '💡 Why does Greedy fail here?'}
         </h4>
         <p>
           {language === 'es'
-            ? 'Una heurística voraz elegiría siempre el día de mayor ganancia inmediata. Por ejemplo, en [100, 10, 10, 100], si hubiera [10, 100, 10], tomar el 100 bloquea sus vecinos. O en [10, 40, 20, 30, 50], elegir vorazmente puede dejar a Juan sin acceso a sumas mayores. Programación Dinámica evalúa el impacto a futuro mediante memoización en tiempo lineal O(n).'
+            ? 'Una heurística greedy elegiría siempre el día de mayor ganancia inmediata. Por ejemplo, en [100, 10, 10, 100], si hubiera [10, 100, 10], tomar el 100 bloquea sus vecinos. O en [10, 40, 20, 30, 50], elegir mediante Greedy puede dejar a Juan sin acceso a sumas mayores. Programación Dinámica evalúa el impacto a futuro mediante memoización en tiempo lineal O(n).'
             : 'A greedy heuristic would always pick the highest paying day. But taking a high day blocks both its neighbors. Dynamic Programming considers future choices by memoizing optimal subproblem solutions in O(n) time.'}
         </p>
       </div>
