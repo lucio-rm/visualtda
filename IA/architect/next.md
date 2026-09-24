@@ -1,89 +1,50 @@
-# Hardening Backlog & Next Tasks
+# Visual TDA — Master Engineering Mission V4 Backlog & Roadmap
 
-Visual TDA has successfully completed **all nine phases (Phases A through I)** of the architectural mandate. All 12 Quality Gates (G1–G12) have achieved **PASS** status.
-
----
-
-## 1. Hardening Phases Completed (Phases A – I)
-
-1. ✅ **PHASE A: Comprehensive Repository Audit & Governance**
-   - Completed in commit `0ced0c2`.
-   - Comprehensive audit report in `IA/architect/audit-mvp.md`.
-   - Quality gates specification in `docs/quality-gates.md` (G1–G12).
-   - Security threat model in `docs/security.md`.
-   - Architecture Decision Records ADR-001 through ADR-004 in `IA/architect/questions.md`.
-
-2. ✅ **PHASE B: Critical Correctness & Security Hardening**
-   - Completed in commit `2b46553`.
-   - Hardened `pyodideWorker.ts` against `BaseException` (`sys.exit()`, `KeyboardInterrupt`).
-   - Implemented 64 KB stdout limit to prevent browser tab freeze / OOM DoS on infinite print loops.
-   - Cleaned up pending callbacks upon worker crash/timeout in `pythonExecutionService.ts`.
-   - Automated verification in `tests/pythonExecution.test.ts`.
-
-3. ✅ **PHASE C: Testing Infrastructure (Independent Oracles & Property Testing)**
-   - Completed in commit `7a40108`.
-   - Built independent combinatorial/brute-force reference solvers in `tests/oracles/referenceSolvers.ts`:
-     - Knapsack 0/1 ($2^n$ exhaustive power-set solver)
-     - Subset Sum ($2^n$ exhaustive subset solver)
-     - Coin Change (recursive memoized minimal-coin solver)
-     - Weighted Interval Scheduling ($2^n$ compatible interval power-set solver)
-     - Inversion Counting ($O(n^2)$ pairwise counter)
-     - N-Queens (independent attack matrix validator)
-     - Huffman Coding (prefix-free property validator)
-     - Vertex Cover (exact minimum vertex cover brute-force solver)
-   - 13 property and adversarial tests in `tests/adversarialAndOracles.test.ts`.
-
-4. ✅ **PHASE D: Browser / User Journey Integration Verification**
-   - Completed in commit `695cf4a`.
-   - 15 core user journey integration tests in `tests/userJourneys.test.tsx` using `happy-dom`.
-   - Verified catalog navigation, exercise selection, 3-phase flow, timeline playback, language/theme toggling, validator feedback, error resilience, and code reset.
-
-5. ✅ **PHASE E: UX & Accessibility Polish**
-   - Completed in commit `97b2a97`.
-   - Added student code session persistence in `sessionStorage` in `SolveView.tsx`.
-   - Added keyboard navigation (`tabIndex={0}`, `role="button"`, `onKeyDown`) and `:focus-visible` styling to visualizers.
-
-6. ✅ **PHASE F: Performance & Code Splitting**
-   - Completed in commit `6c6e689`.
-   - Configured `vite.config.ts` manualChunks:
-     - `vendor-react` (~223 KB)
-     - `visualizers` (~222 KB)
-     - `algorithm-engines` (~117 KB)
-     - `index` (~162 KB)
-   - Eliminated single monolithic bundle; all chunks are now $< 230$ KB.
-
-7. ✅ **PHASE G: Architecture Cleanup (God File De-bloating)**
-   - Completed in commit `bf1f053`.
-   - Created `src/engine/exerciseViewRegistry.tsx` mapping exercises to visualizers and canonical theory without branching.
-   - Refactored `src/app/App.tsx` from 1,347 lines down to 87 lines.
-
-8. ✅ **PHASE H: Curriculum Academic Audit**
-   - Completed in `docs/curriculum-audit.md` (commit `61dea0d`).
-   - Deep-dive academic verification for all foundational exercises against Kleinberg & Tardos (*Algorithm Design*), CLRS (*Introduction to Algorithms*), and FIUBA course guides.
-   - Documented learning objectives, key invariants, mathematical correctness proofs, and asymptotic complexities.
-
-9. ✅ **PHASE I: Foundational Curriculum Expansion (Graph Coloring)**
-   - Completed in commit `b1f02a3`.
-   - Implemented Graph Coloring ($k$-Coloring) vertical slice:
-     - Trace engine: `graphColoringTrace.ts` with conflict detection and backtrack animation
-     - Validator: `graphColoringValidator.ts` with pure validation
-     - Independent oracle: `bruteForceGraphColoring` in `referenceSolvers.ts`
-     - Visualizer: `GraphColoringVisualizer.tsx` with dynamic SVG graph and conflict pins
-     - Playground: `GraphColoringPlayground.tsx` with interactive vertex clicking, right-click uncoloring, and auto-solve
-     - Solvers & hints: `exerciseContent.ts` and `pythonTestRunner.ts`
-     - Unit tests: `tests/graphColoring.test.ts` (4 tests)
-
-10. ✅ **Clean File Audit & Uniformity**
-    - Completed in commit `3dba99b`.
-    - Removed obsolete prototype stubs in `exercises/n_queens/`.
-    - Verified all 21 exercises in `exercises/` have uniform documentation (`exercise.json`, `solution.py`, `pseudocode.md`, `theory.md`).
-    - Verified zero dead code or filler across `src/` and `tests/`.
+Visual TDA has successfully expanded to **37 university-grade exercises** across all fundamental paradigms and advanced topics. All 12 Quality Gates (G1–G12) remain in **PASS** status.
 
 ---
 
-## 2. Future Roadmap Candidates (Post-MVP)
+## 1. Master Mission V4 Milestones Completed
 
-Visual TDA is production-ready, verified across 34 test files (220 tests, 100% pass), and adheres to P1–P12. Future expansion may consider:
-1. **Divide & Conquer: Closest Pair of Points ($O(n \log n)$ 7-point strip theorem)**
-2. **Dynamic Programming: Matrix Chain Multiplication ($O(n^3)$)**
-3. **Graph Algorithms: Dijkstra's Shortest Path ($O((V+E)\log V)$ with min-heap)**
+1. ✅ **Curriculum Expansion to 37 Exercises (100% Coverage)**
+   - Divide & Conquer: Merge Sort, Max Subarray, Peak Finding, Inversion Counting, Closest Pair, Karatsuba, Majority Element, Median of Medians (8 exercises).
+   - Greedy: Interval Scheduling, Fractional Knapsack, Road Antennas, Huffman Coding, Interval Partitioning, Minimize Lateness, Dijkstra, Kruskal (8 exercises).
+   - Dynamic Programming: 0/1 Knapsack, Juan el Vago, Coin Change, LCS, Weighted Interval Scheduling, Segmented Least Squares, RNA Secondary Structure, Bellman-Ford (8 exercises).
+   - Backtracking / Branch & Bound: N-Queens, Subset Sum, Graph Coloring, Sudoku, Knight's Tour, Hamiltonian Cycle, Knapsack B&B, TSP B&B (8 exercises).
+   - Advanced: Max Flow, Linear Programming, IS $\le_P$ VC Reduction, Vertex Cover 2-Approx, Von Neumann Fair Coin (5 exercises).
+   - Every single exercise has a dedicated interactive 2D SVG Visualizer and dedicated interactive Playground.
+
+2. ✅ **Mathematical Typography Engine & LaTeX Unnesting**
+   - Implemented recursive unnesting of `\text`, `\mathrm`, `\mathbf`, `\mathcal` in `TheoryMarkdown.tsx`.
+   - Full Markdown table support (`| col | col |` with separator detection) rendered in semantic HTML.
+   - Comprehensive mathematical symbol mapping (`ℝ`, `ℕ`, `ℤ`, `𝔼`, Greek letters, logic operators, set operators, quantifiers, bounds, and superscripts).
+   - 7 unit tests in `tests/theoryMarkdown.test.tsx` (100% PASS).
+
+3. ✅ **Universal Timeline Keyboard Navigation & Scrubbing**
+   - Default keyboard shortcuts enabled across all 37 visualizers: `ArrowRight` / `ArrowLeft`, `Space` / `k`, `r` (reset), `Home` (step 0), `End` (last step).
+   - Input/textarea focus interception protection.
+   - 6 unit and DOM integration tests in `tests/useTraceTimeline.test.tsx` (100% PASS).
+
+4. ✅ **Visual Quality, Theme Contrast & Full Bilingual Parity**
+   - High-contrast edge styling (`var(--border-strong)`) applied across all graph-based visualizers (`MaxFlow`, `GraphColoring`, `Dijkstra`, `BellmanFord`, `Kruskal`, `HamiltonianCycle`) ensuring WCAG AAA legibility in both light and dark modes.
+   - Eradicated all decorative emojis, cheerleading exclamation marks (`¡`), and informal badges across all visualizers, playgrounds, and cards.
+   - Full bilingual (ES/EN) parity across header bars, metric counters, recurrence callouts, table headers, and playback controls in DP and Greedy visualizers.
+
+5. ✅ **Pedagogical Progress Model & Access Control**
+   - 7 formal stages: `unseen`, `exploring`, `attempted`, `testing`, `passed`, `completed`, `instructor`.
+   - Monotonic rank invariant ensures earlier interactions never degrade higher achievements.
+   - Canonical Python solution strictly locked until tests pass or Instructor Mode is explicitly enabled.
+
+---
+
+## 2. Active Priorities & Verification Targets
+
+1. **Section 11 / 96 — Continuous Exercise Quality Auditing**:
+   - Keep `docs/exercise-quality-matrix.md` updated with empirical verification evidence.
+2. **Section 35 / 36 — Comprehensive Headless Browser QA**:
+   - Maintain 22/22 real Chromium headless test passes across 5 responsive viewports with 0 console errors.
+3. **Section 43 / 44 — Complexity & Invariant Explanations**:
+   - Continuously refine asymptotic cost proofs ($O$) and exchange arguments for FIUBA presentation.
+4. **Section 79 — Mobile & Responsive Layout**:
+   - Ensure all 37 visualizers render cleanly without horizontal overflow clipping on narrow viewports.
+

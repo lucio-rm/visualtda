@@ -1,14 +1,18 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Academic excellence pass for Kleinberg & Tardos presentation. Enforced adult engineering tone, eradicated canonical code leaks in playgrounds, deployed cross-exercise connections, extended trace test suites (38 test files, 279/279 tests passing), verified 22/22 real Chromium headless browser QA scenarios across 5 viewports with 0 console errors.
-- **BASELINE_COMMIT**: `3b2a736`
+- **CURRENT_TASK**: Academic excellence pass for Kleinberg & Tardos presentation. Enforced adult engineering tone, eradicated canonical code leaks in playgrounds, deployed cross-exercise connections, enhanced LaTeX mathematical typography with nested command unwrapping and table rendering, activated universal keyboard navigation with Home/End timeline scrubbing, upgraded SVG graph contrast in light mode, and verified 39 test files (290/290 tests passing) plus 22/22 real Chromium headless browser QA scenarios across 5 viewports with 0 console errors.
+- **BASELINE_COMMIT**: `b153baf`
 - **EXPLICIT_COMPONENT_STATES**:
-  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 38 test files, 279 tests, 0 lint errors, 0 type errors)
-  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.5s)
+  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
+  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.4s)
   - **Visualizer & Playground Completeness (37/37)**: [VERIFIED]
     - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds**.
+    - High-contrast graph edges calibrated for WCAG AAA compliance in both light and dark themes.
     - Zero generic fallbacks anywhere in the application.
+  - **Universal Timeline Keyboard Navigation (37/37)**: [VERIFIED]
+    - `useTraceTimeline` provides default keyboard shortcuts (`ArrowRight`/`ArrowLeft` step forward/back, `Space`/`k` play/pause, `r` reset, `Home` jump to start, `End` jump to finish).
+    - Fully tested in `tests/useTraceTimeline.test.tsx` (6/6 tests PASS).
   - **7-Stage Pedagogical Progress Model & Access Control**: [VERIFIED]
     - Formal states: `unseen`, `exploring`, `attempted`, `testing`, `passed`, `completed`, `instructor`.
     - Monotonic rank invariant ensures earlier interactions never degrade higher achievements.
@@ -19,6 +23,10 @@
     - Structured comparative analysis across major paradigm pairings (Knapsack DP vs Greedy vs B&B, Interval Scheduling vs Partitioning vs Weighted, Dijkstra vs Bellman-Ford, etc.).
     - Bilingual comparative insights and direct navigation in Phase 3 (`UnderstandView.tsx`).
     - Verified in `tests/crossExerciseConnections.test.ts`.
+  - **Mathematical Typography Engine**: [VERIFIED]
+    - `formatMathText` in `TheoryMarkdown.tsx` recursively unnests multi-level LaTeX expressions (`\text`, `\mathrm`, `\mathbf`, `\mathcal`).
+    - Semantic Markdown tables (`| col | col |`) rendered with `.theory-table-container`.
+    - Verified in `tests/theoryMarkdown.test.tsx` (7/7 tests PASS).
   - **Trace Timeline Test Coverage**: [VERIFIED]
     - `tests/extendedTraces.test.ts` comprehensively asserts algorithmic invariants across 16 extended traces (Dijkstra, Kruskal, Interval Partitioning, Minimize Lateness, Bellman-Ford, Segmented Least Squares, RNA Secondary Structure, Closest Pair, Karatsuba, Majority Element, Median of Medians, Hamiltonian Cycle, Knight's Tour, Sudoku, Knapsack B&B, TSP B&B).
   - **Real Browser QA Verification**: [VERIFIED]
@@ -27,6 +35,6 @@
 - **LAST_VERIFIED**:
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
-  - `npm test`: 38 test files, 279 passed (100% PASS)
+  - `npm test`: 39 test files, 290 passed (100% PASS)
   - `npm run test:browser`: 22 / 22 real Chromium scenarios passed (100% PASS)
-  - `npm run build`: static production build succeeds in ~1.5s (`dist/`)
+  - `npm run build`: static production build succeeds in ~1.4s (`dist/`)
