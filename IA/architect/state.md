@@ -1,13 +1,14 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed dedicated interactive playgrounds for `merge-sort` (`MergeSortPlayground`: 2-pointer linear merge step-by-step invariant checker, stability preservation note, and Divide & Conquer recursion tree inspector) and `max-flow` (`MaxFlowPlayground`: interactive residual graph augmentation, bottleneck calculation, flow cancellation via backward edges, and Min-Cut Max-Flow equality demonstration). 100% of all exercises in the catalog now have both a dedicated 2D SVG visualizer and dedicated interactive playground. All 39 test files (290 tests) and 22 real Chromium browser scenarios pass with 0 console errors.
-- **BASELINE_COMMIT**: `be73fb2`
+- **CURRENT_TASK**: Completed Master Engineering Mission V4 sweep: 100% visualizer and playground coverage (38/38 views), total eradication of decorative emojis across all components and chrome, standardization of media playback controls (`▶`, `❚❚`, `↺`, `←`, `→`), DP antecedent subproblem illumination in `LcsVisualizer` and `KnapsackDpVisualizer`, expanded cross-exercise connections across all major paradigms, and real Chromium browser QA validation (22/22 scenarios, 0 console errors).
+- **BASELINE_COMMIT**: `be88886`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.4s)
   - **Visualizer & Playground Completeness (37/37 Exercises, 38 Views)**: [VERIFIED]
     - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds** (including `MergeSortPlayground` and `MaxFlowPlayground`).
+    - Standardized media playback controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 35 visualizers.
     - High-contrast graph edges calibrated for WCAG AAA compliance in both light and dark themes.
     - Zero generic fallbacks anywhere in the application.
   - **Universal Timeline Keyboard Navigation (37/37)**: [VERIFIED]
@@ -18,11 +19,14 @@
     - Monotonic rank invariant ensures earlier interactions never degrade higher achievements.
     - Ground-truth fix: Interacting with playgrounds records exploration/attempts (`markAttempted`) without prematurely unlocking canonical Python or bypassing Phase 2 (Solve).
     - Canonical Python remains strictly locked until automated tests pass or Instructor Mode is explicitly enabled.
-    - Adult academic engineering tone strictly enforced (zero childish emojis or cheerleading).
+    - Adult academic engineering tone strictly enforced (zero childish emojis or cheerleading across all UI chrome and visualizers).
+  - **Dynamic Programming Subproblem Illumination (Section 25)**: [VERIFIED]
+    - Antecedent cells and dependency relationships highlighted during evaluation in `KnapsackDpVisualizer`, `CoinChangeVisualizer`, `LcsVisualizer`, and `JuanElVagoVisualizer`.
+    - Live formula callouts display the exact recurrence calculation step by step.
   - **Cross-Exercise Connections & Technique Comparisons**: [VERIFIED]
-    - Structured comparative analysis across major paradigm pairings (Knapsack DP vs Greedy vs B&B, Interval Scheduling vs Partitioning vs Weighted, Dijkstra vs Bellman-Ford, etc.).
+    - Structured comparative analysis across major paradigm pairings (Knapsack DP vs Greedy vs B&B, Interval Scheduling vs Partitioning vs Weighted, Dijkstra vs Bellman-Ford, Max Flow vs Linear Programming, Sudoku vs Graph Coloring, Hamiltonian Cycle vs TSP B&B, etc.).
     - Bilingual comparative insights and direct navigation in Phase 3 (`UnderstandView.tsx`).
-    - Verified in `tests/crossExerciseConnections.test.ts`.
+    - Verified in `tests/crossExerciseConnections.test.ts` (5/5 tests PASS).
   - **Mathematical Typography Engine**: [VERIFIED]
     - `formatMathText` in `TheoryMarkdown.tsx` recursively unnests multi-level LaTeX expressions (`\text`, `\mathrm`, `\mathbf`, `\mathcal`).
     - Semantic Markdown tables (`| col | col |`) rendered with `.theory-table-container`.
