@@ -39,11 +39,42 @@ const PRESETS: InversionPreset[] = [
 export const InversionCountingVisualizer: React.FC = () => {
   const { language } = useLanguage();
   const [selectedPresetId, setSelectedPresetId] = useState<string>('clrs');
-  const activePreset = PRESETS.find((p) => p.id === selectedPresetId) || PRESETS[0];
+  const [customInputStr, setCustomInputStr] = useState<string>('4, 1, 3, 2');
+  const [customArray, setCustomArray] = useState<number[]>([4, 1, 3, 2]);
+  const [customError, setCustomError] = useState<string | null>(null);
+
+  const activeArray = useMemo(() => {
+    if (selectedPresetId === 'custom') {
+      return customArray;
+    }
+    const preset = PRESETS.find((p) => p.id === selectedPresetId);
+    return preset ? preset.array : PRESETS[0].array;
+  }, [selectedPresetId, customArray]);
+
+  const handleApplyCustomArray = () => {
+    try {
+      const parts = customInputStr.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
+      if (parts.length < 2) {
+        throw new Error(language === 'es' ? 'Ingresá al menos 2 números separados por comas.' : 'Enter at least 2 comma-separated numbers.');
+      }
+      if (parts.length > 10) {
+        throw new Error(language === 'es' ? 'Máximo 10 elementos para mantener legibilidad visual.' : 'Maximum 10 elements to preserve visual clarity.');
+      }
+      const parsed = parts.map((p) => {
+        const v = Number(p);
+        if (isNaN(v)) throw new Error(language === 'es' ? `"${p}" no es un número válido.` : `"${p}" is not a valid number.`);
+        return v;
+      });
+      setCustomError(null);
+      setCustomArray(parsed);
+    } catch (err: unknown) {
+      setCustomError(err instanceof Error ? err.message : 'Error');
+    }
+  };
 
   const timeline = useMemo(
-    () => generateInversionTrace(activePreset.array),
-    [activePreset.array]
+    () => generateInversionTrace(activeArray),
+    [activeArray]
   );
 
   const {
@@ -65,7 +96,7 @@ export const InversionCountingVisualizer: React.FC = () => {
 
   const data = currentEvent?.data;
   const action = data?.action || 'INIT';
-  const range = data?.range || [0, activePreset.array.length - 1];
+  const range = data?.range || [0, activeArray.length - 1];
   const leftArray = data?.leftArray || [];
   const rightArray = data?.rightArray || [];
   const mergedArray = data?.mergedArray || [];
@@ -95,7 +126,52 @@ export const InversionCountingVisualizer: React.FC = () => {
             {preset.label[language]}
           </button>
         ))}
+        <button
+          className={`inv-preset-btn ${selectedPresetId === 'custom' ? 'active' : ''}`}
+          onClick={() => {
+            setSelectedPresetId('custom');
+            reset();
+          }}
+        >
+          {language === 'es' ? 'Caso Propio' : 'Custom Input'}
+        </button>
       </div>
+
+      {selectedPresetId === 'custom' && (
+        <div style={{ margin: '0.75rem 0', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <label htmlFor="inv-custom-input" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
+            {language === 'es' ? 'Elementos (separados por coma):' : 'Elements (comma separated):'}
+          </label>
+          <input
+            id="inv-custom-input"
+            type="text"
+            value={customInputStr}
+            onChange={(e) => setCustomInputStr(e.target.value)}
+            style={{
+              padding: '0.4rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--text)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.85rem',
+              minWidth: '220px'
+            }}
+          />
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              handleApplyCustomArray();
+              reset();
+            }}
+            style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+          >
+            {language === 'es' ? 'Cargar Arreglo' : 'Load Array'}
+          </button>
+          {customError && <span style={{ color: 'var(--color-danger, #ef4444)', fontSize: '0.8rem' }}>{customError}</span>}
+        </div>
+      )}
 
       {/* Top Banner Row */}
       <div className="inv-banner-row">
@@ -233,34 +309,42 @@ export const InversionCountingVisualizer: React.FC = () => {
       {/* Step Explanation Card */}
       <div className="inv-explanation-card">{desc}</div>
 
+      {/* Divide & Conquer Recurrence & Inversion Counting Rationale (Section 12, 44 & 51) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento: Conteo por División y Conquista vs. Doble Bucle O(n²):' : 'Rationale: Divide & Conquer Counting vs. O(n²) Double Loop:'}</strong>{' '}
+        {language === 'es'
+          ? 'Evaluar todas las parejas (i < j con A[i] > A[j]) mediante fuerza bruta requiere n(n-1)/2 comparaciones = O(n²). Mediante división y conquista, las inversiones totales se descomponen en: inv_izq + inv_der + inv_cruzadas. Como ambas mitades están ordenadas, cuando un elemento der[j] es menor que izq[i], der[j] es simultáneamente menor que todos los (|izq| - i) elementos restantes en la izquierda. Esto cuenta las inversiones cruzadas en O(1) por extracción, logrando un paso de combinación lineal O(n) y T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'
+          : 'Testing all pairs (i < j where A[i] > A[j]) naively takes n(n-1)/2 = O(n²). Divide & Conquer decomposes total inversions into: left_inv + right_inv + cross_inv. Because both halves are sorted, when right[j] < left[i], right[j] is inverted against all (|left| - i) remaining items in the left half in O(1) time. This produces an O(n) linear merge and T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-controls" style={{ marginTop: '0.5rem' }}>
         <button
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Previous Step'}
+          title={language === 'es' ? 'Paso Anterior (←)' : 'Previous Step (←)'}
           className="timeline-btn"
         >
-          ↺
+          ←
         </button>
         <button
           onClick={togglePlay}
           className="timeline-btn play-btn"
-          title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
           onClick={stepForward}
           disabled={currentStepIndex >= totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Next Step'}
+          title={language === 'es' ? 'Paso Siguiente (→)' : 'Next Step (→)'}
           className="timeline-btn"
         >
-          ⏭
+          →
         </button>
         <button
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
           className="timeline-btn"
         >
           ↺

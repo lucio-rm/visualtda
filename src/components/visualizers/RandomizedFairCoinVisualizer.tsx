@@ -178,14 +178,22 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* Von Neumann Probabilistic Fairness Theorem Card (Section 12, 23 & 43) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento: Teorema de Von Neumann (1951) y Simetría Condicional:' : 'Rationale: Von Neumann’s Theorem (1951) & Conditional Symmetry:'}</strong>{' '}
+        {language === 'es'
+          ? 'Para cualquier moneda sesgada con P(C)=p desconocida: al lanzar pares independientes, P(C, S) = p(1-p) y P(S, C) = (1-p)p. Por conmutatividad del producto, P(C, S) = P(S, C). Al descartar empates (CC y SS), la probabilidad condicionada a desenlace mixto es exactamente 1/2. El número esperado de pares hasta el éxito sigue una geométrica con esperanza E[lanzamientos] = 1/(p(1-p)), garantizando imparcialidad absoluta.'
+          : 'For any biased coin with unknown P(H)=p: pairs yield P(H, T) = p(1-p) and P(T, H) = (1-p)p. Since multiplication is commutative, P(H, T) = P(T, H). Discarding ties (HH and TT) guarantees exact conditional probability 1/2. Expected coin tosses follow a geometric distribution E[tosses] = 1/(p(1-p)), delivering exact fairness.'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
-        <button className="btn-control" onClick={reset} title="Reiniciar">↺</button>
-        <button className="btn-control" onClick={stepBackward} disabled={currentStepIndex === 0} title="Paso Anterior">◀</button>
-        <button className="btn-control btn-play" onClick={togglePlay} title={isPlaying ? 'Pausa' : 'Reproducir'}>
+        <button className="btn-control" onClick={reset} title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'} aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}>↺</button>
+        <button className="btn-control" onClick={stepBackward} disabled={currentStepIndex === 0} title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'} aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}>←</button>
+        <button className="btn-control btn-play" onClick={togglePlay} title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')} aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}>
           {isPlaying ? '❚❚' : '▶'}
         </button>
-        <button className="btn-control" onClick={stepForward} disabled={currentStepIndex === totalSteps - 1} title="Paso Siguiente">▶</button>
+        <button className="btn-control" onClick={stepForward} disabled={currentStepIndex === totalSteps - 1} title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'} aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}>→</button>
 
         <div className="timeline-slider-wrapper">
           <input

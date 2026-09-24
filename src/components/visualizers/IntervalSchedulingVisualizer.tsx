@@ -151,6 +151,14 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
         </svg>
       </div>
 
+      {/* Greedy Stays Ahead Rationale Card (Section 12 & 23) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento Teórico: Invariante Greedy Stays Ahead (K&T §4.1):' : 'Theoretical Rationale: Greedy Stays Ahead (K&T §4.1):'}</strong>{' '}
+        {language === 'es'
+          ? 'Ordenar por tiempo de finalización temprano (Earliest Finish Time) asegura inductivamente que para todo paso r, f(i_r) ≤ f(j_r), donde j es cualquier solución óptima. Como el algoritmo voraz finaliza antes o al mismo tiempo que cualquier otra alternativa, deja disponible la máxima cantidad de tiempo libre para las tareas futuras, garantizando la optimalidad global en tiempo O(n log n).'
+          : 'Sorting by Earliest Finish Time (EFT) guarantees by induction that at each step r, f(i_r) ≤ f(j_r) for any optimal sequence j. By finishing as early as possible, the greedy choice leaves maximum remaining time for subsequent intervals, guaranteeing global optimality in O(n log n) sorting time.'}
+      </div>
+
       {/* Playback Controls Toolbar */}
       <div className="timeline-toolbar">
         <div className="timeline-scrubber">
@@ -171,7 +179,7 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               type="button"
               className="ctrl-btn"
               onClick={reset}
-              title={language === 'es' ? 'Reiniciar' : 'Reset'}
+              title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
               aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
             >
               ↺
@@ -181,16 +189,16 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               className="ctrl-btn"
               onClick={stepBackward}
               disabled={currentStepIndex === 0}
-              title={language === 'es' ? 'Paso anterior' : 'Previous step'}
+              title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
               aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
             >
-              ◀
+              ←
             </button>
             <button
               type="button"
               className={`ctrl-btn play-btn ${isPlaying ? 'is-playing' : ''}`}
               onClick={togglePlay}
-              title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+              title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
               aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             >
               {isPlaying ? '❚❚' : '▶'}
@@ -200,10 +208,10 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               className="ctrl-btn"
               onClick={stepForward}
               disabled={currentStepIndex >= totalSteps - 1}
-              title={language === 'es' ? 'Paso siguiente' : 'Next step'}
+              title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
               aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
             >
-              ▶
+              →
             </button>
           </div>
 

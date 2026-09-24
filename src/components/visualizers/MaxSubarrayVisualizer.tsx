@@ -187,7 +187,7 @@ export const MaxSubarrayVisualizer: React.FC = () => {
       {winner && (
         <div className="winner-banner">
           <span className="winner-label">
-            {language === 'es' ? '⭐ Ganador Actual:' : '⭐ Current Winner:'}
+            {language === 'es' ? 'Ganador Actual:' : 'Current Winner:'}
           </span>{' '}
           <strong>{winner.source?.toUpperCase()}</strong> —{' '}
           {language === 'es' ? 'Rango' : 'Range'}: <code>[{winner.range[0]}..{winner.range[1]}]</code> |{' '}
@@ -202,12 +202,21 @@ export const MaxSubarrayVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* Master Theorem & Kadane Comparison Card (Section 12, 31 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento: División y Conquista vs. Kadane O(n):' : 'Rationale: Divide & Conquer vs. Kadane O(n):'}</strong>{' '}
+        {language === 'es'
+          ? 'El enfoque por división y conquista divide el arreglo en dos mitades (2T(n/2)) y calcula el subarreglo cruzado óptimo expandiéndose desde el punto medio en tiempo lineal O(n). Por Teorema Maestro, T(n) = 2T(n/2) + O(n) ⇒ O(n log n). Como contraste formativo, el algoritmo dinámico de Kadane resuelve el problema en una única pasada O(n) mediante la recurrencia local dp[i] = max(A[i], dp[i-1] + A[i]), superando el costo logarítmico adicional.'
+          : 'Divide & Conquer splits into two halves (2T(n/2)) and finds the maximal crossing subarray starting from midpoint in linear O(n) time. By Master Theorem, T(n) = 2T(n/2) + O(n) ⇒ O(n log n). In contrast, Kadane’s dynamic programming scan achieves O(n) single-pass runtime via local invariant dp[i] = max(A[i], dp[i-1] + A[i]).'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
         <button
           className="btn-control"
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
           ↺
         </button>
@@ -215,14 +224,16 @@ export const MaxSubarrayVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Step Backward'}
+          title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
         >
-          ◀
+          ←
         </button>
         <button
           className="btn-control btn-play"
           onClick={togglePlay}
-          title={isPlaying ? 'Pausa' : 'Reproducir'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -230,9 +241,10 @@ export const MaxSubarrayVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepForward}
           disabled={currentStepIndex === totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Step Forward'}
+          title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
         >
-          ▶
+          →
         </button>
 
         <div className="timeline-slider-wrapper">

@@ -141,6 +141,14 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* 2-Approximation Theorem Rationale (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Teorema de 2-Aproximación (Kleinberg & Tardos §11.1):' : '2-Approximation Theorem (Kleinberg & Tardos §11.1):'}</strong>{' '}
+        {language === 'es'
+          ? 'Sea M el conjunto de aristas disjuntas elegidas (emparejamiento maximal). Como ninguna arista en M comparte vértices, cualquier Vertex Cover óptimo S* debe contener al menos un extremo por cada arista en M, luego |S*| ≥ |M|. Nuestro algoritmo selecciona ambos extremos de cada arista en M, alcanzando |S| = 2|M| ≤ 2|S*|, garantizando un factor de aproximación exactamente ≤ 2 en tiempo lineal O(|V| + |E|).'
+          : 'Let M be the set of disjoint chosen edges (maximal matching). Since no two edges in M share endpoints, every optimal vertex cover S* must select at least one endpoint per edge in M, hence |S*| ≥ |M|. The algorithm selects both endpoints, so |S| = 2|M| ≤ 2|S*|, guaranteeing an approximation ratio ≤ 2 in linear time O(|V| + |E|).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-controls-card">
         <div className="timeline-slider-row">
@@ -167,7 +175,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               disabled={currentStepIndex === 0}
               title="Paso anterior (←)"
             >
-              ↺
+              ←
             </button>
             <button
               type="button"
@@ -175,7 +183,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               onClick={togglePlay}
               title={isPlaying ? 'Pausar (Espacio / k)' : 'Reproducir (Espacio / k)'}
             >
-              {isPlaying ? '❚❚ Pausa' : '▶ Reproducir'}
+              {isPlaying ? '❚❚' : '▶'}
             </button>
             <button
               type="button"
@@ -184,7 +192,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               disabled={currentStepIndex >= totalSteps - 1}
               title="Paso siguiente (→)"
             >
-              ⏭
+              →
             </button>
             <button
               type="button"
@@ -192,7 +200,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               onClick={reset}
               title="Reiniciar (r)"
             >
-              ↺ Reiniciar
+              ↺
             </button>
           </div>
 

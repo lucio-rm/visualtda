@@ -174,12 +174,21 @@ export const JuanElVagoVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* Non-Adjacent DP Recurrence Card (Section 12, 25 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Recurrencia DP de Selección No Adyacente (K&T §6.1):' : 'Non-Adjacent DP Selection Recurrence (K&T §6.1):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para cada día i: OPT(i) = max(w_i + OPT(i-2), OPT(i-1)). Dicotomía: o Juan trabaja el día i (ganando w_i y descansando obligatoriamente el día i-1 para sumar OPT(i-2)), o descansa el día i (conservando la ganancia acumulada OPT(i-1)). Esta estructura resuelve el problema en tiempo lineal O(n) y O(1) de memoria auxiliar.'
+          : 'For each day i: OPT(i) = max(w_i + OPT(i-2), OPT(i-1)). Dichotomy: either Juan works on day i (earning w_i, mandating rest on day i-1 and collecting OPT(i-2)), or rests on day i (keeping accumulated OPT(i-1)). This optimal substructure runs in linear O(n) time with O(1) auxiliary space.'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
         <button
           className="btn-control"
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
           ↺
         </button>
@@ -187,14 +196,16 @@ export const JuanElVagoVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Step Backward'}
+          title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
         >
-          ◀
+          ←
         </button>
         <button
           className="btn-control btn-play"
           onClick={togglePlay}
-          title={isPlaying ? 'Pausa' : 'Reproducir'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -202,9 +213,10 @@ export const JuanElVagoVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepForward}
           disabled={currentStepIndex === totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Step Forward'}
+          title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
         >
-          ▶
+          →
         </button>
 
         <div className="timeline-slider-wrapper">

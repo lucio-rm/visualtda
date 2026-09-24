@@ -132,17 +132,17 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
               className="ctrl-btn"
               onClick={stepBackward}
               disabled={currentStepIndex === 0}
-              title="Paso anterior"
-              aria-label="Paso anterior"
+              title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+              aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
             >
-              ◀
+              ←
             </button>
             <button
               type="button"
               className={`ctrl-btn play-btn ${isPlaying ? 'is-playing' : ''}`}
               onClick={togglePlay}
-              title={isPlaying ? 'Pausar' : 'Reproducir'}
-              aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+              title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+              aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             >
               {isPlaying ? '❚❚' : '▶'}
             </button>
@@ -151,10 +151,10 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
               className="ctrl-btn"
               onClick={stepForward}
               disabled={currentStepIndex >= totalSteps - 1}
-              title={language === 'es' ? 'Paso siguiente' : 'Next step'}
+              title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
               aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
             >
-              ▶
+              →
             </button>
           </div>
 

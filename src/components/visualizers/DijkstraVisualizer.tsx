@@ -258,6 +258,14 @@ export const DijkstraVisualizer: React.FC = () => {
         </table>
       )}
 
+      {/* Dijkstra Invariant & Non-Negative Weights Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Invariante de Dijkstra y Restricción de Pesos No Negativos (K&T §4.4):' : 'Dijkstra Invariant & Non-Negative Edge Constraint (K&T §4.4):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para todo nodo explorado u ∈ S, d[u] es su distancia mínima definitiva. Al extraer el nodo frontera v con d[v] mínimo, cualquier camino alternativo debe salir de S cruzando alguna arista (x, y). Como los pesos son no negativos (w_e ≥ 0), la longitud de dicho camino satisface d[x] + w_{xy} ≥ d[y] ≥ d[v], impidiendo que exista un camino más corto posterior. Con min-heap, el costo es O((|V| + |E|) log |V|).'
+          : 'For every explored vertex u ∈ S, d[u] is its exact shortest distance. When extracting frontier node v with minimal d[v], any alternate path must leave S via some edge (x, y). Since edge weights are non-negative (w_e ≥ 0), path length is d[x] + w_{xy} ≥ d[y] ≥ d[v], precluding any shorter route. With a binary min-heap, runtime is O((|V| + |E|) log |V|).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -265,7 +273,7 @@ export const DijkstraVisualizer: React.FC = () => {
             type="button"
             className="ctrl-btn"
             onClick={reset}
-            title={language === 'es' ? 'Reiniciar' : 'Reset'}
+            title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
             aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
             ↺
@@ -275,16 +283,16 @@ export const DijkstraVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -294,10 +302,10 @@ export const DijkstraVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

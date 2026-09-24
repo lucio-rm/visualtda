@@ -215,12 +215,21 @@ export const LcsVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* LCS Recurrence & Traceback Rationale Card (Section 12, 25 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Recurrencia DP de Subsecuencia Común (K&T §6.2):' : 'LCS DP Recurrence & Traceback (K&T §6.2):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para prefijos X[1..i] e Y[1..j]: si X[i] == Y[j], L[i, j] = 1 + L[i-1, j-1]; en caso contrario, L[i, j] = max(L[i-1, j], L[i, j-1]). La reconstrucción inicia en L[m, n]: si los caracteres coinciden, se emite el carácter y se retrocede diagonalmente; de lo contrario, se avanza hacia la celda vecina con el valor máximo. Tiempo y espacio: O(m · n).'
+          : 'For prefixes X[1..i] and Y[1..j]: if X[i] == Y[j], L[i, j] = 1 + L[i-1, j-1]; else L[i, j] = max(L[i-1, j], L[i, j-1]). Reconstructing the sequence backtracks from L[m, n]: on character match, emit character and move diagonally; otherwise, follow the maximum adjacent neighbor. Time and space: O(m · n).'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
         <button
           className="btn-control"
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
           ↺
         </button>
@@ -228,14 +237,16 @@ export const LcsVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Step Backward'}
+          title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
         >
-          ◀
+          ←
         </button>
         <button
           className="btn-control btn-play"
           onClick={togglePlay}
-          title={isPlaying ? 'Pausa' : 'Reproducir'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -243,9 +254,10 @@ export const LcsVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepForward}
           disabled={currentStepIndex === totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Step Forward'}
+          title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
         >
-          ▶
+          →
         </button>
 
         <div className="timeline-slider-wrapper">

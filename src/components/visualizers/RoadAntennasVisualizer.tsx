@@ -316,6 +316,14 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
         {t(stepData.description)}
       </div>
 
+      {/* Greedy Stays Ahead Rationale Card (Section 12 & 23) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento Teórico: Invariante Greedy Stays Ahead (K&T §4.1):' : 'Theoretical Rationale: Greedy Stays Ahead (K&T §4.1):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para cubrir la primera casa no cubierta x_i, cualquier solución factible debe colocar una antena en alguna posición p ≤ x_i + R. Situar la antena exactamente en el extremo derecho p = x_i + R cubre obligatoriamente a x_i y extiende el alcance derecho hasta x_i + 2R, el máximo matemáticamente alcanzable. Por argumento de intercambio, cualquier antena de una solución óptima en p < x_i + R puede desplazarse hacia la derecha a x_i + R sin dejar desprotegida a x_i y aumentando o manteniendo la cobertura sobre todas las casas subsiguientes.'
+          : 'To cover the leftmost uncovered house x_i, any valid solution must locate a base station at some p ≤ x_i + R. Placing it at the rightmost boundary p = x_i + R covers x_i while maximizing rightward reach up to x_i + 2R. By exchange argument, any antenna in an optimal solution placed at p < x_i + R can be shifted right to x_i + R without exposing x_i, matching or exceeding coverage on all subsequent houses.'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-controls" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
         <button
@@ -324,16 +332,18 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           onClick={stepBackward}
           disabled={isAtStart}
           title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
         >
-          {language === 'es' ? '← Anterior' : '← Previous'}
+          ←
         </button>
         <button
           type="button"
           className="btn btn-primary"
           onClick={isPlaying ? pause : play}
-          title={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
-          {isPlaying ? (language === 'es' ? '❚❚ Pausa' : '❚❚ Pause') : (language === 'es' ? '▶ Reproducir' : '▶ Play')}
+          {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
           type="button"
@@ -341,16 +351,18 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           onClick={stepForward}
           disabled={isAtEnd}
           title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
         >
-          {language === 'es' ? 'Siguiente →' : 'Next →'}
+          →
         </button>
         <button
           type="button"
           className="btn btn-secondary"
           onClick={reset}
           title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
-          {language === 'es' ? '↺ Reiniciar' : '↺ Reset'}
+          ↺
         </button>
 
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>

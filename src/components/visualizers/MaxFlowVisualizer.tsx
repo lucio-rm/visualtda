@@ -257,6 +257,14 @@ export const MaxFlowVisualizer: React.FC = () => {
         </svg>
       </div>
 
+      {/* Max-Flow Min-Cut Theorem Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Teorema de Flujo Máximo / Corte Mínimo (K&T §7.2):' : 'Max-Flow Min-Cut Theorem (K&T §7.2):'}</strong>{' '}
+        {language === 'es'
+          ? 'En cualquier red de flujo con capacidades enteras, el valor del flujo máximo equivale exactamente a la capacidad del corte s-t mínimo: max v(f) = min cap(A, B). Mientras exista un camino s-t en el grafo residual G_f, aumentamos por el cuello de botella. Al agotarse los caminos aumentantes, los vértices alcanzables desde s definen un corte saturado (A, B) que certifica matemáticamente la optimalidad del flujo.'
+          : 'In any flow network, the maximum flow value equals the capacity of the minimum s-t cut: max v(f) = min cap(A, B). While an augmenting path exists in residual graph G_f, flow increases by bottleneck capacity. When no s-t paths remain in G_f, reachable nodes from s form a saturated cut (A, B) rigorously proving global optimality.'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-controls-bar">
         <div className="timeline-buttons-group">
@@ -277,7 +285,7 @@ export const MaxFlowVisualizer: React.FC = () => {
             aria-label="Paso anterior (Flecha Izquierda)"
             title="Paso anterior (←)"
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
@@ -296,7 +304,7 @@ export const MaxFlowVisualizer: React.FC = () => {
             aria-label="Paso siguiente (Flecha Derecha)"
             title="Paso siguiente (→)"
           >
-            ▶
+            →
           </button>
         </div>
 

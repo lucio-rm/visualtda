@@ -227,6 +227,14 @@ export const BellmanFordVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* DP Recurrence & Negative Cycle Detection Card (Section 12, 25 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Recurrencia DP y Detección de Ciclos Negativos (K&T §6.8):' : 'DP Recurrence & Negative-Cycle Detection (K&T §6.8):'}</strong>{' '}
+        {language === 'es'
+          ? 'Recurrencia: OPT(i, v) = min(OPT(i-1, v), min_{(u,v) ∈ E} (OPT(i-1, u) + c_{uv})). En grafos sin ciclos negativos, el camino más corto simple usa a lo sumo |V| - 1 aristas. Por tanto, |V| - 1 pasadas garantizan convergencia óptima en O(|V| · |E|). Si en la pasada |V|-ésima alguna distancia continúa disminuyendo (d[v] > d[u] + c_{uv}), el algoritmo detecta y certifica la presencia de un ciclo de peso negativo.'
+          : 'Recurrence: OPT(i, v) = min(OPT(i-1, v), min_{(u,v) ∈ E} (OPT(i-1, u) + c_{uv})). In graphs without negative cycles, any shortest simple path uses at most |V| - 1 edges. Thus, |V| - 1 edge relaxation passes guarantee optimal convergence in O(|V| · |E|). If any distance shrinks in the |V|-th pass, a negative cycle is formally proven to exist.'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -234,7 +242,7 @@ export const BellmanFordVisualizer: React.FC = () => {
             type="button"
             className="ctrl-btn"
             onClick={reset}
-            title={language === 'es' ? 'Reiniciar' : 'Reset'}
+            title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
             aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
             ↺
@@ -244,16 +252,16 @@ export const BellmanFordVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -263,10 +271,10 @@ export const BellmanFordVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

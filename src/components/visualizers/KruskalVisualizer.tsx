@@ -223,6 +223,14 @@ export const KruskalVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Cut Property & Union-Find Rationale Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Propiedad del Corte y Estructura Union-Find (K&T §4.5):' : 'Cut Property & Disjoint-Set Union-Find (K&T §4.5):'}</strong>{' '}
+        {language === 'es'
+          ? 'Propiedad del corte: para cualquier partición (S, V \\ S), la arista de menor peso que cruza el corte pertenece a todo MST. Al evaluar aristas ordenadas, si (u, v) une dos componentes distintas, es la arista más barata que conecta ambas componentes y es seguro agregarla. Mediante Union-Find con compresión de caminos, la detección de ciclos toma tiempo casi lineal O(|E| α(|V|)), dominando el ordenamiento en O(|E| log |V|).'
+          : 'Cut Property: for any cut (S, V \\ S), the minimum-weight crossing edge belongs to every MST. When iterating sorted edges, if (u, v) links distinct components, it is the cheapest crossing edge and can be safely included. Disjoint-Set with path compression handles cycle detection in near-linear O(|E| α(|V|)), with total cost dominated by sorting O(|E| log |V|).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -230,7 +238,7 @@ export const KruskalVisualizer: React.FC = () => {
             type="button"
             className="ctrl-btn"
             onClick={reset}
-            title={language === 'es' ? 'Reiniciar' : 'Reset'}
+            title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
             aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
             ↺
@@ -240,16 +248,16 @@ export const KruskalVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -259,10 +267,10 @@ export const KruskalVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

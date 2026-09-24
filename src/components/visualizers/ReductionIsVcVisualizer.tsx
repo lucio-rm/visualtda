@@ -151,6 +151,14 @@ export const ReductionIsVcVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Karp Polynomial Reduction Theorem Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Teorema de Reducción Polinomial (Kleinberg & Tardos §8.2):' : 'Polynomial Reduction Theorem (Kleinberg & Tardos §8.2):'}</strong>{' '}
+        {language === 'es'
+          ? 'Un subconjunto S ⊆ V es un Conjunto Independiente en G=(V, E) si y sólo si su complemento V \\ S es un Vertex Cover en G. (⇒) Si S es independiente, ninguna arista tiene ambos extremos en S, luego toda arista tiene al menos un extremo en V \\ S. (⇐) Si V \\ S cubre toda arista, ninguna arista puede tener ambos extremos en S, luego S es independiente. Esto establece que G tiene un Independent Set de tamaño k si y sólo si tiene un Vertex Cover de tamaño |V| - k, reducible en tiempo lineal O(|V|).'
+          : 'A subset S ⊆ V is an Independent Set in G=(V, E) if and only if its complement V \\ S is a Vertex Cover in G. (⇒) If S is independent, no edge connects two vertices in S, so every edge has at least one endpoint in V \\ S. (⇐) If V \\ S covers all edges, no edge has both endpoints in S, so S is independent. Thus, G has an Independent Set of size k iff it has a Vertex Cover of size |V| - k, reducible in linear time O(|V|).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-controls-card">
         <div className="timeline-slider-row">
@@ -177,7 +185,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               disabled={currentStepIndex === 0}
               title="Paso anterior (←)"
             >
-              ↺
+              ←
             </button>
             <button
               type="button"
@@ -185,7 +193,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               onClick={togglePlay}
               title={isPlaying ? 'Pausar (Espacio / k)' : 'Reproducir (Espacio / k)'}
             >
-              {isPlaying ? '❚❚ Pausa' : '▶ Reproducir'}
+              {isPlaying ? '❚❚' : '▶'}
             </button>
             <button
               type="button"
@@ -194,7 +202,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               disabled={currentStepIndex >= totalSteps - 1}
               title="Paso siguiente (→)"
             >
-              ⏭
+              →
             </button>
             <button
               type="button"
@@ -202,7 +210,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               onClick={reset}
               title="Reiniciar (r)"
             >
-              ↺ Reiniciar
+              ↺
             </button>
           </div>
 

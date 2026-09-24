@@ -163,12 +163,21 @@ export const PeakFindingVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* Peak Existence Invariant Rationale Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento: Invariante de Existencia de Pico y Búsqueda O(log n):' : 'Rationale: Peak Existence Invariant & O(log n) Search:'}</strong>{' '}
+        {language === 'es'
+          ? 'Si el elemento central A[m] no es un pico porque su vecino A[m+1] > A[m], la mitad derecha [m+1..r] garantiza contener al menos un pico local. Demostración: si ningún elemento a la derecha fuera pico, la secuencia debería crecer estrictamente hasta el extremo final A[r], en cuyo caso A[r] es necesariamente un pico por borde. Descartar la mitad contraria es formalmente seguro, resolviendo el problema en T(n) = T(n/2) + O(1) ⇒ O(log n).'
+          : 'If central element A[m] is not a peak because A[m+1] > A[m], the right half [m+1..r] is guaranteed to contain at least one local peak. Proof: if no right-half element were a peak, values would strictly increase until boundary A[r], making A[r] a peak. Discarding the opposite half is invariant-safe, yielding recurrence T(n) = T(n/2) + O(1) ⇒ O(log n).'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
         <button
           className="btn-control"
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
           ↺
         </button>
@@ -176,14 +185,16 @@ export const PeakFindingVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Step Backward'}
+          title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
         >
-          ◀
+          ←
         </button>
         <button
           className="btn-control btn-play"
           onClick={togglePlay}
-          title={isPlaying ? 'Pausa' : 'Reproducir'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -191,9 +202,10 @@ export const PeakFindingVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepForward}
           disabled={currentStepIndex === totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Step Forward'}
+          title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
         >
-          ▶
+          →
         </button>
 
         <div className="timeline-slider-wrapper">

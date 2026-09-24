@@ -291,12 +291,21 @@ export const CoinChangeVisualizer: React.FC = () => {
         </p>
       </div>
 
+      {/* DP Recurrence & Greedy Counterexample Rationale (Section 12, 25 & 94) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Recurrencia DP y Contraejemplo Voraz (K&T §6.4):' : 'DP Recurrence & Greedy Counterexample (K&T §6.4):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para cada valor v: dp[v] = min_{c_i ≤ v} (dp[v - c_i] + 1). El enfoque voraz (tomar la moneda más grande) falla para sistemas no canónicos: con monedas {1, 3, 4} y valor 6, voraz produce 4+1+1 (3 monedas) mientras que el óptimo es 3+3 (2 monedas). La programación dinámica evalúa exhaustivamente todas las transiciones posibles en tiempo O(V · n) garantizando el mínimo global.'
+          : 'For each target value v: dp[v] = min_{c_i ≤ v} (dp[v - c_i] + 1). Greedy selection fails for non-canonical systems: given coins {1, 3, 4} and target 6, greedy picks 4+1+1 (3 coins) while optimal is 3+3 (2 coins). DP explores all optimal subproblems in O(V · n) time, guaranteeing global minimality.'}
+      </div>
+
       {/* Playback Controls */}
       <div className="controls-bar">
         <button
           className="btn-control"
           onClick={reset}
-          title={language === 'es' ? 'Reiniciar' : 'Reset'}
+          title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
           ↺
         </button>
@@ -304,14 +313,16 @@ export const CoinChangeVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
-          title={language === 'es' ? 'Paso Anterior' : 'Step Backward'}
+          title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
         >
-          ◀
+          ←
         </button>
         <button
           className="btn-control btn-play"
           onClick={togglePlay}
-          title={isPlaying ? 'Pausa' : 'Reproducir'}
+          title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -319,9 +330,10 @@ export const CoinChangeVisualizer: React.FC = () => {
           className="btn-control"
           onClick={stepForward}
           disabled={currentStepIndex === totalSteps - 1}
-          title={language === 'es' ? 'Paso Siguiente' : 'Step Forward'}
+          title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
         >
-          ▶
+          →
         </button>
 
         <div className="timeline-slider-wrapper">
