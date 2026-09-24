@@ -108,7 +108,11 @@ export const InversionCountingVisualizer: React.FC = () => {
   const desc = data?.description ? data.description[language] : '';
 
   return (
-    <div className="inversion-visualizer">
+    <div
+      className="inversion-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Conteo de Inversiones' : 'Inversion Counting Visualizer'}
+    >
       {/* Preset Selector */}
       <div className="inv-presets">
         <span className="inv-presets-label">
@@ -320,31 +324,39 @@ export const InversionCountingVisualizer: React.FC = () => {
       {/* Timeline Controls */}
       <div className="timeline-controls" style={{ marginTop: '0.5rem' }}>
         <button
+          type="button"
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
           title={language === 'es' ? 'Paso Anterior (←)' : 'Previous Step (←)'}
+          aria-label={language === 'es' ? 'Paso Anterior' : 'Previous Step'}
           className="timeline-btn"
         >
           ←
         </button>
         <button
+          type="button"
           onClick={togglePlay}
           className="timeline-btn play-btn"
           title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
+          type="button"
           onClick={stepForward}
           disabled={currentStepIndex >= totalSteps - 1}
           title={language === 'es' ? 'Paso Siguiente (→)' : 'Next Step (→)'}
+          aria-label={language === 'es' ? 'Paso Siguiente' : 'Next Step'}
           className="timeline-btn"
         >
           →
         </button>
         <button
+          type="button"
           onClick={reset}
           title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           className="timeline-btn"
         >
           ↺
@@ -357,6 +369,7 @@ export const InversionCountingVisualizer: React.FC = () => {
             max={Math.max(0, totalSteps - 1)}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
             style={{ width: '100%' }}
           />
           <span style={{ fontSize: '0.8rem', minWidth: '4rem', color: 'var(--text-muted, #94a3b8)' }}>
@@ -368,8 +381,10 @@ export const InversionCountingVisualizer: React.FC = () => {
           {[0.5, 1, 2].map((s) => (
             <button
               key={s}
+              type="button"
               className={`timeline-btn ${playbackSpeed === s ? 'active' : ''}`}
               onClick={() => setSpeed(s)}
+              aria-label={language === 'es' ? `Velocidad ${s}x` : `Speed ${s}x`}
               style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem' }}
             >
               {s}x

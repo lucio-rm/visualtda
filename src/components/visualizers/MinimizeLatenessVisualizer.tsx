@@ -53,7 +53,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
     <div
       className="minimize-lateness-visualizer"
       role="region"
-      aria-label="Visualizador de Minimización de Retraso Máximo"
+      aria-label={language === 'es' ? 'Visualizador de Minimización de Retraso Máximo' : 'Minimize Lateness Visualizer'}
     >
       {/* Metrics Row */}
       <div className="ml-metrics-row">
@@ -82,7 +82,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Cronograma de tareas y deadlines"
+          aria-label={language === 'es' ? 'Cronograma de tareas y deadlines' : 'Jobs schedule and deadlines chart'}
         >
           {/* Timeline background track */}
           <line
@@ -249,7 +249,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

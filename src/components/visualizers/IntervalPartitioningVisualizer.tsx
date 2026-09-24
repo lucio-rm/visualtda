@@ -57,7 +57,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
     <div
       className="interval-partitioning-visualizer"
       role="region"
-      aria-label="Visualizador de Partición de Intervalos"
+      aria-label={language === 'es' ? 'Visualizador de Partición de Intervalos' : 'Interval Partitioning Visualizer'}
     >
       {/* Metrics Row */}
       <div className="ip-metrics-row">
@@ -86,7 +86,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Diagrama temporal de asignación de aulas"
+          aria-label={language === 'es' ? 'Diagrama temporal de asignación de aulas' : 'Classroom assignment timeline chart'}
         >
           {/* Time axis ticks & vertical gridlines */}
           {[9, 10, 11, 12, 13, 14, 15, 16].map((hour) => {
@@ -208,7 +208,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
       </div>
 
       {/* Classroom Legend */}
-      <div className="ip-classrooms-legend" aria-label="Aulas activas">
+      <div className="ip-classrooms-legend" aria-label={language === 'es' ? 'Aulas activas' : 'Active classrooms'}>
         {classrooms.map((cr) => (
           <span key={`legend-${cr.id}`} className="ip-room-pill">
             <span className="ip-room-dot" style={{ backgroundColor: cr.color }} />
@@ -229,7 +229,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

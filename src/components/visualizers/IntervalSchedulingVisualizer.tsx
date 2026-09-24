@@ -45,7 +45,11 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
   const getX = (time: number) => paddingLeft + (time / timeSpan) * usableWidth;
 
   return (
-    <div className="interval-visualizer-card">
+    <div
+      className="interval-visualizer-card"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Interval Scheduling' : 'Interval Scheduling Visualizer'}
+    >
       <div className="visualizer-header-bar">
         <h4>
           {language === 'es'
@@ -79,7 +83,7 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="interval-chart-svg"
           role="img"
-          aria-label="Gráfico de intervalos de tiempo"
+          aria-label={language === 'es' ? 'Gráfico de intervalos de tiempo' : 'Time intervals chart'}
         >
           {/* Time axis grid lines */}
           {Array.from({ length: maxTime + 1 }).map((_, t) => (

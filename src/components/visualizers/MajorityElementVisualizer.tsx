@@ -55,7 +55,7 @@ export const MajorityElementVisualizer: React.FC = () => {
     <div
       className="majority-element-visualizer"
       role="region"
-      aria-label="Visualizador del Elemento Mayoritario"
+      aria-label={language === 'es' ? 'Visualizador del Elemento Mayoritario' : 'Majority Element Visualizer'}
     >
       {/* Metrics Row */}
       <div className="me-metrics-row">
@@ -90,7 +90,7 @@ export const MajorityElementVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: `${svgWidth}px`, height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Arreglo de elementos y división recursiva"
+          aria-label={language === 'es' ? 'Arreglo de elementos y división recursiva' : 'Elements array and recursive partition'}
         >
           {/* Active Range Highlight Box */}
           <rect
@@ -177,7 +177,7 @@ export const MajorityElementVisualizer: React.FC = () => {
               fontWeight="600"
               fontFamily="var(--font-mono)"
             >
-              CandIzq: {candLeft} {countLeft > 0 ? `(${countLeft}x)` : ''}
+              {language === 'es' ? 'CandIzq' : 'LeftCand'}: {candLeft} {countLeft > 0 ? `(${countLeft}x)` : ''}
             </text>
           )}
 
@@ -190,7 +190,7 @@ export const MajorityElementVisualizer: React.FC = () => {
               fontWeight="600"
               fontFamily="var(--font-mono)"
             >
-              CandDer: {candRight} {countRight > 0 ? `(${countRight}x)` : ''}
+              {language === 'es' ? 'CandDer' : 'RightCand'}: {candRight} {countRight > 0 ? `(${countRight}x)` : ''}
             </text>
           )}
         </svg>
@@ -205,7 +205,7 @@ export const MajorityElementVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

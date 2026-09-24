@@ -169,7 +169,9 @@ export const HuffmanVisualizer: React.FC = () => {
           </span>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)' }}>
             {language === 'es' ? 'Tamaño del Min-Heap:' : 'Min-Heap Size:'}{' '}
-            <strong style={{ color: 'var(--text, #f8fafc)' }}>{queue.length} nodos</strong>
+            <strong style={{ color: 'var(--text, #f8fafc)' }}>
+              {queue.length} {language === 'es' ? 'nodos' : 'nodes'}
+            </strong>
           </span>
         </div>
 
@@ -311,6 +313,7 @@ export const HuffmanVisualizer: React.FC = () => {
           onClick={stepBackward}
           disabled={currentStepIndex === 0}
           title={language === 'es' ? 'Paso Anterior (←)' : 'Previous Step (←)'}
+          aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
           className="timeline-btn"
         >
           ←
@@ -319,6 +322,7 @@ export const HuffmanVisualizer: React.FC = () => {
           onClick={togglePlay}
           className="timeline-btn play-btn"
           title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+          aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
           {isPlaying ? '❚❚' : '▶'}
         </button>
@@ -326,6 +330,7 @@ export const HuffmanVisualizer: React.FC = () => {
           onClick={stepForward}
           disabled={currentStepIndex >= totalSteps - 1}
           title={language === 'es' ? 'Paso Siguiente (→)' : 'Next Step (→)'}
+          aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
           className="timeline-btn"
         >
           →
@@ -333,6 +338,7 @@ export const HuffmanVisualizer: React.FC = () => {
         <button
           onClick={reset}
           title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+          aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           className="timeline-btn"
         >
           ↺
@@ -345,6 +351,7 @@ export const HuffmanVisualizer: React.FC = () => {
             max={Math.max(0, totalSteps - 1)}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de pasos' : 'Step timeline'}
             style={{ width: '100%' }}
           />
           <span style={{ fontSize: '0.8rem', minWidth: '4rem', color: 'var(--text-muted, #94a3b8)' }}>

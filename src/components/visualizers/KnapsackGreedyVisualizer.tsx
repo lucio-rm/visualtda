@@ -45,17 +45,17 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
     <div className="knapsack-greedy-visualizer">
       {/* Header & Badges */}
       <div className="greedy-header-bar">
-        <h4>Mochila Fraccionaria: Selección Greedy por Densidad</h4>
+        <h4>{language === 'es' ? 'Mochila Fraccionaria: Selección Greedy por Densidad' : 'Fractional Knapsack: Greedy Density Selection'}</h4>
         <div className="knapsack-stats-group">
           <span className="stat-badge stat-highlight">
             <span className="stat-num">${totalValue.toFixed(1)}</span>
-            <span className="stat-label">Valor Obtenido</span>
+            <span className="stat-label">{language === 'es' ? 'Valor Obtenido' : 'Obtained Value'}</span>
           </span>
           <span className="stat-badge">
             <span className="stat-num">
               {totalWeight.toFixed(1)} / {capacity}
             </span>
-            <span className="stat-label">Capacidad Usada</span>
+            <span className="stat-label">{language === 'es' ? 'Capacidad Usada' : 'Used Capacity'}</span>
           </span>
           <span className="stat-badge">
             <span className="stat-num">

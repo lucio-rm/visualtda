@@ -42,7 +42,7 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
   const nodeMap = useMemo(() => new Map(treeNodes.map((n) => [n.id, n])), [treeNodes]);
 
   return (
-    <div className="knapsack-bb-visualizer" role="region" aria-label="Visualizador de Mochila con Branch & Bound">
+    <div className="knapsack-bb-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador de Mochila con Branch & Bound' : 'Knapsack Branch & Bound Visualizer'}>
       {/* Metrics Row */}
       <div className="kbb-metrics-row">
         <div className="kbb-metric-badge">
@@ -243,7 +243,7 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos de Branch and Bound"
+            aria-label={language === 'es' ? 'Progreso de pasos de Branch and Bound' : 'Branch and Bound step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

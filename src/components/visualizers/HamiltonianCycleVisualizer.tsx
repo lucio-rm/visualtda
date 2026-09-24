@@ -57,7 +57,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
     <div
       className="hamiltonian-visualizer"
       role="region"
-      aria-label="Visualizador de Ciclo Hamiltoniano"
+      aria-label={language === 'es' ? 'Visualizador de Ciclo Hamiltoniano' : 'Hamiltonian Cycle Visualizer'}
     >
       {/* Metrics Row */}
       <div className="ham-metrics-row">
@@ -96,7 +96,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
           viewBox="0 0 500 320"
           style={{ width: '100%', maxWidth: '500px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Grafo y camino explorado para ciclo hamiltoniano"
+          aria-label={language === 'es' ? 'Grafo y camino explorado para ciclo hamiltoniano' : 'Graph and explored path for Hamiltonian cycle'}
         >
           {/* Edges */}
           {edges.map((e, idx) => {

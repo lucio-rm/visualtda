@@ -110,7 +110,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               strokeWidth={subcalc === 'Z2' ? 2 : 1}
             />
             <text x={90} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              1. Término Alto (z₂)
+              {language === 'es' ? '1. Término Alto (z₂)' : '1. High Term (z₂)'}
             </text>
             <text x={90} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
               {x1} × {y1} = {z2 ?? '?'}
@@ -130,7 +130,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2 : 1}
             />
             <text x={270} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              2. Suma Cruzada (z_sum)
+              {language === 'es' ? '2. Suma Cruzada (z_sum)' : '2. Cross Sum (z_sum)'}
             </text>
             <text x={270} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
               ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '?'}
@@ -150,7 +150,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               strokeWidth={subcalc === 'Z0' ? 2 : 1}
             />
             <text x={450} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              3. Término Bajo (z₀)
+              {language === 'es' ? '3. Término Bajo (z₀)' : '3. Low Term (z₀)'}
             </text>
             <text x={450} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
               {x0} × {y0} = {z0 ?? '?'}

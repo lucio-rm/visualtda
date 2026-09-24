@@ -60,7 +60,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
     <div
       className="rna-visualizer"
       role="region"
-      aria-label="Visualizador de Estructura Secundaria de ARN"
+      aria-label={language === 'es' ? 'Visualizador de Estructura Secundaria de ARN' : 'RNA Secondary Structure Visualizer'}
     >
       {/* Metrics Row */}
       <div className="rna-metrics-row">
@@ -93,7 +93,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Diagrama de arcos de la estructura de ARN"
+          aria-label={language === 'es' ? 'Diagrama de arcos de la estructura de ARN' : 'RNA structure arc diagram'}
         >
           {/* Active Substring Highlight Band */}
           <rect
@@ -234,7 +234,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

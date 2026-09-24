@@ -74,7 +74,11 @@ export const LinearProgrammingVisualizer: React.FC = () => {
   }, [vertices]);
 
   return (
-    <div className="lp-visualizer">
+    <div
+      className="lp-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Programación Lineal' : 'Linear Programming Visualizer'}
+    >
       {/* Top Header */}
       <div className="visualizer-header">
         <div className="phase-indicator">
@@ -99,7 +103,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="lp-svg"
-          aria-label="Plano cartesiano de programación lineal"
+          aria-label={language === 'es' ? 'Plano cartesiano de programación lineal' : 'Linear programming Cartesian plane'}
         >
           {/* Grid lines */}
           {[0, 2, 4, 6, 8, 10, 12].map((gx) => (
@@ -291,7 +295,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                 <span className="v-coord">({vx}, {vy})</span>
                 <span className="v-val">z = {val}</span>
                 {isOpt && (phase === 'optimal_found' || phase === 'complete') && (
-                  <span className="opt-star">ÓPTIMO</span>
+                  <span className="opt-star">{language === 'es' ? 'ÓPTIMO' : 'OPTIMAL'}</span>
                 )}
               </div>
             );
@@ -330,6 +334,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
             max={totalSteps - 1}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
             className="timeline-slider"
           />
           <span className="step-counter">{currentStepIndex + 1} / {totalSteps}</span>
@@ -337,7 +342,11 @@ export const LinearProgrammingVisualizer: React.FC = () => {
 
         <div className="speed-selector">
           <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
-          <select value={playbackSpeed} onChange={(e) => setSpeed(Number(e.target.value))}>
+          <select
+            value={playbackSpeed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
+          >
             <option value={0.5}>0.5x</option>
             <option value={1}>1.0x</option>
             <option value={1.5}>1.5x</option>

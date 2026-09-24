@@ -64,7 +64,7 @@ export const LcsVisualizer: React.FC = () => {
       {/* Strings Comparison Banner */}
       <div className="strings-banner">
         <div className="string-pill">
-          <span className="pill-name">s1 (filas):</span>
+          <span className="pill-name">{language === 'es' ? 's1 (filas):' : 's1 (rows):'}</span>
           <div className="chars-row">
             {s1.split('').map((char, idx) => {
               const isActive = currentI !== null && idx === currentI - 1;
@@ -81,7 +81,7 @@ export const LcsVisualizer: React.FC = () => {
         </div>
 
         <div className="string-pill">
-          <span className="pill-name">s2 (columnas):</span>
+          <span className="pill-name">{language === 'es' ? 's2 (columnas):' : 's2 (cols):'}</span>
           <div className="chars-row">
             {s2.split('').map((char, idx) => {
               const isActive = currentJ !== null && idx === currentJ - 1;
@@ -268,6 +268,7 @@ export const LcsVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
+            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}

@@ -57,7 +57,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
     <div
       className="tsp-bb-visualizer"
       role="region"
-      aria-label="Visualizador de TSP Branch and Bound"
+      aria-label={language === 'es' ? 'Visualizador de TSP Branch and Bound' : 'TSP Branch and Bound Visualizer'}
     >
       {/* Metrics Row */}
       <div className="tsp-metrics-row">
@@ -92,7 +92,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
           viewBox="0 0 460 260"
           style={{ width: '100%', maxWidth: '460px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Mapa de ciudades y tour de TSP"
+          aria-label={language === 'es' ? 'Mapa de ciudades y tour de TSP' : 'Cities map and TSP tour'}
         >
           {/* Background network edges with distance labels */}
           {cities.map((c1, i) =>

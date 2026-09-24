@@ -51,7 +51,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
     <div
       className="median-of-medians-visualizer"
       role="region"
-      aria-label="Visualizador de Mediana de Medianas"
+      aria-label={language === 'es' ? 'Visualizador de Mediana de Medianas' : 'Median of Medians Visualizer'}
     >
       {/* Metrics Row */}
       <div className="mom-metrics-row">
@@ -90,7 +90,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: `${svgWidth}px`, height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Matriz de grupos de 5 y fila de medianas"
+          aria-label={language === 'es' ? 'Matriz de grupos de 5 y fila de medianas' : 'Groups of 5 matrix and medians row'}
         >
           {/* Header text for columns */}
           {groups.map((_, colIdx) => (
@@ -211,7 +211,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

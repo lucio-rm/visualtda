@@ -46,7 +46,7 @@ export const DijkstraVisualizer: React.FC = () => {
   const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
 
   return (
-    <div className="dijkstra-visualizer" role="region" aria-label="Visualizador del Algoritmo de Dijkstra">
+    <div className="dijkstra-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Algoritmo de Dijkstra' : 'Dijkstra Algorithm Visualizer'}>
       {/* Metrics Row */}
       <div className="djk-metrics-row">
         <div className="djk-metric-badge">
@@ -55,7 +55,7 @@ export const DijkstraVisualizer: React.FC = () => {
         </div>
         <div className="djk-metric-badge">
           <span>{language === 'es' ? 'Cola de prioridad (Q):' : 'Priority Queue (Q):'}</span>
-          <strong>{priorityQueue.length} elementos</strong>
+          <strong>{priorityQueue.length} {language === 'es' ? 'elementos' : 'elements'}</strong>
         </div>
         <div className={`djk-metric-badge djk-action-badge action-${action.toLowerCase()}`}>
           <span>{language === 'es' ? 'Acción actual:' : 'Current action:'}</span>
@@ -317,7 +317,7 @@ export const DijkstraVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos de Dijkstra"
+            aria-label={language === 'es' ? 'Progreso de pasos de Dijkstra' : 'Dijkstra step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

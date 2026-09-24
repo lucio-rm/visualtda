@@ -62,7 +62,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
     <div
       className="segmented-least-squares-visualizer"
       role="region"
-      aria-label="Visualizador de Mínimos Cuadrados Segmentados"
+      aria-label={language === 'es' ? 'Visualizador de Mínimos Cuadrados Segmentados' : 'Segmented Least Squares Visualizer'}
     >
       {/* Metrics Row */}
       <div className="sls-metrics-row">
@@ -95,7 +95,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Gráfico de puntos y líneas ajustadas"
+          aria-label={language === 'es' ? 'Gráfico de puntos y líneas ajustadas' : 'Points and fitted lines chart'}
         >
           {/* Axes */}
           <line
@@ -246,7 +246,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

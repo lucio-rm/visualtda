@@ -49,7 +49,7 @@ export const KnightsTourVisualizer: React.FC = () => {
     .join(' ');
 
   return (
-    <div className="knights-tour-visualizer" role="region" aria-label="Visualizador del Recorrido del Caballo">
+    <div className="knights-tour-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Recorrido del Caballo' : "Knight's Tour Visualizer"}>
       {/* Metrics Row */}
       <div className="kt-metrics-row">
         <div className="kt-metric-badge">
@@ -241,7 +241,7 @@ export const KnightsTourVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos del caballo"
+            aria-label={language === 'es' ? 'Progreso de pasos del caballo' : "Knight's tour step progress"}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

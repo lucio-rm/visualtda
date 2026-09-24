@@ -54,7 +54,7 @@ export const KruskalVisualizer: React.FC = () => {
   const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
 
   return (
-    <div className="kruskal-visualizer" role="region" aria-label="Visualizador del Algoritmo de Kruskal">
+    <div className="kruskal-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Algoritmo de Kruskal' : 'Kruskal Algorithm Visualizer'}>
       {/* Metrics Row */}
       <div className="kru-metrics-row">
         <div className="kru-metric-badge">
@@ -76,7 +76,7 @@ export const KruskalVisualizer: React.FC = () => {
       </div>
 
       {/* Sorted Edge Pills Bar */}
-      <div className="kru-edges-list" aria-label="Lista de aristas ordenadas por peso">
+      <div className="kru-edges-list" aria-label={language === 'es' ? 'Lista de aristas ordenadas por peso' : 'Edges list sorted by weight'}>
         {sortedEdges.map((e, idx) => {
           const isAccepted = mstEdges.includes(e.id);
           const isRejected = rejectedEdges.includes(e.id);
@@ -282,7 +282,7 @@ export const KruskalVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos de Kruskal"
+            aria-label={language === 'es' ? 'Progreso de pasos de Kruskal' : 'Kruskal step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

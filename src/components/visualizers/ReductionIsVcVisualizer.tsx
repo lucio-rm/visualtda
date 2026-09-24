@@ -61,7 +61,11 @@ export const ReductionIsVcVisualizer: React.FC = () => {
   };
 
   return (
-    <div className="reduction-visualizer">
+    <div
+      className="reduction-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Reducción IS a VC' : 'IS to VC Reduction Visualizer'}
+    >
       {/* Metrics Row */}
       <div className="reduction-metrics-row">
         <div className="reduction-metric-badge is-badge">
@@ -84,7 +88,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
       <svg
         className="reduction-graph-canvas"
         viewBox="0 0 540 300"
-        aria-label="Grafo de reducción entre Conjunto Independiente y Cobertura de Vértices"
+        aria-label={language === 'es' ? 'Grafo de reducción entre Conjunto Independiente y Cobertura de Vértices' : 'Reduction graph between Independent Set and Vertex Cover'}
       >
         {/* Draw Edges */}
         <g className="edges-layer">
@@ -169,7 +173,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-progress-bar"
-            aria-label="Paso de la reducción"
+            aria-label={language === 'es' ? 'Paso de la reducción' : 'Reduction step'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}
@@ -183,7 +187,8 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               className="btn-ctrl"
               onClick={stepBackward}
               disabled={currentStepIndex === 0}
-              title="Paso anterior (←)"
+              title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
+              aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
             >
               ←
             </button>
@@ -191,7 +196,8 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               type="button"
               className="btn-ctrl btn-play"
               onClick={togglePlay}
-              title={isPlaying ? 'Pausar (Espacio / k)' : 'Reproducir (Espacio / k)'}
+              title={isPlaying ? (language === 'es' ? 'Pausar (Espacio / k)' : 'Pause (Space / k)') : (language === 'es' ? 'Reproducir (Espacio / k)' : 'Play (Space / k)')}
+              aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             >
               {isPlaying ? '❚❚' : '▶'}
             </button>
@@ -200,7 +206,8 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               className="btn-ctrl"
               onClick={stepForward}
               disabled={currentStepIndex >= totalSteps - 1}
-              title="Paso siguiente (→)"
+              title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
+              aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
             >
               →
             </button>
@@ -208,7 +215,8 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               type="button"
               className="btn-ctrl"
               onClick={reset}
-              title="Reiniciar (r)"
+              title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+              aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
             >
               ↺
             </button>
@@ -220,6 +228,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
               id="speed-select-reduction"
               value={playbackSpeed}
               onChange={(e) => setSpeed(Number(e.target.value))}
+              aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
               className="speed-dropdown"
             >
               <option value={0.5}>0.5x</option>

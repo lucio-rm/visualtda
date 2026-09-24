@@ -128,21 +128,21 @@ export const KnapsackDpVisualizer: React.FC = () => {
 
       {/* Header & Badges */}
       <div className="knapsack-header-bar">
-        <h4>Construcción de la Tabla 2D (Bottom-Up)</h4>
+        <h4>{language === 'es' ? 'Construcción de la Tabla 2D (Bottom-Up)' : '2D Table Construction (Bottom-Up)'}</h4>
         <div className="knapsack-stats-group">
           <span className="stat-badge stat-highlight">
             <span className="stat-num">${totalValue}</span>
-            <span className="stat-label">Valor Óptimo</span>
+            <span className="stat-label">{language === 'es' ? 'Valor Óptimo' : 'Optimal Value'}</span>
           </span>
           <span className="stat-badge">
             <span className="stat-num">
               {totalWeight} / {capacity}
             </span>
-            <span className="stat-label">Peso Mochila</span>
+            <span className="stat-label">{language === 'es' ? 'Peso Mochila' : 'Knapsack Weight'}</span>
           </span>
           <span className="stat-badge">
             <span className="stat-num">{selectedItemIds.length}</span>
-            <span className="stat-label">Ítems Óptimos</span>
+            <span className="stat-label">{language === 'es' ? 'Ítems Óptimos' : 'Optimal Items'}</span>
           </span>
         </div>
       </div>

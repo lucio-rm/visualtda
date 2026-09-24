@@ -62,7 +62,11 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
   const justCoveredSet = useMemo(() => new Set(justCoveredIndices), [justCoveredIndices]);
 
   return (
-    <div className="road-antennas-visualizer">
+    <div
+      className="road-antennas-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Antenas en Carretera' : 'Road Antennas Visualizer'}
+    >
       {/* Top Metrics Banner */}
       <div className="road-metrics-bar">
         <div className="road-metric-item">
@@ -96,7 +100,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           width="100%"
           height={svgHeight}
-          aria-label="Visualización de carretera con antenas y casas"
+          aria-label={language === 'es' ? 'Visualización de carretera con antenas y casas' : 'Road visualization with antennas and houses'}
         >
           <defs>
             {/* Antenna range gradient */}
@@ -376,12 +380,14 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
             max={totalSteps - 1}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Control de línea de tiempo' : 'Timeline scrubber'}
             style={{ width: '130px' }}
           />
           <select
             value={playbackSpeed}
             onChange={(e) => setSpeed(Number(e.target.value))}
             className="form-control"
+            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
             style={{ width: 'auto', padding: '4px 8px', fontSize: '0.85rem' }}
           >
             <option value={0.6}>0.6x</option>

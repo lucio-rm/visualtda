@@ -227,6 +227,7 @@ export const JuanElVagoVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
+            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}
@@ -234,8 +235,9 @@ export const JuanElVagoVisualizer: React.FC = () => {
         </div>
 
         <div className="speed-selector">
-          <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
+          <label htmlFor="juan-speed-select">{language === 'es' ? 'Vel:' : 'Speed:'}</label>
           <select
+            id="juan-speed-select"
             value={playbackSpeed}
             onChange={(e) => setSpeed(Number(e.target.value))}
           >

@@ -271,6 +271,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
             max={totalSteps - 1}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de pasos' : 'Step timeline'}
             style={{ width: '130px' }}
           />
           <select

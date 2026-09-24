@@ -37,7 +37,11 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
   const board = currentData?.board || new Array(n).fill(-1);
 
   return (
-    <div className="nqueens-visualizer-card">
+    <div
+      className="nqueens-visualizer-card"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de N-Reinas' : 'N-Queens Visualizer'}
+    >
       {/* Top Configuration Bar */}
       <div className="visualizer-header-bar">
         <div className="board-size-selector">
@@ -112,7 +116,7 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Línea de tiempo de ejecución"
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
           />
         </div>
 
@@ -122,8 +126,8 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
               type="button"
               className="ctrl-btn"
               onClick={reset}
-              title="Reiniciar (Inicio)"
-              aria-label="Reiniciar ejecución"
+              title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+              aria-label={language === 'es' ? 'Reiniciar ejecución' : 'Reset execution'}
             >
               ↺
             </button>

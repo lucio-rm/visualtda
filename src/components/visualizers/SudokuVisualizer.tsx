@@ -47,7 +47,7 @@ export const SudokuVisualizer: React.FC = () => {
   const boardWidth = cellSize * 9;
 
   return (
-    <div className="sudoku-visualizer" role="region" aria-label="Visualizador de Sudoku con Backtracking y MRV">
+    <div className="sudoku-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador de Sudoku con Backtracking y MRV' : 'Sudoku Visualizer with Backtracking and MRV'}>
       {/* Metrics Row */}
       <div className="sdk-metrics-row">
         <div className="sdk-metric-badge">
@@ -233,7 +233,7 @@ export const SudokuVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos del algoritmo"
+            aria-label={language === 'es' ? 'Progreso de pasos del algoritmo' : 'Algorithm step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

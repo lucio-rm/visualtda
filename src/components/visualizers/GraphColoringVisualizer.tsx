@@ -53,7 +53,7 @@ export const GraphColoringVisualizer: React.FC = () => {
   const coloredCount = Object.keys(coloring).length;
 
   return (
-    <div className="graph-coloring-visualizer" role="region" aria-label="Visualizador de Coloreo de Grafos">
+    <div className="graph-coloring-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador de Coloreo de Grafos' : 'Graph Coloring Visualizer'}>
       {/* Metrics Row */}
       <div className="gc-metrics-row">
         <div className="gc-metric-badge">
@@ -200,6 +200,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             className="btn btn-secondary btn-sm"
             onClick={reset}
             title={language === 'es' ? 'Reiniciar traza (r)' : 'Reset trace (r)'}
+            aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
             ↺
           </button>
@@ -208,6 +209,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
             title={language === 'es' ? 'Paso anterior (←)' : 'Step back (←)'}
+            aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
           >
             ←
           </button>
@@ -215,6 +217,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             className="btn btn-primary btn-sm"
             onClick={togglePlay}
             title={language === 'es' ? 'Reproducir / Pausar (Espacio)' : 'Play / Pause (Space)'}
+            aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
           </button>
@@ -223,6 +226,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
             title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
+            aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
           >
             →
           </button>

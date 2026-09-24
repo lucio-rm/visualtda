@@ -60,7 +60,11 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
   };
 
   return (
-    <div className="approx-visualizer">
+    <div
+      className="approx-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de 2-Aproximación para Vertex Cover' : '2-Approximation for Vertex Cover Visualizer'}
+    >
       {/* Metrics Row */}
       <div className="approx-metrics-row">
         <div className="approx-metric-badge matching-badge">
@@ -83,7 +87,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
       <svg
         className="approx-graph-canvas"
         viewBox="0 0 540 300"
-        aria-label="Grafo de 2-aproximación para Vertex Cover"
+        aria-label={language === 'es' ? 'Grafo de 2-aproximación para Vertex Cover' : '2-approximation graph for Vertex Cover'}
       >
         {/* Edges */}
         <g className="edges-layer">
@@ -159,7 +163,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-progress-bar"
-            aria-label="Paso del algoritmo de aproximación"
+            aria-label={language === 'es' ? 'Paso del algoritmo de aproximación' : 'Approximation algorithm step'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}
@@ -173,7 +177,8 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               className="btn-ctrl"
               onClick={stepBackward}
               disabled={currentStepIndex === 0}
-              title="Paso anterior (←)"
+              title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
+              aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
             >
               ←
             </button>
@@ -181,7 +186,8 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               type="button"
               className="btn-ctrl btn-play"
               onClick={togglePlay}
-              title={isPlaying ? 'Pausar (Espacio / k)' : 'Reproducir (Espacio / k)'}
+              title={isPlaying ? (language === 'es' ? 'Pausar (Espacio / k)' : 'Pause (Space / k)') : (language === 'es' ? 'Reproducir (Espacio / k)' : 'Play (Space / k)')}
+              aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             >
               {isPlaying ? '❚❚' : '▶'}
             </button>
@@ -190,7 +196,8 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               className="btn-ctrl"
               onClick={stepForward}
               disabled={currentStepIndex >= totalSteps - 1}
-              title="Paso siguiente (→)"
+              title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
+              aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
             >
               →
             </button>
@@ -198,7 +205,8 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               type="button"
               className="btn-ctrl"
               onClick={reset}
-              title="Reiniciar (r)"
+              title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
+              aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
             >
               ↺
             </button>
@@ -210,6 +218,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               id="speed-select-approx"
               value={playbackSpeed}
               onChange={(e) => setSpeed(Number(e.target.value))}
+              aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
               className="speed-dropdown"
             >
               <option value={0.5}>0.5x</option>

@@ -41,7 +41,7 @@ export const ClosestPairVisualizer: React.FC = () => {
   const description = data?.description;
 
   return (
-    <div className="closest-pair-visualizer" role="region" aria-label="Visualizador de Par Más Cercano 2D">
+    <div className="closest-pair-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador de Par Más Cercano 2D' : 'Closest Pair 2D Visualizer'}>
       {/* Metrics Row */}
       <div className="cp-metrics-row">
         <div className="cp-metric-badge">
@@ -227,7 +227,7 @@ export const ClosestPairVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos de Par Más Cercano"
+            aria-label={language === 'es' ? 'Progreso de pasos de Par Más Cercano' : 'Closest pair step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

@@ -157,8 +157,8 @@ export const MaxSubarrayVisualizer: React.FC = () => {
               </>
             ) : data?.bestLeftSum !== undefined || data?.bestRightSum !== undefined ? (
               <div className="cross-live-sums">
-                <span>Izq max: {data.bestLeftSum ?? '-'}</span>
-                <span>Der max: {data.bestRightSum ?? '-'}</span>
+                <span>{language === 'es' ? 'Izq max:' : 'Left max:'} {data.bestLeftSum ?? '-'}</span>
+                <span>{language === 'es' ? 'Der max:' : 'Right max:'} {data.bestRightSum ?? '-'}</span>
               </div>
             ) : (
               <em>{language === 'es' ? 'Pendiente...' : 'Pending...'}</em>
@@ -255,6 +255,7 @@ export const MaxSubarrayVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
+            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}

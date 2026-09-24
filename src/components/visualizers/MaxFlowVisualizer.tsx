@@ -56,7 +56,11 @@ export const MaxFlowVisualizer: React.FC = () => {
   const tSet = useMemo(() => new Set(minCutT), [minCutT]);
 
   return (
-    <div className="maxflow-visualizer">
+    <div
+      className="maxflow-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Flujo Máximo' : 'Max Flow Visualizer'}
+    >
       {/* Header Bar */}
       <div className="maxflow-header-bar">
         <h4>{language === 'es' ? 'Algoritmo de Edmonds-Karp: Redes y Corte Mínimo' : 'Edmonds-Karp Algorithm: Networks & Min-Cut'}</h4>
@@ -125,7 +129,7 @@ export const MaxFlowVisualizer: React.FC = () => {
           viewBox="0 0 500 300"
           className="flow-graph-svg"
           role="img"
-          aria-label="Grafo de la red de capacidades y flujo"
+          aria-label={language === 'es' ? 'Grafo de la red de capacidades y flujo' : 'Capacities and flow network graph'}
         >
           <defs>
             <marker
@@ -272,8 +276,8 @@ export const MaxFlowVisualizer: React.FC = () => {
             type="button"
             className="btn-ctrl"
             onClick={reset}
-            aria-label="Reiniciar (R)"
-            title="Reiniciar (tecla R)"
+            aria-label={language === 'es' ? 'Reiniciar (R)' : 'Reset (R)'}
+            title={language === 'es' ? 'Reiniciar (tecla R)' : 'Reset (R key)'}
           >
             ↺
           </button>
@@ -282,8 +286,8 @@ export const MaxFlowVisualizer: React.FC = () => {
             className="btn-ctrl"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            aria-label="Paso anterior (Flecha Izquierda)"
-            title="Paso anterior (←)"
+            aria-label={language === 'es' ? 'Paso anterior (Flecha Izquierda)' : 'Previous step (Left Arrow)'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
           >
             ←
           </button>
@@ -291,8 +295,8 @@ export const MaxFlowVisualizer: React.FC = () => {
             type="button"
             className="btn-ctrl btn-play-pause"
             onClick={togglePlay}
-            aria-label={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
-            title={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
+            aria-label={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
           >
             {isPlaying ? '❚❚' : '▶'}
           </button>
@@ -301,8 +305,8 @@ export const MaxFlowVisualizer: React.FC = () => {
             className="btn-ctrl"
             onClick={stepForward}
             disabled={currentStepIndex === totalSteps - 1}
-            aria-label="Paso siguiente (Flecha Derecha)"
-            title="Paso siguiente (→)"
+            aria-label={language === 'es' ? 'Paso siguiente (Flecha Derecha)' : 'Next step (Right Arrow)'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
           >
             →
           </button>
@@ -316,7 +320,7 @@ export const MaxFlowVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
-            aria-label="Línea de tiempo de estados"
+            aria-label={language === 'es' ? 'Línea de tiempo de estados' : 'State timeline'}
           />
         </div>
 
@@ -328,7 +332,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               type="button"
               className={`btn-speed ${playbackSpeed === spd ? 'active' : ''}`}
               onClick={() => setSpeed(spd)}
-              aria-label={`Velocidad ${spd}x`}
+              aria-label={language === 'es' ? `Velocidad ${spd}x` : `Speed ${spd}x`}
             >
               {spd}x
             </button>

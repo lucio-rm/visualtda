@@ -182,7 +182,7 @@ export const BellmanFordVisualizer: React.FC = () => {
 
         {/* 2D DP Recurrence Table */}
         <div className="bf-matrix-container">
-          <table className="bf-dp-table" aria-label="Matriz de Programación Dinámica M[i, v]">
+          <table className="bf-dp-table" aria-label={language === 'es' ? 'Matriz de Programación Dinámica M[i, v]' : 'Dynamic Programming Matrix M[i, v]'}>
             <thead>
               <tr>
                 <th>i \ v</th>
@@ -236,7 +236,7 @@ export const BellmanFordVisualizer: React.FC = () => {
       </div>
 
       {/* Timeline Controls */}
-      <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
+      <div className="timeline-toolbar" role="toolbar" aria-label={language === 'es' ? 'Controles de línea de tiempo' : 'Timeline controls'}>
         <div className="timeline-nav-group">
           <button
             type="button"

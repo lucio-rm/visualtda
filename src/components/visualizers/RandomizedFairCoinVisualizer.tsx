@@ -45,7 +45,11 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
   const phase = data?.phase || 'init';
 
   return (
-    <div className="fair-coin-visualizer">
+    <div
+      className="fair-coin-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Moneda Imparcial de Von Neumann' : 'Von Neumann Fair Coin Visualizer'}
+    >
       {/* Top Header */}
       <div className="visualizer-header">
         <div className="phase-indicator">
@@ -202,6 +206,7 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
             max={totalSteps - 1}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
             className="timeline-slider"
           />
           <span className="step-counter">{currentStepIndex + 1} / {totalSteps}</span>
@@ -209,7 +214,11 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
 
         <div className="speed-selector">
           <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
-          <select value={playbackSpeed} onChange={(e) => setSpeed(Number(e.target.value))}>
+          <select
+            value={playbackSpeed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
+          >
             <option value={0.5}>0.5x</option>
             <option value={1}>1.0x</option>
             <option value={1.5}>1.5x</option>

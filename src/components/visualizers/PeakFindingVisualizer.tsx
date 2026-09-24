@@ -42,7 +42,11 @@ export const PeakFindingVisualizer: React.FC = () => {
   const maxVal = Math.max(...array, 1);
 
   return (
-    <div className="peak-finding-visualizer">
+    <div
+      className="peak-finding-visualizer"
+      role="region"
+      aria-label={language === 'es' ? 'Visualizador de Búsqueda de Picos' : 'Peak Finding Visualizer'}
+    >
       {/* Top Header */}
       <div className="visualizer-header">
         <div className="phase-indicator">
@@ -99,7 +103,7 @@ export const PeakFindingVisualizer: React.FC = () => {
             return (
               <div key={idx} className={barClass}>
                 {isPeak && (
-                  <div className="peak-crown" title="Pico local confirmado">
+                  <div className="peak-crown" title={language === 'es' ? 'Pico local confirmado' : 'Confirmed local peak'}>
                     ▲
                   </div>
                 )}
@@ -215,6 +219,7 @@ export const PeakFindingVisualizer: React.FC = () => {
             max={totalSteps - 1}
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
             className="timeline-slider"
           />
           <span className="step-counter">
@@ -227,6 +232,7 @@ export const PeakFindingVisualizer: React.FC = () => {
           <select
             value={playbackSpeed}
             onChange={(e) => setSpeed(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
           >
             <option value={0.5}>0.5x</option>
             <option value={1}>1.0x</option>

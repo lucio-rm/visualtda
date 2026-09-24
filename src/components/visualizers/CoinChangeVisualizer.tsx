@@ -210,7 +210,7 @@ export const CoinChangeVisualizer: React.FC = () => {
           <div className="callout-equation">
             <code>
               dp[{currentV}] = min(dp[{currentV}], dp[{currentV} - {currentCoin}] + 1)
-              {'  ⟶  '}
+              {' ⟶ '}
               min({dp[currentV] === INF ? '∞' : dp[currentV]}, {dp[evaluatingTransitionFrom ?? 0] === INF ? '∞' : (dp[evaluatingTransitionFrom ?? 0] + 1)})
             </code>
           </div>
@@ -248,7 +248,7 @@ export const CoinChangeVisualizer: React.FC = () => {
 
         <div className="strategy-card greedy-card">
           <div className="strategy-badge greedy-badge">
-            {language === 'es' ? 'Heurística Greedy (Greedy)' : 'Greedy Heuristic'}
+            {language === 'es' ? 'Heurística Greedy' : 'Greedy Heuristic'}
           </div>
           <div className="strategy-result">
             {greedyCoins ? (
@@ -344,6 +344,7 @@ export const CoinChangeVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
+            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}
@@ -351,8 +352,9 @@ export const CoinChangeVisualizer: React.FC = () => {
         </div>
 
         <div className="speed-selector">
-          <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
+          <label htmlFor="coin-change-speed-select">{language === 'es' ? 'Vel:' : 'Speed:'}</label>
           <select
+            id="coin-change-speed-select"
             value={playbackSpeed}
             onChange={(e) => setSpeed(Number(e.target.value))}
           >
