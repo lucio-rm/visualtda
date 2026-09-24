@@ -1,13 +1,13 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Academic excellence pass for Kleinberg & Tardos presentation. Enforced adult engineering tone, eradicated canonical code leaks in playgrounds, deployed cross-exercise connections, enhanced LaTeX mathematical typography with nested command unwrapping and table rendering, activated universal keyboard navigation with Home/End timeline scrubbing, upgraded SVG graph contrast in light mode, and verified 39 test files (290/290 tests passing) plus 22/22 real Chromium headless browser QA scenarios across 5 viewports with 0 console errors.
-- **BASELINE_COMMIT**: `b153baf`
+- **CURRENT_TASK**: Completed dedicated interactive playgrounds for `merge-sort` (`MergeSortPlayground`: 2-pointer linear merge step-by-step invariant checker, stability preservation note, and Divide & Conquer recursion tree inspector) and `max-flow` (`MaxFlowPlayground`: interactive residual graph augmentation, bottleneck calculation, flow cancellation via backward edges, and Min-Cut Max-Flow equality demonstration). 100% of all exercises in the catalog now have both a dedicated 2D SVG visualizer and dedicated interactive playground. All 39 test files (290 tests) and 22 real Chromium browser scenarios pass with 0 console errors.
+- **BASELINE_COMMIT**: `be73fb2`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.4s)
-  - **Visualizer & Playground Completeness (37/37)**: [VERIFIED]
-    - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds**.
+  - **Visualizer & Playground Completeness (37/37 Exercises, 38 Views)**: [VERIFIED]
+    - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds** (including `MergeSortPlayground` and `MaxFlowPlayground`).
     - High-contrast graph edges calibrated for WCAG AAA compliance in both light and dark themes.
     - Zero generic fallbacks anywhere in the application.
   - **Universal Timeline Keyboard Navigation (37/37)**: [VERIFIED]

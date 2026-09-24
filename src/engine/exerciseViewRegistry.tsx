@@ -11,9 +11,11 @@ import { JuanElVagoVisualizer } from '../components/visualizers/JuanElVagoVisual
 import { JuanElVagoPlayground } from '../components/visualizers/JuanElVagoPlayground';
 import { KnapsackGreedyVisualizer } from '../components/visualizers/KnapsackGreedyVisualizer';
 import { MergeSortVisualizer } from '../components/visualizers/MergeSortVisualizer';
+import { MergeSortPlayground } from '../components/visualizers/MergeSortPlayground';
 import { MaxSubarrayVisualizer } from '../components/visualizers/MaxSubarrayVisualizer';
 import { MaxSubarrayPlayground } from '../components/visualizers/MaxSubarrayPlayground';
 import { MaxFlowVisualizer } from '../components/visualizers/MaxFlowVisualizer';
+import { MaxFlowPlayground } from '../components/visualizers/MaxFlowPlayground';
 import { LinearProgrammingVisualizer } from '../components/visualizers/LinearProgrammingVisualizer';
 import { LinearProgrammingPlayground } from '../components/visualizers/LinearProgrammingPlayground';
 import { ReductionIsVcVisualizer } from '../components/visualizers/ReductionIsVcVisualizer';
@@ -136,6 +138,7 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
 
   'merge-sort': {
     visualizerSlot: <MergeSortVisualizer />,
+    discoverPlaygroundSlot: <MergeSortPlayground />,
     canonicalPython: RAW_EXERCISE_ASSETS['merge-sort'].solution,
     pseudocode: RAW_EXERCISE_ASSETS['merge-sort'].pseudocode,
     correctnessExplanation: RAW_EXERCISE_ASSETS['merge-sort'].theory,
@@ -155,6 +158,7 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
 
   'max-flow': {
     visualizerSlot: <MaxFlowVisualizer />,
+    discoverPlaygroundSlot: <MaxFlowPlayground />,
     canonicalPython: RAW_EXERCISE_ASSETS['max-flow'].solution,
     pseudocode: RAW_EXERCISE_ASSETS['max-flow'].pseudocode,
     correctnessExplanation: RAW_EXERCISE_ASSETS['max-flow'].theory,
