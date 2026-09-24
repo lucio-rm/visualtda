@@ -5,12 +5,19 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import './KnapsackPlayground.css';
 
-type KnapsackPreset = 'standard' | 'counterexample';
+type KnapsackPreset = 'standard' | 'counterexample' | 'custom';
 
 const COUNTEREXAMPLE_ITEMS: KnapsackItem[] = [
   { id: 'item-a', name: 'Objeto A (Alta Densidad)', weight: 1, value: 10 },
   { id: 'item-b', name: 'Objeto B (Gran Rendimiento)', weight: 3, value: 24 },
   { id: 'item-c', name: 'Objeto C (Gran Rendimiento)', weight: 3, value: 24 }
+];
+
+const INITIAL_CUSTOM_ITEMS: KnapsackItem[] = [
+  { id: 'c-1', name: 'Notebook', weight: 3, value: 30 },
+  { id: 'c-2', name: 'Cámara', weight: 2, value: 22 },
+  { id: 'c-3', name: 'Libro', weight: 1, value: 9 },
+  { id: 'c-4', name: 'Linterna', weight: 2, value: 15 }
 ];
 
 export const KnapsackPlayground: React.FC = () => {
@@ -21,8 +28,24 @@ export const KnapsackPlayground: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showGreedyComparison, setShowGreedyComparison] = useState<boolean>(false);
 
-  const items = activePreset === 'standard' ? DEFAULT_DP_ITEMS : COUNTEREXAMPLE_ITEMS;
-  const capacity = DEFAULT_DP_CAPACITY; // 6 kg
+  // Custom case state
+  const [customCapacity, setCustomCapacity] = useState<number>(6);
+  const [customItems, setCustomItems] = useState<KnapsackItem[]>(INITIAL_CUSTOM_ITEMS);
+  const [newItemName, setNewItemName] = useState<string>('');
+  const [newItemWeight, setNewItemWeight] = useState<number>(2);
+  const [newItemValue, setNewItemValue] = useState<number>(10);
+  const [customError, setCustomError] = useState<string | null>(null);
+
+  const items = useMemo(() => {
+    if (activePreset === 'standard') return DEFAULT_DP_ITEMS;
+    if (activePreset === 'counterexample') return COUNTEREXAMPLE_ITEMS;
+    return customItems;
+  }, [activePreset, customItems]);
+
+  const capacity = useMemo(() => {
+    if (activePreset === 'custom') return customCapacity;
+    return DEFAULT_DP_CAPACITY;
+  }, [activePreset, customCapacity]);
 
   // Reset selection when switching preset
   useEffect(() => {
@@ -42,6 +65,48 @@ export const KnapsackPlayground: React.FC = () => {
     setSelectedIds([]);
   };
 
+  const handleAddCustomItem = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCustomError(null);
+    const trimmed = newItemName.trim();
+    if (!trimmed) {
+      setCustomError(language === 'es' ? 'El nombre no puede estar vacío.' : 'Name cannot be empty.');
+      return;
+    }
+    if (newItemWeight <= 0 || !Number.isInteger(newItemWeight)) {
+      setCustomError(language === 'es' ? 'El peso debe ser un entero positivo.' : 'Weight must be a positive integer.');
+      return;
+    }
+    if (newItemValue <= 0 || !Number.isInteger(newItemValue)) {
+      setCustomError(language === 'es' ? 'El valor debe ser un entero positivo.' : 'Value must be a positive integer.');
+      return;
+    }
+    if (customItems.length >= 8) {
+      setCustomError(language === 'es' ? 'Máximo 8 ítems permitidos en el laboratorio.' : 'Maximum 8 items allowed in sandbox.');
+      return;
+    }
+
+    const newItem: KnapsackItem = {
+      id: `custom-${Date.now()}`,
+      name: trimmed,
+      weight: newItemWeight,
+      value: newItemValue
+    };
+
+    setCustomItems([...customItems, newItem]);
+    setNewItemName('');
+  };
+
+  const handleRemoveCustomItem = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (customItems.length <= 1) {
+      setCustomError(language === 'es' ? 'Debe haber al menos un ítem.' : 'Must have at least one item.');
+      return;
+    }
+    setCustomItems(customItems.filter((it) => it.id !== id));
+    setSelectedIds(selectedIds.filter((itemId) => itemId !== id));
+  };
+
   const selectedItems: KnapsackItem[] = items.filter((it) =>
     selectedIds.includes(it.id)
   );
@@ -51,8 +116,26 @@ export const KnapsackPlayground: React.FC = () => {
   const isOverweight = totalWeight > capacity;
 
   const optimalValue = useMemo(() => {
+    if (items.length === 0 || capacity <= 0) return 0;
     return knapsackDpValidator.computeOptimalValue(items, capacity);
   }, [items, capacity]);
+
+  // Compute what a density greedy heuristic would select
+  const greedySelection = useMemo(() => {
+    const sorted = [...items].sort((a, b) => (b.value / b.weight) - (a.value / a.weight));
+    let w = 0;
+    const picked: KnapsackItem[] = [];
+    for (const it of sorted) {
+      if (w + it.weight <= capacity) {
+        picked.push(it);
+        w += it.weight;
+      }
+    }
+    return picked;
+  }, [items, capacity]);
+
+  const greedyWeight = greedySelection.reduce((acc, it) => acc + it.weight, 0);
+  const greedyValue = greedySelection.reduce((acc, it) => acc + it.value, 0);
 
   const validation = knapsackDpValidator.validate(
     { items, capacity },
@@ -98,11 +181,101 @@ export const KnapsackPlayground: React.FC = () => {
           >
             {language === 'es' ? 'Contraejemplo de Greedy' : 'Greedy Counterexample'}
           </button>
+          <button
+            type="button"
+            className={`btn-secondary ${activePreset === 'custom' ? 'active' : ''}`}
+            onClick={() => setActivePreset('custom')}
+          >
+            {language === 'es' ? 'Caso propio' : 'Custom Case'}
+          </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}
           </button>
         </div>
       </div>
+
+      {/* Custom item editor when activePreset === 'custom' */}
+      {activePreset === 'custom' && (
+        <div className="knapsack-custom-editor">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="custom-input-group">
+              <label htmlFor="knapsack-cap-input">
+                {language === 'es' ? 'Capacidad máxima W (kg):' : 'Max Capacity W (kg):'}
+              </label>
+              <input
+                id="knapsack-cap-input"
+                type="number"
+                min="1"
+                max="25"
+                value={customCapacity}
+                onChange={(e) => {
+                  const val = Math.max(1, Math.min(25, parseInt(e.target.value, 10) || 1));
+                  setCustomCapacity(val);
+                }}
+                style={{ width: '80px' }}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                setCustomItems(INITIAL_CUSTOM_ITEMS);
+                setCustomCapacity(6);
+                setSelectedIds([]);
+                setCustomError(null);
+              }}
+              style={{ fontSize: '0.8rem', padding: '0.3rem 0.6rem' }}
+            >
+              {language === 'es' ? 'Restablecer ítems' : 'Reset items'}
+            </button>
+          </div>
+
+          <form onSubmit={handleAddCustomItem} className="custom-editor-row">
+            <div className="custom-input-group" style={{ flex: '1 1 120px' }}>
+              <label>{language === 'es' ? 'Nombre del ítem:' : 'Item Name:'}</label>
+              <input
+                type="text"
+                placeholder={language === 'es' ? 'Ej. Tablet' : 'e.g. Tablet'}
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+              />
+            </div>
+            <div className="custom-input-group" style={{ width: '90px' }}>
+              <label>{language === 'es' ? 'Peso (kg):' : 'Weight (kg):'}</label>
+              <input
+                type="number"
+                min="1"
+                max="20"
+                value={newItemWeight}
+                onChange={(e) => setNewItemWeight(Math.max(1, parseInt(e.target.value, 10) || 1))}
+              />
+            </div>
+            <div className="custom-input-group" style={{ width: '90px' }}>
+              <label>{language === 'es' ? 'Valor ($):' : 'Value ($):'}</label>
+              <input
+                type="number"
+                min="1"
+                max="999"
+                value={newItemValue}
+                onChange={(e) => setNewItemValue(Math.max(1, parseInt(e.target.value, 10) || 1))}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn-secondary"
+              style={{ padding: '0.4rem 0.8rem', height: '34px' }}
+            >
+              {language === 'es' ? '+ Agregar Ítem' : '+ Add Item'}
+            </button>
+          </form>
+
+          {customError && (
+            <div style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>
+              {customError}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Items Shelf */}
       <div className="knapsack-items-shelf">
@@ -127,9 +300,22 @@ export const KnapsackPlayground: React.FC = () => {
             >
               <div className="item-pick-header">
                 <span className="item-pick-name">{it.name}</span>
-                <span className="item-status-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
-                  {inPack ? (language === 'es' ? 'EN MOCHILA' : 'PACKED') : '+'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {activePreset === 'custom' && (
+                    <button
+                      type="button"
+                      className="item-remove-btn"
+                      onClick={(e) => handleRemoveCustomItem(it.id, e)}
+                      title={language === 'es' ? 'Eliminar ítem' : 'Delete item'}
+                      aria-label={language === 'es' ? `Eliminar ${it.name}` : `Delete ${it.name}`}
+                    >
+                      ✕
+                    </button>
+                  )}
+                  <span className="item-status-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
+                    {inPack ? (language === 'es' ? 'EN MOCHILA' : 'PACKED') : '+'}
+                  </span>
+                </div>
               </div>
               <div className="item-pick-metrics">
                 <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
@@ -235,20 +421,28 @@ export const KnapsackPlayground: React.FC = () => {
                 : 'In 0/1 Knapsack, indivisibility invalidates the Greedy exchange argument: selecting the highest density item can leave unusable slack capacity.'}
             </p>
             <div style={{ background: 'var(--surface)', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)' }}>
-              <strong>{language === 'es' ? 'Contrajemplo concreto:' : 'Concrete Counterexample:'}</strong>
+              <strong>
+                {language === 'es' ? 'Comparación en la instancia activa:' : 'Comparison on active instance:'}
+              </strong>
               <br />
-              • A: $10 / 1 kg (Densidad: 10 $/kg)
+              • {language === 'es' ? 'Heurística Greedy (orden por densidad):' : 'Greedy Heuristic (density order):'} ${greedyValue} ({greedyWeight} kg / {capacity} kg)
               <br />
-              • B: $24 / 3 kg (Densidad: 8 $/kg)
-              <br />
-              • C: $24 / 3 kg (Densidad: 8 $/kg)
-              <br />
-              • {language === 'es' ? 'Capacidad' : 'Capacity'} W = 6 kg
+              • {language === 'es' ? 'Óptimo Global DP:' : 'Global DP Optimum:'} ${optimalValue}
               <br />
               <br />
-              → <strong>Greedy</strong> {language === 'es' ? 'empaca A ($10) y B ($24). Restan 2 kg (C no cabe). Total:' : 'packs A ($10) and B ($24). 2 kg remaining (C does not fit). Total:'} <strong>$34</strong> (peso 4 kg).
-              <br />
-              → <strong>DP</strong> {language === 'es' ? 'evalúa el estado compuesto y empaca B ($24) + C ($24). Total:' : 'evaluates composite states and packs B ($24) + C ($24). Total:'} <strong>$48</strong> (peso 6 kg).
+              {greedyValue < optimalValue ? (
+                <span style={{ color: 'var(--color-warning, #d97706)' }}>
+                  {language === 'es'
+                    ? `Greedy queda atrapado en un subóptimo ($${greedyValue} < $${optimalValue}) debido a holgura ociosa indivisible.`
+                    : `Greedy is trapped in a suboptimal solution ($${greedyValue} < $${optimalValue}) due to indivisible slack capacity.`}
+                </span>
+              ) : (
+                <span style={{ color: 'var(--color-success, #10b981)' }}>
+                  {language === 'es'
+                    ? `En esta instancia particular, la heurística Greedy coincide con el óptimo ($${greedyValue}). ¡Creá otra instancia o usá el contraejemplo para verla fallar!`
+                    : `On this specific instance, Greedy matches the DP optimum ($${greedyValue}). Try another instance or the counterexample to see it fail!`}
+                </span>
+              )}
             </div>
           </div>
         )}

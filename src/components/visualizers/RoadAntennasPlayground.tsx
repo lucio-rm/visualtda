@@ -148,6 +148,17 @@ export const RoadAntennasPlayground: React.FC = () => {
                 {t(p.name)}
               </button>
             ))}
+            <button
+              type="button"
+              className="preset-btn"
+              onClick={() => {
+                setHouses([15, 35, 55, 75]);
+                setRadius(12);
+                setUserAntennas([]);
+              }}
+            >
+              {language === 'es' ? 'Caso propio' : 'Custom case'}
+            </button>
           </div>
         </div>
 

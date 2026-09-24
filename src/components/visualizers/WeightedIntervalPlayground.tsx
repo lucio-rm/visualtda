@@ -55,11 +55,32 @@ const PRESETS: Preset[] = [
   }
 ];
 
+const INITIAL_CUSTOM_INTERVALS: WeightedInterval[] = [
+  { id: 'I1', start: 0, end: 3, weight: 3 },
+  { id: 'I2', start: 2, end: 6, weight: 8 },
+  { id: 'I3', start: 5, end: 8, weight: 4 },
+  { id: 'I4', start: 7, end: 10, weight: 6 }
+];
+
 export const WeightedIntervalPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
-  const [intervals, setIntervals] = useState<WeightedInterval[]>(PRESETS[0].intervals);
+
+  const [activePresetIndex, setActivePresetIndex] = useState<number | 'custom'>(0);
+  const [customIntervals, setCustomIntervals] = useState<WeightedInterval[]>(INITIAL_CUSTOM_INTERVALS);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  // Custom interval form state
+  const [newId, setNewId] = useState<string>('');
+  const [newStart, setNewStart] = useState<number>(1);
+  const [newEnd, setNewEnd] = useState<number>(5);
+  const [newWeight, setNewWeight] = useState<number>(6);
+  const [customError, setCustomError] = useState<string | null>(null);
+
+  const intervals = useMemo(() => {
+    if (activePresetIndex === 'custom') return customIntervals;
+    return PRESETS[activePresetIndex].intervals;
+  }, [activePresetIndex, customIntervals]);
 
   const maxTime = useMemo(() => {
     return Math.max(...intervals.map((i) => i.end), 12);
@@ -113,7 +134,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
     if (userStatus.isOptimal) {
       markAttempted('weighted-interval-scheduling');
     }
-  }, [userStatus.isOptimal]);
+  }, [userStatus.isOptimal, markAttempted]);
 
   const toggleTask = (id: string) => {
     setSelectedIds((prev) =>
@@ -125,9 +146,63 @@ export const WeightedIntervalPlayground: React.FC = () => {
     setSelectedIds(greedySolution.map((t) => t.id));
   };
 
-  const handlePreset = (p: Preset) => {
-    setIntervals(p.intervals);
+  const handlePreset = (idx: number) => {
+    setActivePresetIndex(idx);
     setSelectedIds([]);
+    setCustomError(null);
+  };
+
+  const handleCustomMode = () => {
+    setActivePresetIndex('custom');
+    setSelectedIds([]);
+    setCustomError(null);
+  };
+
+  const handleAddCustomInterval = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCustomError(null);
+    const trimmedId = (newId.trim() || `T${customIntervals.length + 1}`).toUpperCase();
+
+    if (customIntervals.some((i) => i.id === trimmedId)) {
+      setCustomError(language === 'es' ? `Ya existe una tarea con identificador "${trimmedId}".` : `Task with ID "${trimmedId}" already exists.`);
+      return;
+    }
+    if (newStart < 0 || !Number.isInteger(newStart)) {
+      setCustomError(language === 'es' ? 'El inicio debe ser un entero no negativo.' : 'Start must be a non-negative integer.');
+      return;
+    }
+    if (newEnd <= newStart || !Number.isInteger(newEnd)) {
+      setCustomError(language === 'es' ? 'El fin debe ser mayor al inicio.' : 'End must be strictly greater than start.');
+      return;
+    }
+    if (newWeight <= 0 || !Number.isInteger(newWeight)) {
+      setCustomError(language === 'es' ? 'El peso debe ser un entero positivo.' : 'Weight must be a positive integer.');
+      return;
+    }
+    if (customIntervals.length >= 8) {
+      setCustomError(language === 'es' ? 'Máximo 8 intervalos permitidos en el laboratorio.' : 'Maximum 8 intervals allowed in sandbox.');
+      return;
+    }
+
+    const newItem: WeightedInterval = {
+      id: trimmedId,
+      start: newStart,
+      end: newEnd,
+      weight: newWeight
+    };
+
+    setCustomIntervals([...customIntervals, newItem]);
+    setNewId('');
+  };
+
+  const handleRemoveCustomInterval = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (customIntervals.length <= 1) {
+      setCustomError(language === 'es' ? 'Debe haber al menos un intervalo.' : 'Must have at least one interval.');
+      return;
+    }
+    setCustomIntervals(customIntervals.filter((it) => it.id !== id));
+    setSelectedIds(selectedIds.filter((itemId) => itemId !== id));
   };
 
   return (
@@ -154,14 +229,99 @@ export const WeightedIntervalPlayground: React.FC = () => {
           {PRESETS.map((p, idx) => (
             <button
               key={idx}
-              className="chip-button"
-              onClick={() => handlePreset(p)}
+              className={`chip-button ${activePresetIndex === idx ? 'active' : ''}`}
+              onClick={() => handlePreset(idx)}
             >
               {p.name[language]}
             </button>
           ))}
+          <button
+            className={`chip-button ${activePresetIndex === 'custom' ? 'active' : ''}`}
+            onClick={handleCustomMode}
+          >
+            {language === 'es' ? 'Caso propio' : 'Custom Case'}
+          </button>
         </div>
       </div>
+
+      {/* Custom interval editor when activePresetIndex === 'custom' */}
+      {activePresetIndex === 'custom' && (
+        <div className="custom-interval-editor">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
+              {language === 'es' ? 'Definir tareas de tu instancia propia:' : 'Define tasks for your custom instance:'}
+            </span>
+            <button
+              type="button"
+              className="chip-button"
+              onClick={() => {
+                setCustomIntervals(INITIAL_CUSTOM_INTERVALS);
+                setSelectedIds([]);
+                setCustomError(null);
+              }}
+              style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+            >
+              {language === 'es' ? 'Restablecer tareas' : 'Reset tasks'}
+            </button>
+          </div>
+
+          <form onSubmit={handleAddCustomInterval} className="custom-interval-form">
+            <div className="custom-interval-group" style={{ width: '80px' }}>
+              <label>{language === 'es' ? 'ID:' : 'ID:'}</label>
+              <input
+                type="text"
+                placeholder="T5"
+                value={newId}
+                onChange={(e) => setNewId(e.target.value)}
+                maxLength={4}
+              />
+            </div>
+            <div className="custom-interval-group" style={{ width: '80px' }}>
+              <label>{language === 'es' ? 'Inicio:' : 'Start:'}</label>
+              <input
+                type="number"
+                min="0"
+                max="20"
+                value={newStart}
+                onChange={(e) => setNewStart(Math.max(0, parseInt(e.target.value, 10) || 0))}
+              />
+            </div>
+            <div className="custom-interval-group" style={{ width: '80px' }}>
+              <label>{language === 'es' ? 'Fin:' : 'End:'}</label>
+              <input
+                type="number"
+                min="1"
+                max="25"
+                value={newEnd}
+                onChange={(e) => setNewEnd(Math.max(1, parseInt(e.target.value, 10) || 1))}
+              />
+            </div>
+            <div className="custom-interval-group" style={{ width: '80px' }}>
+              <label>{language === 'es' ? 'Peso ($):' : 'Weight ($):'}</label>
+              <input
+                type="number"
+                min="1"
+                max="99"
+                value={newWeight}
+                onChange={(e) => setNewWeight(Math.max(1, parseInt(e.target.value, 10) || 1))}
+              />
+            </div>
+            <button
+              type="submit"
+              className="chip-button"
+              style={{ height: '32px', background: 'var(--accent)', color: '#fff', border: 'none' }}
+            >
+              {language === 'es' ? '+ Agregar Tarea' : '+ Add Task'}
+            </button>
+          </form>
+
+          {customError && (
+            <div style={{ color: 'var(--color-error, #dc2626)', fontSize: '0.8rem' }}>
+              {customError}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Interactive Schedule */}
       <div className="interactive-tracks-box">
@@ -201,6 +361,16 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 <div className="task-meta">
                   <span className="task-title">{task.id}</span>
                   <span className="task-val">${task.weight}</span>
+                  {activePresetIndex === 'custom' && (
+                    <button
+                      type="button"
+                      className="interval-remove-btn"
+                      onClick={(e) => handleRemoveCustomInterval(task.id, e)}
+                      title={language === 'es' ? 'Eliminar tarea' : 'Delete task'}
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
                 <div className="track-lane">
                   <div

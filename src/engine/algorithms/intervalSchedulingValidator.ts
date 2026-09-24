@@ -56,7 +56,7 @@ export class IntervalSchedulingValidator
     };
   }
 
-  private computeOptimalCount(intervals: Interval[]): number {
+  computeOptimalCount(intervals: Interval[]): number {
     if (intervals.length === 0) return 0;
     const sorted = [...intervals].sort((a, b) => a[1] - b[1]);
     let count = 0;

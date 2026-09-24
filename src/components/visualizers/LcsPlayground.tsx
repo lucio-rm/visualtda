@@ -36,6 +36,7 @@ const PRESETS: Preset[] = [
 export const LcsPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
+  const [activePresetIdx, setActivePresetIdx] = useState<number | 'custom'>(0);
   const [s1, setS1] = useState<string>('ABCBDAB');
   const [s2, setS2] = useState<string>('BDCABA');
   const [userGuess, setUserGuess] = useState<string>('');
@@ -63,7 +64,8 @@ export const LcsPlayground: React.FC = () => {
     }
   }, [userValidation, markAttempted]);
 
-  const handlePreset = (p: Preset) => {
+  const handlePreset = (p: Preset, idx: number) => {
+    setActivePresetIdx(idx);
     setS1(p.s1);
     setS2(p.s2);
     setUserGuess('');
@@ -93,12 +95,18 @@ export const LcsPlayground: React.FC = () => {
           {PRESETS.map((p, idx) => (
             <button
               key={idx}
-              className="chip-button"
-              onClick={() => handlePreset(p)}
+              className={`chip-button ${activePresetIdx === idx ? 'active' : ''}`}
+              onClick={() => handlePreset(p, idx)}
             >
               {p.name[language]}
             </button>
           ))}
+          <button
+            className={`chip-button ${activePresetIdx === 'custom' ? 'active' : ''}`}
+            onClick={() => setActivePresetIdx('custom')}
+          >
+            {language === 'es' ? 'Caso propio' : 'Custom Case'}
+          </button>
         </div>
       </div>
 
@@ -114,6 +122,7 @@ export const LcsPlayground: React.FC = () => {
             value={s1}
             maxLength={16}
             onChange={(e) => {
+              setActivePresetIdx('custom');
               setS1(e.target.value.toUpperCase());
               setUserGuess('');
             }}
@@ -131,6 +140,7 @@ export const LcsPlayground: React.FC = () => {
             value={s2}
             maxLength={16}
             onChange={(e) => {
+              setActivePresetIdx('custom');
               setS2(e.target.value.toUpperCase());
               setUserGuess('');
             }}

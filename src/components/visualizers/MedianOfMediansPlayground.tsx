@@ -8,10 +8,13 @@ export const MedianOfMediansPlayground: React.FC = () => {
   const { markAttempted } = useStudentProgress();
 
   const [array, setArray] = useState<number[]>(DEFAULT_MOM_ARRAY);
+  const [arrayInputStr, setArrayInputStr] = useState<string>(DEFAULT_MOM_ARRAY.join(', '));
   const [targetK, setTargetK] = useState<number>(7);
+  const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
 
   const sorted = [...array].sort((a, b) => a - b);
-  const expectedElement = sorted[targetK] ?? sorted[0];
+  const validK = Math.max(0, Math.min(array.length - 1, targetK));
+  const expectedElement = sorted[validK] ?? sorted[0];
 
   // Group into 5s
   const groups: number[][] = [];
@@ -32,12 +35,34 @@ export const MedianOfMediansPlayground: React.FC = () => {
   const handleRandomize = () => {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     setArray(shuffled);
+    setArrayInputStr(shuffled.join(', '));
     markAttempted('median-of-medians-dyc');
   };
 
   const handlePresetK = (kVal: number) => {
     setTargetK(kVal);
     markAttempted('median-of-medians-dyc');
+  };
+
+  const handleArrayInputChange = (val: string) => {
+    setArrayInputStr(val);
+    setIsCustomMode(true);
+    const parsed = val
+      .split(',')
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n));
+    if (parsed.length >= 3) {
+      setArray(parsed);
+      setTargetK((prev) => Math.min(prev, parsed.length - 1));
+      markAttempted('median-of-medians-dyc');
+    }
+  };
+
+  const handleResetDefault = () => {
+    setArray(DEFAULT_MOM_ARRAY);
+    setArrayInputStr(DEFAULT_MOM_ARRAY.join(', '));
+    setTargetK(7);
+    setIsCustomMode(false);
   };
 
   return (
@@ -68,17 +93,56 @@ export const MedianOfMediansPlayground: React.FC = () => {
           <button type="button" className="btn-preset" onClick={handleRandomize}>
             {language === 'es' ? 'Reordenar Arreglo' : 'Shuffle Array'}
           </button>
+          {isCustomMode && (
+            <button type="button" className="btn-preset" onClick={handleResetDefault}>
+              {language === 'es' ? 'Restablecer' : 'Reset'}
+            </button>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', fontSize: '0.9rem' }}>
           <span>
             {language === 'es' ? 'Índice k:' : 'Index k:'}{' '}
-            <strong style={{ color: 'var(--accent)' }}>{targetK}</strong>
+            <strong style={{ color: 'var(--accent)' }}>{validK}</strong>
           </span>
           <span>
             {language === 'es' ? 'Elemento esperado:' : 'Expected element:'}{' '}
             <strong style={{ color: '#10b981' }}>{expectedElement}</strong>
           </span>
+        </div>
+      </div>
+
+      {/* Custom Case Array Input */}
+      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', backgroundColor: 'var(--surface)', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border)' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: '600', whiteSpace: 'nowrap' }}>
+          {language === 'es' ? 'Caso propio (separado por comas):' : 'Custom case (comma-separated):'}
+        </span>
+        <input
+          type="text"
+          value={arrayInputStr}
+          onChange={(e) => handleArrayInputChange(e.target.value)}
+          placeholder="Ej: 12, 3, 5, 7, 4, 19, 26, 22, 1"
+          style={{
+            flex: 1,
+            padding: '0.35rem 0.5rem',
+            backgroundColor: 'var(--bg)',
+            color: 'var(--text)',
+            border: '1px solid var(--border)',
+            borderRadius: '4px',
+            fontFamily: 'var(--font-mono)'
+          }}
+        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <label htmlFor="k-slider" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>k:</label>
+          <input
+            id="k-slider"
+            type="range"
+            min={0}
+            max={Math.max(1, array.length - 1)}
+            value={validK}
+            onChange={(e) => setTargetK(parseInt(e.target.value, 10))}
+            style={{ width: '80px' }}
+          />
         </div>
       </div>
 
