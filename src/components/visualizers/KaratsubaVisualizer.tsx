@@ -198,6 +198,14 @@ export const KaratsubaVisualizer: React.FC = () => {
         </div>
       </div>
 
+      {/* Master Theorem Complexity Card (Section 12 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Teorema Maestro: 4 Productos Escolares vs. 3 de Karatsuba:' : 'Master Theorem: 4 Schoolbook Products vs. 3 Karatsuba Multiplications:'}</strong>{' '}
+        {language === 'es'
+          ? 'La división ingenua en 4 productos genera T(n) = 4T(n/2) + O(n) ⇒ O(n^log₂ 4) = O(n²), sin ganancia asintótica. El truco algebraico de Karatsuba calcula el término cruzado z₁ = (x₁+x₀)(y₁+y₀) - z₂ - z₀ requiriendo solo 3 productos recursivos: T(n) = 3T(n/2) + O(n) ⇒ O(n^log₂ 3) ≈ O(n^1.585), revolucionando la aritmética de enteros grandes.'
+          : 'Naive split into 4 products yields T(n) = 4T(n/2) + O(n) ⇒ O(n²). Karatsuba’s algebraic trick computes cross term z₁ = (x₁+x₀)(y₁+y₀) - z₂ - z₀ with just 3 recursive multiplications: T(n) = 3T(n/2) + O(n) ⇒ O(n^log₂ 3) ≈ O(n^1.585), accelerating large-integer arithmetic.'}
+      </div>
+
       {/* Playback Controls */}
       <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
         <div className="trace-buttons">

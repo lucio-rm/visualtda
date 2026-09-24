@@ -168,6 +168,14 @@ export const ClosestPairVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* 2D Strip Packing Lemma Explanation (Section 12 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento: Lema de Empaquetamiento en la Franja δ:' : 'Rationale: δ-Strip Packing Lemma:'}</strong>{' '}
+        {language === 'es'
+          ? 'En lugar de comparar todos los pares en la franja central (lo que costaría O(n²)), el lema de empaquetamiento demuestra que ninguna caja de dimensiones δ × 2δ puede contener más de 8 puntos sin violar que dos puntos del mismo lado disten al menos δ. Por tanto, al ordenar la franja por coordenada y, cada punto solo debe compararse con los siguientes 7 puntos contiguos, combinando las soluciones en O(n) lineal y logrando T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'
+          : 'Instead of comparing all pairs in the strip (O(n²)), the packing lemma proves that no δ × 2δ box can contain more than 8 points without violating the left/right minimal distance δ. Sorting the strip by y-coordinate allows each point to be compared against at most the next 7 points, yielding linear O(n) combine time and T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -185,16 +193,16 @@ export const ClosestPairVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -204,10 +212,10 @@ export const ClosestPairVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 
