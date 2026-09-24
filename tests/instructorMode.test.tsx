@@ -98,7 +98,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     // Understand view rendered immediately without solving or skip modal
     const understandView = container.querySelector('.understand-view');
     expect(understandView).not.toBeNull();
-    expect(container.textContent).toContain('Solución Canónica');
+    expect(container.textContent).toContain('Solución en Python');
   });
 
   it('displays honest pedagogical friction copy in the Solve phase skip modal', async () => {
@@ -171,6 +171,6 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
 
     // Now Understand view is rendered
     expect(container.querySelector('.understand-view')).not.toBeNull();
-    expect(container.textContent).toContain('Solución Canónica');
+    expect(container.textContent).toContain('Solución en Python');
   });
 });

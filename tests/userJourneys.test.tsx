@@ -192,7 +192,7 @@ describe('Phase D: Browser / User Journey Integration Verification (15 Core Flow
     expect(understandView).not.toBeNull();
 
     // Canonical solution, complexity metrics, and visualizer should be present
-    expect(container.textContent).toContain('Solución Canónica');
+    expect(container.textContent).toContain('Solución en Python');
     expect(container.textContent).toContain('O(N!)');
     const visualizer = container.querySelector('.nqueens-visualizer-card');
     expect(visualizer).not.toBeNull();

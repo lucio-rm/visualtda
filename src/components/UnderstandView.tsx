@@ -3,6 +3,7 @@ import { ExerciseMetadata } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { TheoryMarkdown } from './common/TheoryMarkdown';
+import { getRelatedExercisesFor } from '../engine/crossExerciseConnections';
 
 interface UnderstandViewProps {
   exercise: ExerciseMetadata;
@@ -14,6 +15,7 @@ interface UnderstandViewProps {
   visualizerSlot?: React.ReactNode;
   solutionUnlocked?: boolean;
   onGoToSolve?: () => void;
+  onNavigateToExercise?: (exerciseId: string) => void;
 }
 
 export const UnderstandView: React.FC<UnderstandViewProps> = ({
@@ -25,13 +27,15 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   spaceComplexity,
   visualizerSlot,
   solutionUnlocked = false,
-  onGoToSolve
+  onGoToSolve,
+  onNavigateToExercise
 }) => {
   const { t, dict, language } = useLanguage();
   const { isInstructorMode } = useInstructorMode();
   const [codeMode, setCodeMode] = useState<'python' | 'pseudocode'>('python');
 
   const canViewCanonicalPython = solutionUnlocked || isInstructorMode;
+  const relatedExercises = getRelatedExercisesFor(exercise.id);
 
   return (
     <section className="phase-view understand-view" aria-labelledby="understand-heading">
@@ -131,6 +135,66 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Cross-Exercise Connections & Technique Comparisons (Mission V4 Section 30 & 31) */}
+        {relatedExercises.length > 0 && (
+          <div className="card-panel related-exercises-section" style={{ marginTop: '2rem' }}>
+            <div className="related-section-header" style={{ marginBottom: '1.25rem' }}>
+              <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text)' }}>
+                <span>🔗</span>
+                <span>{language === 'es' ? 'Problemas Relacionados y Comparación de Paradigmas' : 'Related Problems & Paradigm Comparison'}</span>
+              </h4>
+              <p style={{ margin: '0.35rem 0 0 0', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                {language === 'es'
+                  ? 'Examiná cómo variaciones en las restricciones del problema conducen a diferentes técnicas y cotas de complejidad.'
+                  : 'Examine how changes in problem constraints lead to different techniques and complexity bounds.'}
+              </p>
+            </div>
+
+            <div className="related-exercises-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+              {relatedExercises.map((rel) => (
+                <div
+                  key={rel.targetExerciseId}
+                  className="related-exercise-card"
+                  style={{
+                    padding: '1.25rem',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-md)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <span className="badge badge-technique" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                        {t(rel.paradigmBadge)}
+                      </span>
+                    </div>
+                    <h5 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', color: 'var(--text)' }}>
+                      {t(rel.comparisonTitle)}
+                    </h5>
+                    <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                      {t(rel.comparisonInsight)}
+                    </p>
+                  </div>
+
+                  {onNavigateToExercise && (
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      style={{ marginTop: '1.25rem', alignSelf: 'flex-start' }}
+                      onClick={() => onNavigateToExercise(rel.targetExerciseId)}
+                    >
+                      {language === 'es' ? 'Explorar Ejercicio →' : 'Explore Exercise →'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import { UnderstandView } from './UnderstandView';
 interface ExerciseViewProps {
   exercise: ExerciseMetadata;
   onBackToCatalog: () => void;
+  onSelectExercise?: (exerciseId: string) => void;
   // Optional slots/data for specific exercises
   visualizerSlot?: React.ReactNode;
   discoverPlaygroundSlot?: React.ReactNode;
@@ -24,6 +25,7 @@ interface ExerciseViewProps {
 export const ExerciseView: React.FC<ExerciseViewProps> = ({
   exercise,
   onBackToCatalog,
+  onSelectExercise,
   visualizerSlot,
   discoverPlaygroundSlot,
   canonicalPython = '# Solución canónica oficial\ndef resolver(n):\n    return []\n',
@@ -140,6 +142,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
             visualizerSlot={visualizerSlot}
             solutionUnlocked={exerciseCompleted || solutionUnlocked}
             onGoToSolve={() => setPhase('solve')}
+            onNavigateToExercise={onSelectExercise}
           />
         )}
       </div>

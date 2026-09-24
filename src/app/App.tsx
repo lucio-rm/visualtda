@@ -120,6 +120,7 @@ const AppContent: React.FC = () => {
           <ExerciseView
             exercise={selectedExercise}
             onBackToCatalog={handleHomeClick}
+            onSelectExercise={(id) => setSelectedExerciseId(id)}
             {...exerciseConfig}
           />
         )}
