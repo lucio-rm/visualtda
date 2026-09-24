@@ -255,7 +255,6 @@ export const SolveView: React.FC<SolveViewProps> = ({
         </h3>
         <p className="view-lead">
           {t(dict.solveLead)}
-          {' '}<strong>{t(exercise.title)}</strong>.
         </p>
       </div>
 

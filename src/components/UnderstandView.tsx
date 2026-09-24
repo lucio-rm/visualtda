@@ -45,7 +45,6 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
         </h3>
         <p className="view-lead">
           {t(dict.understandLead)}
-          {' '}<strong>{t(exercise.title)}</strong>.
         </p>
       </div>
 

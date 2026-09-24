@@ -222,8 +222,9 @@ export const JuanElVagoPlayground: React.FC = () => {
                 </div>
                 <div className="score-number">${optimal.monto}</div>
                 <div className="score-desc">
-                  {language === 'es' ? 'Días recomendados:' : 'Recommended days:'}{' '}
-                  <strong>[{optimal.dias.join(', ')}]</strong>
+                  {language === 'es'
+                    ? 'Combinación óptima de días oculta pedagógicamente (deduzca la regla de no adyacencia en Resolver).'
+                    : 'Optimal day sequence hidden (deduce the non-adjacency recurrence in Solve).'}
                 </div>
               </div>
             )}
