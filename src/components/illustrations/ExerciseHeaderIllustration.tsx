@@ -434,7 +434,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="95" y="55" fill="var(--text-muted, #94a3b8)" fontSize="8">A[p-1] ≤</text>
           <text x="130" y="42" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold">Pico A[p]</text>
           <text x="155" y="55" fill="var(--text-muted, #94a3b8)" fontSize="8">≥ A[p+1]</text>
-          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="9">Búsqueda D&amp;C: O(log N)</text>
+          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="9">{'Búsqueda D&C: O(log N)'}</text>
         </svg>
       );
 
@@ -674,8 +674,8 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
             <text x="60" y="16" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="bold">A</text>
             <text x="39" y="38" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">A = A (Sobrevive)</text>
           </g>
-          <text x="120" y="90" textAnchor="middle" fill="var(--accent)" fontSize="9" fontWeight="bold">Candidato dominante &gt; n/2</text>
-          <text x="120" y="108" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Boyer-Moore O(n) / Divide & Conquer T(n) = 2T(n/2) + O(n)</text>
+          <text x="120" y="90" textAnchor="middle" fill="var(--accent)" fontSize="9" fontWeight="bold">{'Candidato dominante > n/2'}</text>
+          <text x="120" y="108" textAnchor="middle" fill="var(--text-muted)" fontSize="8">{'Boyer-Moore O(n) / Divide & Conquer T(n) = 2T(n/2) + O(n)'}</text>
         </svg>
       );
 
@@ -794,7 +794,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <path d="M 38 82 Q 71 35 104 82" stroke="#10b981" strokeWidth="2" fill="none" />
           <path d="M 126 82 Q 159 30 192 82" stroke="#10b981" strokeWidth="2" fill="none" />
           <text x="120" y="25" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">Apareamientos sin cruce (Non-crossing)</text>
-          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Restricción de horquilla t &lt; j - 4</text>
+          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted)" fontSize="8">{'Restricción de horquilla t < j - 4'}</text>
         </svg>
       );
 

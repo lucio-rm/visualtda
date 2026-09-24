@@ -226,7 +226,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <div className="math-block">
                 <div className="math-row">
                   <span className="math-label">Variables:</span>
-                  <code>x_i ∈ &#123;0, 1&#125; para cada día i ∈ &#123;0, ..., n-1&#125; (1 si Juan trabaja el día i)</code>
+                  <code>{'x_i ∈ {0, 1} para cada día i ∈ {0, ..., n-1} (1 si Juan trabaja el día i)'}</code>
                 </div>
                 <div className="math-row">
                   <span className="math-label">Función Objetivo:</span>
@@ -234,7 +234,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                 </div>
                 <div className="math-row">
                   <span className="math-label">Restricciones:</span>
-                  <code>x_i + x_&#123;i+1&#125; ≤ 1  para todo i ∈ &#123;0, ..., n-2&#125; (nunca dos días seguidos)</code>
+                  <code>{'x_i + x_{i+1} ≤ 1  para todo i ∈ {0, ..., n-2} (nunca dos días seguidos)'}</code>
                 </div>
               </div>
               <p className="model-desc">
@@ -255,7 +255,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <div className="math-block">
                 <div className="math-row">
                   <span className="math-label">Variables:</span>
-                  <code>x_i ∈ &#123;0, 1&#125; para cada ítem i ∈ &#123;0, ..., n-1&#125; (1 si se incluye el ítem i)</code>
+                  <code>{'x_i ∈ {0, 1} para cada ítem i ∈ {0, ..., n-1} (1 si se incluye el ítem i)'}</code>
                 </div>
                 <div className="math-row">
                   <span className="math-label">Función Objetivo:</span>
@@ -284,7 +284,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <div className="math-block">
                 <div className="math-row">
                   <span className="math-label">Variables:</span>
-                  <code>x_v ∈ &#123;0, 1&#125; para cada vértice v ∈ V (1 si v pertenece a la cobertura)</code>
+                  <code>{'x_v ∈ {0, 1} para cada vértice v ∈ V (1 si v pertenece a la cobertura)'}</code>
                 </div>
                 <div className="math-row">
                   <span className="math-label">Función Objetivo:</span>

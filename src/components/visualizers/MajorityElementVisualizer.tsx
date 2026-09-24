@@ -65,7 +65,7 @@ export const MajorityElementVisualizer: React.FC = () => {
         </div>
         <div className="me-metric-badge">
           <span>{language === 'es' ? 'Umbral (> n/2):' : 'Threshold (> n/2):'}</span>
-          <strong>&gt; {threshold}</strong>
+          <strong>{`> ${threshold}`}</strong>
         </div>
         <div className="me-metric-badge">
           <span>{language === 'es' ? 'Ganador Actual:' : 'Current Winner:'}</span>
@@ -194,6 +194,14 @@ export const MajorityElementVisualizer: React.FC = () => {
             </text>
           )}
         </svg>
+      </div>
+
+      {/* Majority Element Theoretical Lemma & Recurrence (K&T §5.2) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fundamento Teórico: Lema de Preservación en Subproblemas (K&T §5.2):' : 'Theoretical Foundation: Subproblem Preservation Lemma (K&T §5.2):'}</strong>{' '}
+        {language === 'es'
+          ? 'Si un elemento x es mayoritario estricto en el arreglo A (frecuencia > n/2), entonces x DEBE ser el elemento mayoritario en al menos una de las dos mitades A[1..⌊n/2⌋] o A[⌊n/2⌋+1..n]. Demostración por reducción al absurdo: si x no fuera mayoritario en ninguna mitad, su frecuencia en la izquierda sería ≤ ⌊n/4⌋ y en la derecha ≤ ⌈n/4⌉, sumando a lo sumo ⌊n/2⌋ apariciones, contradiciendo la hipótesis. Por lo tanto, la recursión solo necesita evaluar a lo sumo dos candidatos devueltos por las mitades, verificando sus frecuencias totales en tiempo lineal O(n). La recurrencia resultante T(n) = 2T(n/2) + O(n) resuelve en O(n log n).'
+          : 'If an element x is strictly majority in array A (frequency > n/2), then x MUST be majority in at least one of the two halves A[1..⌊n/2⌋] or A[⌊n/2⌋+1..n]. Proof by contradiction: if x were majority in neither half, its count in the left would be ≤ ⌊n/4⌋ and in the right ≤ ⌈n/4⌉, totaling at most ⌊n/2⌋ occurrences, contradicting the majority premise. Thus, recursion only evaluates at most two candidate values returned by the subproblems, counting their occurrences in linear O(n) time. The recurrence T(n) = 2T(n/2) + O(n) yields O(n log n).'}
       </div>
 
       {/* Playback Controls */}

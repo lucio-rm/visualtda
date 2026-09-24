@@ -109,9 +109,9 @@ export const MaxFlowVisualizer: React.FC = () => {
             {language === 'es' ? 'Partición de Corte Mínimo (S, T):' : 'Minimum Cut Partition (S, T):'}
           </span>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span className="mincut-badge-s">S = &#123;{minCutS.join(', ')}&#125;</span>
+            <span className="mincut-badge-s">{`S = {${minCutS.join(', ')}}`}</span>
             <span>&nbsp;|&nbsp;</span>
-            <span className="mincut-badge-t">T = &#123;{minCutT.join(', ')}&#125;</span>
+            <span className="mincut-badge-t">{`T = {${minCutT.join(', ')}}`}</span>
             <span style={{ marginLeft: '12px', fontWeight: 700 }}>
               {language === 'es' ? `Capacidad c(S, T) = ${minCutCapacity} == Flujo ${currentFlow}` : `Capacity c(S, T) = ${minCutCapacity} == Flow ${currentFlow}`}
             </span>

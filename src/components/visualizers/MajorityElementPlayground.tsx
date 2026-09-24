@@ -87,7 +87,7 @@ export const MajorityElementPlayground: React.FC = () => {
           </span>
           <span>
             {language === 'es' ? 'Umbral (> n/2):' : 'Threshold (> n/2):'}{' '}
-            <strong style={{ color: 'var(--accent)' }}>&gt; {threshold}</strong>
+            <strong style={{ color: 'var(--accent)' }}>{`> ${threshold}`}</strong>
           </span>
         </div>
       </div>
@@ -165,7 +165,7 @@ export const MajorityElementPlayground: React.FC = () => {
           <div>
             <strong>{language === 'es' ? 'Elemento Mayoritario Encontrado:' : 'Majority Element Found:'}</strong>{' '}
             <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#10b981' }}>{majorityElement}</span>{' '}
-            ({freqMap[majorityElement]} {language === 'es' ? 'apariciones' : 'occurrences'} &gt; {threshold})
+            {`(${freqMap[majorityElement]} ${language === 'es' ? 'apariciones' : 'occurrences'} > ${threshold})`}
           </div>
         ) : (
           <div>

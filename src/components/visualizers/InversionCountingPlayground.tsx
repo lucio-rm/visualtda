@@ -346,7 +346,7 @@ export const InversionCountingPlayground: React.FC = () => {
             <div className="inv-pairs-list">
               {discoveredPairs.map((p, idx) => (
                 <span key={idx} className="inv-pair-pill">
-                  (A[{p.i}]={p.valI} &gt; A[{p.j}]={p.valJ})
+                  {`(A[${p.i}]=${p.valI} > A[${p.j}]=${p.valJ})`}
                 </span>
               ))}
             </div>

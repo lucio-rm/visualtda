@@ -1249,7 +1249,12 @@
 }
 
 /* Standardized Global Timeline Controls for all Visualizers */
-.timeline-toolbar {
+.timeline-toolbar,
+.trace-controls,
+.timeline-controls,
+.timeline-controls-bar,
+.timeline-controls-card,
+.gc-controls-card {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -1260,14 +1265,19 @@
   margin-top: 1rem;
 }
 
-.timeline-scrubber {
+.timeline-scrubber,
+.trace-scrubber,
+.timeline-scrubber-group {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   width: 100%;
 }
 
-.scrubber-slider {
+.scrubber-slider,
+.timeline-scrubber input[type='range'],
+.trace-scrubber input[type='range'],
+.timeline-scrubber-group input[type='range'] {
   flex: 1;
   height: 8px;
   border-radius: 4px;
@@ -1277,7 +1287,10 @@
   accent-color: var(--accent);
 }
 
-.toolbar-buttons-row {
+.toolbar-buttons-row,
+.trace-buttons,
+.gc-playback-buttons,
+.timeline-nav-group {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1293,7 +1306,9 @@
 
 /* Big, accessible, comfortable playback buttons */
 .ctrl-btn,
-.btn-control {
+.btn-control,
+.btn-ctrl,
+.timeline-btn {
   background-color: var(--surface-hover);
   color: var(--text);
   border: 1.5px solid var(--border);
@@ -1312,7 +1327,9 @@
 }
 
 .ctrl-btn:hover:not(:disabled),
-.btn-control:hover:not(:disabled) {
+.btn-control:hover:not(:disabled),
+.btn-ctrl:hover:not(:disabled),
+.timeline-btn:hover:not(:disabled) {
   background-color: var(--surface-active);
   border-color: var(--accent);
   transform: translateY(-1px);
@@ -1320,12 +1337,16 @@
 }
 
 .ctrl-btn:active:not(:disabled),
-.btn-control:active:not(:disabled) {
+.btn-control:active:not(:disabled),
+.btn-ctrl:active:not(:disabled),
+.timeline-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
 .ctrl-btn:disabled,
-.btn-control:disabled {
+.btn-control:disabled,
+.btn-ctrl:disabled,
+.timeline-btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
   transform: none;
@@ -1333,7 +1354,11 @@
 
 /* Play/Pause button stands out with accent styling */
 .ctrl-btn.play-btn,
-.btn-control.btn-play {
+.btn-control.btn-play,
+.btn-ctrl.btn-play,
+.btn-ctrl.btn-play-pause,
+.timeline-btn.play-btn,
+.ctrl-play-btn {
   background-color: var(--accent);
   color: var(--accent-contrast);
   border-color: var(--accent);
@@ -1343,32 +1368,45 @@
 }
 
 .ctrl-btn.play-btn:hover:not(:disabled),
-.btn-control.btn-play:hover:not(:disabled) {
+.btn-control.btn-play:hover:not(:disabled),
+.btn-ctrl.btn-play:hover:not(:disabled),
+.btn-ctrl.btn-play-pause:hover:not(:disabled),
+.timeline-btn.play-btn:hover:not(:disabled),
+.ctrl-play-btn:hover:not(:disabled) {
   background-color: var(--accent-hover);
   border-color: var(--accent-hover);
 }
 
 .ctrl-btn.play-btn.is-playing,
-.btn-control.btn-play.is-playing {
+.btn-control.btn-play.is-playing,
+.btn-ctrl.btn-play.is-playing,
+.timeline-btn.play-btn.is-playing,
+.ctrl-play-btn.is-playing {
   background-color: var(--warning);
   border-color: var(--warning);
   color: #1e293b;
 }
 
-.speed-group {
+.speed-group,
+.trace-speed,
+.speed-selector,
+.timeline-speed-group {
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-.speed-label {
+.speed-label,
+.trace-speed > span,
+.timeline-speed-group > span {
   font-size: 0.8125rem;
   color: var(--text-muted);
   font-weight: 600;
   margin-right: 0.25rem;
 }
 
-.speed-btn {
+.speed-btn,
+.btn-speed {
   background: none;
   border: 1px solid var(--border);
   color: var(--text-muted);
@@ -1380,15 +1418,55 @@
   transition: all 0.15s ease;
 }
 
-.speed-btn:hover {
+.speed-btn:hover,
+.btn-speed:hover {
   background-color: var(--surface-hover);
   color: var(--text);
 }
 
-.speed-btn.active {
+.speed-btn.active,
+.btn-speed.active {
   background-color: var(--accent);
   color: var(--accent-contrast);
   border-color: var(--accent);
+}
+
+.step-counter,
+.step-tag {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* Step Narrative Banner across all Visualizers */
+.step-narrative-banner,
+.trace-step-description,
+.gc-step-card,
+.kt-description-box,
+.sdk-description-box,
+.djk-description-box,
+.inv-explanation-card {
+  background-color: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 0.85rem 1.25rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-narrative-banner p,
+.trace-step-description p,
+.gc-step-card p {
+  margin: 0;
 }
 
 /* Responsive adjustments */
