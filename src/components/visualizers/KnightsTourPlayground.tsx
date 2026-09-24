@@ -73,8 +73,8 @@ export const KnightsTourPlayground: React.FC = () => {
     if (newHistory.length === n * n) {
       setMessage(
         language === 'es'
-          ? '🎉 ¡Felicitaciones! Has completado el Recorrido del Caballo cubriendo todo el tablero sin repetir casillas.'
-          : "🎉 Congratulations! You completed the Knight's Tour without repeating any square."
+          ? 'Recorrido completo factible: 64 casillas transitadas sin repetición.'
+          : "Complete feasible tour: all 64 squares visited without repetition."
       );
       markAttempted('knights-tour-backtracking');
     }

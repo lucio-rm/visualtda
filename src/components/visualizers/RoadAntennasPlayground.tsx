@@ -269,9 +269,9 @@ export const RoadAntennasPlayground: React.FC = () => {
       {/* Feedback Banner */}
       {isMinimal ? (
         <div className="challenge-feedback-banner success">
-          🏆 {language === 'es'
-            ? `¡Excelente! Cubriste todas las ${houses.length} casas utilizando exactamente ${userAntennas.length} antena(s), igualando la cota mínima óptima de Greedy.`
-            : `Outstanding! You covered all ${houses.length} houses using exactly ${userAntennas.length} antenna(s), matching Greedy's optimal minimum.`}
+          {language === 'es'
+            ? `Cobertura factible óptima: se cubrieron las ${houses.length} casas utilizando exactamente ${userAntennas.length} antena(s).`
+            : `Optimal feasible coverage: all ${houses.length} houses covered using exactly ${userAntennas.length} antenna(s).`}
         </div>
       ) : isSuboptimal ? (
         <div className="challenge-feedback-banner suboptimal">

@@ -185,9 +185,9 @@ export const SubsetSumPlayground: React.FC = () => {
         {/* Live Feedback Banner */}
         {isExactMatch ? (
           <div className="challenge-feedback-banner success">
-            🎉 {language === 'es'
-              ? `¡Suma exacta conseguida! La suma de tu selección es exactamente S = ${target}.`
-              : `Exact sum achieved! Your selected numbers sum to exactly S = ${target}.`}
+            {language === 'es'
+              ? `Suma exacta alcanzada: los elementos seleccionados suman exactamente S = ${target}.`
+              : `Exact sum reached: the selected elements sum to exactly S = ${target}.`}
           </div>
         ) : isOverflow ? (
           <div className="challenge-feedback-banner suboptimal">

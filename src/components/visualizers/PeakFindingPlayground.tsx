@@ -242,7 +242,7 @@ export const PeakFindingPlayground: React.FC = () => {
               <div className="card-status-message">
                 {userValidation?.valid ? (
                   <span className="status-success">
-                    🎉 {language === 'es' ? '¡Correcto! Es un pico local válido.' : 'Correct! It is a valid local peak.'}
+                    {language === 'es' ? 'Pico local válido verificado.' : 'Valid local peak verified.'}
                   </span>
                 ) : (
                   <span className="status-fail">

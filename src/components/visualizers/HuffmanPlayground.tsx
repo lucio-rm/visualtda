@@ -278,7 +278,7 @@ export const HuffmanPlayground: React.FC = () => {
         <div className="huff-instruction-banner">
           {isCompletedNow ? (
             <div className="huff-success-box">
-              <span className="huff-success-icon">🎉</span>
+              <span className="huff-success-icon">✓</span>
               <div>
                 <strong>
                   {language === 'es' ? '¡Árbol de Huffman completado con éxito!' : 'Huffman tree completed successfully!'}

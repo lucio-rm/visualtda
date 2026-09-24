@@ -171,7 +171,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </div>
       ) : action === 'SOLUTION_FOUND' ? (
         <div className="pruning-status-banner solution">
-          <span>🎉</span>
+          <span>✓</span>
           <span>
             {language === 'es'
               ? `¡Subconjunto exacto encontrado! [${currentSubset.join(' + ')}] = ${target}.`

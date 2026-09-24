@@ -88,8 +88,8 @@ export const InversionCountingPlayground: React.FC = () => {
         setDiscoveredPairs((prev) => [...prev, newPair]);
         setFeedbackMsg({
           text: language === 'es'
-            ? `🎉 ¡Inversión encontrada! A[${i}]=${valI} > A[${j}]=${valJ} (con índice ${i} < ${j}).`
-            : `🎉 Inversion found! A[${i}]=${valI} > A[${j}]=${valJ} (with index ${i} < ${j}).`,
+            ? `Inversión identificada: A[${i}]=${valI} > A[${j}]=${valJ} (con índice ${i} < ${j}).`
+            : `Inversion identified: A[${i}]=${valI} > A[${j}]=${valJ} (with index ${i} < ${j}).`,
           type: 'success'
         });
       }
@@ -110,8 +110,8 @@ export const InversionCountingPlayground: React.FC = () => {
     if (num === trueTotalInversions) {
       setGuessFeedback(
         language === 'es'
-          ? `🎉 ¡Exacto! El arreglo tiene exactamente ${trueTotalInversions} inversiones. Has demostrado dominio de conteo.`
-          : `🎉 Exact! The array contains exactly ${trueTotalInversions} inversions. You proved mastery.`
+          ? `Conteo exacto verificado: el arreglo contiene ${trueTotalInversions} inversiones.`
+          : `Exact count verified: the array contains ${trueTotalInversions} inversions.`
       );
       markAttempted('inversion-counting-dyc');
     } else if (num < trueTotalInversions) {
@@ -215,17 +215,17 @@ export const InversionCountingPlayground: React.FC = () => {
         {/* Victory Card */}
         {allInversionsDiscovered && (
           <div className="inv-victory-card" role="status">
-            <span style={{ fontSize: '1.4rem' }}>🏆</span>
+            
             <div>
               <strong>
                 {language === 'es'
-                  ? `¡Excelente deducción! Descubriste las ${trueTotalInversions} inversiones del arreglo.`
+                  ? `Total de inversiones deducido: ${trueTotalInversions}.`
                   : `Brilliant deduction! You found all ${trueTotalInversions} inversions in the array.`}
               </strong>
               <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
                 {language === 'es'
-                  ? `El número total de inversiones representa la cantidad mínima de intercambios adyacentes necesarios para ordenar el arreglo (Kendall tau). Has desbloqueado el ejercicio con maestría.`
-                  : `Total inversions represent the minimum adjacent swaps required to sort the array. You have mastered this exercise.`}
+                  ? `El número total de inversiones representa la cantidad mínima de intercambios adyacentes necesarios para ordenar el arreglo (distancia tau de Kendall).`
+                  : `Total inversions represent the minimum adjacent swaps required to sort the array (Kendall tau distance).`}
               </p>
             </div>
           </div>

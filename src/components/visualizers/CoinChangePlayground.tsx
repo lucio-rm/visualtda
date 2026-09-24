@@ -311,7 +311,7 @@ export const CoinChangePlayground: React.FC = () => {
           <div className="card-feedback">
             {isOptimal && (
               <span className="feedback-badge optimal">
-                🎉 {language === 'es' ? '¡Excelente! Mínimo absoluto alcanzado.' : 'Awesome! True global minimum.'}
+                {language === 'es' ? 'Mínimo absoluto de monedas alcanzado.' : 'True global minimum reached.'}
               </span>
             )}
             {isSuboptimal && (

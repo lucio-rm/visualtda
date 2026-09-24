@@ -120,8 +120,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Start Solving →'
   },
   viewCanonicalSolution: {
-    es: 'Ver Solución Canónica',
-    en: 'View Canonical Solution'
+    es: 'Ver Solución Oficial',
+    en: 'View Official Solution'
   },
   skipToUnderstand: {
     es: 'Saltar a la solución explicada',
@@ -244,8 +244,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Runs your code in real Python compiled to WebAssembly inside a Web Worker'
   },
   understandTitle: {
-    es: '3. Comprender: Solución Canónica, Correctness y Complejidad',
-    en: '3. Understand: Canonical Solution, Correctness & Complexity'
+    es: '3. Comprender: Solución en Python, Correctness y Complejidad',
+    en: '3. Understand: Python Solution, Correctness & Complexity'
   },
   understandLead: {
     es: 'Analizá en detalle cómo opera el algoritmo óptimo. Observá la traza paso a paso y comprendé la demostración de corrección formal.',
@@ -256,8 +256,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Visual Execution & State Trace'
   },
   understandCanonicalHeading: {
-    es: 'Implementación Canónica',
-    en: 'Canonical Implementation'
+    es: 'Solución en Python',
+    en: 'Python Solution'
   },
   understandPython3: {
     es: 'Python 3',
@@ -312,8 +312,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: '1. Discover: Intuition & Problem Setup'
   },
   discoverLead: {
-    es: 'Antes de escribir código o pensar en algoritmos complejos, explorá cómo se comporta el problema. Manipulá las variables, observá qué situaciones generan conflictos o inviabilidades, y construí tu intuición.',
-    en: 'Before writing code or jumping to complex algorithms, explore how the problem behaves. Manipulate the variables, observe what creates conflicts or infeasibilities, and build your intuition.'
+    es: 'Explorá el comportamiento del problema y las restricciones del modelo. Experimentá con distintas instancias para identificar invariantes y casos límite.',
+    en: 'Explore the problem behavior and model constraints. Experiment with different instances to identify invariants and boundary cases.'
   },
   discoverProblemStatement: {
     es: 'Planteo del Problema',

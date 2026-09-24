@@ -229,8 +229,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
       markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
-          ? `✓ ¡Excelente! ${evalResult.totalPassed} / ${evalResult.totalTests} pruebas en Python real superadas en ${Math.round(evalResult.executionTimeMs)} ms.`
-          : `✓ Excellent! ${evalResult.totalPassed} / ${evalResult.totalTests} real Python tests passed in ${Math.round(evalResult.executionTimeMs)} ms.`
+          ? `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas exitosamente en ${Math.round(evalResult.executionTimeMs)} ms.`
+          : `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} tests passed successfully in ${Math.round(evalResult.executionTimeMs)} ms.`
       );
       onSuccess();
     } else {

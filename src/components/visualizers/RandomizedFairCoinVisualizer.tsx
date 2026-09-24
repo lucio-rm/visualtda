@@ -155,7 +155,7 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
       {outputBit !== undefined && (
         <div className="final-result-card">
           <div className="final-title">
-            {language === 'es' ? '🎉 Bit Equilibrado Generado (50% / 50%):' : '🎉 Fair Bit Generated (50% / 50%):'}
+            {language === 'es' ? 'Bit Equilibrado Generado (50% / 50%):' : 'Fair Bit Generated (50% / 50%):'}
           </div>
           <div className="final-bit-badge">{outputBit}</div>
           <div className="final-stats">

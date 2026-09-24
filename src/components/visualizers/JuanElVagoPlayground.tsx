@@ -205,7 +205,7 @@ export const JuanElVagoPlayground: React.FC = () => {
                   </span>
                 ) : manualStatus.isOptimal ? (
                   <span className="status-success">
-                    🎉 {language === 'es' ? '¡Excelente! Encontraste el óptimo global.' : 'Awesome! You found global optimum.'}
+                    {language === 'es' ? 'Combinación óptima calculada.' : 'Optimal combination reached.'}
                   </span>
                 ) : (
                   <span className="status-subopt">

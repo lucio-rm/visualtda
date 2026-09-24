@@ -182,7 +182,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
         {isOptimal ? (
           <div className="status-alert success">
-            🎉 {language === 'es' ? '¡Excelente! Encontraste una combinación óptima de 3 tareas compatibles.' : 'Excellent! You found an optimal combination of 3 compatible tasks.'}
+            {language === 'es' ? 'Conjunto máximo de tareas compatibles verificado (3 tareas).' : 'Maximum set of compatible tasks verified (3 tasks).'}
           </div>
         ) : hasOverlap ? (
           <div className="status-alert warning">

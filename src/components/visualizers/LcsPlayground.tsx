@@ -184,7 +184,7 @@ export const LcsPlayground: React.FC = () => {
                 <div className="feedback-banner">
                   {userValidation?.isOptimal ? (
                     <span className="status-opt">
-                      🎉 {language === 'es' ? '¡Excelente! Longitud máxima alcanzada.' : 'Awesome! Maximum length achieved.'}
+                      {language === 'es' ? 'Subsecuencia común más larga identificada.' : 'Longest common subsequence identified.'}
                     </span>
                   ) : userValidation?.isSub1 && userValidation?.isSub2 ? (
                     <span className="status-subopt">

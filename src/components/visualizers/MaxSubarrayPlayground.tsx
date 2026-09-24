@@ -251,7 +251,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
               <span className="stat-value">
                 {isOptimal ? (
                   <span style={{ color: '#10b981', fontWeight: 800 }}>
-                    🎉 {language === 'es' ? '¡ÓPTIMO ALCANZADO!' : 'OPTIMAL REACHED!'}
+                    {language === 'es' ? 'Subarreglo de suma máxima identificado' : 'Maximum sum subarray identified'}
                   </span>
                 ) : userSum !== null ? (
                   <span style={{ color: '#f59e0b' }}>

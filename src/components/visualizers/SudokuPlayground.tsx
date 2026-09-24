@@ -111,8 +111,8 @@ export const SudokuPlayground: React.FC = () => {
     if (isComplete) {
       setSolvedMessage(
         language === 'es'
-          ? '🎉 ¡Felicitaciones! Has completado el Sudoku respetando todas las restricciones.'
-          : '🎉 Congratulations! You have solved the Sudoku respecting all constraints.'
+          ? 'Asignación completa y factible: todas las restricciones de fila, columna y cuadrante 3×3 se satisfacen.'
+          : 'Complete feasible assignment: all row, column, and 3x3 subgrid constraints are satisfied.'
       );
       markAttempted('sudoku-backtracking');
     }

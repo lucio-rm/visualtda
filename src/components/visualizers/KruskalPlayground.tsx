@@ -73,8 +73,8 @@ export const KruskalPlayground: React.FC = () => {
       if (totalWeight === 10) {
         setFeedback(
           language === 'es'
-            ? `🎉 ¡Felicitaciones! Has construido el Árbol Generador Mínimo óptimo con costo total ${totalWeight}.`
-            : `🎉 Congratulations! You constructed the optimal MST with total cost ${totalWeight}.`
+            ? `Árbol Generador Mínimo factible verificado. Costo total: ${totalWeight}.`
+            : `Feasible Minimum Spanning Tree verified. Total cost: ${totalWeight}.`
         );
         markAttempted('kruskal-mst-greedy');
       } else {

@@ -420,6 +420,13 @@
   letter-spacing: 0.05em;
 }
 
+.phase-step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+
 .phase-step-title {
   font-size: 1.05rem;
   font-weight: 700;
@@ -986,12 +993,19 @@
 
 .canonical-code-display {
   background-color: var(--code-bg);
+  color: var(--text);
+  font-family: var(--font-mono);
   border: 1px solid var(--code-border);
   border-radius: var(--radius-md);
   padding: 1.25rem;
   font-size: 0.9375rem;
   line-height: 1.6;
   overflow-x: auto;
+}
+
+.canonical-code-display code {
+  color: inherit;
+  font-family: inherit;
 }
 
 .understand-theory-row {
