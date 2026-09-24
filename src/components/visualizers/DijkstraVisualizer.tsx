@@ -116,7 +116,7 @@ export const DijkstraVisualizer: React.FC = () => {
             const isRelaxing = relaxedEdge && relaxedEdge.u === edge.u && relaxedEdge.v === edge.v;
             const isTreeEdge = predecessors[edge.v] === edge.u;
 
-            let strokeColor = 'var(--border, #475569)';
+            let strokeColor = 'var(--border-strong, #64748b)';
             let strokeWidth = 1.5;
             let marker = 'url(#djk-arrow)';
 

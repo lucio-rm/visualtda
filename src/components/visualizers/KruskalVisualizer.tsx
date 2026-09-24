@@ -117,7 +117,7 @@ export const KruskalVisualizer: React.FC = () => {
             const currentEdge = sortedEdges[currentEdgeIndex];
             const isCurrent = currentEdge && currentEdge.id === edge.id;
 
-            let strokeColor = 'var(--border, #475569)';
+            let strokeColor = 'var(--border-strong, #64748b)';
             let strokeWidth = 1.5;
             let strokeDash: string | undefined = undefined;
 

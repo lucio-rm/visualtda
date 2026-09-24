@@ -18,7 +18,7 @@ const PRESETS = [
   },
   {
     id: 'counterexample',
-    label: { es: '★ Contraejemplo Greedy (C = 10)', en: '★ Greedy Counterexample (C = 10)' },
+    label: { es: 'Contraejemplo Heurística Greedy (C = 10)', en: 'Greedy Heuristic Counterexample (C = 10)' },
     items: [
       { id: 'A', name: 'Ítem A', weight: 6, value: 30 },
       { id: 'B', name: 'Ítem B', weight: 3, value: 14 },
@@ -144,24 +144,32 @@ export const KnapsackDpVisualizer: React.FC = () => {
       {/* Step Narrative Banner */}
       <div className={`step-narrative-banner ${currentEvent?.type || 'init'}`}>
         <span className="step-tag">
-          Paso {currentStepIndex + 1} / {totalSteps}
+          {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}
         </span>
         <p className="step-message-text">
-          {currentEvent?.message?.es || 'Inicializando algoritmo...'}
+          {currentEvent?.message?.[language] || currentEvent?.message?.es || (language === 'es' ? 'Inicializando algoritmo...' : 'Initializing algorithm...')}
         </p>
       </div>
 
       {/* Formula & Live Decision Box */}
       <div className="formula-callout">
-        <span className="formula-title">Decisión de Recurrencia en Celda Actual:</span>
+        <span className="formula-title">
+          {language === 'es' ? 'Decisión de Recurrencia en Celda Actual:' : 'Recurrence Decision at Current Cell:'}
+        </span>
         <div className="formula-body">
           {decisionType === 'base_case' && (
-            <span>Caso Base: Con 0 elementos o capacidad 0, DP[i][w] = 0.</span>
+            <span>
+              {language === 'es'
+                ? 'Caso Base: Con 0 elementos o capacidad 0, DP[i][w] = 0.'
+                : 'Base Case: With 0 items or capacity 0, DP[i][w] = 0.'}
+            </span>
           )}
           {decisionType === 'cannot_fit' && highlightTarget && (
             <span>
-              El ítem {highlightTarget[0]} tiene peso {items[highlightTarget[0] - 1]?.weight} &gt; capacidad actual {highlightTarget[1]}.
-              Se hereda directamente: <strong>DP[{highlightTarget[0]}][{highlightTarget[1]}] = DP[{highlightTarget[0] - 1}][{highlightTarget[1]}]</strong>.
+              {language === 'es'
+                ? `El ítem ${highlightTarget[0]} tiene peso ${items[highlightTarget[0] - 1]?.weight} > capacidad actual ${highlightTarget[1]}. Se hereda directamente: `
+                : `Item ${highlightTarget[0]} has weight ${items[highlightTarget[0] - 1]?.weight} > current capacity ${highlightTarget[1]}. Inherited directly: `}
+              <strong>DP[{highlightTarget[0]}][{highlightTarget[1]}] = DP[{highlightTarget[0] - 1}][{highlightTarget[1]}]</strong>.
             </span>
           )}
           {decisionType === 'compare' && comparison && highlightTarget && (
@@ -170,40 +178,52 @@ export const KnapsackDpVisualizer: React.FC = () => {
                 DP[{highlightTarget[0]}][{highlightTarget[1]}] = max(
               </span>
               <span className="formula-tag exclude">
-                Excluir: ${comparison.excludeValue}
+                {language === 'es' ? 'Excluir: $' : 'Exclude: $'}{comparison.excludeValue}
               </span>
               <span>,</span>
               <span className="formula-tag include">
-                Incluir: ${comparison.includeValue}
+                {language === 'es' ? 'Incluir: $' : 'Include: $'}{comparison.includeValue}
               </span>
               <span>) &rarr;</span>
               <span className="formula-tag chosen">
-                {comparison.chosen === 'include' ? 'INCLUIDO' : 'EXCLUIDO'} (Valor: ${Math.max(comparison.excludeValue, comparison.includeValue)})
+                {comparison.chosen === 'include'
+                  ? (language === 'es' ? 'INCLUIDO' : 'INCLUDED')
+                  : (language === 'es' ? 'EXCLUIDO' : 'EXCLUDED')} ({language === 'es' ? 'Valor: $' : 'Value: $'}{Math.max(comparison.excludeValue, comparison.includeValue)})
               </span>
             </>
           )}
           {decisionType === 'reconstruct' && (
             <span>
-              Fase de Reconstrucción: Rastreo de retroceso desde celda final hacia casos base para identificar ítems que aportaron valor.
+              {language === 'es'
+                ? 'Fase de Reconstrucción: Rastreo de retroceso desde celda final hacia casos base para identificar ítems que aportaron valor.'
+                : 'Backtracking Reconstruction Phase: Tracing backwards from final cell to identify which items contributed value.'}
             </span>
           )}
           {decisionType === 'complete' && (
             <span>
-              Solución óptima alcanzada: subconjunto reconstruido que maximiza el valor respetando la restricción de capacidad W.
+              {language === 'es'
+                ? 'Solución óptima alcanzada: subconjunto reconstruido que maximiza el valor respetando la restricción de capacidad W.'
+                : 'Optimal solution achieved: reconstructed subset that maximizes value respecting capacity bound W.'}
             </span>
           )}
           {decisionType === 'init' && (
-            <span>Asignando memoria para la matriz DP de (n+1) × (W+1).</span>
+            <span>
+              {language === 'es'
+                ? 'Asignando memoria para la matriz DP de (n+1) × (W+1).'
+                : 'Allocating memory for DP matrix of dimensions (n+1) × (W+1).'}
+            </span>
           )}
         </div>
       </div>
 
       {/* 2D DP Table */}
-      <div className="dp-table-wrapper" tabIndex={0} aria-label="Tabla de Programación Dinámica">
+      <div className="dp-table-wrapper" tabIndex={0} aria-label={language === 'es' ? 'Tabla de Programación Dinámica' : 'Dynamic Programming Table'}>
         <table className="dp-table">
           <thead>
             <tr>
-              <th className="row-header-th">Ítem \ Capacidad (w)</th>
+              <th className="row-header-th">
+                {language === 'es' ? 'Ítem \\ Capacidad (w)' : 'Item \\ Capacity (w)'}
+              </th>
               {Array.from({ length: capacity + 1 }, (_, w) => (
                 <th key={`head-w-${w}`}>w={w}</th>
               ))}
@@ -214,8 +234,8 @@ export const KnapsackDpVisualizer: React.FC = () => {
             <tr>
               <th className="row-header-th">
                 <div className="item-row-info">
-                  <span className="item-name">i=0 (Vacío)</span>
-                  <span className="item-specs">Base: 0 ítems</span>
+                  <span className="item-name">{language === 'es' ? 'i=0 (Vacío)' : 'i=0 (Empty)'}</span>
+                  <span className="item-specs">{language === 'es' ? 'Base: 0 ítems' : 'Base: 0 items'}</span>
                 </div>
               </th>
               {Array.from({ length: capacity + 1 }, (_, w) => (
@@ -236,7 +256,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
                         i={r}: {item.name}
                       </span>
                       <span className="item-specs">
-                        peso={item.weight} | val=${item.value}
+                        {language === 'es' ? `peso=${item.weight} | val=$${item.value}` : `weight=${item.weight} | val=$${item.value}`}
                       </span>
                     </div>
                   </th>
@@ -255,7 +275,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
       {/* Backpack Status Preview */}
       <div className="backpack-summary-card">
         <div className="gauge-label-row">
-          <span>Ocupación de la Mochila</span>
+          <span>{language === 'es' ? 'Ocupación de la Mochila' : 'Knapsack Occupancy'}</span>
           <span>
             {totalWeight} kg / {capacity} kg ({Math.round((totalWeight / capacity) * 100)}%)
           </span>
@@ -272,7 +292,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
               .filter((it) => selectedItemIds.includes(it.id))
               .map((it) => (
                 <span key={it.id} className="backpack-item-chip">
-                  🎒 {it.name} (w={it.weight}, v=${it.value})
+                  {it.name} (w={it.weight}, v=${it.value})
                 </span>
               ))}
           </div>
@@ -286,8 +306,8 @@ export const KnapsackDpVisualizer: React.FC = () => {
             type="button"
             className="btn-ctrl"
             onClick={reset}
-            aria-label="Reiniciar (R)"
-            title="Reiniciar (tecla R)"
+            aria-label={language === 'es' ? 'Reiniciar (R)' : 'Reset (R)'}
+            title={language === 'es' ? 'Reiniciar (tecla R)' : 'Reset (key R)'}
           >
             ↺
           </button>
@@ -296,8 +316,8 @@ export const KnapsackDpVisualizer: React.FC = () => {
             className="btn-ctrl"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            aria-label="Paso anterior (Flecha Izquierda)"
-            title="Paso anterior (←)"
+            aria-label={language === 'es' ? 'Paso anterior (Flecha Izquierda)' : 'Previous step (Left Arrow)'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
           >
             ◀
           </button>
@@ -305,8 +325,8 @@ export const KnapsackDpVisualizer: React.FC = () => {
             type="button"
             className="btn-ctrl btn-play-pause"
             onClick={togglePlay}
-            aria-label={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
-            title={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
+            aria-label={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
           >
             {isPlaying ? '❚❚' : '▶'}
           </button>
@@ -315,8 +335,8 @@ export const KnapsackDpVisualizer: React.FC = () => {
             className="btn-ctrl"
             onClick={stepForward}
             disabled={currentStepIndex === totalSteps - 1}
-            aria-label="Paso siguiente (Flecha Derecha)"
-            title="Paso siguiente (→)"
+            aria-label={language === 'es' ? 'Paso siguiente (Flecha Derecha)' : 'Next step (Right Arrow)'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
           >
             ▶
           </button>
@@ -330,19 +350,19 @@ export const KnapsackDpVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="timeline-slider"
-            aria-label="Línea de tiempo de estados"
+            aria-label={language === 'es' ? 'Línea de tiempo de estados' : 'State timeline'}
           />
         </div>
 
         <div className="timeline-speed-group">
-          <span className="speed-label">Velocidad:</span>
+          <span className="speed-label">{language === 'es' ? 'Velocidad:' : 'Speed:'}</span>
           {[0.5, 1, 2, 4].map((spd) => (
             <button
               key={spd}
               type="button"
               className={`btn-speed ${playbackSpeed === spd ? 'active' : ''}`}
               onClick={() => setSpeed(spd)}
-              aria-label={`Velocidad ${spd}x`}
+              aria-label={language === 'es' ? `Velocidad ${spd}x` : `Speed ${spd}x`}
             >
               {spd}x
             </button>

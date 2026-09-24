@@ -4,9 +4,11 @@ import {
   IntervalSchedulingStepData
 } from '../../engine/algorithms/intervalSchedulingTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './IntervalSchedulingVisualizer.css';
 
 export const IntervalSchedulingVisualizer: React.FC = () => {
+  const { language } = useLanguage();
   const timeline = useMemo(() => generateIntervalSchedulingTrace(), []);
 
   const {
@@ -45,23 +47,29 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
   return (
     <div className="interval-visualizer-card">
       <div className="visualizer-header-bar">
-        <h4>Programación Greedy por Fin Más Temprano</h4>
+        <h4>
+          {language === 'es'
+            ? 'Programación Greedy por Fin Más Temprano (Earliest Finish Time)'
+            : 'Greedy Interval Scheduling by Earliest Finish Time'}
+        </h4>
         <div className="stats-badges">
           <span className="stat-badge stat-solution">
             <span className="stat-num">{selectedIds.length}</span>
-            <span className="stat-label">Seleccionados</span>
+            <span className="stat-label">{language === 'es' ? 'Seleccionados' : 'Selected'}</span>
           </span>
           <span className="stat-badge">
             <span className="stat-num">{rejectedIds.length}</span>
-            <span className="stat-label">Descartados</span>
+            <span className="stat-label">{language === 'es' ? 'Descartados' : 'Discarded'}</span>
           </span>
         </div>
       </div>
 
       <div className={`step-narrative-banner ${currentEvent?.type || 'init'}`}>
-        <span className="step-tag">Paso {currentStepIndex + 1} / {totalSteps}</span>
+        <span className="step-tag">
+          {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}
+        </span>
         <p className="step-message-text">
-          {currentEvent?.message?.es || 'Iniciando evaluación...'}
+          {currentEvent?.message?.[language] || currentEvent?.message?.es || (language === 'es' ? 'Iniciando evaluación...' : 'Starting evaluation...')}
         </p>
       </div>
 
@@ -153,13 +161,19 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Línea de tiempo"
+            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
           />
         </div>
 
         <div className="toolbar-buttons-row">
           <div className="playback-group">
-            <button type="button" className="ctrl-btn" onClick={reset} title="Reiniciar">
+            <button
+              type="button"
+              className="ctrl-btn"
+              onClick={reset}
+              title={language === 'es' ? 'Reiniciar' : 'Reset'}
+              aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
+            >
               ⏮
             </button>
             <button
@@ -167,7 +181,8 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               className="ctrl-btn"
               onClick={stepBackward}
               disabled={currentStepIndex === 0}
-              title="Paso anterior"
+              title={language === 'es' ? 'Paso anterior' : 'Previous step'}
+              aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
             >
               ◀
             </button>
@@ -175,7 +190,8 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               type="button"
               className={`ctrl-btn play-btn ${isPlaying ? 'is-playing' : ''}`}
               onClick={togglePlay}
-              title={isPlaying ? 'Pausar' : 'Reproducir'}
+              title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+              aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             >
               {isPlaying ? '⏸' : '▶'}
             </button>
@@ -184,14 +200,15 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
               className="ctrl-btn"
               onClick={stepForward}
               disabled={currentStepIndex >= totalSteps - 1}
-              title="Paso siguiente"
+              title={language === 'es' ? 'Paso siguiente' : 'Next step'}
+              aria-label={language === 'es' ? 'Paso siguiente' : 'Next step'}
             >
               ▶
             </button>
           </div>
 
           <div className="speed-group">
-            <span className="speed-label">Velocidad:</span>
+            <span className="speed-label">{language === 'es' ? 'Velocidad:' : 'Speed:'}</span>
             {[0.5, 1, 2].map((spd) => (
               <button
                 key={spd}

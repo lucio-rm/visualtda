@@ -40,7 +40,7 @@
 
 /* Edges */
 .flow-edge-line {
-  stroke: var(--color-border);
+  stroke: var(--color-border-strong);
   stroke-width: 2.5;
   transition: all var(--transition-fast);
 }
@@ -64,7 +64,7 @@
 
 .edge-label-bg {
   fill: var(--color-surface);
-  stroke: var(--color-border);
+  stroke: var(--color-border-strong);
   stroke-width: 1;
   rx: 4;
 }

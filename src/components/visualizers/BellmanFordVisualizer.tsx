@@ -94,7 +94,7 @@ export const BellmanFordVisualizer: React.FC = () => {
               const isCurrent = currentEdge && currentEdge.u === e.u && currentEdge.v === e.v;
               const isNeg = e.weight < 0;
 
-              let stroke = isNeg ? 'var(--danger, #ef4444)' : 'var(--border, #475569)';
+              let stroke = isNeg ? 'var(--danger, #ef4444)' : 'var(--border-strong, #64748b)';
               let strokeWidth = isNeg ? 2.5 : 1.5;
               let marker = isNeg ? 'url(#bf-arr-neg)' : 'url(#bf-arr)';
 

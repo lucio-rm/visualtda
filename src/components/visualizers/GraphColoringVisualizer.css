@@ -54,7 +54,7 @@
 }
 
 .gc-edge {
-  stroke: var(--border);
+  stroke: var(--border-strong);
   stroke-width: 2.5;
   transition: stroke 0.25s ease, stroke-width 0.25s ease;
 }
