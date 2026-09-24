@@ -1,14 +1,15 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed Section 18 answer leak remediation across DP & D&C tests/stubs, Section 93/94 "What-if?" counterexample presets (Interval Scheduling, Huffman uniform coding, Merge Sort sorted case, Knapsack doubled capacity), Section 17 dedicated textbook insights across all 37 exercises, Section 32/33 phase switcher badge styling without text overflow, Section 79 mobile responsive header fixes eliminating right-edge control clipping, Section 38 explicit environment error vs student error handling, Section 41 data inventory policy (`docs/privacy.md`), and Section 90 known issues log update.
-- **BASELINE_COMMIT**: `bb1463b`
+- **CURRENT_PHASE**: STOPPED_ON_USER_COMMAND
+- **CURRENT_TASK**: Completed full visualizer UX and accessibility overhaul across all 36 algorithm visualizers. Added landmark `role="region"` and bilingual `aria-label` attributes to all visualizer containers, SVGs, and interactive timeline controls (sliders, speed selectors, buttons). Resolved unassociated form labels and unlocalized strings. Executed full verification suite (291 tests, 22 Chromium browser QA scenarios, static build). System cleanly parked.
+- **BASELINE_COMMIT**: `07dfb28`
 - **EXPLICIT_COMPONENT_STATES**:
-  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
+  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 291 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.5s)
   - **Visualizer & Playground Completeness (37/37 Exercises, 38 Views)**: [VERIFIED]
     - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds**.
-    - Standardized media playback controls (`↺`, `←`, `▶`/`❚❚`, `→`) across 100% of visualizers, with zero glyph collisions (`◀` and `▶` step confusion eradicated).
+    - Fully audited for accessibility: landmark `role="region"`, bilingual `aria-label`s on all SVGs, tables, sliders, speed selects, and playback buttons (`↺`, `←`, `▶`/`❚❚`, `→`).
+    - Standardized media playback controls across 100% of visualizers, with zero glyph collisions.
     - Mathematical rationale, recurrence relations, and asymptotic cost comparison cards embedded directly in every visualizer view for university professor-grade presentation.
     - High-contrast graph edges calibrated for WCAG AAA compliance in both light and dark themes.
     - Zero generic fallbacks anywhere in the application.
@@ -18,7 +19,6 @@
   - **7-Stage Pedagogical Progress Model & Access Control**: [VERIFIED]
     - Formal states: `unseen`, `exploring`, `attempted`, `testing`, `passed`, `completed`, `instructor`.
     - Monotonic rank invariant ensures earlier interactions never degrade higher achievements.
-    - Ground-truth fix: Interacting with playgrounds records exploration/attempts (`markAttempted`) without prematurely unlocking canonical Python or bypassing Phase 2 (Solve).
     - Canonical Python remains strictly locked until automated tests pass or Instructor Mode is explicitly enabled.
     - Adult academic engineering tone strictly enforced (zero childish emojis or cheerleading across all UI chrome and visualizers).
   - **Dynamic Programming Subproblem Illumination (Section 25)**: [VERIFIED]
@@ -31,7 +31,7 @@
   - **Mathematical Typography Engine (Section 43)**: [VERIFIED]
     - `formatMathText` in `TheoryMarkdown.tsx` recursively unnests multi-level LaTeX expressions (`\text`, `\mathrm`, `\mathbf`, `\mathcal`).
     - Semantic Markdown tables (`| col | col |`) rendered with `.theory-table-container`.
-    - Verified in `tests/theoryMarkdown.test.tsx` (7/7 tests PASS).
+    - Verified in `tests/theoryMarkdown.test.tsx` (8/8 tests PASS).
   - **Real Browser QA Verification (Section 35 & 79)**: [VERIFIED]
     - 22 / 22 scenarios passed in Chromium headless (`scripts/browserQA.mjs`) across 5 viewports (FHD 1920x1080, Laptop 1440x900, Desktop 1280x720, Tablet 768x1024, Mobile 390x844).
     - 0 console errors captured during real browser sessions.
@@ -39,6 +39,6 @@
 - **LAST_VERIFIED**:
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
-  - `npm test`: 39 test files, 290 passed (100% PASS)
+  - `npm test`: 39 test files, 291 passed (100% PASS)
   - `node scripts/browserQA.mjs`: 22 / 22 real Chromium scenarios passed (100% PASS)
   - `npm run build`: static production build succeeds in ~1.5s (`dist/`)
