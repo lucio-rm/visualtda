@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { ExerciseMetadata } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseContent';
@@ -39,6 +39,9 @@ export const SolveView: React.FC<SolveViewProps> = ({
       return defaultCode;
     }
   });
+
+  const gutterRef = useRef<HTMLDivElement>(null);
+  const lineCount = useMemo(() => Math.max(code.split('\n').length, 1), [code]);
 
   const setCode = (newCode: string) => {
     setCodeState(newCode);
@@ -282,15 +285,29 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 {t(dict.resetTemplate)}
               </button>
             </div>
-            <textarea
-              className="code-editor-input"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={14}
-              aria-label={t(dict.codeEditorAriaLabel)}
-              spellCheck={false}
-            />
+            <div className="editor-input-wrapper">
+              <div ref={gutterRef} className="editor-gutter" aria-hidden="true">
+                {Array.from({ length: lineCount }, (_, i) => (
+                  <span key={i + 1} className="editor-line-number">
+                    {i + 1}
+                  </span>
+                ))}
+              </div>
+              <textarea
+                className="code-editor-input"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onScroll={(e) => {
+                  if (gutterRef.current) {
+                    gutterRef.current.scrollTop = e.currentTarget.scrollTop;
+                  }
+                }}
+                rows={14}
+                aria-label={t(dict.codeEditorAriaLabel)}
+                spellCheck={false}
+              />
+            </div>
             <div className="editor-actions">
               <button
                 type="button"
@@ -332,14 +349,32 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
               <p className="test-summary-message">{testSummary}</p>
 
-              {runtimeError && (
-                <div className="python-output-card">
-                  <div className="python-output-header">
-                    {language === 'es' ? '⚠️ Excepción / Error en Tiempo de Ejecución' : '⚠️ Runtime Exception / Error'}
+              {runtimeError && (() => {
+                const isInfraError =
+                  runtimeError.includes('Pyodide') ||
+                  runtimeError.includes('Web Worker') ||
+                  runtimeError.includes('CDN') ||
+                  runtimeError.includes('WebAssembly') ||
+                  runtimeError.includes('estrategia de pruebas');
+
+                return (
+                  <div className={`python-output-card ${isInfraError ? 'infra-error' : 'student-error'}`}>
+                    <div className="python-output-header">
+                      {isInfraError
+                        ? (language === 'es' ? '⚙️ Fallo de Inicialización del Entorno (Infraestructura)' : '⚙️ Environment Initialization Failure (Infrastructure)')
+                        : (language === 'es' ? '⚠️ Excepción / Error en Tiempo de Ejecución en tu Código' : '⚠️ Runtime Exception / Error in Your Code')}
+                    </div>
+                    <pre className="python-error-box">{runtimeError}</pre>
+                    {isInfraError && (
+                      <p style={{ marginTop: '0.5rem', marginBottom: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        {language === 'es'
+                          ? 'Este fallo se debe a la inicialización de WebAssembly/Pyodide, no a un error de lógica en tu solución. Podés reintentar la ejecución o usar las Pruebas Rápidas locales.'
+                          : 'This failure is due to WebAssembly/Pyodide initialization, not your solution logic. You can retry or use Fast local tests.'}
+                      </p>
+                    )}
                   </div>
-                  <pre className="python-error-box">{runtimeError}</pre>
-                </div>
-              )}
+                );
+              })()}
 
               {stdout && (
                 <div className="python-output-card">
