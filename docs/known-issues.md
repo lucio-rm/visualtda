@@ -42,31 +42,104 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
-## 2. Visual & Architectural Audit of All 21 Visualizers
+### Issue 3.3 — Literal HTML entities and mathematical symbols rendered as broken source code
 
-| # | Exercise ID | View / Playground | Verified Status | Notes |
-|---|-------------|-------------------|-----------------|-------|
-| 1 | `n_queens` | Board + Growth Panel | Verified | Partial validation active; conflict ray functional; complexity growth panel active. |
-| 2 | `road_antennas` | SVG Highway Playground | Verified | Houses, antenna ranges, greedy selection, keyboard navigable. |
-| 3 | `interval_scheduling` | SVG Timeline Intervals | Verified | Non-overlapping interval selection, compatible/incompatible badges. |
-| 4 | `weighted_interval_scheduling` | Dynamic Programming Schedule | Verified | Weighted intervals, memoization table, backtracking arrows. |
-| 5 | `knapsack_01_greedy` | Greedy Density Visualizer | Verified | Value-to-weight ratio ordering, capacity meter. |
-| 6 | `knapsack_01_dp` | DP Table Visualizer | Verified | 2D $(i, w)$ matrix, cell lookup highlights. |
-| 7 | `merge_sort` | Recursion Tree + Array | Verified | Split, recurse, merge buffers. |
-| 8 | `inversion_counting` | Divide & Conquer Inversions | Verified | Inversion pair counter, merge step split. |
-| 9 | `closest_pair` | 2D Geometry Plane | Verified | Point plane, divide line, boundary strip. |
-| 10 | `quicksort` | Pivot Partition Array | Verified | Pivot element, left/right pointers, swap trace. |
-| 11 | `peak_finding` | 1D / 2D Array Grid | Verified | Binary search midpoint, slope indicators. |
-| 12 | `huffman_coding_greedy` | Min-Heap + Prefix Tree | Verified | SVG binary tree forest + heap cards + codebook. |
-| 13 | `graph_coloring` | Graph Backtracking Visualizer | Verified | Graph nodes, chromatic color palette, conflict checks. |
-| 14 | `subset_sum` | DP Matrix | Verified | Boolean reachable sum table. |
-| 15 | `longest_common_subsequence` | 2D DP Grid | Verified | Matching character arrows, reconstructed string. |
-| 16 | `coin_change` | DP Table + Trace | Verified | Minimum coin counts, chosen denominations. |
-| 17 | `juan_el_vago` | 1D DP Visualizer | Verified | Activity choice recurrence without consecutive days. |
-| 18 | `max_subarray` | Kadane + Divide & Conquer | Verified | Cumulative sum bars, current max range indicator. |
-| 19 | `ford_fulkerson` | Flow Network Graph | Verified | Source/sink capacities, augmenting paths, residual graph. |
-| 20 | `vertex_cover_approx` | Graph Approximation | Verified | Maximal matching edge picks, vertex highlight. |
-| 21 | `reduction_is_vc` | Reduction Visualizer | Verified | Independent set to vertex cover dual complement transform. |
+- **Reported Behavior**: JSX text nodes containing entities such as `&#123;`, `&#125;`, `&gt;`, `&lt;`, and `\text{...}` rendered literally on the screen (e.g. `x_i &#123;0, 1&#125;`).
+- **Severity**: Medium (Visual quality defect and user distraction).
+- **Status**: **RESOLVED** (`2cb81df`).
+- **Root Cause Analysis**:
+  - React JSX does not automatically decode numeric HTML entities within raw text children; they are treated as literal string tokens.
+- **Resolution**:
+  1. Replaced all raw HTML entity strings with JavaScript string literals (`{'x_i ∈ {0, 1}'}`) or proper Unicode mathematical characters (`∈`, `≠`, `≤`, `≥`, `∖`).
+  2. Created automated audit script `scripts/audit_quality.mjs` verifying zero raw entity substrings in any `.tsx` or `.ts` file.
+
+---
+
+### Issue 3.4 — Unstyled trace controls and missing timeline stylesheets across views
+
+- **Reported Behavior**: Several visualizer views rendered timeline playback buttons (`.trace-controls`, `.trace-buttons`, `.trace-scrubber`) as unstyled raw elements due to missing CSS classes in their respective component CSS files.
+- **Severity**: High (Degraded visual hierarchy and broke N-Queens-level design parity).
+- **Status**: **RESOLVED** (`2cb81df`).
+- **Root Cause Analysis**:
+  - Modular CSS was introduced per visualizer chunk without global aliases for the timeline controller classes in `App.css`.
+- **Resolution**:
+  1. Consolidated global CSS classes in `src/app/App.css` covering `.trace-controls`, `.trace-buttons`, `.trace-scrubber`, `.trace-speed`, `.btn-speed`, `.step-counter`, `.step-narrative-banner`, and `.trace-step-description`.
+  2. Verified consistent layout across all 37 visualizers with `scripts/browserQA.mjs`.
+
+---
+
+### Issue 3.5 — Premature answer leaks in stubs and playgrounds (Mission V4 §18, §26)
+
+- **Reported Behavior**: In starter code comments and test error messages for Dynamic Programming and Divide & Conquer exercises, the explicit recurrence formulas were given away before the student reasoned about the subproblems. Similarly, the Juan el Vago playground printed the exact recommended days array.
+- **Severity**: High (Pedagogical leak; invalidated the Solve phase).
+- **Status**: **RESOLVED** (`163d60b`, `bb1463b`).
+- **Root Cause Analysis**:
+  - Test `expected` fields contained explanatory strings with recurrence equations rather than functional output values.
+  - Discover playground in Juan el Vago rendered `optimal.dias` unconditionally.
+- **Resolution**:
+  1. Replaced recurrence formulas in test suites with functional criteria (e.g., maximum profit or subarray sum bounds).
+  2. Hid the exact optimal day combination in `JuanElVagoPlayground.tsx`, replacing it with a note explaining the student must deduce the non-adjacency rule in Solve.
+
+---
+
+### Issue 3.6 — Phase switcher tag 20px circle overflow & mobile header control clipping
+
+- **Reported Behavior**:
+  - The `DISPONIBLE` tag in the phase navigation bar was placed inside a 20x20px circle with `border-radius: 9999px`, causing the 10-letter word to overflow the circle horizontally.
+  - On 390px mobile screens, the header controls (brand + instructor button + language select + theme select) overflowed the right edge by ~80px.
+- **Severity**: High (Visual QA defect on both desktop and mobile viewports).
+- **Status**: **RESOLVED** (`bb1463b`, current).
+- **Root Cause Analysis**:
+  - `.phase-unlocked-tag` had `width: 20px; height: 20px` in `App.css`.
+  - `.app-header` lacked mobile responsive rules (`@media (max-width: 640px)`) to collapse long labels into icons or compact tokens.
+- **Resolution**:
+  1. Re-styled `.phase-unlocked-tag` and `.phase-locked-tag` as clean, proportional badges (`padding: 0.15rem 0.5rem; font-size: 0.6875rem`).
+  2. Added responsive mobile header rules hiding subtitle/breadcrumbs, condensing instructor button to an icon, and shortening language options to ISO codes (`ES` / `EN`).
+  3. Added `flex-wrap: wrap` to `.category-list` to eradicate the horizontal scrollbar on desktop.
+
+---
+
+## 2. Complete Visual & Pedagogical Matrix (All 37 Exercises)
+
+| # | Exercise ID | Paradigm | Visualizer & Playground | Verified Status |
+|---|-------------|----------|-------------------------|-----------------|
+| 1 | `merge-sort` | Divide & Conquer | Split tree, merge buffer, sorted bars | VERIFIED |
+| 2 | `max-subarray-dyc` | Divide & Conquer | Prefix/suffix/crossing bars, Kadane compare | VERIFIED |
+| 3 | `peak-finding-dyc` | Divide & Conquer | 1D elevation array + binary midpoint slope | VERIFIED |
+| 4 | `inversion-counting-dyc` | Divide & Conquer | Disordered pair counter + split merge | VERIFIED |
+| 5 | `closest-pair-dyc` | Divide & Conquer | 2D Cartesian plane + delta strip scan | VERIFIED |
+| 6 | `karatsuba-dyc` | Divide & Conquer | Multi-digit split tree + Gauss 3-product trace | VERIFIED |
+| 7 | `median-of-medians-dyc` | Divide & Conquer | 5-element column grid + pivot partitioning | VERIFIED |
+| 8 | `majority-element-dyc` | Divide & Conquer | Boyer-Moore cancellation scale + candidate count | VERIFIED |
+| 9 | `interval-scheduling` | Greedy | Timeline interval segments + conflict filter | VERIFIED |
+| 10 | `knapsack-greedy` | Greedy | Value-weight density sorting + capacity bar | VERIFIED |
+| 11 | `road-antennas-greedy` | Greedy | Kilometer road line + 4km coverage discs | VERIFIED |
+| 12 | `huffman-coding-greedy` | Greedy | Min-Heap cards + SVG binary prefix tree | VERIFIED |
+| 13 | `interval-partitioning-greedy` | Greedy | Classroom schedule lanes + room allocator | VERIFIED |
+| 14 | `minimize-lateness-greedy` | Greedy | Timeline timeline + deadline penalty gauge | VERIFIED |
+| 15 | `dijkstra-greedy` | Greedy | Weighted graph + priority queue + distance badges | VERIFIED |
+| 16 | `kruskal-mst-greedy` | Greedy | Sorted edge queue + Union-Find cycle detector | VERIFIED |
+| 17 | `knapsack-dp` | Dynamic Programming | 2D $(i, w)$ matrix + cell dependency highlights | VERIFIED |
+| 18 | `juan-el-vago` | Dynamic Programming | Day cards + skip-day recurrence highlights | VERIFIED |
+| 19 | `coin-change-dp` | Dynamic Programming | 1D amount vector + coin denomination choices | VERIFIED |
+| 20 | `lcs-dp` | Dynamic Programming | 2D character matching table + backtrack arrows | VERIFIED |
+| 21 | `weighted-interval-scheduling` | Dynamic Programming | Interval timeline + $p(j)$ binary search links | VERIFIED |
+| 22 | `segmented-least-squares-dp` | Dynamic Programming | Scatter plot + piecewise linear segments | VERIFIED |
+| 23 | `rna-secondary-structure-dp` | Dynamic Programming | Sequence arc diagram + Watson-Crick bounds | VERIFIED |
+| 24 | `bellman-ford-dp` | Dynamic Programming | Directed graph + negative cycle detector | VERIFIED |
+| 25 | `n-queens` | Backtracking | Interactive $N \times N$ chessboard + attack conflict rays | VERIFIED |
+| 26 | `subset-sum-backtracking` | Backtracking | Binary decision tree + prefix sum pruner | VERIFIED |
+| 27 | `graph-coloring-backtracking` | Backtracking | Chromatic palette + adjacent vertex conflicts | VERIFIED |
+| 28 | `sudoku-backtracking` | Backtracking | $9 \times 9$ grid + row/col/box constraint validator | VERIFIED |
+| 29 | `hamiltonian-cycle-backtracking` | Backtracking | Vertex traversal path + degree bound pruner | VERIFIED |
+| 30 | `tsp-branch-and-bound` | Backtracking / B&B | Search tree + MST/Hungarian lower bound gauge | VERIFIED |
+| 31 | `knapsack-branch-and-bound` | Backtracking / B&B | Best-first tree + fractional upper bound pruner | VERIFIED |
+| 32 | `knights-tour-backtracking` | Backtracking | Warnsdorff accessibility degree heatmap | VERIFIED |
+| 33 | `max-flow` | Advanced Algorithms | Flow network + augmenting paths + min-cut | VERIFIED |
+| 34 | `linear-programming-formulation` | Advanced Algorithms | 2D polytope feasible region + objective gradient | VERIFIED |
+| 35 | `vertex-cover-reduction` | Reductions & NP | Graph reduction: Independent Set to Vertex Cover | VERIFIED |
+| 36 | `vertex-cover-approx` | Approximations | Maximal matching edge selector + 2-approx bound | VERIFIED |
+| 37 | `randomized-fair-coin` | Randomized Algorithms | Von Neumann biased coin trials + Bernoulli histogram | VERIFIED |
 
 ---
 

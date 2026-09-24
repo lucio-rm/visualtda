@@ -1,8 +1,8 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed comprehensive visualizer catalog mathematical rationale cards (exchange arguments, recurrence breakdowns, packing lemmas, Master Theorem, LP fundamental theorem, NP reductions), 100% standardized media controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 37 exercises, complete eradication of raw HTML entities (`&amp;`, `&gt;`, `&lt;`, `&#123;`, `&#125;`), unified N-Queens-grade CSS styling across all visualizers, and canonical "Greedy" terminology enforcement per Section 16 (0 occurrences of "voraz" repository-wide). Verified with Vitest (290/290 PASS), TypeScript, ESLint, static build, and Chromium headless browser QA (22/22 scenarios, 0 console errors).
-- **BASELINE_COMMIT**: `2cb81df`
+- **CURRENT_TASK**: Completed Section 18 answer leak remediation across DP & D&C tests/stubs, Section 93/94 "What-if?" counterexample presets (Interval Scheduling, Huffman uniform coding, Merge Sort sorted case, Knapsack doubled capacity), Section 17 dedicated textbook insights across all 37 exercises, Section 32/33 phase switcher badge styling without text overflow, Section 79 mobile responsive header fixes eliminating right-edge control clipping, Section 38 explicit environment error vs student error handling, Section 41 data inventory policy (`docs/privacy.md`), and Section 90 known issues log update.
+- **BASELINE_COMMIT**: `bb1463b`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.5s)
@@ -24,22 +24,21 @@
   - **Dynamic Programming Subproblem Illumination (Section 25)**: [VERIFIED]
     - Antecedent cells and dependency relationships highlighted during evaluation in `KnapsackDpVisualizer`, `CoinChangeVisualizer`, `LcsVisualizer`, and `JuanElVagoVisualizer`.
     - Live formula callouts display the exact recurrence calculation step by step.
-  - **Cross-Exercise Connections & Technique Comparisons**: [VERIFIED]
+  - **Cross-Exercise Connections & Technique Comparisons (Section 30 & 31)**: [VERIFIED]
     - Structured comparative analysis across major paradigm pairings (Knapsack DP vs Greedy vs B&B, Interval Scheduling vs Partitioning vs Weighted, Dijkstra vs Bellman-Ford, Max Flow vs Linear Programming, Sudoku vs Graph Coloring, Hamiltonian Cycle vs TSP B&B, etc.).
     - Bilingual comparative insights and direct navigation in Phase 3 (`UnderstandView.tsx`).
     - Verified in `tests/crossExerciseConnections.test.ts` (5/5 tests PASS).
-  - **Mathematical Typography Engine**: [VERIFIED]
+  - **Mathematical Typography Engine (Section 43)**: [VERIFIED]
     - `formatMathText` in `TheoryMarkdown.tsx` recursively unnests multi-level LaTeX expressions (`\text`, `\mathrm`, `\mathbf`, `\mathcal`).
     - Semantic Markdown tables (`| col | col |`) rendered with `.theory-table-container`.
     - Verified in `tests/theoryMarkdown.test.tsx` (7/7 tests PASS).
-  - **Trace Timeline Test Coverage**: [VERIFIED]
-    - `tests/extendedTraces.test.ts` comprehensively asserts algorithmic invariants across 16 extended traces (Dijkstra, Kruskal, Interval Partitioning, Minimize Lateness, Bellman-Ford, Segmented Least Squares, RNA Secondary Structure, Closest Pair, Karatsuba, Majority Element, Median of Medians, Hamiltonian Cycle, Knight's Tour, Sudoku, Knapsack B&B, TSP B&B).
-  - **Real Browser QA Verification**: [VERIFIED]
+  - **Real Browser QA Verification (Section 35 & 79)**: [VERIFIED]
     - 22 / 22 scenarios passed in Chromium headless (`scripts/browserQA.mjs`) across 5 viewports (FHD 1920x1080, Laptop 1440x900, Desktop 1280x720, Tablet 768x1024, Mobile 390x844).
     - 0 console errors captured during real browser sessions.
+    - Mobile 390x844 layout verified: zero header clipping, wrap on category pills, compact language tokens.
 - **LAST_VERIFIED**:
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
   - `npm test`: 39 test files, 290 passed (100% PASS)
-  - `npm run test:browser`: 22 / 22 real Chromium scenarios passed (100% PASS)
+  - `node scripts/browserQA.mjs`: 22 / 22 real Chromium scenarios passed (100% PASS)
   - `npm run build`: static production build succeeds in ~1.5s (`dist/`)

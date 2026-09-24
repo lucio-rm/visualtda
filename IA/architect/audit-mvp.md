@@ -1,7 +1,10 @@
-# Visual TDA — MVP Audit Report (Comprehensive Independent Audit)
+# Visual TDA — MVP Audit Report (Historical Document)
 
-**Date**: 2026-09-19  
-**Auditor**: Antigravity Orchestrator (Phase A Full Audit)  
+> [!NOTE]
+> **Status: Superseded**. This document records the initial Phase A audit on 2026-09-19 (commit `f58a453`). Per Mission V4 directives (§59, §60), the authoritative repository audit is maintained in [`current-audit.md`](./current-audit.md).
+
+**Historical Date**: 2026-09-19  
+**Auditor**: Antigravity Orchestrator (Phase A Initial Audit)  
 **Target Worktree**: `/home/lucio_romero_m/Documents/romerom_tardos_kleinberg/vs_tda/visual_tda-antigravity` (`agent/antigravity`)  
 **Baseline Commit**: `f58a453`  
 **Toolchain Status**: Lint: PASS (0 errors) | Typecheck: PASS (0 errors) | Vitest: 31/31 files, 184/184 tests PASS | Build: PASS (dist generated)

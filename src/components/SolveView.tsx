@@ -219,7 +219,15 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
     setTestResults(effectiveResults);
 
-    if (evalResult.runtimeError) {
+    if (evalResult.isEnvironmentError) {
+      setTestStatus('failed');
+      markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
+      setTestSummary(
+        language === 'es'
+          ? 'El entorno Python no pudo inicializarse. Este fallo no corresponde a un error en tu código sino a la inicialización de WebAssembly/Pyodide. Podés reintentar la ejecución o validar con el motor TypeScript.'
+          : 'The Python environment could not be initialized. This failure is an infrastructure/WebAssembly issue, not an error in your code. You can retry or run local TypeScript validation.'
+      );
+    } else if (evalResult.runtimeError) {
       setTestStatus('failed');
       markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
@@ -354,7 +362,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   runtimeError.includes('Web Worker') ||
                   runtimeError.includes('CDN') ||
                   runtimeError.includes('WebAssembly') ||
-                  runtimeError.includes('estrategia de pruebas');
+                  runtimeError.includes('estrategia de pruebas') ||
+                  runtimeError.includes('El entorno Python no pudo inicializarse');
 
                 return (
                   <div className={`python-output-card ${isInfraError ? 'infra-error' : 'student-error'}`}>

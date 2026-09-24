@@ -92,8 +92,8 @@ export const Header: React.FC<HeaderProps> = ({
             onChange={(e) => setLanguage(e.target.value as 'es' | 'en')}
             aria-label="Seleccionar idioma / Select language"
           >
-            <option value="es">ES (Español)</option>
-            <option value="en">EN (English)</option>
+            <option value="es">ES</option>
+            <option value="en">EN</option>
           </select>
         </label>
 

@@ -10,6 +10,7 @@ export interface PythonEvaluationResult {
   stdout?: string;
   runtimeError?: string;
   executionTimeMs: number;
+  isEnvironmentError?: boolean;
 }
 
 export async function runPythonTests(
@@ -26,7 +27,8 @@ export async function runPythonTests(
       totalPassed: 0,
       totalTests: 0,
       runtimeError: 'El entorno actual no soporta Web Workers para ejecución de Python en navegador.',
-      executionTimeMs: 0
+      executionTimeMs: 0,
+      isEnvironmentError: true
     };
   }
 
@@ -37,8 +39,9 @@ export async function runPythonTests(
       results: [],
       totalPassed: 0,
       totalTests: 0,
-      runtimeError: 'No se pudo inicializar el entorno Pyodide (requiere conexión inicial a CDN para descargar WebAssembly).',
-      executionTimeMs: performance.now() - startTime
+      runtimeError: 'El entorno Python no pudo inicializarse (requiere conexión inicial o soporte WebAssembly para Pyodide).',
+      executionTimeMs: performance.now() - startTime,
+      isEnvironmentError: true
     };
   }
 
