@@ -32,7 +32,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
           </p>
         </div>
         <div className="discover-header-illustration-wrapper" aria-hidden="false">
-          <ExerciseHeaderIllustration exerciseId={exercise.id} />
+          <ExerciseHeaderIllustration exerciseId={exercise.id} problemId={exercise.problemId} />
         </div>
       </div>
 

@@ -2,11 +2,13 @@ import React from 'react';
 
 interface ExerciseHeaderIllustrationProps {
   exerciseId: string;
+  problemId?: string;
   className?: string;
 }
 
 export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProps> = ({
   exerciseId,
+  problemId,
   className = ''
 }) => {
   const commonProps = {
@@ -17,7 +19,10 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
     role: 'img'
   };
 
-  switch (exerciseId) {
+  const key = (problemId || exerciseId)
+    .replace(/-backtracking|-dyc|-greedy|-dp|-reduction|-formulation|-approx$/, '');
+
+  switch (key) {
     case 'n-queens':
       return (
         <svg {...commonProps} aria-label="Tablero de ajedrez N-Reinas con reinas no atacantes">
@@ -59,6 +64,9 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
         </svg>
       );
 
+    case 'knapsack':
+    case 'knapsack-bb':
+    case 'knapsack-branch-and-bound':
     case 'knapsack-dp':
     case 'knapsack-greedy':
       return (
@@ -141,6 +149,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'interval-scheduling':
     case 'weighted-interval':
+    case 'weighted-interval-scheduling':
       return (
         <svg {...commonProps} aria-label="Línea de tiempo con intervalos compatibles y solapados">
           {/* Time axis */}
@@ -371,6 +380,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
       );
 
     case 'lcs':
+    case 'longest-common-subsequence':
       return (
         <svg {...commonProps} aria-label="Alineamiento de caracteres de subsecuencia común más larga">
           {/* Sequence A */}
@@ -584,6 +594,292 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <polygon points="115,14 122,17 117,23" fill="var(--warning, #f59e0b)" />
           <text x="135" y="18" fill="var(--warning, #f59e0b)" fontSize="8">∇c</text>
           <text x="120" y="112" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="8">Polítopo convexo y Teorema Fundamental</text>
+        </svg>
+      );
+
+    case 'closest-pair':
+      return (
+        <svg {...commonProps} aria-label="Plano 2D con franja de corte delta y par de puntos más cercano">
+          <line x1="120" y1="15" x2="120" y2="105" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="3 3" />
+          <text x="120" y="12" textAnchor="middle" fill="var(--accent)" fontSize="8">x_mid</text>
+          <rect x="95" y="15" width="50" height="90" fill="var(--accent)" fillOpacity="0.08" stroke="var(--border)" strokeWidth="1" />
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Franja [x_mid - δ, x_mid + δ]</text>
+          <circle cx="50" cy="35" r="4" fill="var(--text-muted)" />
+          <circle cx="75" cy="70" r="4" fill="var(--text-muted)" />
+          <circle cx="40" cy="85" r="4" fill="var(--text-muted)" />
+          <circle cx="165" cy="30" r="4" fill="var(--text-muted)" />
+          <circle cx="190" cy="65" r="4" fill="var(--text-muted)" />
+          <circle cx="175" cy="90" r="4" fill="var(--text-muted)" />
+          <circle cx="108" cy="50" r="4.5" fill="#10b981" />
+          <circle cx="132" cy="55" r="4.5" fill="#10b981" />
+          <line x1="108" y1="50" x2="132" y2="55" stroke="#10b981" strokeWidth="2" />
+          <text x="120" y="44" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">d(p, q) = δ*</text>
+        </svg>
+      );
+
+    case 'karatsuba':
+      return (
+        <svg {...commonProps} aria-label="Descomposición algebraica de Karatsuba en 3 multiplicaciones">
+          <rect x="30" y="15" width="180" height="30" rx="4" fill="var(--surface-raised)" stroke="var(--border)" />
+          <text x="120" y="34" textAnchor="middle" fill="var(--text)" fontSize="10" fontFamily="monospace">X · Y = (x₁·10ᵐ + x₀)(y₁·10ᵐ + y₀)</text>
+          <g transform="translate(30, 55)">
+            <rect x="0" y="0" width="54" height="28" rx="4" fill="var(--surface-hover)" stroke="var(--accent)" strokeWidth="1" />
+            <text x="27" y="14" textAnchor="middle" fill="var(--accent)" fontSize="8" fontWeight="bold">z₂ = x₁y₁</text>
+            <rect x="63" y="0" width="54" height="28" rx="4" fill="var(--surface-hover)" stroke="#10b981" strokeWidth="1" />
+            <text x="90" y="14" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">z₀ = x₀y₀</text>
+            <rect x="126" y="0" width="54" height="28" rx="4" fill="var(--surface-hover)" stroke="#f59e0b" strokeWidth="1" />
+            <text x="153" y="14" textAnchor="middle" fill="#f59e0b" fontSize="8" fontWeight="bold">z₁ = z_sum - z₂ - z₀</text>
+          </g>
+          <text x="120" y="105" textAnchor="middle" fill="var(--accent)" fontSize="9" fontWeight="600">T(n) = 3T(n/2) + O(n) = O(n^{1.585})</text>
+        </svg>
+      );
+
+    case 'median-of-medians':
+      return (
+        <svg {...commonProps} aria-label="Grupos de 5 elementos y selección de la mediana de medianas">
+          {[0, 1, 2, 3, 4].map((col) => (
+            <g key={col} transform={`translate(${45 + col * 32}, 15)`}>
+              {[0, 1, 2, 3, 4].map((row) => (
+                <circle
+                  key={row}
+                  cx={12}
+                  cy={row * 15 + 8}
+                  r={row === 2 ? 5 : 3.5}
+                  fill={col === 2 && row === 2 ? '#ef4444' : row === 2 ? 'var(--accent)' : 'var(--text-muted)'}
+                />
+              ))}
+              <rect x="2" y="2" width="20" height="72" rx="3" fill="none" stroke="var(--border)" strokeWidth="1" />
+            </g>
+          ))}
+          <line x1="40" y1="53" x2="200" y2="53" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="2 2" />
+          <text x="215" y="56" fill="var(--accent)" fontSize="8">Medianas</text>
+          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Pivote M garantiza ≥ 30% y ≤ 70% en partición lineal O(n)</text>
+        </svg>
+      );
+
+    case 'majority-element':
+      return (
+        <svg {...commonProps} aria-label="Cancelación de pares de candidatos para elemento mayoritario">
+          <g transform="translate(35, 20)">
+            <rect x="0" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
+            <text x="18" y="16" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="bold">A</text>
+            <rect x="42" y="0" width="36" height="24" rx="4" fill="var(--border-strong)" />
+            <text x="60" y="16" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="bold">B</text>
+            <text x="39" y="38" textAnchor="middle" fill="var(--text-muted)" fontSize="8">A ≠ B (Cancela)</text>
+          </g>
+          <g transform="translate(130, 20)">
+            <rect x="0" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
+            <text x="18" y="16" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="bold">A</text>
+            <rect x="42" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
+            <text x="60" y="16" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="bold">A</text>
+            <text x="39" y="38" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">A = A (Sobrevive)</text>
+          </g>
+          <text x="120" y="90" textAnchor="middle" fill="var(--accent)" fontSize="9" fontWeight="bold">Candidato dominante &gt; n/2</text>
+          <text x="120" y="108" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Boyer-Moore O(n) / Divide & Conquer T(n) = 2T(n/2) + O(n)</text>
+        </svg>
+      );
+
+    case 'dijkstra':
+      return (
+        <svg {...commonProps} aria-label="Grafo ponderado con caminos mínimos desde origen S">
+          <line x1="50" y1="60" x2="110" y2="25" stroke="#10b981" strokeWidth="2" />
+          <line x1="50" y1="60" x2="110" y2="95" stroke="var(--border-strong)" strokeWidth="1.5" />
+          <line x1="110" y1="25" x2="180" y2="60" stroke="#10b981" strokeWidth="2" />
+          <line x1="110" y1="95" x2="180" y2="60" stroke="var(--border-strong)" strokeWidth="1.5" />
+          <text x="75" y="35" fill="var(--text-muted)" fontSize="8">4</text>
+          <text x="75" y="85" fill="var(--text-muted)" fontSize="8">2</text>
+          <text x="150" y="35" fill="var(--text-muted)" fontSize="8">3</text>
+          <circle cx="50" cy="60" r="14" fill="var(--accent)" />
+          <text x="50" y="63" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold">S (0)</text>
+          <circle cx="110" cy="25" r="14" fill="#10b981" />
+          <text x="110" y="28" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold">A (4)</text>
+          <circle cx="110" cy="95" r="14" fill="var(--surface-hover)" stroke="var(--border)" />
+          <text x="110" y="98" textAnchor="middle" fill="var(--text)" fontSize="9">B (2)</text>
+          <circle cx="180" cy="60" r="14" fill="#10b981" />
+          <text x="180" y="63" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold">T (7)</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Greedy Stays Ahead: d[u] + w(u, v) relax</text>
+        </svg>
+      );
+
+    case 'kruskal-mst':
+      return (
+        <svg {...commonProps} aria-label="Árbol recubridor mínimo con aristas ordenadas y componentes disjuntos">
+          <line x1="50" y1="40" x2="120" y2="25" stroke="#10b981" strokeWidth="2.5" />
+          <line x1="120" y1="25" x2="190" y2="40" stroke="#10b981" strokeWidth="2.5" />
+          <line x1="50" y1="40" x2="80" y2="85" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="120" y1="25" x2="150" y2="85" stroke="#10b981" strokeWidth="2.5" />
+          <line x1="80" y1="85" x2="150" y2="85" stroke="#10b981" strokeWidth="2.5" />
+          <circle cx="50" cy="40" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
+          <text x="50" y="43" textAnchor="middle" fill="var(--text)" fontSize="8">1</text>
+          <circle cx="120" cy="25" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
+          <text x="120" y="28" textAnchor="middle" fill="var(--text)" fontSize="8">2</text>
+          <circle cx="190" cy="40" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
+          <text x="190" y="43" textAnchor="middle" fill="var(--text)" fontSize="8">3</text>
+          <circle cx="80" cy="85" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
+          <text x="80" y="88" textAnchor="middle" fill="var(--text)" fontSize="8">4</text>
+          <circle cx="150" cy="85" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
+          <text x="150" y="88" textAnchor="middle" fill="var(--text)" fontSize="8">5</text>
+          <text x="120" y="112" textAnchor="middle" fill="var(--success)" fontSize="8" fontWeight="bold">Propiedad del Corte (Cut Property) + Union-Find</text>
+        </svg>
+      );
+
+    case 'interval-partitioning':
+      return (
+        <svg {...commonProps} aria-label="Partición de intervalos en aulas paralelas">
+          <rect x="25" y="15" width="40" height="20" rx="3" fill="var(--surface-hover)" />
+          <text x="45" y="28" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Aula 1</text>
+          <rect x="25" y="45" width="40" height="20" rx="3" fill="var(--surface-hover)" />
+          <text x="45" y="58" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Aula 2</text>
+          <rect x="25" y="75" width="40" height="20" rx="3" fill="var(--surface-hover)" />
+          <text x="45" y="88" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Aula 3</text>
+          <rect x="75" y="17" width="55" height="16" rx="3" fill="var(--accent)" />
+          <rect x="140" y="17" width="65" height="16" rx="3" fill="var(--accent)" />
+          <rect x="90" y="47" width="80" height="16" rx="3" fill="#10b981" />
+          <rect x="110" y="77" width="45" height="16" rx="3" fill="#f59e0b" />
+          <line x1="125" y1="10" x2="125" y2="100" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 3" />
+          <text x="125" y="112" textAnchor="middle" fill="#ef4444" fontSize="8" fontWeight="bold">Profundidad d = 3 aulas óptimas</text>
+        </svg>
+      );
+
+    case 'minimize-lateness':
+      return (
+        <svg {...commonProps} aria-label="Planificación de tareas con minimización de retraso máximo">
+          <line x1="30" y1="65" x2="210" y2="65" stroke="var(--border)" strokeWidth="2" />
+          <rect x="30" y="45" width="45" height="18" rx="3" fill="var(--accent)" />
+          <text x="52" y="57" textAnchor="middle" fill="#fff" fontSize="8">J₁ (t:3)</text>
+          <rect x="78" y="45" width="60" height="18" rx="3" fill="#10b981" />
+          <text x="108" y="57" textAnchor="middle" fill="#fff" fontSize="8">J₂ (t:4)</text>
+          <rect x="141" y="45" width="50" height="18" rx="3" fill="#f59e0b" />
+          <text x="166" y="57" textAnchor="middle" fill="#fff" fontSize="8">J₃ (t:3)</text>
+          <line x1="70" y1="35" x2="70" y2="70" stroke="#ef4444" strokeWidth="1.5" />
+          <text x="70" y="30" textAnchor="middle" fill="#ef4444" fontSize="7">d₁</text>
+          <line x1="130" y1="35" x2="130" y2="70" stroke="#ef4444" strokeWidth="1.5" />
+          <text x="130" y="30" textAnchor="middle" fill="#ef4444" fontSize="7">d₂</text>
+          <line x1="175" y1="35" x2="175" y2="70" stroke="#ef4444" strokeWidth="1.5" />
+          <text x="175" y="30" textAnchor="middle" fill="#ef4444" fontSize="7">d₃</text>
+          <text x="120" y="95" textAnchor="middle" fill="var(--success)" fontSize="8" fontWeight="bold">Earliest Deadline First (EDF) elimina inversiones</text>
+          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="8">L_max = max(0, C_i - d_i) óptimo</text>
+        </svg>
+      );
+
+    case 'segmented-least-squares':
+      return (
+        <svg {...commonProps} aria-label="Mínimos cuadrados segmentados con dos rectas ajustadas">
+          <line x1="30" y1="95" x2="200" y2="95" stroke="var(--border)" strokeWidth="1.5" />
+          <line x1="30" y1="95" x2="30" y2="15" stroke="var(--border)" strokeWidth="1.5" />
+          <circle cx="45" cy="75" r="3" fill="var(--text-muted)" />
+          <circle cx="65" cy="65" r="3" fill="var(--text-muted)" />
+          <circle cx="85" cy="55" r="3" fill="var(--text-muted)" />
+          <line x1="40" y1="78" x2="95" y2="50" stroke="#38bdf8" strokeWidth="2" />
+          <circle cx="120" cy="45" r="3" fill="var(--text-muted)" />
+          <circle cx="145" cy="35" r="3" fill="var(--text-muted)" />
+          <circle cx="175" cy="20" r="3" fill="var(--text-muted)" />
+          <line x1="115" y1="48" x2="185" y2="16" stroke="#10b981" strokeWidth="2" />
+          <line x1="105" y1="20" x2="105" y2="95" stroke="var(--warning)" strokeWidth="1" strokeDasharray="3 3" />
+          <text x="105" y="14" textAnchor="middle" fill="var(--warning)" fontSize="8">Partición óptima i</text>
+          <text x="120" y="112" textAnchor="middle" fill="var(--text-muted)" fontSize="8">OPT(j) = min_{'{1≤i≤j}'} (e_{'{i,j}'} + C + OPT(i-1))</text>
+        </svg>
+      );
+
+    case 'rna-secondary-structure':
+      return (
+        <svg {...commonProps} aria-label="Estructura secundaria de ARN con apareamientos Watson-Crick">
+          <line x1="30" y1="85" x2="210" y2="85" stroke="var(--border-strong)" strokeWidth="2" />
+          {['A', 'U', 'C', 'G', 'A', 'U', 'G', 'C'].map((b, i) => (
+            <g key={i} transform={`translate(${38 + i * 22}, 85)`}>
+              <circle cx="0" cy="0" r="4" fill="var(--accent)" />
+              <text x="0" y="16" textAnchor="middle" fill="var(--text-muted)" fontSize="8" fontWeight="bold">{b}</text>
+            </g>
+          ))}
+          <path d="M 38 82 Q 71 35 104 82" stroke="#10b981" strokeWidth="2" fill="none" />
+          <path d="M 126 82 Q 159 30 192 82" stroke="#10b981" strokeWidth="2" fill="none" />
+          <text x="120" y="25" textAnchor="middle" fill="#10b981" fontSize="8" fontWeight="bold">Apareamientos sin cruce (Non-crossing)</text>
+          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Restricción de horquilla t &lt; j - 4</text>
+        </svg>
+      );
+
+    case 'bellman-ford':
+      return (
+        <svg {...commonProps} aria-label="Bellman-Ford con aristas negativas y detección de ciclos">
+          <line x1="50" y1="60" x2="110" y2="25" stroke="var(--border-strong)" strokeWidth="1.5" />
+          <line x1="110" y1="25" x2="170" y2="60" stroke="#ef4444" strokeWidth="2" />
+          <line x1="170" y1="60" x2="110" y2="95" stroke="var(--border-strong)" strokeWidth="1.5" />
+          <line x1="110" y1="95" x2="50" y2="60" stroke="var(--border-strong)" strokeWidth="1.5" />
+          <text x="145" y="38" fill="#ef4444" fontSize="8" fontWeight="bold">-3</text>
+          <circle cx="50" cy="60" r="12" fill="var(--accent)" />
+          <text x="50" y="63" textAnchor="middle" fill="#fff" fontSize="8" fontWeight="bold">S</text>
+          <circle cx="110" cy="25" r="12" fill="var(--surface-raised)" stroke="var(--border)" />
+          <text x="110" y="28" textAnchor="middle" fill="var(--text)" fontSize="8">u</text>
+          <circle cx="170" cy="60" r="12" fill="var(--surface-raised)" stroke="var(--border)" />
+          <text x="170" y="63" textAnchor="middle" fill="var(--text)" fontSize="8">v</text>
+          <circle cx="110" cy="95" r="12" fill="var(--surface-raised)" stroke="var(--border)" />
+          <text x="110" y="98" textAnchor="middle" fill="var(--text)" fontSize="8">w</text>
+          <text x="120" y="112" textAnchor="middle" fill="var(--text-muted)" fontSize="8">M[i, v] = min(M[i-1, v], min_u (M[i-1, u] + c_{'{uv}'}))</text>
+        </svg>
+      );
+
+    case 'sudoku':
+      return (
+        <svg {...commonProps} aria-label="Cuadrícula 3x3 de Sudoku con dominios de restricción">
+          <rect x="75" y="15" width="90" height="90" rx="4" fill="var(--surface-raised)" stroke="var(--accent)" strokeWidth="2" />
+          {[1, 2].map((i) => (
+            <React.Fragment key={i}>
+              <line x1={75 + i * 30} y1="15" x2={75 + i * 30} y2="105" stroke="var(--border)" strokeWidth="1" />
+              <line x1="75" y1={15 + i * 30} x2="165" y2={15 + i * 30} stroke="var(--border)" strokeWidth="1" />
+            </React.Fragment>
+          ))}
+          <text x="90" y="35" textAnchor="middle" fill="var(--text)" fontSize="12" fontWeight="bold">5</text>
+          <text x="120" y="35" textAnchor="middle" fill="var(--text)" fontSize="12" fontWeight="bold">3</text>
+          <text x="150" y="65" textAnchor="middle" fill="var(--text)" fontSize="12" fontWeight="bold">7</text>
+          <text x="90" y="95" textAnchor="middle" fill="var(--text)" fontSize="12" fontWeight="bold">6</text>
+          <rect x="106" y="46" width="28" height="28" fill="rgba(99, 102, 241, 0.2)" stroke="var(--accent)" strokeWidth="1.5" />
+          <text x="120" y="58" textAnchor="middle" fill="var(--accent)" fontSize="7" fontWeight="bold">{'{1, 4}'}</text>
+          <text x="120" y="68" textAnchor="middle" fill="var(--text-muted)" fontSize="6">MRV: 2</text>
+          <text x="120" y="115" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Restricción de filas, columnas y cajas 3×3</text>
+        </svg>
+      );
+
+    case 'hamiltonian-cycle':
+      return (
+        <svg {...commonProps} aria-label="Grafo con ciclo hamiltoniano activo pasando por todos los vértices">
+          <polygon points="120,20 180,50 160,100 80,100 60,50" fill="none" stroke="#10b981" strokeWidth="2.5" />
+          <line x1="120" y1="20" x2="160" y2="100" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="120" y1="20" x2="80" y2="100" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
+          {[{x: 120, y: 20}, {x: 180, y: 50}, {x: 160, y: 100}, {x: 80, y: 100}, {x: 60, y: 50}].map((n, i) => (
+            <circle key={i} cx={n.x} cy={n.y} r="8" fill="#10b981" stroke="var(--surface)" strokeWidth="2" />
+          ))}
+          <text x="120" y="65" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold">Ciclo Simple Válido</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Visita cada vértice exactamente una vez (NP-completo)</text>
+        </svg>
+      );
+
+    case 'tsp':
+      return (
+        <svg {...commonProps} aria-label="Viajante de comercio con tour óptimo y poda Branch and Bound">
+          <polygon points="50,30 130,20 190,60 140,95 70,85" fill="none" stroke="var(--accent)" strokeWidth="2" />
+          {[{x: 50, y: 30}, {x: 130, y: 20}, {x: 190, y: 60}, {x: 140, y: 95}, {x: 70, y: 85}].map((c, i) => (
+            <circle key={i} cx={c.x} cy={c.y} r="6" fill="var(--accent)" stroke="#fff" strokeWidth="1.5" />
+          ))}
+          <rect x="85" y="45" width="70" height="24" rx="4" fill="var(--surface-raised)" stroke="var(--border)" />
+          <text x="120" y="56" textAnchor="middle" fill="var(--text)" fontSize="8">Cost: 247 km</text>
+          <text x="120" y="65" textAnchor="middle" fill="#10b981" fontSize="7" fontWeight="bold">LB ≤ Incumbent</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Branch & Bound con cotas Held-Karp 1-Tree</text>
+        </svg>
+      );
+
+    case 'knights-tour':
+      return (
+        <svg {...commonProps} aria-label="Tablero de ajedrez con salto en L de caballo y heurística de Warnsdorff">
+          <rect x="70" y="15" width="100" height="90" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
+          <rect x="110" y="55" width="20" height="20" fill="var(--accent)" rx="2" />
+          <text x="120" y="70" textAnchor="middle" fill="#fff" fontSize="13">♞</text>
+          <line x1="120" y1="65" x2="100" y2="25" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
+          <circle cx="100" cy="25" r="5" fill="#10b981" />
+          <line x1="120" y1="65" x2="140" y2="25" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
+          <circle cx="140" cy="25" r="5" fill="#10b981" />
+          <line x1="120" y1="65" x2="80" y2="55" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
+          <circle cx="80" cy="55" r="5" fill="#10b981" />
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="8">Heurística de Warnsdorff: grado mínimo de salida</text>
         </svg>
       );
 
