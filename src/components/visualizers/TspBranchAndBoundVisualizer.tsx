@@ -181,6 +181,14 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
         </span>
       </div>
 
+      {/* TSP Branch & Bound Pruning Card (Section 24) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fuerza Bruta vs. Branch & Bound en TSP:' : 'Brute Force vs. Branch & Bound in TSP:'}</strong>{' '}
+        {language === 'es'
+          ? 'Evaluar todas las rutas posibles entre n ciudades requiere (n-1)!/2 recorridos exhaustivos. Branch & Bound calcula en cada nodo una cota inferior optimista (LB) basada en las aristas mínimas de salida. Si el costo acumulado + LB ≥ mejor tour completo ya hallado (incumbent), se descarta el subárbol completo, evitando evaluar millones de combinaciones inviables.'
+          : 'Evaluating all permutations between n cities requires (n-1)!/2 tours. Branch & Bound calculates an optimistic lower bound (LB) using minimum outgoing edges. If current cost + LB ≥ incumbent best, the entire subtree is pruned.'}
+      </div>
+
       {/* Playback Controls */}
       <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
         <div className="trace-buttons">

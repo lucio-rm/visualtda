@@ -182,6 +182,14 @@ export const KnightsTourVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Warnsdorff Pruning Analysis Card (Section 24) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fuerza Bruta vs. Regla de Warnsdorff:' : 'Brute Force vs. Warnsdorff Heuristic:'}</strong>{' '}
+        {language === 'es'
+          ? `En un tablero ${n}×${n}, el caballo dispone de hasta 8 movimientos en L por casilla. Un árbol exhaustivo sin guía colapsa en un espacio de búsqueda astronómico. La heurística de Warnsdorff ordena los saltos candidatos por grado de accesibilidad creciente (priorizando casillas periféricas con menos salidas libres), reduciendo los retrocesos a prácticamente cero y resolviendo el recorrido eficientemente.`
+          : `On an ${n}×${n} board, the knight has up to 8 moves per square. An unguided search tree explodes exponentially. Warnsdorff heuristic sorts moves by increasing forward degree (prioritizing hard-to-reach corner squares first), reducing backtracks to near zero.`}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -199,16 +207,16 @@ export const KnightsTourVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -218,10 +226,10 @@ export const KnightsTourVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

@@ -185,6 +185,14 @@ export const GraphColoringVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Pruning Analysis Card (Section 24) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fuerza Bruta vs. Backtracking con Restricción Vecinal:' : 'Brute Force vs. Backtracking with Neighbor Constraints:'}</strong>{' '}
+        {language === 'es'
+          ? `Para un grafo de |V| = ${vertices.length} vértices y k = ${k} colores, la fuerza bruta exhaustiva evalúa k^|V| = ${Math.pow(k, vertices.length)} asignaciones totales. Backtracking descarta de inmediato cualquier color asignado que coincida con un vecino adyacente ya pintado, podando el subárbol completo de decisiones posteriores y reduciendo drásticamente el espacio explorado.`
+          : `For a graph with |V| = ${vertices.length} vertices and k = ${k} colors, brute force evaluates k^|V| = ${Math.pow(k, vertices.length)} total assignments. Backtracking immediately rejects any color matching an already-colored adjacent neighbor, pruning entire subsequent subtrees and dramatically reducing explored states.`}
+      </div>
+
       {/* Timeline Controls */}
       <div className="gc-controls-card">
         <div className="gc-playback-buttons">
@@ -201,7 +209,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             disabled={currentStepIndex === 0}
             title={language === 'es' ? 'Paso anterior (←)' : 'Step back (←)'}
           >
-            ◀
+            ←
           </button>
           <button
             className="btn btn-primary btn-sm"
@@ -216,7 +224,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             disabled={currentStepIndex >= totalSteps - 1}
             title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
           >
-            ▶
+            →
           </button>
         </div>
 

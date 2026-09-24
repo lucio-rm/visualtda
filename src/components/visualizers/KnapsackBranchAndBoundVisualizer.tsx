@@ -184,6 +184,14 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Branch & Bound Pruning Analysis Card (Section 24 & 31) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Principio de Poda por Cota (Branch & Bound):' : 'Bound-based Pruning Principle (Branch & Bound):'}</strong>{' '}
+        {language === 'es'
+          ? 'En lugar de podar únicamente cuando la mochila se desborda (peso > capacidad), Branch & Bound calcula en cada nodo una cota superior optimista (UB) resolviendo la relajación continua con la heurística Greedy fraccionaria. Si UB ≤ mejor solución conocida (incumbent), esa rama no puede superar al óptimo y se poda por completo, eliminando ramas enteras del árbol.'
+          : 'Rather than pruning only when the knapsack overflows (weight > capacity), Branch & Bound computes an optimistic upper bound (UB) at each node using fractional greedy relaxation. If UB ≤ incumbent best, the entire subtree is pruned, guaranteeing optimality without evaluating all leaves.'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -201,16 +209,16 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -220,10 +228,10 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

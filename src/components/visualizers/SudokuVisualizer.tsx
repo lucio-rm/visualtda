@@ -174,6 +174,14 @@ export const SudokuVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Pruning & MRV Analysis Card (Section 24) */}
+      <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fuerza Bruta vs. Backtracking con Heurística MRV:' : 'Brute Force vs. Backtracking with MRV:'}</strong>{' '}
+        {language === 'es'
+          ? 'Una búsqueda exhaustiva ingenua que pruebe dígitos del 1 al 9 en las casillas vacías exploraría hasta 9⁵⁰ ≈ 10⁴⁷ estados. El algoritmo con Backtracking valida restricciones de fila, columna y cuadrante 3×3 inmediatamente, podando ramas inviables. Con la heurística MRV (Minimum Remaining Values), se selecciona siempre la casilla con menor dominio restante, provocando fallas tempranas en ramas sin salida y resolviendo el tablero con un número mínimo de retrocesos.'
+          : 'Naive brute force across ~50 empty cells would test 9⁵⁰ ≈ 10⁴⁷ states. Backtracking checks row, column, and box constraints immediately. With MRV (Minimum Remaining Values), choosing the cell with smallest remaining domain causes rapid failures on dead ends, solving the board with minimal backtracks.'}
+      </div>
+
       {/* Timeline Controls */}
       <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
         <div className="timeline-nav-group">
@@ -181,8 +189,8 @@ export const SudokuVisualizer: React.FC = () => {
             type="button"
             className="ctrl-btn"
             onClick={reset}
-            title={language === 'es' ? 'Reiniciar ejecución' : 'Reset'}
-            aria-label={language === 'es' ? 'Reiniciar ejecución' : 'Reset'}
+            title={language === 'es' ? 'Reiniciar (R)' : 'Reset (R)'}
+            aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
             ↺
           </button>
@@ -191,16 +199,16 @@ export const SudokuVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
-            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            title={language === 'es' ? 'Paso anterior (←)' : 'Step backward (←)'}
             aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
           >
-            ◀
+            ←
           </button>
           <button
             type="button"
             className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
             onClick={togglePlay}
-            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
             {isPlaying ? '❚❚' : '▶'}
@@ -210,10 +218,10 @@ export const SudokuVisualizer: React.FC = () => {
             className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
-            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}
             aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
           >
-            ▶
+            →
           </button>
         </div>
 

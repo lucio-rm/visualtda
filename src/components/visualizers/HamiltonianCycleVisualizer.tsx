@@ -180,6 +180,14 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
         </span>
       </div>
 
+      {/* Pruning Analysis Card (Section 24) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Fuerza Bruta vs. Backtracking en Ciclo Hamiltoniano:' : 'Brute Force vs. Backtracking in Hamiltonian Cycle:'}</strong>{' '}
+        {language === 'es'
+          ? `Evaluar todas las permutaciones posibles de vértices requeriría |V|! = ${nodes.length}! = 720 ordenamientos completos. El algoritmo con Backtracking valida la existencia de aristas consecutivas paso a paso y poda de inmediato si el candidato ya fue visitado o no tiene arista adyacente, explorando solo caminos válidos hasta verificar el ciclo.`
+          : `Testing all vertex permutations requires |V|! = ${nodes.length}! = 720 full orderings. Backtracking checks adjacency step by step and prunes dead branches immediately when no edge connects the vertices or a vertex is revisited.`}
+      </div>
+
       {/* Playback Controls */}
       <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
         <div className="trace-buttons">
