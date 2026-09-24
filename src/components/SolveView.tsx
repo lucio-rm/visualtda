@@ -4,6 +4,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseContent';
 import { runPythonTests } from '../runtime/pythonTestRunner';
 import { pythonService } from '../runtime/pythonExecutionService';
+import { useStudentProgress } from '../context/StudentProgressContext';
 
 interface SolveViewProps {
   exercise: ExerciseMetadata;
@@ -21,6 +22,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
   starterCode
 }) => {
   const { language, t, dict } = useLanguage();
+  const { markAttempted, markTesting, markPassed } = useStudentProgress();
 
   const content = useMemo(() => {
     return EXERCISE_SOLVE_CONTENT[exercise.id] || null;
@@ -40,6 +42,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
   const setCode = (newCode: string) => {
     setCodeState(newCode);
+    markAttempted(exercise.id);
     try {
       sessionStorage.setItem(storageKey, newCode);
     } catch {
@@ -49,6 +52,39 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
   const handleResetCode = () => {
     setCode(defaultCode);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const target = e.currentTarget;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const spaces = '    ';
+      const newCode = code.substring(0, start) + spaces + code.substring(end);
+      setCode(newCode);
+      requestAnimationFrame(() => {
+        target.selectionStart = target.selectionEnd = start + 4;
+      });
+    } else if (e.key === 'Enter') {
+      const target = e.currentTarget;
+      const start = target.selectionStart;
+      const currentLine = code.substring(0, start).split('\n').pop() || '';
+      const indentMatch = currentLine.match(/^\s*/);
+      let indent = indentMatch ? indentMatch[0] : '';
+      if (currentLine.trim().endsWith(':')) {
+        indent += '    ';
+      }
+      if (indent.length > 0) {
+        e.preventDefault();
+        const end = target.selectionEnd;
+        const newCode = code.substring(0, start) + '\n' + indent + code.substring(end);
+        setCode(newCode);
+        requestAnimationFrame(() => {
+          target.selectionStart = target.selectionEnd = start + 1 + indent.length;
+        });
+      }
+    }
   };
 
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
@@ -101,6 +137,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
       if (evaluation.passed) {
         setTestStatus('passed');
+        markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
         setTestSummary(
           language === 'es'
             ? `✓ ${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
@@ -109,6 +146,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
         onSuccess();
       } else {
         setTestStatus('failed');
+        markTesting(exercise.id, evaluation.totalPassed, evaluation.totalTests);
         setTestSummary(
           language === 'es'
             ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisá las condiciones y salidas fallidas en la tabla de abajo.`
@@ -121,6 +159,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
       setTestResults(evalResult.results);
       if (evalResult.passed) {
         setTestStatus('passed');
+        markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
         setTestSummary(
           language === 'es'
             ? `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} casos de prueba superados con éxito.`
@@ -129,6 +168,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
         onSuccess();
       } else {
         setTestStatus('failed');
+        markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
         setTestSummary(
           language === 'es'
             ? `${evalResult.totalPassed} / ${evalResult.totalTests} casos superados. El código no satisfizo todas las restricciones o contiene errores.`
@@ -178,6 +218,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
     if (evalResult.runtimeError) {
       setTestStatus('failed');
+      markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
           ? 'Error detectado durante la ejecución en Python. Revisa la traza abajo y los casos fallidos.'
@@ -185,6 +226,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
       );
     } else if (evalResult.passed) {
       setTestStatus('passed');
+      markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
           ? `✓ ¡Excelente! ${evalResult.totalPassed} / ${evalResult.totalTests} pruebas en Python real superadas en ${Math.round(evalResult.executionTimeMs)} ms.`
@@ -193,6 +235,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
       onSuccess();
     } else {
       setTestStatus('failed');
+      markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
           ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas. Revisa los casos fallidos en la tabla.`
@@ -243,6 +286,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
               className="code-editor-input"
               value={code}
               onChange={(e) => setCode(e.target.value)}
+              onKeyDown={handleKeyDown}
               rows={14}
               aria-label={t(dict.codeEditorAriaLabel)}
               spellCheck={false}

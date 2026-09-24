@@ -40,6 +40,38 @@ import { HuffmanVisualizer } from '../components/visualizers/HuffmanVisualizer';
 import { HuffmanPlayground } from '../components/visualizers/HuffmanPlayground';
 import { GraphColoringVisualizer } from '../components/visualizers/GraphColoringVisualizer';
 import { GraphColoringPlayground } from '../components/visualizers/GraphColoringPlayground';
+import { SudokuVisualizer } from '../components/visualizers/SudokuVisualizer';
+import { SudokuPlayground } from '../components/visualizers/SudokuPlayground';
+import { KnightsTourVisualizer } from '../components/visualizers/KnightsTourVisualizer';
+import { KnightsTourPlayground } from '../components/visualizers/KnightsTourPlayground';
+import { DijkstraVisualizer } from '../components/visualizers/DijkstraVisualizer';
+import { DijkstraPlayground } from '../components/visualizers/DijkstraPlayground';
+import { KruskalVisualizer } from '../components/visualizers/KruskalVisualizer';
+import { KruskalPlayground } from '../components/visualizers/KruskalPlayground';
+import { BellmanFordVisualizer } from '../components/visualizers/BellmanFordVisualizer';
+import { BellmanFordPlayground } from '../components/visualizers/BellmanFordPlayground';
+import { ClosestPairVisualizer } from '../components/visualizers/ClosestPairVisualizer';
+import { ClosestPairPlayground } from '../components/visualizers/ClosestPairPlayground';
+import { KnapsackBranchAndBoundVisualizer } from '../components/visualizers/KnapsackBranchAndBoundVisualizer';
+import { KnapsackBranchAndBoundPlayground } from '../components/visualizers/KnapsackBranchAndBoundPlayground';
+import { IntervalPartitioningVisualizer } from '../components/visualizers/IntervalPartitioningVisualizer';
+import { IntervalPartitioningPlayground } from '../components/visualizers/IntervalPartitioningPlayground';
+import { MinimizeLatenessVisualizer } from '../components/visualizers/MinimizeLatenessVisualizer';
+import { MinimizeLatenessPlayground } from '../components/visualizers/MinimizeLatenessPlayground';
+import { KaratsubaVisualizer } from '../components/visualizers/KaratsubaVisualizer';
+import { KaratsubaPlayground } from '../components/visualizers/KaratsubaPlayground';
+import { MajorityElementVisualizer } from '../components/visualizers/MajorityElementVisualizer';
+import { MajorityElementPlayground } from '../components/visualizers/MajorityElementPlayground';
+import { MedianOfMediansVisualizer } from '../components/visualizers/MedianOfMediansVisualizer';
+import { MedianOfMediansPlayground } from '../components/visualizers/MedianOfMediansPlayground';
+import { SegmentedLeastSquaresVisualizer } from '../components/visualizers/SegmentedLeastSquaresVisualizer';
+import { SegmentedLeastSquaresPlayground } from '../components/visualizers/SegmentedLeastSquaresPlayground';
+import { RnaSecondaryStructureVisualizer } from '../components/visualizers/RnaSecondaryStructureVisualizer';
+import { RnaSecondaryStructurePlayground } from '../components/visualizers/RnaSecondaryStructurePlayground';
+import { HamiltonianCycleVisualizer } from '../components/visualizers/HamiltonianCycleVisualizer';
+import { HamiltonianCyclePlayground } from '../components/visualizers/HamiltonianCyclePlayground';
+import { TspBranchAndBoundVisualizer } from '../components/visualizers/TspBranchAndBoundVisualizer';
+import { TspBranchAndBoundPlayground } from '../components/visualizers/TspBranchAndBoundPlayground';
 
 export interface ExerciseViewConfig {
   visualizerSlot?: React.ReactNode;
@@ -262,11 +294,171 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
   'graph-coloring-backtracking': {
     visualizerSlot: <GraphColoringVisualizer />,
     discoverPlaygroundSlot: <GraphColoringPlayground />,
-    canonicalPython: RAW_EXERCISE_ASSETS['graph-coloring-backtracking'].solution,
-    pseudocode: RAW_EXERCISE_ASSETS['graph-coloring-backtracking'].pseudocode,
-    correctnessExplanation: RAW_EXERCISE_ASSETS['graph-coloring-backtracking'].theory,
+    canonicalPython: RAW_EXERCISE_ASSETS['graph-coloring-backtracking']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['graph-coloring-backtracking']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['graph-coloring-backtracking']?.theory,
     timeComplexity: 'O(K^V) en el peor caso exponencial',
     spaceComplexity: 'O(V) vector de asignación de colores'
+  },
+
+  'sudoku-backtracking': {
+    visualizerSlot: <SudokuVisualizer />,
+    discoverPlaygroundSlot: <SudokuPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['sudoku-backtracking']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['sudoku-backtracking']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['sudoku-backtracking']?.theory,
+    timeComplexity: 'O(9^m) en el peor caso sin podas / MRV resuelve en milisegundos',
+    spaceComplexity: 'O(1) tablero 9x9 constante (81 celdas)'
+  },
+
+  'knights-tour-backtracking': {
+    visualizerSlot: <KnightsTourVisualizer />,
+    discoverPlaygroundSlot: <KnightsTourPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['knights-tour-backtracking']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['knights-tour-backtracking']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['knights-tour-backtracking']?.theory,
+    timeComplexity: 'O(8^(N²)) en el peor caso / O(N²) tiempo lineal casi seguro con Warnsdorff',
+    spaceComplexity: 'O(N²) para la matriz del tablero y la pila de recursión'
+  },
+
+  'dijkstra-greedy': {
+    visualizerSlot: <DijkstraVisualizer />,
+    discoverPlaygroundSlot: <DijkstraPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['dijkstra-greedy']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['dijkstra-greedy']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['dijkstra-greedy']?.theory,
+    timeComplexity: 'O((V + E) log V) con min-heap binario / O(V²) con arreglo simple',
+    spaceComplexity: 'O(V) para distancias, predecesores y cola de prioridad'
+  },
+
+  'kruskal-mst-greedy': {
+    visualizerSlot: <KruskalVisualizer />,
+    discoverPlaygroundSlot: <KruskalPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['kruskal-mst-greedy']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['kruskal-mst-greedy']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['kruskal-mst-greedy']?.theory,
+    timeComplexity: 'O(E log E) dominado por el ordenamiento de las aristas',
+    spaceComplexity: 'O(V) para la estructura de Conjuntos Disjuntos (Union-Find)'
+  },
+
+  'bellman-ford-dp': {
+    visualizerSlot: <BellmanFordVisualizer />,
+    discoverPlaygroundSlot: <BellmanFordPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['bellman-ford-dp']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['bellman-ford-dp']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['bellman-ford-dp']?.theory,
+    timeComplexity: 'O(V · E) tiempo polinomial / detecta ciclos negativos en la iteración |V|',
+    spaceComplexity: 'O(V · E) tabla 2D completa o O(V) con optimización de espacio'
+  },
+
+  'closest-pair-dyc': {
+    visualizerSlot: <ClosestPairVisualizer />,
+    discoverPlaygroundSlot: <ClosestPairPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['closest-pair-dyc']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['closest-pair-dyc']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['closest-pair-dyc']?.theory,
+    timeComplexity: 'O(N log N) recurrencia T(N) = 2T(N/2) + O(N) vía ordenamiento previo en Y',
+    spaceComplexity: 'O(N) arreglos auxiliares para la banda de fusión'
+  },
+
+  'knapsack-branch-and-bound': {
+    visualizerSlot: <KnapsackBranchAndBoundVisualizer />,
+    discoverPlaygroundSlot: <KnapsackBranchAndBoundPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['knapsack-branch-and-bound']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['knapsack-branch-and-bound']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['knapsack-branch-and-bound']?.theory,
+    timeComplexity: 'O(2^N) en el peor caso / poda drástica en la práctica mediante cota fraccionaria',
+    spaceComplexity: 'O(N) profundidad máxima del árbol de búsqueda'
+  },
+
+  'interval-partitioning-greedy': {
+    visualizerSlot: <IntervalPartitioningVisualizer />,
+    discoverPlaygroundSlot: <IntervalPartitioningPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['interval-partitioning-greedy']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['interval-partitioning-greedy']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['interval-partitioning-greedy']?.theory,
+    timeComplexity: 'O(N log N) dominado por ordenamiento y min-heap de aulas',
+    spaceComplexity: 'O(N) para la cola de prioridad de aulas abiertas'
+  },
+
+  'minimize-lateness-greedy': {
+    visualizerSlot: <MinimizeLatenessVisualizer />,
+    discoverPlaygroundSlot: <MinimizeLatenessPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['minimize-lateness-greedy']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['minimize-lateness-greedy']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['minimize-lateness-greedy']?.theory,
+    timeComplexity: 'O(N log N) ordenamiento por fecha límite d_i (EDF)',
+    spaceComplexity: 'O(N) para el cronograma secuencial'
+  },
+
+  'karatsuba-dyc': {
+    visualizerSlot: <KaratsubaVisualizer />,
+    discoverPlaygroundSlot: <KaratsubaPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['karatsuba-dyc']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['karatsuba-dyc']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['karatsuba-dyc']?.theory,
+    timeComplexity: 'O(N^{log_2 3}) ≈ O(N^{1.585}) mediante 3 multiplicaciones recursivas',
+    spaceComplexity: 'O(N) para buffers y pila de recursión'
+  },
+
+  'majority-element-dyc': {
+    visualizerSlot: <MajorityElementVisualizer />,
+    discoverPlaygroundSlot: <MajorityElementPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['majority-element-dyc']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['majority-element-dyc']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['majority-element-dyc']?.theory,
+    timeComplexity: 'O(N log N) D&C estándar / O(N) Boyer-Moore',
+    spaceComplexity: 'O(log N) pila de recursión'
+  },
+
+  'median-of-medians-dyc': {
+    visualizerSlot: <MedianOfMediansVisualizer />,
+    discoverPlaygroundSlot: <MedianOfMediansPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['median-of-medians-dyc']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['median-of-medians-dyc']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['median-of-medians-dyc']?.theory,
+    timeComplexity: 'O(N) lineal determinístico estricto en el peor caso',
+    spaceComplexity: 'O(N) para sublistas de medianas y particiones'
+  },
+
+  'segmented-least-squares-dp': {
+    visualizerSlot: <SegmentedLeastSquaresVisualizer />,
+    discoverPlaygroundSlot: <SegmentedLeastSquaresPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['segmented-least-squares-dp']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['segmented-least-squares-dp']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['segmented-least-squares-dp']?.theory,
+    timeComplexity: 'O(N²) con precomputación de errores / O(N³) sin precomputación',
+    spaceComplexity: 'O(N) para el vector OPT y origen de particiones'
+  },
+
+  'rna-secondary-structure-dp': {
+    visualizerSlot: <RnaSecondaryStructureVisualizer />,
+    discoverPlaygroundSlot: <RnaSecondaryStructurePlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['rna-secondary-structure-dp']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['rna-secondary-structure-dp']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['rna-secondary-structure-dp']?.theory,
+    timeComplexity: 'O(N³) por búsqueda del punto de enlace t en cada intervalo',
+    spaceComplexity: 'O(N²) para la matriz DP triangular superior'
+  },
+
+  'hamiltonian-cycle-backtracking': {
+    visualizerSlot: <HamiltonianCycleVisualizer />,
+    discoverPlaygroundSlot: <HamiltonianCyclePlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['hamiltonian-cycle-backtracking']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['hamiltonian-cycle-backtracking']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['hamiltonian-cycle-backtracking']?.theory,
+    timeComplexity: 'O(N!) en el peor caso exponencial (problema NP-completo)',
+    spaceComplexity: 'O(N) para la pila de recursión y conjunto de visitados'
+  },
+
+  'tsp-branch-and-bound': {
+    visualizerSlot: <TspBranchAndBoundVisualizer />,
+    discoverPlaygroundSlot: <TspBranchAndBoundPlayground />,
+    canonicalPython: RAW_EXERCISE_ASSETS['tsp-branch-and-bound']?.solution,
+    pseudocode: RAW_EXERCISE_ASSETS['tsp-branch-and-bound']?.pseudocode,
+    correctnessExplanation: RAW_EXERCISE_ASSETS['tsp-branch-and-bound']?.theory,
+    timeComplexity: 'O(N!) en el peor caso / poda drástica con cotas 1-tree o asignación',
+    spaceComplexity: 'O(N) para la pila del recorrido Branch & Bound'
   }
 };
 

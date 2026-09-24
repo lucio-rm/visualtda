@@ -1,0 +1,79 @@
+.knights-tour-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.kt-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.kt-metric-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.kt-metric-badge strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.kt-action-badge {
+  font-weight: 700;
+  border-color: var(--accent);
+}
+
+.kt-action-badge.action-move_knight {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.kt-action-badge.action-backtrack {
+  border-color: var(--warning, #f59e0b);
+  color: var(--warning, #f59e0b);
+}
+
+.kt-action-badge.action-complete {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.kt-board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.kt-svg-board {
+  max-width: 440px;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.kt-description-box {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+}

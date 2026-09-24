@@ -1,0 +1,44 @@
+.majority-element-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.me-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.me-metric-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.me-metric-badge strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.me-action-badge {
+  border-left: 3px solid var(--accent);
+}
+
+.me-canvas-container {
+  display: flex;
+  justify-content: center;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  overflow-x: auto;
+}

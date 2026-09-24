@@ -1,0 +1,312 @@
+import React, { useMemo } from 'react';
+import {
+  generateMinimizeLatenessTrace,
+  MinimizeLatenessStepData,
+  DEFAULT_LATENESS_JOBS
+} from '../../engine/algorithms/minimizeLatenessTrace';
+import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
+import './MinimizeLatenessVisualizer.css';
+
+export const MinimizeLatenessVisualizer: React.FC = () => {
+  const { language } = useLanguage();
+
+  const timeline = useMemo(() => generateMinimizeLatenessTrace(DEFAULT_LATENESS_JOBS), []);
+
+  const {
+    currentStepIndex,
+    totalSteps,
+    currentEvent,
+    isPlaying,
+    playbackSpeed,
+    togglePlay,
+    stepForward,
+    stepBackward,
+    goToStep,
+    reset,
+    setSpeed
+  } = useTraceTimeline<MinimizeLatenessStepData>(timeline, {
+    baseIntervalMs: 650,
+    enableKeyboardShortcuts: true
+  });
+
+  const data = currentEvent?.data;
+  const scheduledJobs = data?.scheduledJobs || [];
+  const currentJob = data?.currentJob;
+  const maxLateness = data?.maxLateness ?? 0;
+  const currentTime = data?.currentTime ?? 0;
+  const action = data?.action || 'INIT';
+  const description = data?.description;
+
+  // Timeline coordinate scale
+  const maxAxisTime = 18;
+  const svgWidth = 600;
+  const svgHeight = 220;
+  const marginLeft = 40;
+  const marginRight = 30;
+  const marginTop = 50;
+  const chartWidth = svgWidth - marginLeft - marginRight;
+
+  const timeToX = (t: number) => marginLeft + (t / maxAxisTime) * chartWidth;
+
+  return (
+    <div
+      className="minimize-lateness-visualizer"
+      role="region"
+      aria-label="Visualizador de Minimización de Retraso Máximo"
+    >
+      {/* Metrics Row */}
+      <div className="ml-metrics-row">
+        <div className="ml-metric-badge">
+          <span>{language === 'es' ? 'Tiempo actual (t):' : 'Current Time (t):'}</span>
+          <strong>{currentTime}</strong>
+        </div>
+        <div className="ml-metric-badge">
+          <span>{language === 'es' ? 'Retraso Máximo (L_max):' : 'Max Lateness (L_max):'}</span>
+          <strong style={{ color: maxLateness > 0 ? '#ef4444' : '#10b981' }}>{maxLateness}</strong>
+        </div>
+        <div className={`ml-metric-badge ml-action-badge action-${action.toLowerCase()}`}>
+          <span>{language === 'es' ? 'Fase:' : 'Phase:'}</span>
+          <strong>{action}</strong>
+        </div>
+      </div>
+
+      {/* Narrative Step Description */}
+      <div className="trace-step-description" role="status" aria-live="polite">
+        <p>{description ? (language === 'es' ? description.es : description.en) : ''}</p>
+      </div>
+
+      {/* SVG Canvas */}
+      <div className="ml-canvas-container">
+        <svg
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block' }}
+          role="img"
+          aria-label="Cronograma de tareas y deadlines"
+        >
+          {/* Timeline background track */}
+          <line
+            x1={marginLeft}
+            y1={marginTop + 50}
+            x2={marginLeft + chartWidth}
+            y2={marginTop + 50}
+            stroke="var(--border)"
+            strokeWidth={4}
+            strokeLinecap="round"
+          />
+
+          {/* Time ticks */}
+          {Array.from({ length: maxAxisTime + 1 }).map((_, t) => {
+            const x = timeToX(t);
+            return (
+              <g key={`tick-${t}`}>
+                <line
+                  x1={x}
+                  y1={marginTop + 45}
+                  x2={x}
+                  y2={marginTop + 55}
+                  stroke="var(--border)"
+                  strokeWidth={t % 2 === 0 ? 1.5 : 1}
+                />
+                {t % 2 === 0 && (
+                  <text
+                    x={x}
+                    y={marginTop + 72}
+                    textAnchor="middle"
+                    fill="var(--text-muted)"
+                    fontSize="10px"
+                    fontFamily="var(--font-mono)"
+                  >
+                    {t}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+
+          {/* Scheduled Job Blocks */}
+          {scheduledJobs.map((job) => {
+            if (job.startTime === undefined || job.finishTime === undefined) return null;
+            const x1 = timeToX(job.startTime);
+            const x2 = timeToX(job.finishTime);
+            const w = Math.max(4, x2 - x1);
+            const isLate = (job.lateness ?? 0) > 0;
+            const isSelected = currentJob?.id === job.id;
+
+            return (
+              <g key={`block-${job.id}`}>
+                {/* Job rectangle */}
+                <rect
+                  x={x1}
+                  y={marginTop}
+                  width={w}
+                  height={42}
+                  rx={4}
+                  fill={job.color}
+                  fillOpacity={0.85}
+                  stroke={isSelected ? '#ffffff' : 'none'}
+                  strokeWidth={isSelected ? 2.5 : 0}
+                />
+                <text
+                  x={x1 + w / 2}
+                  y={marginTop + 24}
+                  textAnchor="middle"
+                  fill="#0f172a"
+                  fontSize="11px"
+                  fontWeight="700"
+                  fontFamily="sans-serif"
+                >
+                  {job.name} (t={job.duration})
+                </text>
+
+                {/* Deadline indicator pin */}
+                <line
+                  x1={timeToX(job.deadline)}
+                  y1={marginTop - 20}
+                  x2={timeToX(job.deadline)}
+                  y2={marginTop + 42}
+                  stroke={isLate ? '#ef4444' : '#10b981'}
+                  strokeWidth={2}
+                  strokeDasharray="3,2"
+                />
+                <circle
+                  cx={timeToX(job.deadline)}
+                  cy={marginTop - 20}
+                  r={5}
+                  fill={isLate ? '#ef4444' : '#10b981'}
+                />
+                <text
+                  x={timeToX(job.deadline)}
+                  y={marginTop - 28}
+                  textAnchor="middle"
+                  fill={isLate ? '#ef4444' : '#10b981'}
+                  fontSize="9px"
+                  fontWeight="700"
+                  fontFamily="var(--font-mono)"
+                >
+                  d={job.deadline}
+                </text>
+
+                {/* Lateness bracket if job is late */}
+                {isLate && (
+                  <rect
+                    x={timeToX(job.deadline)}
+                    y={marginTop + 38}
+                    width={x2 - timeToX(job.deadline)}
+                    height={4}
+                    fill="#ef4444"
+                    rx={2}
+                  />
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Job schedule details table */}
+      <div style={{ overflowX: 'auto' }}>
+        <table className="ml-job-table">
+          <thead>
+            <tr>
+              <th>{language === 'es' ? 'Tarea' : 'Job'}</th>
+              <th>{language === 'es' ? 'Duración (t_i)' : 'Duration (t_i)'}</th>
+              <th>{language === 'es' ? 'Deadline (d_i)' : 'Deadline (d_i)'}</th>
+              <th>{language === 'es' ? 'Inicio (s_i)' : 'Start (s_i)'}</th>
+              <th>{language === 'es' ? 'Fin (f_i)' : 'Finish (f_i)'}</th>
+              <th>{language === 'es' ? 'Retraso (L_i)' : 'Lateness (L_i)'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scheduledJobs.map((j) => (
+              <tr key={`row-${j.id}`}>
+                <td style={{ fontWeight: '600', color: j.color }}>{j.name}</td>
+                <td style={{ fontFamily: 'var(--font-mono)' }}>{j.duration}</td>
+                <td style={{ fontFamily: 'var(--font-mono)' }}>{j.deadline}</td>
+                <td style={{ fontFamily: 'var(--font-mono)' }}>{j.startTime ?? '-'}</td>
+                <td style={{ fontFamily: 'var(--font-mono)' }}>{j.finishTime ?? '-'}</td>
+                <td
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: '700',
+                    color: (j.lateness ?? 0) > 0 ? '#ef4444' : '#10b981'
+                  }}
+                >
+                  {j.lateness ?? 0}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Playback Controls */}
+      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+        <div className="trace-buttons">
+          <button
+            type="button"
+            className="btn-control"
+            onClick={reset}
+            aria-label={language === 'es' ? 'Reiniciar visualización' : 'Reset visualization'}
+          >
+            ⏮
+          </button>
+          <button
+            type="button"
+            className="btn-control"
+            onClick={stepBackward}
+            disabled={currentStepIndex <= 0}
+            aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
+          >
+            ⏪
+          </button>
+          <button
+            type="button"
+            className="btn-control btn-play"
+            onClick={togglePlay}
+            aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </button>
+          <button
+            type="button"
+            className="btn-control"
+            onClick={stepForward}
+            disabled={currentStepIndex >= totalSteps - 1}
+            aria-label={language === 'es' ? 'Siguiente paso' : 'Next step'}
+          >
+            ⏩
+          </button>
+        </div>
+
+        <div className="trace-scrubber">
+          <input
+            type="range"
+            min={0}
+            max={Math.max(0, totalSteps - 1)}
+            value={currentStepIndex}
+            onChange={(e) => goToStep(Number(e.target.value))}
+            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
+          />
+          <span className="step-counter">
+            {language === 'es' ? 'Paso' : 'Step'} {currentStepIndex + 1} / {totalSteps}
+          </span>
+        </div>
+
+        <div className="trace-speed">
+          <span>{language === 'es' ? 'Velocidad:' : 'Speed:'}</span>
+          {[1, 2, 4].map((spd) => (
+            <button
+              key={spd}
+              type="button"
+              className={`btn-speed ${playbackSpeed === spd ? 'active' : ''}`}
+              onClick={() => setSpeed(spd)}
+            >
+              {spd}x
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};

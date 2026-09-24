@@ -126,7 +126,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     // Verify modal contains honest pedagogical friction copy
     const modal = container.querySelector('.modal-card');
     expect(modal).not.toBeNull();
-    expect(modal?.textContent).toContain('¿Revelar la solución canónica?');
+    expect(modal?.textContent).toContain('¿Revelar la solución explicada?');
     expect(modal?.textContent).toContain('sin penalización');
     expect(modal?.textContent).toContain('retención y comprensión profunda');
   });
@@ -159,7 +159,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     // Friction modal should be displayed
     const modal = container.querySelector('.modal-card');
     expect(modal).not.toBeNull();
-    expect(modal?.textContent).toContain('¿Revelar la solución canónica?');
+    expect(modal?.textContent).toContain('¿Revelar la solución explicada?');
 
     // Clicking confirm in modal unlocks Understand phase
     const confirmBtn = container.querySelector('.modal-actions .btn-primary') as HTMLButtonElement;

@@ -1,0 +1,345 @@
+import React, { useMemo } from 'react';
+import {
+  generateDijkstraTrace,
+  DijkstraStepData,
+  DEFAULT_DIJKSTRA_GRAPH
+} from '../../engine/algorithms/dijkstraTrace';
+import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
+import './DijkstraVisualizer.css';
+
+export const DijkstraVisualizer: React.FC = () => {
+  const { language } = useLanguage();
+
+  const timeline = useMemo(() => generateDijkstraTrace(DEFAULT_DIJKSTRA_GRAPH), []);
+
+  const {
+    currentStepIndex,
+    totalSteps,
+    currentEvent,
+    isPlaying,
+    playbackSpeed,
+    togglePlay,
+    stepForward,
+    stepBackward,
+    goToStep,
+    reset,
+    setSpeed
+  } = useTraceTimeline<DijkstraStepData>(timeline, {
+    baseIntervalMs: 700,
+    enableKeyboardShortcuts: true
+  });
+
+  const data = currentEvent?.data;
+  const nodes = data?.nodes || DEFAULT_DIJKSTRA_GRAPH.nodes;
+  const edges = data?.edges || DEFAULT_DIJKSTRA_GRAPH.edges;
+  const distances = data?.distances || {};
+  const predecessors = data?.predecessors || {};
+  const visited = data?.visited || [];
+  const currentU = data?.currentU;
+  const currentV = data?.currentV;
+  const relaxedEdge = data?.relaxedEdge;
+  const priorityQueue = data?.priorityQueue || [];
+  const action = data?.action || 'INIT';
+  const description = data?.description;
+
+  const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
+
+  return (
+    <div className="dijkstra-visualizer" role="region" aria-label="Visualizador del Algoritmo de Dijkstra">
+      {/* Metrics Row */}
+      <div className="djk-metrics-row">
+        <div className="djk-metric-badge">
+          <span>{language === 'es' ? 'Nodos definitivos (S):' : 'Settled nodes (S):'}</span>
+          <strong>{visited.length} / {nodes.length}</strong>
+        </div>
+        <div className="djk-metric-badge">
+          <span>{language === 'es' ? 'Cola de prioridad (Q):' : 'Priority Queue (Q):'}</span>
+          <strong>{priorityQueue.length} elementos</strong>
+        </div>
+        <div className={`djk-metric-badge djk-action-badge action-${action.toLowerCase()}`}>
+          <span>{language === 'es' ? 'Acción actual:' : 'Current action:'}</span>
+          <strong>{action}</strong>
+        </div>
+      </div>
+
+      {/* SVG Canvas */}
+      <div className="djk-canvas-container">
+        <svg
+          viewBox="0 0 510 300"
+          className="djk-svg-canvas"
+          role="img"
+          aria-label={language === 'es' ? 'Grafo dirigido con pesos de Dijkstra' : 'Directed weighted graph for Dijkstra'}
+        >
+          <defs>
+            <marker
+              id="djk-arrow"
+              viewBox="0 0 10 10"
+              refX="22"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
+            </marker>
+            <marker
+              id="djk-arrow-active"
+              viewBox="0 0 10 10"
+              refX="22"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+            </marker>
+            <marker
+              id="djk-arrow-tree"
+              viewBox="0 0 10 10"
+              refX="22"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+            </marker>
+          </defs>
+
+          {/* Edges */}
+          {edges.map((edge) => {
+            const uNode = nodeMap.get(edge.u);
+            const vNode = nodeMap.get(edge.v);
+            if (!uNode || !vNode) return null;
+
+            const isRelaxing = relaxedEdge && relaxedEdge.u === edge.u && relaxedEdge.v === edge.v;
+            const isTreeEdge = predecessors[edge.v] === edge.u;
+
+            let strokeColor = 'var(--border, #475569)';
+            let strokeWidth = 1.5;
+            let marker = 'url(#djk-arrow)';
+
+            if (isTreeEdge) {
+              strokeColor = '#10b981';
+              strokeWidth = 3;
+              marker = 'url(#djk-arrow-tree)';
+            } else if (isRelaxing) {
+              strokeColor = '#f59e0b';
+              strokeWidth = 2.5;
+              marker = 'url(#djk-arrow-active)';
+            }
+
+            const midX = (uNode.x + vNode.x) / 2;
+            const midY = (uNode.y + vNode.y) / 2;
+
+            return (
+              <g key={`edge-${edge.u}-${edge.v}`}>
+                <line
+                  x1={uNode.x}
+                  y1={uNode.y}
+                  x2={vNode.x}
+                  y2={vNode.y}
+                  stroke={strokeColor}
+                  strokeWidth={strokeWidth}
+                  markerEnd={marker}
+                />
+                <circle cx={midX} cy={midY} r={11} fill="var(--surface, #0f172a)" stroke={strokeColor} strokeWidth={1} />
+                <text
+                  x={midX}
+                  y={midY + 4}
+                  textAnchor="middle"
+                  fill="var(--text, #f8fafc)"
+                  fontFamily="var(--font-mono)"
+                  fontSize="11px"
+                  fontWeight="700"
+                >
+                  {edge.weight}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Nodes */}
+          {nodes.map((node) => {
+            const isSettled = visited.includes(node.id);
+            const isU = currentU === node.id;
+            const isV = currentV === node.id;
+            const dist = distances[node.id];
+            const distLabel = dist === Infinity ? '∞' : String(dist);
+
+            let fill = 'var(--surface, #0f172a)';
+            let stroke = 'var(--border, #64748b)';
+            let strokeWidth = 2;
+
+            if (isU) {
+              fill = 'rgba(56, 189, 248, 0.3)';
+              stroke = '#38bdf8';
+              strokeWidth = 3.5;
+            } else if (isV) {
+              fill = 'rgba(245, 158, 11, 0.3)';
+              stroke = '#f59e0b';
+              strokeWidth = 3;
+            } else if (isSettled) {
+              fill = 'rgba(16, 185, 129, 0.25)';
+              stroke = '#10b981';
+              strokeWidth = 2.5;
+            }
+
+            return (
+              <g key={`node-${node.id}`}>
+                <circle cx={node.x} cy={node.y} r={22} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+                <text
+                  x={node.x}
+                  y={node.y + 5}
+                  textAnchor="middle"
+                  fill="var(--text, #f8fafc)"
+                  fontFamily="var(--font-mono)"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  {node.id}
+                </text>
+                {/* Distance Badge Above Node */}
+                <rect
+                  x={node.x - 18}
+                  y={node.y - 38}
+                  width={36}
+                  height={16}
+                  rx={4}
+                  fill={isSettled ? '#10b981' : 'var(--surface-hover, #1e293b)'}
+                  stroke={isSettled ? '#059669' : 'var(--border, #475569)'}
+                />
+                <text
+                  x={node.x}
+                  y={node.y - 26}
+                  textAnchor="middle"
+                  fill={isSettled ? '#ffffff' : 'var(--accent, #38bdf8)'}
+                  fontFamily="var(--font-mono)"
+                  fontSize="11px"
+                  fontWeight="800"
+                >
+                  d:{distLabel}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Description */}
+      {description && (
+        <div className="djk-description-box" role="status" aria-live="polite">
+          {language === 'es' ? description.es : description.en}
+        </div>
+      )}
+
+      {/* Priority Queue State Display */}
+      {priorityQueue.length > 0 && (
+        <table className="djk-pq-table" aria-label="Estado de la Cola de Prioridad">
+          <thead>
+            <tr>
+              <th>{language === 'es' ? 'Prioridad en Cola (Q)' : 'Queue Priority (Q)'}</th>
+              {priorityQueue.map((item) => (
+                <th key={`th-${item.node}`}>{item.node}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{language === 'es' ? 'Distancia Acumulada' : 'Accumulated Dist'}</td>
+              {priorityQueue.map((item) => (
+                <td key={`td-${item.node}`}>
+                  <strong>{item.dist}</strong>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      )}
+
+      {/* Timeline Controls */}
+      <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
+        <div className="timeline-nav-group">
+          <button
+            type="button"
+            className="ctrl-btn"
+            onClick={reset}
+            title={language === 'es' ? 'Reiniciar' : 'Reset'}
+            aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
+          >
+            ⏮
+          </button>
+          <button
+            type="button"
+            className="ctrl-btn"
+            onClick={stepBackward}
+            disabled={currentStepIndex === 0}
+            title={language === 'es' ? 'Paso anterior' : 'Step backward'}
+            aria-label={language === 'es' ? 'Paso anterior' : 'Step backward'}
+          >
+            ◀
+          </button>
+          <button
+            type="button"
+            className={`ctrl-btn ctrl-play-btn ${isPlaying ? 'is-playing' : ''}`}
+            onClick={togglePlay}
+            title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+            aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </button>
+          <button
+            type="button"
+            className="ctrl-btn"
+            onClick={stepForward}
+            disabled={currentStepIndex >= totalSteps - 1}
+            title={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+            aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}
+          >
+            ▶
+          </button>
+        </div>
+
+        <div className="timeline-scrubber-group">
+          <input
+            type="range"
+            min={0}
+            max={Math.max(0, totalSteps - 1)}
+            value={currentStepIndex}
+            onChange={(e) => goToStep(Number(e.target.value))}
+            className="scrubber-slider"
+            aria-label="Progreso de pasos de Dijkstra"
+          />
+          <span className="step-tag">
+            {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}
+          </span>
+        </div>
+
+        <div className="timeline-speed-group">
+          <button
+            type="button"
+            className={`btn-speed ${playbackSpeed === 0.5 ? 'active' : ''}`}
+            onClick={() => setSpeed(0.5)}
+          >
+            0.5x
+          </button>
+          <button
+            type="button"
+            className={`btn-speed ${playbackSpeed === 1 ? 'active' : ''}`}
+            onClick={() => setSpeed(1)}
+          >
+            1x
+          </button>
+          <button
+            type="button"
+            className={`btn-speed ${playbackSpeed === 2 ? 'active' : ''}`}
+            onClick={() => setSpeed(2)}
+          >
+            2x
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

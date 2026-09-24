@@ -503,7 +503,27 @@ server.listen(PORT, async () => {
       `);
       await new Promise((r) => setTimeout(r, 300));
 
-      const validCode = 'def resolver_n_reinas(n):\\n    soluciones = []\\n    tablero = [-1] * n\\n    cols = set()\\n    d1 = set()\\n    d2 = set()\\n    def bt(r):\\n        if r == n:\\n            soluciones.append(list(tablero))\\n            return\\n        for c in range(n):\\n            if c in cols or (r - c) in d1 or (r + c) in d2:\\n                continue\\n            tablero[r] = c\\n            cols.add(c); d1.add(r - c); d2.add(r + c)\\n            bt(r + 1)\\n            cols.remove(c); d1.remove(r - c); d2.remove(r + c)\\n            tablero[r] = -1\\n    bt(0)\\n    return soluciones\\n';
+      const validCode = `def resolver_n_reinas(n):
+    soluciones = []
+    tablero = [-1] * n
+    cols = set()
+    d1 = set()
+    d2 = set()
+    def bt(r):
+        if r == n:
+            soluciones.append(list(tablero))
+            return
+        for c in range(n):
+            if c in cols or (r - c) in d1 or (r + c) in d2:
+                continue
+            tablero[r] = c
+            cols.add(c); d1.add(r - c); d2.add(r + c)
+            bt(r + 1)
+            cols.remove(c); d1.remove(r - c); d2.remove(r + c)
+            tablero[r] = -1
+    bt(0)
+    return soluciones
+`;
       await setEditorCode(validCode);
       await new Promise((r) => setTimeout(r, 250));
 
@@ -524,7 +544,8 @@ server.listen(PORT, async () => {
         )
       `);
       if (!isPassed) {
-        throw new Error('Tests did not pass with valid code');
+        const summary = await evaluate('document.querySelector(".test-summary")?.textContent || document.querySelector(".test-feedback-card")?.textContent');
+        throw new Error(`Tests did not pass with valid code: ${summary}`);
       }
       await captureScreenshot('11-solve-tests-passed.png');
 

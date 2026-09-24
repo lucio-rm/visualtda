@@ -59,8 +59,15 @@ export const backtrackingContent: Record<string, ExerciseSolveContent> = {
       }
 
       const stripped = stripCode(code);
-      const hasRecursion = stripped.includes('def ') && (stripped.includes('backtrack(') || stripped.includes('resolver_n_reinas(') || stripped.includes('colocar('));
-      const hasPruning = stripped.includes('col') && (stripped.includes('diag') || stripped.includes('-') || stripped.includes('+') || stripped.includes('abs('));
+      const funcMatches = Array.from(stripped.matchAll(/def\s+([a-zA-Z0-9_]+)\s*\(/g)).map((m) => m[1]);
+      const hasInnerRecursion = funcMatches.some((fn) => {
+        const firstIdx = stripped.indexOf(`def ${fn}`);
+        if (firstIdx === -1) return false;
+        const remainder = stripped.slice(firstIdx + `def ${fn}`.length);
+        return new RegExp(`\\b${fn}\\s*\\(`).test(remainder);
+      });
+      const hasRecursion = hasInnerRecursion || (stripped.includes('def ') && /\b(backtrack|bt|resolver|colocar|dfs|solve|search)\s*\(/.test(stripped));
+      const hasPruning = (stripped.includes('col') || stripped.includes('tablero') || stripped.includes('fila')) && (stripped.includes('diag') || stripped.includes('d1') || stripped.includes('-') || stripped.includes('+') || stripped.includes('abs('));
       const hasBaseCase = stripped.includes('== n') || stripped.includes('>= n') || stripped.includes('len(');
       const isSound = hasRecursion && hasPruning && hasBaseCase;
 

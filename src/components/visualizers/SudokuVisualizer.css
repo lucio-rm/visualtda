@@ -1,0 +1,107 @@
+.sudoku-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.sdk-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.sdk-metric-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.sdk-metric-badge strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.sdk-action-badge {
+  font-weight: 700;
+  border-color: var(--accent);
+}
+
+.sdk-action-badge.action-mrv_select {
+  border-color: #06b6d4;
+  color: #06b6d4;
+}
+
+.sdk-action-badge.action-prune_conflict {
+  border-color: var(--danger, #ef4444);
+  color: var(--danger, #ef4444);
+}
+
+.sdk-action-badge.action-place_digit {
+  border-color: var(--success, #10b981);
+  color: var(--success, #10b981);
+}
+
+.sdk-action-badge.action-backtrack {
+  border-color: var(--warning, #f59e0b);
+  color: var(--warning, #f59e0b);
+}
+
+.sdk-action-badge.action-solved {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.sdk-board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.sdk-svg-board {
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.sdk-cell-rect {
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.sdk-cell-text {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.sdk-cell-domain {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-muted);
+  opacity: 0.6;
+}
+
+.sdk-description-box {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+}

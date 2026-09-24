@@ -1,0 +1,44 @@
+.tsp-bb-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.tsp-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tsp-metric-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.tsp-metric-badge strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.tsp-action-badge {
+  border-left: 3px solid var(--accent);
+}
+
+.tsp-canvas-container {
+  display: flex;
+  justify-content: center;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  overflow-x: auto;
+}

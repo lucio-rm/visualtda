@@ -27,7 +27,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   solutionUnlocked = false,
   onGoToSolve
 }) => {
-  const { t, dict } = useLanguage();
+  const { t, dict, language } = useLanguage();
   const { isInstructorMode } = useInstructorMode();
   const [codeMode, setCodeMode] = useState<'python' | 'pseudocode'>('python');
 
@@ -86,13 +86,17 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
             {codeMode === 'python' && !canViewCanonicalPython ? (
               <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🔒</div>
-                <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>Solución Canónica en Python Bloqueada</h4>
+                <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
+                  {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
+                </h4>
                 <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  Para acceder a la implementación de referencia oficial en Python, primero debés superar los casos de prueba automatizados en la fase <strong>Resolver</strong> (o activar el <strong>Modo Docente 🎓</strong> en la barra superior).
+                  {language === 'es'
+                    ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente 🎓 en la barra superior).'
+                    : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode 🎓 in the top bar).'}
                 </p>
                 {onGoToSolve && (
                   <button type="button" className="btn-primary" onClick={onGoToSolve}>
-                    Ir a Resolver el Ejercicio →
+                    {language === 'es' ? 'Ir a Resolver el Ejercicio →' : 'Go to Solve Exercise →'}
                   </button>
                 )}
               </div>

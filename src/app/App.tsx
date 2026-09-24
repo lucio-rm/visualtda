@@ -20,7 +20,7 @@ const AppContent: React.FC = () => {
     return (saved as ThemeMode) || 'dark';
   });
 
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>('backtracking');
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
 
   useEffect(() => {

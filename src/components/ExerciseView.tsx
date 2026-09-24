@@ -34,23 +34,34 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 }) => {
   const { t, dict, language } = useLanguage();
   const { isInstructorMode } = useInstructorMode();
-  const { isCompleted, markCompleted } = useStudentProgress();
+  const { isCompleted, markCompleted, markExploring, markAttempted, markPassed, getExerciseState } = useStudentProgress();
+  const currentState = getExerciseState(exercise.id);
   const exerciseCompleted = isCompleted(exercise.id);
   const [phase, setPhase] = useState<ExercisePhase>('discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
   const isEffectiveUnlocked = exerciseCompleted || solutionUnlocked || isInstructorMode;
   const [showFrictionModal, setShowFrictionModal] = useState(false);
 
+  React.useEffect(() => {
+    if (currentState === 'unseen') {
+      markExploring(exercise.id);
+    }
+  }, [exercise.id, currentState, markExploring]);
+
   const handlePhaseChange = (newPhase: ExercisePhase) => {
     if (newPhase === 'understand' && !isEffectiveUnlocked) {
       setShowFrictionModal(true);
       return;
+    }
+    if (newPhase === 'solve') {
+      markAttempted(exercise.id);
     }
     setPhase(newPhase);
   };
 
   const handleSolveSuccess = () => {
     setSolutionUnlocked(true);
+    markPassed(exercise.id);
     markCompleted(exercise.id);
   };
 

@@ -1,0 +1,64 @@
+.knapsack-bb-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.kbb-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.kbb-metric-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.kbb-metric-badge strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.kbb-action-badge {
+  font-weight: 700;
+  border-color: var(--accent);
+}
+
+.kbb-action-badge.action-prune_bound {
+  border-color: var(--warning, #f59e0b);
+  color: var(--warning, #f59e0b);
+}
+
+.kbb-action-badge.action-update_incumbent {
+  border-color: var(--success, #10b981);
+  color: var(--success, #10b981);
+}
+
+.kbb-canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.kbb-svg-canvas {
+  max-width: 520px;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+}

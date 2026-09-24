@@ -128,12 +128,12 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Skip to explained solution'
   },
   skipModalTitle: {
-    es: '¿Revelar la solución canónica?',
-    en: 'Reveal the canonical solution?'
+    es: '¿Revelar la solución explicada?',
+    en: 'Reveal the explained solution?'
   },
   skipModalBody: {
-    es: 'Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: podés consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización.',
-    en: 'Attempting the problem on your own maximizes retention and deep comprehension. However, Visual TDA is dedicated to honest learning: you can consult the canonical solution, step-by-step trace, and formal proof at any time without penalty.'
+    es: 'Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: podés consultar la solución comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización.',
+    en: 'Attempting the problem on your own maximizes retention and deep comprehension. However, Visual TDA is dedicated to honest learning: you can consult the annotated solution, step-by-step trace, and formal proof at any time without penalty.'
   },
   skipModalCancel: {
     es: 'Seguir intentando',
@@ -196,8 +196,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: '2. Solve: Formulate Your Algorithmic Solution'
   },
   solveLead: {
-    es: 'Implementá el algoritmo. Si te trabás, podés consultar pistas progresivas o solicitar ver la solución canónica en cualquier momento.',
-    en: 'Implement the algorithm. If you get stuck, use progressive hints or view the canonical solution at any time.'
+    es: 'Implementá el algoritmo. Si te trabás, podés consultar pistas progresivas o solicitar ver la solución oficial en cualquier momento.',
+    en: 'Implement the algorithm. If you get stuck, use progressive hints or view the official solution at any time.'
   },
   hintsDesc: {
     es: 'Descubrí pistas sólo si las necesitás para destrabar tu razonamiento:',
@@ -216,8 +216,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Prefer to see the solution directly?'
   },
   skipSolutionDesc: {
-    es: 'El objetivo es pedagógico. Podés consultar la solución canónica comentada y el análisis formal sin penalización.',
-    en: 'The goal is educational. You can view the canonical solution and formal analysis anytime without being blocked.'
+    es: 'El objetivo es pedagógico. Podés consultar la solución comentada y el análisis formal sin penalización.',
+    en: 'The goal is educational. You can view the annotated solution and formal analysis anytime without being blocked.'
   },
   evaluationResult: {
     es: 'Resultado de la Evaluación',
