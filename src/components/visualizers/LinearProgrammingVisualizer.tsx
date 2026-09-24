@@ -273,8 +273,8 @@ export const LinearProgrammingVisualizer: React.FC = () => {
       <div className="vertices-panel">
         <div className="panel-title">
           {language === 'es'
-            ? '📌 Vértices Extremos (Soluciones Básicas Factibles)'
-            : '📌 Extreme Vertices (Basic Feasible Solutions)'}
+            ? 'Vértices Extremos (Soluciones Básicas Factibles)'
+            : 'Extreme Vertices (Basic Feasible Solutions)'}
         </div>
         <div className="vertices-grid">
           {vertices.map(([vx, vy], idx) => {
@@ -291,7 +291,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                 <span className="v-coord">({vx}, {vy})</span>
                 <span className="v-val">z = {val}</span>
                 {isOpt && (phase === 'optimal_found' || phase === 'complete') && (
-                  <span className="opt-star">★ ÓPTIMO</span>
+                  <span className="opt-star">ÓPTIMO</span>
                 )}
               </div>
             );

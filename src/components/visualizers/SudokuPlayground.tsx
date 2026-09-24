@@ -94,8 +94,8 @@ export const SudokuPlayground: React.FC = () => {
     if (num !== 0 && !isValidSudokuCell(board, r, c, num)) {
       setConflictMsg(
         language === 'es'
-          ? `¡Conflicto! El número ${num} ya existe en la fila ${r + 1}, columna ${c + 1} o en el cuadrante 3×3 correspondiente.`
-          : `Conflict! Number ${num} already exists in row ${r + 1}, column ${c + 1} or 3x3 block.`
+          ? `Restricción violada: el dígito ${num} ya existe en la fila ${r + 1}, columna ${c + 1} o en el cuadrante 3×3 correspondiente.`
+          : `Constraint violated: digit ${num} already exists in row ${r + 1}, column ${c + 1} or 3x3 block.`
       );
       return;
     }

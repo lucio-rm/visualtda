@@ -111,17 +111,17 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? '¡Cronograma Óptimo Alcanzado!' : 'Optimal Schedule Achieved!'}</strong>{' '}
+          ✓ <strong>{language === 'es' ? 'Cronograma Óptimo Confirmado' : 'Optimal Schedule Confirmed'}</strong>:{' '}
           {language === 'es'
-            ? '0 inversiones. El argumento de intercambio garantiza que ningún reordenamiento puede producir un retraso máximo menor.'
-            : '0 inversions. The exchange argument proves no rearrangement can yield lower max lateness.'}
+            ? '0 inversiones. El argumento de intercambio de Kleinberg & Tardos garantiza que ningún reordenamiento puede reducir el retraso máximo.'
+            : '0 inversions. The Kleinberg & Tardos exchange argument proves no rearrangement can reduce maximum lateness.'}
         </div>
       ) : (
         <div className="sdk-conflict-banner" role="alert">
-          <strong>💡 {language === 'es' ? 'Argumento de Intercambio' : 'Exchange Argument'}:</strong>{' '}
+          <strong>{language === 'es' ? 'Argumento de Intercambio' : 'Exchange Argument'}:</strong>{' '}
           {language === 'es'
-            ? `Hay ${inversions} inversiones (tareas con fecha límite lejana programadas antes que tareas urgentes). Usá los botones ↑ / ↓ para intercambiar tareas invertidas adyacentes hasta eliminarlas.`
-            : `There are ${inversions} inversions. Use the ↑ / ↓ buttons to swap adjacent inverted jobs until eliminated.`}
+            ? `Se detectaron ${inversions} inversiones (tareas con fecha límite lejana programadas antes que tareas urgentes). Usá los botones ↑ / ↓ para intercambiar tareas invertidas adyacentes hasta eliminarlas.`
+            : `Detected ${inversions} inversions. Use the ↑ / ↓ buttons to swap adjacent inverted jobs until eliminated.`}
         </div>
       )}
 

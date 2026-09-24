@@ -178,7 +178,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
               </span>
               <span>) &rarr;</span>
               <span className="formula-tag chosen">
-                {comparison.chosen === 'include' ? '¡INCLUIDO!' : 'EXCLUIDO'} (Valor: ${Math.max(comparison.excludeValue, comparison.includeValue)})
+                {comparison.chosen === 'include' ? 'INCLUIDO' : 'EXCLUIDO'} (Valor: ${Math.max(comparison.excludeValue, comparison.includeValue)})
               </span>
             </>
           )}
@@ -189,7 +189,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
           )}
           {decisionType === 'complete' && (
             <span>
-              ¡Solución Final! Subconjunto óptimo reconstruido que maximiza el valor respetando la capacidad máxima.
+              Solución óptima alcanzada: subconjunto reconstruido que maximiza el valor respetando la restricción de capacidad W.
             </span>
           )}
           {decisionType === 'init' && (

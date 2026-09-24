@@ -110,8 +110,8 @@ export const JuanElVagoPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Haz clic en los días para armar tu propuesta de trabajo para Juan. Recuerda su única condición: ¡no trabaja dos días seguidos!'
-            : 'Click on days to choose your work schedule for Juan. Remember his condition: never work two consecutive days!'}
+            ? 'Hacé clic en los días para armar una propuesta de trabajo. Restricción del modelo: no se permite seleccionar dos días consecutivos.'
+            : 'Click on days to choose a work schedule. Model constraint: no two consecutive days may be selected.'}
         </p>
       </div>
 

@@ -29,7 +29,7 @@ export function useTraceTimeline<T>(
   timeline: TraceTimeline<T>,
   options: UseTraceTimelineOptions = {}
 ): UseTraceTimelineReturn<T> {
-  const { baseIntervalMs = 500, autoPlay = false } = options;
+  const { baseIntervalMs = 500, autoPlay = false, enableKeyboardShortcuts = true } = options;
 
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoPlay);
@@ -122,7 +122,7 @@ export function useTraceTimeline<T>(
 
   // Keyboard navigation effect
   useEffect(() => {
-    if (!options.enableKeyboardShortcuts) {
+    if (!enableKeyboardShortcuts) {
       return;
     }
 
@@ -151,6 +151,12 @@ export function useTraceTimeline<T>(
       } else if (e.key === 'r') {
         e.preventDefault();
         reset();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToStep(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToStep(totalSteps - 1);
       }
     };
 
@@ -158,7 +164,7 @@ export function useTraceTimeline<T>(
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [options.enableKeyboardShortcuts, stepForward, stepBackward, togglePlay, reset]);
+  }, [enableKeyboardShortcuts, stepForward, stepBackward, togglePlay, reset, goToStep, totalSteps]);
 
   return {
     currentStepIndex,

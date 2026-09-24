@@ -135,8 +135,8 @@ export const InversionCountingVisualizer: React.FC = () => {
           <div>
             <div className="inv-split-title">
               {language === 'es'
-                ? '⚡ ¡Inversión Cruzada Detectada en Tiempo O(1)!'
-                : '⚡ Cross Inversion Detected in O(1) Time!'}
+                ? 'Inversión Cruzada Identificada en Tiempo O(1)'
+                : 'Cross Inversion Identified in O(1) Time'}
             </div>
             <div style={{ fontSize: '0.8rem', color: '#fef3c7', marginTop: '0.2rem' }}>
               {language === 'es'

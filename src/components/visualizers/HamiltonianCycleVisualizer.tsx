@@ -75,7 +75,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
           <span>{language === 'es' ? 'Estado del Ciclo:' : 'Cycle Status:'}</span>
           <strong style={{ color: isCycleFound ? '#10b981' : '#38bdf8' }}>
             {isCycleFound
-              ? (language === 'es' ? '¡Ciclo Hallado!' : 'Cycle Found!')
+              ? (language === 'es' ? 'Ciclo Verificado' : 'Cycle Verified')
               : (language === 'es' ? 'En Búsqueda' : 'Searching')}
           </strong>
         </div>

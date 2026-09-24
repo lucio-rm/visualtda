@@ -113,16 +113,16 @@ export const MajorityElementPlayground: React.FC = () => {
       >
         {majorityElement !== null ? (
           <>
-            ✓ <strong>{language === 'es' ? '¡Elemento Mayoritario Encontrado!' : 'Majority Element Found!'}</strong>{' '}
+            ✓ <strong>{language === 'es' ? 'Elemento Mayoritario Confirmado' : 'Majority Element Confirmed'}</strong>:{' '}
             {language === 'es'
               ? `El elemento ${majorityElement} aparece ${freqMap[majorityElement]} veces en un arreglo de tamaño ${n} (${Math.round((freqMap[majorityElement] / n) * 100)}% > 50%).`
               : `Element ${majorityElement} appears ${freqMap[majorityElement]} times in size ${n} (${Math.round((freqMap[majorityElement] / n) * 100)}% > 50%).`}
           </>
         ) : (
           <>
-            ⚠️ <strong>{language === 'es' ? 'No existe elemento mayoritario' : 'No majority element exists'}</strong>{' '}
+            <strong>{language === 'es' ? 'No existe elemento mayoritario' : 'No majority element exists'}</strong>:{' '}
             {language === 'es'
-              ? `Ningún elemento supera estrictamente ${threshold} apariciones. Nota: una "pluralidad" (el elemento más frecuente) no califica como mayoritario si no supera el 50% absoluto.`
+              ? `Ningún elemento supera estrictamente ${threshold} apariciones. Nota académica: una "pluralidad" (el elemento más frecuente) no califica como mayoritario si no supera el 50% absoluto.`
               : `No element strictly exceeds ${threshold} occurrences.`}
           </>
         )}

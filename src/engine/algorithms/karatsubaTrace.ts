@@ -165,8 +165,8 @@ export function generateKaratsubaTrace(x: number = 5678, y: number = 1234): Trac
     'COMPLETE',
     'NONE',
     3,
-    `Multiplicación completada: ${x} · ${y} = ${result}. Verificación: ${x * y === result ? 'CORRECTO ✓' : 'ERROR'}. Complejidad: T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585) frente a O(n^2) del método tradicional.`,
-    `Multiplication complete: ${x} · ${y} = ${result}. Verification: ${x * y === result ? 'CORRECT ✓' : 'ERROR'}. Complexity: T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585) vs O(n^2) naive.`
+    `Multiplicación completada: ${x} · ${y} = ${result}. Verificación: ${x * y === result ? 'CORRECTO' : 'ERROR'}. Complejidad: T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585) frente a O(n^2) del método tradicional.`,
+    `Multiplication complete: ${x} · ${y} = ${result}. Verification: ${x * y === result ? 'CORRECT' : 'ERROR'}. Complexity: T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585) vs O(n^2) naive.`
   );
 
   return {

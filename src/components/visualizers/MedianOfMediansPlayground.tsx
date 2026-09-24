@@ -66,7 +66,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
             {language === 'es' ? 'Máximo (k = n-1)' : 'Maximum (k = n-1)'}
           </button>
           <button type="button" className="btn-preset" onClick={handleRandomize}>
-            🎲 {language === 'es' ? 'Reordenar Arreglo' : 'Shuffle Array'}
+            {language === 'es' ? 'Reordenar Arreglo' : 'Shuffle Array'}
           </button>
         </div>
 
@@ -93,7 +93,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
         }}
         role="status"
       >
-        <strong>🔬 {language === 'es' ? '¿Por qué Grupos de 5?' : 'Why Groups of 5?'}:</strong>{' '}
+        <strong>{language === 'es' ? 'Fundamento: ¿Por qué Grupos de 5?' : 'Rationale: Why Groups of 5?'}:</strong>{' '}
         {language === 'es'
           ? 'Grupos de 5 generan subproblemas de tamaño n/5 y a lo sumo 7n/10. La suma de razones es 1/5 + 7/10 = 9/10 < 1, lo que colapsa la serie geométrica en O(n) lineal estricto. Si usáramos grupos de 3: 1/3 + 2/3 = 1, la serie no colapsaría y costaría O(n log n).'
           : 'Groups of 5 yield subproblems n/5 and ≤ 7n/10. Sum 1/5 + 7/10 = 9/10 < 1 guarantees geometric convergence to strict linear O(n).'}
@@ -133,7 +133,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   </td>
                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
                     {isPiv ? (
-                      <strong style={{ color: '#f59e0b' }}>★ PIVOTE ({pivot})</strong>
+                      <strong style={{ color: '#f59e0b' }}>PIVOTE ({pivot})</strong>
                     ) : (
                       <span style={{ color: 'var(--text-muted)' }}>—</span>
                     )}

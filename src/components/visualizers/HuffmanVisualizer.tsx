@@ -124,7 +124,7 @@ export const HuffmanVisualizer: React.FC = () => {
             reset();
           }}
         >
-          {language === 'es' ? '✍️ Caso Propio' : '✍️ Custom Case'}
+          {language === 'es' ? 'Caso Personalizado' : 'Custom Input'}
         </button>
       </div>
 
@@ -327,7 +327,7 @@ export const HuffmanVisualizer: React.FC = () => {
           title={language === 'es' ? 'Reiniciar' : 'Reset'}
           className="timeline-btn"
         >
-          🔄
+          ↺
         </button>
 
         <div className="timeline-scrubber" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1 }}>

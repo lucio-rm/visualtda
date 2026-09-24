@@ -316,9 +316,9 @@ export const CoinChangePlayground: React.FC = () => {
             )}
             {isSuboptimal && (
               <span className="feedback-badge suboptimal">
-                ⚠️ {language === 'es'
-                  ? `Suma exacta alcanzada, pero con ${userCoinsList.length} monedas. ¡La PD lo logra con solo ${optimalSolution.length}!`
-                  : `Exact sum reached, but using ${userCoinsList.length} coins. DP achieves it in ${optimalSolution.length}!`}
+                {language === 'es'
+                  ? `Suma exacta alcanzada con ${userCoinsList.length} monedas. La cota óptima por PD requiere ${optimalSolution.length} monedas.`
+                  : `Exact sum reached with ${userCoinsList.length} coins. Optimal DP bound requires ${optimalSolution.length} coins.`}
               </span>
             )}
             {userTotal < target && (
@@ -330,9 +330,9 @@ export const CoinChangePlayground: React.FC = () => {
             )}
             {userTotal > target && (
               <span className="feedback-badge error">
-                ❌ {language === 'es'
-                  ? `Te excediste por $${userTotal - target}.`
-                  : `Exceeded target by $${userTotal - target}.`}
+                {language === 'es'
+                  ? `Objetivo excedido por $${userTotal - target}.`
+                  : `Target exceeded by $${userTotal - target}.`}
               </span>
             )}
           </div>
@@ -357,7 +357,7 @@ export const CoinChangePlayground: React.FC = () => {
               <code>[{optimalSolution.join(', ')}]</code>
             ) : optimalSolution.length > 0 ? (
               <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
-                {language === 'es' ? '🔒 ??? (¡descúbrelo tú mismo!)' : '🔒 ??? (discover it yourself!)'}
+                {language === 'es' ? 'No revelado (alcance el óptimo mediante experimentación)' : 'Hidden (reach optimum via experimentation)'}
               </span>
             ) : (
               <em>{language === 'es' ? 'No existe combinación' : 'No combination exists'}</em>

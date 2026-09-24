@@ -155,7 +155,7 @@ export const KnightsTourPlayground: React.FC = () => {
             onClick={handleAutoSolve}
             style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
           >
-            {language === 'es' ? 'Resolver Warnsdorff ⚡' : 'Solve Warnsdorff ⚡'}
+            {language === 'es' ? 'Resolver con Regla de Warnsdorff' : "Solve with Warnsdorff's Rule"}
           </button>
         </div>
       </div>
@@ -166,7 +166,7 @@ export const KnightsTourPlayground: React.FC = () => {
         </span>
         {legalMoves.length === 0 && !isComplete && (
           <span style={{ color: 'var(--danger, #ef4444)', fontWeight: 600, fontSize: '0.85rem' }}>
-            ⚠️ {language === 'es' ? '¡Caballo acorralado sin movimientos!' : 'Knight trapped!'}
+            {language === 'es' ? 'Sin movimientos legales disponibles' : 'No legal knight moves available'}
           </span>
         )}
       </div>

@@ -229,8 +229,8 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
             </div>
             <p className="growth-card-footer">
               {language === 'es'
-                ? '💡 Para N = 8, una búsqueda exhaustiva necesitaría evaluar más de 16 millones de casillas. El algoritmo con poda por columnas y diagonales resuelve el problema explorando solo 2.057 estados.'
-                : '💡 For N = 8, naive brute force would test over 16 million grids. Early column and diagonal pruning resolves the problem exploring just 2,057 states.'}
+                ? 'Nota de complejidad: Para N = 8, una búsqueda exhaustiva necesitaría evaluar más de 16 millones de casillas. El algoritmo con poda por columnas y diagonales resuelve el problema explorando solo 2.057 estados.'
+                : 'Complexity note: For N = 8, naive brute force would test over 16 million grids. Early column and diagonal pruning resolves the problem exploring just 2,057 states.'}
             </p>
           </div>
         )}

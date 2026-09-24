@@ -25,7 +25,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-completed"
             title={language === 'es' ? 'Has completado el análisis y la solución' : 'You have mastered the analysis and solution'}
           >
-            ★ {language === 'es' ? 'Completado' : 'Completed'}
+            {language === 'es' ? 'Completado' : 'Completed'}
           </span>
         );
       case 'passed':
@@ -34,7 +34,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-passed badge-completed"
             title={language === 'es' ? 'Solución algorítmica verificada con éxito' : 'Algorithmic solution successfully verified'}
           >
-            ✓ {language === 'es' ? 'Resuelto' : 'Solved'}
+            {language === 'es' ? 'Resuelto' : 'Solved'}
           </span>
         );
       case 'testing':
@@ -43,7 +43,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-testing"
             title={language === 'es' ? 'Pruebas en curso' : 'Tests in progress'}
           >
-            ⚙ {language === 'es' ? 'En Pruebas' : 'Testing'}
+            {language === 'es' ? 'En Pruebas' : 'Testing'}
           </span>
         );
       case 'attempted':
@@ -52,7 +52,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-attempted"
             title={language === 'es' ? 'Código en desarrollo' : 'Code in development'}
           >
-            ✍ {language === 'es' ? 'En Desarrollo' : 'In Progress'}
+            {language === 'es' ? 'En Desarrollo' : 'In Progress'}
           </span>
         );
       case 'exploring':
@@ -61,7 +61,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-exploring"
             title={language === 'es' ? 'Explorando visualmente' : 'Exploring visually'}
           >
-            🔍 {language === 'es' ? 'Explorando' : 'Exploring'}
+            {language === 'es' ? 'Explorando' : 'Exploring'}
           </span>
         );
       default:
@@ -70,7 +70,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
   };
 
   const getButtonLabel = () => {
-    if (state === 'completed') return language === 'es' ? 'Revisar Ejercicio ★' : 'Review Exercise ★';
+    if (state === 'completed') return language === 'es' ? 'Revisar Ejercicio →' : 'Review Exercise →';
     if (state === 'passed') return language === 'es' ? 'Ver Análisis Formal →' : 'View Formal Analysis →';
     if (state === 'testing' || state === 'attempted') return language === 'es' ? 'Continuar Resolución →' : 'Continue Solving →';
     if (state === 'exploring') return language === 'es' ? 'Continuar Exploración →' : 'Continue Exploring →';

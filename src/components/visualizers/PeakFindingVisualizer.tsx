@@ -62,7 +62,7 @@ export const PeakFindingVisualizer: React.FC = () => {
       {/* Elevation Profile / Mountain Bars */}
       <div className="mountain-chart-wrapper">
         <div className="chart-legend">
-          <span>{language === 'es' ? '⛰️ Perfil de Elevación del Arreglo' : '⛰️ Array Elevation Profile'}</span>
+          <span>{language === 'es' ? 'Perfil de Valores del Arreglo' : 'Array Value Profile'}</span>
           <div className="legend-pills">
             <span className="pill-item pill-window">
               <span className="pill-dot dot-active"></span>
@@ -99,8 +99,8 @@ export const PeakFindingVisualizer: React.FC = () => {
             return (
               <div key={idx} className={barClass}>
                 {isPeak && (
-                  <div className="peak-crown" title="¡Pico local confirmado!">
-                    👑
+                  <div className="peak-crown" title="Pico local confirmado">
+                    ▲
                   </div>
                 )}
                 <div className="bar-value-bubble">{val}</div>

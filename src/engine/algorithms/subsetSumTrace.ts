@@ -173,8 +173,8 @@ export function generateSubsetSumTrace(
         step: stepIndex++,
         type: 'PRUNE_EXCESS',
         message: {
-          es: `🚫 Poda por Exceso: ${currentSum} + ${elem} = ${currentSum + elem} > ${target}. Se descarta la rama completa.`,
-          en: `🚫 Excess Pruning: ${currentSum} + ${elem} = ${currentSum + elem} > ${target}. Subtree discarded.`
+          es: `Poda por Exceso: ${currentSum} + ${elem} = ${currentSum + elem} > ${target}. Se descarta la rama completa.`,
+          en: `Excess Pruning: ${currentSum} + ${elem} = ${currentSum + elem} > ${target}. Subtree discarded.`
         },
         data: {
           elements,
@@ -233,8 +233,8 @@ export function generateSubsetSumTrace(
         step: stepIndex++,
         type: 'PRUNE_DEFICIT',
         message: {
-          es: `🚫 Poda por Déficit: ${currentSum} + remanente ${newRemaining} = ${currentSum + newRemaining} < ${target}. Imposible alcanzar S.`,
-          en: `🚫 Deficit Pruning: ${currentSum} + remaining ${newRemaining} = ${currentSum + newRemaining} < ${target}. Target unreachable.`
+          es: `Poda por Déficit: ${currentSum} + remanente ${newRemaining} = ${currentSum + newRemaining} < ${target}. Imposible alcanzar S.`,
+          en: `Deficit Pruning: ${currentSum} + remaining ${newRemaining} = ${currentSum + newRemaining} < ${target}. Target unreachable.`
         },
         data: {
           elements,

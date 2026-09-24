@@ -148,16 +148,16 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Running test suite...'
   },
   testsSuccess: {
-    es: '✓ ¡Todos los tests pasaron exitosamente! Desbloqueaste la fase de comprensión.',
-    en: '✓ All tests passed successfully! You unlocked the understand phase.'
+    es: 'Pruebas automatizadas superadas con éxito. Fase de comprensión desbloqueada.',
+    en: 'Automated tests passed successfully. Understand phase unlocked.'
   },
   testsPassed: {
     es: 'Tests pasados',
     en: 'Tests passed'
   },
   runPyodideTests: {
-    es: '⚡ Ejecutar en Python (Web Worker)',
-    en: '⚡ Run in Python (Web Worker)'
+    es: 'Ejecutar en Python (Web Worker)',
+    en: 'Run in Python (Web Worker)'
   },
   pythonStdOutput: {
     es: 'Salida de consola (stdout):',

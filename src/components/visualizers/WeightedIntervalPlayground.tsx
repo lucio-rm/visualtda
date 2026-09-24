@@ -16,8 +16,8 @@ interface Preset {
 const PRESETS: Preset[] = [
   {
     name: {
-      es: '★ Trampa Greedy (Greedy pierde por mucho)',
-      en: '★ Greedy Trap (Greedy falls far behind)'
+      es: 'Caso de Estudio: Falla de Heurística Greedy',
+      en: 'Case Study: Greedy Heuristic Failure'
     },
     intervals: [
       { id: 'T1', start: 0, end: 3, weight: 2 },
@@ -140,8 +140,8 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Haz clic en las tareas para seleccionarlas. Recuerda que no pueden solaparse en el tiempo. ¡Intenta maximizar la ganancia total!'
-            : 'Click on tasks to select them. Remember they cannot overlap in time. Try to maximize total weight!'}
+            ? 'Hacé clic en las tareas para seleccionarlas. Las tareas seleccionadas deben ser mutuamente compatibles (sin solapamiento temporal). El objetivo es maximizar la suma de pesos.'
+            : 'Click on tasks to select them. Selected tasks must be mutually compatible (no temporal overlap). The objective is to maximize the sum of weights.'}
         </p>
       </div>
 
@@ -169,7 +169,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
           <span>{language === 'es' ? 'Toca las tareas para activar/desactivar:' : 'Click tasks to toggle:'}</span>
           <div className="quick-buttons">
             <button className="btn-load greedy-load" onClick={loadGreedy}>
-              {language === 'es' ? '👉 Probar Heurística Greedy' : '👉 Test Greedy Heuristic'}
+              {language === 'es' ? 'Probar Heurística Greedy' : 'Test Greedy Heuristic'}
             </button>
             <button
               className="btn-load clear-load"
@@ -233,9 +233,9 @@ export const WeightedIntervalPlayground: React.FC = () => {
           <div className="card-feedback">
             {userStatus.hasCollision ? (
               <span className="status-err">
-                ⚠️ {language === 'es'
-                  ? `Colisión: Tarea ${userStatus.collisionPair?.[0]} se superpone con ${userStatus.collisionPair?.[1]}!`
-                  : `Collision: Task ${userStatus.collisionPair?.[0]} overlaps with ${userStatus.collisionPair?.[1]}!`}
+                {language === 'es'
+                  ? `Incompatibilidad temporal: Tarea ${userStatus.collisionPair?.[0]} se superpone con ${userStatus.collisionPair?.[1]}.`
+                  : `Temporal incompatibility: Task ${userStatus.collisionPair?.[0]} overlaps with ${userStatus.collisionPair?.[1]}.`}
               </span>
             ) : userStatus.isOptimal ? (
               <span className="status-ok">
@@ -266,8 +266,8 @@ export const WeightedIntervalPlayground: React.FC = () => {
               {userStatus.isOptimal
                 ? `[${optimalSolution.map((t) => t.id).join(', ')}]`
                 : language === 'es'
-                ? '[??? ¡Encontrá el conjunto!]'
-                : '[??? Find the set!]'}
+                ? '[No revelado (alcance el óptimo mediante experimentación)]'
+                : '[Hidden (reach optimum via experimentation)]'}
             </span>
           </div>
           <div className="card-feedback status-ok">
@@ -304,13 +304,13 @@ export const WeightedIntervalPlayground: React.FC = () => {
       <div className="pedagogy-tip">
         <h4>
           {language === 'es'
-            ? '💡 ¿Por qué es tan importante la función p(j)?'
-            : '💡 Why is the predecessor function p(j) so crucial?'}
+            ? 'Fundamento: El Rol de la Función Predecesora p(j)'
+            : 'Rationale: The Role of the Predecessor Function p(j)'}
         </h4>
         <p>
           {language === 'es'
-            ? 'Si no ordenáramos los intervalos, para saber qué tareas previas son compatibles con j tendríamos que buscar entre todas las demás tareas, lo que daría una búsqueda lenta o exponenciales subproblemas no encadenados. Al ordenar por tiempo de fin y precalcular p(j) con búsqueda binaria, cada decisión de incluir o no una tarea se evalúa en tiempo O(1), logrando un algoritmo estelar en O(n log n).'
-            : 'Without ordering, checking compatibility would require evaluating all previous subsets. By sorting by finish time and precomputing p(j) via binary search, each Bellman decision takes O(1) time, yielding a stellar O(n log n) total runtime.'}
+            ? 'Si no ordenáramos los intervalos, determinar qué tareas previas son compatibles con j requeriría inspeccionar todas las demás tareas, generando subproblemas disjuntos difíciles de tabular. Al ordenar por tiempo de finalización y precalcular p(j) con búsqueda binaria, cada decisión de la recurrencia se evalúa en tiempo O(1), logrando una cota global estricta de O(n log n).'
+            : 'Without sorting, determining compatibility would require inspecting all candidate intervals. By sorting by finish time and precomputing p(j) via binary search, each recurrence step evaluates in O(1) time, yielding a strict global bound of O(n log n).'}
         </p>
       </div>
     </div>

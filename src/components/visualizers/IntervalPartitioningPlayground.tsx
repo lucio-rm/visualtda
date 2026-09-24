@@ -140,10 +140,10 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? '¡Partición Óptima Lograda!' : 'Optimal Partitioning Achieved!'}</strong>{' '}
+          ✓ <strong>{language === 'es' ? 'Configuración Óptima Alcanzada' : 'Optimal Configuration Reached'}</strong>:{' '}
           {language === 'es'
-            ? `Todas las clases fueron programadas sin conflictos usando exactamente d = ${depth} aulas (cota mínima teórica).`
-            : `All lectures scheduled with zero conflicts using exactly d = ${depth} classrooms (minimum theoretical bound).`}
+            ? `Todas las tareas fueron asignadas sin conflictos utilizando exactamente d = ${depth} aulas (cota mínima teórica).`
+            : `All tasks assigned with zero conflicts using exactly d = ${depth} classrooms (theoretical minimum bound).`}
         </div>
       ) : null}
 

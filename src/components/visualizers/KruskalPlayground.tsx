@@ -54,8 +54,8 @@ export const KruskalPlayground: React.FC = () => {
       setIsCycleWarning(true);
       setFeedback(
         language === 'es'
-          ? `¡Ciclo detectado! Los vértices ${edge.u} y ${edge.v} ya están conectados indirectamente. Por la Propiedad de Ciclo de Kleinberg & Tardos, agregarla genera redundancia cíclica.`
-          : `Cycle detected! Vertices ${edge.u} and ${edge.v} already connected. Adding it forms a cycle.`
+          ? `Ciclo detectado: los vértices ${edge.u} y ${edge.v} ya están conectados. Por la Propiedad del Ciclo (Kleinberg & Tardos), esta arista es redundante.`
+          : `Cycle detected: vertices ${edge.u} and ${edge.v} already connected. By the Cycle Property, this edge is redundant.`
       );
       return;
     }
@@ -80,8 +80,8 @@ export const KruskalPlayground: React.FC = () => {
       } else {
         setFeedback(
           language === 'es'
-            ? `Has conectado todos los vértices pero el costo (${totalWeight}) no es el mínimo posible. ¡Intenta priorizar aristas más livianas!`
-            : `Connected all vertices, but weight (${totalWeight}) is not minimal. Try lighter edges!`
+            ? `Todos los vértices están conectados, pero el costo total (${totalWeight}) excede el óptimo (10). Se deben priorizar aristas de menor peso según la Propiedad del Corte.`
+            : `Connected all vertices, but weight (${totalWeight}) exceeds optimal (10). Prioritize lighter edges.`
         );
       }
     } else {
@@ -219,7 +219,7 @@ export const KruskalPlayground: React.FC = () => {
       </div>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-        💡 <strong>{language === 'es' ? 'Cómo Interactuar' : 'How to Interact'}:</strong>{' '}
+        <strong>{language === 'es' ? 'Instrucciones de Exploración' : 'Exploration Instructions'}:</strong>{' '}
         {language === 'es'
           ? 'Hacé clic sobre las aristas del grafo para incorporarlas o removerlas del árbol. El sistema evaluará automáticamente si la arista genera un ciclo o si expande el árbol hacia un corte válido.'
           : 'Click edges on the graph to add or remove them from the tree. The system evaluates cycle and cut properties.'}

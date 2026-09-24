@@ -127,7 +127,7 @@ export const BellmanFordPlayground: React.FC = () => {
 
       {hasNegativeCycleDetected && (
         <div className="sdk-conflict-banner" role="alert">
-          <strong>⚠️ {language === 'es' ? '¡Ciclo Negativo Detectado!' : 'Negative Cycle Detected!'}:</strong>{' '}
+          <strong>{language === 'es' ? 'Ciclo Negativo Identificado' : 'Negative Cycle Identified'}:</strong>{' '}
           {language === 'es'
             ? 'En la iteración |V| = 4, las distancias continúan decreciendo (M[4, A] < M[3, A]). Esto demuestra formalmente que existe un ciclo cerrado con suma de pesos negativa (A → B → C → A con costo 2 - 3 - 1 = -2), por lo que las distancias mínimas convergen a -∞ y no están acotadas.'
             : 'At iteration |V|, distances continue to decrease. This proves a negative cycle exists; distances diverge to -∞.'}
@@ -207,7 +207,7 @@ export const BellmanFordPlayground: React.FC = () => {
       </div>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-        💡 <strong>{language === 'es' ? 'Fundamento Teórico (Kleinberg & Tardos Cap. 6.8)' : 'Theory Foundation'}:</strong>{' '}
+        <strong>{language === 'es' ? 'Fundamento Teórico (Kleinberg & Tardos Cap. 6.8)' : 'Theory Foundation'}:</strong>{' '}
         {language === 'es'
           ? 'En un grafo sin ciclos negativos, el camino más simple entre dos nodos contiene a lo sumo |V| - 1 aristas. Por tanto, si al ejecutar la iteración |V| alguna distancia aún se reduce, obligatoriamente existe un ciclo negativo absorbente.'
           : 'In graphs without negative cycles, shortest paths have at most |V|-1 edges. Any decrease at iteration |V| proves a negative cycle.'}

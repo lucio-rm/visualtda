@@ -138,8 +138,8 @@ export const HuffmanPlayground: React.FC = () => {
     if (!isGreedyValid) {
       setGreedyError(
         language === 'es'
-          ? `⚠️ Desvío de la Propiedad Greedy: Has seleccionado nodos con frecuencias (${nodeA.freq} y ${nodeB.freq}). En el algoritmo de Huffman, la regla irrevocable exige combinar siempre los DOS árboles con menor frecuencia acumulada (${minFreq1} y ${minFreq2}) para garantizar la minimalidad de la longitud media esperada.`
-          : `⚠️ Greedy Invariant Violation: You selected nodes with weights (${nodeA.freq} and ${nodeB.freq}). Huffman's algorithm requires merging the TWO nodes with lowest cumulative weight (${minFreq1} and ${minFreq2}) to ensure prefix-code optimality.`
+          ? `Desvío de la Propiedad Greedy: Has seleccionado nodos con frecuencias (${nodeA.freq} y ${nodeB.freq}). En el algoritmo de Huffman, la regla irrevocable exige combinar siempre los DOS árboles con menor frecuencia acumulada (${minFreq1} y ${minFreq2}) para garantizar la minimalidad de la longitud media esperada.`
+          : `Greedy Invariant Violation: You selected nodes with weights (${nodeA.freq} and ${nodeB.freq}). Huffman's algorithm requires merging the TWO nodes with lowest cumulative weight (${minFreq1} and ${minFreq2}) to ensure prefix-code optimality.`
       );
       return;
     }
@@ -281,7 +281,7 @@ export const HuffmanPlayground: React.FC = () => {
               <span className="huff-success-icon">✓</span>
               <div>
                 <strong>
-                  {language === 'es' ? '¡Árbol de Huffman completado con éxito!' : 'Huffman tree completed successfully!'}
+                  {language === 'es' ? 'Árbol de Huffman construido correctamente' : 'Huffman tree constructed correctly'}
                 </strong>
                 <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
                   {language === 'es'
@@ -329,14 +329,14 @@ export const HuffmanPlayground: React.FC = () => {
                 onClick={handleAutoStep}
                 title="Avanzar automáticamente un paso Greedy óptimo"
               >
-                ⚡ {language === 'es' ? 'Paso Greedy Óptimo' : 'Optimal Greedy Step'}
+                {language === 'es' ? 'Paso Greedy Óptimo' : 'Optimal Greedy Step'}
               </button>
               <button
                 type="button"
                 className="btn-huff-reset"
                 onClick={initializeForest}
               >
-                🔄 {language === 'es' ? 'Reiniciar Árbol' : 'Reset Tree'}
+                {language === 'es' ? 'Reiniciar Árbol' : 'Reset Tree'}
               </button>
             </div>
           </div>

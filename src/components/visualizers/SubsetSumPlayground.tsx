@@ -221,13 +221,13 @@ export const SubsetSumPlayground: React.FC = () => {
           </div>
         ) : isOverflow ? (
           <div className="challenge-feedback-banner suboptimal">
-            ⚠️ {language === 'es'
+            {language === 'es'
               ? `Suma actual: ${userSelectedSum} > ${target} (excedido por ${userSelectedSum - target}). El algoritmo de Backtracking poda esta rama inmediatamente.`
               : `Current sum: ${userSelectedSum} > ${target} (exceeded by ${userSelectedSum - target}). Backtracking prunes this branch immediately.`}
           </div>
         ) : (
           <div className="challenge-feedback-banner incomplete">
-            💡 {language === 'es'
+            {language === 'es'
               ? `Suma actual: ${userSelectedSum} / ${target} (faltan ${target - userSelectedSum} para alcanzar la meta).`
               : `Current sum: ${userSelectedSum} / ${target} (need ${target - userSelectedSum} to reach target).`}
           </div>

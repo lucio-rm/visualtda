@@ -79,7 +79,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
             ⏮ {language === 'es' ? 'Reiniciar' : 'Reset'}
           </button>
           <button type="button" className="btn-preset active" onClick={handleAutoOptimal}>
-            ⚡ {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}
+            {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}
           </button>
         </div>
 
@@ -108,7 +108,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? '¡Tour Óptimo Encontrado!' : 'Optimal Tour Found!'}</strong>{' '}
+          <strong>{language === 'es' ? 'Tour Óptimo Confirmado' : 'Optimal Tour Confirmed'}</strong>:{' '}
           {language === 'es'
             ? `Costo total mínimo = ${currentCost}. Branch & Bound garantiza que ninguna otra permutación tiene costo inferior.`
             : `Minimal cost = ${currentCost}. Branch & Bound guarantees no other permutation is cheaper.`}
@@ -125,7 +125,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ⚠️ <strong>{language === 'es' ? 'Tour Válido pero Subóptimo' : 'Valid but Suboptimal Tour'}</strong>:{' '}
+          <strong>{language === 'es' ? 'Tour Válido pero Subóptimo' : 'Valid but Suboptimal Tour'}</strong>:{' '}
           {language === 'es'
             ? `Tu tour cuesta ${currentCost}, pero el óptimo es ${optimalCost}. En un árbol Branch & Bound real, esta rama habría sido podada antes de completarse.`
             : `Your tour costs ${currentCost}, optimal is ${optimalCost}. In B&B this branch would be pruned.`}

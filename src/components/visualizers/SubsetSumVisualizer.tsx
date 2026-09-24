@@ -174,13 +174,13 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
           <span>✓</span>
           <span>
             {language === 'es'
-              ? `¡Subconjunto exacto encontrado! [${currentSubset.join(' + ')}] = ${target}.`
-              : `Exact subset found! [${currentSubset.join(' + ')}] = ${target}.`}
+              ? `Subconjunto exacto verificado: [${currentSubset.join(' + ')}] = ${target}.`
+              : `Exact subset verified: [${currentSubset.join(' + ')}] = ${target}.`}
           </span>
         </div>
       ) : (
         <div className="pruning-status-banner exploring">
-          <span>🔍</span>
+          <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>●</span>
           <span>
             {language === 'es'
               ? `Subconjunto actual: [${currentSubset.join(', ') || 'vacío'}] con suma = ${currentSum}.`

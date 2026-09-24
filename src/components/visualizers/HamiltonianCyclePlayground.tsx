@@ -101,14 +101,14 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? '¡Ciclo Hamiltoniano Completo!' : 'Hamiltonian Cycle Complete!'}</strong>{' '}
+          ✓ <strong>{language === 'es' ? 'Ciclo Hamiltoniano Válido' : 'Valid Hamiltonian Cycle'}</strong>:{' '}
           {language === 'es'
             ? `Visitaste los ${numV} vértices exactamente una vez y retornaste al inicio: [${path.join(' → ')}].`
             : `Visited all ${numV} vertices exactly once and returned to start: [${path.join(' → ')}].`}
         </div>
       ) : isDeadEnd ? (
         <div className="sdk-conflict-banner" role="alert">
-          <strong>⚠️ {language === 'es' ? '¡Callejón sin salida (Dead End)!' : 'Dead End!'}:</strong>{' '}
+          <strong>{language === 'es' ? 'Estado Terminal Inviable (Dead End)' : 'Dead End State'}:</strong>{' '}
           {language === 'es'
             ? 'Todos los vecinos del vértice actual ya fueron visitados, pero aún faltan vértices por recorrer. Hacé clic en "Retroceder (Backtrack)" para explorar otra rama.'
             : 'All neighbors are already visited, but vertices remain unvisited. Click "Backtrack" to try another branch.'}
@@ -123,7 +123,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             fontSize: '0.85rem'
           }}
         >
-          💡 {language === 'es' ? 'Hacé clic en los vértices resaltados en verde para avanzar por el camino:' : 'Click highlighted green vertices to advance path:'}{' '}
+          {language === 'es' ? 'Vértices válidos adyacentes para avanzar por el camino:' : 'Valid adjacent vertices to advance path:'}{' '}
           <strong>{validNext.map((v) => `v${v}`).join(', ') || (language === 'es' ? 'Ninguno' : 'None')}</strong>
         </div>
       )}
