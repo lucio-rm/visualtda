@@ -87,7 +87,7 @@ export const BellmanFordPlayground: React.FC = () => {
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Bellman-Ford y Ciclos Negativos">
+    <div className="algorithm-playground bellman-ford-playground" role="region" aria-label="Laboratorio de Bellman-Ford y Ciclos Negativos">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

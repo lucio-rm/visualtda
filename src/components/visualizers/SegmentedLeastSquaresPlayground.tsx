@@ -62,7 +62,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Mínimos Cuadrados Segmentados">
+    <div className="algorithm-playground sls-playground" role="region" aria-label="Laboratorio de Mínimos Cuadrados Segmentados">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

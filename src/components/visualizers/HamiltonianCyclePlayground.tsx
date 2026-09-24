@@ -63,7 +63,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Ciclo Hamiltoniano">
+    <div className="algorithm-playground hamiltonian-cycle-playground" role="region" aria-label="Laboratorio de Ciclo Hamiltoniano">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button type="button" className="btn-preset" onClick={handleUndo} disabled={path.length <= 1}>

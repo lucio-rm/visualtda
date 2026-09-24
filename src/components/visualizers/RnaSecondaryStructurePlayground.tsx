@@ -63,7 +63,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Estructura Secundaria de ARN">
+    <div className="algorithm-playground rna-playground" role="region" aria-label="Laboratorio de Estructura Secundaria de ARN">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

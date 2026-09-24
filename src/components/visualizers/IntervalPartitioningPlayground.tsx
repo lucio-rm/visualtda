@@ -96,7 +96,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Partición de Intervalos">
+    <div className="algorithm-playground interval-partitioning-playground" role="region" aria-label="Laboratorio de Partición de Intervalos">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button type="button" className="btn-preset active" onClick={() => setLectures(DEFAULT_LECTURES)}>

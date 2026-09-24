@@ -41,7 +41,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Mediana de Medianas">
+    <div className="algorithm-playground median-medians-playground" role="region" aria-label="Laboratorio de Mediana de Medianas">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

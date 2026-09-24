@@ -54,7 +54,7 @@ export const ClosestPairPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Par Más Cercano 2D">
+    <div className="algorithm-playground closest-pair-playground" role="region" aria-label="Laboratorio de Par Más Cercano 2D">
       <div className="sdk-pg-controls">
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

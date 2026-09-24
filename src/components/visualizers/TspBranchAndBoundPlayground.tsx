@@ -69,7 +69,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de TSP Branch and Bound">
+    <div className="algorithm-playground tsp-bb-playground" role="region" aria-label="Laboratorio de TSP Branch and Bound">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button type="button" className="btn-preset" onClick={handleUndo} disabled={tour.length <= 1}>

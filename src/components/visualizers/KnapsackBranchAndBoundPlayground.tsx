@@ -40,7 +40,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Branch & Bound vs Backtracking">
+    <div className="algorithm-playground knapsack-bb-playground" role="region" aria-label="Laboratorio de Branch & Bound vs Backtracking">
       <div className="sdk-pg-controls">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

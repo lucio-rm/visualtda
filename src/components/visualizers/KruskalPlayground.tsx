@@ -106,7 +106,7 @@ export const KruskalPlayground: React.FC = () => {
   }, 0);
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Kruskal y AGM">
+    <div className="algorithm-playground kruskal-playground" role="region" aria-label="Laboratorio de Kruskal y AGM">
       <div className="sdk-pg-controls">
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

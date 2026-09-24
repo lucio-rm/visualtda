@@ -38,7 +38,7 @@ export const KaratsubaPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Multiplicación de Karatsuba">
+    <div className="algorithm-playground karatsuba-playground" role="region" aria-label="Laboratorio de Multiplicación de Karatsuba">
       <div className="sdk-pg-controls">
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <label style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

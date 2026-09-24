@@ -38,7 +38,7 @@ export const MajorityElementPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Elemento Mayoritario">
+    <div className="algorithm-playground majority-element-playground" role="region" aria-label="Laboratorio de Elemento Mayoritario">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button
