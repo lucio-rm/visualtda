@@ -1,8 +1,8 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed comprehensive visualizer catalog mathematical rationale cards (exchange arguments, recurrence breakdowns, packing lemmas, Master Theorem, LP fundamental theorem, NP reductions) and 100% standardized media controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 37 exercises, verified with Vitest (290/290 PASS), TypeScript, ESLint, static build, and Chromium headless browser QA (22/22 scenarios, 0 console errors).
-- **BASELINE_COMMIT**: `1074448`
+- **CURRENT_TASK**: Completed comprehensive visualizer catalog mathematical rationale cards (exchange arguments, recurrence breakdowns, packing lemmas, Master Theorem, LP fundamental theorem, NP reductions), 100% standardized media controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 37 exercises, complete eradication of raw HTML entities (`&amp;`, `&gt;`, `&lt;`, `&#123;`, `&#125;`), unified N-Queens-grade CSS styling across all visualizers, and canonical "Greedy" terminology enforcement per Section 16 (0 occurrences of "voraz" repository-wide). Verified with Vitest (290/290 PASS), TypeScript, ESLint, static build, and Chromium headless browser QA (22/22 scenarios, 0 console errors).
+- **BASELINE_COMMIT**: `2cb81df`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.5s)
