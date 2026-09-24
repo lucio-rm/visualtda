@@ -1,14 +1,15 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed Master Engineering Mission V4 sweep: 100% visualizer and playground coverage (38/38 views), dedicated 2D SVG header illustrations for all 37 exercises, universal custom input ("Caso propio") expansion across key playgrounds, Backtracking & Branch and Bound pruning analysis cards, total eradication of decorative emojis across all components and chrome, standardization of media playback controls (`▶`, `❚❚`, `↺`, `←`, `→`), DP antecedent subproblem illumination in `LcsVisualizer` and `KnapsackDpVisualizer`, expanded cross-exercise connections across all major paradigms, and real Chromium browser QA validation (22/22 scenarios, 0 console errors).
-- **BASELINE_COMMIT**: `3e621bc`
+- **CURRENT_TASK**: Completed comprehensive visualizer catalog mathematical rationale cards (exchange arguments, recurrence breakdowns, packing lemmas, Master Theorem, LP fundamental theorem, NP reductions) and 100% standardized media controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 37 exercises, verified with Vitest (290/290 PASS), TypeScript, ESLint, static build, and Chromium headless browser QA (22/22 scenarios, 0 console errors).
+- **BASELINE_COMMIT**: `1074448`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
-  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.4s)
+  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.5s)
   - **Visualizer & Playground Completeness (37/37 Exercises, 38 Views)**: [VERIFIED]
-    - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds** (including `MergeSortPlayground` and `MaxFlowPlayground`).
-    - Standardized media playback controls (`↺`, `←`, `▶`/`❚❚`, `→`) across all 35 visualizers.
+    - **100% of all 37 exercises in the repository have dedicated interactive 2D SVG Visualizers and dedicated interactive Playgrounds**.
+    - Standardized media playback controls (`↺`, `←`, `▶`/`❚❚`, `→`) across 100% of visualizers, with zero glyph collisions (`◀` and `▶` step confusion eradicated).
+    - Mathematical rationale, recurrence relations, and asymptotic cost comparison cards embedded directly in every visualizer view for university professor-grade presentation.
     - High-contrast graph edges calibrated for WCAG AAA compliance in both light and dark themes.
     - Zero generic fallbacks anywhere in the application.
   - **Universal Timeline Keyboard Navigation (37/37)**: [VERIFIED]
@@ -41,4 +42,4 @@
   - `npm run typecheck`: 0 errors
   - `npm test`: 39 test files, 290 passed (100% PASS)
   - `npm run test:browser`: 22 / 22 real Chromium scenarios passed (100% PASS)
-  - `npm run build`: static production build succeeds in ~1.4s (`dist/`)
+  - `npm run build`: static production build succeeds in ~1.5s (`dist/`)
