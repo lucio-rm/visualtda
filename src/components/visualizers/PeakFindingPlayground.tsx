@@ -19,15 +19,15 @@ const PRESETS: Preset[] = [
     array: [4, 10, 5, 8, 15, 3, 11, 2]
   },
   {
-    name: { es: '📈 Creciente (Pico en Extremo Derecho)', en: '📈 Increasing (Peak at Right Edge)' },
+    name: { es: 'Creciente (Pico en Extremo Derecho)', en: 'Increasing (Peak at Right Edge)' },
     array: [2, 5, 9, 14, 21, 30]
   },
   {
-    name: { es: '📉 Decreciente (Pico en Extremo Izquierdo)', en: '📉 Decreasing (Peak at Left Edge)' },
+    name: { es: 'Decreciente (Pico en Extremo Izquierdo)', en: 'Decreasing (Peak at Left Edge)' },
     array: [35, 28, 19, 11, 6, 2]
   },
   {
-    name: { es: '🪨 Meseta (Valores Duplicados)', en: '🪨 Plateau (Equal Elements)' },
+    name: { es: 'Meseta (Valores Duplicados)', en: 'Plateau (Equal Elements)' },
     array: [4, 9, 9, 9, 3]
   }
 ];
@@ -152,7 +152,7 @@ export const PeakFindingPlayground: React.FC = () => {
             </button>
           ))}
           <button className="chip-button random-btn" onClick={handleRandom}>
-            {language === 'es' ? '🎲 Generar Aleatorio' : '🎲 Generate Random'}
+            {language === 'es' ? 'Generar Aleatorio' : 'Generate Random'}
           </button>
         </div>
       </div>
@@ -295,13 +295,13 @@ export const PeakFindingPlayground: React.FC = () => {
       <div className="pedagogy-tip">
         <h4>
           {language === 'es'
-            ? '💡 ¿Por qué funciona la búsqueda binaria en un arreglo desordenado?'
-            : '💡 Why does binary search work on an unsorted array?'}
+            ? 'Fundamento: Búsqueda Binaria en Arreglos No Ordenados'
+            : 'Rationale: Binary Search on Unsorted Arrays'}
         </h4>
         <p>
           {language === 'es'
-            ? 'A diferencia de la búsqueda binaria clásica que requiere un arreglo ordenado, la búsqueda de pico no busca un valor específico, sino una cresta local. Al comparar el punto medio con sus vecinos, si uno de ellos es más alto, el "camino cuesta arriba" garantiza matemáticamente que en esa mitad existe al menos un pico. Esta reducción geométrica a la mitad en cada paso otorga una velocidad O(log n) asombrosa: en un arreglo de 1.000.000 de elementos, ¡encuentra un pico en solo 20 pasos!'
-            : 'Unlike classic binary search which requires sorted elements, peak finding seeks a local crest. The uphill walk guarantees at least one peak lies in the uphill half. This halving at each step yields O(log n) efficiency: in 1,000,000 elements, it locates a peak in only 20 steps!'}
+            ? 'A diferencia de la búsqueda binaria clásica que requiere un arreglo ordenado, la búsqueda de pico no busca un valor específico, sino una cresta local. Al comparar el punto medio con sus vecinos, si uno de ellos es más alto, el invariante de gradiente garantiza matemáticamente que en esa mitad existe al menos un pico. Esta reducción geométrica a la mitad en cada paso otorga una cota asintótica de O(log n): para un arreglo de n = 1.000.000 elementos, el algoritmo localiza un pico en a lo sumo 20 comparaciones.'
+            : 'Unlike classic binary search which requires sorted elements, peak finding seeks a local crest. The gradient invariant guarantees at least one peak lies in the uphill half. This geometric halving yields an O(log n) bound: for an array of n = 1,000,000 elements, it locates a peak in at most 20 comparisons.'}
         </p>
       </div>
     </div>

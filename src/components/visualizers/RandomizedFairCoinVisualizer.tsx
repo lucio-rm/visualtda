@@ -64,8 +64,8 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
       <div className="arena-box">
         <div className="arena-title">
           {language === 'es'
-            ? `🎲 Ronda ${currentRoundIndex + 1} — Lanzamientos en Pares (T1, T2)`
-            : `🎲 Round ${currentRoundIndex + 1} — Paired Tosses (T1, T2)`}
+            ? `Ronda ${currentRoundIndex + 1} — Lanzamientos en Pares (T1, T2)`
+            : `Round ${currentRoundIndex + 1} — Paired Tosses (T1, T2)`}
         </div>
 
         <div className="coins-stage">
@@ -127,7 +127,7 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
       {rounds.length > 0 && (
         <div className="rounds-history">
           <div className="history-title">
-            {language === 'es' ? '📜 Historial de Rondas:' : '📜 Rounds History:'}
+            {language === 'es' ? 'Historial de Rondas:' : 'Rounds History:'}
           </div>
           <div className="history-chips">
             {rounds.map((r, idx) => {

@@ -175,7 +175,7 @@ export const RoadAntennasPlayground: React.FC = () => {
               style={activeTool === 'place_antenna' ? { background: '#6366f1', color: '#fff' } : {}}
               onClick={() => setActiveTool('place_antenna')}
             >
-              📡 {language === 'es' ? 'Colocar / Quitar Antena' : 'Place / Remove Antenna'}
+              {language === 'es' ? 'Colocar / Quitar Antena' : 'Place / Remove Antenna'}
             </button>
             <button
               type="button"
@@ -183,7 +183,7 @@ export const RoadAntennasPlayground: React.FC = () => {
               style={activeTool === 'place_house' ? { background: '#f59e0b', color: '#fff' } : {}}
               onClick={() => setActiveTool('place_house')}
             >
-              🏠 {language === 'es' ? 'Agregar / Quitar Casa' : 'Add / Remove House'}
+              {language === 'es' ? 'Agregar / Quitar Casa' : 'Add / Remove House'}
             </button>
           </div>
         </div>
@@ -224,8 +224,8 @@ export const RoadAntennasPlayground: React.FC = () => {
               }}
             >
               {activeTool === 'place_antenna'
-                ? (language === 'es' ? '📡 Colocar / Quitar en km' : '📡 Place / Remove at km')
-                : (language === 'es' ? '🏠 Colocar / Quitar casa' : '🏠 Place / Remove house')}
+                ? (language === 'es' ? 'Colocar / Quitar en km' : 'Place / Remove at km')
+                : (language === 'es' ? 'Colocar / Quitar casa' : 'Place / Remove house')}
             </button>
           </div>
         </div>
@@ -281,8 +281,8 @@ export const RoadAntennasPlayground: React.FC = () => {
         </div>
       ) : (
         <div className="challenge-feedback-banner incomplete">
-          💡 {language === 'es'
-            ? `Haz clic a lo largo de la ruta para colocar antenas y dar cobertura a las casas. Quedan ${houses.length - userCoveredIndices.size} casa(s) sin señal.`
+          {language === 'es'
+            ? `Hacé clic a lo largo de la ruta para colocar antenas y dar cobertura a las casas. Quedan ${houses.length - userCoveredIndices.size} casa(s) sin señal.`
             : `Click along the highway to place antennas and cover the houses. ${houses.length - userCoveredIndices.size} house(s) remain without signal.`}
         </div>
       )}
@@ -510,7 +510,7 @@ export const RoadAntennasPlayground: React.FC = () => {
           <div className="placed-antennas-chips">
             {userAntennas.map((antKm, idx) => (
               <span key={`chip-${antKm}-${idx}`} className="antenna-chip">
-                📡 {antKm}k [{Math.max(0, antKm - radius)}–{Math.min(maxKm, antKm + radius)}k]
+                {antKm}k [{Math.max(0, antKm - radius)}–{Math.min(maxKm, antKm + radius)}k]
                 <button
                   type="button"
                   className="antenna-chip-remove"

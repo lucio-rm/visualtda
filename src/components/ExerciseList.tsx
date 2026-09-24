@@ -17,7 +17,7 @@ interface ParadigmTrackDef {
   title: { es: string; en: string };
   bookReference: { es: string; en: string };
   description: { es: string; en: string };
-  icon: string;
+  code: string;
 }
 
 const PARADIGM_TRACKS: ParadigmTrackDef[] = [
@@ -31,7 +31,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
       es: 'Exploración sistemática del espacio de búsqueda en profundidad con poda inmediata de ramas que violan restricciones.',
       en: 'Systematic depth-first search space exploration with immediate pruning of violating candidate branches.'
     },
-    icon: '🌲'
+    code: 'BT'
   },
   {
     id: 'greedy',
@@ -43,7 +43,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
       es: 'Elección local óptima irrevocable demostrada formalmente mediante argumento de intercambio o Greedy Stays Ahead.',
       en: 'Irrevocable locally optimal choice proved optimal via exchange arguments or Greedy Stays Ahead.'
     },
-    icon: '🎯'
+    code: 'GREEDY'
   },
   {
     id: 'divide-and-conquer',
@@ -55,7 +55,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
       es: 'Descomposición en subproblemas disjuntos, resolución recursiva y recombinación en tiempo lineal u O(N log N).',
       en: 'Decompose into disjoint subproblems, recursive solve, and recombination in linear or O(N log N) time.'
     },
-    icon: '⚡'
+    code: 'DYC'
   },
   {
     id: 'dynamic-programming',
@@ -67,7 +67,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
       es: 'Subestructura óptima y subproblemas superpuestos tabulados sistemáticamente evitando recomputación exponencial.',
       en: 'Optimal substructure and overlapping subproblems tabulated to eliminate exponential recomputation.'
     },
-    icon: '🧩'
+    code: 'DP'
   },
   {
     id: 'advanced',
@@ -79,7 +79,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
       es: 'Flujo en redes (Ford-Fulkerson), formulación en programación lineal y caracterización de problemas NP-Completos.',
       en: 'Network flow, linear programming duality, and NP-completeness reductions and approximation.'
     },
-    icon: '🌐'
+    code: 'ADV'
   }
 ];
 
@@ -114,10 +114,13 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                 <span className="track-badge">
                   {language === 'es' ? `Ruta de Estudio #${matchingTrack.trackNumber}` : `Study Track #${matchingTrack.trackNumber}`}
                 </span>
-                <span className="track-book-ref">📖 {t(matchingTrack.bookReference)}</span>
+                <span className="track-book-ref">{t(matchingTrack.bookReference)}</span>
               </div>
               <h3 className="track-title">
-                <span className="track-icon">{matchingTrack.icon}</span> {t(matchingTrack.title)}
+                <span className="badge badge-technique" style={{ marginRight: '0.5rem', fontSize: '0.8rem' }}>
+                  {matchingTrack.code}
+                </span>{' '}
+                {t(matchingTrack.title)}
               </h3>
               <p className="track-desc">{t(matchingTrack.description)}</p>
               <div className="track-progress-bar-container">
@@ -164,11 +167,14 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                 <span className="track-badge">
                   {language === 'es' ? `Ruta de Estudio #${track.trackNumber}` : `Study Track #${track.trackNumber}`}
                 </span>
-                <span className="track-book-ref">📖 {t(track.bookReference)}</span>
+                <span className="track-book-ref">{t(track.bookReference)}</span>
               </div>
               <div className="track-title-row">
                 <h3 id={`track-${track.id}-title`} className="track-title">
-                  <span className="track-icon">{track.icon}</span> {t(track.title)}
+                  <span className="badge badge-technique" style={{ marginRight: '0.5rem', fontSize: '0.8rem' }}>
+                    {track.code}
+                  </span>{' '}
+                  {t(track.title)}
                 </h3>
                 <span className="track-count-badge">
                   {trackExercises.length} {language === 'es' ? 'ejercicios' : 'exercises'}

@@ -268,14 +268,14 @@ export const MaxSubarrayPlayground: React.FC = () => {
             {optimal && (
               <div className="summary-stat">
                 <span className="stat-label">
-                  {language === 'es' ? 'Cota Máxima Posible:' : 'Theoretical Maximum:'}
+                  {language === 'es' ? 'Cota Máxima Teórica:' : 'Theoretical Maximum:'}
                 </span>
                 <span className="stat-value highlight">
                   {isOptimal ? (
                     `${optimal.maxSum} (Rango [${optimal.startIndex}..${optimal.endIndex}])`
                   ) : (
                     <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
-                      {language === 'es' ? '🔒 ??? (¡descúbrelo tú mismo!)' : '🔒 ??? (discover it yourself!)'}
+                      {language === 'es' ? 'No revelado (alcance el óptimo mediante experimentación)' : 'Hidden (reach optimum via experimentation)'}
                     </span>
                   )}
                 </span>
@@ -289,8 +289,8 @@ export const MaxSubarrayPlayground: React.FC = () => {
       <div className="educational-callout">
         <h4>
           {language === 'es'
-            ? '💡 ¿Por qué División y Conquista en este problema?'
-            : '💡 Why Divide & Conquer for this problem?'}
+            ? 'Fundamento de División y Conquista en este problema'
+            : 'Divide & Conquer Rationale for this problem'}
         </h4>
         <p>
           {language === 'es'

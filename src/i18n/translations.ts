@@ -304,8 +304,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Instructor Mode (Demo): free and immediate access to all phases and solutions.'
   },
   instructorModeBanner: {
-    es: '🎓 Modo Docente activo: Demostración de soluciones y trazas desbloqueada en todo el catálogo.',
-    en: '🎓 Instructor Mode active: Solution demonstration and traces unlocked across the entire catalog.'
+    es: 'Modo Docente activo: Demostración de soluciones y trazas desbloqueada en todo el catálogo.',
+    en: 'Instructor Mode active: Solution demonstration and traces unlocked across the entire catalog.'
   },
   discoverTitle: {
     es: '1. Descubrir: Intuición y Planteo del Problema',

@@ -96,7 +96,7 @@ export const KnapsackPlayground: React.FC = () => {
             onClick={() => setActivePreset('counterexample')}
             title={language === 'es' ? 'Instancia donde Greedy por densidad fracasa' : 'Instance where density Greedy fails'}
           >
-            {language === 'es' ? 'Contrajemplo de Greedy' : 'Greedy Counterexample'}
+            {language === 'es' ? 'Contraejemplo de Greedy' : 'Greedy Counterexample'}
           </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}
@@ -127,7 +127,7 @@ export const KnapsackPlayground: React.FC = () => {
             >
               <div className="item-pick-header">
                 <span className="item-pick-name">{it.name}</span>
-                <span className="item-status-icon">{inPack ? '🎒 ✓' : '➕'}</span>
+                <span className="item-status-icon">{inPack ? '✓' : '+'}</span>
               </div>
               <div className="item-pick-metrics">
                 <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>

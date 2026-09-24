@@ -14,7 +14,7 @@ export type ThemeMode = 'system' | 'light' | 'dark';
 
 const AppContent: React.FC = () => {
   const { t, dict, language } = useLanguage();
-  const { completedCount, totalExercisesCount } = useStudentProgress();
+  const { completedCount, totalExercisesCount, records, isCompleted } = useStudentProgress();
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('visual_tda_theme');
     return (saved as ThemeMode) || 'dark';
@@ -44,6 +44,25 @@ const AppContent: React.FC = () => {
   const exerciseConfig = selectedExercise ? getExerciseViewConfig(selectedExercise.id) : {};
   const progressPercent = totalExercisesCount > 0 ? Math.round((completedCount / totalExercisesCount) * 100) : 0;
 
+  // Active in-progress exercise (exploring, attempted, or testing)
+  const inProgressExercise = React.useMemo(() => {
+    const activeEntries = Object.entries(records)
+      .filter(([_, rec]) => rec.state === 'exploring' || rec.state === 'attempted' || rec.state === 'testing')
+      .sort((a, b) => b[1].updatedAt - a[1].updatedAt);
+    if (activeEntries.length > 0) {
+      return registry.getExercise(activeEntries[0][0]);
+    }
+    return undefined;
+  }, [records]);
+
+  // Next exercise in curriculum if none in progress but some completed
+  const nextCurricularExercise = React.useMemo(() => {
+    if (completedCount > 0 && completedCount < totalExercisesCount) {
+      return registry.getExercises().find((ex) => !isCompleted(ex.id));
+    }
+    return undefined;
+  }, [completedCount, totalExercisesCount, isCompleted]);
+
   return (
     <div className="app-layout">
       <a href="#main-content" className="skip-to-content">
@@ -67,7 +86,7 @@ const AppContent: React.FC = () => {
               <div className="student-overall-progress-card">
                 <div className="progress-header-row">
                   <span className="progress-title">
-                    🎓 {language === 'es' ? 'Progreso de Dominio Académico' : 'Academic Mastery Progress'}:
+                    {language === 'es' ? 'Progreso de Dominio Académico' : 'Academic Mastery Progress'}:
                   </span>
                   <span className="progress-stats">
                     <strong>{completedCount}</strong> / {totalExercisesCount} {language === 'es' ? 'ejercicios completados' : 'exercises completed'} ({progressPercent}%)
@@ -78,7 +97,26 @@ const AppContent: React.FC = () => {
                 </div>
               </div>
 
-              {completedCount === 0 && (
+              {inProgressExercise ? (
+                <div className="recommended-start-card">
+                  <div className="recommended-text">
+                    <span className="recommended-tag">{language === 'es' ? 'CONTINUAR APRENDIENDO' : 'CONTINUE LEARNING'}</span>
+                    <h4>{t(inProgressExercise.title)}</h4>
+                    <p>
+                      {language === 'es'
+                        ? `Tu progreso actual en este problema está registrado. Retomá la exploración o implementación formal.`
+                        : `Your progress on this problem is active. Resume your visual exploration or formal code solution.`}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-start-recommended"
+                    onClick={() => setSelectedExerciseId(inProgressExercise.id)}
+                  >
+                    {language === 'es' ? 'Continuar ejercicio →' : 'Continue exercise →'}
+                  </button>
+                </div>
+              ) : completedCount === 0 ? (
                 <div className="recommended-start-card">
                   <div className="recommended-text">
                     <span className="recommended-tag">{language === 'es' ? 'PUNTO DE PARTIDA SUGERIDO' : 'RECOMMENDED START'}</span>
@@ -97,7 +135,22 @@ const AppContent: React.FC = () => {
                     {language === 'es' ? 'Comenzar con N-Reinas →' : 'Start with N-Queens →'}
                   </button>
                 </div>
-              )}
+              ) : nextCurricularExercise ? (
+                <div className="recommended-start-card">
+                  <div className="recommended-text">
+                    <span className="recommended-tag">{language === 'es' ? 'SIGUIENTE EN LA CURRÍCULA' : 'NEXT IN CURRICULUM'}</span>
+                    <h4>{t(nextCurricularExercise.title)}</h4>
+                    <p>{t(nextCurricularExercise.subtitle)}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-start-recommended"
+                    onClick={() => setSelectedExerciseId(nextCurricularExercise.id)}
+                  >
+                    {language === 'es' ? 'Iniciar siguiente ejercicio →' : 'Start next exercise →'}
+                  </button>
+                </div>
+              ) : null}
             </section>
 
             <section className="catalog-section">

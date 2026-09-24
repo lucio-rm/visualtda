@@ -89,14 +89,16 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
 
             {codeMode === 'python' && !canViewCanonicalPython ? (
               <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🔒</div>
+                <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {language === 'es' ? 'Acceso Restringido' : 'Restricted Access'}
+                </div>
                 <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
                   {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
                 </h4>
                 <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
                   {language === 'es'
-                    ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente 🎓 en la barra superior).'
-                    : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode 🎓 in the top bar).'}
+                    ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente en la barra superior).'
+                    : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode in the top bar).'}
                 </p>
                 {onGoToSolve && (
                   <button type="button" className="btn-primary" onClick={onGoToSolve}>
@@ -141,7 +143,9 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           <div className="card-panel related-exercises-section" style={{ marginTop: '2rem' }}>
             <div className="related-section-header" style={{ marginBottom: '1.25rem' }}>
               <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text)' }}>
-                <span>🔗</span>
+                <span className="badge badge-technique" style={{ fontSize: '0.75rem' }}>
+                  {language === 'es' ? 'Conexiones' : 'Connections'}
+                </span>
                 <span>{language === 'es' ? 'Problemas Relacionados y Comparación de Paradigmas' : 'Related Problems & Paradigm Comparison'}</span>
               </h4>
               <p style={{ margin: '0.35rem 0 0 0', color: 'var(--text-muted)', fontSize: '0.875rem' }}>

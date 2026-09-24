@@ -93,13 +93,13 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
       {/* Action Buttons */}
       <div className="action-buttons">
         <button className="btn-action single" onClick={runSingle}>
-          {language === 'es' ? '🎲 Generar 1 Bit' : '🎲 Generate 1 Bit'}
+          {language === 'es' ? 'Generar 1 Bit' : 'Generate 1 Bit'}
         </button>
         <button className="btn-action batch" onClick={() => runBatch(2000)}>
-          {language === 'es' ? '⚡ Simular 2,000 Bits' : '⚡ Simulate 2,000 Bits'}
+          {language === 'es' ? 'Simular 2,000 Bits' : 'Simulate 2,000 Bits'}
         </button>
         <button className="btn-action massive" onClick={() => runBatch(15000)}>
-          {language === 'es' ? '🚀 Monte Carlo (15,000 Bits)' : '🚀 Monte Carlo (15,000 Bits)'}
+          {language === 'es' ? 'Simulación Monte Carlo (15,000 Bits)' : 'Monte Carlo Simulation (15,000 Bits)'}
         </button>
       </div>
 
@@ -192,13 +192,13 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
       <div className="educational-note">
         <h4>
           {language === 'es'
-            ? '💡 La Belleza de la Simetría Probabilística'
-            : '💡 The Beauty of Probabilistic Symmetry'}
+            ? 'Fundamento Matemático: Simetría Probabilística'
+            : 'Mathematical Rationale: Probabilistic Symmetry'}
         </h4>
         <p>
           {language === 'es'
-            ? 'Aunque no sepamos cuál es el sesgo p de la moneda, por independencia física P(0 seguido de 1) = (1-p)·p y P(1 seguido de 0) = p·(1-p). Debido a la conmutatividad del producto real, ¡ambos números son idénticos! Al descartar los resultados idénticos (0,0) y (1,1), cualquier asimetría desaparece por completo, logrando un extractor de aleatoriedad perfecto en tiempo esperado finito O(1).'
-            : 'Even without knowing the bias p, independence implies P(0 then 1) = (1-p)p and P(1 then 0) = p(1-p). Because multiplication commutes, both probabilities are identical! By discarding identical outcomes (0,0) and (1,1), all bias cancels out, yielding a perfect randomness extractor in O(1) expected time.'}
+            ? 'Aunque no sepamos cuál es el sesgo p de la moneda, por independencia física P(0 seguido de 1) = (1-p)·p y P(1 seguido de 0) = p·(1-p). Debido a la conmutatividad del producto real, ambos valores son matemáticamente idénticos. Al descartar los resultados simétricos (0,0) y (1,1), cualquier asimetría desaparece por completo, logrando un extractor de aleatoriedad perfecto en tiempo esperado finito O(1).'
+            : 'Even without knowing the bias p, physical independence implies P(0 then 1) = (1-p)p and P(1 then 0) = p(1-p). Because real multiplication commutes, both probabilities are mathematically identical. By discarding symmetric outcomes (0,0) and (1,1), all bias is eliminated, yielding an exact randomness extractor in finite O(1) expected time.'}
         </p>
       </div>
     </div>

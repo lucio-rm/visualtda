@@ -62,7 +62,7 @@ export const JuanElVagoVisualizer: React.FC = () => {
 
       {/* Daily Offers Row */}
       <div className="section-title">
-        {language === 'es' ? '📅 Ofertas de Trabajo Diarias' : '📅 Daily Job Offers'}
+        {language === 'es' ? 'Ofertas de Trabajo Diarias' : 'Daily Job Offers'}
       </div>
       <div className="days-strip">
         {ganancias.map((val, idx) => {
@@ -101,7 +101,7 @@ export const JuanElVagoVisualizer: React.FC = () => {
 
       {/* DP Table 1D */}
       <div className="section-title">
-        {language === 'es' ? '📊 Tabla de Programación Dinámica (1D Memoization)' : '📊 DP Table (1D Memoization)'}
+        {language === 'es' ? 'Tabla de Programación Dinámica (Memoización 1D)' : 'DP Table (1D Memoization)'}
       </div>
       <div className="dp-strip">
         {dp.map((val, idx) => {
