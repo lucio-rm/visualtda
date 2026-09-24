@@ -293,9 +293,9 @@ export const CoinChangeVisualizer: React.FC = () => {
 
       {/* DP Recurrence & Greedy Counterexample Rationale (Section 12, 25 & 94) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia DP y Contraejemplo Voraz (K&T §6.4):' : 'DP Recurrence & Greedy Counterexample (K&T §6.4):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP y Contraejemplo Greedy (K&T §6.4):' : 'DP Recurrence & Greedy Counterexample (K&T §6.4):'}</strong>{' '}
         {language === 'es'
-          ? 'Para cada valor v: dp[v] = min_{c_i ≤ v} (dp[v - c_i] + 1). El enfoque voraz (tomar la moneda más grande) falla para sistemas no canónicos: con monedas {1, 3, 4} y valor 6, voraz produce 4+1+1 (3 monedas) mientras que el óptimo es 3+3 (2 monedas). La programación dinámica evalúa exhaustivamente todas las transiciones posibles en tiempo O(V · n) garantizando el mínimo global.'
+          ? 'Para cada valor v: dp[v] = min_{c_i ≤ v} (dp[v - c_i] + 1). El enfoque Greedy (tomar la moneda más grande) falla para sistemas no canónicos: con monedas {1, 3, 4} y valor 6, Greedy produce 4+1+1 (3 monedas) mientras que el óptimo es 3+3 (2 monedas). La programación dinámica evalúa exhaustivamente todas las transiciones posibles en tiempo O(V · n) garantizando el mínimo global.'
           : 'For each target value v: dp[v] = min_{c_i ≤ v} (dp[v - c_i] + 1). Greedy selection fails for non-canonical systems: given coins {1, 3, 4} and target 6, greedy picks 4+1+1 (3 coins) while optimal is 3+3 (2 coins). DP explores all optimal subproblems in O(V · n) time, guaranteeing global minimality.'}
       </div>
 

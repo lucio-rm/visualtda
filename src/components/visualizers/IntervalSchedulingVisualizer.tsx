@@ -155,7 +155,7 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
         <strong>{language === 'es' ? 'Fundamento Teórico: Invariante Greedy Stays Ahead (K&T §4.1):' : 'Theoretical Rationale: Greedy Stays Ahead (K&T §4.1):'}</strong>{' '}
         {language === 'es'
-          ? 'Ordenar por tiempo de finalización temprano (Earliest Finish Time) asegura inductivamente que para todo paso r, f(i_r) ≤ f(j_r), donde j es cualquier solución óptima. Como el algoritmo voraz finaliza antes o al mismo tiempo que cualquier otra alternativa, deja disponible la máxima cantidad de tiempo libre para las tareas futuras, garantizando la optimalidad global en tiempo O(n log n).'
+          ? 'Ordenar por tiempo de finalización temprano (Earliest Finish Time) asegura inductivamente que para todo paso r, f(i_r) ≤ f(j_r), donde j es cualquier solución óptima. Como el algoritmo Greedy finaliza antes o al mismo tiempo que cualquier otra alternativa, deja disponible la máxima cantidad de tiempo libre para las tareas futuras, garantizando la optimalidad global en tiempo O(n log n).'
           : 'Sorting by Earliest Finish Time (EFT) guarantees by induction that at each step r, f(i_r) ≤ f(j_r) for any optimal sequence j. By finishing as early as possible, the greedy choice leaves maximum remaining time for subsequent intervals, guaranteeing global optimality in O(n log n) sorting time.'}
       </div>
 
