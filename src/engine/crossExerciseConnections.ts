@@ -124,7 +124,7 @@ export const CROSS_EXERCISE_RELATIONS: Record<string, CrossExerciseRelation[]> =
         en: 'Unweighted Interval Scheduling (Greedy)'
       },
       comparisonInsight: {
-        es: 'Si todos los pesos son idénticos (vᵢ = 1), la formulación DP se simplifica drásticamente y la regla voraz Earliest-Finish-Time alcanza la solución óptima en tiempo O(n log n).',
+        es: 'Si todos los pesos son idénticos (vᵢ = 1), la formulación DP se simplifica drásticamente y la regla Greedy Earliest-Finish-Time alcanza la solución óptima en tiempo O(n log n).',
         en: 'If all weights are identical (vᵢ = 1), the DP formulation collapses to the earliest-finish-time greedy rule, achieving optimality in O(n log n).'
       },
       paradigmBadge: { es: 'DP vs. Greedy', en: 'DP vs. Greedy' }
