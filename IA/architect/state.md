@@ -1,8 +1,8 @@
 # Visual TDA — Current Repository State
 
 - **CURRENT_PHASE**: MASTER_ENGINEERING_MISSION_V4_AUTONOMOUS_EXECUTION
-- **CURRENT_TASK**: Completed Master Engineering Mission V4 sweep: 100% visualizer and playground coverage (38/38 views), total eradication of decorative emojis across all components and chrome, standardization of media playback controls (`▶`, `❚❚`, `↺`, `←`, `→`), DP antecedent subproblem illumination in `LcsVisualizer` and `KnapsackDpVisualizer`, expanded cross-exercise connections across all major paradigms, and real Chromium browser QA validation (22/22 scenarios, 0 console errors).
-- **BASELINE_COMMIT**: `be88886`
+- **CURRENT_TASK**: Completed Master Engineering Mission V4 sweep: 100% visualizer and playground coverage (38/38 views), dedicated 2D SVG header illustrations for all 37 exercises, universal custom input ("Caso propio") expansion across key playgrounds, Backtracking & Branch and Bound pruning analysis cards, total eradication of decorative emojis across all components and chrome, standardization of media playback controls (`▶`, `❚❚`, `↺`, `←`, `→`), DP antecedent subproblem illumination in `LcsVisualizer` and `KnapsackDpVisualizer`, expanded cross-exercise connections across all major paradigms, and real Chromium browser QA validation (22/22 scenarios, 0 console errors).
+- **BASELINE_COMMIT**: `3e621bc`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 290 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.4s)
