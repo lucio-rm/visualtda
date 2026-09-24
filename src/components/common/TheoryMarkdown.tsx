@@ -4,40 +4,128 @@ interface TheoryMarkdownProps {
   content: string;
 }
 
-// Cleanly replaces LaTeX symbols into standard Unicode mathematical typography
-function formatMathText(text: string): string {
-  return text
-    .replace(/\\le\b/g, '≤')
-    .replace(/\\ge\b/g, '≥')
-    .replace(/\\ne\b/g, '≠')
-    .replace(/\\in\b/g, '∈')
-    .replace(/\\notin\b/g, '∉')
-    .replace(/\\times\b/g, '×')
-    .replace(/\\cdot\b/g, '·')
-    .replace(/\\dots\b/g, '…')
-    .replace(/\\approx\b/g, '≈')
-    .replace(/\\forall\b/g, '∀')
-    .replace(/\\exists\b/g, '∃')
-    .replace(/\\sum\b/g, '∑')
-    .replace(/\\subset\b/g, '⊂')
-    .replace(/\\subseteq\b/g, '⊆')
-    .replace(/\\cup\b/g, '∪')
-    .replace(/\\cap\b/g, '∩')
-    .replace(/\\emptyset\b/g, '∅')
-    .replace(/\\Theta\b/g, 'Θ')
-    .replace(/\\Omega\b/g, 'Ω')
-    .replace(/\\alpha\b/g, 'α')
-    .replace(/\\beta\b/g, 'β')
-    .replace(/\\gamma\b/g, 'γ')
-    .replace(/\\delta\b/g, 'δ')
-    .replace(/\\epsilon\b/g, 'ε')
-    .replace(/\\lambda\b/g, 'λ')
-    .replace(/\\binom\{([^}]+)\}\{([^}]+)\}/g, 'C($1, $2)')
-    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1 / $2)');
+// Cleanly replaces LaTeX symbols and formatting into standard mathematical Unicode typography
+export function formatMathText(text: string): string {
+  let formatted = text;
+
+  // 1. Unnest \text{...}, \mathrm{...}, \mathbf{...}, \mathit{...}, \mathcal{...}
+  for (let round = 0; round < 3; round++) {
+    formatted = formatted.replace(/\\(?:text|mathrm|mathbf|mathit|mathcal)\{([^{}]+)\}/g, '$1');
+  }
+
+  // 2. Remove LaTeX environments (e.g. \begin{aligned}, \end{aligned})
+  formatted = formatted.replace(/\\(?:begin|end)\{[a-zA-Z*]+\}/g, '');
+
+  // 3. Mathematical symbol transformations
+  const mathSymbols: [RegExp, string | ((match: string) => string)][] = [
+    // Sets & Number systems
+    [/\\mathbb\{R\}\^([nm0-9])/g, 'ℝ^$1'],
+    [/\\mathbb\{R\}/g, 'ℝ'],
+    [/\\mathbb\{N\}/g, 'ℕ'],
+    [/\\mathbb\{Z\}/g, 'ℤ'],
+    [/\\mathbb\{E\}/g, '𝔼'],
+    [/\\mathcal\{F\}/g, 'F'],
+
+    // Greek letters
+    [/\\Delta(?=[^a-zA-Z]|$)/g, 'Δ'],
+    [/\\delta(?=[^a-zA-Z]|$)/g, 'δ'],
+    [/\\theta(?=[^a-zA-Z]|$)/g, 'θ'],
+    [/\\Theta(?=[^a-zA-Z]|$)/g, 'Θ'],
+    [/\\Omega(?=[^a-zA-Z]|$)/g, 'Ω'],
+    [/\\rho(?=[^a-zA-Z]|$)/g, 'ρ'],
+    [/\\chi(?=[^a-zA-Z]|$)/g, 'χ'],
+    [/\\epsilon(?=[^a-zA-Z]|$)/g, 'ε'],
+    [/\\alpha(?=[^a-zA-Z]|$)/g, 'α'],
+    [/\\beta(?=[^a-zA-Z]|$)/g, 'β'],
+    [/\\gamma(?=[^a-zA-Z]|$)/g, 'γ'],
+    [/\\lambda(?=[^a-zA-Z]|$)/g, 'λ'],
+
+    // Logic & Implication
+    [/\\implies(?=[^a-zA-Z]|$)/g, ' ⟹ '],
+    [/\\iff(?=[^a-zA-Z]|$)/g, ' ⟺ '],
+    [/\\Longrightarrow(?=[^a-zA-Z]|$)/g, ' ⟹ '],
+    [/\\Longleftarrow(?=[^a-zA-Z]|$)/g, ' ⟸ '],
+    [/\\longrightarrow(?=[^a-zA-Z]|$)/g, ' ⟶ '],
+    [/\\leftarrow(?=[^a-zA-Z]|$)/g, ' ← '],
+    [/\\to(?=[^a-zA-Z]|$)/g, ' → '],
+    [/\\lor(?=[^a-zA-Z]|$)/g, ' ∨ '],
+
+    // Relations & Inequalities
+    [/\\le_P(?=[^a-zA-Z]|$)/g, ' ≤ₚ '],
+    [/\\le(?=[^a-zA-Z]|$)/g, ' ≤ '],
+    [/\\ge(?=[^a-zA-Z]|$)/g, ' ≥ '],
+    [/\\ne(?=[^a-zA-Z]|$)/g, ' ≠ '],
+    [/\\approx(?=[^a-zA-Z]|$)/g, ' ≈ '],
+    [/\\equiv(?=[^a-zA-Z]|$)/g, ' ≡ '],
+    [/\\in(?=[^a-zA-Z]|$)/g, ' ∈ '],
+    [/\\notin(?=[^a-zA-Z]|$)/g, ' ∉ '],
+    [/\\subset(?=[^a-zA-Z]|$)/g, ' ⊂ '],
+    [/\\subseteq(?=[^a-zA-Z]|$)/g, ' ⊆ '],
+    [/\\cap(?=[^a-zA-Z]|$)/g, ' ∩ '],
+    [/\\cup(?=[^a-zA-Z]|$)/g, ' ∪ '],
+    [/\\emptyset(?=[^a-zA-Z]|$)/g, ' ∅ '],
+    [/\\setminus(?=[^a-zA-Z]|$)/g, ' \\ '],
+
+    // Quantifiers & Calculus
+    [/\\forall(?=[^a-zA-Z]|$)/g, ' ∀ '],
+    [/\\exists(?=[^a-zA-Z]|$)/g, ' ∃ '],
+    [/\\blacksquare(?=[^a-zA-Z]|$)/g, ' ■ '],
+    [/\\times(?=[^a-zA-Z]|$)/g, ' × '],
+    [/\\cdot(?=[^a-zA-Z]|$)/g, ' · '],
+    [/\\(?:dots|cdots|ldots)(?=[^a-zA-Z]|$)/g, ' … '],
+    [/\\sum(?=[^a-zA-Z]|$)/g, '∑'],
+    [/\\int(?=[^a-zA-Z]|$)/g, '∫'],
+    [/\\infty(?=[^a-zA-Z]|$)/g, '∞'],
+
+    // Delimiters
+    [/\\lfloor(?=[^a-zA-Z]|$)/g, '⌊'],
+    [/\\rfloor(?=[^a-zA-Z]|$)/g, '⌋'],
+    [/\\lceil(?=[^a-zA-Z]|$)/g, '⌈'],
+    [/\\rceil(?=[^a-zA-Z]|$)/g, '⌉'],
+    [/\\langle(?=[^a-zA-Z]|$)/g, '⟨'],
+    [/\\rangle(?=[^a-zA-Z]|$)/g, '⟩'],
+    [/\\mid(?=[^a-zA-Z]|$)/g, ' | '],
+    [/\\quad(?=[^a-zA-Z]|$)/g, '   '],
+    [/\\qquad(?=[^a-zA-Z]|$)/g, '      '],
+    [/\\(?:left|right|Big)(?=[^a-zA-Z]|$)/g, ''],
+
+    // Functions
+    [/\\(?:max|min|log|ln|arg)(?=[^a-zA-Z]|$)/g, (match: string) => match.slice(1)],
+    [/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '($1 / $2)'],
+    [/\\binom\{([^{}]+)\}\{([^{}]+)\}/g, 'C($1, $2)'],
+    [/\\sqrt\{([^{}]+)\}/g, '√($1)'],
+
+    // Superscripts
+    [/\^T\b/g, 'ᵀ'],
+    [/\^2\b/g, '²'],
+    [/\^3\b/g, '³'],
+    [/\^k\b/g, 'ᵏ'],
+    [/\^n\b/g, 'ⁿ'],
+    [/\^m\b/g, 'ᵐ'],
+    [/_\{([^{}]+)\}/g, '_$1']
+  ];
+
+  for (const [pattern, replacement] of mathSymbols) {
+    if (typeof replacement === 'function') {
+      formatted = formatted.replace(pattern, replacement);
+    } else {
+      formatted = formatted.replace(pattern, replacement);
+    }
+  }
+
+  // Handle alignment tokens and line breaks
+  formatted = formatted.replace(/\\\\/g, '\n');
+  formatted = formatted.replace(/&/g, '');
+
+  const cleanedLines = formatted
+    .split('\n')
+    .map((l) => l.replace(/ +/g, ' ').trim())
+    .filter((l) => l.length > 0);
+
+  return cleanedLines.join('\n');
 }
 
-function renderInlineFormatting(line: string): React.ReactNode[] {
-  // Regex to match math `$..$`, code `` `..` ``, bold `**..**`
+export function renderInlineFormatting(line: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   const regex = /(\$\$[\s\S]*?\$\$|\$[^$]+\$|`[^`]+`|\*\*[^*]+\*\*)/g;
   let lastIndex = 0;
@@ -124,15 +212,15 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
       }
       i++;
       while (i < lines.length && !lines[i].trim().endsWith('$$')) {
-        mathContent += ' ' + lines[i].trim();
+        mathContent += '\n' + lines[i].trim();
         i++;
       }
       if (i < lines.length) {
-        mathContent += ' ' + lines[i].trim().replace(/\$\$/, '');
+        mathContent += '\n' + lines[i].trim().replace(/\$\$/, '');
         i++;
       }
       elements.push(
-        <div key={`mathblk-${i}`} className="theory-block-equation">
+        <div key={`mathblk-${i}`} className="theory-block-equation" style={{ whiteSpace: 'pre-line' }}>
           {formatMathText(mathContent.trim())}
         </div>
       );
@@ -186,7 +274,70 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
       continue;
     }
 
-    // 6. Unordered Lists
+    // 6. Markdown Tables
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (i + 1 < lines.length && /^\|[\s\-:|]+\|$/.test(lines[i + 1].trim())) {
+        const headerCells = line
+          .split('|')
+          .slice(1, -1)
+          .map((c) => c.trim());
+        i += 2; // skip header and separator row
+        const dataRows: string[][] = [];
+        while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+          const rowCells = lines[i]
+            .trim()
+            .split('|')
+            .slice(1, -1)
+            .map((c) => c.trim());
+          dataRows.push(rowCells);
+          i++;
+        }
+        elements.push(
+          <div key={`tbl-${i}`} className="theory-table-container">
+            <table className="theory-table">
+              <thead>
+                <tr>
+                  {headerCells.map((h, hIdx) => (
+                    <th key={hIdx}>{renderInlineFormatting(h)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {dataRows.map((r, rIdx) => (
+                  <tr key={rIdx}>
+                    {r.map((c, cIdx) => (
+                      <td key={cIdx}>{renderInlineFormatting(c)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+        continue;
+      }
+    }
+
+    // 7. Callouts / Blockquotes (Theorems, Key Invariants)
+    if (line.startsWith('>')) {
+      const quoteLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('>')) {
+        quoteLines.push(lines[i].trim().replace(/^>\s?/, ''));
+        i++;
+      }
+      elements.push(
+        <blockquote key={`bq-${i}`} className="theory-callout">
+          {quoteLines.map((ql, qIdx) => (
+            <p key={qIdx} style={{ margin: qIdx > 0 ? '0.5rem 0 0 0' : 0 }}>
+              {renderInlineFormatting(ql)}
+            </p>
+          ))}
+        </blockquote>
+      );
+      continue;
+    }
+
+    // 8. Unordered Lists
     if (line.startsWith('- ') || line.startsWith('* ')) {
       const items: React.ReactNode[] = [];
       while (i < lines.length && (lines[i].trim().startsWith('- ') || lines[i].trim().startsWith('* '))) {
@@ -202,7 +353,7 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
       continue;
     }
 
-    // 7. Ordered Lists
+    // 9. Ordered Lists
     if (/^\d+\.\s/.test(line)) {
       const items: React.ReactNode[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
@@ -218,7 +369,7 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
       continue;
     }
 
-    // 8. Regular paragraph
+    // 10. Regular paragraph
     elements.push(
       <p key={`p-${i}`} className="theory-paragraph">
         {renderInlineFormatting(line)}
