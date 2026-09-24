@@ -91,8 +91,8 @@ export const KruskalVisualizer: React.FC = () => {
             <div key={e.id} className={pillClass}>
               <span>{e.u}—{e.v}</span>
               <strong>w:{e.weight}</strong>
-              {isAccepted && <span>✓</span>}
-              {isRejected && <span>✗</span>}
+              {isAccepted && <span>[MST]</span>}
+              {isRejected && <span>{language === 'es' ? '[Ciclo]' : '[Cycle]'}</span>}
             </div>
           );
         })}

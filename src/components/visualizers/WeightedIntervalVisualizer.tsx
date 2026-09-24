@@ -129,12 +129,12 @@ export const WeightedIntervalVisualizer: React.FC = () => {
                 <div className="task-flags">
                   {isSelected && (
                     <span className="flag-dp" title="Elegido por DP">
-                      ✓ DP
+                      DP
                     </span>
                   )}
                   {isGreedy && (
                     <span className="flag-greedy" title="Elegido por Greedy">
-                      ★ Greedy
+                      Greedy
                     </span>
                   )}
                 </div>
@@ -148,7 +148,7 @@ export const WeightedIntervalVisualizer: React.FC = () => {
       <div className="dp-panel-grid">
         <div className="dp-table-container">
           <div className="panel-title">
-            {language === 'es' ? '📊 Tabla de Estados DP' : '📊 DP State Table'}
+            {language === 'es' ? 'Tabla de Estados DP' : 'DP State Table'}
           </div>
           <table className="dp-opt-table">
             <thead>
@@ -251,7 +251,7 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           <div className="strategy-desc">
             {greedyWeight < dpWeight ? (
               <span className="greedy-fail-alert">
-                ⚠️ {language === 'es'
+                {language === 'es'
                   ? `Falla al priorizar tareas cortas de bajo valor ($${greedyWeight} vs $${dpWeight}).`
                   : `Fails by prioritizing short low-value tasks ($${greedyWeight} vs $${dpWeight}).`}
               </span>

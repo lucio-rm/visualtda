@@ -181,8 +181,8 @@ export const JuanElVagoPlayground: React.FC = () => {
                   <div className="picker-gain">${gain}</div>
                   <div className="picker-status">
                     {isSelected
-                      ? language === 'es' ? '✓ TRABAJA' : '✓ WORKS'
-                      : language === 'es' ? 'DESCANSAR' : 'REST'}
+                      ? (language === 'es' ? 'TRABAJA' : 'WORKS')
+                      : (language === 'es' ? 'DESCANSAR' : 'REST')}
                   </div>
                 </button>
               );
@@ -199,9 +199,9 @@ export const JuanElVagoPlayground: React.FC = () => {
               <div className="score-desc">
                 {!manualStatus.isValid ? (
                   <span className="status-error">
-                    ⚠️ {language === 'es'
-                      ? `Infracción: Días ${manualStatus.violatingPair?.[0]} y ${manualStatus.violatingPair?.[1]} son consecutivos!`
-                      : `Violation: Days ${manualStatus.violatingPair?.[0]} and ${manualStatus.violatingPair?.[1]} are consecutive!`}
+                    {language === 'es'
+                      ? `[Infracción] Días ${manualStatus.violatingPair?.[0]} y ${manualStatus.violatingPair?.[1]} son consecutivos.`
+                      : `[Violation] Days ${manualStatus.violatingPair?.[0]} and ${manualStatus.violatingPair?.[1]} are consecutive.`}
                   </span>
                 ) : manualStatus.isOptimal ? (
                   <span className="status-success">
@@ -234,7 +234,7 @@ export const JuanElVagoPlayground: React.FC = () => {
       {/* Educational takeaway */}
       <div className="pedagogy-tip">
         <h4>
-          {language === 'es' ? '💡 ¿Por qué falla el enfoque greedy (Greedy)?' : '💡 Why does Greedy fail here?'}
+          {language === 'es' ? '¿Por qué falla el enfoque Greedy?' : 'Why does Greedy fail here?'}
         </h4>
         <p>
           {language === 'es'

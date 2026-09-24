@@ -11,11 +11,11 @@ interface Preset {
 
 const PRESETS: Preset[] = [
   {
-    name: { es: '🏔️ Montaña Central (Pico Único)', en: '🏔️ Single Central Mountain' },
+    name: { es: 'Montaña Central (Pico Único)', en: 'Single Central Mountain' },
     array: [1, 3, 7, 12, 18, 14, 9, 2]
   },
   {
-    name: { es: '⚡ Cordillera (Múltiples Picos)', en: '⚡ Mountain Range (Multiple Peaks)' },
+    name: { es: 'Cordillera (Múltiples Picos)', en: 'Mountain Range (Multiple Peaks)' },
     array: [4, 10, 5, 8, 15, 3, 11, 2]
   },
   {
@@ -246,7 +246,7 @@ export const PeakFindingPlayground: React.FC = () => {
                   </span>
                 ) : (
                   <span className="status-fail">
-                    ❌ {userValidation?.errors[0]}
+                    {userValidation?.errors[0]}
                   </span>
                 )}
               </div>

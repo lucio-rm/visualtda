@@ -156,8 +156,8 @@ export function generateKnapsackGreedyTrace(
         step: stepIndex++,
         type: 'taken_full',
         message: {
-          es: `✓ Tomado 100% de "${item.name}". Peso +${item.weight} kg, Valor +$${item.value}. Capacidad restante: ${remainingCapacity} kg.`,
-          en: `✓ Took 100% of "${item.name}". Weight +${item.weight} kg, Value +$${item.value}. Remaining: ${remainingCapacity} kg.`
+          es: `Tomado 100% de "${item.name}". Peso +${item.weight} kg, Valor +$${item.value}. Capacidad restante: ${remainingCapacity} kg.`,
+          en: `Took 100% of "${item.name}". Weight +${item.weight} kg, Value +$${item.value}. Remaining: ${remainingCapacity} kg.`
         },
         data: {
           items: sortedItems.map((it) => ({ ...it })),
@@ -188,8 +188,8 @@ export function generateKnapsackGreedyTrace(
         step: stepIndex++,
         type: 'taken_partial',
         message: {
-          es: `✓ Tomada fracción ${(fraction * 100).toFixed(1)}% de "${item.name}". Peso +${weightTaken.toFixed(1)} kg, Valor +$${valueTaken.toFixed(1)}. Mochila completada.`,
-          en: `✓ Took ${(fraction * 100).toFixed(1)}% fraction of "${item.name}". Weight +${weightTaken.toFixed(1)} kg, Value +$${valueTaken.toFixed(1)}. Knapsack full.`
+          es: `Tomada fracción ${(fraction * 100).toFixed(1)}% de "${item.name}". Peso +${weightTaken.toFixed(1)} kg, Valor +$${valueTaken.toFixed(1)}. Mochila completada.`,
+          en: `Took ${(fraction * 100).toFixed(1)}% fraction of "${item.name}". Weight +${weightTaken.toFixed(1)} kg, Value +$${valueTaken.toFixed(1)}. Knapsack full.`
         },
         data: {
           items: sortedItems.map((it) => ({ ...it })),

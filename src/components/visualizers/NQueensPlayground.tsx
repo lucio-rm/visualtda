@@ -187,8 +187,8 @@ export const NQueensPlayground: React.FC = () => {
           </span>
           <span style={{ color: conflicts.length > 0 ? 'var(--color-error)' : 'var(--color-success)', fontWeight: 600 }}>
             {conflicts.length === 0
-              ? (language === 'es' ? '✓ Sin colisiones' : '✓ No conflicts')
-              : (language === 'es' ? `✗ ${conflicts.length} conflicto(s) activo(s)` : `✗ ${conflicts.length} active conflict(s)`)}
+              ? (language === 'es' ? '[Válido] Sin colisiones' : '[Valid] No conflicts')
+              : (language === 'es' ? `[Conflicto] ${conflicts.length} activo(s)` : `[Conflict] ${conflicts.length} active`)}
           </span>
         </div>
 

@@ -87,13 +87,13 @@ export const LinearProgrammingPlayground: React.FC = () => {
           className={`tab-btn ${activeTab === 'geometric' ? 'active' : ''}`}
           onClick={() => setActiveTab('geometric')}
         >
-          {language === 'es' ? '📐 Geometría 2D y Teorema Fundamental' : '📐 2D Geometry & Fundamental Theorem'}
+          {language === 'es' ? 'Geometría 2D y Teorema Fundamental' : '2D Geometry & Fundamental Theorem'}
         </button>
         <button
           className={`tab-btn ${activeTab === 'modeling' ? 'active' : ''}`}
           onClick={() => setActiveTab('modeling')}
         >
-          {language === 'es' ? '📝 Modelado ILP de Problemas TDA' : '📝 ILP Modeling for TDA Problems'}
+          {language === 'es' ? 'Modelado ILP de Problemas TDA' : 'ILP Modeling for TDA Problems'}
         </button>
       </div>
 
@@ -178,8 +178,8 @@ export const LinearProgrammingPlayground: React.FC = () => {
           <div className="educational-note">
             <h4>
               {language === 'es'
-                ? '💡 Teorema Fundamental de la Programación Lineal'
-                : '💡 Fundamental Theorem of Linear Programming'}
+                ? 'Teorema Fundamental de la Programación Lineal'
+                : 'Fundamental Theorem of Linear Programming'}
             </h4>
             <p>
               {language === 'es'

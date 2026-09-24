@@ -126,7 +126,12 @@ export const KaratsubaPlayground: React.FC = () => {
         }}
         role="status"
       >
-        <strong>{isMatch ? '✓ Resultado Verificado' : '⚠️ Error en descomposición'}:</strong>{' '}
+        <strong>
+          {isMatch
+            ? (language === 'es' ? '[Verificado] Resultado Correcto' : '[Verified] Correct Result')
+            : (language === 'es' ? '[Error] Inconsistencia en Descomposición' : '[Error] Decomposition Inconsistency')}
+          :
+        </strong>{' '}
         {inputX} × {inputY} ={' '}
         <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>{finalResult}</span>
         {' '}({language === 'es' ? 'Multiplicaciones recursivas: exactamente 3' : 'Recursive multiplications: exactly 3'})

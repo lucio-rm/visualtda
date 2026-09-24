@@ -72,7 +72,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
               {t(insight.algorithmicPerspective)}
             </div>
             <div style={{ fontSize: '0.85rem', lineHeight: 1.5, color: 'var(--error)', background: 'var(--error-bg)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
-              <strong>{language === 'es' ? '⚠️ Trampa de la intuición ingenua: ' : '⚠️ Naive heuristic trap: '}</strong>
+              <strong>{language === 'es' ? 'Trampa de la intuición ingenua: ' : 'Naive heuristic trap: '}</strong>
               {t(insight.naiveTrapWarning)}
             </div>
           </div>

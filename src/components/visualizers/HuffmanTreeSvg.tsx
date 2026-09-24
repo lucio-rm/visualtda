@@ -166,7 +166,7 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
     <div className="huff-tree-container">
       <div className="huff-tree-header">
         <span className="huff-tree-title">
-          {language === 'es' ? '🌲 Estructura del Árbol de Huffman (Bosque en Construcción):' : '🌲 Huffman Tree Structure (Forest under Construction):'}
+          {language === 'es' ? 'Estructura del Árbol de Huffman (Bosque en Construcción):' : 'Huffman Tree Structure (Forest under Construction):'}
         </span>
         <span className="huff-tree-subtitle">
           {forestRoots.length === 1

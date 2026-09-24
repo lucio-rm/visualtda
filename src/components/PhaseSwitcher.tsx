@@ -22,21 +22,21 @@ const PHASES: PhaseConfig[] = [
     stepNumber: 1,
     label: { es: 'Descubrir', en: 'Discover' },
     question: { es: '¿Qué problema resolvemos?', en: 'What problem are we solving?' },
-    icon: '🔍'
+    icon: '01'
   },
   {
     id: 'solve',
     stepNumber: 2,
     label: { es: 'Resolver', en: 'Solve' },
     question: { es: '¿Cómo lo resolverías?', en: 'How would you solve it?' },
-    icon: '⚡'
+    icon: '02'
   },
   {
     id: 'understand',
     stepNumber: 3,
     label: { es: 'Comprender', en: 'Understand' },
     question: { es: '¿Por qué funciona?', en: 'Why does it work?' },
-    icon: '💡'
+    icon: '03'
   }
 ];
 
@@ -71,9 +71,13 @@ export const PhaseSwitcher: React.FC<PhaseSwitcherProps> = ({
                 </div>
                 {p.id === 'understand' && (
                   solutionUnlocked ? (
-                    <span className="phase-unlocked-tag" title={language === 'es' ? 'Solución desbloqueada' : 'Solution unlocked'}>✓</span>
+                    <span className="phase-unlocked-tag" title={language === 'es' ? 'Solución desbloqueada' : 'Solution unlocked'}>
+                      {language === 'es' ? 'DISPONIBLE' : 'UNLOCKED'}
+                    </span>
                   ) : (
-                    <span className="phase-locked-tag" title={language === 'es' ? 'Requiere resolver o confirmar' : 'Requires solve or confirm'}>🔒</span>
+                    <span className="phase-locked-tag" title={language === 'es' ? 'Requiere resolver o confirmar' : 'Requires solve or confirm'}>
+                      {language === 'es' ? 'BLOQUEADO' : 'LOCKED'}
+                    </span>
                   )
                 )}
               </button>

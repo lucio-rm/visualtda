@@ -143,8 +143,8 @@ export function generateVertexCoverApproxTrace(
     step: ++step,
     type: 'finished',
     message: {
-      es: `✓ Cobertura completa: 100% aristas cubiertas con |C| = ${currentCover.size}. Garantía: |C| ≤ 2·|C*| porque |C*| ≥ ${currentMatching.length}.`,
-      en: `✓ Complete cover: 100% edges covered with |C| = ${currentCover.size}. Bound: |C| ≤ 2·|C*| because |C*| ≥ ${currentMatching.length}.`
+      es: `Cobertura completa: 100% aristas cubiertas con |C| = ${currentCover.size}. Garantía: |C| ≤ 2·|C*| porque |C*| ≥ ${currentMatching.length}.`,
+      en: `Complete cover: 100% edges covered with |C| = ${currentCover.size}. Bound: |C| ≤ 2·|C*| because |C*| ≥ ${currentMatching.length}.`
     },
     data: {
       vertices,

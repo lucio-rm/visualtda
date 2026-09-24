@@ -278,7 +278,9 @@ export const HuffmanPlayground: React.FC = () => {
         <div className="huff-instruction-banner">
           {isCompletedNow ? (
             <div className="huff-success-box">
-              <span className="huff-success-icon">✓</span>
+              <span className="huff-success-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
+                {language === 'es' ? '[ÓPTIMO]' : '[OPTIMAL]'}
+              </span>
               <div>
                 <strong>
                   {language === 'es' ? 'Árbol de Huffman construido correctamente' : 'Huffman tree constructed correctly'}

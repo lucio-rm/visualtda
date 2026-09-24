@@ -141,8 +141,8 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
                   <span className="chip-pair">({r.toss1}, {r.toss2})</span>
                   <span className="chip-outcome">
                     {isDiscard
-                      ? language === 'es' ? '✕ Descartado' : '✕ Discarded'
-                      : `✓ Emite Bit ${r.outputBit}`}
+                      ? language === 'es' ? 'Descartado' : 'Discarded'
+                      : (language === 'es' ? `Emite Bit ${r.outputBit}` : `Emits Bit ${r.outputBit}`)}
                   </span>
                 </div>
               );

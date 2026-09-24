@@ -275,9 +275,9 @@ export const RoadAntennasPlayground: React.FC = () => {
         </div>
       ) : isSuboptimal ? (
         <div className="challenge-feedback-banner suboptimal">
-          ⚠️ {language === 'es'
-            ? `Cobertura completa lograda, pero usaste ${userAntennas.length} antenas cuando el óptimo teórico requiere solo ${greedyAntennas.length}. ¿Podés lograrlo moviendo las antenas más hacia la derecha?`
-            : `Full coverage achieved, but you used ${userAntennas.length} antennas when optimal only needs ${greedyAntennas.length}. Can you improve by shifting antennas further right?`}
+          {language === 'es'
+            ? `[Aviso de Subóptimo] Cobertura completa lograda, pero usaste ${userAntennas.length} antenas cuando el óptimo teórico requiere solo ${greedyAntennas.length}. ¿Podés lograrlo moviendo las antenas más hacia la derecha?`
+            : `[Suboptimal Notice] Full coverage achieved, but you used ${userAntennas.length} antennas when optimal only needs ${greedyAntennas.length}. Can you improve by shifting antennas further right?`}
         </div>
       ) : (
         <div className="challenge-feedback-banner incomplete">

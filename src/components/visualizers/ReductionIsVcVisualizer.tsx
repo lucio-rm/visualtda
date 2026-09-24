@@ -75,7 +75,7 @@ export const ReductionIsVcVisualizer: React.FC = () => {
         </div>
 
         <div className="reduction-metric-badge duality-badge">
-          <span>🔗 {language === 'es' ? 'Aristas Cubiertas:' : 'Covered Edges:'}</span>
+          <span>{language === 'es' ? 'Aristas Cubiertas:' : 'Covered Edges:'}</span>
           <strong>{coveredEdges.length} / {edges.length}</strong>
         </div>
       </div>

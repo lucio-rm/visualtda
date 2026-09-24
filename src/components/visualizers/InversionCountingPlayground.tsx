@@ -96,8 +96,8 @@ export const InversionCountingPlayground: React.FC = () => {
     } else {
       setFeedbackMsg({
         text: language === 'es'
-          ? `✗ No es inversión: A[${i}]=${valI} ≤ A[${j}]=${valJ}. El par está en orden relativo correcto.`
-          : `✗ Not an inversion: A[${i}]=${valI} ≤ A[${j}]=${valJ}. Relative order is already sorted.`,
+          ? `No es inversión: A[${i}]=${valI} ≤ A[${j}]=${valJ}. El par está en orden relativo correcto.`
+          : `Not an inversion: A[${i}]=${valI} ≤ A[${j}]=${valJ}. Relative order is already sorted.`,
         type: 'error'
       });
     }
@@ -117,14 +117,14 @@ export const InversionCountingPlayground: React.FC = () => {
     } else if (num < trueTotalInversions) {
       setGuessFeedback(
         language === 'es'
-          ? `🔍 Tu estimación (${num}) es inferior al número real. Hay más pares desordenados en el arreglo.`
-          : `🔍 Your estimate (${num}) is too low. There are more out-of-order pairs.`
+          ? `Tu estimación (${num}) es inferior al número real. Hay más pares desordenados en el arreglo.`
+          : `Your estimate (${num}) is too low. There are more out-of-order pairs.`
       );
     } else {
       setGuessFeedback(
         language === 'es'
-          ? `⚠️ Tu estimación (${num}) supera el número real. Recordá que solo se cuentan pares (i, j) con i < j y A[i] > A[j].`
-          : `⚠️ Your estimate (${num}) is too high. Remember only pairs (i, j) with i < j and A[i] > A[j] count.`
+          ? `Tu estimación (${num}) supera el número real. Recordá que solo se cuentan pares (i, j) con i < j y A[i] > A[j].`
+          : `Your estimate (${num}) is too high. Remember only pairs (i, j) with i < j and A[i] > A[j] count.`
       );
     }
   };
@@ -178,7 +178,7 @@ export const InversionCountingPlayground: React.FC = () => {
               {language === 'es' ? 'Ordenado [1, 2, 3, 4, 5]' : 'Sorted [1, 2, 3, 4, 5]'}
             </button>
             <button className="inv-pg-btn accent" onClick={handleRandomize}>
-              🎲 {language === 'es' ? 'Aleatorio' : 'Randomize'}
+              {language === 'es' ? 'Aleatorio' : 'Randomize'}
             </button>
           </div>
         </div>
@@ -233,7 +233,6 @@ export const InversionCountingPlayground: React.FC = () => {
 
         {isZeroDisorder && (
           <div className="inv-victory-card" role="status">
-            <span style={{ fontSize: '1.4rem' }}>✓</span>
             <div>
               <strong>
                 {language === 'es'
@@ -280,7 +279,7 @@ export const InversionCountingPlayground: React.FC = () => {
         {/* Challenge Guessing Box */}
         <div className="inv-challenge-box">
           <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text)' }}>
-            🎯 {language === 'es' ? 'Desafío de Estimación Matemática:' : 'Mathematical Estimation Challenge:'}
+            {language === 'es' ? 'Desafío de Estimación Matemática:' : 'Mathematical Estimation Challenge:'}
           </div>
           <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es'

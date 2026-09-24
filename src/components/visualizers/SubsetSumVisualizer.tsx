@@ -153,7 +153,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
       {/* Pruning and Action Status Banner */}
       {action === 'PRUNE_EXCESS' ? (
         <div className="pruning-status-banner excess">
-          <span>🚫</span>
+          <span style={{ fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase' }}>[Poda]</span>
           <span>
             {language === 'es'
               ? `Poda por Exceso: ${currentSum} + ${currentElement} > ${target}. Se poda la rama porque ningún número positivo puede reducir la suma.`
@@ -162,7 +162,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </div>
       ) : action === 'PRUNE_DEFICIT' ? (
         <div className="pruning-status-banner deficit">
-          <span>🚫</span>
+          <span style={{ fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase' }}>[Poda]</span>
           <span>
             {language === 'es'
               ? `Poda por Déficit: Suma actual (${currentSum}) + remanente total (${remainingSum}) < ${target}. Imposible alcanzar la meta.`
@@ -171,7 +171,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </div>
       ) : action === 'SOLUTION_FOUND' ? (
         <div className="pruning-status-banner solution">
-          <span>✓</span>
+          <span style={{ fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase' }}>[Solución]</span>
           <span>
             {language === 'es'
               ? `Subconjunto exacto verificado: [${currentSubset.join(' + ')}] = ${target}.`

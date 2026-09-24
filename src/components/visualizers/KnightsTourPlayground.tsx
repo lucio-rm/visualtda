@@ -103,8 +103,8 @@ export const KnightsTourPlayground: React.FC = () => {
       setHistory(newHist);
       setMessage(
         language === 'es'
-          ? '✓ Recorrido completado exitosamente mediante la Regla de Warnsdorff.'
-          : "✓ Tour completed successfully via Warnsdorff's Rule."
+          ? 'Recorrido completado exitosamente mediante la Regla de Warnsdorff.'
+          : "Tour completed successfully via Warnsdorff's Rule."
       );
       markAttempted('knights-tour-backtracking');
     }
@@ -114,7 +114,7 @@ export const KnightsTourPlayground: React.FC = () => {
   const boardSize = cellSize * n;
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio del Recorrido del Caballo">
+    <div className="knights-tour-playground" role="region" aria-label="Laboratorio del Recorrido del Caballo">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

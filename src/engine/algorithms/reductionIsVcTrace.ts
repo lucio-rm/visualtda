@@ -207,8 +207,8 @@ export function generateReductionTrace(
     step: ++step,
     type: 'completed',
     message: {
-      es: `✓ Reducción Verificada: S={A, D} (tamaño 2) ⟺ C={B, C, E} (tamaño 3) cubre el 100% de las aristas.`,
-      en: `✓ Reduction Verified: S={A, D} (size 2) ⟺ C={B, C, E} (size 3) covers 100% of edges.`
+      es: `Reducción Verificada: S={A, D} (tamaño 2) ⟺ C={B, C, E} (tamaño 3) cubre el 100% de las aristas.`,
+      en: `Reduction Verified: S={A, D} (size 2) ⟺ C={B, C, E} (size 3) covers 100% of edges.`
     },
     data: {
       vertices,

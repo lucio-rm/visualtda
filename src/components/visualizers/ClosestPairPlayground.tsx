@@ -169,7 +169,7 @@ export const ClosestPairPlayground: React.FC = () => {
       </div>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-        💡 <strong>{language === 'es' ? 'Caso Propio e Intuición Geométrica' : 'Custom Instance & Geometric Intuition'}:</strong>{' '}
+        <strong>{language === 'es' ? 'Caso Propio e Intuición Geométrica' : 'Custom Instance & Geometric Intuition'}:</strong>{' '}
         {language === 'es'
           ? 'Hacé clic sobre cualquier región del plano para agregar nuevos puntos en tiempo real. Observá cómo la fuerza bruta compara N(N-1)/2 pares, mientras que División y Conquista acota la búsqueda en la banda vertical comparando cada punto contra a lo sumo 7 u 8 vecinos.'
           : 'Click anywhere to add points in real-time. Notice how Divide and Conquer inspects at most 8 candidates in the delta-strip.'}

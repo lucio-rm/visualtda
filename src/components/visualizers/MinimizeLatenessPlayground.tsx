@@ -76,14 +76,14 @@ export const MinimizeLatenessPlayground: React.FC = () => {
   };
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Minimización de Retraso">
+    <div className="lateness-playground" role="region" aria-label="Laboratorio de Minimización de Retraso">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button type="button" className="btn-preset active" onClick={handleSortEDF}>
-            ⚡ {language === 'es' ? 'Criterio Óptimo EDF (d_i creciente)' : 'Optimal EDF (ascending d_i)'}
+            {language === 'es' ? 'Criterio Óptimo EDF (d_i creciente)' : 'Optimal EDF (ascending d_i)'}
           </button>
           <button type="button" className="btn-preset" onClick={handleSortSPT}>
-            ⚠️ {language === 'es' ? 'Heurística Ingenua SPT (t_i creciente)' : 'Naive SPT (ascending t_i)'}
+            {language === 'es' ? 'Heurística Ingenua SPT (t_i creciente)' : 'Naive SPT (ascending t_i)'}
           </button>
         </div>
 
@@ -111,7 +111,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? 'Cronograma Óptimo Confirmado' : 'Optimal Schedule Confirmed'}</strong>:{' '}
+          <strong>{language === 'es' ? 'Cronograma Óptimo Confirmado' : 'Optimal Schedule Confirmed'}</strong>:{' '}
           {language === 'es'
             ? '0 inversiones. El argumento de intercambio de Kleinberg & Tardos garantiza que ningún reordenamiento puede reducir el retraso máximo.'
             : '0 inversions. The Kleinberg & Tardos exchange argument proves no rearrangement can reduce maximum lateness.'}

@@ -103,7 +103,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             {language === 'es' ? 'Instancia Estándar (d = 3)' : 'Standard Instance (d = 3)'}
           </button>
           <button type="button" className="btn-preset" onClick={handleAutoGreedy}>
-            ⚡ {language === 'es' ? 'Resolver con Greedy (s_i creciente)' : 'Solve with Greedy (s_i ascending)'}
+            {language === 'es' ? 'Resolver con Greedy (s_i creciente)' : 'Solve with Greedy (s_i ascending)'}
           </button>
         </div>
 
@@ -123,7 +123,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
 
       {conflicts.length > 0 ? (
         <div className="sdk-conflict-banner" role="alert">
-          <strong>⚠️ {language === 'es' ? 'Conflicto de Horario' : 'Schedule Conflict'}:</strong>{' '}
+          <strong>{language === 'es' ? 'Conflicto de Horario' : 'Schedule Conflict'}:</strong>{' '}
           {language === 'es'
             ? `Aula ${conflicts[0].room} tiene superposición entre "${conflicts[0].lec1}" y "${conflicts[0].lec2}". Dos clases no pueden ocupar la misma aula al mismo tiempo.`
             : `Classroom ${conflicts[0].room} has overlap between "${conflicts[0].lec1}" and "${conflicts[0].lec2}".`}
@@ -140,7 +140,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? 'Configuración Óptima Alcanzada' : 'Optimal Configuration Reached'}</strong>:{' '}
+          <strong>{language === 'es' ? 'Configuración Óptima Alcanzada' : 'Optimal Configuration Reached'}</strong>:{' '}
           {language === 'es'
             ? `Todas las tareas fueron asignadas sin conflictos utilizando exactamente d = ${depth} aulas (cota mínima teórica).`
             : `All tasks assigned with zero conflicts using exactly d = ${depth} classrooms (theoretical minimum bound).`}

@@ -79,7 +79,7 @@ export const DijkstraPlayground: React.FC = () => {
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio de Dijkstra">
+    <div className="dijkstra-playground" role="region" aria-label="Laboratorio de Dijkstra">
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button
@@ -94,7 +94,7 @@ export const DijkstraPlayground: React.FC = () => {
             className={`btn-preset ${preset === 'negative' ? 'active' : ''}`}
             onClick={() => handleSelectPreset('negative')}
           >
-            {language === 'es' ? 'Contraejemplo Pesos Negativos ⚠️' : 'Negative Weight Counterexample ⚠️'}
+            {language === 'es' ? 'Contraejemplo Pesos Negativos' : 'Negative Weight Counterexample'}
           </button>
         </div>
 
@@ -122,7 +122,7 @@ export const DijkstraPlayground: React.FC = () => {
 
       {hasNegativeEdge && (
         <div className="sdk-conflict-banner" role="alert">
-          <strong>⚠️ {language === 'es' ? 'Invariante Violado' : 'Invariant Violated'}:</strong>{' '}
+          <strong>{language === 'es' ? 'Falla de Invariante Greedy' : 'Greedy Invariant Failure'}:</strong>{' '}
           {language === 'es'
             ? 'Dijkstra asume que las distancias mínimas en S jamás pueden disminuir agregando aristas posteriores (Greedy Stays Ahead). Al existir aristas de peso negativo, el camino S → B → A tiene costo 3 + (-2) = 1, pero Dijkstra ya fijó irrevocablemente d[A] = 2. Para grafos con pesos negativos, debe usarse Programación Dinámica (Bellman-Ford).'
             : "Dijkstra assumes distances in S never decrease later. With negative weights, S → B → A has cost 1, but Dijkstra permanently fixed d[A]=2. Use Bellman-Ford DP instead."}
@@ -139,7 +139,7 @@ export const DijkstraPlayground: React.FC = () => {
         >
           <defs>
             <marker id="pg-arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--border-strong, #94a3b8)" />
             </marker>
           </defs>
 
@@ -160,7 +160,7 @@ export const DijkstraPlayground: React.FC = () => {
                   y1={u.y}
                   x2={v.x}
                   y2={v.y}
-                  stroke={isNeg ? 'var(--danger, #ef4444)' : 'var(--border, #475569)'}
+                  stroke={isNeg ? 'var(--danger, #ef4444)' : 'var(--border-strong, #94a3b8)'}
                   strokeWidth={isNeg ? 2.5 : 1.5}
                   markerEnd="url(#pg-arrow)"
                 />
@@ -242,7 +242,7 @@ export const DijkstraPlayground: React.FC = () => {
       </div>
 
       <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-        💡 <strong>{language === 'es' ? 'Interactividad' : 'Interactivity'}:</strong>{' '}
+        <strong>{language === 'es' ? 'Interactividad' : 'Interactivity'}:</strong>{' '}
         {language === 'es'
           ? 'Hacé clic sobre cualquier nodo para fijarlo como origen y observar el cálculo instantáneo de distancias mínimas en tiempo real.'
           : 'Click any node to set it as source and inspect real-time minimal distance calculation.'}

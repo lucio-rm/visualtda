@@ -86,10 +86,10 @@ export const ReductionIsVcPlayground: React.FC = () => {
           </span>
           <span className={`panel-status ${hasConflict ? 'status-err' : 'status-ok'}`}>
             {hasConflict
-              ? (language === 'es' ? `⚠️ Conflicto en ${conflictEdges.length} arista(s)` : `⚠️ Conflict on ${conflictEdges.length} edge(s)`)
+              ? (language === 'es' ? `[Conflicto] En ${conflictEdges.length} arista(s)` : `[Conflict] In ${conflictEdges.length} edge(s)`)
               : (isOptimal
-                  ? (language === 'es' ? '✓ Válido (Objetivo k alcanzado)' : '✓ Valid (Target k reached)')
-                  : (language === 'es' ? '✓ Válido (Sin aristas internas)' : '✓ Valid (No internal edges)'))}
+                  ? (language === 'es' ? '[Válido] Objetivo k alcanzado' : '[Valid] Target k reached')
+                  : (language === 'es' ? '[Válido] Sin aristas internas' : '[Valid] No internal edges'))}
           </span>
         </div>
 
@@ -100,8 +100,8 @@ export const ReductionIsVcPlayground: React.FC = () => {
           </span>
           <span className={`panel-status ${vcValidation.valid ? 'status-ok' : 'status-err'}`}>
             {vcValidation.valid
-              ? (language === 'es' ? '✓ 100% Aristas Cubiertas' : '✓ 100% Edges Covered')
-              : (language === 'es' ? '✗ Aristas sin cubrir' : '✗ Uncovered edges')}
+              ? (language === 'es' ? '[Válido] 100% Aristas Cubiertas' : '[Valid] 100% Edges Covered')
+              : (language === 'es' ? '[Incompleto] Aristas sin cubrir' : '[Incomplete] Uncovered edges')}
           </span>
         </div>
       </div>

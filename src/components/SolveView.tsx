@@ -143,8 +143,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
         markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
         setTestSummary(
           language === 'es'
-            ? `✓ ${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
-            : `✓ ${evaluation.totalPassed} / ${evaluation.totalTests} test cases passed successfully.`
+            ? `${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
+            : `${evaluation.totalPassed} / ${evaluation.totalTests} test cases passed successfully.`
         );
         onSuccess();
       } else {
@@ -165,8 +165,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
         markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
         setTestSummary(
           language === 'es'
-            ? `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} casos de prueba superados con éxito.`
-            : `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} test cases passed successfully.`
+            ? `${evalResult.totalPassed} / ${evalResult.totalTests} casos de prueba superados con éxito.`
+            : `${evalResult.totalPassed} / ${evalResult.totalTests} test cases passed successfully.`
         );
         onSuccess();
       } else {
@@ -232,8 +232,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
       markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
-          ? `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas exitosamente en ${Math.round(evalResult.executionTimeMs)} ms.`
-          : `✓ ${evalResult.totalPassed} / ${evalResult.totalTests} tests passed successfully in ${Math.round(evalResult.executionTimeMs)} ms.`
+          ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas exitosamente en ${Math.round(evalResult.executionTimeMs)} ms.`
+          : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed successfully in ${Math.round(evalResult.executionTimeMs)} ms.`
       );
       onSuccess();
     } else {
@@ -361,8 +361,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   <div className={`python-output-card ${isInfraError ? 'infra-error' : 'student-error'}`}>
                     <div className="python-output-header">
                       {isInfraError
-                        ? (language === 'es' ? '⚙️ Fallo de Inicialización del Entorno (Infraestructura)' : '⚙️ Environment Initialization Failure (Infrastructure)')
-                        : (language === 'es' ? '⚠️ Excepción / Error en Tiempo de Ejecución en tu Código' : '⚠️ Runtime Exception / Error in Your Code')}
+                        ? (language === 'es' ? 'Fallo de Inicialización del Entorno (Infraestructura)' : 'Environment Initialization Failure (Infrastructure)')
+                        : (language === 'es' ? 'Excepción / Error en Tiempo de Ejecución en tu Código' : 'Runtime Exception / Error in Your Code')}
                     </div>
                     <pre className="python-error-box">{runtimeError}</pre>
                     {isInfraError && (
@@ -387,7 +387,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 <div className="test-case-results-list">
                   {testResults.map((tr) => (
                     <div key={tr.testId} className={`test-case-item ${tr.passed ? 'pass' : 'fail'}`}>
-                      <span className="test-case-badge">{tr.passed ? '✓ PASS' : '✗ FAIL'}</span>
+                      <span className="test-case-badge">{tr.passed ? 'PASS' : 'FAIL'}</span>
                       <div className="test-case-details">
                         <span className="test-case-desc">{t(tr.description)}</span>
                         {tr.message && <span className="test-case-msg">{tr.message}</span>}

@@ -160,7 +160,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 fontWeight="600"
                 fontFamily="var(--font-sans)"
               >
-                {isConflict ? '⚠ ' : isSelected ? '✓ ' : ''}{task.id} [{task.start}-{task.end}]
+                {isConflict ? '[!] ' : isSelected ? '[Sel] ' : ''}{task.id} [{task.start}-{task.end}]
               </text>
             </g>
           );
@@ -171,12 +171,12 @@ export const IntervalSchedulingPlayground: React.FC = () => {
         <div className="score-row">
           <span>
             {language === 'es' ? 'Tareas seleccionadas:' : 'Selected tasks:'}{' '}
-            <strong>{selectedIds.length} / 3 (Óptimo)</strong>
+            <strong>{selectedIds.length} / 3</strong>
           </span>
           <span>
             {hasOverlap
-              ? (language === 'es' ? '⚠️ Con solapamiento' : '⚠️ Has overlap')
-              : (language === 'es' ? '✓ Compatibles' : '✓ Compatible')}
+              ? (language === 'es' ? '[Incompatible] Con solapamiento' : '[Incompatible] Has overlap')
+              : (language === 'es' ? '[Válido] Compatibles' : '[Valid] Compatible')}
           </span>
         </div>
 
@@ -186,15 +186,15 @@ export const IntervalSchedulingPlayground: React.FC = () => {
           </div>
         ) : hasOverlap ? (
           <div className="status-alert warning">
-            ⚠️ {language === 'es' ? 'Hay tareas seleccionadas que se superponen en el tiempo. Deselecciona alguna para resolver el conflicto.' : 'Some selected tasks overlap in time. Deselect one to fix the conflict.'}
+            {language === 'es' ? 'Hay tareas seleccionadas que se superponen en el tiempo. Deselecciona alguna para resolver el conflicto.' : 'Some selected tasks overlap in time. Deselect one to fix the conflict.'}
           </div>
         ) : selectedIds.length > 0 ? (
           <div className="status-alert info">
-            💡 {language === 'es' ? `Tienes ${selectedIds.length} tarea(s) compatible(s). ¿Puedes encontrar una combinación que alcance 3?` : `You have ${selectedIds.length} compatible task(s). Can you reach 3?`}
+            {language === 'es' ? `Tienes ${selectedIds.length} tarea(s) compatible(s). ¿Puedes encontrar una combinación que alcance 3?` : `You have ${selectedIds.length} compatible task(s). Can you reach 3?`}
           </div>
         ) : (
           <div className="status-alert info">
-            👉 {language === 'es' ? 'Comienza seleccionando una tarea haciendo clic sobre ella.' : 'Start by clicking on any task to select it.'}
+            {language === 'es' ? 'Comienza seleccionando una tarea haciendo clic sobre ella.' : 'Start by clicking on any task to select it.'}
           </div>
         )}
       </div>

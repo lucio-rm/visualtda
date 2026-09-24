@@ -88,7 +88,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
           )}
           <span className="badge badge-technique">{exercise.techniqueId}</span>
           <span className="badge badge-difficulty" aria-label={`Dificultad nivel ${exercise.difficulty} de 5`}>
-            {'★'.repeat(exercise.difficulty)}{'☆'.repeat(5 - exercise.difficulty)}
+            {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
           </span>
           {renderStateBadge()}
         </div>

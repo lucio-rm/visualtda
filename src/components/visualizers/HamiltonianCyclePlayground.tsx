@@ -101,7 +101,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           }}
           role="status"
         >
-          ✓ <strong>{language === 'es' ? 'Ciclo Hamiltoniano Válido' : 'Valid Hamiltonian Cycle'}</strong>:{' '}
+          <strong>{language === 'es' ? 'Ciclo Hamiltoniano Válido' : 'Valid Hamiltonian Cycle'}</strong>:{' '}
           {language === 'es'
             ? `Visitaste los ${numV} vértices exactamente una vez y retornaste al inicio: [${path.join(' → ')}].`
             : `Visited all ${numV} vertices exactly once and returned to start: [${path.join(' → ')}].`}

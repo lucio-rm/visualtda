@@ -28,7 +28,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   onSelectExercise,
   visualizerSlot,
   discoverPlaygroundSlot,
-  canonicalPython = '# Solución canónica oficial\ndef resolver(n):\n    return []\n',
+  canonicalPython = '# Solución oficial\ndef resolver(n):\n    return []\n',
   pseudocode = 'ALGORITMO Resolver(n)\n  PARA cada fila de 1 a n:\n    SI posición es segura:\n      colocar elemento\n',
   correctnessExplanation = 'El algoritmo garantiza que ninguna decisión viole las restricciones impuestas por decisiones previas, podando de forma exhaustiva las ramas inviables.',
   timeComplexity = 'O(N!)',
@@ -94,11 +94,11 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
         <div className="exercise-meta-row">
           <span className="badge badge-technique">{exercise.techniqueId}</span>
           <span className="badge badge-difficulty">
-            {'★'.repeat(exercise.difficulty)}{'☆'.repeat(5 - exercise.difficulty)}
+            {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
           </span>
           {exerciseCompleted && (
             <span className="badge badge-completed">
-              ✓ {language === 'es' ? 'Completado' : 'Completed'}
+              {language === 'es' ? 'Completado' : 'Completed'}
             </span>
           )}
         </div>

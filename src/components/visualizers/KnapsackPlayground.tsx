@@ -127,7 +127,9 @@ export const KnapsackPlayground: React.FC = () => {
             >
               <div className="item-pick-header">
                 <span className="item-pick-name">{it.name}</span>
-                <span className="item-status-icon">{inPack ? '✓' : '+'}</span>
+                <span className="item-status-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
+                  {inPack ? (language === 'es' ? 'EN MOCHILA' : 'PACKED') : '+'}
+                </span>
               </div>
               <div className="item-pick-metrics">
                 <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
@@ -169,8 +171,8 @@ export const KnapsackPlayground: React.FC = () => {
           </span>
           <span style={{ color: isOverweight ? 'var(--color-error)' : 'var(--color-success)', fontWeight: 600 }}>
             {isOverweight
-              ? (language === 'es' ? '✗ Capacidad excedida' : '✗ Capacity exceeded')
-              : (language === 'es' ? '✓ Factible' : '✓ Feasible')}
+              ? (language === 'es' ? '[No Factible] Capacidad excedida' : '[Infeasible] Capacity exceeded')
+              : (language === 'es' ? '[Factible]' : '[Feasible]')}
           </span>
         </div>
 

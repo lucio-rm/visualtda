@@ -102,8 +102,8 @@ export const LcsVisualizer: React.FC = () => {
       <div className="table-wrapper">
         <div className="table-title">
           {language === 'es'
-            ? '📊 Tabla de Estados 2D: dp[i][j] = Longitud LCS(s1[0..i-1], s2[0..j-1])'
-            : '📊 2D State Table: dp[i][j] = Length of LCS(s1[0..i-1], s2[0..j-1])'}
+            ? 'Tabla de Estados 2D: dp[i][j] = Longitud LCS(s1[0..i-1], s2[0..j-1])'
+            : '2D State Table: dp[i][j] = Length of LCS(s1[0..i-1], s2[0..j-1])'}
         </div>
         <div className="lcs-grid-container">
           <table className="lcs-matrix">

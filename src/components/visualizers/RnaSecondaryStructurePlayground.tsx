@@ -139,14 +139,14 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
       >
         {n < 5 ? (
           <>
-            ⚠️ <strong>{language === 'es' ? 'Restricción de Giros Cerrados (No sharp turns)' : 'No Sharp Turns Rule'}</strong>:{' '}
+            <strong>{language === 'es' ? 'Restricción de Giros Cerrados (No sharp turns)' : 'No Sharp Turns Rule'}</strong>:{' '}
             {language === 'es'
               ? 'La molécula de ARN requiere al menos 4 bases intermedias sin emparejar para poder doblarse sobre sí misma sin romperse (t < j - 4). Para n < 5, el resultado es estrictamente 0 pares.'
               : 'RNA molecules require at least 4 intervening unpaired bases to bend without structural strain. For n < 5, result is 0.'}
           </>
         ) : (
           <>
-            ✓ <strong>{language === 'es' ? 'Estructura Biológica Válida' : 'Valid Biological Structure'}</strong>:{' '}
+            <strong>{language === 'es' ? 'Estructura Biológica Válida' : 'Valid Biological Structure'}</strong>:{' '}
             {language === 'es'
               ? `Se detectaron ${maxPairs} pares complementarios Watson-Crick estrictamente no cruzados.`
               : `${maxPairs} complementary Watson-Crick non-crossing pairs detected.`}

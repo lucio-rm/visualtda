@@ -113,7 +113,7 @@ export const MajorityElementPlayground: React.FC = () => {
       >
         {majorityElement !== null ? (
           <>
-            ✓ <strong>{language === 'es' ? 'Elemento Mayoritario Confirmado' : 'Majority Element Confirmed'}</strong>:{' '}
+            <strong>{language === 'es' ? 'Elemento Mayoritario Confirmado' : 'Majority Element Confirmed'}</strong>:{' '}
             {language === 'es'
               ? `El elemento ${majorityElement} aparece ${freqMap[majorityElement]} veces en un arreglo de tamaño ${n} (${Math.round((freqMap[majorityElement] / n) * 100)}% > 50%).`
               : `Element ${majorityElement} appears ${freqMap[majorityElement]} times in size ${n} (${Math.round((freqMap[majorityElement] / n) * 100)}% > 50%).`}
@@ -172,7 +172,7 @@ export const MajorityElementPlayground: React.FC = () => {
                         color: isMaj ? '#10b981' : 'var(--text-muted)'
                       }}
                     >
-                      {isMaj ? '✓ SÍ / YES' : '✗ No'}
+                      {isMaj ? (language === 'es' ? 'Mayoría' : 'Majority') : (language === 'es' ? 'No' : 'No')}
                     </td>
                   </tr>
                 );

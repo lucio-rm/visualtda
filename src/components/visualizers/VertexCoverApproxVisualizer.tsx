@@ -64,17 +64,17 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
       {/* Metrics Row */}
       <div className="approx-metrics-row">
         <div className="approx-metric-badge matching-badge">
-          <span>⚡ {language === 'es' ? 'Matching M (Disjunto):' : 'Matching M (Disjoint):'}</span>
+          <span>{language === 'es' ? 'Matching M (Disjunto):' : 'Matching M (Disjoint):'}</span>
           <strong>{matching.length} {language === 'es' ? 'aristas' : 'edges'}</strong>
         </div>
 
         <div className="approx-metric-badge cover-badge">
-          <span>● {language === 'es' ? 'Cobertura C (2·|M|):' : 'Cover C (2·|M|):'}</span>
+          <span>{language === 'es' ? 'Cobertura C (2·|M|):' : 'Cover C (2·|M|):'}</span>
           <strong>{coverSize} {language === 'es' ? 'vértices' : 'vertices'}</strong>
         </div>
 
         <div className="approx-metric-badge ratio-badge">
-          <span>🎯 {language === 'es' ? 'Cota Inferior & Garantía:' : 'Lower Bound & Ratio:'}</span>
+          <span>{language === 'es' ? 'Cota Inferior & Garantía:' : 'Lower Bound & Ratio:'}</span>
           <strong>|C*| ≥ {lowerBound} ⟹ |C|/|C*| ≤ 2.0</strong>
         </div>
       </div>

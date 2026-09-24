@@ -106,8 +106,8 @@ export const VertexCoverApproxPlayground: React.FC = () => {
           <span className="stat-num">{coveredCount} / {edges.length}</span>
           <span style={{ fontSize: '0.75rem', color: isAllCovered ? '#10b981' : '#ef4444', fontWeight: 600 }}>
             {isAllCovered
-              ? (language === 'es' ? '✓ Cobertura Factible' : '✓ Feasible Cover')
-              : (language === 'es' ? 'Faltan aristas' : 'Edges remaining')}
+              ? (language === 'es' ? '[Válido] Cobertura Factible' : '[Valid] Feasible Cover')
+              : (language === 'es' ? '[Incompleto] Faltan aristas' : '[Incomplete] Edges remaining')}
           </span>
         </div>
       </div>
@@ -138,7 +138,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                 aria-pressed={isMatched}
                 aria-label={`Arista ${u}-${v}: ${edgeStatus}`}
               >
-                {isMatched ? '★ ' : isCovered ? '✓ ' : '○ '}{u}—{v}
+                {isMatched ? '[M] ' : isCovered ? '[C] ' : '[ ] '}{u}—{v}
               </button>
             );
           })}

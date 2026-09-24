@@ -116,7 +116,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '0.5rem' }}>
         <div style={{ padding: '0.75rem', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '4px' }}>
           <h5 style={{ margin: '0 0 0.5rem 0', color: 'var(--danger, #ef4444)' }}>
-            ❌ {language === 'es' ? 'Fuerza Bruta / Backtracking Ciego' : 'Brute Force / Blind Backtracking'}
+            {language === 'es' ? 'Fuerza Bruta / Backtracking Ciego' : 'Brute Force / Blind Backtracking'}
           </h5>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
             {language === 'es'
@@ -127,7 +127,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
 
         <div style={{ padding: '0.75rem', backgroundColor: 'var(--bg)', border: '1px solid #10b981', borderRadius: '4px' }}>
           <h5 style={{ margin: '0 0 0.5rem 0', color: '#10b981' }}>
-            ✓ {language === 'es' ? 'Branch & Bound con Relajación Continua' : 'Branch & Bound with Continuous Relaxation'}
+            {language === 'es' ? 'Branch & Bound con Relajación Continua' : 'Branch & Bound with Continuous Relaxation'}
           </h5>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
             {language === 'es'

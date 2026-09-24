@@ -116,8 +116,8 @@ export function generateIntervalSchedulingTrace(
         step: stepIndex++,
         type: 'select',
         message: {
-          es: `✓ Compatible (inicio ${task.start} ≥ último fin ${lastEndTime === task.end ? 'previo' : lastEndTime}). Seleccionada tarea ${task.id}.`,
-          en: `✓ Compatible (start ${task.start} ≥ last finish). Selected task ${task.id}.`
+          es: `Compatible (inicio ${task.start} ≥ último fin ${lastEndTime === task.end ? 'previo' : lastEndTime}). Seleccionada tarea ${task.id}.`,
+          en: `Compatible (start ${task.start} ≥ last finish). Selected task ${task.id}.`
         },
         data: {
           allIntervals: sorted,
@@ -137,8 +137,8 @@ export function generateIntervalSchedulingTrace(
         step: stepIndex++,
         type: 'conflict',
         message: {
-          es: `✗ Incompatible (inicio ${task.start} < último fin ${lastEndTime}). Descartada tarea ${task.id}.`,
-          en: `✗ Incompatible (start ${task.start} < last finish ${lastEndTime}). Discarded task ${task.id}.`
+          es: `Incompatible (inicio ${task.start} < último fin ${lastEndTime}). Descartada tarea ${task.id}.`,
+          en: `Incompatible (start ${task.start} < last finish ${lastEndTime}). Discarded task ${task.id}.`
         },
         data: {
           allIntervals: sorted,

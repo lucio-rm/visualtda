@@ -12,22 +12,22 @@ interface Preset {
 
 const PRESETS: Preset[] = [
   {
-    name: { es: '★ Ejemplo Cátedra (CLRS / FIUBA)', en: '★ Course Example (CLRS / FIUBA)' },
+    name: { es: 'Ejemplo Cátedra (CLRS / FIUBA)', en: 'Course Example (CLRS / FIUBA)' },
     s1: 'ABCBDAB',
     s2: 'BDCABA'
   },
   {
-    name: { es: '🧬 Secuencias de ADN (Bioinformática)', en: '🧬 DNA Sequences (Bioinformatics)' },
+    name: { es: 'Secuencias de ADN (Bioinformática)', en: 'DNA Sequences (Bioinformatics)' },
     s1: 'ACCGGTC',
     s2: 'AGTGTC'
   },
   {
-    name: { es: '📖 Español: CORAZON / RAZON', en: '📖 Spanish: CORAZON / RAZON' },
+    name: { es: 'Español: CORAZON / RAZON', en: 'Spanish: CORAZON / RAZON' },
     s1: 'CORAZON',
     s2: 'RAZON'
   },
   {
-    name: { es: '🚫 Disjuntas (Sin Caracteres Comunes)', en: '🚫 Disjoint (No Common Chars)' },
+    name: { es: 'Disjuntas (Sin Caracteres Comunes)', en: 'Disjoint (No Common Chars)' },
     s1: 'HOLA',
     s2: 'TREN'
   }
@@ -143,8 +143,8 @@ export const LcsPlayground: React.FC = () => {
       <div className="user-guess-section">
         <label htmlFor="user-guess-input">
           {language === 'es'
-            ? '✍️ Escribe tu propuesta de subsecuencia común:'
-            : '✍️ Enter your proposed common subsequence:'}
+            ? 'Escribe tu propuesta de subsecuencia común:'
+            : 'Enter your proposed common subsequence:'}
         </label>
         <div className="guess-input-row">
           <input
@@ -174,11 +174,11 @@ export const LcsPlayground: React.FC = () => {
             {userGuess ? (
               <>
                 <div className={`check-line ${userValidation?.isSub1 ? 'valid' : 'invalid'}`}>
-                  {userValidation?.isSub1 ? '✓' : '✗'}{' '}
+                  {userValidation?.isSub1 ? '[Válido]' : '[No]'} {' '}
                   {language === 'es' ? 'Es subsecuencia de s1' : 'Is subsequence of s1'}
                 </div>
                 <div className={`check-line ${userValidation?.isSub2 ? 'valid' : 'invalid'}`}>
-                  {userValidation?.isSub2 ? '✓' : '✗'}{' '}
+                  {userValidation?.isSub2 ? '[Válido]' : '[No]'} {' '}
                   {language === 'es' ? 'Es subsecuencia de s2' : 'Is subsequence of s2'}
                 </div>
                 <div className="feedback-banner">
@@ -188,13 +188,13 @@ export const LcsPlayground: React.FC = () => {
                     </span>
                   ) : userValidation?.isSub1 && userValidation?.isSub2 ? (
                     <span className="status-subopt">
-                      ⚠️ {language === 'es'
+                      {language === 'es'
                         ? `Es común pero subóptima (${userGuess.length} < ${optimalLcs.length}).`
                         : `Common but suboptimal (${userGuess.length} < ${optimalLcs.length}).`}
                     </span>
                   ) : (
                     <span className="status-error">
-                      ❌ {language === 'es' ? 'No es una subsecuencia común válida.' : 'Not a valid common subsequence.'}
+                      {language === 'es' ? 'No es una subsecuencia común válida.' : 'Not a valid common subsequence.'}
                     </span>
                   )}
                 </div>
@@ -220,7 +220,7 @@ export const LcsPlayground: React.FC = () => {
               </>
             ) : (
               <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
-                {language === 'es' ? '🔒 Longitud óptima:' : '🔒 Optimal length:'} {optimalLcs.length} chars
+                {language === 'es' ? 'Longitud óptima:' : 'Optimal length:'} {optimalLcs.length} chars
               </span>
             )}
           </div>
@@ -236,8 +236,8 @@ export const LcsPlayground: React.FC = () => {
       <div className="pedagogy-tip">
         <h4>
           {language === 'es'
-            ? '💡 ¿Cómo se relaciona el LCS con el comando git diff?'
-            : '💡 How does LCS relate to git diff?'}
+            ? '¿Cómo se relaciona el LCS con el comando git diff?'
+            : 'How does LCS relate to git diff?'}
         </h4>
         <p>
           {language === 'es'

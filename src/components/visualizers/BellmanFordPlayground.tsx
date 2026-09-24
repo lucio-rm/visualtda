@@ -102,7 +102,7 @@ export const BellmanFordPlayground: React.FC = () => {
             className={`btn-preset ${mode === 'cycle' ? 'active' : ''}`}
             onClick={() => handleReset('cycle')}
           >
-            {language === 'es' ? 'Grafo con Ciclo Negativo ⚠️' : 'Negative Cycle Graph ⚠️'}
+            {language === 'es' ? 'Grafo con Ciclo Negativo' : 'Negative Cycle Graph'}
           </button>
         </div>
 

@@ -10,7 +10,7 @@ import './CoinChangeVisualizer.css';
 const PRESETS = [
   {
     id: 'counterexample',
-    label: { es: '★ Contraejemplo Greedy [1, 3, 4] (V = 6)', en: '★ Greedy Counterexample [1, 3, 4] (V = 6)' },
+    label: { es: 'Contraejemplo Greedy [1, 3, 4] (V = 6)', en: 'Greedy Counterexample [1, 3, 4] (V = 6)' },
     coins: [1, 3, 4],
     target: 6
   },
@@ -128,7 +128,7 @@ export const CoinChangeVisualizer: React.FC = () => {
       {/* Denominations Row */}
       <div className="coins-panel">
         <div className="panel-title">
-          {language === 'es' ? '🪙 Sistema de Denominaciones Disponibles' : '🪙 Available Coin Denominations'}
+          {language === 'es' ? 'Sistema de Denominaciones Disponibles' : 'Available Coin Denominations'}
         </div>
         <div className="coins-tokens-strip">
           {coins.map((c) => {
@@ -154,8 +154,8 @@ export const CoinChangeVisualizer: React.FC = () => {
       {/* 1D DP Array View */}
       <div className="panel-title">
         {language === 'es'
-          ? '📊 Tabla de Estados 1D: dp[v] = cantidad mínima de monedas para cambio de $v'
-          : '📊 1D State Table: dp[v] = minimum number of coins for change $v'}
+          ? 'Tabla de Estados 1D: dp[v] = cantidad mínima de monedas para cambio de $v'
+          : '1D State Table: dp[v] = minimum number of coins for change $v'}
       </div>
       <div className="dp-table-container">
         <div className="dp-cells-row">
@@ -269,7 +269,7 @@ export const CoinChangeVisualizer: React.FC = () => {
           <div className="strategy-note">
             {greedyCoins && greedyCoins.length > (dp[target] ?? 0) ? (
               <span className="suboptimal-alert">
-                ⚠️ {language === 'es'
+                {language === 'es'
                   ? `Subóptimo: Toma $4 y queda obligado a dos $1 (3 monedas) perdiendo el óptimo $3+$3 (2 monedas).`
                   : `Suboptimal: Grabs $4 then forced into two $1s (3 coins), missing the optimal $3+$3 (2 coins).`}
               </span>

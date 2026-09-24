@@ -126,8 +126,8 @@ export const SudokuPlayground: React.FC = () => {
       setConflictMsg(null);
       setSolvedMessage(
         language === 'es'
-          ? '✓ Solución completa encontrada mediante Backtracking sistemático con poda MRV.'
-          : '✓ Complete solution found via systematic Backtracking with MRV pruning.'
+          ? 'Solución completa encontrada mediante Backtracking sistemático con poda MRV.'
+          : 'Complete solution found via systematic Backtracking with MRV pruning.'
       );
       markAttempted('sudoku-backtracking');
     } else {
@@ -186,7 +186,7 @@ export const SudokuPlayground: React.FC = () => {
             onClick={handleSolveWithBacktracking}
             style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
           >
-            {language === 'es' ? 'Resolver con Backtracking ⚡' : 'Solve with Backtracking ⚡'}
+            {language === 'es' ? 'Resolver con Backtracking' : 'Solve with Backtracking'}
           </button>
         </div>
       </div>

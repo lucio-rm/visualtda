@@ -141,7 +141,7 @@ export const PeakFindingVisualizer: React.FC = () => {
               <span className="eval-label">A[m] (Centro)</span>
               <span className="eval-value mid-val-highlight">{array[mid]}</span>
               {decision === 'PEAK_FOUND' && (
-                <span className="peak-badge">✓ {language === 'es' ? 'PICO' : 'PEAK'}</span>
+                <span className="peak-badge">{language === 'es' ? 'PICO LOCAL' : 'LOCAL PEAK'}</span>
               )}
             </div>
 

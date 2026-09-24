@@ -237,7 +237,11 @@ export const GraphColoringPlayground: React.FC = () => {
       {/* Feedback Message */}
       {feedback && (
         <div className={`gc-feedback-banner ${feedback.valid ? 'gc-feedback-valid' : 'gc-feedback-error'}`}>
-          <span>{feedback.valid ? '✓' : '⚠'}</span>
+          <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>
+            {feedback.valid
+              ? (language === 'es' ? '[Válido]' : '[Valid]')
+              : (language === 'es' ? '[Conflicto]' : '[Conflict]')}
+          </span>
           <p>{feedback.text}</p>
         </div>
       )}

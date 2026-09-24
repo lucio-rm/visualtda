@@ -16,8 +16,8 @@ interface Preset {
 const PRESETS: Preset[] = [
   {
     name: {
-      es: '★ Contraejemplo Clásico (Greedy Falla)',
-      en: '★ Classic Counterexample (Greedy Fails)'
+      es: 'Contraejemplo Clásico (Greedy Falla)',
+      en: 'Classic Counterexample (Greedy Fails)'
     },
     coins: [1, 3, 4],
     target: 6
@@ -232,7 +232,7 @@ export const CoinChangePlayground: React.FC = () => {
       <div className="dispenser-section">
         <div className="dispenser-header">
           <span className="dispenser-title">
-            {language === 'es' ? '🪙 Dispensador de Monedas' : '🪙 Coin Dispenser'}
+            {language === 'es' ? 'Dispensador de Monedas' : 'Coin Dispenser'}
           </span>
           <div className="quick-actions">
             <button
@@ -419,8 +419,8 @@ export const CoinChangePlayground: React.FC = () => {
       <div className="pedagogy-box">
         <h4>
           {language === 'es'
-            ? '💡 ¿Por qué las monedas comunes permiten Greedy pero otros sistemas no?'
-            : '💡 Why do standard coin systems allow Greedy while others do not?'}
+            ? 'Fundamento: Sistemas Canónicos vs Arbitrarios'
+            : 'Theoretical Foundation: Canonical vs Arbitrary Systems'}
         </h4>
         <p>
           {language === 'es'
