@@ -47,6 +47,7 @@ export const SubsetSumPlayground: React.FC = () => {
   const { markAttempted } = useStudentProgress();
 
   const [numbers, setNumbers] = useState<number[]>([2, 3, 5, 7, 8]);
+  const [numbersStr, setNumbersStr] = useState<string>('2, 3, 5, 7, 8');
   const [target, setTarget] = useState<number>(10);
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
 
@@ -113,6 +114,7 @@ export const SubsetSumPlayground: React.FC = () => {
             className="preset-btn"
             onClick={() => {
               setNumbers(p.numbers);
+              setNumbersStr(p.numbers.join(', '));
               setTarget(p.target);
               setSelectedIndices(new Set());
             }}
@@ -122,7 +124,7 @@ export const SubsetSumPlayground: React.FC = () => {
         ))}
       </div>
 
-      {/* Target Config */}
+      {/* Target & Elements Config */}
       <div className="subset-playground-config">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <label htmlFor="target-input-slider" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
@@ -139,11 +141,39 @@ export const SubsetSumPlayground: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? 'Conjunto de elementos:' : 'Input elements:'}
-          </span>
-          <span style={{ fontSize: '1rem', fontWeight: 700 }}>
-            [{numbers.join(', ')}] (Suma total = {numbers.reduce((a, b) => a + b, 0)})
+          <label htmlFor="subset-elements-input" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+            {language === 'es' ? 'Elementos (editables, separados por coma):' : 'Elements (editable, comma-separated):'}
+          </label>
+          <input
+            id="subset-elements-input"
+            type="text"
+            value={numbersStr}
+            onChange={(e) => {
+              const val = e.target.value;
+              setNumbersStr(val);
+              const parsed = val
+                .split(',')
+                .map((s) => parseInt(s.trim(), 10))
+                .filter((n) => !isNaN(n) && n > 0);
+              if (parsed.length > 0) {
+                setNumbers(parsed);
+                setSelectedIndices(new Set());
+              }
+            }}
+            style={{
+              padding: '0.4rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--text)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.9rem'
+            }}
+          />
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            {language === 'es'
+              ? `Total ${numbers.length} elementos (Suma total = ${numbers.reduce((a, b) => a + b, 0)})`
+              : `Total ${numbers.length} elements (Total sum = ${numbers.reduce((a, b) => a + b, 0)})`}
           </span>
         </div>
       </div>

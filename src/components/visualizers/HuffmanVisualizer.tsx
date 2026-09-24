@@ -41,11 +41,30 @@ const PRESETS: HuffmanPreset[] = [
 export const HuffmanVisualizer: React.FC = () => {
   const { language } = useLanguage();
   const [selectedPresetId, setSelectedPresetId] = useState<string>('clrs');
-  const activePreset = PRESETS.find((p) => p.id === selectedPresetId) || PRESETS[0];
+  const [customText, setCustomText] = useState<string>('ALGORITMOS');
+
+  const activeFrequencies = useMemo(() => {
+    if (selectedPresetId === 'custom') {
+      const freqs: Record<string, number> = {};
+      const clean = customText.trim().toUpperCase() || 'AB';
+      for (const ch of clean) {
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch === ' ') {
+          freqs[ch] = (freqs[ch] || 0) + 1;
+        }
+      }
+      if (Object.keys(freqs).length < 2) {
+        freqs['A'] = (freqs['A'] || 0) + 2;
+        freqs['B'] = (freqs['B'] || 0) + 1;
+      }
+      return freqs;
+    }
+    const preset = PRESETS.find((p) => p.id === selectedPresetId);
+    return preset ? preset.frequencies : DEFAULT_HUFFMAN_FREQS;
+  }, [selectedPresetId, customText]);
 
   const timeline = useMemo(
-    () => generateHuffmanTrace(activePreset.frequencies),
-    [activePreset.frequencies]
+    () => generateHuffmanTrace(activeFrequencies),
+    [activeFrequencies]
   );
 
   const {
@@ -98,7 +117,49 @@ export const HuffmanVisualizer: React.FC = () => {
             {p.label[language]}
           </button>
         ))}
+        <button
+          className={`huff-preset-btn ${selectedPresetId === 'custom' ? 'active' : ''}`}
+          onClick={() => {
+            setSelectedPresetId('custom');
+            reset();
+          }}
+        >
+          {language === 'es' ? '✍️ Caso Propio' : '✍️ Custom Case'}
+        </button>
       </div>
+
+      {selectedPresetId === 'custom' && (
+        <div className="huff-custom-input-box" style={{ margin: '0.75rem 0', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <label htmlFor="huff-custom-text" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
+            {language === 'es' ? 'Texto a codificar:' : 'Text to encode:'}
+          </label>
+          <input
+            id="huff-custom-text"
+            type="text"
+            value={customText}
+            onChange={(e) => {
+              setCustomText(e.target.value);
+              reset();
+            }}
+            maxLength={60}
+            style={{
+              padding: '0.4rem 0.75rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--text)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.9rem',
+              flex: 1,
+              minWidth: '220px',
+              maxWidth: '350px'
+            }}
+          />
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            {language === 'es' ? 'Frecuencias calculadas dinámicamente' : 'Frequencies computed dynamically'}
+          </span>
+        </div>
+      )}
 
       {/* Banner Summary */}
       <div className="huff-banner-row">
@@ -215,7 +276,7 @@ export const HuffmanVisualizer: React.FC = () => {
             </thead>
             <tbody>
               {Object.entries(codes).map(([c, code]) => {
-                const freq = activePreset.frequencies[c] ?? 0;
+                const freq = activeFrequencies[c] ?? 0;
                 return (
                   <tr key={c}>
                     <td style={{ fontWeight: 800 }}>"{c}"</td>

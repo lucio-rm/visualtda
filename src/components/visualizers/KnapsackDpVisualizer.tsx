@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   generateKnapsackDpTrace,
   KnapsackDpStepData,
@@ -6,12 +6,37 @@ import {
   DEFAULT_DP_CAPACITY
 } from '../../engine/algorithms/knapsackDpTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './KnapsackDpVisualizer.css';
 
+const PRESETS = [
+  {
+    id: 'standard',
+    label: { es: 'Estándar (4 ítems, C = 7)', en: 'Standard (4 items, C = 7)' },
+    items: DEFAULT_DP_ITEMS,
+    capacity: DEFAULT_DP_CAPACITY
+  },
+  {
+    id: 'counterexample',
+    label: { es: '★ Contraejemplo Greedy (C = 10)', en: '★ Greedy Counterexample (C = 10)' },
+    items: [
+      { id: 'A', name: 'Ítem A', weight: 6, value: 30 },
+      { id: 'B', name: 'Ítem B', weight: 3, value: 14 },
+      { id: 'C', name: 'Ítem C', weight: 4, value: 16 },
+      { id: 'D', name: 'Ítem D', weight: 2, value: 9 }
+    ],
+    capacity: 10
+  }
+];
+
 export const KnapsackDpVisualizer: React.FC = () => {
+  const { language } = useLanguage();
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('standard');
+  const activePreset = PRESETS.find((p) => p.id === selectedPresetId) || PRESETS[0];
+
   const timeline = useMemo(
-    () => generateKnapsackDpTrace(DEFAULT_DP_ITEMS, DEFAULT_DP_CAPACITY),
-    []
+    () => generateKnapsackDpTrace(activePreset.items, activePreset.capacity),
+    [activePreset]
   );
 
   const {
@@ -66,6 +91,35 @@ export const KnapsackDpVisualizer: React.FC = () => {
 
   return (
     <div className="knapsack-dp-visualizer">
+      {/* Preset Selector */}
+      <div className="knapsack-presets" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          {language === 'es' ? 'Instancia:' : 'Instance:'}
+        </span>
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`btn-secondary ${selectedPresetId === p.id ? 'active' : ''}`}
+            onClick={() => {
+              setSelectedPresetId(p.id);
+              reset();
+            }}
+            style={{
+              padding: '0.35rem 0.75rem',
+              fontSize: '0.825rem',
+              backgroundColor: selectedPresetId === p.id ? 'var(--accent)' : 'var(--surface)',
+              color: selectedPresetId === p.id ? '#ffffff' : 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              cursor: 'pointer'
+            }}
+          >
+            {p.label[language]}
+          </button>
+        ))}
+      </div>
+
       {/* Header & Badges */}
       <div className="knapsack-header-bar">
         <h4>Construcción de la Tabla 2D (Bottom-Up)</h4>

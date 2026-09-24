@@ -7,13 +7,40 @@ import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './CoinChangeVisualizer.css';
 
-const DEFAULT_COINS = [1, 3, 4];
-const DEFAULT_TARGET = 6;
+const PRESETS = [
+  {
+    id: 'counterexample',
+    label: { es: '★ Contraejemplo Greedy [1, 3, 4] (V = 6)', en: '★ Greedy Counterexample [1, 3, 4] (V = 6)' },
+    coins: [1, 3, 4],
+    target: 6
+  },
+  {
+    id: 'trap2',
+    label: { es: 'Trampa Greedy II [1, 5, 6, 9] (V = 11)', en: 'Greedy Trap II [1, 5, 6, 9] (V = 11)' },
+    coins: [1, 5, 6, 9],
+    target: 11
+  },
+  {
+    id: 'stamps',
+    label: { es: 'Sellos [2, 5, 7] (V = 11)', en: 'Stamps [2, 5, 7] (V = 11)' },
+    coins: [2, 5, 7],
+    target: 11
+  },
+  {
+    id: 'currency',
+    label: { es: 'Monedas [1, 2, 5, 10, 20] (V = 27)', en: 'Currency [1, 2, 5, 10, 20] (V = 27)' },
+    coins: [1, 2, 5, 10, 20],
+    target: 27
+  }
+];
 
 export const CoinChangeVisualizer: React.FC = () => {
   const { language } = useLanguage();
-  const [coins] = useState<number[]>(DEFAULT_COINS);
-  const [target] = useState<number>(DEFAULT_TARGET);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('counterexample');
+  const activePreset = PRESETS.find((p) => p.id === selectedPresetId) || PRESETS[0];
+
+  const coins = activePreset.coins;
+  const target = activePreset.target;
 
   const timeline = useMemo(() => generateCoinChangeTrace(coins, target), [coins, target]);
 
@@ -53,6 +80,35 @@ export const CoinChangeVisualizer: React.FC = () => {
 
   return (
     <div className="coin-change-visualizer">
+      {/* Preset Selector */}
+      <div className="coin-presets" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          {language === 'es' ? 'Escenario:' : 'Scenario:'}
+        </span>
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`btn-secondary ${selectedPresetId === p.id ? 'active' : ''}`}
+            onClick={() => {
+              setSelectedPresetId(p.id);
+              reset();
+            }}
+            style={{
+              padding: '0.35rem 0.75rem',
+              fontSize: '0.825rem',
+              backgroundColor: selectedPresetId === p.id ? 'var(--accent)' : 'var(--surface)',
+              color: selectedPresetId === p.id ? '#ffffff' : 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              cursor: 'pointer'
+            }}
+          >
+            {p.label[language]}
+          </button>
+        ))}
+      </div>
+
       {/* Header */}
       <div className="visualizer-header">
         <div className="phase-indicator">
