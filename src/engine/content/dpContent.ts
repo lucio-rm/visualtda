@@ -117,9 +117,9 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     if n == 1:
         return ganancias[0], [0]
 
-    # 1. Inicializar tabla DP 1D
-    # 2. Casos base: dp[0], dp[1]
-    # 3. Llenar tabla iterativa: dp[i] = max(dp[i-1], dp[i-2] + ganancias[i])
+    # 1. Inicializar estructura para memorizar subproblemas
+    # 2. Definir casos base para los primeros días
+    # 3. Evaluar decisiones óptimas para cada día subsiguiente
     # 4. Reconstrucción hacia atrás para obtener los días trabajados
 
     return 0, []
@@ -151,7 +151,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
               en: 'Implementation of Juan el Vago problem (DP)'
             },
             passed: false,
-            expected: 'Ecuación de recurrencia dp[i] = max(dp[i-1], dp[i-2] + g[i]) y reconstrucción',
+            expected: 'Ganancia máxima y días válidos no contiguos seleccionados',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,
@@ -252,7 +252,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
               en: 'Implementation of Minimum Coin Change algorithm (DP)'
             },
             passed: false,
-            expected: 'Tabla DP dp[v] = min(dp[v - c] + 1) y reconstrucción',
+            expected: 'Cantidad mínima de monedas y combinación óptima correspondiente',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,
@@ -619,7 +619,7 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
               en: 'Implementation of Segmented Least Squares (DP)'
             },
             passed: false,
-            expected: 'Ecuación de Bellman OPT[j] = min(e[i][j] + C + OPT[i-1]) y reconstrucción',
+            expected: 'Costo óptimo balanceado y partición de segmentos reconstruida',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,
@@ -680,10 +680,9 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
     if n < 5:
         return 0
 
-    # 1. Inicializa tabla DP 2D de n x n
-    # 2. Itera por longitud creciente de intervalo (desde longitud 5 hasta n)
-    # 3. La base j no se aparea: dp[i][j-1]
-    #    O se aparea con t en [i, j-5]: 1 + dp[i][t-1] + dp[t+1][j-1]
+    # 1. Inicializa tabla de programación dinámica por intervalos (n x n)
+    # 2. Itera por longitud creciente de subcadena (respetando la condición de horquilla)
+    # 3. Evalúa las transiciones: base j no apareada vs. apareamiento válido con t < j - 4
 
     return 0
 `,

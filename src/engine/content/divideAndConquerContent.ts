@@ -153,7 +153,7 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
               en: 'Implementation of maximum subarray with D&C'
             },
             passed: false,
-            expected: 'División recursiva en mitades y subarreglo cruzado en O(n)',
+            expected: 'División balanceada y combinación de subarreglos cruzados',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,
@@ -174,11 +174,11 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
       results.push({
         testId: 'maxsub-heuristic-check',
         description: {
-          es: 'Estructura DyC: Divide en mitades, recursión en ambas ramas y cálculo de subarreglo cruzado O(n).',
-          en: 'D&C structure: Halving, recursion on both branches, and O(n) crossing calculation.'
+          es: 'Estructura DyC: División balanceada en mitades y combinación lineal del caso cruzado',
+          en: 'D&C structure: Balanced division in halves and linear crossing combination'
         },
         passed: passesHeuristic && val1.valid,
-        expected: 'T(n) = 2T(n/2) + O(n) -> O(n log n)',
+        expected: 'Subarreglo de suma máxima identificado correctamente',
         actual: passesHeuristic ? 'Estructura DyC correcta' : 'Estructura incompleta o sin llamadas recursivas'
       });
 
@@ -253,7 +253,7 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
               en: 'Implementation of peak finding with D&C'
             },
             passed: false,
-            expected: 'Búsqueda binaria O(log n) guiada por el gradiente de vecinos',
+            expected: 'Índice de un pico local que satisface la condición sobre sus vecinos',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,
@@ -369,7 +369,7 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
               en: 'Implementation of inversion counting with Merge & Count'
             },
             passed: false,
-            expected: 'Conteo en O(n log n) mediante división y ordenamiento combinado',
+            expected: 'Cantidad exacta de inversiones y arreglo ordenado devueltos',
             actual: 'Código incompleto o sin implementar (plantilla inicial)'
           }],
           totalPassed: 0,

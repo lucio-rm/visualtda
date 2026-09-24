@@ -22,6 +22,10 @@ const PRESETS: Preset[] = [
     array: [12, 25, 18, 12, 35, 18]
   },
   {
+    name: { es: 'Ya Ordenado (Comportamiento Θ(n log n))', en: 'Already Sorted (Invariable Θ(n log n))' },
+    array: [10, 20, 30, 40, 50, 60, 70, 80]
+  },
+  {
     name: { es: 'Casi Ordenado', en: 'Nearly Sorted' },
     array: [5, 10, 15, 20, 12, 25, 30]
   }

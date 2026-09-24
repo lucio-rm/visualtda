@@ -39,8 +39,8 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
             results.push({
               testId: 'py-mergesort-sorted',
               description: {
-                es: 'Arreglo desordenado: Se ordena correctamente en tiempo O(n log n).',
-                en: 'Unsorted array: Correctly sorted in O(n log n) time.'
+                es: 'Caso general: Ordenamiento estable de arreglo desordenado [38, 27, 43, 3, 9, 82, 10]',
+                en: 'General case: Stable sorting of unsorted array [38, 27, 43, 3, 9, 82, 10]'
               },
               passed: validation.valid,
               expected: '[3, 9, 10, 27, 38, 43, 82]',

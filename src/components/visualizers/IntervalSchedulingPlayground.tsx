@@ -23,6 +23,20 @@ const PRESETS: Preset[] = [
     }
   },
   {
+    id: 'earliest-start',
+    name: { es: 'Contraejemplo Inicio Temprano', en: 'Earliest Start Fails' },
+    intervals: [
+      [0, 10],
+      [1, 3],
+      [4, 6],
+      [7, 9]
+    ],
+    description: {
+      es: 'La tarea que empieza primero [0, 10] monopoliza todo el tiempo. La heurística greedy por tiempo de inicio toma solo 1 tarea, mientras que el óptimo toma 3 tareas disjuntas ([1,3], [4,6], [7,9]).',
+      en: 'The task starting earliest [0, 10] blocks the entire timeline. Earliest-start heuristic takes only 1 task, while the optimum takes 3 compatible tasks ([1,3], [4,6], [7,9]).'
+    }
+  },
+  {
     id: 'shortest',
     name: { es: 'Contraejemplo Menor Duración', en: 'Shortest Duration Fails' },
     intervals: [

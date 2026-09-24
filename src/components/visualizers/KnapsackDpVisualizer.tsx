@@ -26,6 +26,12 @@ const PRESETS = [
       { id: 'D', name: 'Ítem D', weight: 2, value: 9 }
     ],
     capacity: 10
+  },
+  {
+    id: 'doubled-capacity',
+    label: { es: '¿Qué pasa al duplicar C? (C = 14)', en: 'What if Capacity Doubles? (C = 14)' },
+    items: DEFAULT_DP_ITEMS,
+    capacity: 14
   }
 ];
 

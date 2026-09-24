@@ -250,8 +250,8 @@ export const HuffmanPlayground: React.FC = () => {
             <button className="huff-pg-btn" onClick={() => setText('ALGORITMOS')}>
               ALGORITMOS
             </button>
-            <button className="huff-pg-btn" onClick={() => setText('ESTRUCTURAS DE DATOS')}>
-              ESTRUCTURAS DE DATOS
+            <button className="huff-pg-btn" onClick={() => setText('ABCDEFGH')}>
+              {language === 'es' ? 'ABCDEFGH (Uniforme)' : 'ABCDEFGH (Uniform)'}
             </button>
             <button className="huff-pg-btn" onClick={() => setText('FIUBA TDA')}>
               FIUBA TDA
