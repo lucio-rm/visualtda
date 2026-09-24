@@ -193,7 +193,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             onClick={reset}
             title={language === 'es' ? 'Reiniciar traza (r)' : 'Reset trace (r)'}
           >
-            ⏮
+            ↺
           </button>
           <button
             className="btn btn-secondary btn-sm"
@@ -208,7 +208,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             onClick={togglePlay}
             title={language === 'es' ? 'Reproducir / Pausar (Espacio)' : 'Play / Pause (Space)'}
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying ? '❚❚' : '▶'}
           </button>
           <button
             className="btn btn-secondary btn-sm"

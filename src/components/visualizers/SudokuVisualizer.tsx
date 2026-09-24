@@ -184,7 +184,7 @@ export const SudokuVisualizer: React.FC = () => {
             title={language === 'es' ? 'Reiniciar ejecución' : 'Reset'}
             aria-label={language === 'es' ? 'Reiniciar ejecución' : 'Reset'}
           >
-            ⏮
+            ↺
           </button>
           <button
             type="button"
@@ -203,7 +203,7 @@ export const SudokuVisualizer: React.FC = () => {
             title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying ? '❚❚' : '▶'}
           </button>
           <button
             type="button"

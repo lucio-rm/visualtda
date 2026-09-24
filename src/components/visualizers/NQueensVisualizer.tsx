@@ -125,7 +125,7 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
               title="Reiniciar (Inicio)"
               aria-label="Reiniciar ejecución"
             >
-              ⏮
+              ↺
             </button>
             <button
               type="button"
@@ -144,7 +144,7 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
               title={isPlaying ? 'Pausar' : 'Reproducir'}
               aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
             >
-              {isPlaying ? '⏸' : '▶'}
+              {isPlaying ? '❚❚' : '▶'}
             </button>
             <button
               type="button"

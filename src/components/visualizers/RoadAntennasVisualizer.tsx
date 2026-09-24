@@ -333,7 +333,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           onClick={isPlaying ? pause : play}
           title={isPlaying ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'}
         >
-          {isPlaying ? (language === 'es' ? '⏸ Pausa' : '⏸ Pause') : (language === 'es' ? '▶ Reproducir' : '▶ Play')}
+          {isPlaying ? (language === 'es' ? '❚❚ Pausa' : '❚❚ Pause') : (language === 'es' ? '▶ Reproducir' : '▶ Play')}
         </button>
         <button
           type="button"

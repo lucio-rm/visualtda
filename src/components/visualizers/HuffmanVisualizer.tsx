@@ -305,14 +305,14 @@ export const HuffmanVisualizer: React.FC = () => {
           title={language === 'es' ? 'Paso Anterior' : 'Previous Step'}
           className="timeline-btn"
         >
-          ⏮
+          ↺
         </button>
         <button
           onClick={togglePlay}
           className="timeline-btn play-btn"
           title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
         >
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
           onClick={stepForward}

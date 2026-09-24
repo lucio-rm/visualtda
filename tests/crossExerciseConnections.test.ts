@@ -56,5 +56,26 @@ describe('Cross-Exercise Connections & Technique Comparisons (Mission V4 Section
 
     const bfRelations = getRelatedExercisesFor('bellman-ford-dp');
     expect(bfRelations.some((r) => r.targetExerciseId === 'dijkstra-greedy')).toBe(true);
+
+    // Max Flow <-> Linear Programming
+    const maxFlowRelations = getRelatedExercisesFor('max-flow');
+    expect(maxFlowRelations.some((r) => r.targetExerciseId === 'linear-programming-formulation')).toBe(true);
+
+    const lpRelations = getRelatedExercisesFor('linear-programming-formulation');
+    expect(lpRelations.some((r) => r.targetExerciseId === 'max-flow')).toBe(true);
+
+    // Graph Coloring <-> Sudoku
+    const gcRelations = getRelatedExercisesFor('graph-coloring-backtracking');
+    expect(gcRelations.some((r) => r.targetExerciseId === 'sudoku-backtracking')).toBe(true);
+
+    const sudokuRelations = getRelatedExercisesFor('sudoku-backtracking');
+    expect(sudokuRelations.some((r) => r.targetExerciseId === 'graph-coloring-backtracking')).toBe(true);
+
+    // Hamiltonian Cycle <-> TSP B&B
+    const hcRelations = getRelatedExercisesFor('hamiltonian-cycle-backtracking');
+    expect(hcRelations.some((r) => r.targetExerciseId === 'tsp-branch-and-bound')).toBe(true);
+
+    const tspRelations = getRelatedExercisesFor('tsp-branch-and-bound');
+    expect(tspRelations.some((r) => r.targetExerciseId === 'hamiltonian-cycle-backtracking')).toBe(true);
   });
 });

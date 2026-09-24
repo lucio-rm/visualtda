@@ -76,7 +76,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
             ↩ {language === 'es' ? 'Deshacer Paso' : 'Undo Step'}
           </button>
           <button type="button" className="btn-preset" onClick={handleReset}>
-            ⏮ {language === 'es' ? 'Reiniciar' : 'Reset'}
+            ↺ {language === 'es' ? 'Reiniciar' : 'Reset'}
           </button>
           <button type="button" className="btn-preset active" onClick={handleAutoOptimal}>
             {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}

@@ -180,10 +180,10 @@ export const RandomizedFairCoinVisualizer: React.FC = () => {
 
       {/* Playback Controls */}
       <div className="controls-bar">
-        <button className="btn-control" onClick={reset} title="Reiniciar">⏮</button>
+        <button className="btn-control" onClick={reset} title="Reiniciar">↺</button>
         <button className="btn-control" onClick={stepBackward} disabled={currentStepIndex === 0} title="Paso Anterior">◀</button>
         <button className="btn-control btn-play" onClick={togglePlay} title={isPlaying ? 'Pausa' : 'Reproducir'}>
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? '❚❚' : '▶'}
         </button>
         <button className="btn-control" onClick={stepForward} disabled={currentStepIndex === totalSteps - 1} title="Paso Siguiente">▶</button>
 

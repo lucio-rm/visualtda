@@ -70,7 +70,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             ↩ {language === 'es' ? 'Retroceder (Backtrack)' : 'Backtrack (Undo)'}
           </button>
           <button type="button" className="btn-preset" onClick={handleReset}>
-            ⏮ {language === 'es' ? 'Reiniciar' : 'Reset'}
+            ↺ {language === 'es' ? 'Reiniciar' : 'Reset'}
           </button>
         </div>
 

@@ -276,7 +276,7 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           onClick={reset}
           title={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
-          ⏮
+          ↺
         </button>
         <button
           className="btn-control"
@@ -291,7 +291,7 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           onClick={togglePlay}
           title={isPlaying ? 'Pausa' : 'Reproducir'}
         >
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
           className="btn-control"

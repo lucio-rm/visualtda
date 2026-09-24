@@ -178,7 +178,7 @@ export const ClosestPairVisualizer: React.FC = () => {
             title={language === 'es' ? 'Reiniciar' : 'Reset'}
             aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
           >
-            ⏮
+            ↺
           </button>
           <button
             type="button"
@@ -197,7 +197,7 @@ export const ClosestPairVisualizer: React.FC = () => {
             title={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying ? '❚❚' : '▶'}
           </button>
           <button
             type="button"

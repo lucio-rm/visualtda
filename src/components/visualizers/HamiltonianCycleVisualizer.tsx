@@ -189,7 +189,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
             onClick={reset}
             aria-label={language === 'es' ? 'Reiniciar visualización' : 'Reset visualization'}
           >
-            ⏮
+            ↺
           </button>
           <button
             type="button"
@@ -198,7 +198,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
             disabled={currentStepIndex <= 0}
             aria-label={language === 'es' ? 'Paso anterior' : 'Previous step'}
           >
-            ⏪
+            ←
           </button>
           <button
             type="button"
@@ -206,7 +206,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
             onClick={togglePlay}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying ? '❚❚' : '▶'}
           </button>
           <button
             type="button"
@@ -215,7 +215,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
             disabled={currentStepIndex >= totalSteps - 1}
             aria-label={language === 'es' ? 'Siguiente paso' : 'Next step'}
           >
-            ⏩
+            →
           </button>
         </div>
 

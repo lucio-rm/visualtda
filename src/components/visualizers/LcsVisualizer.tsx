@@ -139,9 +139,13 @@ export const LcsVisualizer: React.FC = () => {
                         action === 'MATCH_DIAGONAL' &&
                         currentI === i &&
                         currentJ === j;
+                      const isAntecedent =
+                        (action === 'MATCH_DIAGONAL' && currentI === i + 1 && currentJ === j + 1) ||
+                        (action === 'MAX_MISMATCH' && ((currentI === i + 1 && currentJ === j) || (currentI === i && currentJ === j + 1)));
 
                       let cellClass = 'lcs-cell';
                       if (isCurrent) cellClass += ' current-cell';
+                      if (isAntecedent) cellClass += ' antecedent-cell';
                       if (inPath) cellClass += ' path-cell';
                       if (isMatch) cellClass += ' match-cell';
 
@@ -159,6 +163,51 @@ export const LcsVisualizer: React.FC = () => {
         </div>
       </div>
 
+      {/* Live Recurrence Subproblem Box */}
+      {currentI !== null && currentJ !== null && (action === 'MATCH_DIAGONAL' || action === 'MAX_MISMATCH') && (
+        <div
+          className="lcs-formula-callout"
+          style={{
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
+            borderRadius: '6px',
+            padding: '0.65rem 1rem',
+            fontSize: '0.88rem',
+            fontFamily: 'monospace',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.3rem'
+          }}
+        >
+          <div style={{ fontWeight: 600, color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+            {language === 'es' ? 'Recurrencia de Subproblemas en evaluación:' : 'Subproblem Recurrence under evaluation:'}
+          </div>
+          {action === 'MATCH_DIAGONAL' ? (
+            <div>
+              <span style={{ color: 'var(--accent)', fontWeight: 600 }}>dp[{currentI}][{currentJ}]</span>
+              {' = '}
+              <span>dp[{currentI - 1}][{currentJ - 1}] + 1</span>
+              {' = '}
+              <span style={{ color: '#10b981', fontWeight: 600 }}>{(dp[currentI - 1]?.[currentJ - 1] ?? 0) + 1}</span>
+              {' '}
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                ({language === 'es' ? `coincidencia '${s1[currentI - 1]}'` : `match '${s1[currentI - 1]}'`})
+              </span>
+            </div>
+          ) : (
+            <div>
+              <span style={{ color: 'var(--accent)', fontWeight: 600 }}>dp[{currentI}][{currentJ}]</span>
+              {' = '}
+              <span>max(dp[{currentI - 1}][{currentJ}], dp[{currentI}][{currentJ - 1}])</span>
+              {' = '}
+              <span>max({dp[currentI - 1]?.[currentJ] ?? 0}, {dp[currentI]?.[currentJ - 1] ?? 0})</span>
+              {' = '}
+              <span style={{ color: '#10b981', fontWeight: 600 }}>{Math.max(dp[currentI - 1]?.[currentJ] ?? 0, dp[currentI]?.[currentJ - 1] ?? 0)}</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Narrative Event Box */}
       <div className="narrative-box">
         <p className="narrative-text">
@@ -173,7 +222,7 @@ export const LcsVisualizer: React.FC = () => {
           onClick={reset}
           title={language === 'es' ? 'Reiniciar' : 'Reset'}
         >
-          ⏮
+          ↺
         </button>
         <button
           className="btn-control"
@@ -188,7 +237,7 @@ export const LcsVisualizer: React.FC = () => {
           onClick={togglePlay}
           title={isPlaying ? 'Pausa' : 'Reproducir'}
         >
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? '❚❚' : '▶'}
         </button>
         <button
           className="btn-control"

@@ -167,7 +167,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               disabled={currentStepIndex === 0}
               title="Paso anterior (←)"
             >
-              ⏮
+              ↺
             </button>
             <button
               type="button"
@@ -175,7 +175,7 @@ export const VertexCoverApproxVisualizer: React.FC = () => {
               onClick={togglePlay}
               title={isPlaying ? 'Pausar (Espacio / k)' : 'Reproducir (Espacio / k)'}
             >
-              {isPlaying ? '⏸ Pausa' : '▶ Reproducir'}
+              {isPlaying ? '❚❚ Pausa' : '▶ Reproducir'}
             </button>
             <button
               type="button"

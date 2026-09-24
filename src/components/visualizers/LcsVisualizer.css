@@ -171,6 +171,13 @@
   font-weight: bold;
 }
 
+.lcs-cell.antecedent-cell {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1.5px dashed var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .lcs-cell.match-cell {
   background: rgba(16, 185, 129, 0.25);
   color: #059669;

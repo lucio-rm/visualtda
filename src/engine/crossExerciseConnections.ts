@@ -273,6 +273,246 @@ export const CROSS_EXERCISE_RELATIONS: Record<string, CrossExerciseRelation[]> =
       },
       paradigmBadge: { es: 'Grafos en Tablero', en: 'Board Graphs' }
     }
+  ],
+
+  'coin-change-dp': [
+    {
+      targetExerciseId: 'knapsack-dp',
+      comparisonTitle: {
+        es: 'Mochila 0/1 (Programación Dinámica)',
+        en: '0/1 Knapsack (Dynamic Programming)'
+      },
+      comparisonInsight: {
+        es: 'Ambos problemas optimizan una función objetivo aditiva sujeta a capacidad. Cambio de Monedas corresponde a una mochila ilimitada (unbounded) donde cada denominación puede reutilizarse infinitas veces.',
+        en: 'Both problems optimize an additive objective subject to capacity. Coin Change is an unbounded knapsack variant where each coin denomination can be reused arbitrarily.'
+      },
+      paradigmBadge: { es: 'DP Ilimitada vs. 0/1', en: 'Unbounded vs 0/1 DP' }
+    },
+    {
+      targetExerciseId: 'knapsack-greedy',
+      comparisonTitle: {
+        es: 'Mochila Fraccionaria (Greedy)',
+        en: 'Fractional Knapsack (Greedy)'
+      },
+      comparisonInsight: {
+        es: 'Demuestra el peligro del heurístico Greedy: mientras que en monedas estándar o mochila continua Greedy triunfa, en sistemas arbitrarios como [1, 3, 4] con V=6 Greedy toma 4+1+1 (3 monedas) perdiendo el óptimo 3+3 (2 monedas).',
+        en: 'Illustrates the danger of Greedy heuristics: while Greedy succeeds on canonical coin systems or continuous knapsacks, on arbitrary denominations like [1, 3, 4] with V=6 Greedy yields 4+1+1 (3 coins), missing the optimum 3+3 (2 coins).'
+      },
+      paradigmBadge: { es: 'Greedy vs. DP', en: 'Greedy vs. DP' }
+    }
+  ],
+
+  'kruskal-mst-greedy': [
+    {
+      targetExerciseId: 'dijkstra-greedy',
+      comparisonTitle: {
+        es: 'Dijkstra (Caminos Mínimos)',
+        en: 'Dijkstra (Shortest Paths)'
+      },
+      comparisonInsight: {
+        es: 'Ambos son algoritmos Greedy sobre grafos ponderados, pero con objetivos distintos: Kruskal minimiza la suma global de aristas conectando todos los vértices (MST con propiedad del corte), mientras Dijkstra minimiza la distancia desde una única fuente (SPT).',
+        en: 'Both are Greedy graph algorithms with distinct goals: Kruskal minimizes total edge weight to span all vertices (MST via Cut Property), while Dijkstra minimizes path distance from a single source (SPT).'
+      },
+      paradigmBadge: { es: 'MST vs. SPT', en: 'MST vs. SPT' }
+    }
+  ],
+
+  'max-flow': [
+    {
+      targetExerciseId: 'linear-programming-formulation',
+      comparisonTitle: {
+        es: 'Programación Lineal (Formulación)',
+        en: 'Linear Programming (Formulation)'
+      },
+      comparisonInsight: {
+        es: 'El Flujo Máximo puede formularse como un problema de Programación Lineal con función objetivo max ∑ f(s, v), restricciones de capacidad 0 ≤ f(e) ≤ c(e) y leyes de conservación de flujo ∑ f_in = ∑ f_out en cada nodo intermedio.',
+        en: 'Max Flow can be formulated as a Linear Program maximizing ∑ f(s, v) subject to capacity constraints 0 ≤ f(e) ≤ c(e) and node flow conservation ∑ f_in = ∑ f_out.'
+      },
+      paradigmBadge: { es: 'Reducción a PL', en: 'Reduction to LP' }
+    }
+  ],
+
+  'linear-programming-formulation': [
+    {
+      targetExerciseId: 'max-flow',
+      comparisonTitle: {
+        es: 'Flujo Máximo (Ford-Fulkerson)',
+        en: 'Max Flow (Ford-Fulkerson)'
+      },
+      comparisonInsight: {
+        es: 'Muestra cómo problemas combinatorios específicos que encajan en Programación Lineal general admiten algoritmos combinatorialmente especializados (redes residuales, caminos aumentantes) mucho más veloces que el método Símplex general.',
+        en: 'Exemplifies how specific combinatorial problems within general Linear Programming admit specialized algorithms (residual networks, augmenting paths) far faster than general Simplex.'
+      },
+      paradigmBadge: { es: 'PL Especializada', en: 'Specialized LP' }
+    }
+  ],
+
+  'subset-sum-backtracking': [
+    {
+      targetExerciseId: 'knapsack-dp',
+      comparisonTitle: {
+        es: 'Mochila 0/1 (Programación Dinámica)',
+        en: '0/1 Knapsack (Dynamic Programming)'
+      },
+      comparisonInsight: {
+        es: 'Subset Sum es la versión de decisión de la Mochila 0/1 donde el valor de cada objeto coincide con su peso (vᵢ = wᵢ) y la meta es verificar si existe un subconjunto con suma exacta igual a W.',
+        en: 'Subset Sum is the decision version of 0/1 Knapsack where item value equals its weight (vᵢ = wᵢ) and the goal is to decide if a subset sums exactly to W.'
+      },
+      paradigmBadge: { es: 'Variación de Decisión', en: 'Decision Variant' }
+    },
+    {
+      targetExerciseId: 'knapsack-branch-and-bound',
+      comparisonTitle: {
+        es: 'Mochila 0/1 con Branch & Bound',
+        en: '0/1 Knapsack with Branch & Bound'
+      },
+      comparisonInsight: {
+        es: 'Ambos exploran el retículo booleano {0, 1}ⁿ. Backtracking poda por exceso (suma actual > T) y déficit (suma actual + remanente < T); Branch & Bound utiliza además cotas superiores continuas de relajación.',
+        en: 'Both explore the boolean lattice {0, 1}ⁿ. Backtracking prunes by excess and deficit; Branch & Bound additionally leverages continuous relaxation upper bounds.'
+      },
+      paradigmBadge: { es: 'Podas de Retículo', en: 'Lattice Pruning' }
+    }
+  ],
+
+  'graph-coloring-backtracking': [
+    {
+      targetExerciseId: 'sudoku-backtracking',
+      comparisonTitle: {
+        es: 'Sudoku (Backtracking)',
+        en: 'Sudoku (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'Sudoku es matemáticamente una instancia de 9-Coloreo de un grafo de 81 vértices con aristas entre celdas que comparten fila, columna o cuadrante 3×3, con vértices pre-coloreados fijos.',
+        en: 'Sudoku is mathematically an instance of 9-Coloring on an 81-vertex graph with edges connecting cells in the same row, column, or 3×3 box, with fixed pre-colored vertices.'
+      },
+      paradigmBadge: { es: 'Coloreo Estructurado', en: 'Structured Coloring' }
+    }
+  ],
+
+  'sudoku-backtracking': [
+    {
+      targetExerciseId: 'graph-coloring-backtracking',
+      comparisonTitle: {
+        es: 'Coloreo de Grafos (Backtracking)',
+        en: 'Graph Coloring (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'La restricción del Sudoku de que dígitos idénticos no compartan fila, columna o cuadrante equivale exactamente a que ningún par de vértices adyacentes en el grafo de restricciones reciba el mismo color.',
+        en: 'The Sudoku rule prohibiting duplicate digits in rows, columns, or boxes is equivalent to no adjacent vertices receiving identical colors in its constraint graph.'
+      },
+      paradigmBadge: { es: 'Grafo Subyacente', en: 'Underlying Graph' }
+    },
+    {
+      targetExerciseId: 'n-queens',
+      comparisonTitle: {
+        es: 'N-Reinas (Backtracking)',
+        en: 'N-Queens (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'Ambos representan problemas clásicos de Satisfacción de Restricciones (CSP) resueltos mediante búsqueda sistemática en árbol con propagación de restricciones y poda inmediata al detectar conflictos.',
+        en: 'Both represent classic Constraint Satisfaction Problems (CSP) solved via systematic tree search with constraint propagation and immediate pruning upon conflict detection.'
+      },
+      paradigmBadge: { es: 'CSP Canónico', en: 'Canonical CSP' }
+    }
+  ],
+
+  'hamiltonian-cycle-backtracking': [
+    {
+      targetExerciseId: 'tsp-branch-and-bound',
+      comparisonTitle: {
+        es: 'Viajante de Comercio (Branch & Bound)',
+        en: 'Traveling Salesperson (Branch & Bound)'
+      },
+      comparisonInsight: {
+        es: 'Ciclo Hamiltoniano pregunta si existe un ciclo simple que visite todos los vértices (decisión, NP-completo). TSP busca el ciclo hamiltoniano de longitud mínima en un grafo con pesos arbitrarios (optimización, NP-difícil).',
+        en: 'Hamiltonian Cycle asks whether a simple cycle visiting all vertices exists (decision, NP-complete). TSP seeks the minimum-weight Hamiltonian cycle in an edge-weighted graph (optimization, NP-hard).'
+      },
+      paradigmBadge: { es: 'Decisión vs. Optimización', en: 'Decision vs. Opt' }
+    },
+    {
+      targetExerciseId: 'knights-tour-backtracking',
+      comparisonTitle: {
+        es: 'Recorrido del Caballo (Backtracking)',
+        en: "Knight's Tour (Backtracking)"
+      },
+      comparisonInsight: {
+        es: 'El recorrido del caballo cerrado es formalmente un ciclo hamiltoniano en el grafo inducido por los movimientos válidos de un caballo de ajedrez en un tablero de 8×8.',
+        en: 'The closed knight’s tour is formally a Hamiltonian cycle in the graph induced by legal chess knight moves on an 8×8 board.'
+      },
+      paradigmBadge: { es: 'Instancia en Tablero', en: 'Board Instance' }
+    }
+  ],
+
+  'tsp-branch-and-bound': [
+    {
+      targetExerciseId: 'hamiltonian-cycle-backtracking',
+      comparisonTitle: {
+        es: 'Ciclo Hamiltoniano (Backtracking)',
+        en: 'Hamiltonian Cycle (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'Branch & Bound añade una función de cota inferior admisible (como el Árbol Generador Mínimo 1-Tree de Held-Karp) para podar ramas enteras que no puedan superar la mejor solución incumbente.',
+        en: 'Branch & Bound adds an admissible lower bounding function (such as the Held-Karp 1-Tree MST relaxation) to prune subtrees that cannot beat the best incumbent tour.'
+      },
+      paradigmBadge: { es: 'Cotas en B&B', en: 'Bounding in B&B' }
+    }
+  ],
+
+  'knights-tour-backtracking': [
+    {
+      targetExerciseId: 'hamiltonian-cycle-backtracking',
+      comparisonTitle: {
+        es: 'Ciclo Hamiltoniano (Backtracking)',
+        en: 'Hamiltonian Cycle (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'La heurística de Warnsdorff (elegir la casilla con menor grado de salida) actúa como un criterio greedy de ordenamiento de ramas dentro de la exploración de caminos hamiltonianos, evitando cuellos de botella.',
+        en: 'Warnsdorff’s heuristic (picking the neighbor with lowest degree) acts as a greedy branch-ordering heuristic inside the Hamiltonian path search, avoiding premature bottlenecks.'
+      },
+      paradigmBadge: { es: 'Heurística en Búsqueda', en: 'Search Heuristics' }
+    },
+    {
+      targetExerciseId: 'n-queens',
+      comparisonTitle: {
+        es: 'N-Reinas (Backtracking)',
+        en: 'N-Queens (Backtracking)'
+      },
+      comparisonInsight: {
+        es: 'Mientras N-Reinas busca independencia entre piezas en el tablero sin amenazas diagonales o axiales, el Caballo busca conectividad consecutiva para visitar cada celda una única vez.',
+        en: 'While N-Queens seeks piece independence with no mutual threats, Knight’s Tour seeks consecutive topological connectivity visiting every board square exactly once.'
+      },
+      paradigmBadge: { es: 'Problemas de Ajedrez', en: 'Chess Problems' }
+    }
+  ],
+
+  'peak-finding-dyc': [
+    {
+      targetExerciseId: 'merge-sort',
+      comparisonTitle: {
+        es: 'Merge Sort (División y Conquista)',
+        en: 'Merge Sort (Divide & Conquer)'
+      },
+      comparisonInsight: {
+        es: 'Mientras Merge Sort debe resolver recursivamente ambas mitades (T(n) = 2T(n/2) + O(n)), Búsqueda de Picos descarta una mitad completa siguiendo la pendiente creciente (T(n) = T(n/2) + O(1)), logrando O(log n).',
+        en: 'While Merge Sort must solve both halves recursively (T(n) = 2T(n/2) + O(n)), Peak Finding discards an entire half following the rising slope (T(n) = T(n/2) + O(1)), achieving O(log n).'
+      },
+      paradigmBadge: { es: 'Poda de Subproblema', en: 'Subproblem Pruning' }
+    }
+  ],
+
+  'karatsuba-dyc': [
+    {
+      targetExerciseId: 'merge-sort',
+      comparisonTitle: {
+        es: 'Merge Sort (División y Conquista)',
+        en: 'Merge Sort (Divide & Conquer)'
+      },
+      comparisonInsight: {
+        es: 'Karatsuba demuestra el Teorema Maestro reduciendo el número de llamadas recursivas de 4 a 3 mediante álgebra inteligente: T(n) = 3T(n/2) + O(n) implica O(n^{log₂ 3}) ≈ O(n^{1.585}), superando el O(n²) tradicional.',
+        en: 'Karatsuba illustrates the Master Theorem by algebraically reducing recursive calls from 4 to 3: T(n) = 3T(n/2) + O(n) yields O(n^{log₂ 3}) ≈ O(n^{1.585}), defeating classical O(n²).'
+      },
+      paradigmBadge: { es: 'Teorema Maestro', en: 'Master Theorem' }
+    }
   ]
 };
 
