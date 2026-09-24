@@ -9,7 +9,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const TspBranchAndBoundPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const cities = DEFAULT_TSP_CITIES;
   const dist = DEFAULT_TSP_MATRIX;
@@ -47,7 +47,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
         cTotal += dist[nextTour[i]][nextTour[i + 1]];
       }
       if (cTotal === optimalCost) {
-        markCompleted('tsp-branch-and-bound');
+        markAttempted('tsp-branch-and-bound');
       }
     }
   };
@@ -65,7 +65,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
   const handleAutoOptimal = () => {
     // Standard optimal tour for this matrix
     setTour([0, 2, 1, 4, 3, 0]);
-    markCompleted('tsp-branch-and-bound');
+    markAttempted('tsp-branch-and-bound');
   };
 
   return (

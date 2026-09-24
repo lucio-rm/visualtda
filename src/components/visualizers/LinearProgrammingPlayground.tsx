@@ -42,7 +42,7 @@ const PRESETS: LPPreset[] = [
 
 export const LinearProgrammingPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [activeTab, setActiveTab] = useState<'geometric' | 'modeling'>('geometric');
   const [modelingProblem, setModelingProblem] = useState<'juan' | 'mochila' | 'vertex-cover'>('juan');
 
@@ -56,9 +56,9 @@ export const LinearProgrammingPlayground: React.FC = () => {
 
   useEffect(() => {
     if (solution && solution.optimalPoint) {
-      markCompleted('linear-programming-formulation');
+      markAttempted('linear-programming-formulation');
     }
-  }, [solution, markCompleted]);
+  }, [solution, markAttempted]);
 
   const handlePresetSelect = (p: LPPreset) => {
     setActivePreset(p);

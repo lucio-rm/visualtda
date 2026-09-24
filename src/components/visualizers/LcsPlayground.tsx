@@ -35,7 +35,7 @@ const PRESETS: Preset[] = [
 
 export const LcsPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [s1, setS1] = useState<string>('ABCBDAB');
   const [s2, setS2] = useState<string>('BDCABA');
   const [userGuess, setUserGuess] = useState<string>('');
@@ -59,9 +59,9 @@ export const LcsPlayground: React.FC = () => {
 
   useEffect(() => {
     if (userValidation?.isOptimal) {
-      markCompleted('lcs-dp');
+      markAttempted('lcs-dp');
     }
-  }, [userValidation, markCompleted]);
+  }, [userValidation, markAttempted]);
 
   const handlePreset = (p: Preset) => {
     setS1(p.s1);

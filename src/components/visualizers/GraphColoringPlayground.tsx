@@ -11,7 +11,7 @@ import './GraphColoringPlayground.css';
 
 export const GraphColoringPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [k, setK] = useState<number>(3);
   const [coloring, setColoring] = useState<Record<string, number>>({});
   const [feedback, setFeedback] = useState<{ valid: boolean; text: string } | null>(null);
@@ -61,7 +61,7 @@ export const GraphColoringPlayground: React.FC = () => {
       text: language === 'es' ? result.message.es : result.message.en
     });
     if (result.valid && coloredCount === vertices.length) {
-      markCompleted('graph-coloring-backtracking');
+      markAttempted('graph-coloring-backtracking');
     }
   };
 

@@ -5,7 +5,7 @@ import { solveKnapsackBranchAndBound } from '../../engine/algorithms/knapsackBra
 
 export const KnapsackBranchAndBoundPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [capacity, setCapacity] = useState<number>(7);
   const [items, setItems] = useState([
@@ -28,7 +28,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
     const copy = [...items];
     copy[idx].w = newW;
     setItems(copy);
-    markCompleted('knapsack-branch-and-bound');
+    markAttempted('knapsack-branch-and-bound');
   };
 
   const handleUpdateValue = (idx: number, newV: number) => {
@@ -36,7 +36,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
     const copy = [...items];
     copy[idx].v = newV;
     setItems(copy);
-    markCompleted('knapsack-branch-and-bound');
+    markAttempted('knapsack-branch-and-bound');
   };
 
   return (

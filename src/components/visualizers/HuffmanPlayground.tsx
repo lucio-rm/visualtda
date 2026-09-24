@@ -9,7 +9,7 @@ const DEFAULT_TEXT = 'ABRACADABRA';
 
 export const HuffmanPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [text, setText] = useState<string>(DEFAULT_TEXT);
 
   // Active forest for step-by-step interactive tree construction
@@ -87,7 +87,7 @@ export const HuffmanPlayground: React.FC = () => {
 
       traverse(rootId, '');
       setConstructedCodes(codes);
-      markCompleted('huffman-coding-greedy');
+      markAttempted('huffman-coding-greedy');
     }
   }, [forestRoots, allNodes]);
 

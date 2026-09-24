@@ -5,7 +5,7 @@ import { Point2D, DEFAULT_CLOSEST_PAIR_POINTS } from '../../engine/algorithms/cl
 
 export const ClosestPairPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [points, setPoints] = useState<Point2D[]>(DEFAULT_CLOSEST_PAIR_POINTS);
   const [showAllPairs, setShowAllPairs] = useState(false);
@@ -40,7 +40,7 @@ export const ClosestPairPlayground: React.FC = () => {
       const updated = [...points, newPt];
       setPoints(updated);
       if (updated.length >= 10) {
-        markCompleted('closest-pair-dyc');
+        markAttempted('closest-pair-dyc');
       }
     }
   };

@@ -43,7 +43,7 @@ const PRESETS: Preset[] = [
 
 export const RoadAntennasPlayground: React.FC = () => {
   const { language, t } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [houses, setHouses] = useState<number[]>([4, 12, 18, 26, 32, 45, 60, 68, 75]);
   const [radius, setRadius] = useState<number>(10);
@@ -73,9 +73,9 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isMinimal) {
-      markCompleted('road-antennas-greedy');
+      markAttempted('road-antennas-greedy');
     }
-  }, [isMinimal, markCompleted]);
+  }, [isMinimal, markAttempted]);
 
   // SVG scaling
   const svgWidth = 840;

@@ -6,7 +6,7 @@ import './RandomizedFairCoinPlayground.css';
 
 export const RandomizedFairCoinPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [bias, setBias] = useState<number>(0.4);
   const [simulation, setSimulation] = useState<FairCoinOutput | null>(() => simulateVonNeumann(0.4, 3000));
   const [singleBitLog, setSingleBitLog] = useState<{ roundFlips: number; bit: number }[]>([]);
@@ -17,9 +17,9 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
 
   useEffect(() => {
     if (simulation && Math.abs(simulation.empiricalRatio0 - 50) < 5) {
-      markCompleted('randomized-fair-coin');
+      markAttempted('randomized-fair-coin');
     }
-  }, [simulation, markCompleted]);
+  }, [simulation, markAttempted]);
 
   const runSingle = () => {
     let flips = 0;

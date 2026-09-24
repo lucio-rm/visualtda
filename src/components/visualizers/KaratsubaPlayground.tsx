@@ -4,7 +4,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const KaratsubaPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [inputX, setInputX] = useState<number>(5678);
   const [inputY, setInputY] = useState<number>(1234);
@@ -33,7 +33,7 @@ export const KaratsubaPlayground: React.FC = () => {
 
   const handleRun = () => {
     if (isMatch) {
-      markCompleted('karatsuba-dyc');
+      markAttempted('karatsuba-dyc');
     }
   };
 

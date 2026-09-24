@@ -5,7 +5,7 @@ import { KNIGHT_MOVES, solveKnightsTour } from '../../engine/algorithms/knightsT
 
 export const KnightsTourPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [n, setN] = useState<number>(5);
   const [board, setBoard] = useState<number[][]>(() => {
@@ -76,7 +76,7 @@ export const KnightsTourPlayground: React.FC = () => {
           ? '🎉 ¡Felicitaciones! Has completado el Recorrido del Caballo cubriendo todo el tablero sin repetir casillas.'
           : "🎉 Congratulations! You completed the Knight's Tour without repeating any square."
       );
-      markCompleted('knights-tour-backtracking');
+      markAttempted('knights-tour-backtracking');
     }
   };
 
@@ -106,7 +106,7 @@ export const KnightsTourPlayground: React.FC = () => {
           ? '✓ Recorrido completado exitosamente mediante la Regla de Warnsdorff.'
           : "✓ Tour completed successfully via Warnsdorff's Rule."
       );
-      markCompleted('knights-tour-backtracking');
+      markAttempted('knights-tour-backtracking');
     }
   };
 

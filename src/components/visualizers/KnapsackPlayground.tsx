@@ -7,7 +7,7 @@ import './KnapsackPlayground.css';
 
 export const KnapsackPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleItem = (id: string) => {
@@ -40,7 +40,7 @@ export const KnapsackPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isOptimal) {
-      markCompleted('knapsack-dp');
+      markAttempted('knapsack-dp');
     }
   }, [isOptimal]);
 

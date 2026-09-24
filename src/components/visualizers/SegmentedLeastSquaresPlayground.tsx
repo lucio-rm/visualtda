@@ -8,7 +8,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const SegmentedLeastSquaresPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [costC, setCostC] = useState<number>(3.5);
   const points = DEFAULT_SLS_POINTS;
@@ -58,7 +58,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
 
   const handlePresetC = (cVal: number) => {
     setCostC(cVal);
-    markCompleted('segmented-least-squares-dp');
+    markAttempted('segmented-least-squares-dp');
   };
 
   return (
@@ -123,7 +123,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
           value={costC}
           onChange={(e) => {
             setCostC(Number(e.target.value));
-            markCompleted('segmented-least-squares-dp');
+            markAttempted('segmented-least-squares-dp');
           }}
           style={{ width: '100%' }}
         />

@@ -11,7 +11,7 @@ import './ReductionIsVcVisualizer.css';
 
 export const ReductionIsVcPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [selectedIS, setSelectedIS] = useState<string[]>([]);
 
   const { vertices, edges, k } = DEFAULT_REDUCTION_GRAPH;
@@ -51,9 +51,9 @@ export const ReductionIsVcPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isOptimal) {
-      markCompleted('vertex-cover-reduction');
+      markAttempted('vertex-cover-reduction');
     }
-  }, [isOptimal, markCompleted]);
+  }, [isOptimal, markAttempted]);
 
   return (
     <div className="reduction-playground-box">

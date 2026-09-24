@@ -9,7 +9,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const IntervalPartitioningPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [lectures, setLectures] = useState<LectureInterval[]>(DEFAULT_LECTURES);
   const [userAssignments, setUserAssignments] = useState<Record<string, number>>({});
@@ -52,7 +52,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
     // Check if optimal valid schedule achieved
     const nextRooms = new Set(Object.values(next));
     if (conflicts.length === 0 && nextRooms.size <= depth) {
-      markCompleted('interval-partitioning-greedy');
+      markAttempted('interval-partitioning-greedy');
     }
   };
 
@@ -92,7 +92,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
       }
     }
     setUserAssignments(assignments);
-    markCompleted('interval-partitioning-greedy');
+    markAttempted('interval-partitioning-greedy');
   };
 
   return (

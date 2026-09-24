@@ -5,7 +5,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const MinimizeLatenessPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   // Initial order is deliberately shuffled to demonstrate inversions
   const [jobs, setJobs] = useState<LatenessJob[]>([
@@ -59,14 +59,14 @@ export const MinimizeLatenessPlayground: React.FC = () => {
       }
     }
     if (newInversions === 0) {
-      markCompleted('minimize-lateness-greedy');
+      markAttempted('minimize-lateness-greedy');
     }
   };
 
   const handleSortEDF = () => {
     const sorted = [...jobs].sort((a, b) => a.deadline - b.deadline || a.duration - b.duration);
     setJobs(sorted);
-    markCompleted('minimize-lateness-greedy');
+    markAttempted('minimize-lateness-greedy');
   };
 
   const handleSortSPT = () => {

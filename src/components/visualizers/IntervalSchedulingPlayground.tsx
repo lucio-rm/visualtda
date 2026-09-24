@@ -7,7 +7,7 @@ import './IntervalSchedulingPlayground.css';
 
 export const IntervalSchedulingPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const allTasks: IntervalItem[] = useMemo(() => {
     return DEFAULT_INTERVALS.map(([start, end], idx) => ({
@@ -47,7 +47,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isOptimal) {
-      markCompleted('interval-scheduling');
+      markAttempted('interval-scheduling');
     }
   }, [isOptimal]);
 

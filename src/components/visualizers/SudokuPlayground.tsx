@@ -30,7 +30,7 @@ const PRESET_MRV_SHOWCASE: number[][] = [
 
 export const SudokuPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [activePreset, setActivePreset] = useState<'easy' | 'mrv' | 'empty'>('easy');
   const [board, setBoard] = useState<number[][]>(() => PRESET_EASY.map((row) => [...row]));
@@ -114,7 +114,7 @@ export const SudokuPlayground: React.FC = () => {
           ? '🎉 ¡Felicitaciones! Has completado el Sudoku respetando todas las restricciones.'
           : '🎉 Congratulations! You have solved the Sudoku respecting all constraints.'
       );
-      markCompleted('sudoku-backtracking');
+      markAttempted('sudoku-backtracking');
     }
   };
 
@@ -129,7 +129,7 @@ export const SudokuPlayground: React.FC = () => {
           ? '✓ Solución completa encontrada mediante Backtracking sistemático con poda MRV.'
           : '✓ Complete solution found via systematic Backtracking with MRV pruning.'
       );
-      markCompleted('sudoku-backtracking');
+      markAttempted('sudoku-backtracking');
     } else {
       setConflictMsg(
         language === 'es'

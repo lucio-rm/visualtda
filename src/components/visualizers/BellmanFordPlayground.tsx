@@ -36,7 +36,7 @@ const GRAPH_CYCLE: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
 
 export const BellmanFordPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [mode, setMode] = useState<'stable' | 'cycle'>('stable');
   const [iteration, setIteration] = useState<number>(0);
@@ -71,7 +71,7 @@ export const BellmanFordPlayground: React.FC = () => {
       const nextIter = iteration + 1;
       setIteration(nextIter);
       if (nextIter >= nodes.length && mode === 'cycle') {
-        markCompleted('bellman-ford-dp');
+        markAttempted('bellman-ford-dp');
       }
     }
   };
@@ -80,7 +80,7 @@ export const BellmanFordPlayground: React.FC = () => {
     setMode(newMode);
     setIteration(0);
     if (newMode === 'cycle') {
-      markCompleted('bellman-ford-dp');
+      markAttempted('bellman-ford-dp');
     }
   };
 

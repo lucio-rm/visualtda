@@ -5,7 +5,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const MedianOfMediansPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [array, setArray] = useState<number[]>(DEFAULT_MOM_ARRAY);
   const [targetK, setTargetK] = useState<number>(7);
@@ -32,12 +32,12 @@ export const MedianOfMediansPlayground: React.FC = () => {
   const handleRandomize = () => {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     setArray(shuffled);
-    markCompleted('median-of-medians-dyc');
+    markAttempted('median-of-medians-dyc');
   };
 
   const handlePresetK = (kVal: number) => {
     setTargetK(kVal);
-    markCompleted('median-of-medians-dyc');
+    markAttempted('median-of-medians-dyc');
   };
 
   return (

@@ -34,7 +34,7 @@ const GRAPH_NEGATIVE_COUNTEREXAMPLE: { nodes: DijkstraNode[]; edges: DijkstraEdg
 
 export const DijkstraPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [preset, setPreset] = useState<'standard' | 'negative'>('standard');
   const [source, setSource] = useState<string>('S');
@@ -72,7 +72,7 @@ export const DijkstraPlayground: React.FC = () => {
     setPreset(p);
     setSource('S');
     if (p === 'negative') {
-      markCompleted('dijkstra-greedy');
+      markAttempted('dijkstra-greedy');
     }
   };
 

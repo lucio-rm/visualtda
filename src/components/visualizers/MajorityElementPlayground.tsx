@@ -4,7 +4,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const MajorityElementPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [inputStr, setInputStr] = useState<string>('2, 2, 1, 1, 2, 2, 3, 2');
 
@@ -34,7 +34,7 @@ export const MajorityElementPlayground: React.FC = () => {
 
   const handlePreset = (arr: number[]) => {
     setInputStr(arr.join(', '));
-    markCompleted('majority-element-dyc');
+    markAttempted('majority-element-dyc');
   };
 
   return (
@@ -85,7 +85,7 @@ export const MajorityElementPlayground: React.FC = () => {
           value={inputStr}
           onChange={(e) => {
             setInputStr(e.target.value);
-            markCompleted('majority-element-dyc');
+            markAttempted('majority-element-dyc');
           }}
           style={{
             flex: 1,

@@ -5,7 +5,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const HamiltonianCyclePlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const { nodes, edges } = DEFAULT_HAM_GRAPH;
   const numV = nodes.length;
@@ -48,7 +48,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
     setPath(nextPath);
 
     if (nextPath.length === numV + 1 && nextPath[nextPath.length - 1] === 0) {
-      markCompleted('hamiltonian-cycle-backtracking');
+      markAttempted('hamiltonian-cycle-backtracking');
     }
   };
 

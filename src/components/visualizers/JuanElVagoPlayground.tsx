@@ -30,7 +30,7 @@ const PRESETS: Preset[] = [
 
 export const JuanElVagoPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [gananciasStr, setGananciasStr] = useState<string>('10, 40, 20, 30, 50');
   const [manualSelection, setManualSelection] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -84,7 +84,7 @@ export const JuanElVagoPlayground: React.FC = () => {
 
   useEffect(() => {
     if (manualStatus.isOptimal && manualSelection.length > 0) {
-      markCompleted('juan-el-vago');
+      markAttempted('juan-el-vago');
     }
   }, [manualStatus.isOptimal, manualSelection]);
 

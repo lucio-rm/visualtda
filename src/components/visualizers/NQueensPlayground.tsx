@@ -13,7 +13,7 @@ interface DetailedConflict extends QueenConflictPair {
 }
 
 export const NQueensPlayground: React.FC = () => {
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [n, setN] = useState<number>(4);
   const [queens, setQueens] = useState<QueenPos[]>([]);
 
@@ -103,7 +103,7 @@ export const NQueensPlayground: React.FC = () => {
   // Mark exercise completed when student successfully finds a complete collision-free configuration
   useEffect(() => {
     if (isCompleteSolution) {
-      markCompleted('n-queens');
+      markAttempted('n-queens');
     }
   }, [isCompleteSolution]);
 

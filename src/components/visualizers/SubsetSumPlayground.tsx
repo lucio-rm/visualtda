@@ -44,7 +44,7 @@ const PRESETS: Preset[] = [
 
 export const SubsetSumPlayground: React.FC = () => {
   const { language, t } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [numbers, setNumbers] = useState<number[]>([2, 3, 5, 7, 8]);
   const [target, setTarget] = useState<number>(10);
@@ -95,7 +95,7 @@ export const SubsetSumPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isExactMatch && selectedIndices.size > 0) {
-      markCompleted('subset-sum-backtracking');
+      markAttempted('subset-sum-backtracking');
     }
   }, [isExactMatch, selectedIndices]);
 

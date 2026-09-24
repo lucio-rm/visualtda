@@ -34,7 +34,7 @@ const PRESETS: Preset[] = [
 
 export const MaxSubarrayPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [arrayStr, setArrayStr] = useState<string>('5, -4, 2, 4, -1');
   const [userStart, setUserStart] = useState<number | null>(null);
   const [userEnd, setUserEnd] = useState<number | null>(null);
@@ -79,9 +79,9 @@ export const MaxSubarrayPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isOptimal) {
-      markCompleted('max-subarray-dyc');
+      markAttempted('max-subarray-dyc');
     }
-  }, [isOptimal, markCompleted]);
+  }, [isOptimal, markAttempted]);
 
   const handleItemClick = (idx: number) => {
     if (userStart === null) {

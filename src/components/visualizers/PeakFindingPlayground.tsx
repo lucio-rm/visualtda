@@ -34,7 +34,7 @@ const PRESETS: Preset[] = [
 
 export const PeakFindingPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [arrayStr, setArrayStr] = useState<string>('4, 10, 5, 8, 15, 3, 11, 2');
   const [userSelectedIndex, setUserSelectedIndex] = useState<number | null>(null);
   const [discoveredPeaks, setDiscoveredPeaks] = useState<Set<number>>(new Set());
@@ -98,9 +98,9 @@ export const PeakFindingPlayground: React.FC = () => {
 
   useEffect(() => {
     if (userValidation?.valid) {
-      markCompleted('peak-finding-dyc');
+      markAttempted('peak-finding-dyc');
     }
-  }, [userValidation, markCompleted]);
+  }, [userValidation, markAttempted]);
 
   const handlePreset = (preset: Preset) => {
     setArrayStr(preset.array.join(', '));

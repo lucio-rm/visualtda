@@ -9,7 +9,7 @@ import './VertexCoverApproxPlayground.css';
 
 export const VertexCoverApproxPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const { vertices, edges } = DEFAULT_APPROX_GRAPH;
 
   // Selected matching M (array of edges [u, v])
@@ -33,9 +33,9 @@ export const VertexCoverApproxPlayground: React.FC = () => {
 
   useEffect(() => {
     if (isAllCovered && matching.length > 0) {
-      markCompleted('vertex-cover-approx');
+      markAttempted('vertex-cover-approx');
     }
-  }, [isAllCovered, matching.length, markCompleted]);
+  }, [isAllCovered, matching.length, markAttempted]);
 
   const toggleEdge = (u: string, v: string) => {
     const isAlreadyMatched = matching.some(

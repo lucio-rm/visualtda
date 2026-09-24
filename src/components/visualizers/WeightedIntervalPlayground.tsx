@@ -57,7 +57,7 @@ const PRESETS: Preset[] = [
 
 export const WeightedIntervalPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [intervals, setIntervals] = useState<WeightedInterval[]>(PRESETS[0].intervals);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -111,7 +111,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
 
   useEffect(() => {
     if (userStatus.isOptimal) {
-      markCompleted('weighted-interval-scheduling');
+      markAttempted('weighted-interval-scheduling');
     }
   }, [userStatus.isOptimal]);
 

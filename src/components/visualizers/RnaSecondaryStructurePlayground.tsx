@@ -8,7 +8,7 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 
 export const RnaSecondaryStructurePlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const [sequence, setSequence] = useState<string>(DEFAULT_RNA_SEQUENCE);
 
@@ -59,7 +59,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
 
   const handlePreset = (seq: string) => {
     setSequence(seq);
-    markCompleted('rna-secondary-structure-dp');
+    markAttempted('rna-secondary-structure-dp');
   };
 
   return (
@@ -110,7 +110,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
           value={sequence}
           onChange={(e) => {
             setSequence(e.target.value.toUpperCase());
-            markCompleted('rna-secondary-structure-dp');
+            markAttempted('rna-secondary-structure-dp');
           }}
           placeholder="ACCGGUAGU"
           style={{

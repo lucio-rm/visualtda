@@ -50,7 +50,7 @@ const PRESETS: Preset[] = [
 
 export const CoinChangePlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [coinsStr, setCoinsStr] = useState<string>('1, 3, 4');
   const [target, setTarget] = useState<number>(6);
   const [userCoinsCount, setUserCoinsCount] = useState<Record<number, number>>({});
@@ -150,9 +150,9 @@ export const CoinChangePlayground: React.FC = () => {
 
   useEffect(() => {
     if (isOptimal) {
-      markCompleted('coin-change-dp');
+      markAttempted('coin-change-dp');
     }
-  }, [isOptimal, markCompleted]);
+  }, [isOptimal, markAttempted]);
 
   return (
     <div className="coin-change-playground">

@@ -15,7 +15,7 @@ interface DiscoveredInversion {
 
 export const InversionCountingPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
   const [array, setArray] = useState<number[]>(DEFAULT_ARRAY);
   const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
   const [discoveredPairs, setDiscoveredPairs] = useState<DiscoveredInversion[]>([]);
@@ -43,7 +43,7 @@ export const InversionCountingPlayground: React.FC = () => {
   // Trigger mastery completion when student discovers all inversions
   useEffect(() => {
     if (allInversionsDiscovered || (isZeroDisorder && discoveredPairs.length === 0)) {
-      markCompleted('inversion-counting-dyc');
+      markAttempted('inversion-counting-dyc');
     }
   }, [allInversionsDiscovered, isZeroDisorder]);
 
@@ -113,7 +113,7 @@ export const InversionCountingPlayground: React.FC = () => {
           ? `🎉 ¡Exacto! El arreglo tiene exactamente ${trueTotalInversions} inversiones. Has demostrado dominio de conteo.`
           : `🎉 Exact! The array contains exactly ${trueTotalInversions} inversions. You proved mastery.`
       );
-      markCompleted('inversion-counting-dyc');
+      markAttempted('inversion-counting-dyc');
     } else if (num < trueTotalInversions) {
       setGuessFeedback(
         language === 'es'

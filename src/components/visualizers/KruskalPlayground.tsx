@@ -5,7 +5,7 @@ import { DEFAULT_KRUSKAL_GRAPH } from '../../engine/algorithms/kruskalTrace';
 
 export const KruskalPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markCompleted } = useStudentProgress();
+  const { markAttempted } = useStudentProgress();
 
   const { nodes, edges } = DEFAULT_KRUSKAL_GRAPH;
   const [selectedEdgeIds, setSelectedEdgeIds] = useState<string[]>([]);
@@ -76,7 +76,7 @@ export const KruskalPlayground: React.FC = () => {
             ? `🎉 ¡Felicitaciones! Has construido el Árbol Generador Mínimo óptimo con costo total ${totalWeight}.`
             : `🎉 Congratulations! You constructed the optimal MST with total cost ${totalWeight}.`
         );
-        markCompleted('kruskal-mst-greedy');
+        markAttempted('kruskal-mst-greedy');
       } else {
         setFeedback(
           language === 'es'
