@@ -23,6 +23,35 @@ export const InversionCountingPlayground: React.FC = () => {
   const [guessInput, setGuessInput] = useState<string>('');
   const [guessFeedback, setGuessFeedback] = useState<string | null>(null);
   const [showDivideExplanation, setShowDivideExplanation] = useState<boolean>(false);
+  const [customInputStr, setCustomInputStr] = useState<string>('2, 3, 8, 6, 1');
+  const [customInputError, setCustomInputError] = useState<string | null>(null);
+
+  const handleApplyCustomInput = () => {
+    try {
+      const parts = customInputStr
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      if (parts.length === 0) {
+        throw new Error(language === 'es' ? 'Ingresá al menos 2 números separados por coma.' : 'Enter at least 2 comma-separated numbers.');
+      }
+      const nums = parts.map((p) => {
+        const v = Number(p);
+        if (isNaN(v)) throw new Error(language === 'es' ? `"${p}" no es un número válido.` : `"${p}" is not a valid number.`);
+        return v;
+      });
+      if (nums.length < 2) {
+        throw new Error(language === 'es' ? 'El arreglo debe tener al menos 2 elementos.' : 'Array must have at least 2 elements.');
+      }
+      if (nums.length > 10) {
+        throw new Error(language === 'es' ? 'Máximo 10 elementos para mantener legibilidad visual.' : 'Maximum 10 elements to maintain visual legibility.');
+      }
+      setCustomInputError(null);
+      setArray(nums);
+    } catch (err: unknown) {
+      setCustomInputError(err instanceof Error ? err.message : 'Error');
+    }
+  };
 
   // Secret calculation for verification (not revealed to student prematurely)
   const trueTotalInversions = useMemo(() => countInversions(array), [array]);
@@ -160,27 +189,81 @@ export const InversionCountingPlayground: React.FC = () => {
 
           <div className="inv-pg-actions">
             <button
+              type="button"
               className="inv-pg-btn"
-              onClick={() => setArray([2, 3, 8, 6, 1])}
+              onClick={() => {
+                setArray([2, 3, 8, 6, 1]);
+                setCustomInputStr('2, 3, 8, 6, 1');
+                setCustomInputError(null);
+              }}
             >
               CLRS [2, 3, 8, 6, 1]
             </button>
             <button
+              type="button"
               className="inv-pg-btn"
-              onClick={() => setArray([5, 4, 3, 2, 1])}
+              onClick={() => {
+                setArray([5, 4, 3, 2, 1]);
+                setCustomInputStr('5, 4, 3, 2, 1');
+                setCustomInputError(null);
+              }}
             >
               {language === 'es' ? 'Invertido [5, 4, 3, 2, 1]' : 'Reversed [5, 4, 3, 2, 1]'}
             </button>
             <button
+              type="button"
               className="inv-pg-btn"
-              onClick={() => setArray([1, 2, 3, 4, 5])}
+              onClick={() => {
+                setArray([1, 2, 3, 4, 5]);
+                setCustomInputStr('1, 2, 3, 4, 5');
+                setCustomInputError(null);
+              }}
             >
               {language === 'es' ? 'Ordenado [1, 2, 3, 4, 5]' : 'Sorted [1, 2, 3, 4, 5]'}
             </button>
-            <button className="inv-pg-btn accent" onClick={handleRandomize}>
+            <button
+              type="button"
+              className="inv-pg-btn accent"
+              onClick={handleRandomize}
+            >
               {language === 'es' ? 'Aleatorio' : 'Randomize'}
             </button>
           </div>
+        </div>
+
+        {/* Custom Input (Caso propio) */}
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
+          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+            {language === 'es' ? 'Caso propio:' : 'Custom case:'}
+          </label>
+          <input
+            type="text"
+            value={customInputStr}
+            onChange={(e) => setCustomInputStr(e.target.value)}
+            placeholder="ej: 7, 2, 9, 1, 5"
+            style={{
+              padding: '0.35rem 0.65rem',
+              fontSize: '0.85rem',
+              backgroundColor: 'var(--bg)',
+              color: 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              width: '180px'
+            }}
+          />
+          <button
+            type="button"
+            className="inv-pg-btn"
+            onClick={handleApplyCustomInput}
+            style={{ padding: '0.35rem 0.75rem', fontSize: '0.825rem' }}
+          >
+            {language === 'es' ? 'Cargar' : 'Load'}
+          </button>
+          {customInputError && (
+            <span style={{ fontSize: '0.8rem', color: 'var(--color-error)' }}>
+              {customInputError}
+            </span>
+          )}
         </div>
 
         {/* Array Visualization */}
