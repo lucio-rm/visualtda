@@ -237,6 +237,14 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
         </table>
       </div>
 
+      {/* DP Recurrence & Penalty Trade-Off Card (Section 12, 25 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Recurrencia DP y Balance de Penalización C (K&T §6.3):' : 'DP Recurrence & Penalty Trade-Off C (K&T §6.3):'}</strong>{' '}
+        {language === 'es'
+          ? 'Para minimizar el error cuadrático acumulado más la penalización c por segmento: OPT(j) = min_{1 ≤ i ≤ j} (e_{i, j} + c + OPT(i-1)). El último segmento comienza forzosamente en algún punto i y termina en j. Al variar el hiperparámetro c se controla el balance entre ajuste preciso (sobreajuste con c bajo) y parsimonia del modelo (pocos segmentos con c alto). Tiempo de llenado de tabla: O(n²).'
+          : 'To minimize cumulative squared error plus per-segment penalty c: OPT(j) = min_{1 ≤ i ≤ j} (e_{i, j} + c + OPT(i-1)). The final segment necessarily begins at some index i and ends at j. Hyperparameter c balances precision against parsimony, avoiding overfitting. DP table filling runs in O(n²).'}
+      </div>
+
       {/* Playback Controls */}
       <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
         <div className="trace-buttons">

@@ -240,6 +240,14 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
         </table>
       </div>
 
+      {/* Exchange Argument & Inversion Reduction Card (Section 12, 23 & 44) */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
+        <strong>{language === 'es' ? 'Argumento de Intercambio y Reducción de Inversiones (K&T §4.2):' : 'Exchange Argument & Inversion Reduction (K&T §4.2):'}</strong>{' '}
+        {language === 'es'
+          ? 'Una inversión es un par ordenado (i, j) donde i precede a j pero d_i > d_j. Todo cronograma con inversiones posee al menos un par adyacente invertido. Intercambiar dicho par reduce las inversiones en 1 y no incrementa el retraso máximo de ninguna tarea. Por inducción finita, cualquier solución óptima puede transformarse en la solución voraz Earliest Deadline First (EDF) con 0 inversiones, demostrando su optimalidad en O(n log n).'
+          : 'An inversion is a pair (i, j) where i precedes j but d_i > d_j. Any schedule with inversions contains an adjacent inverted pair. Swapping this adjacent pair strictly decrements total inversions by 1 without increasing maximum lateness. By finite induction, any optimal schedule can be transformed into the greedy Earliest Deadline First (EDF) order with zero inversions, proving optimality in O(n log n).'}
+      </div>
+
       {/* Playback Controls */}
       <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
         <div className="trace-buttons">
