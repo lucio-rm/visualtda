@@ -50,7 +50,7 @@ export const ClosestPairVisualizer: React.FC = () => {
         </div>
         <div className="cp-metric-badge">
           <span>{language === 'es' ? 'Mejor par actual:' : 'Current best pair:'}</span>
-          <strong>{bestPair ? `${bestPair[0].id} — ${bestPair[1].id}` : 'Ninguno'}</strong>
+          <strong>{bestPair ? `${bestPair[0].id} — ${bestPair[1].id}` : (language === 'es' ? 'Ninguno' : 'None')}</strong>
         </div>
         <div className={`cp-metric-badge cp-action-badge action-${action.toLowerCase()}`}>
           <span>{language === 'es' ? 'Acción actual:' : 'Action:'}</span>

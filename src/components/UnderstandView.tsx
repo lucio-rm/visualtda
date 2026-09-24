@@ -52,7 +52,12 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
         {/* Visualizer and Timeline area */}
         <div className="understand-visualizer-container">
           <div className="card-panel">
-            <h4>{t(dict.understandVisualizerHeading)}</h4>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <h4 style={{ margin: 0 }}>{t(dict.understandVisualizerHeading)}</h4>
+              <span className="keyboard-hints" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                {language === 'es' ? 'Atajos: [← / →] pasos · [Espacio] reproducir · [R] reiniciar' : 'Shortcuts: [← / →] step · [Space] play · [R] reset'}
+              </span>
+            </div>
             {visualizerSlot || (
               <div className="visualizer-slot-placeholder">
                 <p>{t(dict.understandVisualizerPlaceholder)}</p>

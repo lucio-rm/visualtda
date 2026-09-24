@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExerciseMetadata } from '../types';
+import { ExerciseMetadata, formatTechniqueLabel } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
 
@@ -86,7 +86,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
               #{indexNumber}
             </span>
           )}
-          <span className="badge badge-technique">{exercise.techniqueId}</span>
+          <span className="badge badge-technique">
+            {formatTechniqueLabel(exercise.techniqueId, language)}
+          </span>
           <span className="badge badge-difficulty" aria-label={`Dificultad nivel ${exercise.difficulty} de 5`}>
             {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
           </span>

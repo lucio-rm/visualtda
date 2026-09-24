@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExerciseMetadata, ExercisePhase } from '../types';
+import { ExerciseMetadata, ExercisePhase, formatTechniqueLabel } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
@@ -92,7 +92,9 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
       <div className="exercise-view-header">
         <div className="exercise-meta-row">
-          <span className="badge badge-technique">{exercise.techniqueId}</span>
+          <span className="badge badge-technique">
+            {formatTechniqueLabel(exercise.techniqueId, language)}
+          </span>
           <span className="badge badge-difficulty">
             {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
           </span>

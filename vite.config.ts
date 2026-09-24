@@ -15,7 +15,7 @@ export default defineConfig({
             return 'illustrations';
           }
           if (id.includes('src/components/visualizers/')) {
-            if (id.includes('NQueens') || id.includes('SubsetSum') || id.includes('GraphColoring') || id.includes('Sudoku') || id.includes('Hamiltonian') || id.includes('Tsp') || id.includes('KnightsTour')) {
+            if (id.includes('NQueens') || id.includes('SubsetSum') || id.includes('GraphColoring') || id.includes('Sudoku') || id.includes('Hamiltonian') || id.includes('Tsp') || id.includes('KnightsTour') || id.includes('KnapsackBranchAndBound')) {
               return 'visualizers-backtracking';
             }
             if (id.includes('IntervalScheduling') || id.includes('KnapsackGreedy') || id.includes('RoadAntennas') || id.includes('Huffman') || id.includes('IntervalPartitioning') || id.includes('MinimizeLateness') || id.includes('Dijkstra') || id.includes('Kruskal')) {
@@ -28,6 +28,9 @@ export default defineConfig({
               return 'visualizers-dyc';
             }
             return 'visualizers-advanced';
+          }
+          if (id.includes('src/engine/content/') || id.includes('src/engine/exerciseContextInsights') || id.includes('src/engine/rawExerciseAssets')) {
+            return 'exercise-content';
           }
           if (id.includes('src/engine/algorithms/')) {
             return 'algorithm-engines';

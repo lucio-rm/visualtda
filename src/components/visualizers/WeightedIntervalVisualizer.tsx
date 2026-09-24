@@ -76,8 +76,8 @@ export const WeightedIntervalVisualizer: React.FC = () => {
         <div className="schedule-legend">
           <span>
             {language === 'es'
-              ? '⏱️ Diagrama Temporal de Tareas (Ordenadas por Fin)'
-              : '⏱️ Task Timeline (Sorted by Finish Time)'}
+              ? 'Diagrama Temporal de Tareas (Ordenadas por Fin)'
+              : 'Task Timeline (Sorted by Finish Time)'}
           </span>
           <div className="legend-items">
             <span className="legend-pill pill-selected">

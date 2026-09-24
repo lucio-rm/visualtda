@@ -55,6 +55,18 @@ describe('TheoryMarkdown & Mathematical Typography Engine (Mission V4 Section 23
       expect(output).toContain('C(n, k)');
       expect(output).toContain('√(x)');
     });
+
+    it('correctly handles leq, geq, neq, land, lnot and greek symbols', () => {
+      const input = 'a \\leq b \\land b \\geq c \\implies a \\neq c \\circ \\pi \\sigma';
+      const output = formatMathText(input);
+      expect(output).toContain('a ≤ b');
+      expect(output).toContain('∧');
+      expect(output).toContain('b ≥ c');
+      expect(output).toContain('a ≠ c');
+      expect(output).toContain('∘');
+      expect(output).toContain('π');
+      expect(output).toContain('σ');
+    });
   });
 
   describe('TheoryMarkdown Component DOM Rendering', () => {

@@ -39,6 +39,10 @@ export function formatMathText(text: string): string {
     [/\\beta(?=[^a-zA-Z]|$)/g, 'β'],
     [/\\gamma(?=[^a-zA-Z]|$)/g, 'γ'],
     [/\\lambda(?=[^a-zA-Z]|$)/g, 'λ'],
+    [/\\pi(?=[^a-zA-Z]|$)/g, 'π'],
+    [/\\sigma(?=[^a-zA-Z]|$)/g, 'σ'],
+    [/\\Sigma(?=[^a-zA-Z]|$)/g, 'Σ'],
+    [/\\mu(?=[^a-zA-Z]|$)/g, 'μ'],
 
     // Logic & Implication
     [/\\implies(?=[^a-zA-Z]|$)/g, ' ⟹ '],
@@ -49,14 +53,17 @@ export function formatMathText(text: string): string {
     [/\\leftarrow(?=[^a-zA-Z]|$)/g, ' ← '],
     [/\\to(?=[^a-zA-Z]|$)/g, ' → '],
     [/\\lor(?=[^a-zA-Z]|$)/g, ' ∨ '],
+    [/\\land(?=[^a-zA-Z]|$)/g, ' ∧ '],
+    [/\\(?:neg|lnot)(?=[^a-zA-Z]|$)/g, '¬'],
 
     // Relations & Inequalities
     [/\\le_P(?=[^a-zA-Z]|$)/g, ' ≤ₚ '],
-    [/\\le(?=[^a-zA-Z]|$)/g, ' ≤ '],
-    [/\\ge(?=[^a-zA-Z]|$)/g, ' ≥ '],
-    [/\\ne(?=[^a-zA-Z]|$)/g, ' ≠ '],
+    [/\\leq?(?=[^a-zA-Z]|$)/g, ' ≤ '],
+    [/\\geq?(?=[^a-zA-Z]|$)/g, ' ≥ '],
+    [/\\neq?(?=[^a-zA-Z]|$)/g, ' ≠ '],
     [/\\approx(?=[^a-zA-Z]|$)/g, ' ≈ '],
     [/\\equiv(?=[^a-zA-Z]|$)/g, ' ≡ '],
+    [/\\circ(?=[^a-zA-Z]|$)/g, ' ∘ '],
     [/\\in(?=[^a-zA-Z]|$)/g, ' ∈ '],
     [/\\notin(?=[^a-zA-Z]|$)/g, ' ∉ '],
     [/\\subset(?=[^a-zA-Z]|$)/g, ' ⊂ '],
