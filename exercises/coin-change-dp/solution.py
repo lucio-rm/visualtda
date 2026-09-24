@@ -61,17 +61,3 @@ def cambio_minimo_monedas(monedas: List[int], objetivo: int) -> List[int]:
         curr -= c
 
     return cambio
-
-
-if __name__ == "__main__":
-    # Contraejemplo clásico donde Greedy falla:
-    # Sistema: [1, 3, 4], Objetivo: 6
-    # Greedy elige: 4, 1, 1 (3 monedas)
-    # Programación Dinámica elige: 3, 3 (2 monedas)
-    monedas_ejemplo = [1, 3, 4]
-    meta = 6
-    sol = cambio_minimo_monedas(monedas_ejemplo, meta)
-    print(f"Cambio para ${meta} con monedas {monedas_ejemplo}:")
-    print(" -> Monedas:", sol)
-    print(" -> Cantidad total:", len(sol))
-    print(" -> Suma:", sum(sol))

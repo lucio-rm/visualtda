@@ -125,30 +125,3 @@ def edmonds_karp(
         corte_minimo_S=corte_S,
         corte_minimo_T=corte_T
     )
-
-
-if __name__ == "__main__":
-    # Red canónica de prueba (Kleinberg & Tardos Fig 7.2)
-    # s -> u (10), s -> v (10)
-    # u -> v (2), u -> t (10)
-    # v -> t (10)
-    nodos = ["s", "u", "v", "t"]
-    red = [
-        Edge(origen="s", destino="u", capacidad=10),
-        Edge(origen="s", destino="v", capacidad=10),
-        Edge(origen="u", destino="v", capacidad=2),
-        Edge(origen="u", destino="t", capacidad=10),
-        Edge(origen="v", destino="t", capacidad=10),
-    ]
-
-    res = edmonds_karp(nodos, red, fuente="s", sumidero="t")
-    print(f"Flujo Máximo: {res.flujo_maximo} (Esperado: 20)")
-    print(f"Corte Mínimo S: {res.corte_minimo_S}")
-    print(f"Corte Mínimo T: {res.corte_minimo_T}")
-    for (u, v), f in res.flujo_aristas.items():
-        print(f"  Arista {u} -> {v}: flujo {f}")
-
-    assert res.flujo_maximo == 20
-    assert "s" in res.corte_minimo_S
-    assert "t" in res.corte_minimo_T
-    print("Prueba canónica de Flujo Máximo superada exitosamente.")

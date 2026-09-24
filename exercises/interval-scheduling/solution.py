@@ -45,9 +45,3 @@ def seleccion_intervalos(intervalos: List[Tuple[int, int]]) -> List[Tuple[int, i
             ultimo_fin = fin
 
     return seleccionados
-
-
-if __name__ == "__main__":
-    ejemplo = [(0, 3), (1, 5), (3, 6), (4, 8), (6, 9), (7, 10)]
-    optimo = seleccion_intervalos(ejemplo)
-    print(f"Intervalos compatibles máximos seleccionados ({len(optimo)}): {optimo}")

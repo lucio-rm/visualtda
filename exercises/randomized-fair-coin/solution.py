@@ -69,16 +69,3 @@ def simular_experimento(n_repeticiones: int = 10000, sesgo: float = 0.4) -> Tupl
         unos / n_repeticiones * 100,
         total_tiros / n_repeticiones
     )
-
-
-if __name__ == "__main__":
-    fuente_prueba = lambda: moneda_cargada_simulada(0.4)
-    res = moneda_equilibrada(fuente_prueba)
-    print("Bit justo generado:", res)
-
-    print("Simulando 10,000 repeticiones con sesgo p = 0.4 (40% unos, 60% ceros)...")
-    pct_0, pct_1, avg_t = simular_experimento(10000, 0.4)
-    print(f"Resultado empírico: 0s = {pct_0:.2f}%, 1s = {pct_1:.2f}%")
-    print(f"Promedio de tiros por bit: {avg_t:.2f} (Teórico esperado: {1/(0.4*0.6):.2f})")
-    assert abs(pct_0 - 50.0) < 3.0, "La distribución empírica difiere significativamente del 50%"
-    print("¡Verificación de Von Neumann exitosa!")

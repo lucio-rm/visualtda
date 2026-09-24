@@ -109,30 +109,3 @@ def modelar_mochila_ilp(valores: List[int], pesos: List[int], capacidad: int) ->
         'restricciones': [restriccion_capacidad],
         'cantidad_restricciones': 1
     }
-
-
-if __name__ == "__main__":
-    # Test LP 2D:
-    # Maximizar 3x + 2y
-    # s.a. 2x + y <= 18
-    #      2x + 3y <= 42
-    #      3x + y <= 24
-    #      x, y >= 0
-    c = (3.0, 2.0)
-    restricciones = [
-        (2.0, 1.0, 18.0),
-        (2.0, 3.0, 42.0),
-        (3.0, 1.0, 24.0)
-    ]
-    res = resolver_lp_2d(c, restricciones)
-    print("Vértices Factibles:", res['vertices_factibles'])
-    print(f"Óptimo en: {res['optimo']} con valor: {res['valor_maximo']}")
-    assert res['factible'] is True
-    assert res['optimo'] is not None
-    print("Test LP 2D exitoso!")
-
-    # Test Modelado Juan el Vago
-    modelo_juan = modelar_juan_el_vago_ilp([10, 40, 20, 30, 50])
-    print("Modelo Juan el Vago:", modelo_juan['restricciones'])
-    assert len(modelo_juan['restricciones']) == 4
-    print("Todos los tests de Programación Lineal pasaron con éxito!")

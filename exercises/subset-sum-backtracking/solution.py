@@ -66,13 +66,3 @@ def subconjuntos_que_suman(numeros: List[int], objetivo: int) -> List[List[int]]
 
     backtrack(0, 0, suma_total_remanente)
     return soluciones
-
-
-if __name__ == "__main__":
-    nums = [2, 3, 5, 7, 8]
-    s = 10
-    res = subconjuntos_que_suman(nums, s)
-    print(f"Subconjuntos de {nums} que suman {s}:")
-    for sol in res:
-        print(" ->", sol, "suma:", sum(sol))
-    # Posibles: [8, 2], [7, 3], [5, 3, 2]

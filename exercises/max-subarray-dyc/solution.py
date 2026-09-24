@@ -96,18 +96,3 @@ def kadane(arr: List[int]) -> Tuple[int, int, int]:
             fin = i
             
     return max_global, inicio, fin
-
-
-if __name__ == "__main__":
-    test_cases = [
-        ([5, 3, 2, 4, -1], [5, 3, 2, 4]),
-        ([5, 3, -5, 4, -1], [5, 3]),
-        ([5, -4, 2, 4, -1], [5, -4, 2, 4]),
-        ([5, -4, 2, 4], [5, -4, 2, 4]),
-        ([-5, -2, -8], [-2]),
-    ]
-    for inp, expected in test_cases:
-        res = subarreglo_maxima_suma(inp)
-        print(f"Input: {inp} -> Result: {res} (Sum: {sum(res)})")
-        assert sum(res) == sum(expected), f"Failed on {inp}: got {res}, expected {expected}"
-    print("All Python test cases passed successfully!")

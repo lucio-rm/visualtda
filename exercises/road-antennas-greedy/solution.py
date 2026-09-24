@@ -50,13 +50,3 @@ def construir_antenas(casas: List[float], radio: float) -> List[float]:
             i += 1
 
     return antenas
-
-
-if __name__ == "__main__":
-    casas_ejemplo = [4.0, 12.0, 18.0, 26.0, 32.0, 45.0, 60.0, 68.0, 75.0]
-    r = 10.0
-    antenas_res = construir_antenas(casas_ejemplo, r)
-    print("Casas:", casas_ejemplo)
-    print("Radio R:", r)
-    print("Antenas construidas:", antenas_res)
-    print("Cantidad de antenas:", len(antenas_res))

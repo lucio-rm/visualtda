@@ -72,11 +72,3 @@ def primera_solucion_n_reinas(n: int) -> Optional[List[int]]:
     """
     soluciones = resolver_n_reinas(n)
     return soluciones[0] if soluciones else None
-
-
-if __name__ == "__main__":
-    n = 4
-    soluciones = resolver_n_reinas(n)
-    print(f"Soluciones para N={n}: {len(soluciones)}")
-    for i, sol in enumerate(soluciones, 1):
-        print(f"Solución {i}: {sol}")

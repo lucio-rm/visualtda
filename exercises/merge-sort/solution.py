@@ -54,19 +54,3 @@ def merge(izq: list[int], der: list[int]) -> list[int]:
         resultado.extend(der[j:])
 
     return resultado
-
-
-if __name__ == "__main__":
-    lista_prueba = [38, 27, 43, 3, 9, 82, 10]
-    esperado = sorted(lista_prueba)
-    obtenido = merge_sort(lista_prueba)
-
-    print("Entrada original:", lista_prueba)
-    print("Salida ordenada :", obtenido)
-    assert obtenido == esperado, f"Esperado {esperado}, pero obtuvo {obtenido}"
-
-    # Pruebas con duplicados y listas vacías
-    assert merge_sort([]) == []
-    assert merge_sort([5]) == [5]
-    assert merge_sort([5, 1, 5, 2]) == [1, 2, 5, 5]
-    print("Todas las pruebas canónicas de Merge Sort pasaron con éxito.")

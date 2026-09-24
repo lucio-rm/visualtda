@@ -59,31 +59,3 @@ def mochila_dp(items: list[Item], capacidad: int) -> tuple[int, list[Item]]:
     seleccionados.reverse()
 
     return valor_optimo, seleccionados
-
-
-if __name__ == "__main__":
-    # Instancia de prueba clasica
-    elementos = [
-        Item(nombre="Guitarra", peso=1, valor=1500),
-        Item(nombre="Stereo", peso=4, valor=3000),
-        Item(nombre="Laptop", peso=3, valor=2000),
-        Item(nombre="Celular", peso=1, valor=2000),
-    ]
-    capacidad_mochila = 4
-
-    val_max, seleccion = mochila_dp(elementos, capacidad_mochila)
-    peso_total = sum(it.peso for it in seleccion)
-
-    print(f"Capacidad Mochila: {capacidad_mochila}")
-    print(f"Valor Optimo: ${val_max}")
-    print(f"Peso Utilizado: {peso_total}/{capacidad_mochila}")
-    print("Items Seleccionados:")
-    for it in seleccion:
-        print(f"  - {it.nombre}: peso={it.peso}, valor=${it.valor}")
-
-    assert val_max == 4000  # Laptop ($2000, 3kg) + Celular ($2000, 1kg) o Guitarra + Celular... wait
-    # Laptop (3kg, 2000) + Celular (1kg, 2000) = 4kg, 4000
-    # Stereo (4kg, 3000) = 3000
-    # Guitarra (1kg, 1500) + Celular (1kg, 2000) = 2kg, 3500
-    assert peso_total <= capacidad_mochila
-    print("Prueba superada exitosamente.")

@@ -93,27 +93,3 @@ def contraejemplo_mochila_01() -> dict:
         "optimo_01_valor": 220,
         "diferencia": 60,
     }
-
-
-if __name__ == "__main__":
-    elementos = [
-        Item(nombre="Oro en polvo", peso=10, valor=60),
-        Item(nombre="Plata en polvo", peso=20, valor=100),
-        Item(nombre="Cobre en polvo", peso=30, valor=120),
-    ]
-    cap = 50.0
-
-    val_max, asignaciones = mochila_fraccionaria_greedy(elementos, cap)
-    print(f"Mochila Fraccionaria (Capacidad {cap}):")
-    print(f"  Valor Máximo: {val_max}")
-    for asig in asignaciones:
-        print(f"  - {asig.item.nombre}: {asig.fraccion * 100:.1f}% tomado (peso: {asig.peso_tomado}, valor: {asig.valor_obtenido})")
-
-    assert val_max == 240.0  # 60 + 100 + 2/3 * 120 (80) = 240.0
-
-    ce = contraejemplo_mochila_01()
-    print("\nContraejemplo 0/1 con la misma entrada:")
-    print(f"  Greedy 0/1 obtiene valor {ce['greedy_01_valor']} ({ce['greedy_01_seleccion']})")
-    print(f"  Óptimo 0/1 obtiene valor {ce['optimo_01_valor']} ({ce['optimo_01_seleccion']})")
-    assert ce["optimo_01_valor"] > ce["greedy_01_valor"]
-    print("Prueba superada exitosamente.")

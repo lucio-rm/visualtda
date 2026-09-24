@@ -62,18 +62,3 @@ def juan_el_vago(ganancias: List[int]) -> Tuple[int, List[int]]:
 
     dias.reverse()
     return dp[n - 1], dias
-
-
-if __name__ == "__main__":
-    casos = [
-        ([10, 40, 20, 30, 50], 90, [1, 4]),
-        ([100, 10, 10, 100], 200, [0, 3]),
-        ([2, 7, 9, 3, 1], 12, [0, 2, 4]),
-        ([5, 1, 1, 5], 10, [0, 3]),
-    ]
-    for g, exp_monto, exp_dias in casos:
-        monto, dias = juan_el_vago(g)
-        print(f"Ganancias: {g} => Monto: {monto}, Días: {dias}")
-        assert monto == exp_monto, f"Error en monto: esperado {exp_monto}, obtenido {monto}"
-        assert dias == exp_dias, f"Error en días: esperado {exp_dias}, obtenido {dias}"
-    print("¡Todos los tests de Juan el Vago pasaron con éxito!")
