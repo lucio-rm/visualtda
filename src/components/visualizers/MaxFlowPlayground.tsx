@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import './MaxFlowPlayground.css';
@@ -89,6 +89,18 @@ export const MaxFlowPlayground: React.FC = () => {
   const [selectedPresetIndex, setSelectedPresetIndex] = useState<number>(0);
   const activePreset = PRESETS[selectedPresetIndex];
 
+  // Dynamic node coordinates for 2D dragging
+  const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>(() => {
+    const init: Record<string, { x: number; y: number }> = {};
+    for (const n of activePreset.nodes) {
+      init[n.id] = { x: n.x, y: n.y };
+    }
+    return init;
+  });
+
+  const [draggingNode, setDraggingNode] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
   const [edges, setEdges] = useState<PlaygroundEdge[]>(() =>
     activePreset.edges.map((e) => ({ ...e, flow: 0 }))
   );
@@ -101,6 +113,11 @@ export const MaxFlowPlayground: React.FC = () => {
   const resetNetwork = useCallback((preset: PlaygroundPreset) => {
     setEdges(preset.edges.map((e) => ({ ...e, flow: 0 })));
     setSelectedPath([preset.source]);
+    const initPos: Record<string, { x: number; y: number }> = {};
+    for (const n of preset.nodes) {
+      initPos[n.id] = { x: n.x, y: n.y };
+    }
+    setNodePositions(initPos);
     setMessage({
       es: 'Red reiniciada con flujo cero. Selecciona el siguiente nodo conectado en la red residual.',
       en: 'Network reset with zero flow. Select the next connected node in the residual network.'
@@ -190,8 +207,8 @@ export const MaxFlowPlayground: React.FC = () => {
 
     if (nodeId === activePreset.sink) {
       setMessage({
-        es: `¡Camino de aumento s-t encontrado! Capacidad de cuello de botella: ${bottleneck}. Presiona "Aumentar Flujo".`,
-        en: `Augmenting s-t path found! Bottleneck capacity: ${bottleneck}. Click "Push Flow".`
+        es: `¡Camino de aumento s-t encontrado! Presiona "Aumentar Flujo".`,
+        en: `Augmenting s-t path found! Click "Push Flow".`
       });
     } else {
       setMessage({
@@ -228,9 +245,115 @@ export const MaxFlowPlayground: React.FC = () => {
 
     setSelectedPath([activePreset.source]);
     setMessage({
-      es: `Flujo aumentado exitosamente en ${delta} unidades. El flujo total actual es ${totalFlow + delta}.`,
-      en: `Flow successfully augmented by ${delta} units. Current total flow is ${totalFlow + delta}.`
+      es: `Flujo aumentado exitosamente en ${delta} unidades. Flujo total actual: ${totalFlow + delta}.`,
+      en: `Flow successfully augmented by ${delta} units. Current total flow: ${totalFlow + delta}.`
     });
+  };
+
+  // Find augmenting path via BFS in residual network (Edmonds-Karp step)
+  const handleFindAugmentingPathBFS = () => {
+    const parent: Record<string, string> = {};
+    const visited = new Set<string>([activePreset.source]);
+    const queue = [activePreset.source];
+    let found = false;
+
+    while (queue.length > 0) {
+      const curr = queue.shift()!;
+      if (curr === activePreset.sink) {
+        found = true;
+        break;
+      }
+      for (const node of activePreset.nodes) {
+        if (!visited.has(node.id) && getResidualCapacity(curr, node.id, edges) > 0) {
+          visited.add(node.id);
+          parent[node.id] = curr;
+          queue.push(node.id);
+        }
+      }
+    }
+
+    if (!found) {
+      setMessage({
+        es: 'No existen más caminos de aumento en la red residual. Se alcanzó el Flujo Máximo global.',
+        en: 'No more augmenting paths exist in residual network. Global Max-Flow reached.'
+      });
+      return;
+    }
+
+    const pathReconstructed: string[] = [];
+    let curr: string | undefined = activePreset.sink;
+    while (curr) {
+      pathReconstructed.unshift(curr);
+      curr = parent[curr];
+    }
+    setSelectedPath(pathReconstructed);
+    setMessage({
+      es: `Camino de aumento hallado por BFS: [${pathReconstructed.join(' → ')}]. Presiona "Aumentar Flujo".`,
+      en: `Augmenting path found via BFS: [${pathReconstructed.join(' → ')}]. Click "Push Flow".`
+    });
+  };
+
+  // Auto-solve full max flow with Ford-Fulkerson
+  const handleSolveFullMaxFlow = () => {
+    const currentEdges = edges.map((e) => ({ ...e }));
+    let augmented = true;
+
+    while (augmented) {
+      augmented = false;
+      const parent: Record<string, string> = {};
+      const visited = new Set<string>([activePreset.source]);
+      const queue = [activePreset.source];
+      let reached = false;
+
+      while (queue.length > 0) {
+        const curr = queue.shift()!;
+        if (curr === activePreset.sink) {
+          reached = true;
+          break;
+        }
+        for (const node of activePreset.nodes) {
+          if (!visited.has(node.id) && getResidualCapacity(curr, node.id, currentEdges) > 0) {
+            visited.add(node.id);
+            parent[node.id] = curr;
+            queue.push(node.id);
+          }
+        }
+      }
+
+      if (reached) {
+        const path: string[] = [];
+        let curr: string | undefined = activePreset.sink;
+        while (curr) {
+          path.unshift(curr);
+          curr = parent[curr];
+        }
+
+        let delta = Infinity;
+        for (let i = 0; i < path.length - 1; i++) {
+          const cap = getResidualCapacity(path[i], path[i + 1], currentEdges);
+          if (cap < delta) delta = cap;
+        }
+
+        if (delta > 0 && delta !== Infinity) {
+          augmented = true;
+          for (let i = 0; i < path.length - 1; i++) {
+            const u = path[i];
+            const v = path[i + 1];
+            const fwd = currentEdges.find((e) => e.u === u && e.v === v);
+            if (fwd) {
+              fwd.flow += delta;
+            } else {
+              const bwd = currentEdges.find((e) => e.u === v && e.v === u);
+              if (bwd) bwd.flow -= delta;
+            }
+          }
+        }
+      }
+    }
+
+    setEdges(currentEdges);
+    setSelectedPath([activePreset.source]);
+    markAttempted('max-flow');
   };
 
   // Find reachable nodes from s in residual graph (Cut S)
@@ -252,216 +375,377 @@ export const MaxFlowPlayground: React.FC = () => {
 
   const isMaxFlowAchieved = !reachableNodes.has(activePreset.sink);
 
+  // 2D Pointer Drag Handlers
+  const handlePointerDown = (nodeId: string, e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingNode(nodeId);
+  };
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      if (!draggingNode || !svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      const rawX = ((e.clientX - rect.left) / rect.width) * 500;
+      const rawY = ((e.clientY - rect.top) / rect.height) * 280;
+
+      const clampedX = Math.max(30, Math.min(470, Math.round(rawX)));
+      const clampedY = Math.max(30, Math.min(250, Math.round(rawY)));
+
+      setNodePositions((prev) => ({
+        ...prev,
+        [draggingNode]: { x: clampedX, y: clampedY }
+      }));
+    },
+    [draggingNode]
+  );
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingNode) {
+      try {
+        (e.target as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignored
+      }
+      setDraggingNode(null);
+    }
+  };
+
   return (
-    <div className="maxflow-playground">
+    <div
+      className="maxflow-playground"
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+    >
       <div>
-        <h3>
+        <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>
           {language === 'es'
             ? 'Laboratorio Interactivo: Redes de Flujo y Caminos de Aumento'
-            : 'Interactive Playground: Flow Networks & Augmenting Paths'}
+            : 'Interactive Lab: Flow Networks & Augmenting Paths'}
         </h3>
-        <p>
+        <p style={{ margin: 0, color: 'var(--text-muted)' }}>
           {language === 'es'
-            ? 'Experimenta con el método de Ford-Fulkerson. Selecciona nodos conectados para definir un camino de aumento s-t en la red residual, observa el cuello de botella Δ y cancela flujo mediante aristas hacia atrás cuando sea necesario.'
-            : 'Experiment with the Ford-Fulkerson method. Select connected nodes to define an augmenting s-t path in the residual network, observe bottleneck capacity Δ, and cancel flow via backward edges when necessary.'}
+            ? 'Construye caminos de aumento hacia el sumidero, envía flujo para saturar cuellos de botella y observa el surgimiento del corte mínimo S-T. Puedes arrastrar los nodos para reorganizar el grafo.'
+            : 'Construct augmenting paths to sink, push flow to saturate bottlenecks, and observe min-cut emergence. Drag nodes to rearrange graph.'}
         </p>
       </div>
 
-      {/* Presets */}
-      <div className="presets-section">
-        <span className="section-label">
-          {language === 'es' ? 'Topologías de Red Curadas:' : 'Curated Network Topologies:'}
+      {/* Preset selection bar */}
+      <div className="presets-row" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+          {language === 'es' ? 'Topologías de Red:' : 'Network Topologies:'}
         </span>
-        <div className="preset-chips">
-          {PRESETS.map((p, idx) => (
-            <button
-              key={idx}
-              className={`chip-btn ${selectedPresetIndex === idx ? 'active' : ''}`}
-              onClick={() => handleSelectPreset(idx)}
-            >
-              {p.name[language]}
-            </button>
-          ))}
-        </div>
+        {PRESETS.map((p, idx) => (
+          <button
+            key={idx}
+            type="button"
+            className={`btn-preset ${selectedPresetIndex === idx ? 'active' : ''}`}
+            onClick={() => handleSelectPreset(idx)}
+          >
+            {p.name[language]}
+          </button>
+        ))}
       </div>
 
-      {/* Network SVG */}
-      <svg className="mf-network-svg" viewBox="0 0 500 280">
-        <defs>
-          <marker
-            id="mf-arrow"
-            viewBox="0 0 10 10"
-            refX="22"
-            refY="5"
-            markerWidth="6"
-            markerHeight="6"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--border-strong, #94a3b8)" />
-          </marker>
-          <marker
-            id="mf-arrow-active"
-            viewBox="0 0 10 10"
-            refX="22"
-            refY="5"
-            markerWidth="6"
-            markerHeight="6"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--primary, #2563eb)" />
-          </marker>
-        </defs>
+      {/* Interactive SVG Canvas with 2D Dragging */}
+      <div
+        style={{
+          position: 'relative',
+          backgroundColor: 'var(--bg)',
+          borderRadius: '8px',
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
+          padding: '0.5rem'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
+            marginBottom: '0.25rem',
+            padding: '0 0.5rem'
+          }}
+        >
+          <span>
+            {language === 'es'
+              ? 'Hacé clic en los nodos en orden para trazar el camino de aumento. Arrastralos para moverlos.'
+              : 'Click nodes in order to trace augmenting path. Drag to reposition.'}
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)' }}>|V| = {activePreset.nodes.length}, |E| = {edges.length}</span>
+        </div>
 
-        {/* Edges */}
-        {edges.map((e, idx) => {
-          const uNode = activePreset.nodes.find((n) => n.id === e.u)!;
-          const vNode = activePreset.nodes.find((n) => n.id === e.v)!;
+        <svg
+          ref={svgRef}
+          viewBox="0 0 500 280"
+          style={{
+            width: '100%',
+            maxWidth: '540px',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto',
+            touchAction: 'none'
+          }}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          role="img"
+          aria-label="Red de flujo interactiva con arrastre 2D"
+        >
+          <defs>
+            <marker
+              id="arrow"
+              viewBox="0 0 10 10"
+              refX="19"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)" />
+            </marker>
+            <marker
+              id="arrow-saturated"
+              viewBox="0 0 10 10"
+              refX="19"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+            </marker>
+            <marker
+              id="arrow-flow"
+              viewBox="0 0 10 10"
+              refX="19"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+            </marker>
+          </defs>
 
-          let isInSelectedPath = false;
-          for (let i = 0; i < selectedPath.length - 1; i++) {
-            if (
-              (selectedPath[i] === e.u && selectedPath[i + 1] === e.v) ||
-              (selectedPath[i] === e.v && selectedPath[i + 1] === e.u)
-            ) {
-              isInSelectedPath = true;
-              break;
+          {/* Edges */}
+          {edges.map((e) => {
+            const uPos = nodePositions[e.u] || { x: 50, y: 50 };
+            const vPos = nodePositions[e.v] || { x: 100, y: 100 };
+            const midX = (uPos.x + vPos.x) / 2;
+            const midY = (uPos.y + vPos.y) / 2 - 8;
+
+            const isSaturated = e.flow === e.capacity;
+            const hasFlow = e.flow > 0;
+
+            let marker = 'url(#arrow)';
+            if (isSaturated) marker = 'url(#arrow-saturated)';
+            else if (hasFlow) marker = 'url(#arrow-flow)';
+
+            // Check if edge is in selected augmenting path
+            let inAugmentingPath = false;
+            for (let i = 0; i < selectedPath.length - 1; i++) {
+              if (selectedPath[i] === e.u && selectedPath[i + 1] === e.v) {
+                inAugmentingPath = true;
+                break;
+              }
             }
-          }
 
-          const midX = (uNode.x + vNode.x) / 2;
-          const midY = (uNode.y + vNode.y) / 2;
-
-          return (
-            <g key={idx}>
-              <line
-                x1={uNode.x}
-                y1={uNode.y}
-                x2={vNode.x}
-                y2={vNode.y}
-                className={`mf-edge-line ${isInSelectedPath ? 'in-path' : ''}`}
-                markerEnd={isInSelectedPath ? 'url(#mf-arrow-active)' : 'url(#mf-arrow)'}
-              />
-              <rect
-                x={midX - 22}
-                y={midY - 11}
-                width={44}
-                height={22}
-                className="mf-edge-bg"
-              />
-              <text x={midX} y={midY} className="mf-edge-text">
-                {e.flow}/{e.capacity}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Nodes */}
-        {activePreset.nodes.map((n) => {
-          const isSelected = selectedPath.includes(n.id);
-          const isReachable = reachableNodes.has(n.id);
-          return (
-            <g key={n.id} onClick={() => handleNodeClick(n.id)}>
-              <circle
-                cx={n.x}
-                cy={n.y}
-                r={18}
-                className={`mf-node-circle ${n.isSource ? 'source' : ''} ${
-                  n.isSink ? 'sink' : ''
-                } ${isSelected ? 'selected-in-path' : ''}`}
-              />
-              <text x={n.x} y={n.y} className="mf-node-text">
-                {n.id}
-              </text>
-              {isMaxFlowAchieved && (
+            return (
+              <g key={`${e.u}->${e.v}`}>
+                <line
+                  x1={uPos.x}
+                  y1={uPos.y}
+                  x2={vPos.x}
+                  y2={vPos.y}
+                  stroke={inAugmentingPath ? 'var(--accent)' : isSaturated ? '#ef4444' : hasFlow ? '#10b981' : 'var(--border)'}
+                  strokeWidth={inAugmentingPath ? 3.5 : hasFlow ? 2.5 : 1.5}
+                  markerEnd={marker}
+                  opacity={isSaturated ? 0.7 : 1}
+                />
                 <text
-                  x={n.x}
-                  y={n.y + 26}
-                  fontSize={10}
+                  x={midX}
+                  y={midY}
                   textAnchor="middle"
-                  fill="var(--text-muted)"
+                  fill={isSaturated ? '#ef4444' : hasFlow ? '#10b981' : 'var(--text-muted)'}
+                  fontSize="10px"
+                  fontWeight="700"
+                  fontFamily="var(--font-mono)"
+                  pointerEvents="none"
                 >
-                  {isReachable ? 'S' : 'T'}
+                  {e.flow}/{e.capacity}
                 </text>
-              )}
-            </g>
-          );
-        })}
-      </svg>
+              </g>
+            );
+          })}
+
+          {/* Nodes */}
+          {activePreset.nodes.map((n) => {
+            const pos = nodePositions[n.id] || { x: n.x, y: n.y };
+            const isSelected = selectedPath.includes(n.id);
+            const isReachable = reachableNodes.has(n.id);
+            const isDragging = draggingNode === n.id;
+
+            return (
+              <g
+                key={n.id}
+                onPointerDown={(e) => handlePointerDown(n.id, e)}
+                onClick={() => handleNodeClick(n.id)}
+                style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
+              >
+                <circle
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={18}
+                  fill={n.isSource ? '#3b82f6' : n.isSink ? '#10b981' : isSelected ? 'var(--accent)' : 'var(--surface)'}
+                  stroke={isSelected ? '#ffffff' : n.isSource ? '#2563eb' : n.isSink ? '#059669' : 'var(--border)'}
+                  strokeWidth={isSelected ? 3 : 2}
+                />
+                <text
+                  x={pos.x}
+                  y={pos.y + 4}
+                  textAnchor="middle"
+                  fill={n.isSource || n.isSink || isSelected ? '#ffffff' : 'var(--text)'}
+                  fontSize="11px"
+                  fontWeight="700"
+                  fontFamily="var(--font-mono)"
+                  pointerEvents="none"
+                >
+                  {n.id}
+                </text>
+                {isMaxFlowAchieved && (
+                  <text
+                    x={pos.x}
+                    y={pos.y + 28}
+                    fontSize="10px"
+                    textAnchor="middle"
+                    fill={isReachable ? '#3b82f6' : '#10b981'}
+                    fontWeight="800"
+                    pointerEvents="none"
+                  >
+                    {isReachable ? '∈ S' : '∈ T'}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
 
       {/* Path building info and action buttons */}
-      <div className="mf-controls-row">
-        <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-          {language === 'es' ? 'Camino Seleccionado:' : 'Selected Path:'}{' '}
-          <code style={{ background: 'var(--bg)', padding: '2px 6px', borderRadius: 4 }}>
+      <div
+        className="mf-controls-row"
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+            {language === 'es' ? 'Camino Seleccionado:' : 'Selected Path:'}
+          </span>
+          <code style={{ background: 'var(--surface)', padding: '3px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--accent)' }}>
             {selectedPath.join(' → ')}
           </code>
-        </span>
+        </div>
 
-        <button
-          className="mf-btn primary"
-          onClick={handlePushFlow}
-          disabled={!bottleneck || bottleneck <= 0 || selectedPath[selectedPath.length - 1] !== activePreset.sink}
-        >
-          {language === 'es'
-            ? `Aumentar Flujo (+${bottleneck || 0})`
-            : `Push Flow (+${bottleneck || 0})`}
-        </button>
-
-        <button className="mf-btn" onClick={() => resetNetwork(activePreset)}>
-          {language === 'es' ? 'Reiniciar Flujo' : 'Reset Flow'}
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn-preset"
+            onClick={handleFindAugmentingPathBFS}
+            disabled={isMaxFlowAchieved}
+            title={language === 'es' ? 'Buscar camino de aumento en la red residual con BFS' : 'Find augmenting path via BFS'}
+          >
+            🔍 {language === 'es' ? 'Buscar Camino (BFS)' : 'Find Path (BFS)'}
+          </button>
+          <button
+            type="button"
+            className="btn-preset active"
+            onClick={handlePushFlow}
+            disabled={!bottleneck || bottleneck <= 0 || selectedPath[selectedPath.length - 1] !== activePreset.sink}
+          >
+            {language === 'es'
+              ? `Aumentar Flujo (+${bottleneck || 0})`
+              : `Push Flow (+${bottleneck || 0})`}
+          </button>
+          <button
+            type="button"
+            className="btn-preset"
+            onClick={handleSolveFullMaxFlow}
+            disabled={isMaxFlowAchieved}
+          >
+            ★ {language === 'es' ? 'Resolver Ford-Fulkerson' : 'Solve Max-Flow'}
+          </button>
+          <button
+            type="button"
+            className="btn-preset"
+            onClick={() => resetNetwork(activePreset)}
+          >
+            ↺ {language === 'es' ? 'Reiniciar Flujo' : 'Reset Flow'}
+          </button>
+        </div>
       </div>
 
       {/* Status banner */}
-      <div className="mf-status-box">{message[language]}</div>
+      <div
+        style={{
+          padding: '0.65rem 0.85rem',
+          backgroundColor: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm)',
+          fontSize: '0.85rem'
+        }}
+      >
+        {message[language]}
+      </div>
 
       {/* Metrics */}
-      <div className="mf-metrics-grid">
-        <div className="mf-metric-card">
-          <span className="mf-metric-label">
+      <div className="mf-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+        <div className="mf-metric-card" style={{ padding: '0.75rem', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <span className="mf-metric-label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Flujo Total Actual |f|:' : 'Current Total Flow |f|:'}
           </span>
-          <span className="mf-metric-val">{totalFlow}</span>
+          <div className="mf-metric-val" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--accent)' }}>
+            {totalFlow}
+          </div>
         </div>
-        <div className="mf-metric-card">
-          <span className="mf-metric-label">
+        <div className="mf-metric-card" style={{ padding: '0.75rem', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <span className="mf-metric-label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Cuello de Botella del Camino (Δ):' : 'Path Bottleneck (Δ):'}
           </span>
-          <span className="mf-metric-val">{bottleneck ?? 0}</span>
+          <div className="mf-metric-val" style={{ fontSize: '1.2rem', fontWeight: '800', color: '#f59e0b' }}>
+            {bottleneck ?? 0}
+          </div>
         </div>
-        <div className="mf-metric-card">
-          <span className="mf-metric-label">
+        <div className="mf-metric-card" style={{ padding: '0.75rem', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <span className="mf-metric-label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Estado del Teorema Min-Cut:' : 'Min-Cut Theorem State:'}
           </span>
-          <span className="mf-metric-val" style={{ fontSize: '0.95rem' }}>
+          <div className="mf-metric-val" style={{ fontSize: '1rem', fontWeight: '700', color: isMaxFlowAchieved ? '#10b981' : 'var(--text)' }}>
             {isMaxFlowAchieved
-              ? language === 'es'
-                ? 'Flujo Máximo = Cap(S, T)'
-                : 'Max Flow = Cap(S, T)'
-              : language === 'es'
-              ? 'Existen caminos residuales'
-              : 'Residual paths exist'}
-          </span>
+              ? (language === 'es' ? 'Flujo Máximo = Cap(S, T)' : 'Max Flow = Cap(S, T)')
+              : (language === 'es' ? 'Caminos residuales activos' : 'Residual paths active')}
+          </div>
         </div>
       </div>
 
       {isMaxFlowAchieved && (
         <div
-          className="mf-status-box"
           style={{
-            background: 'var(--surface-hover)',
+            padding: '0.75rem 1rem',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
             borderLeft: '4px solid #10b981',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '0.85rem',
             lineHeight: 1.5
           }}
         >
           <strong>
-            {language === 'es' ? 'Teorema de Flujo Máximo / Corte Mínimo:' : 'Max-Flow Min-Cut Theorem:'}
+            {language === 'es' ? 'Teorema de Flujo Máximo / Corte Mínimo (Ford-Fulkerson):' : 'Max-Flow Min-Cut Theorem:'}
           </strong>{' '}
           {language === 'es'
-            ? `No existen más caminos de aumento entre s y t en la red residual (t no es alcanzable desde s). La partición S = {${Array.from(
+            ? `No existen más caminos de aumento entre s y t en la red residual. La partición S = {${Array.from(
                 reachableNodes
               ).join(', ')}} define el corte mínimo con capacidad idéntica al flujo total (|f*| = ${totalFlow}).`
-            : `No more augmenting paths exist between s and t in the residual network (t is unreachable from s). The partition S = {${Array.from(
+            : `No more augmenting paths exist. Partition S = {${Array.from(
                 reachableNodes
               ).join(', ')}} defines the minimum cut with capacity identical to total flow (|f*| = ${totalFlow}).`}
         </div>

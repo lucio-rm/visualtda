@@ -120,6 +120,20 @@ export const IntervalSchedulingPlayground: React.FC = () => {
     setSelectedIds([]);
   };
 
+  const handleSolveGreedyEFT = () => {
+    const sorted = [...allTasks].sort((a, b) => a.end - b.end);
+    const chosenIds: string[] = [];
+    let lastEnd = -Infinity;
+    for (const t of sorted) {
+      if (t.start >= lastEnd) {
+        chosenIds.push(t.id);
+        lastEnd = t.end;
+      }
+    }
+    setSelectedIds(chosenIds);
+    markAttempted('interval-scheduling');
+  };
+
   // Check overlaps
   const selectedIntervals: Interval[] = selectedIds
     .map((id) => {
@@ -198,6 +212,9 @@ export const IntervalSchedulingPlayground: React.FC = () => {
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Limpiar Selección' : 'Clear Selection'}
+          </button>
+          <button type="button" className="btn-primary" onClick={handleSolveGreedyEFT}>
+            ★ {language === 'es' ? 'Resolver con Greedy EFT (f_i creciente)' : 'Solve with Greedy EFT (ascending f_i)'}
           </button>
         </div>
       </div>
