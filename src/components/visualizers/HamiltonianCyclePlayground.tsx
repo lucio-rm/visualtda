@@ -1,16 +1,139 @@
-import React, { useState, useMemo } from 'react';
-import { DEFAULT_HAM_GRAPH } from '../../engine/algorithms/hamiltonianCycleTrace';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
+import { DEFAULT_HAM_GRAPH, HamNode, HamEdge } from '../../engine/algorithms/hamiltonianCycleTrace';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
+
+interface GraphPreset {
+  id: string;
+  name: { es: string; en: string };
+  description: { es: string; en: string };
+  isHamiltonian: boolean;
+  nodes: HamNode[];
+  edges: HamEdge[];
+  optimalCycle?: number[];
+}
+
+const GRAPH_PRESETS: GraphPreset[] = [
+  {
+    id: 'default',
+    name: { es: 'Grafo Estándar (6 vértices)', en: 'Standard Graph (6 vertices)' },
+    description: {
+      es: 'Grafo estándar con múltiples caminos y al menos un ciclo hamiltoniano completo.',
+      en: 'Standard graph with multiple paths and at least one complete Hamiltonian cycle.'
+    },
+    isHamiltonian: true,
+    nodes: DEFAULT_HAM_GRAPH.nodes,
+    edges: DEFAULT_HAM_GRAPH.edges,
+    optimalCycle: [0, 1, 3, 5, 4, 2, 0]
+  },
+  {
+    id: 'k5',
+    name: { es: 'Grafo Completo K₅ (5 vértices)', en: 'Complete Graph K₅ (5 vertices)' },
+    description: {
+      es: 'Todo par de vértices está conectado. Existen múltiples ciclos hamiltonianos posibles.',
+      en: 'Every pair of vertices is connected. Multiple Hamiltonian cycles exist.'
+    },
+    isHamiltonian: true,
+    nodes: [
+      { id: 0, label: 'v0', x: 250, y: 55 },
+      { id: 1, label: 'v1', x: 400, y: 155 },
+      { id: 2, label: 'v2', x: 345, y: 295 },
+      { id: 3, label: 'v3', x: 155, y: 295 },
+      { id: 4, label: 'v4', x: 100, y: 155 }
+    ],
+    edges: [
+      { u: 0, v: 1 }, { u: 0, v: 2 }, { u: 0, v: 3 }, { u: 0, v: 4 },
+      { u: 1, v: 2 }, { u: 1, v: 3 }, { u: 1, v: 4 },
+      { u: 2, v: 3 }, { u: 2, v: 4 },
+      { u: 3, v: 4 }
+    ],
+    optimalCycle: [0, 1, 2, 3, 4, 0]
+  },
+  {
+    id: 'bipartite-odd',
+    name: { es: 'Bipartito Impar K₃,₄ (Contraejemplo)', en: 'Odd Bipartite K₃,₄ (Counterexample)' },
+    description: {
+      es: 'Partición con |L|=3 y |R|=4 (|V|=7 impar). Demuestra por qué un grafo bipartito con |L| ≠ |R| NUNCA puede tener ciclo hamiltoniano.',
+      en: 'Partition with |L|=3 and |R|=4 (|V|=7 odd). Proves why bipartite graphs with |L| ≠ |R| NEVER admit a Hamiltonian cycle.'
+    },
+    isHamiltonian: false,
+    nodes: [
+      // Left partition (3 nodes)
+      { id: 0, label: 'L0', x: 140, y: 80 },
+      { id: 1, label: 'L1', x: 140, y: 180 },
+      { id: 2, label: 'L2', x: 140, y: 280 },
+      // Right partition (4 nodes)
+      { id: 3, label: 'R0', x: 360, y: 50 },
+      { id: 4, label: 'R1', x: 360, y: 130 },
+      { id: 5, label: 'R2', x: 360, y: 210 },
+      { id: 6, label: 'R3', x: 360, y: 290 }
+    ],
+    edges: [
+      { u: 0, v: 3 }, { u: 0, v: 4 }, { u: 0, v: 5 }, { u: 0, v: 6 },
+      { u: 1, v: 3 }, { u: 1, v: 4 }, { u: 1, v: 5 }, { u: 1, v: 6 },
+      { u: 2, v: 3 }, { u: 2, v: 4 }, { u: 2, v: 5 }, { u: 2, v: 6 }
+    ]
+  },
+  {
+    id: 'petersen',
+    name: { es: 'Grafo de Petersen (10 vértices)', en: 'Petersen Graph (10 vertices)' },
+    description: {
+      es: 'Clásico contraejemplo de teoría de grafos: es hipohamiltoniano (eliminar un vértice lo hace hamiltoniano, pero el grafo entero NO tiene ciclo).',
+      en: 'Classic graph theory counterexample: hypohamiltonian (removing any vertex yields a cycle, but the graph itself has NO Hamiltonian cycle).'
+    },
+    isHamiltonian: false,
+    nodes: [
+      // Outer pentagon (0-4)
+      { id: 0, label: '0', x: 250, y: 40 },
+      { id: 1, label: '1', x: 410, y: 145 },
+      { id: 2, label: '2', x: 355, y: 300 },
+      { id: 3, label: '3', x: 145, y: 300 },
+      { id: 4, label: '4', x: 90, y: 145 },
+      // Inner star (5-9)
+      { id: 5, label: '5', x: 250, y: 110 },
+      { id: 6, label: '6', x: 350, y: 175 },
+      { id: 7, label: '7', x: 315, y: 250 },
+      { id: 8, label: '8', x: 185, y: 250 },
+      { id: 9, label: '9', x: 150, y: 175 }
+    ],
+    edges: [
+      // Outer pentagon
+      { u: 0, v: 1 }, { u: 1, v: 2 }, { u: 2, v: 3 }, { u: 3, v: 4 }, { u: 4, v: 0 },
+      // Inner star
+      { u: 5, v: 7 }, { u: 7, v: 9 }, { u: 9, v: 6 }, { u: 6, v: 8 }, { u: 8, v: 5 },
+      // Spokes
+      { u: 0, v: 5 }, { u: 1, v: 6 }, { u: 2, v: 7 }, { u: 3, v: 8 }, { u: 4, v: 9 }
+    ]
+  }
+];
 
 export const HamiltonianCyclePlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
 
-  const { nodes, edges } = DEFAULT_HAM_GRAPH;
-  const numV = nodes.length;
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('default');
+  const currentPreset = useMemo(
+    () => GRAPH_PRESETS.find((p) => p.id === selectedPresetId) || GRAPH_PRESETS[0],
+    [selectedPresetId]
+  );
+
+  const [nodePositions, setNodePositions] = useState<Record<number, { x: number; y: number }>>(() => {
+    const init: Record<number, { x: number; y: number }> = {};
+    for (const n of GRAPH_PRESETS[0].nodes) {
+      init[n.id] = { x: n.x, y: n.y };
+    }
+    return init;
+  });
 
   const [path, setPath] = useState<number[]>([0]);
+
+  // Dragging state for 2D vertex manipulation
+  const [draggingNodeId, setDraggingNodeId] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const nodes = currentPreset.nodes;
+  const edges = currentPreset.edges;
+  const numV = nodes.length;
 
   const adj = useMemo(() => {
     const map = new Map<number, number[]>();
@@ -22,12 +145,11 @@ export const HamiltonianCyclePlayground: React.FC = () => {
     return map;
   }, [nodes, edges]);
 
-  const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
-
   const currentU = path[path.length - 1];
-  const visitedSet = new Set(path.slice(0, path.length === numV + 1 ? numV : path.length));
+  const visitedSet = useMemo(() => {
+    return new Set(path.slice(0, path.length === numV + 1 ? numV : path.length));
+  }, [path, numV]);
 
-  // Determine valid next candidates
   const isCompleteCycle = path.length === numV + 1 && path[path.length - 1] === 0;
 
   const validNext = useMemo(() => {
@@ -41,6 +163,17 @@ export const HamiltonianCyclePlayground: React.FC = () => {
   }, [adj, currentU, path.length, numV, visitedSet, isCompleteCycle]);
 
   const isDeadEnd = path.length < numV && validNext.length === 0;
+
+  const handleSelectPreset = (presetId: string) => {
+    setSelectedPresetId(presetId);
+    const target = GRAPH_PRESETS.find((p) => p.id === presetId) || GRAPH_PRESETS[0];
+    const newPositions: Record<number, { x: number; y: number }> = {};
+    for (const n of target.nodes) {
+      newPositions[n.id] = { x: n.x, y: n.y };
+    }
+    setNodePositions(newPositions);
+    setPath([0]);
+  };
 
   const handleSelectNode = (v: number) => {
     if (!validNext.includes(v)) return;
@@ -62,29 +195,128 @@ export const HamiltonianCyclePlayground: React.FC = () => {
     setPath([0]);
   };
 
+  const handleLoadOptimal = () => {
+    if (currentPreset.optimalCycle) {
+      setPath(currentPreset.optimalCycle);
+      markAttempted('hamiltonian-cycle-backtracking');
+    }
+  };
+
+  // 2D Pointer Drag Handlers
+  const handlePointerDown = (nodeId: number, e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingNodeId(nodeId);
+  };
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      if (draggingNodeId === null || !svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      const rawX = ((e.clientX - rect.left) / rect.width) * 500;
+      const rawY = ((e.clientY - rect.top) / rect.height) * 350;
+
+      const clampedX = Math.max(25, Math.min(475, Math.round(rawX)));
+      const clampedY = Math.max(25, Math.min(325, Math.round(rawY)));
+
+      setNodePositions((prev) => ({
+        ...prev,
+        [draggingNodeId]: { x: clampedX, y: clampedY }
+      }));
+    },
+    [draggingNodeId]
+  );
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingNodeId !== null) {
+      try {
+        (e.target as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignored if pointer capture already released
+      }
+      setDraggingNodeId(null);
+    }
+  };
+
   return (
-    <div className="algorithm-playground hamiltonian-cycle-playground" role="region" aria-label="Laboratorio de Ciclo Hamiltoniano">
-      <div className="sdk-pg-controls">
-        <div className="sdk-pg-presets">
-          <button type="button" className="btn-preset" onClick={handleUndo} disabled={path.length <= 1}>
-            ↩ {language === 'es' ? 'Retroceder (Backtrack)' : 'Backtrack (Undo)'}
-          </button>
-          <button type="button" className="btn-preset" onClick={handleReset}>
-            ↺ {language === 'es' ? 'Reiniciar' : 'Reset'}
-          </button>
+    <div
+      className="algorithm-playground hamiltonian-cycle-playground"
+      role="region"
+      aria-label="Laboratorio de Ciclo Hamiltoniano"
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+    >
+      {/* Controls & Instance Presets */}
+      <div className="sdk-pg-controls" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            {GRAPH_PRESETS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className={`btn-preset ${selectedPresetId === p.id ? 'active' : ''}`}
+                onClick={() => handleSelectPreset(p.id)}
+              >
+                {p.name[language]}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              type="button"
+              className="btn-preset"
+              onClick={handleUndo}
+              disabled={path.length <= 1}
+              style={{ fontWeight: '600' }}
+            >
+              ↩ {language === 'es' ? 'Retroceder (Backtrack)' : 'Backtrack (Undo)'}
+            </button>
+            <button type="button" className="btn-preset" onClick={handleReset}>
+              ↺ {language === 'es' ? 'Reiniciar' : 'Reset'}
+            </button>
+            {currentPreset.optimalCycle && (
+              <button
+                type="button"
+                className="btn-preset active"
+                onClick={handleLoadOptimal}
+                title={language === 'es' ? 'Cargar solución canónica' : 'Load canonical solution'}
+              >
+                ★ {language === 'es' ? 'Ver Ciclo Óptimo' : 'Show Optimal Cycle'}
+              </button>
+            )}
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', fontSize: '0.9rem' }}>
-          <span>
-            {language === 'es' ? 'Visitados:' : 'Visited:'}{' '}
-            <strong style={{ color: 'var(--accent)' }}>
-              {visitedSet.size} / {numV}
-            </strong>
+        {/* Instance description and live stats */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: 'var(--surface)',
+            padding: '0.6rem 0.85rem',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--border)',
+            fontSize: '0.85rem',
+            flexWrap: 'wrap',
+            gap: '0.5rem'
+          }}
+        >
+          <span style={{ color: 'var(--text-muted)' }}>
+            {currentPreset.description[language]}
           </span>
-          <span>
-            {language === 'es' ? 'Vértice actual:' : 'Current vertex:'}{' '}
-            <strong>v = {currentU}</strong>
-          </span>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', whiteSpace: 'nowrap' }}>
+            <span>
+              {language === 'es' ? 'Vértices visitados:' : 'Visited vertices:'}{' '}
+              <strong style={{ color: visitedSet.size === numV ? '#10b981' : 'var(--accent)' }}>
+                {visitedSet.size} / {numV}
+              </strong>
+            </span>
+            <span>
+              {language === 'es' ? 'Vértice actual:' : 'Current vertex:'}{' '}
+              <strong style={{ color: '#f59e0b' }}>v{currentU}</strong>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -103,15 +335,41 @@ export const HamiltonianCyclePlayground: React.FC = () => {
         >
           <strong>{language === 'es' ? 'Ciclo Hamiltoniano Válido' : 'Valid Hamiltonian Cycle'}</strong>:{' '}
           {language === 'es'
-            ? `Visitaste los ${numV} vértices exactamente una vez y retornaste al inicio: [${path.join(' → ')}].`
-            : `Visited all ${numV} vertices exactly once and returned to start: [${path.join(' → ')}].`}
+            ? `Visitaste los ${numV} vértices exactamente una vez y retornaste al inicio: [${path.map((v) => `v${v}`).join(' → ')}].`
+            : `Visited all ${numV} vertices exactly once and returned to start: [${path.map((v) => `v${v}`).join(' → ')}].`}
         </div>
       ) : isDeadEnd ? (
-        <div className="sdk-conflict-banner" role="alert">
-          <strong>{language === 'es' ? 'Estado Terminal Inviable (Dead End)' : 'Dead End State'}:</strong>{' '}
+        <div
+          className="sdk-conflict-banner"
+          role="alert"
+          style={{
+            padding: '0.75rem 1rem',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid #ef4444',
+            borderRadius: 'var(--radius-sm)',
+            color: '#ef4444'
+          }}
+        >
+          <strong>{language === 'es' ? 'Poda por Inviabilidad (Dead End / Backtrack Obligatorio)' : 'Dead End State (Backtrack Required)'}:</strong>{' '}
           {language === 'es'
-            ? 'Todos los vecinos del vértice actual ya fueron visitados, pero aún faltan vértices por recorrer. Hacé clic en "Retroceder (Backtrack)" para explorar otra rama.'
-            : 'All neighbors are already visited, but vertices remain unvisited. Click "Backtrack" to try another branch.'}
+            ? `Desde v${currentU}, todos los vecinos ya fueron visitados o no permiten cerrar el ciclo. El algoritmo de Backtracking debe descartar este subárbol y hacer retroceso.`
+            : `From v${currentU}, all neighbors are already visited. Backtracking must prune this branch and backtrack.`}
+        </div>
+      ) : !currentPreset.isHamiltonian ? (
+        <div
+          style={{
+            padding: '0.6rem 0.85rem',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            border: '1px solid #f59e0b',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '0.85rem',
+            color: '#f59e0b'
+          }}
+        >
+          <strong>{language === 'es' ? 'Instancia No Hamiltoniana' : 'Non-Hamiltonian Instance'}:</strong>{' '}
+          {language === 'es'
+            ? 'Ninguna permutación de vértices puede cerrar un ciclo simple. Experimentá para comprobar cómo toda rama termina inevitablemente en Dead End.'
+            : 'No permutation of vertices forms a simple cycle. Experiment to observe how every path leads to a Dead End.'}
         </div>
       ) : (
         <div
@@ -123,99 +381,209 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             fontSize: '0.85rem'
           }}
         >
-          {language === 'es' ? 'Vértices válidos adyacentes para avanzar por el camino:' : 'Valid adjacent vertices to advance path:'}{' '}
-          <strong>{validNext.map((v) => `v${v}`).join(', ') || (language === 'es' ? 'Ninguno' : 'None')}</strong>
+          {language === 'es' ? 'Candidatos adyacentes válidos para el siguiente paso:' : 'Valid adjacent candidates for next step:'}{' '}
+          <strong style={{ color: '#10b981' }}>
+            {validNext.map((v) => `v${v}`).join(', ') || (language === 'es' ? 'Ninguno' : 'None')}
+          </strong>
         </div>
       )}
 
-      {/* SVG Interactive Graph */}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      {/* SVG Interactive Canvas with 2D Dragging */}
+      <div
+        style={{
+          position: 'relative',
+          backgroundColor: 'var(--bg)',
+          borderRadius: '8px',
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
+          padding: '0.5rem'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
+            marginBottom: '0.25rem',
+            padding: '0 0.5rem'
+          }}
+        >
+          <span>
+            {language === 'es'
+              ? 'Podes arrastrar los vértices libremente para reorganizar la topología del grafo.'
+              : 'You can freely drag vertices to rearrange graph topology.'}
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)' }}>
+            |V| = {numV}, |E| = {edges.length}
+          </span>
+        </div>
+
         <svg
-          viewBox="0 0 500 320"
-          style={{ width: '100%', maxWidth: '500px', height: 'auto', display: 'block', backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)' }}
+          ref={svgRef}
+          viewBox="0 0 500 350"
+          style={{
+            width: '100%',
+            maxWidth: '540px',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto',
+            touchAction: 'none'
+          }}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
           role="img"
-          aria-label="Grafo interactivo para construir ciclo hamiltoniano"
+          aria-label="Grafo interactivo de ciclo hamiltoniano con arrastre 2D"
         >
           {/* Edges */}
           {edges.map((e, idx) => {
-            const u = nodeMap.get(e.u);
-            const v = nodeMap.get(e.v);
-            if (!u || !v) return null;
+            const uPos = nodePositions[e.u] || { x: 50, y: 50 };
+            const vPos = nodePositions[e.v] || { x: 100, y: 100 };
 
-            // Check if part of path
+            // Check if edge is traversed in path
             let inPath = false;
+            let pathOrder = -1;
             for (let i = 0; i < path.length - 1; i++) {
-              if ((path[i] === e.u && path[i + 1] === e.v) || (path[i] === e.v && path[i + 1] === e.u)) {
+              if (
+                (path[i] === e.u && path[i + 1] === e.v) ||
+                (path[i] === e.v && path[i + 1] === e.u)
+              ) {
                 inPath = true;
+                pathOrder = i + 1;
                 break;
               }
             }
 
             return (
-              <line
-                key={`pg-edge-${e.u}-${e.v}-${idx}`}
-                x1={u.x}
-                y1={u.y}
-                x2={v.x}
-                y2={v.y}
-                stroke={inPath ? (isCompleteCycle ? '#10b981' : 'var(--accent)') : 'var(--border)'}
-                strokeWidth={inPath ? 3.5 : 1.5}
-                opacity={inPath ? 1 : 0.4}
-              />
+              <g key={`ham-edge-${e.u}-${e.v}-${idx}`}>
+                <line
+                  x1={uPos.x}
+                  y1={uPos.y}
+                  x2={vPos.x}
+                  y2={vPos.y}
+                  stroke={inPath ? (isCompleteCycle ? '#10b981' : 'var(--accent)') : 'var(--border)'}
+                  strokeWidth={inPath ? 3.5 : 1.5}
+                  opacity={inPath ? 1 : 0.35}
+                />
+                {inPath && (
+                  <circle
+                    cx={(uPos.x + vPos.x) / 2}
+                    cy={(uPos.y + vPos.y) / 2}
+                    r={7}
+                    fill={isCompleteCycle ? '#10b981' : 'var(--accent)'}
+                  />
+                )}
+                {inPath && (
+                  <text
+                    x={(uPos.x + vPos.x) / 2}
+                    y={(uPos.y + vPos.y) / 2 + 3}
+                    textAnchor="middle"
+                    fill="#0f172a"
+                    fontSize="8px"
+                    fontWeight="800"
+                    fontFamily="var(--font-mono)"
+                  >
+                    {pathOrder}
+                  </text>
+                )}
+              </g>
             );
           })}
 
-          {/* Interactive Nodes */}
+          {/* Interactive Draggable Nodes */}
           {nodes.map((node) => {
+            const pos = nodePositions[node.id] || { x: node.x, y: node.y };
             const isVisited = visitedSet.has(node.id);
             const isCurrent = currentU === node.id;
             const isSelectable = validNext.includes(node.id);
             const pathIdx = path.indexOf(node.id);
+            const isStart = node.id === 0;
 
             return (
               <g
-                key={`pg-node-${node.id}`}
-                onClick={() => handleSelectNode(node.id)}
-                style={{ cursor: isSelectable ? 'pointer' : 'default' }}
+                key={`ham-node-${node.id}`}
+                onPointerDown={(e) => handlePointerDown(node.id, e)}
+                onClick={() => {
+                  if (isSelectable) handleSelectNode(node.id);
+                }}
+                style={{ cursor: isSelectable ? 'pointer' : 'grab' }}
               >
+                {/* Glow ring on selectable or current node */}
+                {(isCurrent || isSelectable) && (
+                  <circle
+                    cx={pos.x}
+                    cy={pos.y}
+                    r={24}
+                    fill="none"
+                    stroke={isCurrent ? '#f59e0b' : '#10b981'}
+                    strokeWidth={2}
+                    strokeDasharray={isSelectable ? '3,3' : undefined}
+                    opacity={0.8}
+                  />
+                )}
+
                 <circle
-                  cx={node.x}
-                  cy={node.y}
-                  r={20}
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={18}
                   fill={
                     isCurrent
                       ? '#f59e0b'
                       : isSelectable
                       ? 'rgba(16, 185, 129, 0.25)'
                       : isVisited
-                      ? 'var(--surface-active, #38bdf8)'
+                      ? 'var(--surface-hover)'
                       : 'var(--surface)'
                   }
-                  stroke={isSelectable ? '#10b981' : isCurrent ? '#ffffff' : isVisited ? 'var(--accent)' : 'var(--border)'}
-                  strokeWidth={isSelectable || isCurrent ? 3 : 1.5}
+                  stroke={
+                    isCurrent
+                      ? '#f59e0b'
+                      : isSelectable
+                      ? '#10b981'
+                      : isVisited
+                      ? 'var(--accent)'
+                      : 'var(--border)'
+                  }
+                  strokeWidth={isCurrent || isSelectable ? 2.5 : 1.5}
                 />
+
                 <text
-                  x={node.x}
-                  y={node.y + 5}
+                  x={pos.x}
+                  y={pos.y + 4}
                   textAnchor="middle"
                   fill={isCurrent ? '#0f172a' : 'var(--text)'}
-                  fontSize="13px"
+                  fontSize="12px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
+                  pointerEvents="none"
                 >
                   {node.label}
                 </text>
+
+                {/* Path order badge */}
                 {pathIdx >= 0 && (
-                  <text
-                    x={node.x + 18}
-                    y={node.y - 10}
-                    fill="var(--accent)"
-                    fontSize="10px"
-                    fontWeight="700"
-                    fontFamily="var(--font-mono)"
-                  >
-                    #{pathIdx + 1}
-                  </text>
+                  <g pointerEvents="none">
+                    <rect
+                      x={pos.x + 10}
+                      y={pos.y - 20}
+                      width={16}
+                      height={14}
+                      rx={3}
+                      fill={isStart && pathIdx === 0 ? 'var(--accent)' : '#0ea5e9'}
+                    />
+                    <text
+                      x={pos.x + 18}
+                      y={pos.y - 10}
+                      textAnchor="middle"
+                      fill="#ffffff"
+                      fontSize="9px"
+                      fontWeight="800"
+                      fontFamily="var(--font-mono)"
+                    >
+                      {pathIdx + 1}
+                    </text>
+                  </g>
                 )}
               </g>
             );
@@ -223,11 +591,31 @@ export const HamiltonianCyclePlayground: React.FC = () => {
         </svg>
       </div>
 
-      {/* Path sequence */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-        <span>{language === 'es' ? 'Secuencia:' : 'Sequence:'}</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>
-          [{path.join(' → ')}]
+      {/* Decision Stack & Path Sequence */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: 'var(--surface)',
+          padding: '0.6rem 0.85rem',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border)',
+          fontSize: '0.85rem',
+          flexWrap: 'wrap',
+          gap: '0.5rem'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontWeight: '600' }}>
+            {language === 'es' ? 'Recorrido en Pila (Stack):' : 'Traversal Stack:'}
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--accent)' }}>
+            [{path.map((v) => `v${v}`).join(' → ')}]
+          </span>
+        </div>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+          {language === 'es' ? 'Profundidad de árbol:' : 'Tree depth:'} {path.length - 1} / {numV}
         </span>
       </div>
     </div>

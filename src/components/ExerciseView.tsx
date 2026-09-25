@@ -55,7 +55,6 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
         setPhase(initialPhase);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exercise.id, initialPhase]);
 
   React.useEffect(() => {

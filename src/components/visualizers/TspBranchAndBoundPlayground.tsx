@@ -1,26 +1,111 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import {
   DEFAULT_TSP_CITIES,
   DEFAULT_TSP_MATRIX,
   TspCity
 } from '../../engine/algorithms/tspBranchAndBoundTrace';
-import { solveTspBranchAndBound } from '../../engine/algorithms/tspBranchAndBoundValidator';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import './TspBranchAndBoundVisualizer.css';
+
+/**
+ * Solves Branch & Bound for any NxN distance matrix and returns both optimal cost and tour sequence.
+ */
+function getOptimalTspTour(dist: number[][]): { cost: number; tour: number[] } {
+  const n = dist.length;
+  if (n <= 1) return { cost: 0, tour: [0] };
+
+  let bestCost = Infinity;
+  let bestTour: number[] = [];
+
+  function lowerBound(curr: number, visited: Set<number>, currentCost: number): number {
+    const unvisited: number[] = [];
+    for (let i = 0; i < n; i++) {
+      if (!visited.has(i)) unvisited.push(i);
+    }
+    if (unvisited.length === 0) return currentCost + dist[curr][0];
+
+    let minOut = Infinity;
+    for (const r of unvisited) {
+      if (dist[curr][r] < minOut) minOut = dist[curr][r];
+    }
+    let minReturn = Infinity;
+    for (const r of unvisited) {
+      if (dist[r][0] < minReturn) minReturn = dist[r][0];
+    }
+    return currentCost + minOut + minReturn;
+  }
+
+  function explore(u: number, visited: Set<number>, currentCost: number, currentTour: number[]) {
+    if (visited.size === n) {
+      const total = currentCost + dist[u][0];
+      if (total < bestCost) {
+        bestCost = total;
+        bestTour = [...currentTour, 0];
+      }
+      return;
+    }
+
+    if (lowerBound(u, visited, currentCost) >= bestCost) return;
+
+    const unvisited: number[] = [];
+    for (let i = 0; i < n; i++) {
+      if (!visited.has(i)) unvisited.push(i);
+    }
+    unvisited.sort((a, b) => dist[u][a] - dist[u][b]);
+
+    for (const v of unvisited) {
+      visited.add(v);
+      explore(v, visited, currentCost + dist[u][v], [...currentTour, v]);
+      visited.delete(v);
+    }
+  }
+
+  explore(0, new Set([0]), 0, [0]);
+  return { cost: bestCost, tour: bestTour };
+}
 
 export const TspBranchAndBoundPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
 
-  const cities: TspCity[] = DEFAULT_TSP_CITIES;
-  const dist: number[][] = DEFAULT_TSP_MATRIX;
-  const optimalCost = useMemo(() => solveTspBranchAndBound(dist), [dist]);
+  const [useEuclideanMode, setUseEuclideanMode] = useState<boolean>(true);
+
+  // Dynamic city coordinates supporting 2D dragging
+  const [cities, setCities] = useState<TspCity[]>(DEFAULT_TSP_CITIES);
+  const [draggingCityId, setDraggingCityId] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  // Dynamic distance matrix
+  const dist: number[][] = useMemo(() => {
+    if (!useEuclideanMode) {
+      return DEFAULT_TSP_MATRIX;
+    }
+    const n = cities.length;
+    const matrix: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (i === j) {
+          matrix[i][j] = 0;
+        } else {
+          const dx = cities[i].x - cities[j].x;
+          const dy = cities[i].y - cities[j].y;
+          // Scale factor to keep weights pedagogical (10 - 70)
+          const euclidean = Math.round(Math.hypot(dx, dy) / 6);
+          matrix[i][j] = Math.max(5, euclidean);
+        }
+      }
+    }
+    return matrix;
+  }, [cities, useEuclideanMode]);
+
+  const optimalSolution = useMemo(() => getOptimalTspTour(dist), [dist]);
+  const optimalCost = optimalSolution.cost;
 
   const [tour, setTour] = useState<number[]>([0]);
   const [hoveredCity, setHoveredCity] = useState<number | null>(null);
 
-  // Compute cumulative cost along the tour path
+  // Compute cumulative cost along current partial tour
   const currentCost = useMemo(() => {
     let cost = 0;
     for (let i = 0; i < tour.length - 1; i++) {
@@ -43,7 +128,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
     return cities.map((c) => c.id).filter((cId) => !visitedSet.has(cId));
   }, [isComplete, tour.length, cities, visitedSet]);
 
-  // Compute Lower Bound (LB) for the partial tour
+  // Compute Branch & Bound Lower Bound (LB) for the partial tour
   const { lowerBound, projectedTotalCost, isPruned } = useMemo(() => {
     if (isComplete) {
       return { lowerBound: 0, projectedTotalCost: currentCost, isPruned: false };
@@ -58,33 +143,22 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
 
     let lb = 0;
     if (unvisited.length === 0) {
-      // Must return to origin city 0
+      // Must return to origin 0
       lb = dist[currentCity][0];
     } else {
-      // 1. Min out-edge from current city to an unvisited city
+      // Min out-edge from current city to an unvisited city
       let minOut = Infinity;
       for (const u of unvisited) {
-        if (dist[currentCity][u] < minOut) {
-          minOut = dist[currentCity][u];
-        }
+        if (dist[currentCity][u] < minOut) minOut = dist[currentCity][u];
       }
       lb += minOut;
 
-      // 2. For each unvisited city, minimum outgoing edge to another unvisited city or return to origin 0
+      // Min return from unvisited to origin
+      let minReturn = Infinity;
       for (const u of unvisited) {
-        let minEdge = Infinity;
-        // Check edges to other unvisited cities
-        for (const v of unvisited) {
-          if (u !== v && dist[u][v] < minEdge) {
-            minEdge = dist[u][v];
-          }
-        }
-        // Check edge returning to origin
-        if (dist[u][0] < minEdge) {
-          minEdge = dist[u][0];
-        }
-        lb += minEdge;
+        if (dist[u][0] < minReturn) minReturn = dist[u][0];
       }
+      lb += minReturn;
     }
 
     const projected = currentCost + lb;
@@ -118,12 +192,53 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
     setTour([0]);
   };
 
-  const handleAutoOptimal = () => {
-    setTour([0, 2, 1, 4, 3, 0]);
+  const handleLoadOptimal = () => {
+    setTour(optimalSolution.tour);
     markAttempted('tsp-branch-and-bound');
   };
 
-  // Helper to check if edge (u, v) is in currentTour
+  const handleResetCities = () => {
+    setCities(DEFAULT_TSP_CITIES);
+    setTour([0]);
+  };
+
+  // 2D Pointer Drag Handlers
+  const handlePointerDown = (cityId: number, e: React.PointerEvent) => {
+    if (!useEuclideanMode) return;
+    e.stopPropagation();
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingCityId(cityId);
+  };
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      if (draggingCityId === null || !svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      const rawX = ((e.clientX - rect.left) / rect.width) * 480;
+      const rawY = ((e.clientY - rect.top) / rect.height) * 280;
+
+      const clampedX = Math.max(30, Math.min(450, Math.round(rawX)));
+      const clampedY = Math.max(30, Math.min(250, Math.round(rawY)));
+
+      setCities((prev) =>
+        prev.map((c) => (c.id === draggingCityId ? { ...c, x: clampedX, y: clampedY } : c))
+      );
+    },
+    [draggingCityId]
+  );
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingCityId !== null) {
+      try {
+        (e.target as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignored
+      }
+      setDraggingCityId(null);
+    }
+  };
+
+  // Helper to check if edge (u, v) is in tour
   const isTourEdge = (u: number, v: number): boolean => {
     for (let i = 0; i < tour.length - 1; i++) {
       if ((tour[i] === u && tour[i + 1] === v) || (tour[i] === v && tour[i + 1] === u)) {
@@ -140,41 +255,68 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
       aria-label={language === 'es' ? 'Laboratorio de TSP Branch and Bound' : 'TSP Branch and Bound Playground'}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
     >
-      {/* Playground Toolbar */}
-      <div className="sdk-pg-controls" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className="btn-preset"
-            onClick={handleUndo}
-            disabled={tour.length <= 1}
-            title={language === 'es' ? 'Deshacer último paso' : 'Undo last step'}
-          >
-            {language === 'es' ? 'Deshacer Paso' : 'Undo Step'}
-          </button>
-          <button
-            type="button"
-            className="btn-preset"
-            onClick={handleReset}
-            title={language === 'es' ? 'Reiniciar recorrido' : 'Reset tour'}
-          >
-            {language === 'es' ? 'Reiniciar' : 'Reset'}
-          </button>
-          <button
-            type="button"
-            className="btn-preset active"
-            onClick={handleAutoOptimal}
-            title={language === 'es' ? 'Cargar el recorrido óptimo resuelto por Branch & Bound' : 'Load optimal B&B tour'}
-          >
-            {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}
-          </button>
+      {/* Playground Controls */}
+      <div className="sdk-pg-controls" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className={`btn-preset ${useEuclideanMode ? 'active' : ''}`}
+              onClick={() => {
+                setUseEuclideanMode(true);
+                setTour([0]);
+              }}
+            >
+              {language === 'es' ? 'Geometría Euclidiana (Arrastre Libre)' : 'Euclidean Geometry (Free Drag)'}
+            </button>
+            <button
+              type="button"
+              className={`btn-preset ${!useEuclideanMode ? 'active' : ''}`}
+              onClick={() => {
+                setUseEuclideanMode(false);
+                setCities(DEFAULT_TSP_CITIES);
+                setTour([0]);
+              }}
+            >
+              {language === 'es' ? 'Matriz Canónica Asimétrica' : 'Asymmetric Canonical Matrix'}
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              type="button"
+              className="btn-preset"
+              onClick={handleUndo}
+              disabled={tour.length <= 1}
+            >
+              ↩ {language === 'es' ? 'Deshacer Paso' : 'Undo Step'}
+            </button>
+            <button type="button" className="btn-preset" onClick={handleReset}>
+              ↺ {language === 'es' ? 'Reiniciar Tour' : 'Reset Tour'}
+            </button>
+            {useEuclideanMode && (
+              <button type="button" className="btn-preset" onClick={handleResetCities}>
+                {language === 'es' ? 'Reset Mapa' : 'Reset Map'}
+              </button>
+            )}
+            <button
+              type="button"
+              className="btn-preset active"
+              onClick={handleLoadOptimal}
+              title={language === 'es' ? 'Cargar solución óptima calculada por B&B' : 'Load B&B optimal solution'}
+            >
+              ★ {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}
+            </button>
+          </div>
         </div>
 
         {/* Live Metrics Grid */}
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <div className="tsp-metric-badge">
             <span>{language === 'es' ? 'Costo Parcial (C):' : 'Current Cost (C):'}</span>
-            <strong style={{ color: isOptimal ? 'var(--color-success)' : 'var(--accent)' }}>{currentCost}</strong>
+            <strong style={{ color: isOptimal ? 'var(--color-success, #10b981)' : 'var(--accent)' }}>
+              {currentCost}
+            </strong>
           </div>
           {!isComplete && (
             <div className="tsp-metric-badge">
@@ -185,23 +327,137 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           {!isComplete && (
             <div className="tsp-metric-badge">
               <span>{language === 'es' ? 'Proyectado (C + LB):' : 'Projected (C + LB):'}</span>
-              <strong style={{ color: isPruned ? 'var(--color-error)' : 'var(--text)' }}>{projectedTotalCost}</strong>
+              <strong style={{ color: isPruned ? '#ef4444' : 'var(--text)' }}>
+                {projectedTotalCost}
+              </strong>
             </div>
           )}
           <div className="tsp-metric-badge">
             <span>{language === 'es' ? 'Incumbent Óptimo (UB):' : 'Incumbent Best (UB):'}</span>
-            <strong style={{ color: 'var(--color-success)' }}>{optimalCost}</strong>
+            <strong style={{ color: '#10b981' }}>{optimalCost}</strong>
           </div>
         </div>
       </div>
 
-      {/* Interactive Map Canvas */}
-      <div className="tsp-canvas-container" style={{ position: 'relative' }}>
+      {/* Status banner */}
+      {isOptimal ? (
+        <div
+          style={{
+            padding: '0.75rem 1rem',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid #10b981',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '0.9rem',
+            color: '#10b981'
+          }}
+          role="status"
+        >
+          <strong>{language === 'es' ? '¡Tour Óptimo Encontrado!' : 'Optimal Tour Found!'}</strong>:{' '}
+          {language === 'es'
+            ? `Recorriste todas las ciudades y retornaste al origen con costo exacto ${currentCost}. Ninguna rama explorada por Branch & Bound puede superar esta solución.`
+            : `All cities visited with cost ${currentCost}, verified optimal by Branch & Bound.`}
+        </div>
+      ) : isPruned ? (
+        <div
+          className="sdk-conflict-banner"
+          role="alert"
+          style={{
+            padding: '0.75rem 1rem',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid #ef4444',
+            borderRadius: 'var(--radius-sm)',
+            color: '#ef4444'
+          }}
+        >
+          <strong>{language === 'es' ? 'Poda por Cota (Branch & Bound Cutoff)' : 'Bound Cutoff (Pruned)'}:</strong>{' '}
+          {language === 'es'
+            ? `Costo Proyectado (${projectedTotalCost}) ≥ Incumbent Óptimo (${optimalCost}). Ningún completamiento de este camino puede ser mejor que la mejor solución ya descubierta. Este nodo se poda.`
+            : `Projected cost (${projectedTotalCost}) ≥ Best known bound (${optimalCost}). This branch is pruned.`}
+        </div>
+      ) : isComplete ? (
+        <div
+          style={{
+            padding: '0.75rem 1rem',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            border: '1px solid #f59e0b',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '0.9rem',
+            color: '#f59e0b'
+          }}
+        >
+          <strong>{language === 'es' ? 'Tour Válido pero Subóptimo' : 'Valid but Suboptimal Tour'}:</strong>{' '}
+          {language === 'es'
+            ? `Costo obtenido: ${currentCost}. El óptimo global es ${optimalCost}. Hacé clic en "Deshacer Paso" para explorar ramas con menor cota.`
+            : `Cost: ${currentCost}. Optimal is ${optimalCost}. Undo steps to explore alternative branches.`}
+        </div>
+      ) : (
+        <div
+          style={{
+            padding: '0.6rem 0.85rem',
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '0.85rem'
+          }}
+        >
+          {language === 'es'
+            ? 'Hacé clic en una ciudad contigua para extender el recorrido, o arrastrala para alterar distancias en tiempo real:'
+            : 'Click an available city to extend tour, or drag it to modify distances in real-time:'}{' '}
+          <strong style={{ color: 'var(--accent)' }}>
+            {availableCities.map((cId) => cities[cId].name).join(', ') || (language === 'es' ? 'Completado' : 'Complete')}
+          </strong>
+        </div>
+      )}
+
+      {/* Interactive Map Canvas with 2D Dragging */}
+      <div
+        style={{
+          position: 'relative',
+          backgroundColor: 'var(--bg)',
+          borderRadius: '8px',
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
+          padding: '0.5rem'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
+            marginBottom: '0.25rem',
+            padding: '0 0.5rem'
+          }}
+        >
+          <span>
+            {useEuclideanMode
+              ? (language === 'es'
+                  ? 'Arrastrá cualquier ciudad: las distancias euclidianas y cotas B&B se recalculan al instante.'
+                  : 'Drag any city: Euclidean distances and B&B bounds recompute instantly.')
+              : (language === 'es'
+                  ? 'Matriz fija estándar: distancias asimétricas de libro de texto.'
+                  : 'Fixed canonical matrix: textbook asymmetric distances.')}
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)' }}>|V| = {cities.length}</span>
+        </div>
+
         <svg
-          viewBox="0 0 460 260"
-          style={{ width: '100%', maxWidth: '460px', height: 'auto', display: 'block' }}
+          ref={svgRef}
+          viewBox="0 0 480 280"
+          style={{
+            width: '100%',
+            maxWidth: '520px',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto',
+            touchAction: 'none'
+          }}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
           role="img"
-          aria-label={language === 'es' ? 'Mapa interactivo de ciudades y recorrido TSP' : 'Interactive TSP city map'}
+          aria-label={language === 'es' ? 'Mapa interactivo TSP con arrastre 2D' : 'Interactive TSP map with 2D dragging'}
         >
           {/* Background network edges with distance labels */}
           {cities.map((c1, i) =>
@@ -218,19 +474,20 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     y1={c1.y}
                     x2={c2.x}
                     y2={c2.y}
-                    stroke={inTour ? 'var(--color-success)' : 'var(--border)'}
+                    stroke={inTour ? '#10b981' : 'var(--border)'}
                     strokeWidth={inTour ? 3.5 : 1}
                     strokeDasharray={inTour ? undefined : '2,3'}
-                    opacity={inTour ? 1 : 0.45}
+                    opacity={inTour ? 1 : 0.4}
                   />
                   {!inTour && (
                     <text
                       x={midX}
-                      y={midY}
+                      y={midY - 2}
                       textAnchor="middle"
                       fill="var(--text-muted)"
                       fontSize="9px"
                       fontFamily="var(--font-mono)"
+                      pointerEvents="none"
                     >
                       {weight}
                     </text>
@@ -240,33 +497,35 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
             })
           )}
 
-          {/* City Nodes */}
+          {/* Interactive City Nodes */}
           {cities.map((city) => {
             const inTour = tour.includes(city.id);
             const isStart = city.id === 0;
             const isCurrent = city.id === currentCity;
             const isAvailable = availableCities.includes(city.id);
             const isHovered = hoveredCity === city.id;
+            const tourOrder = tour.indexOf(city.id);
 
             return (
               <g
                 key={`city-pg-${city.id}`}
+                onPointerDown={(e) => handlePointerDown(city.id, e)}
                 onClick={() => isAvailable && handleAddCity(city.id)}
                 onMouseEnter={() => setHoveredCity(city.id)}
                 onMouseLeave={() => setHoveredCity(null)}
-                style={{ cursor: isAvailable ? 'pointer' : 'default' }}
+                style={{ cursor: isAvailable ? 'pointer' : useEuclideanMode ? 'grab' : 'default' }}
               >
-                {/* Glow ring on current or available node */}
+                {/* Glow ring */}
                 {(isCurrent || isAvailable) && (
                   <circle
                     cx={city.x}
                     cy={city.y}
-                    r={isCurrent ? 20 : 18}
+                    r={isCurrent ? 22 : 18}
                     fill="none"
-                    stroke={isCurrent ? 'var(--accent)' : 'var(--color-success)'}
-                    strokeWidth={isCurrent ? 2.5 : 1.5}
+                    stroke={isCurrent ? '#f59e0b' : '#10b981'}
+                    strokeWidth={2}
                     strokeDasharray={isAvailable && !isCurrent ? '3,3' : undefined}
-                    opacity={isHovered ? 0.9 : 0.5}
+                    opacity={isHovered ? 0.9 : 0.6}
                   />
                 )}
 
@@ -274,21 +533,24 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                   cx={city.x}
                   cy={city.y}
                   r={isStart ? 16 : 14}
-                  fill={isCurrent ? 'var(--accent)' : inTour ? 'var(--color-success)' : isAvailable ? 'var(--surface-hover)' : 'var(--surface)'}
-                  stroke={isCurrent ? 'var(--accent)' : inTour ? 'var(--color-success)' : isAvailable ? 'var(--color-success)' : 'var(--border)'}
+                  fill={isCurrent ? '#f59e0b' : inTour ? '#10b981' : isAvailable ? 'var(--surface-hover)' : 'var(--surface)'}
+                  stroke={isCurrent ? '#f59e0b' : inTour ? '#10b981' : isAvailable ? '#10b981' : 'var(--border)'}
                   strokeWidth={2}
                 />
+
                 <text
                   x={city.x}
                   y={city.y + 4}
                   textAnchor="middle"
-                  fill={isCurrent || inTour ? '#ffffff' : 'var(--text)'}
+                  fill={isCurrent || inTour ? '#0f172a' : 'var(--text)'}
                   fontSize="11px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
+                  pointerEvents="none"
                 >
                   {city.id}
                 </text>
+
                 <text
                   x={city.x}
                   y={city.y - 18}
@@ -296,122 +558,57 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                   fill="var(--text)"
                   fontSize="11px"
                   fontWeight={isCurrent ? '700' : '600'}
+                  pointerEvents="none"
                 >
                   {city.name}
                 </text>
+
+                {tourOrder >= 0 && (
+                  <text
+                    x={city.x + 14}
+                    y={city.y + 16}
+                    textAnchor="middle"
+                    fill="var(--accent)"
+                    fontSize="9px"
+                    fontWeight="800"
+                    fontFamily="var(--font-mono)"
+                    pointerEvents="none"
+                  >
+                    #{tourOrder + 1}
+                  </text>
+                )}
               </g>
             );
           })}
         </svg>
       </div>
 
-      {/* Status & Pedagogical Insight Banners */}
-      {isOptimal ? (
-        <div
-          style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: 'var(--success-bg)',
-            border: '1px solid var(--color-success)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.875rem',
-            color: 'var(--color-success)',
-            lineHeight: 1.5
-          }}
-          role="status"
-        >
-          <strong>{language === 'es' ? 'Tour Óptimo Confirmado' : 'Optimal Tour Confirmed'}</strong>:{' '}
-          {language === 'es'
-            ? `Costo total mínimo = ${currentCost}. Branch & Bound demuestra formalmente que ninguna de las restantes (n-1)!/2 = 12 permutaciones tiene costo menor.`
-            : `Minimal cost = ${currentCost}. Branch & Bound formally guarantees none of the other (n-1)!/2 = 12 tours is cheaper.`}
-        </div>
-      ) : isComplete ? (
-        <div
-          style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid #f59e0b',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.875rem',
-            color: '#f59e0b',
-            lineHeight: 1.5
-          }}
-          role="status"
-        >
-          <strong>{language === 'es' ? 'Tour Válido pero Subóptimo' : 'Valid but Suboptimal Tour'}</strong>:{' '}
-          {language === 'es'
-            ? `Tu tour cuesta ${currentCost}, mientras que el óptimo garantizado por Branch & Bound es ${optimalCost}. En el árbol de búsqueda, esta solución no mejora la cota superior (UB).`
-            : `Your tour costs ${currentCost}, optimal B&B is ${optimalCost}. This tour does not improve the incumbent upper bound.`}
-        </div>
-      ) : isPruned ? (
-        <div
-          style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: 'var(--danger-bg)',
-            border: '1px solid var(--color-error)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.875rem',
-            color: 'var(--color-error)',
-            lineHeight: 1.5
-          }}
-          role="alert"
-        >
-          <strong>{language === 'es' ? 'Poda por Cota Activa (Branch & Bound)' : 'Pruned by Bound (Branch & Bound)'}</strong>:{' '}
-          {language === 'es'
-            ? `Costo actual (${currentCost}) + Cota optimista mínima restante (${lowerBound}) = ${projectedTotalCost} ≥ Incumbent óptimo (${optimalCost}). Ninguna combinación futura a partir de este punto puede superar la mejor solución ya conocida. El algoritmo de Branch & Bound descarta este subárbol sin evaluar sus descendientes.`
-            : `Current cost (${currentCost}) + Remaining lower bound (${lowerBound}) = ${projectedTotalCost} ≥ Incumbent best (${optimalCost}). No future continuation can beat the known optimum. Branch & Bound prunes this search branch immediately.`}
-        </div>
-      ) : (
-        <div
-          style={{
-            padding: '0.65rem 0.85rem',
-            backgroundColor: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.85rem',
-            lineHeight: 1.5
-          }}
-        >
-          {language === 'es'
-            ? `Haz clic en una ciudad conectada o en los botones inferiores para avanzar desde ${cities[currentCity].name}. Cota estimada viable: ${projectedTotalCost} < ${optimalCost}.`
-            : `Click a connected city or the buttons below to extend the path from ${cities[currentCity].name}. Feasible projected cost: ${projectedTotalCost} < ${optimalCost}.`}
-        </div>
-      )}
-
-      {/* Available Next Cities Buttons */}
-      {!isComplete && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-            {language === 'es' ? 'Próxima ciudad:' : 'Next city:'}
+      {/* Partial Tour Breakdown Sequence */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: 'var(--surface)',
+          padding: '0.6rem 0.85rem',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border)',
+          fontSize: '0.85rem',
+          flexWrap: 'wrap',
+          gap: '0.5rem'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontWeight: '600' }}>
+            {language === 'es' ? 'Secuencia Actual del Tour:' : 'Current Tour Sequence:'}
           </span>
-          {availableCities.map((cId) => (
-            <button
-              key={`next-city-${cId}`}
-              type="button"
-              className="btn-control"
-              onClick={() => handleAddCity(cId)}
-              style={{
-                padding: '0.4rem 0.85rem',
-                fontSize: '0.85rem',
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer'
-              }}
-            >
-              + {cities[cId].name} (+{dist[currentCity][cId]})
-            </button>
-          ))}
+          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--accent)' }}>
+            [{tour.map((cId) => cities[cId].name).join(' → ')}]
+          </span>
         </div>
-      )}
-
-      {/* Tour Path Breadcrumb */}
-      <div style={{ backgroundColor: 'var(--surface)', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)' }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
-          {language === 'es' ? 'RECORRIDO ACTUAL' : 'CURRENT TOUR PATH'}
-        </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: '700', color: isOptimal ? 'var(--color-success)' : 'var(--text)' }}>
-          {tour.map((cId) => cities[cId].name).join(' → ')}
-        </div>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+          {language === 'es' ? 'Ciudades visitadas:' : 'Cities visited:'} {visitedSet.size} / {cities.length}
+        </span>
       </div>
     </div>
   );

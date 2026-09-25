@@ -54,7 +54,6 @@ export const KruskalPlayground: React.FC = () => {
       roots[n.id] = find(n.id);
     }
     return roots;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, selectedEdgeIds]);
 
   const handleToggleEdge = (edgeId: string) => {
