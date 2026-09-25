@@ -7,6 +7,7 @@ import {
 } from '../../engine/algorithms/knapsackDpTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { KnapsackVisualBag } from './KnapsackVisualBag';
 import './KnapsackDpVisualizer.css';
 
 const PRESETS = [
@@ -278,31 +279,17 @@ export const KnapsackDpVisualizer: React.FC = () => {
         </table>
       </div>
 
-      {/* Backpack Status Preview */}
-      <div className="backpack-summary-card">
-        <div className="gauge-label-row">
-          <span>{language === 'es' ? 'Ocupación de la Mochila' : 'Knapsack Occupancy'}</span>
-          <span>
-            {totalWeight} kg / {capacity} kg ({Math.round((totalWeight / capacity) * 100)}%)
-          </span>
-        </div>
-        <div className="progress-bar-track">
-          <div
-            className="progress-bar-fill"
-            style={{ width: `${Math.min(100, (totalWeight / capacity) * 100)}%` }}
-          />
-        </div>
-        {selectedItemIds.length > 0 && (
-          <div className="backpack-items-list">
-            {items
-              .filter((it) => selectedItemIds.includes(it.id))
-              .map((it) => (
-                <span key={it.id} className="backpack-item-chip">
-                  {it.name} (w={it.weight}, v=${it.value})
-                </span>
-              ))}
-          </div>
-        )}
+      {/* Authentic Visual Backpack Model (Reflecting current DP state) */}
+      <div className="knapsack-dp-bag-section" style={{ marginTop: '1.25rem', marginBottom: '1rem' }}>
+        <KnapsackVisualBag
+          capacity={capacity}
+          items={items}
+          selectedItemIds={selectedItemIds}
+          totalWeight={totalWeight}
+          totalValue={totalValue}
+          language={language}
+          interactive={false}
+        />
       </div>
 
       {/* DP Table & Reconstruction Rationale Card (Section 12, 25 & 50) */}

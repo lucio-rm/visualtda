@@ -218,6 +218,16 @@ export const NQueensPlayground: React.FC = () => {
                 </li>
               )}
             </ul>
+            <div style={{ marginTop: '0.65rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(239, 68, 68, 0.25)', fontSize: '0.825rem', lineHeight: 1.5 }}>
+              <strong>
+                {language === 'es'
+                  ? '¿Cómo opera la poda de Backtracking en este estado?'
+                  : 'How does Backtracking prune this state?'}
+              </strong>{' '}
+              {language === 'es'
+                ? 'Al avanzar fila por fila, tan pronto como una reina tentativa colisiona en columna o diagonal (|fila₁ - fila₂| = |col₁ - col₂|), el algoritmo no continúa descendiendo: poda inmediatamente todo el subárbol de búsqueda restante (ahorrando hasta N^(N - k) evaluaciones inútiles).'
+                : 'Advancing row by row, as soon as a candidate queen conflicts along a column or diagonal (|row₁ - row₂| = |col₁ - col₂|), the algorithm prunes immediately without exploring deeper, cutting off up to N^(N - k) subtree evaluations.'}
+            </div>
           </div>
         ) : (
           <div className="playground-hint-text" style={{ marginTop: '0.75rem' }}>

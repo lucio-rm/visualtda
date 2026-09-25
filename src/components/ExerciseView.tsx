@@ -10,6 +10,7 @@ import { UnderstandView } from './UnderstandView';
 
 interface ExerciseViewProps {
   exercise: ExerciseMetadata;
+  initialPhase?: ExercisePhase;
   onBackToCatalog: () => void;
   onSelectExercise?: (exerciseId: string) => void;
   // Optional slots/data for specific exercises
@@ -24,6 +25,7 @@ interface ExerciseViewProps {
 
 export const ExerciseView: React.FC<ExerciseViewProps> = ({
   exercise,
+  initialPhase,
   onBackToCatalog,
   onSelectExercise,
   visualizerSlot,
@@ -39,10 +41,20 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   const { isCompleted, markCompleted, markExploring, markAttempted, markPassed, getExerciseState } = useStudentProgress();
   const currentState = getExerciseState(exercise.id);
   const exerciseCompleted = isCompleted(exercise.id);
-  const [phase, setPhase] = useState<ExercisePhase>('discover');
+  const [phase, setPhase] = useState<ExercisePhase>(initialPhase || 'discover');
   const [solutionUnlocked, setSolutionUnlocked] = useState(false);
   const isEffectiveUnlocked = exerciseCompleted || solutionUnlocked || isInstructorMode;
   const [showFrictionModal, setShowFrictionModal] = useState(false);
+
+  React.useEffect(() => {
+    if (initialPhase) {
+      if (initialPhase === 'understand' && !isEffectiveUnlocked) {
+        setShowFrictionModal(true);
+      } else {
+        setPhase(initialPhase);
+      }
+    }
+  }, [exercise.id, initialPhase, isEffectiveUnlocked]);
 
   React.useEffect(() => {
     if (currentState === 'unseen') {

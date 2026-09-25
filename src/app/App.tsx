@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { registry } from '../engine/registry';
+import { ExercisePhase } from '../types';
 import { Header } from '../components/Header';
 import { CategoryNav } from '../components/CategoryNav';
 import { ExerciseList } from '../components/ExerciseList';
@@ -22,6 +23,7 @@ const AppContent: React.FC = () => {
 
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
+  const [targetPhase, setTargetPhase] = useState<ExercisePhase | undefined>(undefined);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -37,8 +39,14 @@ const AppContent: React.FC = () => {
   const exercises = registry.getExercises(activeCategoryId || undefined);
   const selectedExercise = selectedExerciseId ? registry.getExercise(selectedExerciseId) : undefined;
 
+  const handleSelectExercise = (id: string, phase?: ExercisePhase) => {
+    setSelectedExerciseId(id);
+    setTargetPhase(phase);
+  };
+
   const handleHomeClick = () => {
     setSelectedExerciseId(null);
+    setTargetPhase(undefined);
   };
 
   const exerciseConfig = selectedExercise ? getExerciseViewConfig(selectedExercise.id) : {};
@@ -111,7 +119,11 @@ const AppContent: React.FC = () => {
                   <button
                     type="button"
                     className="btn-start-recommended"
-                    onClick={() => setSelectedExerciseId(inProgressExercise.id)}
+                    onClick={() => {
+                      const st = records[inProgressExercise.id]?.state;
+                      const phase: ExercisePhase = st === 'attempted' || st === 'testing' ? 'solve' : 'discover';
+                      handleSelectExercise(inProgressExercise.id, phase);
+                    }}
                   >
                     {language === 'es' ? 'Continuar ejercicio →' : 'Continue exercise →'}
                   </button>
@@ -120,19 +132,19 @@ const AppContent: React.FC = () => {
                 <div className="recommended-start-card">
                   <div className="recommended-text">
                     <span className="recommended-tag">{language === 'es' ? 'PUNTO DE PARTIDA SUGERIDO' : 'RECOMMENDED START'}</span>
-                    <h4>{language === 'es' ? 'Las N-Reinas (Backtracking con Poda)' : 'N-Queens (Backtracking with Pruning)'}</h4>
+                    <h4>{language === 'es' ? 'Selección de Intervalos (Algoritmos Greedy)' : 'Interval Scheduling (Greedy Algorithms)'}</h4>
                     <p>
                       {language === 'es'
-                        ? 'Explora la búsqueda exhaustiva sistemática, experimenta con colisiones diagonales y verifica el invariante antes de pasar a la programación formal.'
-                        : 'Explore systematic exhaustive search, experiment with diagonal conflicts, and verify invariants before code.'}
+                        ? 'Explorá por qué las heurísticas intuitivas (menor duración, inicio temprano) fallan con contraejemplos interactivos, y cómo Earliest Finish Time garantiza el óptimo global mediante argumento de intercambio.'
+                        : 'Explore why intuitive greedy heuristics fail with interactive counterexamples, and how Earliest Finish Time guarantees the global optimum via exchange argument.'}
                     </p>
                   </div>
                   <button
                     type="button"
                     className="btn-start-recommended"
-                    onClick={() => setSelectedExerciseId('n-queens')}
+                    onClick={() => handleSelectExercise('interval-scheduling', 'discover')}
                   >
-                    {language === 'es' ? 'Comenzar con N-Reinas →' : 'Start with N-Queens →'}
+                    {language === 'es' ? 'Comenzar con Intervalos (Descubrir) →' : 'Start with Intervals (Discover) →'}
                   </button>
                 </div>
               ) : nextCurricularExercise ? (
@@ -145,7 +157,7 @@ const AppContent: React.FC = () => {
                   <button
                     type="button"
                     className="btn-start-recommended"
-                    onClick={() => setSelectedExerciseId(nextCurricularExercise.id)}
+                    onClick={() => handleSelectExercise(nextCurricularExercise.id, 'discover')}
                   >
                     {language === 'es' ? 'Iniciar siguiente ejercicio →' : 'Start next exercise →'}
                   </button>
@@ -165,15 +177,16 @@ const AppContent: React.FC = () => {
               <ExerciseList
                 exercises={exercises}
                 activeCategoryId={activeCategoryId}
-                onSelectExercise={(id) => setSelectedExerciseId(id)}
+                onSelectExercise={(id) => handleSelectExercise(id, 'discover')}
               />
             </section>
           </>
         ) : (
           <ExerciseView
             exercise={selectedExercise}
+            initialPhase={targetPhase}
             onBackToCatalog={handleHomeClick}
-            onSelectExercise={(id) => setSelectedExerciseId(id)}
+            onSelectExercise={(id) => handleSelectExercise(id, 'discover')}
             {...exerciseConfig}
           />
         )}

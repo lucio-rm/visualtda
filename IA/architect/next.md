@@ -1,50 +1,50 @@
-# Visual TDA — Master Engineering Mission V4 Backlog & Roadmap
+# Visual TDA — Master Product, UX & Pedagogical Mission V5 Roadmap
 
-Visual TDA has successfully expanded to **37 university-grade exercises** across all fundamental paradigms and advanced topics. All 12 Quality Gates (G1–G12) remain in **PASS** status.
-
----
-
-## 1. Master Mission V4 Milestones Completed
-
-1. ✅ **Curriculum Expansion to 37 Exercises (100% Coverage)**
-   - Divide & Conquer: Merge Sort, Max Subarray, Peak Finding, Inversion Counting, Closest Pair, Karatsuba, Majority Element, Median of Medians (8 exercises).
-   - Greedy: Interval Scheduling, Fractional Knapsack, Road Antennas, Huffman Coding, Interval Partitioning, Minimize Lateness, Dijkstra, Kruskal (8 exercises).
-   - Dynamic Programming: 0/1 Knapsack, Juan el Vago, Coin Change, LCS, Weighted Interval Scheduling, Segmented Least Squares, RNA Secondary Structure, Bellman-Ford (8 exercises).
-   - Backtracking / Branch & Bound: N-Queens, Subset Sum, Graph Coloring, Sudoku, Knight's Tour, Hamiltonian Cycle, Knapsack B&B, TSP B&B (8 exercises).
-   - Advanced: Max Flow, Linear Programming, IS $\le_P$ VC Reduction, Vertex Cover 2-Approx, Von Neumann Fair Coin (5 exercises).
-   - Every single exercise has a dedicated interactive 2D SVG Visualizer and dedicated interactive Playground.
-
-2. ✅ **Mathematical Typography Engine & LaTeX Unnesting**
-   - Implemented recursive unnesting of `\text`, `\mathrm`, `\mathbf`, `\mathcal` in `TheoryMarkdown.tsx`.
-   - Full Markdown table support (`| col | col |` with separator detection) rendered in semantic HTML.
-   - Comprehensive mathematical symbol mapping (`ℝ`, `ℕ`, `ℤ`, `𝔼`, Greek letters, logic operators, set operators, quantifiers, bounds, and superscripts).
-   - 7 unit tests in `tests/theoryMarkdown.test.tsx` (100% PASS).
-
-3. ✅ **Universal Timeline Keyboard Navigation & Scrubbing**
-   - Default keyboard shortcuts enabled across all 37 visualizers: `ArrowRight` / `ArrowLeft`, `Space` / `k`, `r` (reset), `Home` (step 0), `End` (last step).
-   - Input/textarea focus interception protection.
-   - 6 unit and DOM integration tests in `tests/useTraceTimeline.test.tsx` (100% PASS).
-
-4. ✅ **Visual Quality, Theme Contrast & Full Bilingual Parity**
-   - High-contrast edge styling (`var(--border-strong)`) applied across all graph-based visualizers (`MaxFlow`, `GraphColoring`, `Dijkstra`, `BellmanFord`, `Kruskal`, `HamiltonianCycle`) ensuring WCAG AAA legibility in both light and dark modes.
-   - Eradicated all decorative emojis, cheerleading exclamation marks (`¡`), and informal badges across all visualizers, playgrounds, and cards.
-   - Full bilingual (ES/EN) parity across header bars, metric counters, recurrence callouts, table headers, and playback controls in DP and Greedy visualizers.
-
-5. ✅ **Pedagogical Progress Model & Access Control**
-   - 7 formal stages: `unseen`, `exploring`, `attempted`, `testing`, `passed`, `completed`, `instructor`.
-   - Monotonic rank invariant ensures earlier interactions never degrade higher achievements.
-   - Canonical Python solution strictly locked until tests pass or Instructor Mode is explicitly enabled.
+Este documento define la hoja de ruta y prioridades operativas de Visual TDA para la **Misión V5**, enfocada en la excelencia pedagógica universitaria (estándar FIUBA / Kleinberg & Tardos) y calidad visual real.
 
 ---
 
-## 2. Active Priorities & Verification Targets
+## 1. Hitos Completados en Misión V5
 
-1. **Section 11 / 96 — Continuous Exercise Quality Auditing**:
-   - Keep `docs/exercise-quality-matrix.md` updated with empirical verification evidence.
-2. **Section 35 / 36 — Comprehensive Headless Browser QA**:
-   - Maintain 22/22 real Chromium headless test passes across 5 responsive viewports with 0 console errors.
-3. **Section 43 / 44 — Complexity & Invariant Explanations**:
-   - Continuously refine asymptotic cost proofs ($O$) and exchange arguments for FIUBA presentation.
-4. **Section 79 — Mobile & Responsive Layout**:
-   - Ensure all 37 visualizers render cleanly without horizontal overflow clipping on narrow viewports.
+1. ✅ **Reorganización Curricular del Catálogo (P1, Prompt V5 §§8-10)**:
+   - Orden pedagógico Kleinberg & Tardos en pistas y filtros: Divide & Conquer -> Greedy -> DP -> Backtracking & Ramificación -> Flujo & LP -> Reducciones & Avanzados.
+   - Recomendación inicial redirigida a *Interval Scheduling* (Greedy, K&T Cap. 4) con foco en *Greedy Stays Ahead*.
+2. ✅ **Navegación con Fase Objetivo en Recomendaciones (P1, Prompt V5 §11)**:
+   - CTAs de recomendación conducen a la fase pedagógicamente prevista (`initialPhase: 'discover' | 'solve' | 'understand'`).
+3. ✅ **Modelo Visual de Mochila de Carga (P1, Prompt V5 §22, §28)**:
+   - Componente `KnapsackVisualBag.tsx` con manija, bloques proporcionales al peso, holgura libre, alerta de desborde y soporte fraccional.
+   - Integrado en `KnapsackPlayground`, `KnapsackDpVisualizer` y `KnapsackGreedyVisualizer`.
+4. ✅ **Optimización de Espacio Vertical y "Above-the-Fold" (P1, Prompt V5 §§20-21)**:
+   - `--max-width: 1440px` en `variables.css`.
+   - Compactación de paddings en `.phase-view`, `.discover-header-card` e ilustraciones para visualización de lienzos sin scroll en pantallas 1366x768 y 1440x900.
+5. ✅ **Entregables de Documentación V5 Generados (§§317–324)**:
+   - `docs/product-ux-audit.md` (Entregable 1)
+   - `docs/visual-design-system.md` (Entregable 2)
+   - `docs/exercise-quality-matrix.md` (Entregable 3)
+   - `docs/pedagogical-language-guide.md` (Entregable 4)
+   - `docs/known-issues.md` (Entregable 5)
+   - `IA/architect/state.md` (Entregable 6)
+   - `IA/architect/next.md` (Entregable 7)
+   - `IA/sessions/2026-09-25.md` (Entregable 8)
 
+---
+
+## 2. Próximas Prioridades Operativas
+
+1. **Revisión Continua de los 10 Ejercicios Flagship (§203)**:
+   - `n-queens`: Refinar la experiencia de contraejemplos interactivos de ataque en diagonal.
+   - `knapsack-greedy` vs `knapsack-dp`: Ampliar el análisis comparativo del quiebre de la heurística voraz en mochila entera.
+   - `huffman-coding-greedy`: Mantener sincronizados los pasos del Min-Heap con las ramas del árbol SVG y el prefijo de código libre.
+   - `dijkstra-greedy`: Verificar el contraejemplo con aristas de peso negativo y la cola de prioridad.
+   - `merge-sort` & `inversion-counting-dyc`: Consolidar la visualización del árbol de recursión y el búfer auxiliar.
+   - `tsp-branch-and-bound` & `knapsack-branch-and-bound`: Verificar el indicador de cota optimista y podas por incumbent.
+   - `max-flow`: Profundizar la visualización del corte mínimo ($S, T$) y capacidades residuales.
+   - `linear-programming-formulation`: Afinar el poliedro 2D y el vector gradiente.
+2. **Propagación del Estándar Flagship a los 27 Ejercicios Restantes (§204)**:
+   - Elevar los ejercicios clasificados como `Sólido` en la matriz de calidad mediante la incorporación de microinteracciones específicas y mejores explicaciones del "por qué".
+3. **Mantenimiento del Quality Gate Completo**:
+   - `npm run lint`: 0 errores.
+   - `npm run typecheck`: 0 errores.
+   - `npm test`: 291/291 pruebas vitest.
+   - `npm run build`: compilación estática a `dist/`.
+   - `node scripts/browserQA.mjs`: 22/22 escenarios Chromium en 5 resoluciones con 0 errores de consola.

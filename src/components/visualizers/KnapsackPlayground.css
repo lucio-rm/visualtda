@@ -9,9 +9,39 @@
   box-shadow: var(--shadow-sm);
 }
 
+.knapsack-dual-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .knapsack-dual-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.knapsack-shelf-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.shelf-column-header h5 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.knapsack-bag-column {
+  display: flex;
+  justify-content: center;
+}
+
 .knapsack-items-shelf {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-3);
 }
 

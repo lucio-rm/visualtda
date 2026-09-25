@@ -549,20 +549,35 @@ server.listen(PORT, async () => {
       }
       await captureScreenshot('11-solve-tests-passed.png');
 
-      // If proceed button is present, click it; otherwise we already transitioned to Understand
+      // Transition to Understand phase
       await evaluate(`
         (() => {
           const proceedBtn = document.querySelector('.btn-primary.mt-2');
-          if (proceedBtn) proceedBtn.click();
+          if (proceedBtn) {
+            proceedBtn.click();
+          } else {
+            const understandTab = Array.from(document.querySelectorAll('.phase-button')).find(t => t.textContent.includes('Comprender') || t.textContent.includes('Understand'));
+            if (understandTab) understandTab.click();
+          }
         })()
       `);
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 500));
     });
 
     // ----------------------------------------------------
     // Scenario 12: Understand Phase Canonical Code & Pseudocode
     // ----------------------------------------------------
     await runScenario(12, 'Understand Phase Code / Pseudocode Toggle', async () => {
+      await evaluate(`
+        (() => {
+          if (!document.querySelector('.understand-view')) {
+            const understandTab = Array.from(document.querySelectorAll('.phase-button')).find(t => t.textContent.includes('Comprender') || t.textContent.includes('Understand'));
+            if (understandTab) understandTab.click();
+          }
+        })()
+      `);
+      await new Promise((r) => setTimeout(r, 500));
+
       const pyCode = await evaluate('document.querySelector(".canonical-code-display code")?.textContent');
       if (!pyCode || !pyCode.includes('def resolver_n_reinas')) {
         throw new Error(`Canonical Python missing: ${pyCode?.slice(0, 50)}`);

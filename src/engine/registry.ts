@@ -20,21 +20,21 @@ export const CATEGORIES: Category[] = [
     }
   },
   {
-    id: 'backtracking',
-    order: 3,
-    title: { es: 'Backtracking', en: 'Backtracking' },
-    description: {
-      es: 'Exploración exhaustiva y sistemática del espacio de soluciones con poda de ramas inviables.',
-      en: 'Systematic exhaustive search of solution space with pruning of infeasible branches.'
-    }
-  },
-  {
     id: 'dynamic-programming',
-    order: 4,
+    order: 3,
     title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
     description: {
       es: 'Resolver subproblemas superpuestos recordando resultados previos para evitar recomputación.',
       en: 'Solve overlapping subproblems by memoizing previous results to avoid recomputation.'
+    }
+  },
+  {
+    id: 'backtracking',
+    order: 4,
+    title: { es: 'Backtracking', en: 'Backtracking' },
+    description: {
+      es: 'Exploración exhaustiva y sistemática del espacio de soluciones con poda de ramas inviables.',
+      en: 'Systematic exhaustive search of solution space with pruning of infeasible branches.'
     }
   },
   {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { DEFAULT_DP_ITEMS, DEFAULT_DP_CAPACITY } from '../../engine/algorithms/knapsackDpTrace';
 import { knapsackDpValidator, KnapsackItem } from '../../engine/algorithms/knapsackDpValidator';
+import { KnapsackVisualBag } from './KnapsackVisualBag';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import './KnapsackPlayground.css';
@@ -277,73 +278,78 @@ export const KnapsackPlayground: React.FC = () => {
         </div>
       )}
 
-      {/* Items Shelf */}
-      <div className="knapsack-items-shelf">
-        {items.map((it) => {
-          const inPack = selectedIds.includes(it.id);
-          const density = (it.value / it.weight).toFixed(1);
-          return (
-            <div
-              key={it.id}
-              onClick={() => toggleItem(it.id)}
-              className={`item-pick-card ${inPack ? 'in-pack' : ''}`}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  toggleItem(it.id);
-                }
-              }}
-              aria-pressed={inPack}
-              aria-label={`${it.name}, ${it.weight} kg, $${it.value}, ${inPack ? (language === 'es' ? 'guardado en mochila' : 'in backpack') : (language === 'es' ? 'disponible' : 'available')}`}
-            >
-              <div className="item-pick-header">
-                <span className="item-pick-name">{it.name}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {activePreset === 'custom' && (
-                    <button
-                      type="button"
-                      className="item-remove-btn"
-                      onClick={(e) => handleRemoveCustomItem(it.id, e)}
-                      title={language === 'es' ? 'Eliminar ítem' : 'Delete item'}
-                      aria-label={language === 'es' ? `Eliminar ${it.name}` : `Delete ${it.name}`}
-                    >
-                      ✕
-                    </button>
-                  )}
-                  <span className="item-status-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
-                    {inPack ? (language === 'es' ? 'EN MOCHILA' : 'PACKED') : '+'}
-                  </span>
+      {/* Interactive Dual Workspace: Items Shelf + Authentic Backpack Bag */}
+      <div className="knapsack-dual-workspace">
+        <div className="knapsack-shelf-column">
+          <div className="shelf-column-header">
+            <h5>
+              {language === 'es'
+                ? '📦 Objetos Disponibles (Hacé clic para empacar o quitar):'
+                : '📦 Available Items (Click to pack or unpack):'}
+            </h5>
+          </div>
+          <div className="knapsack-items-shelf">
+            {items.map((it) => {
+              const inPack = selectedIds.includes(it.id);
+              const density = (it.value / it.weight).toFixed(1);
+              return (
+                <div
+                  key={it.id}
+                  onClick={() => toggleItem(it.id)}
+                  className={`item-pick-card ${inPack ? 'in-pack' : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleItem(it.id);
+                    }
+                  }}
+                  aria-pressed={inPack}
+                  aria-label={`${it.name}, ${it.weight} kg, $${it.value}, ${inPack ? (language === 'es' ? 'guardado en mochila' : 'in backpack') : (language === 'es' ? 'disponible' : 'available')}`}
+                >
+                  <div className="item-pick-header">
+                    <span className="item-pick-name">{it.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {activePreset === 'custom' && (
+                        <button
+                          type="button"
+                          className="item-remove-btn"
+                          onClick={(e) => handleRemoveCustomItem(it.id, e)}
+                          title={language === 'es' ? 'Eliminar ítem' : 'Delete item'}
+                          aria-label={language === 'es' ? `Eliminar ${it.name}` : `Delete ${it.name}`}
+                        >
+                          ✕
+                        </button>
+                      )}
+                      <span className="item-status-icon" style={{ fontSize: '0.8rem', fontWeight: 700 }}>
+                        {inPack ? (language === 'es' ? 'EN MOCHILA' : 'PACKED') : '+'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="item-pick-metrics">
+                    <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
+                    <span>{language === 'es' ? 'Valor' : 'Value'}: ${it.value}</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                    {language === 'es' ? 'Densidad:' : 'Density:'} {density} $/kg
+                  </div>
                 </div>
-              </div>
-              <div className="item-pick-metrics">
-                <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
-                <span>{language === 'es' ? 'Valor' : 'Value'}: ${it.value}</span>
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                {language === 'es' ? 'Densidad:' : 'Density:'} {density} $/kg
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Backpack capacity gauge */}
-      <div className="backpack-summary-card">
-        <div className="gauge-label-row">
-          <span>{language === 'es' ? 'Capacidad de Carga' : 'Weight Capacity'}</span>
-          <span style={{ color: isOverweight ? 'var(--color-error)' : undefined, fontWeight: 700 }}>
-            {totalWeight} kg / {capacity} kg ({Math.round((totalWeight / capacity) * 100)}%)
-          </span>
+              );
+            })}
+          </div>
         </div>
-        <div className="progress-bar-track">
-          <div
-            className="progress-bar-fill"
-            style={{
-              width: `${Math.min(100, (totalWeight / capacity) * 100)}%`,
-              background: isOverweight ? 'var(--color-error)' : undefined
-            }}
+
+        <div className="knapsack-bag-column">
+          <KnapsackVisualBag
+            capacity={capacity}
+            items={items}
+            selectedItemIds={selectedIds}
+            totalWeight={totalWeight}
+            totalValue={totalValue}
+            language={language}
+            onUnpackItem={toggleItem}
+            interactive={true}
           />
         </div>
       </div>

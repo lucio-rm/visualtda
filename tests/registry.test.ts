@@ -7,7 +7,8 @@ describe('ExerciseRegistry', () => {
     expect(cats.length).toBe(CATEGORIES.length);
     expect(cats[0].id).toBe('divide-and-conquer');
     expect(cats[1].id).toBe('greedy');
-    expect(cats[2].id).toBe('backtracking');
+    expect(cats[2].id).toBe('dynamic-programming');
+    expect(cats[3].id).toBe('backtracking');
   });
 
   it('retrieves category by ID', () => {

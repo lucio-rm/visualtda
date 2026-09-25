@@ -7,6 +7,7 @@ import {
 } from '../../engine/algorithms/knapsackGreedyTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { KnapsackVisualBag, KnapsackVisualItem } from './KnapsackVisualBag';
 import './KnapsackGreedyVisualizer.css';
 
 export const KnapsackGreedyVisualizer: React.FC = () => {
@@ -40,6 +41,22 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
   const totalValue = data?.totalValue || 0;
   const counterexampleComparison = data?.counterexampleComparison;
   const currentPhase = data?.currentPhase || 'init';
+
+  const visualItems: KnapsackVisualItem[] = useMemo(() => {
+    return items.map((it) => ({
+      id: it.id,
+      name: it.name,
+      weight: it.weight,
+      value: it.value,
+      fractionTaken: it.fractionTaken,
+      weightTaken: it.weightTaken,
+      valueTaken: it.valueTaken
+    }));
+  }, [items]);
+
+  const selectedItemIds = useMemo(() => {
+    return items.filter((it) => it.fractionTaken > 0).map((it) => it.id);
+  }, [items]);
 
   return (
     <div className="knapsack-greedy-visualizer">
@@ -76,53 +93,55 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
         </p>
       </div>
 
-      {/* Backpack Progress Bar */}
-      <div className="backpack-summary-card">
-        <div className="gauge-label-row">
-          <span>{language === 'es' ? 'Capacidad de la Mochila' : 'Knapsack Capacity'}</span>
-          <span>
-            {totalWeight.toFixed(1)} kg / {capacity} kg ({Math.round((totalWeight / capacity) * 100)}%)
-          </span>
+      {/* Dual Zone: Items Shelf vs Authentic Knapsack Bag */}
+      <div className="greedy-visual-split">
+        <div className="greedy-items-shelf">
+          <div className="shelf-header-title">
+            {language === 'es' ? 'Ítems Disponibles (Ordenados por Densidad v_i / w_i)' : 'Available Items (Sorted by Density v_i / w_i)'}
+          </div>
+          <div className="greedy-items-grid">
+            {items.map((it) => {
+              const isPartial = it.status === 'taken_partial';
+              return (
+                <div key={it.id} className={`greedy-item-card ${it.status}`}>
+                  <div className="greedy-card-header">
+                    <span className="greedy-item-title">{it.name}</span>
+                    <span className="density-badge">
+                      {it.ratio.toFixed(2)} $/kg
+                    </span>
+                  </div>
+                  <div className="greedy-item-specs">
+                    <span>{language === 'es' ? 'Peso:' : 'Weight:'} {it.weight} kg</span>
+                    <span>{language === 'es' ? 'Valor: $' : 'Value: $'}{it.value}</span>
+                  </div>
+                  <div className="fraction-gauge">
+                    <div className="fraction-label-row">
+                      <span>{language === 'es' ? 'Asignación:' : 'Allocation:'}</span>
+                      <span>{(it.fractionTaken * 100).toFixed(1)}%</span>
+                    </div>
+                    <div className="fraction-track">
+                      <div
+                        className={`fraction-fill ${isPartial ? 'partial' : ''}`}
+                        style={{ width: `${it.fractionTaken * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="progress-bar-track">
-          <div
-            className="progress-bar-fill"
-            style={{ width: `${Math.min(100, (totalWeight / capacity) * 100)}%` }}
+
+        <div className="greedy-bag-pane">
+          <KnapsackVisualBag
+            capacity={capacity}
+            items={visualItems}
+            selectedItemIds={selectedItemIds}
+            totalWeight={totalWeight}
+            totalValue={totalValue}
+            language={language}
           />
         </div>
-      </div>
-
-      {/* Items Grid */}
-      <div className="greedy-items-grid">
-        {items.map((it) => {
-          const isPartial = it.status === 'taken_partial';
-          return (
-            <div key={it.id} className={`greedy-item-card ${it.status}`}>
-              <div className="greedy-card-header">
-                <span className="greedy-item-title">{it.name}</span>
-                <span className="density-badge">
-                  {it.ratio.toFixed(2)} $/kg
-                </span>
-              </div>
-              <div className="greedy-item-specs">
-                <span>{language === 'es' ? 'Peso:' : 'Weight:'} {it.weight} kg</span>
-                <span>{language === 'es' ? 'Valor: $' : 'Value: $'}{it.value}</span>
-              </div>
-              <div className="fraction-gauge">
-                <div className="fraction-label-row">
-                  <span>{language === 'es' ? 'Asignación:' : 'Allocation:'}</span>
-                  <span>{(it.fractionTaken * 100).toFixed(1)}%</span>
-                </div>
-                <div className="fraction-track">
-                  <div
-                    className={`fraction-fill ${isPartial ? 'partial' : ''}`}
-                    style={{ width: `${it.fractionTaken * 100}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
       </div>
 
       {/* Counterexample Section */}

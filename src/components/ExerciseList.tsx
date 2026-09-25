@@ -22,16 +22,16 @@ interface ParadigmTrackDef {
 
 const PARADIGM_TRACKS: ParadigmTrackDef[] = [
   {
-    id: 'backtracking',
-    categoryIds: ['backtracking'],
+    id: 'divide-and-conquer',
+    categoryIds: ['divide-and-conquer'],
     trackNumber: 1,
-    title: { es: 'Backtracking y Ramificación', en: 'Backtracking & Branching' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
+    title: { es: 'División y Conquista', en: 'Divide & Conquer' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 5', en: 'Kleinberg & Tardos — Chapter 5' },
     description: {
-      es: 'Exploración sistemática del espacio de búsqueda en profundidad con poda inmediata de ramas que violan restricciones.',
-      en: 'Systematic depth-first search space exploration with immediate pruning of violating candidate branches.'
+      es: 'Descomposición en subproblemas disjuntos, resolución recursiva y recombinación en tiempo lineal u O(N log N).',
+      en: 'Decompose into disjoint subproblems, recursive solve, and recombination in linear or O(N log N) time.'
     },
-    code: 'BT'
+    code: 'DYC'
   },
   {
     id: 'greedy',
@@ -46,21 +46,9 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     code: 'GREEDY'
   },
   {
-    id: 'divide-and-conquer',
-    categoryIds: ['divide-and-conquer'],
-    trackNumber: 3,
-    title: { es: 'División y Conquista', en: 'Divide & Conquer' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 5', en: 'Kleinberg & Tardos — Chapter 5' },
-    description: {
-      es: 'Descomposición en subproblemas disjuntos, resolución recursiva y recombinación en tiempo lineal u O(N log N).',
-      en: 'Decompose into disjoint subproblems, recursive solve, and recombination in linear or O(N log N) time.'
-    },
-    code: 'DYC'
-  },
-  {
     id: 'dynamic-programming',
     categoryIds: ['dynamic-programming'],
-    trackNumber: 4,
+    trackNumber: 3,
     title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
     bookReference: { es: 'Kleinberg & Tardos — Capítulo 6', en: 'Kleinberg & Tardos — Chapter 6' },
     description: {
@@ -70,14 +58,38 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     code: 'DP'
   },
   {
-    id: 'advanced',
-    categoryIds: ['network-flow', 'linear-programming', 'reductions', 'approximation', 'randomized'],
-    trackNumber: 5,
-    title: { es: 'Redes, Reducciones y Avanzados', en: 'Networks, Reductions & Advanced' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulos 7 y 8', en: 'Kleinberg & Tardos — Chapters 7 & 8' },
+    id: 'backtracking',
+    categoryIds: ['backtracking'],
+    trackNumber: 4,
+    title: { es: 'Backtracking y Ramificación', en: 'Backtracking & Branching' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
     description: {
-      es: 'Flujo en redes (Ford-Fulkerson), formulación en programación lineal y caracterización de problemas NP-Completos.',
-      en: 'Network flow, linear programming duality, and NP-completeness reductions and approximation.'
+      es: 'Exploración sistemática del espacio de búsqueda en profundidad con poda inmediata de ramas que violan restricciones.',
+      en: 'Systematic depth-first search space exploration with immediate pruning of violating candidate branches.'
+    },
+    code: 'BT'
+  },
+  {
+    id: 'network-flow-lp',
+    categoryIds: ['network-flow', 'linear-programming'],
+    trackNumber: 5,
+    title: { es: 'Flujo en Redes y Programación Lineal', en: 'Network Flow & Linear Programming' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulos 7 y 11', en: 'Kleinberg & Tardos — Chapters 7 & 11' },
+    description: {
+      es: 'Flujo en redes (Ford-Fulkerson, corte mínimo) y formulación en programación lineal continua.',
+      en: 'Network flow (Ford-Fulkerson, min-cut) and continuous linear programming formulations.'
+    },
+    code: 'FLOW-LP'
+  },
+  {
+    id: 'reductions-approx-random',
+    categoryIds: ['reductions', 'approximation', 'randomized'],
+    trackNumber: 6,
+    title: { es: 'Reducciones, Aproximación y Aleatorizados', en: 'Reductions, Approximation & Randomized' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulos 8, 11 y 13', en: 'Kleinberg & Tardos — Chapters 8, 11 & 13' },
+    description: {
+      es: 'Transformaciones polinomiales para caracterizar NP-completitud, cotas de aproximación y algoritmos probabilísticos.',
+      en: 'Polynomial-time reductions for NP-completeness, approximation bounds, and probabilistic algorithms.'
     },
     code: 'ADV'
   }

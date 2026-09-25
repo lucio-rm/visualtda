@@ -99,6 +99,49 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.7 — Catalog tracks ordering starting with Backtracking rather than fundamental algorithmic paradigms
+
+- **Reported Behavior**: The home catalog presented Backtracking as the very first track, placing NP-hard and exponential search concepts ahead of Divide & Conquer, Greedy, and Dynamic Programming.
+- **Severity**: High (Pedagogical dissonance; distorted curriculum progression for university students).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  - `PARADIGM_TRACKS` in `ExerciseList.tsx` and `CATEGORIES` in `registry.ts` ordered categories alphabetically or by initial implementation order instead of following the canonical Kleinberg & Tardos curriculum progression.
+- **Resolution**:
+  1. Realigned `PARADIGM_TRACKS` to follow the university sequence: Track 1: Divide & Conquer (K&T Ch. 5) -> Track 2: Algoritmos Greedy (K&T Ch. 4) -> Track 3: Programación Dinámica (K&T Ch. 6) -> Track 4: Backtracking y Ramificación (K&T Ch. 8) -> Track 5: Flujo en Redes y Programación Lineal (K&T Ch. 7 & 11) -> Track 6: Reducciones, Aproximación y Aleatorizados (K&T Ch. 8, 11 & 13).
+  2. Changed default recommended introductory exercise from N-Queens to Interval Scheduling (Greedy, K&T Ch. 4) with explicit exchange argument guidance.
+  3. Verified automated test suites in `tests/registry.test.ts` and `tests/userJourneys.test.tsx`.
+
+---
+
+### Issue 3.8 — Knapsack problem represented merely as an abstract matrix without an authentic visual backpack
+
+- **Reported Behavior**: Both Knapsack 0/1 (DP) and Fractional Knapsack (Greedy) only showed data tables and progress bars. The student could not visually recognize a physical cargo container, weight-proportional items, slack capacity, or overflow conditions.
+- **Severity**: High (Pedagogical failure: mental model of capacity packing was not visually represented).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  - Visualizers rendered the numeric table directly without a physical metaphor component.
+- **Resolution**:
+  1. Built `KnapsackVisualBag.tsx` and `KnapsackVisualBag.css` modeling an authentic backpack container with top handle, capacity boundary badge, weight-proportional item blocks (name, weight, value, density), visual slack capacity block ("Holgura disponible: X kg"), and an overflow warning banner when infeasible.
+  2. Integrated `KnapsackVisualBag` into `KnapsackPlayground.tsx` (Discover phase), `KnapsackDpVisualizer.tsx` (Understand phase), and `KnapsackGreedyVisualizer.tsx` (supporting fractional percentage allocation).
+  3. Added interactive click-to-unpack behavior in the Discover playground and live synchronization with DP reconstruction and Greedy density ordering.
+
+---
+
+### Issue 3.9 — Above-the-fold vertical space compression on standard laptop/desktop viewports (1366x768 & 1440x900)
+
+- **Reported Behavior**: On standard 1366x768 and 1440x900 screens, oversized vertical paddings, 130px header cards, and excessive card margins pushed the primary visualizer canvas below the fold, forcing students to scroll down on every step.
+- **Severity**: Medium (UX friction and split attention between controls and canvas).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  - Global `--max-width` was restricted to `1200px` causing vertical stretching, `.phase-view` padding was `2rem`, and `.discover-header-card` was `1.5rem` with a fixed `120px` illustration wrapper.
+- **Resolution**:
+  1. Expanded `--max-width` in `variables.css` to `1440px`.
+  2. Compacted `.phase-view` padding to `1.25rem 1.5rem` and `.discover-header-card` to `0.75rem 1.25rem`.
+  3. Reduced illustration wrapper height to `80px` and compacted phase navigation button padding to `0.55rem 0.85rem`.
+  4. Verified across 5 viewports (1920x1080, 1440x900, 1280x720, 768x1024, 390x844) via Chromium headless capture in `scripts/browserQA.mjs`.
+
+---
+
 ## 2. Complete Visual & Pedagogical Matrix (All 37 Exercises)
 
 | # | Exercise ID | Paradigm | Visualizer & Playground | Verified Status |
