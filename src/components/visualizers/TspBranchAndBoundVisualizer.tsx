@@ -150,7 +150,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                   x={city.x}
                   y={city.y + 4}
                   textAnchor="middle"
-                  fill={isStart || inTour ? '#0f172a' : 'var(--text)'}
+                  fill={isStart || inTour ? '#ffffff' : 'var(--text)'}
                   fontSize="11px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
