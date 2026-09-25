@@ -180,7 +180,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                             borderRadius: '4px',
                             border: '1px solid var(--border)',
                             backgroundColor: currentRoom === rNum ? 'var(--accent)' : 'var(--bg)',
-                            color: currentRoom === rNum ? '#0f172a' : 'var(--text)',
+                            color: currentRoom === rNum ? 'var(--accent-contrast)' : 'var(--text)',
                             fontWeight: currentRoom === rNum ? '700' : '400',
                             cursor: 'pointer'
                           }}

@@ -165,6 +165,9 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
 
               return (
                 <g key={`placed-${room.id}-${lecture.id}`}>
+                  <clipPath id={`clip-${lecture.id}`}>
+                    <rect x={x1} y={y} width={w} height={h} rx={4} />
+                  </clipPath>
                   <rect
                     x={x1}
                     y={y}
