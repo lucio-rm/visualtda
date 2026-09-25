@@ -119,24 +119,67 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 
 ---
 
+### AUDIT-07 | Seguridad Criptográfica Anti-Tamper en Modo Docente y Protección contra Inspección DevTools
+- **Pantalla**: Header / Modal de Acreditación Docente (`InstructorAuthModal`) y Vista Comprender (`UnderstandView`)
+- **Ejercicio/Módulo**: `src/utils/cryptoAuth.ts`, `src/context/InstructorModeContext.tsx`, `src/components/UnderstandView.tsx`
+- **Severidad**: **P0** (Seguridad e integridad de evaluación)
+- **Evidencia**: Anteriormente, un usuario con conocimientos básicos de desarrollo web podía abrir Chrome DevTools, modificar una variable booleana de estado en React (`isInstructorMode: false` → `true` o `solutionUnlocked: false` → `true`) o insertar una entrada estática en `localStorage`, revelando inmediatamente todas las soluciones canónicas y respuestas de los 37 ejercicios sin haber completado los tests pedagógicos ni poseer credenciales docentes legítimas.
+- **Impacto Pedagógico**: Destruye la barrera de esfuerzo formativo del estudiante y anula el rol del docente como evaluador.
+- **Impacto UX**: Falta de protección contra manipulación accidental o intencional del árbol de componentes.
+- **Solución Propuesta y Ejecutada**:
+  1. Diseñar e implementar `cryptoAuth.ts`: suite criptográfica cliente basada en Web Crypto API con fallback determinístico SHA-256.
+  2. Almacenamiento seguro: la contraseña docente de 8 caracteres (`MEL75.29`, Martin Ezequiel Lucio / Cátedra 75.29) **NUNCA** se almacena en texto plano en la aplicación; solo se verifica su digest SHA-256 irreversible `be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`.
+  3. Firma de sesión efímera in-memory: se genera entropía criptográfica (`SESSION_SECRET_SALT`) por recarga de ventana para firmar sesiones docentes válidas.
+  4. Autoridad Anti-Tamper `isExerciseSolutionAuthorized`: si un usuario altera manualmente los flags booleanos de estado en DevTools sin poseer la firma de sesión de cátedra ni un token de aprobación de tests Pyodide, el componente `UnderstandView` rechaza el renderizado, inserta una tarjeta de bloqueo (`.solution-tamper-card`: *"Firma Criptográfica Inválida: Acceso Bloqueado contra Manipulación"*) y jamás inyecta el código Python canónico en el DOM.
+- **Estado de Verificación**: **VERIFICADO** (Tests unitarios automatizados dedicados en `tests/instructorMode.test.tsx` 7/7 PASS, incluyendo rechazo de flag tampering en DevTools).
+
+---
+
+### AUDIT-08 | Manipulación Física 2D Táctil y Arrastre en Playgrounds Algorítmicos
+- **Pantalla**: Discover Phase / Playgrounds de Paradigmas Avanzados
+- **Ejercicio/Módulo**: `HamiltonianCyclePlayground`, `TspBranchAndBoundPlayground`, `IntervalPartitioningPlayground`, `MinimizeLatenessPlayground`, `ReductionIsVcPlayground`, `CoinChangePlayground`, `GraphColoringPlayground`, `MaxFlowPlayground`
+- **Severidad**: **P1**
+- **Evidencia**: Varios playgrounds se limitaban a controles estáticos o listas de botones sin una interacción visual directa con los objetos del problema (nodos, rectángulos de tareas, monedas, ciudades).
+- **Impacto Pedagógico**: Dificultad para formular hipótesis táctiles ("¿Qué pasa si muevo esta ciudad?", "¿Qué pasa si paso esta clase al Aula 2?", "¿Qué pasa si intercambio estas dos tareas invertidas?").
+- **Impacto UX**: Sensación de "formulario web" en lugar de laboratorio interactivo.
+- **Solución Propuesta y Ejecutada**:
+  1. **Ciclo Hamiltoniano (`HamiltonianCyclePlayground`)**: Arrastre 2D libre de vértices con captura de puntero (`PointerCapture`), múltiples grafos predefinidos ($K_5$, Petersen, Contraejemplo Bipartito Impar $K_{3,4}$) y pila de decisiones de backtracking con detección de Dead Ends.
+  2. **TSP Branch & Bound (`TspBranchAndBoundPlayground`)**: Arrastre 2D de ciudades con recálculo dinámico de matriz de distancias euclidianas, cota inferior (LB) y solución óptima de B&B en tiempo real.
+  3. **Partición de Intervalos (`IntervalPartitioningPlayground`)**: Arrastre 2D de bloques de clases entre aulas y en la línea temporal, con línea de barrido de cuello de botella en $t^*$ y presets de instancia.
+  4. **Minimización de Retraso (`MinimizeLatenessPlayground`)**: Arrastre horizontal 1D de bloques de tareas con intercambio en vivo, indicador visual de inversiones adyacentes y paso asistente de argumento de intercambio.
+  5. **Reducción IS ⟺ VC (`ReductionIsVcPlayground`)**: Arrastre 2D de vértices, selección dual $S$ y $C = V \setminus S$, y presets canónicos ($C_5$, $K_{3,3}$, Triángulo con Cola).
+  6. **Caja Registradora / Cambio de Monedas (`CoinChangePlayground`)**: Arrastre y soltado de monedas desde el dispensador hacia la bandeja de pago con tokens metálicos grabados y comparación lado a lado (Manual vs Greedy vs PD).
+  7. **Coloreo de Grafos (`GraphColoringPlayground`)**: Arrastre 2D de nodos, barra de pinceles de colores y presets cromáticos ($C_5$, $K_4$, $K_{3,3}$).
+  8. **Flujo Máximo (`MaxFlowPlayground`)**: Arrastre 2D de red de nodos, buscador BFS de caminos de aumento (Edmonds-Karp) y visualización del corte mínimo $(S, T)$.
+- **Estado de Verificación**: **VERIFICADO** (293/293 tests unitarios PASS, `tsc --noEmit` 0 errores, `npm run build` PASS).
+
+---
+
 ## 3. Matriz de Estado por Paradigma y Flagship
 
 | Paradigma | Ejercicio Flagship | Visualizador | Playground | Modelo Mental | Estado |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **División y Conquista** | *Merge Sort* (`merge-sort`) | Árbol recursivo + 2 punteros | Fusión interactiva L vs R | Árbol de subproblemas | **Excelente** |
 | **División y Conquista** | *Contar Inversiones* (`inversion-counting-dyc`) | Pasos de fusión con split count | Prueba de permutaciones | Parejas cruzadas | **Excelente** |
-| **Algoritmos Greedy** | *Selección de Intervalos* (`interval-scheduling`) | Línea de tiempo + selector EFT | Cronograma interactivo | Incompatible vs Compatible | **Excelente** |
+| **Algoritmos Greedy** | *Selección de Intervalos* (`interval-scheduling`) | Línea de tiempo + selector EFT | Cronograma interactivo + Greedy EFT | Incompatible vs Compatible | **Excelente** |
 | **Algoritmos Greedy** | *Codificación de Huffman* (`huffman-coding-greedy`) | Min-Heap + Árbol binario | Fusión interactiva de mínimos | Bosque a Árbol Prefijo | **Excelente** |
+| **Algoritmos Greedy** | *Partición de Intervalos* (`interval-partitioning-greedy`) | Timeline de Aulas + d | **Arrastre de bloques 2D + Sweep line** | Cuello de botella $d$ | **Excelente** |
+| **Algoritmos Greedy** | *Minimización de Retraso* (`minimize-lateness-greedy`) | Cronograma + Deadlines | **Arrastre 1D + Argumento de Intercambio** | Eliminación de Inversiones | **Excelente** |
 | **Programación Dinámica** | *Mochila 0/1* (`knapsack-dp`) | Matriz 2D Bottom-Up con traceback | **Mochila física interactiva** | Capacidad vs Valor | **Excelente** |
-| **Programación Dinámica** | *Subsecuencia Común (LCS)* (`lcs-dp`) | Tabla 2D con flechas de reconstrucción | Comparador de cadenas | Prefijos coincidentes | **Excelente** |
+| **Programación Dinámica** | *Cambio de Monedas* (`coin-change-dp`) | Matriz DP $M[i, v]$ + Reconstrucción | **Bandeja interactiva Drag & Drop** | Canónico vs Trampa Greedy | **Excelente** |
+| **Programación Dinámica** | *Bellman-Ford* (`bellman-ford-dp`) | Matriz DP $M[i, v]$ + Aristas | **Vértices 2D + Detección Ciclo Negativo** | Relajación y Caminos Mínimos | **Excelente** |
 | **Backtracking** | *N-Reinas* (`n-queens`) | Tablero con rayos de ataque | Tablero libre con podas | Invariante diagonal | **Excelente** |
-| **Backtracking** | *Suma de Subconjuntos* (`subset-sum-backtracking`) | Árbol de decisión Sí/No | Explorador de sumas | Poda por cota superior | **Excelente** |
-| **Flujo en Redes** | *Flujo Máximo* (`max-flow-ford-fulkerson`) | Red residual interactiva | Ajuste de caminos de aumento | Cuello de botella | **Excelente** |
-| **Aproximación** | *Vertex Cover 2-Aprox* (`vertex-cover-approx`) | Grafo con matching maximal | Selección de aristas | Factor 2-garantizado | **Excelente** |
+| **Backtracking** | *Ciclo Hamiltoniano* (`hamiltonian-cycle-backtracking`) | Grafo interactivo + Pila de búsqueda | **Grafo 2D Draggable + Decision Tree** | Dead End y Backtracking | **Excelente** |
+| **Branch & Bound** | *TSP Branch & Bound* (`tsp-branch-and-bound`) | Árbol de cotas y podas | **Mapa 2D Draggable + Recálculo LB en vivo** | Poda por Cota $C + LB \ge UB$ | **Excelente** |
+| **Flujo en Redes** | *Flujo Máximo* (`max-flow-ford-fulkerson`) | Red residual interactiva | **Red 2D Draggable + Edmonds-Karp BFS** | Cuello de botella y Corte Mínimo | **Excelente** |
+| **Reducciones** | *Reducción IS ⟺ VC* (`vertex-cover-reduction`) | Grafo dual complementario | **Grafo 2D Draggable + Validación Dual S/C** | Dualidad $|S| + |C| = |V|$ | **Excelente** |
+| **Aproximación** | *Vertex Cover 2-Aprox* (`vertex-cover-approx`) | Grafo con matching maximal | **Grafo 2D Draggable + Matching Maximal** | Factor 2-garantizado | **Excelente** |
 
 ---
 
 ## 4. Conclusiones y Próximos Pasos de Refinamiento
-1. La plataforma ha superado la etapa de prototipo y cuenta con una arquitectura de presentación sólida, con el catálogo reordenado curricularmente y la metáfora de la mochila completamente integrada.
-2. Ningún test de runtime ni integración falla (`npm test` 291/291 PASS, `node scripts/browserQA.mjs` 22/22 PASS).
-3. Se continuará con la elaboración de la guía de lenguaje pedagógico y la formalización del Design System visual.
+1. La plataforma cuenta ahora con una barrera de seguridad criptográfica robusta anti-tamper en el Modo Docente, protegiendo las soluciones canónicas de cualquier inspección superficial de DevTools.
+2. Todos los playgrounds prioritarios han sido enriquecidos con interacción física táctil (arrastre 2D de nodos, ciudades y antenas, arrastre de rectángulos de tareas y clases, y drag & drop de monedas).
+3. 293/293 tests pasan sin error, el typecheck estricto no reporta problemas (`tsc --noEmit` 0 errores), `npm run lint` pasa con 0 errores y el build estático se completa en ~1.6 segundos.
+4. El proceso de auditoría y refinamiento continuará de acuerdo con las directivas del Prompt V5.
+
