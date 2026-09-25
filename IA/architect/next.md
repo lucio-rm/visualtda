@@ -37,7 +37,8 @@ Este documento define la hoja de ruta y prioridades operativas de Visual TDA par
    - `huffman-coding-greedy`: Mantener sincronizados los pasos del Min-Heap con las ramas del árbol SVG y el prefijo de código libre.
    - `dijkstra-greedy`: Verificar el contraejemplo con aristas de peso negativo y la cola de prioridad.
    - `merge-sort` & `inversion-counting-dyc`: Consolidar la visualización del árbol de recursión y el búfer auxiliar.
-   - `tsp-branch-and-bound` & `knapsack-branch-and-bound`: Verificar el indicador de cota optimista y podas por incumbent.
+   - `tsp-branch-and-bound`: ✅ Implementado lienzo SVG 2D interactivo con mapa de ciudades argentinas y cálculo en vivo de cota inferior ($C + LB$) con poda estricta por incumbent.
+   - `knapsack-branch-and-bound`: Verificar el indicador de cota optimista (relajación continua) y podas por incumbent.
    - `max-flow`: Profundizar la visualización del corte mínimo ($S, T$) y capacidades residuales.
    - `linear-programming-formulation`: Afinar el poliedro 2D y el vector gradiente.
 2. **Propagación del Estándar Flagship a los 27 Ejercicios Restantes (§204)**:

@@ -70,7 +70,7 @@ De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de 
 | `graph-coloring-backtracking` | Coloreo de Grafos | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Grafo SVG interactivo, paleta cromática de $k$ colores y detección inmediata de conflicto de arista. |
 | `sudoku-backtracking` | Sudoku 9x9 | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Cuadrícula 9x9 con inspector MRV (Minimum Remaining Values) y propagación de restricciones. |
 | `hamiltonian-cycle-backtracking` | Ciclo Hamiltoniano | 4 | 4 | 3 | Sí | 4 | 4 | **Sólido** | Exploración de caminos simples con verificación de cobertura total de vértices y retorno al origen. |
-| `tsp-branch-and-bound` | Viajante de Comercio (TSP B&B) | 5 | 4 | 4 | Sí | 5 | 5 | **Flagship** | Árbol de búsqueda Branch & Bound, cota inferior (LB) y poda estricta cuando $LB \ge \text{incumbent}$. |
+| `tsp-branch-and-bound` | Viajante de Comercio (TSP B&B) | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Lienzo 2D interactivo con mapa de ciudades argentinas, cálculo en vivo de cota inferior ($C + LB$) y poda estricta cuando $C + LB \ge UB$. |
 | `knapsack-branch-and-bound` | Mochila Branch & Bound | 5 | 4 | 4 | Sí | 5 | 5 | **Flagship** | Relajación continua Greedy como cota superior optimista (UB) y poda cuando $UB \le \text{incumbent}$. |
 | `knights-tour-backtracking` | Recorrido del Caballo | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Tablero con mapa de calor de accesibilidad de Warnsdorff y traza de polilínea continua. |
 

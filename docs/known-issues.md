@@ -142,6 +142,30 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.10 — Missing inline `<clipPath>` definitions in Interval Partitioning SVG
+
+- **Reported Behavior**: In `IntervalPartitioningVisualizer.tsx`, text elements inside lecture bars referenced `clipPath="url(#clip-${lecture.id})"`, but no corresponding `<clipPath>` element existed in the SVG `<defs>` or DOM tree.
+- **Severity**: Low (Potential text overflow or missing labels in strict browser SVG renderers).
+- **Status**: **RESOLVED** (`c77ac64`).
+- **Resolution**:
+  - Generated inline `<clipPath id="clip-${lecture.id}"><rect x={x1} y={y} width={w} height={h} rx={4} /></clipPath>` elements for every placed lecture interval.
+  - Corrected button text color in `IntervalPartitioningPlayground.tsx` using `var(--accent-contrast)` instead of hardcoded `#0f172a`.
+
+---
+
+### Issue 3.11 — TSP Branch & Bound Discover playground lacked interactive map canvas and real-time lower bound calculation
+
+- **Reported Behavior**: In the Discover phase for TSP Branch & Bound, the playground presented only text buttons to append cities without any geometric 2D visual representation of the Argentine cities, network edges, or explicit calculation of the Lower Bound ($C + LB$) showing why subtrees are pruned.
+- **Severity**: High (Pedagogical deficit: students could not observe branch pruning in action before writing code).
+- **Status**: **RESOLVED** (`9935141`).
+- **Resolution**:
+  - Implemented an interactive 2D SVG canvas in `TspBranchAndBoundPlayground.tsx` with all 5 cities (Buenos Aires, Córdoba, Rosario, Mendoza, La Plata), distance weight labels, and active tour edges.
+  - Implemented real-time calculation of the optimistic Lower Bound ($LB$) for unvisited cities and projected total cost ($C + LB$).
+  - Added visual pruning callout banner when $C + LB \ge UB$ (30), demonstrating how Branch & Bound prunes subtrees before evaluating individual permutations.
+  - Allowed direct clicking on map city nodes with interactive hover rings and accessible keyboard controls.
+
+---
+
 ## 2. Complete Visual & Pedagogical Matrix (All 37 Exercises)
 
 | # | Exercise ID | Paradigm | Visualizer & Playground | Verified Status |
@@ -175,7 +199,7 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 | 27 | `graph-coloring-backtracking` | Backtracking | Chromatic palette + adjacent vertex conflicts | VERIFIED |
 | 28 | `sudoku-backtracking` | Backtracking | $9 \times 9$ grid + row/col/box constraint validator | VERIFIED |
 | 29 | `hamiltonian-cycle-backtracking` | Backtracking | Vertex traversal path + degree bound pruner | VERIFIED |
-| 30 | `tsp-branch-and-bound` | Backtracking / B&B | Search tree + MST/Hungarian lower bound gauge | VERIFIED |
+| 30 | `tsp-branch-and-bound` | Backtracking / B&B | Interactive 2D city map + search tree + live LB pruning gauge | VERIFIED |
 | 31 | `knapsack-branch-and-bound` | Backtracking / B&B | Best-first tree + fractional upper bound pruner | VERIFIED |
 | 32 | `knights-tour-backtracking` | Backtracking | Warnsdorff accessibility degree heatmap | VERIFIED |
 | 33 | `max-flow` | Advanced Algorithms | Flow network + augmenting paths + min-cut | VERIFIED |
