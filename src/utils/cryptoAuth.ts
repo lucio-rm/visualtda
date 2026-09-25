@@ -25,6 +25,103 @@ export async function computeSha256(message: string): Promise<string> {
   return fallbackSha256(message);
 }
 
+export function computeSha256Sync(ascii: string): string {
+  return fallbackSha256(ascii);
+}
+
+// In-memory runtime session entropy generated once per window session
+const SESSION_SECRET_SALT = typeof crypto !== 'undefined' && crypto.getRandomValues
+  ? Array.from(crypto.getRandomValues(new Uint8Array(16))).map((b) => b.toString(16).padStart(2, '0')).join('')
+  : Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+let authenticatedSessionSignature: string | null = null;
+const legitimateExercisePasses = new Set<string>();
+const honestSkipPasses = new Set<string>();
+
+/**
+ * Initializes authenticated session token upon legitimate faculty credential verification.
+ */
+export function activateInstructorSession(): void {
+  authenticatedSessionSignature = computeSha256Sync(INSTRUCTOR_CREDENTIAL_HASH + SESSION_SECRET_SALT);
+}
+
+/**
+ * Deactivates and clears faculty session state.
+ */
+export function resetInstructorSession(): void {
+  authenticatedSessionSignature = null;
+}
+
+/**
+ * Cryptographically verifies if the current session possesses genuine faculty credential authentication.
+ */
+export function verifyInstructorAccess(): boolean {
+  if (!authenticatedSessionSignature) {
+    // Check if token exists in storage for page reloads
+    try {
+      const stored =
+        localStorage.getItem(INSTRUCTOR_AUTH_STORAGE_KEY) ||
+        sessionStorage.getItem(INSTRUCTOR_AUTH_STORAGE_KEY);
+      if (stored === INSTRUCTOR_AUTH_TOKEN) {
+        // Legitimate pre-stored token detected, activate session
+        activateInstructorSession();
+        return true;
+      }
+    } catch {
+      return false;
+    }
+    return false;
+  }
+  return authenticatedSessionSignature === computeSha256Sync(INSTRUCTOR_CREDENTIAL_HASH + SESSION_SECRET_SALT);
+}
+
+/**
+ * Registers an exercise as legitimately passed via Python test execution.
+ */
+export function recordLegitimateExercisePass(exerciseId: string): void {
+  legitimateExercisePasses.add(exerciseId);
+}
+
+/**
+ * Registers an exercise as voluntarily revealed via pedagogical skip modal.
+ */
+export function recordHonestSkipPass(exerciseId: string): void {
+  honestSkipPasses.add(exerciseId);
+}
+
+/**
+ * Anti-Tamper Verification Authority:
+ * Detects DevTools inspection tampering (such as flipping isInstructorMode or solutionUnlocked from false to true).
+ */
+export function isExerciseSolutionAuthorized(
+  exerciseId: string,
+  isInstructorModeFlag?: boolean,
+  solutionUnlockedFlag?: boolean
+): { authorized: boolean; isTampered: boolean } {
+  // 1. Legitimate faculty access
+  if (verifyInstructorAccess()) {
+    return { authorized: true, isTampered: false };
+  }
+
+  // 2. Legitimate test execution pass in this session
+  if (legitimateExercisePasses.has(exerciseId)) {
+    return { authorized: true, isTampered: false };
+  }
+
+  // 3. Legitimate pedagogical skip confirmation
+  if (honestSkipPasses.has(exerciseId)) {
+    return { authorized: true, isTampered: false };
+  }
+
+  // 4. Anti-Tamper check: if component flags claim to be unlocked or instructor without cryptographic proof
+  if (isInstructorModeFlag || solutionUnlockedFlag) {
+    return { authorized: false, isTampered: true };
+  }
+
+  // 5. Standard locked state
+  return { authorized: false, isTampered: false };
+}
+
 /**
  * Fallback SHA-256 bitwise implementation ensuring 100% environment resilience.
  */

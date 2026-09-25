@@ -3,7 +3,10 @@ import {
   computeSha256,
   INSTRUCTOR_CREDENTIAL_HASH,
   INSTRUCTOR_AUTH_STORAGE_KEY,
-  INSTRUCTOR_AUTH_TOKEN
+  INSTRUCTOR_AUTH_TOKEN,
+  activateInstructorSession,
+  resetInstructorSession,
+  verifyInstructorAccess
 } from '../utils/cryptoAuth';
 
 export interface VerifyResult {
@@ -58,6 +61,7 @@ export const InstructorModeProvider: React.FC<{ children: React.ReactNode }> = (
 
     const hash = await computeSha256(password);
     if (hash === INSTRUCTOR_CREDENTIAL_HASH) {
+      activateInstructorSession();
       try {
         localStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
         sessionStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
@@ -74,6 +78,7 @@ export const InstructorModeProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   const deactivateInstructorMode = () => {
+    resetInstructorSession();
     try {
       localStorage.removeItem(INSTRUCTOR_AUTH_STORAGE_KEY);
       sessionStorage.removeItem(INSTRUCTOR_AUTH_STORAGE_KEY);
@@ -94,6 +99,11 @@ export const InstructorModeProvider: React.FC<{ children: React.ReactNode }> = (
 
   const setInstructorMode = (enabled: boolean) => {
     if (enabled) {
+      if (!verifyInstructorAccess()) {
+        // Reject unauthenticated enabling attempt via console
+        openAuthModal();
+        return;
+      }
       try {
         localStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
         localStorage.setItem('visual_tda_instructor_mode', 'true');

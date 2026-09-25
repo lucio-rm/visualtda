@@ -5,6 +5,7 @@ import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseConten
 import { runPythonTests } from '../runtime/pythonTestRunner';
 import { pythonService } from '../runtime/pythonExecutionService';
 import { useStudentProgress } from '../context/StudentProgressContext';
+import { recordLegitimateExercisePass, recordHonestSkipPass } from '../utils/cryptoAuth';
 
 interface SolveViewProps {
   exercise: ExerciseMetadata;
@@ -140,6 +141,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
       if (evaluation.passed) {
         setTestStatus('passed');
+        recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
         setTestSummary(
           language === 'es'
@@ -162,6 +164,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
       setTestResults(evalResult.results);
       if (evalResult.passed) {
         setTestStatus('passed');
+        recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
         setTestSummary(
           language === 'es'
@@ -237,6 +240,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
       );
     } else if (evalResult.passed) {
       setTestStatus('passed');
+      recordLegitimateExercisePass(exercise.id);
       markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
       setTestSummary(
         language === 'es'
@@ -485,6 +489,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 className="btn-primary"
                 onClick={() => {
                   setShowSkipModal(false);
+                  recordHonestSkipPass(exercise.id);
                   onSkipToUnderstand();
                 }}
               >

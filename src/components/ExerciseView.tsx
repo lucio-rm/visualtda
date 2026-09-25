@@ -3,6 +3,7 @@ import { ExerciseMetadata, ExercisePhase, formatTechniqueLabel } from '../types'
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
+import { recordLegitimateExercisePass, recordHonestSkipPass } from '../utils/cryptoAuth';
 import { PhaseSwitcher } from './PhaseSwitcher';
 import { DiscoverView } from './DiscoverView';
 import { SolveView } from './SolveView';
@@ -54,7 +55,8 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
         setPhase(initialPhase);
       }
     }
-  }, [exercise.id, initialPhase, isEffectiveUnlocked]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise.id, initialPhase]);
 
   React.useEffect(() => {
     if (currentState === 'unseen') {
@@ -74,12 +76,15 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   };
 
   const handleSolveSuccess = () => {
+    recordLegitimateExercisePass(exercise.id);
     setSolutionUnlocked(true);
     markPassed(exercise.id);
     markCompleted(exercise.id);
   };
 
   const handleSkipToUnderstand = () => {
+    recordHonestSkipPass(exercise.id);
+    setSolutionUnlocked(true);
     setPhase('understand');
   };
 

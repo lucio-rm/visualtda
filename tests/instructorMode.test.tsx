@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { App } from '../src/app/App';
-import { INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN } from '../src/utils/cryptoAuth';
+import { INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN, resetInstructorSession } from '../src/utils/cryptoAuth';
 
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -13,6 +13,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
   let root: Root;
 
   beforeEach(() => {
+    resetInstructorSession();
     localStorage.clear();
     sessionStorage.clear();
     localStorage.setItem('visual_tda_lang', 'es');
@@ -222,5 +223,42 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     // Now Understand view is rendered
     expect(container.querySelector('.understand-view')).not.toBeNull();
     expect(container.textContent).toContain('Solución en Python');
+  });
+
+  it('detects tampering and blocks solution if state flags are altered via DevTools without genuine crypto credential or test pass', async () => {
+    // Attempting to render UnderstandView with solutionUnlocked=true without genuine crypto pass token
+    const { registry } = await import('../src/engine/registry');
+    const testExercise = registry.getExercise('road-antennas-greedy')!;
+
+    const { UnderstandView } = await import('../src/components/UnderstandView');
+    const { LanguageProvider } = await import('../src/i18n/LanguageContext');
+    const { InstructorModeProvider } = await import('../src/context/InstructorModeContext');
+
+    await act(async () => {
+      root.render(
+        <LanguageProvider>
+          <InstructorModeProvider>
+            <UnderstandView
+              exercise={testExercise}
+              canonicalPython="def solve(): # CANONICAL_SECRET_CODE"
+              pseudocode="Algoritmo Greedy"
+              correctnessExplanation="Demostración"
+              timeComplexity="O(N)"
+              spaceComplexity="O(1)"
+              solutionUnlocked={true} // Tampered flag
+            />
+          </InstructorModeProvider>
+        </LanguageProvider>
+      );
+    });
+
+    // Tamper card must be displayed
+    const tamperCard = container.querySelector('.solution-tamper-card');
+    expect(tamperCard).not.toBeNull();
+    expect(tamperCard?.textContent).toContain('Firma Criptográfica Inválida');
+    expect(tamperCard?.textContent).toContain('Se detectó una alteración de variables en la consola/inspección de DevTools');
+
+    // Secret python code must NOT be present anywhere in the DOM
+    expect(container.textContent).not.toContain('CANONICAL_SECRET_CODE');
   });
 });

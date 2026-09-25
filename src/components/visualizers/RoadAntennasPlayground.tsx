@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solveRoadAntennas } from '../../engine/algorithms/roadAntennasValidator';
@@ -51,6 +51,9 @@ export const RoadAntennasPlayground: React.FC = () => {
   const [activeTool, setActiveTool] = useState<'place_antenna' | 'place_house'>('place_antenna');
   const [cursorKm, setCursorKm] = useState<number>(30);
   const [inputKm, setInputKm] = useState<string>('30');
+  const [draggingAntennaIdx, setDraggingAntennaIdx] = useState<number | null>(null);
+  const [draggingHouseIdx, setDraggingHouseIdx] = useState<number | null>(null);
+  const isDraggingRef = useRef(false);
 
   // Compute canonical greedy solution
   const greedyAntennas = useMemo(() => {
@@ -118,7 +121,68 @@ export const RoadAntennasPlayground: React.FC = () => {
     }
   };
 
+  const handlePointerDownAntenna = (idx: number, e: React.PointerEvent) => {
+    e.stopPropagation();
+    isDraggingRef.current = true;
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingAntennaIdx(idx);
+  };
+
+  const handlePointerDownHouse = (idx: number, e: React.PointerEvent) => {
+    e.stopPropagation();
+    isDraggingRef.current = true;
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingHouseIdx(idx);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (draggingAntennaIdx === null && draggingHouseIdx === null) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
+    const currentKm = xToKm(clickX);
+
+    if (draggingAntennaIdx !== null) {
+      setUserAntennas((prev) => {
+        const copy = [...prev];
+        copy[draggingAntennaIdx] = currentKm;
+        return copy;
+      });
+      setCursorKm(currentKm);
+      setInputKm(String(currentKm));
+    } else if (draggingHouseIdx !== null) {
+      setHouses((prev) => {
+        const copy = [...prev];
+        copy[draggingHouseIdx] = currentKm;
+        return copy;
+      });
+      setCursorKm(currentKm);
+      setInputKm(String(currentKm));
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingAntennaIdx !== null || draggingHouseIdx !== null) {
+      try {
+        (e.target as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+      if (draggingAntennaIdx !== null) {
+        setUserAntennas((prev) => [...prev].sort((a, b) => a - b));
+        setDraggingAntennaIdx(null);
+      }
+      if (draggingHouseIdx !== null) {
+        setHouses((prev) => [...prev].sort((a, b) => a - b));
+        setDraggingHouseIdx(null);
+      }
+      setTimeout(() => {
+        isDraggingRef.current = false;
+      }, 50);
+    }
+  };
+
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (isDraggingRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
     const clickedKm = xToKm(clickX);
@@ -306,6 +370,8 @@ export const RoadAntennasPlayground: React.FC = () => {
           width="100%"
           height={svgHeight}
           onClick={handleSvgClick}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
           tabIndex={0}
           role="region"
           aria-label={
@@ -411,7 +477,11 @@ export const RoadAntennasPlayground: React.FC = () => {
             const spanWidth = Math.max(0, spanRight - spanLeft);
 
             return (
-              <g key={`user-ant-${aIdx}`}>
+              <g
+                key={`user-ant-${aIdx}`}
+                onPointerDown={(e) => handlePointerDownAntenna(aIdx, e)}
+                style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }}
+              >
                 <rect
                   x={spanLeft}
                   y={roadY - 45}
@@ -482,7 +552,11 @@ export const RoadAntennasPlayground: React.FC = () => {
             const houseColor = isCovered ? '#10b981' : '#f59e0b';
 
             return (
-              <g key={`house-${hIdx}`}>
+              <g
+                key={`house-${hIdx}`}
+                onPointerDown={(e) => handlePointerDownHouse(hIdx, e)}
+                style={{ cursor: draggingHouseIdx === hIdx ? 'grabbing' : 'grab' }}
+              >
                 <polygon
                   points={`${hX - 8},${roadY - 14} ${hX + 8},${roadY - 14} ${hX},${roadY - 23}`}
                   fill={houseColor}

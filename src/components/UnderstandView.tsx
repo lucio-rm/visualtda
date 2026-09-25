@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ExerciseMetadata } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
+import { isExerciseSolutionAuthorized } from '../utils/cryptoAuth';
 import { TheoryMarkdown } from './common/TheoryMarkdown';
 import { getRelatedExercisesFor } from '../engine/crossExerciseConnections';
 
@@ -34,7 +35,9 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   const { isInstructorMode } = useInstructorMode();
   const [codeMode, setCodeMode] = useState<'python' | 'pseudocode'>('python');
 
-  const canViewCanonicalPython = solutionUnlocked || isInstructorMode;
+  const authStatus = isExerciseSolutionAuthorized(exercise.id, isInstructorMode, solutionUnlocked);
+  const canViewCanonicalPython = authStatus.authorized;
+  const isTampered = authStatus.isTampered;
   const relatedExercises = getRelatedExercisesFor(exercise.id);
 
   return (
@@ -92,24 +95,64 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
             </div>
 
             {codeMode === 'python' && !canViewCanonicalPython ? (
-              <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  {language === 'es' ? 'Acceso Restringido' : 'Restricted Access'}
+              isTampered ? (
+                <div
+                  className="solution-tamper-card"
+                  role="alert"
+                  style={{
+                    padding: '2rem',
+                    textAlign: 'center',
+                    background: 'rgba(239, 68, 68, 0.08)',
+                    border: '1px solid rgba(239, 68, 68, 0.35)',
+                    borderRadius: 'var(--radius-md)'
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      padding: '0.35rem 0.75rem',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: '#ef4444',
+                      marginBottom: '0.75rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    {language === 'es' ? 'Firma Criptográfica Inválida' : 'Invalid Cryptographic Signature'}
+                  </div>
+                  <h4 style={{ marginBottom: '0.5rem', color: '#ef4444' }}>
+                    {language === 'es' ? 'Acceso Bloqueado contra Manipulación' : 'Access Blocked against Tampering'}
+                  </h4>
+                  <p style={{ maxWidth: '540px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {language === 'es'
+                      ? 'Se detectó una alteración de variables en la consola/inspección de DevTools sin validación de credenciales. La solución oficial de la cátedra requiere ingresar la clave de 8 caracteres en "Modo Docente" o aprobar las pruebas unitarias en la fase Resolver.'
+                      : 'State variable modification detected in DevTools without valid credential signature. The official faculty solution requires entering the 8-character password in "Instructor Mode" or passing all unit tests in Solve.'}
+                  </p>
                 </div>
-                <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
-                  {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
-                </h4>
-                <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  {language === 'es'
-                    ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente en la barra superior).'
-                    : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode in the top bar).'}
-                </p>
-                {onGoToSolve && (
-                  <button type="button" className="btn-primary" onClick={onGoToSolve}>
-                    {language === 'es' ? 'Ir a Resolver el Ejercicio →' : 'Go to Solve Exercise →'}
-                  </button>
-                )}
-              </div>
+              ) : (
+                <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+                  <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    {language === 'es' ? 'Acceso Restringido' : 'Restricted Access'}
+                  </div>
+                  <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
+                    {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
+                  </h4>
+                  <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {language === 'es'
+                      ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente en la barra superior).'
+                      : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode in the top bar).'}
+                  </p>
+                  {onGoToSolve && (
+                    <button type="button" className="btn-primary" onClick={onGoToSolve}>
+                      {language === 'es' ? 'Ir a Resolver el Ejercicio →' : 'Go to Solve Exercise →'}
+                    </button>
+                  )}
+                </div>
+              )
             ) : (
               <pre className="canonical-code-display">
                 <code>{codeMode === 'python' ? canonicalPython : pseudocode}</code>

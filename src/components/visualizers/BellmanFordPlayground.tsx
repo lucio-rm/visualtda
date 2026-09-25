@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import { BellmanFordNode, BellmanFordEdge } from '../../engine/algorithms/bellmanFordTrace';
 
-const GRAPH_STABLE: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
+const GRAPH_STABLE_DEFAULT: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
   nodes: [
-    { id: 'S', x: 70, y: 130 },
-    { id: 'A', x: 200, y: 50 },
-    { id: 'B', x: 200, y: 210 },
-    { id: 'T', x: 340, y: 130 }
+    { id: 'S', x: 80, y: 130 },
+    { id: 'A', x: 210, y: 60 },
+    { id: 'B', x: 210, y: 200 },
+    { id: 'T', x: 370, y: 130 }
   ],
   edges: [
     { u: 'S', v: 'A', weight: 4 },
@@ -19,12 +19,12 @@ const GRAPH_STABLE: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
   ]
 };
 
-const GRAPH_CYCLE: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
+const GRAPH_CYCLE_DEFAULT: { nodes: BellmanFordNode[]; edges: BellmanFordEdge[] } = {
   nodes: [
-    { id: 'S', x: 60, y: 130 },
-    { id: 'A', x: 190, y: 60 },
-    { id: 'B', x: 310, y: 60 },
-    { id: 'C', x: 250, y: 210 }
+    { id: 'S', x: 70, y: 130 },
+    { id: 'A', x: 200, y: 60 },
+    { id: 'B', x: 340, y: 60 },
+    { id: 'C', x: 270, y: 210 }
   ],
   edges: [
     { u: 'S', v: 'A', weight: 1 },
@@ -40,30 +40,44 @@ export const BellmanFordPlayground: React.FC = () => {
 
   const [mode, setMode] = useState<'stable' | 'cycle'>('stable');
   const [iteration, setIteration] = useState<number>(0);
+  const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
 
-  const activeGraph = mode === 'stable' ? GRAPH_STABLE : GRAPH_CYCLE;
+  // Editable / draggable node coordinates
+  const [stableNodes, setStableNodes] = useState<BellmanFordNode[]>(GRAPH_STABLE_DEFAULT.nodes);
+  const [cycleNodes, setCycleNodes] = useState<BellmanFordNode[]>(GRAPH_CYCLE_DEFAULT.nodes);
+
+  const activeGraph = useMemo(() => {
+    return mode === 'stable'
+      ? { nodes: stableNodes, edges: GRAPH_STABLE_DEFAULT.edges }
+      : { nodes: cycleNodes, edges: GRAPH_CYCLE_DEFAULT.edges };
+  }, [mode, stableNodes, cycleNodes]);
+
   const { nodes, edges } = activeGraph;
   const maxIters = nodes.length - 1;
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  // Compute table up to iteration
-  const table: Array<Record<string, number>> = [];
-  const row0: Record<string, number> = {};
-  for (const n of nodes) row0[n.id] = Infinity;
-  row0['S'] = 0;
-  table.push(row0);
+  // Compute DP table M[i, v] for all i from 0 up to nodes.length
+  const fullTable: Array<Record<string, number>> = useMemo(() => {
+    const rows: Array<Record<string, number>> = [];
+    const row0: Record<string, number> = {};
+    for (const n of nodes) row0[n.id] = Infinity;
+    row0['S'] = 0;
+    rows.push(row0);
 
-  for (let i = 1; i <= Math.min(iteration, maxIters + 1); i++) {
-    const prev = table[i - 1];
-    const curr: Record<string, number> = { ...prev };
-    for (const e of edges) {
-      if (prev[e.u] !== Infinity && prev[e.u] + e.weight < curr[e.v]) {
-        curr[e.v] = prev[e.u] + e.weight;
+    for (let i = 1; i <= nodes.length; i++) {
+      const prev = rows[i - 1];
+      const curr: Record<string, number> = { ...prev };
+      for (const e of edges) {
+        if (prev[e.u] !== Infinity && prev[e.u] + e.weight < curr[e.v]) {
+          curr[e.v] = prev[e.u] + e.weight;
+        }
       }
+      rows.push(curr);
     }
-    table.push(curr);
-  }
+    return rows;
+  }, [nodes, edges]);
 
-  const currentDists = table[table.length - 1] || row0;
+  const currentDists = fullTable[iteration] || fullTable[0];
   const hasNegativeCycleDetected = mode === 'cycle' && iteration >= nodes.length;
 
   const handleStep = () => {
@@ -76,18 +90,64 @@ export const BellmanFordPlayground: React.FC = () => {
     }
   };
 
+  const handlePrevStep = () => {
+    if (iteration > 0) {
+      setIteration(iteration - 1);
+    }
+  };
+
   const handleReset = (newMode: 'stable' | 'cycle') => {
     setMode(newMode);
     setIteration(0);
+    setDraggingNodeId(null);
     if (newMode === 'cycle') {
       markAttempted('bellman-ford-dp');
     }
   };
 
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+  // Node Dragging Handling
+  const handlePointerDown = (id: string, e: React.PointerEvent) => {
+    e.preventDefault();
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setDraggingNodeId(id);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!draggingNodeId || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const scaleX = 460 / rect.width;
+    const scaleY = 260 / rect.height;
+
+    const newX = Math.round(Math.max(30, Math.min(430, (e.clientX - rect.left) * scaleX)));
+    const newY = Math.round(Math.max(30, Math.min(230, (e.clientY - rect.top) * scaleY)));
+
+    if (mode === 'stable') {
+      setStableNodes((prev) => prev.map((n) => (n.id === draggingNodeId ? { ...n, x: newX, y: newY } : n)));
+    } else {
+      setCycleNodes((prev) => prev.map((n) => (n.id === draggingNodeId ? { ...n, x: newX, y: newY } : n)));
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingNodeId) {
+      try {
+        (e.target as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+      setDraggingNodeId(null);
+    }
+  };
+
+  const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
 
   return (
-    <div className="algorithm-playground bellman-ford-playground" role="region" aria-label="Laboratorio de Bellman-Ford y Ciclos Negativos">
+    <div
+      className="algorithm-playground bellman-ford-playground"
+      role="region"
+      aria-label="Laboratorio de Bellman-Ford y Ciclos Negativos"
+    >
+      {/* Top Presets & Controls Bar */}
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button
@@ -95,25 +155,36 @@ export const BellmanFordPlayground: React.FC = () => {
             className={`btn-preset ${mode === 'stable' ? 'active' : ''}`}
             onClick={() => handleReset('stable')}
           >
-            {language === 'es' ? 'Pesos Negativos Válidos (Sin Ciclo)' : 'Valid Negative Weights (No Cycle)'}
+            {language === 'es' ? 'Pesos Negativos Factibles (Sin Ciclo)' : 'Valid Negative Weights (No Cycle)'}
           </button>
           <button
             type="button"
             className={`btn-preset ${mode === 'cycle' ? 'active' : ''}`}
             onClick={() => handleReset('cycle')}
           >
-            {language === 'es' ? 'Grafo con Ciclo Negativo' : 'Negative Cycle Graph'}
+            {language === 'es' ? 'Grafo con Ciclo Negativo (Kleinberg Cap. 6.8)' : 'Negative Cycle Graph'}
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <button
+            type="button"
+            className="btn-tool"
+            onClick={handlePrevStep}
+            disabled={iteration === 0}
+          >
+            ← {language === 'es' ? 'Paso Anterior' : 'Prev Step'}
+          </button>
           <button
             type="button"
             className="btn-tool"
             onClick={handleStep}
             disabled={iteration >= nodes.length}
+            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
           >
-            {language === 'es' ? `Avanzar Iteración (${iteration} / ${maxIters}) →` : `Advance Iteration (${iteration} / ${maxIters}) →`}
+            {iteration === maxIters && mode === 'cycle'
+              ? (language === 'es' ? 'Probar Iteración |V| (Detector Ciclo) →' : 'Test Iteration |V| (Cycle Check) →')
+              : (language === 'es' ? `Avanzar Iteración (${iteration} / ${maxIters}) →` : `Advance Iteration (${iteration} / ${maxIters}) →`)}
           </button>
           <button
             type="button"
@@ -125,26 +196,51 @@ export const BellmanFordPlayground: React.FC = () => {
         </div>
       </div>
 
+      {/* Cycle Detection Banner */}
       {hasNegativeCycleDetected && (
-        <div className="sdk-conflict-banner" role="alert">
-          <strong>{language === 'es' ? 'Ciclo Negativo Identificado' : 'Negative Cycle Identified'}:</strong>{' '}
+        <div className="sdk-conflict-banner" role="alert" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444' }}>
+          <strong style={{ color: '#ef4444' }}>
+            {language === 'es' ? '¡Ciclo Negativo Identificado por la Ecuación de Bellman!' : 'Negative Cycle Detected via Bellman Equation!'}:
+          </strong>{' '}
           {language === 'es'
-            ? 'En la iteración |V| = 4, las distancias continúan decreciendo (M[4, A] < M[3, A]). Esto demuestra formalmente que existe un ciclo cerrado con suma de pesos negativa (A → B → C → A con costo 2 - 3 - 1 = -2), por lo que las distancias mínimas convergen a -∞ y no están acotadas.'
-            : 'At iteration |V|, distances continue to decrease. This proves a negative cycle exists; distances diverge to -∞.'}
+            ? 'En la iteración |V| = 4, las distancias continuaron disminuyendo (M[4, A] = -1 < M[3, A] = 0). Esto demuestra formalmente que existe el ciclo cerrado A → B → C → A con costo 2 + (-3) + (-1) = -2 < 0. En consecuencia, el camino más corto diverge a -∞.'
+            : 'At iteration |V| = 4, distances decreased further (M[4, A] = -1 < M[3, A] = 0). Cycle A -> B -> C -> A has weight sum -2 < 0. Distances diverge to -∞.'}
         </div>
       )}
 
-      {/* SVG Canvas */}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      {/* Interactive SVG Graph */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '480px', display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
+          <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos para moverlos):' : 'Directed Graph (Drag nodes to rearrange):'}</span>
+          <span>{language === 'es' ? 'Iteración actual i =' : 'Current iter i ='} <strong>{iteration}</strong></span>
+        </div>
+
         <svg
-          viewBox="0 0 460 250"
-          style={{ maxWidth: '460px', width: '100%', height: 'auto', borderRadius: '4px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)' }}
+          ref={svgRef}
+          viewBox="0 0 460 260"
+          style={{
+            maxWidth: '480px',
+            width: '100%',
+            height: 'auto',
+            borderRadius: 'var(--radius-md)',
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            touchAction: 'none'
+          }}
           role="img"
           aria-label="Grafo interactivo de Bellman-Ford"
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
         >
           <defs>
             <marker id="bf-pg-arr" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
+            </marker>
+            <marker id="bf-pg-arr-neg" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+            </marker>
+            <marker id="bf-pg-arr-cycle" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
             </marker>
           </defs>
 
@@ -155,8 +251,17 @@ export const BellmanFordPlayground: React.FC = () => {
             if (!u || !v) return null;
 
             const isNeg = e.weight < 0;
+            const isCycleEdge = mode === 'cycle' && ['A-B', 'B-C', 'C-A'].includes(`${e.u}-${e.v}`);
             const midX = (u.x + v.x) / 2;
             const midY = (u.y + v.y) / 2;
+
+            let strokeColor = isNeg ? '#ef4444' : 'var(--border, #475569)';
+            let markerId = isNeg ? 'url(#bf-pg-arr-neg)' : 'url(#bf-pg-arr)';
+
+            if (hasNegativeCycleDetected && isCycleEdge) {
+              strokeColor = '#f59e0b';
+              markerId = 'url(#bf-pg-arr-cycle)';
+            }
 
             return (
               <g key={`bf-pg-e-${idx}`}>
@@ -165,16 +270,23 @@ export const BellmanFordPlayground: React.FC = () => {
                   y1={u.y}
                   x2={v.x}
                   y2={v.y}
-                  stroke={isNeg ? 'var(--danger, #ef4444)' : 'var(--border, #475569)'}
-                  strokeWidth={isNeg ? 2.5 : 1.5}
-                  markerEnd="url(#bf-pg-arr)"
+                  stroke={strokeColor}
+                  strokeWidth={isNeg || (hasNegativeCycleDetected && isCycleEdge) ? 2.5 : 1.75}
+                  markerEnd={markerId}
                 />
-                <circle cx={midX} cy={midY} r={11} fill="var(--surface, #0f172a)" stroke={isNeg ? 'var(--danger, #ef4444)' : 'var(--border, #475569)'} />
+                <circle
+                  cx={midX}
+                  cy={midY}
+                  r={12}
+                  fill="var(--surface-hover, #0f172a)"
+                  stroke={strokeColor}
+                  strokeWidth={1.5}
+                />
                 <text
                   x={midX}
                   y={midY + 4}
                   textAnchor="middle"
-                  fill={isNeg ? 'var(--danger, #ef4444)' : 'var(--text, #f8fafc)'}
+                  fill={isNeg ? '#ef4444' : 'var(--text, #f8fafc)'}
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="700"
@@ -189,16 +301,58 @@ export const BellmanFordPlayground: React.FC = () => {
           {nodes.map((n) => {
             const dist = currentDists[n.id];
             const distStr = dist === Infinity ? '∞' : String(dist);
+            const isDragging = draggingNodeId === n.id;
+            const isSource = n.id === 'S';
 
             return (
-              <g key={`bf-pg-n-${n.id}`}>
-                <circle cx={n.x} cy={n.y} r={22} fill="var(--surface, #0f172a)" stroke="var(--accent, #6366f1)" strokeWidth={2.5} />
-                <text x={n.x} y={n.y + 5} textAnchor="middle" fill="var(--text, #f8fafc)" fontFamily="var(--font-mono)" fontSize="14px" fontWeight="700">
+              <g
+                key={`bf-pg-n-${n.id}`}
+                onPointerDown={(e) => handlePointerDown(n.id, e)}
+                style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+              >
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r={22}
+                  fill="var(--surface, #0f172a)"
+                  stroke={isSource ? '#10b981' : isDragging ? '#38bdf8' : 'var(--accent, #6366f1)'}
+                  strokeWidth={isDragging ? 3.5 : 2.5}
+                />
+                <text
+                  x={n.x}
+                  y={n.y + 5}
+                  textAnchor="middle"
+                  fill="var(--text, #f8fafc)"
+                  fontFamily="var(--font-mono)"
+                  fontSize="14px"
+                  fontWeight="700"
+                  style={{ userSelect: 'none' }}
+                >
                   {n.id}
                 </text>
-                <rect x={n.x - 18} y={n.y - 38} width={36} height={16} rx={4} fill="var(--surface-hover, #1e293b)" stroke="var(--border, #475569)" />
-                <text x={n.x} y={n.y - 26} textAnchor="middle" fill="var(--accent, #38bdf8)" fontFamily="var(--font-mono)" fontSize="11px" fontWeight="800">
-                  d:{distStr}
+
+                {/* Distance Badge */}
+                <rect
+                  x={n.x - 22}
+                  y={n.y - 40}
+                  width={44}
+                  height={18}
+                  rx={4}
+                  fill="var(--bg, #1e293b)"
+                  stroke={dist === Infinity ? 'var(--border)' : '#38bdf8'}
+                  strokeWidth={1}
+                />
+                <text
+                  x={n.x}
+                  y={n.y - 27}
+                  textAnchor="middle"
+                  fill={dist === Infinity ? 'var(--text-muted)' : '#38bdf8'}
+                  fontFamily="var(--font-mono)"
+                  fontSize="10px"
+                  fontWeight="800"
+                  style={{ userSelect: 'none' }}
+                >
+                  d={distStr}
                 </text>
               </g>
             );
@@ -206,11 +360,80 @@ export const BellmanFordPlayground: React.FC = () => {
         </svg>
       </div>
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Fundamento Teórico (Kleinberg & Tardos Cap. 6.8)' : 'Theory Foundation'}:</strong>{' '}
-        {language === 'es'
-          ? 'En un grafo sin ciclos negativos, el camino más simple entre dos nodos contiene a lo sumo |V| - 1 aristas. Por tanto, si al ejecutar la iteración |V| alguna distancia aún se reduce, obligatoriamente existe un ciclo negativo absorbente.'
-          : 'In graphs without negative cycles, shortest paths have at most |V|-1 edges. Any decrease at iteration |V| proves a negative cycle.'}
+      {/* Dynamic Programming Table M[i, v] */}
+      <div style={{ marginTop: '0.75rem' }}>
+        <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.35rem' }}>
+          {language === 'es' ? 'Matriz de Programación Dinámica M[i, v] (Kleinberg & Tardos):' : 'Dynamic Programming Matrix M[i, v]:'}
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="djk-pq-table" style={{ width: '100%', fontSize: '0.85rem' }} aria-label="Tabla M[i, v] Bellman-Ford">
+            <thead>
+              <tr>
+                <th style={{ width: '120px' }}>{language === 'es' ? 'Paso i (≤ i aristas)' : 'Step i (≤ i edges)'}</th>
+                {nodes.map((n) => (
+                  <th key={`th-node-${n.id}`} style={{ textAlign: 'center' }}>
+                    v = {n.id}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {fullTable.slice(0, iteration + 1).map((row, iIdx) => {
+                const isCurrentRow = iIdx === iteration;
+                const isCycleDetectionRow = mode === 'cycle' && iIdx === nodes.length;
+
+                return (
+                  <tr
+                    key={`dp-row-${iIdx}`}
+                    style={{
+                      background: isCycleDetectionRow
+                        ? 'rgba(239, 68, 68, 0.15)'
+                        : isCurrentRow
+                        ? 'rgba(56, 189, 248, 0.12)'
+                        : 'transparent'
+                    }}
+                  >
+                    <td>
+                      <strong>
+                        {iIdx === nodes.length && mode === 'cycle'
+                          ? (language === 'es' ? 'i = 4 (|V| cheq.)' : 'i = 4 (|V| test)')
+                          : `M[${iIdx}, v]`}
+                      </strong>
+                    </td>
+                    {nodes.map((n) => {
+                      const val = row[n.id];
+                      const prevVal = iIdx > 0 ? fullTable[iIdx - 1][n.id] : Infinity;
+                      const hasDecreased = iIdx > 0 && val < prevVal;
+
+                      return (
+                        <td
+                          key={`cell-${iIdx}-${n.id}`}
+                          style={{
+                            textAlign: 'center',
+                            fontFamily: 'var(--font-mono)',
+                            color: hasDecreased
+                              ? isCycleDetectionRow
+                                ? '#ef4444'
+                                : '#10b981'
+                              : 'var(--text)',
+                            fontWeight: hasDecreased || isCurrentRow ? 700 : 400
+                          }}
+                        >
+                          {val === Infinity ? '∞' : val}
+                          {hasDecreased && (
+                            <span style={{ fontSize: '0.7rem', marginLeft: '3px' }}>
+                              {isCycleDetectionRow ? '▼!' : '▼'}
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
