@@ -13,7 +13,7 @@
      - Plaintext credential is never stored; verified strictly via irreversible SHA-256 digest (`be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`).
      - Session entropy salt (`SESSION_SECRET_SALT`) signs valid instructor sessions.
      - Central authority `isExerciseSolutionAuthorized()` blocks DevTools tampering (`isInstructorMode: false` -> `true` or `solutionUnlocked: false` -> `true`), rendering `.solution-tamper-card` ("Firma Criptográfica Inválida: Acceso Bloqueado contra Manipulación") and completely withholding canonical Python source code from the DOM.
-  8. Overhauled all priority playgrounds with genuine tactile interaction (2D pointer dragging, physical manipulation, dynamic recalculation, and multi-instance presets):
+  8. Overhauled all 22 interactive playgrounds with genuine tactile interaction (2D pointer dragging, physical manipulation, dynamic recalculation, and multi-instance presets):
      - `HamiltonianCyclePlayground`: 2D draggable vertices, multiple graph presets ($K_5$, Petersen, $K_{3,4}$), live backtrack decision stack with dead-end detection.
      - `TspBranchAndBoundPlayground`: 2D draggable cities, dynamic Euclidean distance matrix recalculation, live Branch & Bound lower bound and optimal incumbent solver.
      - `IntervalPartitioningPlayground`: 2D draggable lecture blocks across classrooms and timeline, bottleneck sweep line at $t^*$, multi-instance presets.
@@ -27,10 +27,18 @@
      - `KruskalPlayground`: Disjoint-Set Union-Find component colors, sorted edges queue, and cycle detection.
      - `RoadAntennasPlayground`: 1D pointer dragging for antennas and houses directly along highway.
      - `VertexCoverApproxPlayground`: 2D draggable vertices, greedy maximal matching step assistant, animated coverage progress bar.
-     - `DijkstraPlayground`: Interactive Min-Heap priority queue $Q$ panel and settled set $S$.
-     - `ClosestPairPlayground`: 2D point creation and dragging with dynamic $\delta$ strip.
-  9. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, and static `dist/` build in 1.6s.
-- **BASELINE_COMMIT**: `e63560a`
+     - `DijkstraPlayground`: Interactive Min-Heap priority queue $Q$ panel, settled set $S$, and 2D draggable vertices.
+     - `ClosestPairPlayground`: 2D point creation and dragging with dynamic $\delta$ strip and median line.
+     - `KnightsTourPlayground`: Warnsdorff degree badges, best move highlighting with gold star, custom starting cell selection, correct dynamic copy, and step-through heuristics.
+     - `SudokuPlayground`: Minimum Remaining Values (MRV) candidate highlighting, constraint crosshairs (row, col, 3x3 block), digit frequency matching, and step MRV button.
+     - `PeakFindingPlayground`: Vertical bar dragging to mold custom elevation relief, interactive D&C binary search step simulation with active interval $[L, R]$ highlighting and midpoint indicator.
+     - `RandomizedFairCoinPlayground`: Physical metallic coin toss animation stage, pair outcome extraction, live toss status, and Monte Carlo convergence comparison against 50% line.
+     - `SubsetSumPlayground`: Drag-and-drop bucket and pool zones, dynamic gauge fill bar, and excess pruning feedback.
+     - `LinearProgrammingPlayground`: Full 2D Cartesian SVG plane, shaded feasible polytope, constraint lines, objective normal vector, and level set sweep line.
+     - `LcsPlayground`: Interactive SVG alignment ribbons, non-crossing matching invariant, crossing detection, and auto-align DP button.
+     - `WeightedIntervalPlayground`: Predecessor function $p(j)$ calculation, hover highlight, and dynamic programming recurrence callout.
+  9. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, 22/22 real Chromium browser QA scenarios passed across 5 viewports, and static `dist/` build in ~1.6s.
+- **BASELINE_COMMIT**: `363c7fe`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 293 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.6s)
