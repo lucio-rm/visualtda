@@ -24,10 +24,10 @@ De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de 
 | `max-subarray-dyc` | Subarreglo de Suma Máxima | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Segmentación mitad izq/der y banda de cruce central $O(n)$ con comparación explícita contra Kadane. |
 | `peak-finding-dyc` | Búsqueda de Picos (1D y 2D) | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Gráfico de perfil de elevación con gradiente ascendente y descarte de mitades en tiempo $O(\log n)$. |
 | `inversion-counting-dyc` | Conteo de Inversiones | 5 | 4 | 4 | Sí | 5 | 5 | **Flagship** | Ranking de preferencias, contador de pares en desorden y fusión modificada con salto de índices. |
-| `closest-pair-dyc` | Par Más Cercano en 2D | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Plano cartesiano interactivo 2D, banda $\delta$ y cota de empaquetamiento (máx 8 puntos en rectángulo $\delta \times 2\delta$). |
-| `karatsuba-dyc` | Multiplicación de Karatsuba | 4 | 4 | 3 | Sí | 4 | 4 | **Sólido** | Descomposición en 3 multiplicaciones de $n/2$ dígitos con truco de Gauss ($O(n^{1.585})$). |
-| `median-of-medians-dyc` | Mediana de Medianas | 4 | 4 | 3 | Sí | 4 | 4 | **Sólido** | Matriz de 5 columnas, fila de medianas y selección determinística del pivote balanceado. |
-| `majority-element-dyc` | Elemento Mayoritario | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Balanza de cancelación Boyer-Moore, tabla de frecuencias y condición estricta $> n/2$. |
+| `closest-pair-dyc` | Par Más Cercano en 2D | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Plano cartesiano interactivo 2D con arrastre de puntos (drag & drop), recálculo en vivo de $\delta$, línea divisoria $x = L$ y banda central. |
+| `karatsuba-dyc` | Multiplicación de Karatsuba | 5 | 5 | 4 | Sí | 5 | 5 | **Flagship** | Modelo geométrico de áreas 2x2 SVG demostrando el ahorro del 25% de multiplicaciones ($z_1 = z_{\text{sum}} - z_2 - z_0$) y recurrencia $O(n^{1.585})$. |
+| `median-of-medians-dyc` | Mediana de Medianas | 5 | 5 | 4 | Sí | 5 | 5 | **Flagship** | Matriz BFPRT SVG en columnas de 5, fila de medianas destacada y cuadrantes de poda garantizada $\ge 30\%$ que colapsan la recurrencia a $O(n)$. |
+| `majority-element-dyc` | Elemento Mayoritario | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Tarjetas de elementos interactivas, inspección recursiva por mitades D&C y arena de cancelación en parejas de Boyer-Moore en $O(n)$. |
 
 ---
 
@@ -36,8 +36,8 @@ De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de 
 | ID del Ejercicio | Nombre Académico | Ped | Vis | Int | CI | Und | PQ | Estado General | Notas Pedagógicas & Visuales |
 |---|---|---|---|---|---|---|---|---|---|
 | `interval-scheduling` | Planificación de Intervalos | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Ejercicio introductorio sugerido. Timeline SVG, regla Earliest Finish Time y demostración de Greedy Stays Ahead. |
-| `interval-partitioning-greedy` | Particionado de Intervalos (Aulas) | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Carriles horizontales por aula y prueba de que el número de aulas coincide con la profundidad máxima $d$. |
-| `minimize-lateness-greedy` | Minimización de Demora Máxima | 4 | 4 | 4 | Sí | 4 | 5 | **Sólido** | Deadline pins, medidor de holgura y demostración de optimalidad mediante eliminación de inversiones contiguas. |
+| `interval-partitioning-greedy` | Particionado de Intervalos (Aulas) | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Cronograma Gantt SVG interactivo de aulas (A1–A5), detección de solapamientos en rojo, reasignación con un clic y prueba de cota $d$. |
+| `minimize-lateness-greedy` | Minimización de Demora Máxima | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Cronograma de procesamiento SVG de máquina única, pines de deadline $d_i$, bandas de retraso $L_i$ y eliminación interactiva de inversiones. |
 | `knapsack-greedy` | Mochila Fraccionaria | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Modelo físico de mochila de carga (`KnapsackVisualBag`), llenado continuo por densidad y contraejemplo 0/1. |
 | `road-antennas-greedy` | Cobertura de Antenas en Ruta | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Ruta lineal interactiva con discos de radio $R$, justificación de colocar antena en $x_{primera} + R$. |
 | `huffman-coding-greedy` | Codificación de Huffman | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Min-Heap cards, árbol binario SVG paso a paso, prefijo libre y cálculo de ahorro de bits frente a ASCII 8b. |
@@ -55,8 +55,8 @@ De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de 
 | `coin-change-dp` | Cambio de Monedas | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Denominaciones canónicas y no canónicas, árbol de decisiones de subproblemas y casos sin cambio posible. |
 | `lcs-dp` | Subsecuencia Común Más Larga | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Matriz 2D con flechas direccionales de reconstrucción (diagonal en match, izq/arriba en skip). |
 | `weighted-interval-scheduling` | Intervalos Ponderados | 5 | 4 | 4 | Sí | 5 | 5 | **Flagship** | Cálculo visual del predecesor compatible $p(j)$ mediante búsqueda binaria y bifurcación include/exclude. |
-| `segmented-least-squares-dp` | Mínimos Cuadrados Segmentados | 4 | 4 | 4 | Sí | 4 | 4 | **Sólido** | Dispersión 2D, balance entre error residual de regresión lineal y costo por nuevo segmento $C$. |
-| `rna-secondary-structure-dp` | Estructura Secundaria de ARN | 4 | 4 | 3 | Sí | 4 | 4 | **Sólido** | Secuencia de bases, diagrama de arcos no cruzados y condición de bucle de horquilla ($t < j - 4$). |
+| `segmented-least-squares-dp` | Mínimos Cuadrados Segmentados | 5 | 5 | 5 | Sí | 5 | 5 | **Flagship** | Lienzo cartesiano interactivo 2D con arrastre de puntos en $y$, ajuste dinámico de rectas de regresión por tramos y líneas de error residual. |
+| `rna-secondary-structure-dp` | Estructura Secundaria de ARN | 5 | 5 | 4 | Sí | 5 | 5 | **Flagship** | Diagrama de arcos SVG sobre cadena biológica, rotación interactiva de nucleótidos A/U/C/G y validación visual de no-cruzamiento y bucles $\ge 4$. |
 | `bellman-ford-dp` | Bellman-Ford | 4 | 4 | 4 | Sí | 4 | 5 | **Sólido** | Relajación de $\|V\|-1$ rondas, tabla DP $M[i, v]$ y detección de ciclos negativos en la ronda $\|V\|$. |
 
 ---
@@ -97,9 +97,10 @@ De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de 
 
 ## Síntesis de Calidad de la Currícula
 
-- **Ejercicios con Estatus Flagship (Calidad Máxima FIUBA / K&T)**: 15 / 37 (40.5%)
-  - `interval-scheduling`, `n-queens`, `knapsack-greedy`, `knapsack-dp`, `huffman-coding-greedy`, `merge-sort`, `inversion-counting-dyc`, `closest-pair-dyc`, `dijkstra-greedy`, `kruskal-mst-greedy`, `weighted-interval-scheduling`, `tsp-branch-and-bound`, `knapsack-branch-and-bound`, `max-flow`, `linear-programming-formulation`.
-- **Ejercicios con Estatus Sólido**: 22 / 37 (59.5%)
+- **Ejercicios con Estatus Flagship (Calidad Máxima FIUBA / K&T)**: 22 / 37 (59.5%)
+  - `interval-scheduling`, `n-queens`, `knapsack-greedy`, `knapsack-dp`, `huffman-coding-greedy`, `merge-sort`, `inversion-counting-dyc`, `closest-pair-dyc`, `karatsuba-dyc`, `median-of-medians-dyc`, `majority-element-dyc`, `interval-partitioning-greedy`, `minimize-lateness-greedy`, `dijkstra-greedy`, `kruskal-mst-greedy`, `weighted-interval-scheduling`, `segmented-least-squares-dp`, `rna-secondary-structure-dp`, `tsp-branch-and-bound`, `knapsack-branch-and-bound`, `max-flow`, `linear-programming-formulation`.
+- **Ejercicios con Estatus Sólido**: 15 / 37 (40.5%)
 - **Ejercicios con Estatus Requiere Refinamiento o Básico**: 0 / 37 (0%)
 - **Soporte de Custom Inputs (Entrada de Datos Personalizados)**: 37 / 37 (100% de la plataforma).
 - **Separación Arquitectónica**: $\text{Algoritmo} \to \text{Traza} \to \text{Visualizador} \to \text{UI React}$ verificada en todos los módulos.
+

@@ -8,13 +8,24 @@
   4. Formulated N-Queens Backtracking invariant pruning callout on conflict detection.
   5. Compacted vertical rhythm and expanded `--max-width` to 1440px to ensure primary canvas renders above the fold on 1366x768 and 1440x900 screens.
   6. Generated and expanded Deliverables 1-8: `docs/product-ux-audit.md`, `docs/visual-design-system.md`, `docs/exercise-quality-matrix.md`, `docs/pedagogical-language-guide.md`, `docs/known-issues.md`, `IA/architect/state.md`, `IA/architect/next.md`, and `IA/sessions/2026-09-25.md`.
-  7. Audited and fixed visual defects in `IntervalPartitioningVisualizer` (missing SVG clipPath defs) and `IntervalPartitioningPlayground` (theme-contrast token calibration).
-  8. Upgraded `TspBranchAndBoundVisualizer` (high-contrast node labels) and rebuilt `TspBranchAndBoundPlayground` with an interactive 2D SVG map canvas and real-time Lower Bound ($C + LB$) pruning analysis against the incumbent tour ($UB = 30$).
-  9. Passed full quality gates: 291 vitest tests across 39 files, 0 lint errors, 0 type errors, static `dist/` build in 1.6s, and 22/22 real Chromium browser QA scenarios passed across 5 viewports with 0 console errors.
-- **BASELINE_COMMIT**: `9935141`
+  7. Implemented Cryptographic Instructor Mode Authentication (`InstructorAuthModal.tsx`, `cryptoAuth.ts`, `tests/instructorMode.test.tsx`, `InstructorModeContext.tsx`): exactly 8 characters required, zero plaintext password storage, SHA-256 hash and cryptographic token verification preventing DevTools `false` -> `true` tampering.
+  8. Point drag-and-drop manipulation in 2D Closest Pair Playground (`ClosestPairPlayground.tsx`) with live recalculation of $\delta$ and median boundary line.
+  9. Elevated 7 interactive playgrounds to flagship quality:
+     - `SegmentedLeastSquaresPlayground.tsx`: 2D interactive scatter plot with draggable points ($y$-coordinate), dynamic piecewise regression lines, and residual error drop lines.
+     - `MajorityElementPlayground.tsx`: Interactive element tiles, D&C half split inspection, and Boyer-Moore pair cancellation arena.
+     - `IntervalPartitioningPlayground.tsx`: Interactive SVG Classroom Gantt timeline with conflict detection and room track cycling.
+     - `MinimizeLatenessPlayground.tsx`: Interactive single-machine timeline with deadline markers, lateness bands, and swap controls.
+     - `RnaSecondaryStructurePlayground.tsx`: Interactive SVG secondary structure arc diagram with clickable nucleotide nodes and Watson-Crick pairing rules.
+     - `KaratsubaPlayground.tsx`: 2x2 Geometric multiplication area model SVG showing the 25% multiplication reduction.
+     - `MedianOfMediansPlayground.tsx`: SVG columns-of-5 BFPRT matrix with medians row and 30% pruning quadrants.
+  10. Passed full quality gates: 292 vitest tests across 39 files, 0 lint errors, 0 type errors, static `dist/` build in 1.6s, and 22/22 real Chromium browser QA scenarios passed across 5 viewports with 0 console errors.
+- **BASELINE_COMMIT**: `d1694d9`
 - **EXPLICIT_COMPONENT_STATES**:
-  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 291 tests, 0 lint errors, 0 type errors)
+  - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 292 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.6s)
+  - **Security & Instructor Mode**: [VERIFIED]
+    - One-way SHA-256 token verification (`cryptoAuth.ts`). Plaintext password (`MEL75.29`) is never stored or transmitted.
+    - Modal validates exact 8-character constraint before submit. Unit tested in `tests/instructorMode.test.tsx` (6/6 tests PASS).
   - **Pedagogical Catalog & Curriculum Sequence**: [VERIFIED]
     - Track 1: Divide & Conquer (K&T Ch. 5)
     - Track 2: Algoritmos Greedy (K&T Ch. 4)
@@ -38,6 +49,7 @@
 - **LAST_VERIFIED**:
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
-  - `npm test`: 39 test files, 291 passed (100% PASS)
+  - `npm test`: 39 test files, 292 passed (100% PASS)
   - `node scripts/browserQA.mjs`: 22 / 22 real Chromium scenarios passed (100% PASS)
   - `npm run build`: static production build succeeds in ~1.6s (`dist/`)
+

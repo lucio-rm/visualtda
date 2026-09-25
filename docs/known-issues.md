@@ -166,6 +166,37 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.12 — Instructor mode privilege escalation vulnerability and plaintext password leakage risk
+
+- **Reported Behavior**: Instructor Mode could previously be activated without password gating or trivially bypassed via browser DevTools console by executing `localStorage.setItem('visual_tda_instructor_mode', 'true')`, enabling full canonical answers and bypassing pedagogy without authorization.
+- **Severity**: High (Academic integrity and security: students could bypass learning progression).
+- **Status**: **RESOLVED** (`949ab06`).
+- **Resolution**:
+  - Built `src/utils/cryptoAuth.ts` implementing pure one-way SHA-256 cryptographic hashing (`crypto.subtle.digest` with TS bitwise fallback).
+  - The required password (`MEL75.29`) is NEVER stored in plaintext in the codebase, bundle, or comments; only its cryptographic hash `be0bfc6c...` and session token are verified.
+  - Built `src/components/InstructorAuthModal.tsx` requiring an exact 8-character password with live counter, show/hide toggle, and localized error messages.
+  - Updated `src/context/InstructorModeContext.tsx` to validate a cryptographic token; manual manipulation of `localStorage` boolean values is rejected and cleared.
+  - Added 6 unit tests in `tests/instructorMode.test.tsx` verifying modal gating, length enforcement, rejection of invalid passwords, and protection against unauthorized privilege escalation.
+
+---
+
+### Issue 3.13 — Playgrounds lacked physical manipulation, Gantt charts, regression plots, and geometric area models
+
+- **Reported Behavior**: Several playgrounds (Closest Pair, Segmented Least Squares, Majority Element, Interval Partitioning, Minimize Lateness, Karatsuba, Median of Medians, RNA Structure) relied primarily on text tables, basic forms, or numeric inputs without interactive graphical representations.
+- **Severity**: High (Violation of Prompt V5 §18, §48, §49, §350: lack of direct manipulation and visual cognitive aids).
+- **Status**: **RESOLVED** (`d1694d9`).
+- **Resolution**:
+  - `ClosestPairPlayground.tsx`: Added interactive SVG canvas supporting mouse drag-and-drop of 2D points with real-time recalculation of $\delta$, $x = L$ divider, and corridor points count.
+  - `SegmentedLeastSquaresPlayground.tsx`: Added 2D interactive scatter plot with draggable points ($y$-coordinate), dynamic piecewise regression lines, and residual error drop lines.
+  - `MajorityElementPlayground.tsx`: Added interactive element tiles (+/-/delete), D&C recursive split inspection, and Boyer-Moore pair cancellation arena.
+  - `IntervalPartitioningPlayground.tsx`: Added interactive SVG Classroom Gantt timeline (A1–A5) with real-time conflict detection and one-click room track cycling.
+  - `MinimizeLatenessPlayground.tsx`: Added interactive SVG single-machine timeline with deadline markers, lateness bands, and adjacent swap interactions.
+  - `RnaSecondaryStructurePlayground.tsx`: Added interactive SVG secondary structure arc diagram with clickable nucleotide nodes and Watson-Crick pairing rules.
+  - `KaratsubaPlayground.tsx`: Added 2x2 geometric multiplication area model SVG showing the 25% multiplication reduction.
+  - `MedianOfMediansPlayground.tsx`: Added SVG columns-of-5 BFPRT matrix with medians row and 30% pruning quadrants.
+
+---
+
 ## 2. Complete Visual & Pedagogical Matrix (All 37 Exercises)
 
 | # | Exercise ID | Paradigm | Visualizer & Playground | Verified Status |

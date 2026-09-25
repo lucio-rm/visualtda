@@ -26,26 +26,31 @@ Este documento define la hoja de ruta y prioridades operativas de Visual TDA par
    - `IA/architect/state.md` (Entregable 6)
    - `IA/architect/next.md` (Entregable 7)
    - `IA/sessions/2026-09-25.md` (Entregable 8)
+6. ✅ **Seguridad Criptográfica y Modo Docente ("Ser Docente")**:
+   - Modal de autenticación de 8 caracteres exactos (`InstructorAuthModal.tsx`).
+   - Token SHA-256 criptográfico (`cryptoAuth.ts`) sin filtración de contraseñas en texto plano ni vulnerabilidad a inspección de DevTools (`false` -> `true`).
+7. ✅ **Overhaul de Playgrounds a Estándar Flagship (§350)**:
+   - Arrastre interactivo de puntos 2D en `ClosestPairPlayground.tsx` y `SegmentedLeastSquaresPlayground.tsx`.
+   - Cronograma Gantt interactivo de aulas en `IntervalPartitioningPlayground.tsx`.
+   - Cronograma interactivo de máquina única y deadlines en `MinimizeLatenessPlayground.tsx`.
+   - Modelo geométrico de áreas 2x2 en `KaratsubaPlayground.tsx`.
+   - Matriz de columnas de 5 BFPRT con cuadrantes de poda en `MedianOfMediansPlayground.tsx`.
+   - Diagrama de arcos de estructura secundaria en `RnaSecondaryStructurePlayground.tsx`.
+   - Arena de cancelación de Boyer-Moore e inspección D&C en `MajorityElementPlayground.tsx`.
 
 ---
 
 ## 2. Próximas Prioridades Operativas
 
-1. **Revisión Continua de los 10 Ejercicios Flagship (§203)**:
-   - `n-queens`: Refinar la experiencia de contraejemplos interactivos de ataque en diagonal.
-   - `knapsack-greedy` vs `knapsack-dp`: Ampliar el análisis comparativo del quiebre de la heurística voraz en mochila entera.
-   - `huffman-coding-greedy`: Mantener sincronizados los pasos del Min-Heap con las ramas del árbol SVG y el prefijo de código libre.
-   - `dijkstra-greedy`: Verificar el contraejemplo con aristas de peso negativo y la cola de prioridad.
-   - `merge-sort` & `inversion-counting-dyc`: Consolidar la visualización del árbol de recursión y el búfer auxiliar.
-   - `tsp-branch-and-bound`: ✅ Implementado lienzo SVG 2D interactivo con mapa de ciudades argentinas y cálculo en vivo de cota inferior ($C + LB$) con poda estricta por incumbent.
-   - `knapsack-branch-and-bound`: Verificar el indicador de cota optimista (relajación continua) y podas por incumbent.
-   - `max-flow`: Profundizar la visualización del corte mínimo ($S, T$) y capacidades residuales.
-   - `linear-programming-formulation`: Afinar el poliedro 2D y el vector gradiente.
-2. **Propagación del Estándar Flagship a los 27 Ejercicios Restantes (§204)**:
-   - Elevar los ejercicios clasificados como `Sólido` en la matriz de calidad mediante la incorporación de microinteracciones específicas y mejores explicaciones del "por qué".
-3. **Mantenimiento del Quality Gate Completo**:
+1. **Revisión Continua de los Ejercicios Restantes**:
+   - `road-antennas-greedy`: Incorporar arrastre de estaciones a lo largo de la ruta y ajuste dinámico de radio $R$.
+   - `knights-tour-backtracking`: Agregar interacción de selección manual de casillas guiada por la heurística de Warnsdorff.
+   - `coin-change-dp`: Agregar comparación visual en vivo entre la solución voraz (subóptima en monedas arbitrarias) y la tabla DP.
+   - `vertex-cover-approx`: Interacción para seleccionar aristas maximales independientes y ver la cota 2-aproximada.
+2. **Monitoreo de Calidad**:
    - `npm run lint`: 0 errores.
    - `npm run typecheck`: 0 errores.
-   - `npm test`: 291/291 pruebas vitest.
+   - `npm test`: 292/292 pruebas vitest (100% PASS).
    - `npm run build`: compilación estática a `dist/`.
    - `node scripts/browserQA.mjs`: 22/22 escenarios Chromium en 5 resoluciones con 0 errores de consola.
+
