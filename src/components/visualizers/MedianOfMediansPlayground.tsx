@@ -163,6 +163,114 @@ export const MedianOfMediansPlayground: React.FC = () => {
           : 'Groups of 5 yield subproblems n/5 and ≤ 7n/10. Sum 1/5 + 7/10 = 9/10 < 1 guarantees geometric convergence to strict linear O(n).'}
       </div>
 
+      {/* SVG BFPRT Column Matrix */}
+      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 0.35rem 0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          <span>
+            {language === 'es'
+              ? 'Matriz BFPRT: Cada columna de 5 se ordena verticalmente. La fila central contiene las medianas.'
+              : 'BFPRT Matrix: Each column of 5 is sorted vertically. Center row contains medians.'}
+          </span>
+          <span style={{ color: '#10b981', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+            {language === 'es' ? 'Poda garantizada ≥ 30%' : 'Guaranteed pruning ≥ 30%'}
+          </span>
+        </div>
+
+        <svg
+          viewBox={`0 0 ${Math.max(460, groups.length * 64 + 40)} 200`}
+          style={{ width: '100%', maxWidth: `${Math.max(460, groups.length * 64 + 40)}px`, height: 'auto', display: 'block', margin: '0 auto' }}
+          role="img"
+          aria-label={language === 'es' ? 'Matriz de columnas de 5 del algoritmo BFPRT' : 'BFPRT columns of 5 matrix'}
+        >
+          {/* Medians row highlight band */}
+          <rect
+            x={15}
+            y={24 + 2 * 32 - 2}
+            width={groups.length * 64 + 10}
+            height={32}
+            rx={4}
+            fill="rgba(56, 189, 248, 0.08)"
+            stroke="var(--accent)"
+            strokeWidth={1}
+            strokeDasharray="4 2"
+          />
+
+          {/* Group Columns */}
+          {groups.map((grp, colIdx) => {
+            const sortedGrp = [...grp].sort((a, b) => a - b);
+            const med = medians[colIdx];
+            const isPivotCol = med === pivot;
+            const x = 20 + colIdx * 64;
+
+            return (
+              <g key={`mom-svg-col-${colIdx}`}>
+                {/* Column header */}
+                <text
+                  x={x + 28}
+                  y={16}
+                  textAnchor="middle"
+                  fill={isPivotCol ? '#f59e0b' : 'var(--text-muted)'}
+                  fontSize="10px"
+                  fontFamily="var(--font-mono)"
+                  fontWeight={isPivotCol ? '700' : '600'}
+                >
+                  G{colIdx + 1}
+                </text>
+
+                {/* 5 elements stacked vertically */}
+                {sortedGrp.map((val, rowIdx) => {
+                  const y = 24 + rowIdx * 32;
+                  const isMedCell = rowIdx === Math.floor(sortedGrp.length / 2);
+                  const isPivotCell = val === pivot;
+                  const isGuaranteedLesser = val < pivot && (isMedCell || rowIdx < 2);
+                  const isGuaranteedGreater = val > pivot && (isMedCell || rowIdx > 2);
+
+                  return (
+                    <g key={`mom-cell-${colIdx}-${rowIdx}`}>
+                      <rect
+                        x={x}
+                        y={y}
+                        width={56}
+                        height={28}
+                        rx={4}
+                        fill={
+                          isPivotCell
+                            ? '#f59e0b'
+                            : isGuaranteedLesser
+                            ? 'rgba(56, 189, 248, 0.12)'
+                            : isGuaranteedGreater
+                            ? 'rgba(16, 185, 129, 0.12)'
+                            : 'var(--surface)'
+                        }
+                        stroke={
+                          isPivotCell
+                            ? '#ffffff'
+                            : isMedCell
+                            ? 'var(--accent)'
+                            : 'var(--border)'
+                        }
+                        strokeWidth={isPivotCell ? 2.5 : isMedCell ? 1.5 : 1}
+                      />
+                      <text
+                        x={x + 28}
+                        y={y + 18}
+                        textAnchor="middle"
+                        fill={isPivotCell ? '#0f172a' : 'var(--text)'}
+                        fontSize="11px"
+                        fontWeight={isPivotCell || isMedCell ? '700' : '500'}
+                        fontFamily="var(--font-mono)"
+                      >
+                        {val}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
       {/* Grouping inspection table */}
       <div style={{ overflowX: 'auto', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>

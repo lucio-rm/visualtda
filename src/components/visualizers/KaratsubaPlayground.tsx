@@ -134,7 +134,85 @@ export const KaratsubaPlayground: React.FC = () => {
         </strong>{' '}
         {inputX} × {inputY} ={' '}
         <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>{finalResult}</span>
-        {' '}({language === 'es' ? 'Multiplicaciones recursivas: exactamente 3' : 'Recursive multiplications: exactly 3'})
+        {' '}({language === 'es' ? 'Multiplicaciones recursivas: exactamente 3 en vez de 4' : 'Recursive multiplications: exactly 3 instead of 4'})
+      </div>
+
+      {/* 2x2 Geometric Area Model SVG */}
+      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.75rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          <span>
+            {language === 'es'
+              ? 'Modelo geométrico de áreas: 3 multiplicaciones computan los 4 cuadrantes'
+              : 'Geometric area model: 3 multiplications resolve all 4 quadrants'}
+          </span>
+          <span style={{ color: '#10b981', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+            T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585)
+          </span>
+        </div>
+
+        <svg
+          viewBox="0 0 540 180"
+          style={{ width: '100%', maxWidth: '540px', height: 'auto', display: 'block', margin: '0 auto' }}
+          role="img"
+          aria-label={language === 'es' ? 'Modelo de áreas de Karatsuba' : 'Karatsuba area model'}
+        >
+          {/* Outer frame */}
+          <rect x={70} y={25} width={400} height={130} rx={6} fill="var(--surface)" stroke="var(--border)" strokeWidth={1.5} />
+
+          {/* Dividing lines */}
+          <line x1={270} y1={25} x2={270} y2={155} stroke="var(--border)" strokeWidth={1.5} strokeDasharray="3 3" />
+          <line x1={70} y1={90} x2={470} y2={90} stroke="var(--border)" strokeWidth={1.5} strokeDasharray="3 3" />
+
+          {/* Labels for Top & Left factors */}
+          <text x={170} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+            x₁·10^m ({x1}·{pot})
+          </text>
+          <text x={370} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+            x₀ ({x0})
+          </text>
+
+          <text x={60} y={62} textAnchor="end" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+            y₁ ({y1})
+          </text>
+          <text x={60} y={127} textAnchor="end" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+            y₀ ({y0})
+          </text>
+
+          {/* Quadrant 1: z2 = x1 * y1 */}
+          <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(56, 189, 248, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
+          <text x={170} y={54} textAnchor="middle" fill="var(--accent)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₂ = x₁ · y₁
+          </text>
+          <text x={170} y={72} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="800" fontFamily="var(--font-mono)">
+            {z2}
+          </text>
+
+          {/* Quadrants 2 & 3: Cross Terms combined as z1 */}
+          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={370} y={54} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontFamily="var(--font-mono)">
+            x₀ · y₁ ({x0 * y1})
+          </text>
+
+          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={170} y={119} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontFamily="var(--font-mono)">
+            x₁ · y₀ ({x1 * y0})
+          </text>
+
+          {/* Cross terms bridge tag */}
+          <rect x={210} y={76} width={120} height={28} rx={14} fill="var(--surface)" stroke="#f59e0b" strokeWidth={1.5} />
+          <text x={270} y={94} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₁ = z_sum - z₂ - z₀ ({z1})
+          </text>
+
+          {/* Quadrant 4: z0 = x0 * y0 */}
+          <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" strokeWidth={1.5} />
+          <text x={370} y={119} textAnchor="middle" fill="#10b981" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₀ = x₀ · y₀
+          </text>
+          <text x={370} y={137} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="800" fontFamily="var(--font-mono)">
+            {z0}
+          </text>
+        </svg>
       </div>
 
       {/* Breakdown Decomposition Cards */}

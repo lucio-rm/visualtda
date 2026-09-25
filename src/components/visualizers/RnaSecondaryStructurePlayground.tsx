@@ -57,10 +57,46 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
   }
   if (n >= 5) reconstruct(0, n - 1);
 
+  const baseColors: Record<string, string> = {
+    A: '#38bdf8', // sky
+    U: '#f59e0b', // amber
+    C: '#10b981', // emerald
+    G: '#ec4899'  // pink
+  };
+
   const handlePreset = (seq: string) => {
     setSequence(seq);
     markAttempted('rna-secondary-structure-dp');
   };
+
+  const handleCycleBase = (index: number) => {
+    const cycleMap: Record<string, string> = { A: 'U', U: 'C', C: 'G', G: 'A' };
+    const current = cleanSeq[index] || 'A';
+    const nextBase = cycleMap[current] || 'A';
+    const chars = cleanSeq.split('');
+    chars[index] = nextBase;
+    setSequence(chars.join(''));
+    markAttempted('rna-secondary-structure-dp');
+  };
+
+  const handleAppendBase = (base: string) => {
+    if (n >= 14) return;
+    setSequence(cleanSeq + base);
+    markAttempted('rna-secondary-structure-dp');
+  };
+
+  const handleRemoveLast = () => {
+    if (n <= 1) return;
+    setSequence(cleanSeq.slice(0, -1));
+    markAttempted('rna-secondary-structure-dp');
+  };
+
+  // SVG dimensions
+  const svgWidth = 560;
+  const svgHeight = 175;
+  const padLeft = 40;
+  const spacing = n > 1 ? (svgWidth - 2 * padLeft) / (n - 1) : 0;
+  const baselineY = 135;
 
   return (
     <div className="algorithm-playground rna-playground" role="region" aria-label="Laboratorio de Estructura Secundaria de ARN">
@@ -100,30 +136,122 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
         </div>
       </div>
 
-      {/* Interactive Sequence Input */}
-      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', backgroundColor: 'var(--surface)', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border)' }}>
-        <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>
-          {language === 'es' ? 'Secuencia de ARN {A, U, C, G}:' : 'RNA Sequence {A, U, C, G}:'}
-        </span>
-        <input
-          type="text"
-          value={sequence}
-          onChange={(e) => {
-            setSequence(e.target.value.toUpperCase());
-            markAttempted('rna-secondary-structure-dp');
-          }}
-          placeholder="ACCGGUAGU"
-          style={{
-            flex: 1,
-            padding: '0.35rem 0.5rem',
-            backgroundColor: 'var(--bg)',
-            color: 'var(--text)',
-            border: '1px solid var(--border)',
-            borderRadius: '4px',
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '2px'
-          }}
-        />
+      {/* SVG Interactive Secondary Structure Arc Diagram */}
+      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 0.35rem 0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          <span>
+            {language === 'es'
+              ? 'Estructura secundaria en arcos (haz clic sobre cualquier base para rotar A → U → C → G):'
+              : 'Secondary structure arc diagram (click any base to cycle A → U → C → G):'}
+          </span>
+          <div style={{ display: 'flex', gap: '0.25rem' }}>
+            {['A', 'U', 'C', 'G'].map((b) => (
+              <button
+                key={`btn-add-${b}`}
+                type="button"
+                onClick={() => handleAppendBase(b)}
+                disabled={n >= 14}
+                style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', color: baseColors[b], cursor: 'pointer', fontWeight: '700' }}
+              >
+                +{b}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={handleRemoveLast}
+              disabled={n <= 1}
+              style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: '#ef4444', cursor: 'pointer' }}
+              title={language === 'es' ? 'Eliminar última base' : 'Remove last base'}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        <svg
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block', margin: '0 auto' }}
+          role="img"
+          aria-label={language === 'es' ? 'Diagrama de arcos de estructura secundaria de ARN' : 'RNA secondary structure arc diagram'}
+        >
+          {/* Backbone strand line */}
+          <line
+            x1={padLeft - 15}
+            y1={baselineY}
+            x2={n > 1 ? padLeft + (n - 1) * spacing + 15 : padLeft + 15}
+            y2={baselineY}
+            stroke="var(--border)"
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
+
+          {/* Arcs for paired bases */}
+          {computedPairs.map(([ti, tj], idx) => {
+            const x1 = padLeft + ti * spacing;
+            const x2 = padLeft + tj * spacing;
+            const arcH = Math.min(85, ((tj - ti) * spacing) * 0.45);
+
+            return (
+              <g key={`rna-arc-${idx}`}>
+                <path
+                  d={`M ${x1} ${baselineY - 14} Q ${(x1 + x2) / 2} ${baselineY - 14 - arcH * 1.8} ${x2} ${baselineY - 14}`}
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                />
+              </g>
+            );
+          })}
+
+          {/* Bases along the strand */}
+          {cleanSeq.split('').map((base, idx) => {
+            const x = n > 1 ? padLeft + idx * spacing : padLeft;
+            const color = baseColors[base] || 'var(--text)';
+            const isPaired = computedPairs.some(([ti, tj]) => ti === idx || tj === idx);
+
+            return (
+              <g
+                key={`base-node-${idx}`}
+                onClick={() => handleCycleBase(idx)}
+                style={{ cursor: 'pointer' }}
+              >
+                {/* Node circle */}
+                <circle
+                  cx={x}
+                  cy={baselineY}
+                  r={14}
+                  fill={isPaired ? 'var(--surface)' : 'var(--bg)'}
+                  stroke={isPaired ? '#10b981' : color}
+                  strokeWidth={isPaired ? 2.5 : 1.5}
+                />
+                {/* Base letter */}
+                <text
+                  x={x}
+                  y={baselineY + 4}
+                  textAnchor="middle"
+                  fill={color}
+                  fontSize="12px"
+                  fontWeight="800"
+                  fontFamily="var(--font-mono)"
+                >
+                  {base}
+                </text>
+                {/* Index subscript */}
+                <text
+                  x={x}
+                  y={baselineY + 26}
+                  textAnchor="middle"
+                  fill="var(--text-muted)"
+                  fontSize="9px"
+                  fontFamily="var(--font-mono)"
+                >
+                  {idx}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
 
       {/* Biological Invariant Notes Banner */}
@@ -172,7 +300,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                 fontFamily: 'var(--font-mono)'
               }}
             >
-              <strong>{cleanSeq[ti]}</strong>[{ti}] ↔ <strong>{cleanSeq[tj]}</strong>[{tj}]
+              <strong style={{ color: baseColors[cleanSeq[ti]] }}>{cleanSeq[ti]}</strong>[{ti}] ↔ <strong style={{ color: baseColors[cleanSeq[tj]] }}>{cleanSeq[tj]}</strong>[{tj}]
             </span>
           ))}
         </div>
@@ -180,3 +308,4 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
     </div>
   );
 };
+
