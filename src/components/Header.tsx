@@ -2,6 +2,7 @@ import React from 'react';
 import { ThemeMode } from '../app/App';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
+import { InstructorAuthModal } from './InstructorAuthModal';
 
 interface HeaderProps {
   theme: ThemeMode;
@@ -111,6 +112,8 @@ export const Header: React.FC<HeaderProps> = ({
           </select>
         </label>
       </div>
+
+      <InstructorAuthModal />
     </header>
   );
 };

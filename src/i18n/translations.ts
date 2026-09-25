@@ -58,6 +58,14 @@ export interface TranslationsDictionary {
   instructorModeActive: { es: string; en: string };
   instructorModeTooltip: { es: string; en: string };
   instructorModeBanner: { es: string; en: string };
+  instructorAuthTitle: { es: string; en: string };
+  instructorAuthSubtitle: { es: string; en: string };
+  instructorAuthInputLabel: { es: string; en: string };
+  instructorAuthErrorLength: { es: string; en: string };
+  instructorAuthErrorInvalid: { es: string; en: string };
+  instructorAuthSubmit: { es: string; en: string };
+  instructorAuthCancel: { es: string; en: string };
+  instructorAuthDeactivate: { es: string; en: string };
   discoverTitle: { es: string; en: string };
   discoverLead: { es: string; en: string };
   discoverProblemStatement: { es: string; en: string };
@@ -306,6 +314,38 @@ export const TRANSLATIONS: TranslationsDictionary = {
   instructorModeBanner: {
     es: 'Modo Docente activo: Demostración de soluciones y trazas desbloqueada en todo el catálogo.',
     en: 'Instructor Mode active: Solution demonstration and traces unlocked across the entire catalog.'
+  },
+  instructorAuthTitle: {
+    es: 'Acreditación de Modo Docente',
+    en: 'Instructor Mode Authentication'
+  },
+  instructorAuthSubtitle: {
+    es: 'Para activar la inspección de cátedra y desbloquear soluciones pedagógicas, ingresá la contraseña de 8 caracteres (Cátedra 75.29).',
+    en: 'To activate faculty inspection and unlock pedagogical solutions, enter the 8-character course password (Course 75.29).'
+  },
+  instructorAuthInputLabel: {
+    es: 'Contraseña docente (8 caracteres):',
+    en: 'Instructor password (8 characters):'
+  },
+  instructorAuthErrorLength: {
+    es: 'La contraseña debe tener exactamente 8 caracteres.',
+    en: 'Password must be exactly 8 characters long.'
+  },
+  instructorAuthErrorInvalid: {
+    es: 'Contraseña de acreditación incorrecta. Acceso restringido a la cátedra 75.29.',
+    en: 'Incorrect authentication password. Access restricted to course 75.29 faculty.'
+  },
+  instructorAuthSubmit: {
+    es: 'Acreditar y Activar',
+    en: 'Verify & Activate'
+  },
+  instructorAuthCancel: {
+    es: 'Cancelar',
+    en: 'Cancel'
+  },
+  instructorAuthDeactivate: {
+    es: 'Salir del Modo Docente',
+    en: 'Exit Instructor Mode'
   },
   discoverTitle: {
     es: '1. Descubrir: Intuición y Planteo del Problema',

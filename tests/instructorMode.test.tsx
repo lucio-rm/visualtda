@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { App } from '../src/app/App';
+import { INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN } from '../src/utils/cryptoAuth';
 
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -39,40 +40,89 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
     expect(toggleBtn.getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('toggles instructor mode on click and persists state in localStorage', async () => {
+  it('opens authentication modal on click, requires 8-char password, and activates only with valid credential', async () => {
     await act(async () => {
       root.render(<App />);
     });
 
     const toggleBtn = container.querySelector('.instructor-mode-toggle') as HTMLButtonElement;
 
-    // Click to enable
+    // Click to open authentication modal
     await act(async () => {
       toggleBtn.click();
     });
 
+    const modal = container.querySelector('.instructor-auth-card');
+    expect(modal).not.toBeNull();
+    expect(modal?.textContent).toContain('Acreditación de Modo Docente');
+
+    const input = container.querySelector('#instructor-password-input') as HTMLInputElement;
+    expect(input).not.toBeNull();
+
+    const setInputValue = (el: HTMLInputElement, val: string) => {
+      const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+      nativeSetter?.call(el, val);
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+
+    // Try submitting with wrong credential
+    const form = container.querySelector('.instructor-auth-form') as HTMLFormElement;
+    await act(async () => {
+      setInputValue(input, 'WRONG_PW');
+    });
+
+    await act(async () => {
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    });
+
+    // Should display invalid error and remain inactive
+    expect(container.querySelector('.auth-error-banner')?.textContent).toContain('Contraseña de acreditación incorrecta');
+    expect(toggleBtn.classList.contains('active')).toBe(false);
+
+    // Enter correct 8-character credential (MEL75.29)
+    await act(async () => {
+      setInputValue(input, 'MEL75.29');
+    });
+
+    await act(async () => {
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    });
+
+    // Modal should close and instructor mode becomes active
+    expect(container.querySelector('.instructor-auth-card')).toBeNull();
     expect(toggleBtn.classList.contains('active')).toBe(true);
     expect(toggleBtn.getAttribute('aria-pressed')).toBe('true');
-    expect(localStorage.getItem('visual_tda_instructor_mode')).toBe('true');
+    expect(localStorage.getItem(INSTRUCTOR_AUTH_STORAGE_KEY)).toBe(INSTRUCTOR_AUTH_TOKEN);
 
-    // Click to disable
+    // Click again to deactivate
     await act(async () => {
       toggleBtn.click();
     });
 
     expect(toggleBtn.classList.contains('active')).toBe(false);
     expect(toggleBtn.getAttribute('aria-pressed')).toBe('false');
-    expect(localStorage.getItem('visual_tda_instructor_mode')).toBe('false');
   });
 
-  it('automatically unlocks Understand phase and displays banner when instructor mode is pre-enabled', async () => {
+  it('rejects unauthorized boolean tampering in localStorage without cryptographic token', async () => {
+    // Attempt unauthorized privilege escalation via localStorage tampering
     localStorage.setItem('visual_tda_instructor_mode', 'true');
 
     await act(async () => {
       root.render(<App />);
     });
 
-    // Open first exercise (N-Queens)
+    const toggleBtn = container.querySelector('.instructor-mode-toggle') as HTMLButtonElement;
+    expect(toggleBtn.classList.contains('active')).toBe(false);
+  });
+
+  it('automatically unlocks Understand phase and displays banner when instructor mode is pre-enabled with valid token', async () => {
+    localStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
+
+    await act(async () => {
+      root.render(<App />);
+    });
+
+    // Open first exercise (Interval Scheduling)
     const openBtn = container.querySelector('.exercise-card .btn-open-exercise') as HTMLButtonElement;
     await act(async () => {
       openBtn.click();
