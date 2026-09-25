@@ -4,12 +4,34 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 import { simulateVonNeumann, FairCoinOutput } from '../../engine/algorithms/randomizedFairCoinValidator';
 import './RandomizedFairCoinPlayground.css';
 
+interface CoinPairState {
+  flip1: number;
+  flip2: number;
+  extractedBit: number | null;
+  tossCount: number;
+  status: 'idle' | 'flipping' | 'extracted' | 'discarded';
+  explanation: { es: string; en: string };
+}
+
 export const RandomizedFairCoinPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
-  const [bias, setBias] = useState<number>(0.4);
-  const [simulation, setSimulation] = useState<FairCoinOutput | null>(() => simulateVonNeumann(0.4, 3000));
+  const [bias, setBias] = useState<number>(0.35);
+  const [simulation, setSimulation] = useState<FairCoinOutput | null>(() => simulateVonNeumann(0.35, 3000));
   const [singleBitLog, setSingleBitLog] = useState<{ roundFlips: number; bit: number }[]>([]);
+
+  // Interactive coin animation state
+  const [coinState, setCoinState] = useState<CoinPairState>({
+    flip1: 0,
+    flip2: 1,
+    extractedBit: 0,
+    tossCount: 2,
+    status: 'idle',
+    explanation: {
+      es: 'Presiona "Lanzar Par de Monedas" para observar el proceso de extracción en vivo.',
+      en: 'Click "Toss Pair of Coins" to observe the live extraction process.'
+    }
+  });
 
   const theoreticalExpected = useMemo(() => {
     return 1 / (bias * (1 - bias));
@@ -21,20 +43,60 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
     }
   }, [simulation, markAttempted]);
 
-  const runSingle = () => {
-    let flips = 0;
-    while (true) {
+  const runAnimatedSingle = () => {
+    setCoinState((prev) => ({ ...prev, status: 'flipping' }));
+
+    let currentTosses = 0;
+    const attemptToss = () => {
+      currentTosses += 2;
       const t1 = Math.random() < bias ? 1 : 0;
       const t2 = Math.random() < bias ? 1 : 0;
-      flips += 2;
+
       if (t1 === 0 && t2 === 1) {
-        setSingleBitLog((prev) => [{ roundFlips: flips, bit: 0 }, ...prev.slice(0, 9)]);
-        break;
+        setCoinState({
+          flip1: t1,
+          flip2: t2,
+          extractedBit: 0,
+          tossCount: currentTosses,
+          status: 'extracted',
+          explanation: {
+            es: `Resultado: (0, 1) obtenido en ${currentTosses} tiros. P(0,1) = (1-p)·p. ¡Bit extraído = 0!`,
+            en: `Outcome: (0, 1) obtained in ${currentTosses} tosses. P(0,1) = (1-p)p. Extracted Bit = 0!`
+          }
+        });
+        setSingleBitLog((prev) => [{ roundFlips: currentTosses, bit: 0 }, ...prev.slice(0, 7)]);
       } else if (t1 === 1 && t2 === 0) {
-        setSingleBitLog((prev) => [{ roundFlips: flips, bit: 1 }, ...prev.slice(0, 9)]);
-        break;
+        setCoinState({
+          flip1: t1,
+          flip2: t2,
+          extractedBit: 1,
+          tossCount: currentTosses,
+          status: 'extracted',
+          explanation: {
+            es: `Resultado: (1, 0) obtenido en ${currentTosses} tiros. P(1,0) = p·(1-p). ¡Bit extraído = 1!`,
+            en: `Outcome: (1, 0) obtained in ${currentTosses} tosses. P(1,0) = p(1-p). Extracted Bit = 1!`
+          }
+        });
+        setSingleBitLog((prev) => [{ roundFlips: currentTosses, bit: 1 }, ...prev.slice(0, 7)]);
+      } else {
+        // Discarded symmetric outcome (0,0) or (1,1)
+        setCoinState({
+          flip1: t1,
+          flip2: t2,
+          extractedBit: null,
+          tossCount: currentTosses,
+          status: 'discarded',
+          explanation: {
+            es: `Resultado simétrico (${t1}, ${t1}) descartado. Probabilidad P = ${t1 === 1 ? 'p²' : '(1-p)²'}. Reintentando automáticamente...`,
+            en: `Symmetric outcome (${t1}, ${t1}) discarded. Probability P = ${t1 === 1 ? 'p²' : '(1-p)²'}. Retrying automatically...`
+          }
+        });
+        // Continue flipping after a tiny delay
+        setTimeout(attemptToss, 350);
       }
-    }
+    };
+
+    setTimeout(attemptToss, 200);
   };
 
   const runBatch = (trials: number) => {
@@ -47,21 +109,21 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
       <div className="playground-intro">
         <h3>
           {language === 'es'
-            ? 'Laboratorio Monte Carlo: Extracción de Aleatoriedad Pura'
-            : 'Monte Carlo Laboratory: Pure Randomness Extraction'}
+            ? 'Laboratorio Monte Carlo: Extracción de Aleatoriedad Pura (Algoritmo de von Neumann)'
+            : 'Monte Carlo Laboratory: Pure Randomness Extraction (von Neumann Algorithm)'}
         </h3>
         <p>
           {language === 'es'
-            ? 'Configura cualquier sesgo p en la moneda original (ej. 10%, 40%, 85%) y comprueba empíricamente cómo el algoritmo de Von Neumann produce siempre una distribución 50/50 perfecta.'
-            : 'Configure any bias p in the original coin (e.g. 10%, 40%, 85%) and verify empirically how Von Neumann algorithm always yields a perfect 50/50 distribution.'}
+            ? 'Configura cualquier sesgo p en la moneda original (ej. 15%, 35%, 80%) y comprueba empíricamente cómo el algoritmo de von Neumann produce siempre una distribución 50/50 perfecta explotando la simetría multiplicativa (1-p)·p = p·(1-p).'
+            : 'Configure any bias p in the original coin (e.g. 15%, 35%, 80%) and verify empirically how the von Neumann algorithm always yields a perfect 50/50 distribution by exploiting multiplicative symmetry (1-p)p = p(1-p).'}
         </p>
       </div>
 
-      {/* Bias Control */}
+      {/* Bias Control Slider */}
       <div className="bias-controls-card">
         <div className="bias-header">
           <label htmlFor="bias-range">
-            {language === 'es' ? 'Sesgo de la Moneda Original P(1):' : 'Original Coin Bias P(1):'}
+            {language === 'es' ? 'Sesgo de la Moneda Original P(Cara = 1):' : 'Original Coin Bias P(Heads = 1):'}
           </label>
           <span className="bias-badge">
             P(1) = <strong>{(bias * 100).toFixed(0)}%</strong> | P(0) ={' '}
@@ -82,24 +144,189 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           }}
           className="bias-slider"
         />
-        <div className="bias-stats-row">
+        <div className="bias-stats-row" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
           <span>
-            {language === 'es' ? 'Esperanza de tiros por bit E[T] = 1/(p·(1-p)):' : 'Expected tosses per bit E[T] = 1/(p·(1-p)): '}
-            <code>{theoreticalExpected.toFixed(2)}</code>
+            {language === 'es' ? 'Esperanza de tiros físicos por bit: ' : 'Expected physical tosses per bit: '}
+            <code>E[T] = 1 / (p·(1-p)) = {theoreticalExpected.toFixed(2)} tiros</code>
+          </span>
+          <span>
+            {language === 'es' ? 'Simetría teórica:' : 'Theoretical symmetry:'}{' '}
+            <code>P(0,1) = P(1,0) = {(bias * (1 - bias) * 100).toFixed(2)}%</code>
           </span>
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Interactive Physical Coin Toss Arena */}
+      <div
+        style={{
+          background: 'var(--bg)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '1.25rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)' }}>
+            {language === 'es' ? 'Simulador de Lanzamiento Físico' : 'Physical Coin Toss Simulator'}
+          </span>
+          <button
+            type="button"
+            className="btn-action single"
+            onClick={runAnimatedSingle}
+            disabled={coinState.status === 'flipping'}
+            style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem', background: 'var(--accent)', color: '#fff', border: 'none' }}
+          >
+            🎲 {language === 'es' ? 'Lanzar Par de Monedas' : 'Toss Pair of Coins'}
+          </button>
+        </div>
+
+        {/* Visual Coins Stage */}
+        <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center', justifyContent: 'center', margin: '0.5rem 0' }}>
+          {/* Coin 1 */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Tiro 1' : 'Toss 1'}
+            </span>
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: coinState.flip1 === 1 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
+                border: '3px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: '1.4rem',
+                fontWeight: '900',
+                fontFamily: 'var(--font-mono)',
+                transform: coinState.status === 'flipping' ? 'scale(0.9) rotateY(180deg)' : 'scale(1)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {coinState.flip1}
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {coinState.flip1 === 1 ? 'Cara (1)' : 'Cruz (0)'}
+            </span>
+          </div>
+
+          <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-muted)' }}>+</span>
+
+          {/* Coin 2 */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Tiro 2' : 'Toss 2'}
+            </span>
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: coinState.flip2 === 1 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
+                border: '3px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: '1.4rem',
+                fontWeight: '900',
+                fontFamily: 'var(--font-mono)',
+                transform: coinState.status === 'flipping' ? 'scale(0.9) rotateY(180deg)' : 'scale(1)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {coinState.flip2}
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {coinState.flip2 === 1 ? 'Cara (1)' : 'Cruz (0)'}
+            </span>
+          </div>
+
+          <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-muted)' }}>➔</span>
+
+          {/* Extracted Output Bit */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Bit Extraído' : 'Extracted Bit'}
+            </span>
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '12px',
+                background:
+                  coinState.extractedBit === 0
+                    ? 'rgba(16, 185, 129, 0.2)'
+                    : coinState.extractedBit === 1
+                    ? 'rgba(56, 189, 248, 0.2)'
+                    : 'rgba(239, 68, 68, 0.1)',
+                border: `2px solid ${
+                  coinState.extractedBit === 0
+                    ? '#10b981'
+                    : coinState.extractedBit === 1
+                    ? '#38bdf8'
+                    : '#ef4444'
+                }`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color:
+                  coinState.extractedBit === 0
+                    ? '#10b981'
+                    : coinState.extractedBit === 1
+                    ? '#38bdf8'
+                    : '#ef4444',
+                fontSize: '1.6rem',
+                fontWeight: '900',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              {coinState.extractedBit !== null ? coinState.extractedBit : '✕'}
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {coinState.extractedBit !== null
+                ? `${coinState.tossCount} tiros`
+                : language === 'es'
+                ? 'Descartado'
+                : 'Discarded'}
+            </span>
+          </div>
+        </div>
+
+        {/* Live explanation of last toss */}
+        <div
+          style={{
+            width: '100%',
+            padding: '0.6rem 0.85rem',
+            backgroundColor: 'var(--surface)',
+            borderRadius: '4px',
+            border: '1px solid var(--border)',
+            fontSize: '0.85rem',
+            textAlign: 'center'
+          }}
+        >
+          {coinState.explanation[language]}
+        </div>
+      </div>
+
+      {/* Batch Simulation Action Buttons */}
       <div className="action-buttons">
-        <button className="btn-action single" onClick={runSingle}>
-          {language === 'es' ? 'Generar 1 Bit' : 'Generate 1 Bit'}
+        <button className="btn-action batch" onClick={() => runBatch(500)}>
+          {language === 'es' ? 'Simular 500 Bits' : 'Simulate 500 Bits'}
         </button>
-        <button className="btn-action batch" onClick={() => runBatch(2000)}>
-          {language === 'es' ? 'Simular 2,000 Bits' : 'Simulate 2,000 Bits'}
+        <button className="btn-action batch" onClick={() => runBatch(3000)}>
+          {language === 'es' ? 'Simular 3,000 Bits' : 'Simulate 3,000 Bits'}
         </button>
-        <button className="btn-action massive" onClick={() => runBatch(15000)}>
-          {language === 'es' ? 'Simulación Monte Carlo (15,000 Bits)' : 'Monte Carlo Simulation (15,000 Bits)'}
+        <button className="btn-action massive" onClick={() => runBatch(20000)}>
+          ⚡ {language === 'es' ? 'Monte Carlo Masivo (20,000 Bits)' : 'Massive Monte Carlo (20,000 Bits)'}
         </button>
       </div>
 
@@ -112,7 +339,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           <div className="feed-chips">
             {singleBitLog.map((item, idx) => (
               <span key={idx} className={`feed-chip bit-${item.bit}`}>
-                Bit <strong>{item.bit}</strong> ({item.roundFlips} tiros)
+                Bit <strong>{item.bit}</strong> ({item.roundFlips} {language === 'es' ? 'tiros' : 'tosses'})
               </span>
             ))}
           </div>
@@ -125,7 +352,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           {/* Source Distribution */}
           <div className="dist-box source-box">
             <div className="box-title">
-              {language === 'es' ? 'Fuente Sesgada (Moneda Original)' : 'Biased Source (Original Coin)'}
+              {language === 'es' ? 'Fuente Sesgada (Moneda Original p)' : 'Biased Source (Original Coin p)'}
             </div>
             <div className="bars-wrapper">
               <div className="bar-row">
@@ -148,7 +375,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
               </div>
             </div>
             <div className="dist-sub">
-              {language === 'es' ? 'Asimétrica y sesgada' : 'Asymmetric & biased'}
+              {language === 'es' ? 'Asimétrica y fuertemente sesgada' : 'Asymmetric & heavily biased'}
             </div>
           </div>
 
@@ -156,8 +383,8 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           <div className="dist-box fair-box">
             <div className="box-title">
               {language === 'es'
-                ? '⭐ Salida von Neumann (Aleatoriedad Pura)'
-                : '⭐ Von Neumann Output (Pure Randomness)'}
+                ? '⭐ Salida von Neumann (Aleatoriedad Pura Extraída)'
+                : '⭐ Von Neumann Output (Extracted Pure Randomness)'}
             </div>
             <div className="bars-wrapper">
               <div className="bar-row">
@@ -181,8 +408,8 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             </div>
             <div className="dist-sub highlight-fair">
               {language === 'es'
-                ? `Promedio de lanzamientos: ${simulation.avgFlips.toFixed(2)} (Teórico: ${theoreticalExpected.toFixed(2)})`
-                : `Average physical tosses: ${simulation.avgFlips.toFixed(2)} (Theoretical: ${theoreticalExpected.toFixed(2)})`}
+                ? `Promedio de lanzamientos: ${simulation.avgFlips.toFixed(2)} (Esperado teórico: ${theoreticalExpected.toFixed(2)})`
+                : `Average physical tosses: ${simulation.avgFlips.toFixed(2)} (Theoretical expected: ${theoreticalExpected.toFixed(2)})`}
             </div>
           </div>
         </div>

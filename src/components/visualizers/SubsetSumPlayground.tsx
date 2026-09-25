@@ -50,6 +50,7 @@ export const SubsetSumPlayground: React.FC = () => {
   const [numbersStr, setNumbersStr] = useState<string>('2, 3, 5, 7, 8');
   const [target, setTarget] = useState<number>(10);
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
+  const [isDragOverBucket, setIsDragOverBucket] = useState<boolean>(false);
 
   // Canonical solutions
   const canonicalSolutions = useMemo(() => {
@@ -100,6 +101,36 @@ export const SubsetSumPlayground: React.FC = () => {
     }
   }, [isExactMatch, selectedIndices]);
 
+  // Drag and Drop handlers
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    e.dataTransfer.setData('text/plain', idx.toString());
+  };
+
+  const handleDropInBucket = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverBucket(false);
+    const idxStr = e.dataTransfer.getData('text/plain');
+    const idx = parseInt(idxStr, 10);
+    if (!isNaN(idx) && idx >= 0 && idx < numbers.length) {
+      setSelectedIndices((prev) => new Set([...prev, idx]));
+    }
+  };
+
+  const handleDropInPool = (e: React.DragEvent) => {
+    e.preventDefault();
+    const idxStr = e.dataTransfer.getData('text/plain');
+    const idx = parseInt(idxStr, 10);
+    if (!isNaN(idx) && idx >= 0 && idx < numbers.length) {
+      setSelectedIndices((prev) => {
+        const next = new Set(prev);
+        next.delete(idx);
+        return next;
+      });
+    }
+  };
+
+  const fillPercentage = Math.min(100, Math.round((userSelectedSum / target) * 100));
+
   return (
     <div className="subset-sum-playground">
       {/* Presets Row */}
@@ -127,9 +158,14 @@ export const SubsetSumPlayground: React.FC = () => {
       {/* Target & Elements Config */}
       <div className="subset-playground-config">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <label htmlFor="target-input-slider" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? `Valor objetivo S: ${target}` : `Target sum S: ${target}`}
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label htmlFor="target-input-slider" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+              {language === 'es' ? `Valor objetivo S:` : `Target sum S:`}
+            </label>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent)' }}>
+              S = {target}
+            </span>
+          </div>
           <input
             id="target-input-slider"
             type="range"
@@ -137,6 +173,7 @@ export const SubsetSumPlayground: React.FC = () => {
             max={Math.max(30, numbers.reduce((a, b) => a + b, 0))}
             value={target}
             onChange={(e) => setTarget(Number(e.target.value))}
+            style={{ accentColor: 'var(--accent)' }}
           />
         </div>
 
@@ -172,66 +209,233 @@ export const SubsetSumPlayground: React.FC = () => {
           />
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es'
-              ? `Total ${numbers.length} elementos (Suma total = ${numbers.reduce((a, b) => a + b, 0)})`
-              : `Total ${numbers.length} elements (Total sum = ${numbers.reduce((a, b) => a + b, 0)})`}
+              ? `Total ${numbers.length} elementos (Suma máxima = ${numbers.reduce((a, b) => a + b, 0)})`
+              : `Total ${numbers.length} elements (Max sum = ${numbers.reduce((a, b) => a + b, 0)})`}
           </span>
         </div>
       </div>
 
-      {/* Interactive Subset Builder Zone */}
+      {/* Tactile Drag & Drop Interactive Arena */}
       <div className="interactive-builder-zone">
-        <div className="builder-header">
-          <span>{language === 'es' ? 'Haz clic en los números para armar tu subconjunto:' : 'Click numbers to build your candidate subset:'}</span>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            style={{ fontSize: '0.8rem', padding: '2px 8px' }}
-            onClick={() => setSelectedIndices(new Set())}
-          >
-            {language === 'es' ? 'Limpiar selección' : 'Clear selection'}
-          </button>
+        {/* Source Pool of Available Elements */}
+        <div
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDropInPool}
+          style={{
+            padding: '0.75rem',
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '6px'
+          }}
+        >
+          <div className="builder-header" style={{ marginBottom: '0.5rem' }}>
+            <span>
+              {language === 'es'
+                ? 'Elementos disponibles (arrastra a la balanza o haz clic):'
+                : 'Available elements (drag into bucket or click):'}
+            </span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {numbers.length - selectedIndices.size} {language === 'es' ? 'en espera' : 'waiting'}
+            </span>
+          </div>
+
+          <div className="clickable-chips-grid" style={{ minHeight: '60px' }}>
+            {numbers.map((val, idx) => {
+              const isSelected = selectedIndices.has(idx);
+              if (isSelected) return null; // Rendered in bucket below
+
+              return (
+                <div
+                  key={`chip-available-${idx}`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onClick={() => toggleNumber(idx)}
+                  className="clickable-chip"
+                  role="button"
+                  tabIndex={0}
+                  style={{ cursor: 'grab' }}
+                  title={language === 'es' ? 'Arrastra a la cubeta o haz clic' : 'Drag to bucket or click'}
+                >
+                  <span className="chip-sub">{language === 'es' ? 'Arrastrar' : 'Drag'}</span>
+                  <span>{val}</span>
+                </div>
+              );
+            })}
+            {selectedIndices.size === numbers.length && (
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic', alignSelf: 'center' }}>
+                {language === 'es' ? 'Todos los elementos fueron colocados en la balanza.' : 'All elements placed in bucket.'}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Clickable Chips */}
-        <div className="clickable-chips-grid">
-          {numbers.map((val, idx) => {
-            const isSelected = selectedIndices.has(idx);
-            return (
-              <button
-                key={`chip-num-${val}-${idx}`}
-                type="button"
-                className={`clickable-chip ${isSelected ? 'selected' : ''}`}
-                onClick={() => toggleNumber(idx)}
-                aria-pressed={isSelected}
-                aria-label={`${val}, ${isSelected ? (language === 'es' ? 'en suma' : 'in sum') : (language === 'es' ? 'disponible' : 'available')}`}
+        {/* Target Bucket / Balance Zone */}
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragOverBucket(true);
+          }}
+          onDragLeave={() => setIsDragOverBucket(false)}
+          onDrop={handleDropInBucket}
+          style={{
+            padding: '1rem',
+            backgroundColor: isDragOverBucket
+              ? 'rgba(59, 130, 246, 0.15)'
+              : isExactMatch
+              ? 'rgba(16, 185, 129, 0.12)'
+              : isOverflow
+              ? 'rgba(239, 68, 68, 0.12)'
+              : 'var(--surface)',
+            border: `2px dashed ${
+              isDragOverBucket
+                ? '#3b82f6'
+                : isExactMatch
+                ? '#10b981'
+                : isOverflow
+                ? '#ef4444'
+                : 'var(--border)'
+            }`,
+            borderRadius: '8px',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <div className="builder-header" style={{ marginBottom: '0.5rem' }}>
+            <span style={{ fontWeight: 700, color: 'var(--text)' }}>
+              ⚖️ {language === 'es' ? 'Balanza de Suma Objetivo' : 'Target Sum Balance'}:{' '}
+              <strong
+                style={{
+                  color: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                  fontSize: '1.1rem'
+                }}
               >
-                <span className="chip-sub">{isSelected ? (language === 'es' ? 'En suma' : 'Chosen') : (language === 'es' ? 'Sumar' : 'Add')}</span>
-                <span>{val}</span>
-              </button>
-            );
-          })}
-        </div>
+                {userSelectedSum} / {target}
+              </strong>
+            </span>
 
-        {/* Live Feedback Banner */}
-        {isExactMatch ? (
-          <div className="challenge-feedback-banner success">
-            {language === 'es'
-              ? `Suma exacta alcanzada: los elementos seleccionados suman exactamente S = ${target}.`
-              : `Exact sum reached: the selected elements sum to exactly S = ${target}.`}
+            <button
+              type="button"
+              className="chip-btn"
+              style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+              onClick={() => setSelectedIndices(new Set())}
+              disabled={selectedIndices.size === 0}
+            >
+              ✕ {language === 'es' ? 'Vaciar balanza' : 'Empty bucket'}
+            </button>
           </div>
-        ) : isOverflow ? (
-          <div className="challenge-feedback-banner suboptimal">
-            {language === 'es'
-              ? `Suma actual: ${userSelectedSum} > ${target} (excedido por ${userSelectedSum - target}). El algoritmo de Backtracking poda esta rama inmediatamente.`
-              : `Current sum: ${userSelectedSum} > ${target} (exceeded by ${userSelectedSum - target}). Backtracking prunes this branch immediately.`}
+
+          {/* Fluid Level Bar Gauge */}
+          <div
+            style={{
+              width: '100%',
+              height: '14px',
+              backgroundColor: 'var(--bg)',
+              borderRadius: '7px',
+              overflow: 'hidden',
+              marginBottom: '0.75rem',
+              border: '1px solid var(--border)',
+              position: 'relative'
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                width: `${fillPercentage}%`,
+                backgroundColor: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                transition: 'width 0.3s ease, background-color 0.3s ease'
+              }}
+            />
           </div>
-        ) : (
-          <div className="challenge-feedback-banner incomplete">
-            {language === 'es'
-              ? `Suma actual: ${userSelectedSum} / ${target} (faltan ${target - userSelectedSum} para alcanzar la meta).`
-              : `Current sum: ${userSelectedSum} / ${target} (need ${target - userSelectedSum} to reach target).`}
+
+          {/* Bucket Chips */}
+          <div className="clickable-chips-grid" style={{ minHeight: '65px' }}>
+            {Array.from(selectedIndices).map((idx) => {
+              const val = numbers[idx];
+              return (
+                <div
+                  key={`chip-in-bucket-${idx}`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onClick={() => toggleNumber(idx)}
+                  className="clickable-chip selected"
+                  style={{
+                    backgroundColor: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                    borderColor: isExactMatch ? '#059669' : isOverflow ? '#dc2626' : '#2563eb',
+                    cursor: 'pointer'
+                  }}
+                  title={language === 'es' ? 'Haz clic o arrastra para quitar' : 'Click or drag to remove'}
+                >
+                  <span className="chip-sub">{language === 'es' ? 'Quitar' : 'Remove'}</span>
+                  <span>{val}</span>
+                </div>
+              );
+            })}
+            {selectedIndices.size === 0 && (
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic', alignSelf: 'center' }}>
+                {language === 'es'
+                  ? 'Arrastra números aquí o haz clic en los de arriba para construir tu subconjunto.'
+                  : 'Drag numbers here or click above to build your subset.'}
+              </span>
+            )}
           </div>
-        )}
+
+          {/* Live Feedback Banner */}
+          {isExactMatch ? (
+            <div
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.6rem 0.85rem',
+                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                borderLeft: '4px solid #10b981',
+                borderRadius: '4px',
+                fontSize: '0.85rem',
+                color: 'var(--text)'
+              }}
+            >
+              🎉{' '}
+              <strong>
+                {language === 'es' ? '¡Suma Exacta Factible!' : 'Exact Feasible Sum!'}
+              </strong>{' '}
+              {language === 'es'
+                ? `Los números seleccionados suman exactamente S = ${target}. Se encontró una solución válida para el problema de la decisión.`
+                : `Selected numbers sum to exactly S = ${target}. A valid solution to the decision problem was found.`}
+            </div>
+          ) : isOverflow ? (
+            <div
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.6rem 0.85rem',
+                backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                borderLeft: '4px solid #ef4444',
+                borderRadius: '4px',
+                fontSize: '0.85rem',
+                color: 'var(--text)'
+              }}
+            >
+              ⚠{' '}
+              <strong>
+                {language === 'es' ? 'Poda Inmediata por Exceso:' : 'Immediate Excess Pruning:'}
+              </strong>{' '}
+              {language === 'es'
+                ? `Suma actual = ${userSelectedSum} > S = ${target} (exceso de ${userSelectedSum - target}). Como todos los números son positivos, cualquier adición posterior seguirá siendo mayor a S. El algoritmo de Backtracking poda esta rama sin explorar sus descendientes.`
+                : `Current sum = ${userSelectedSum} > S = ${target} (overflow by ${userSelectedSum - target}). Since all numbers are positive, further additions only increase sum. Backtracking prunes this branch immediately.`}
+            </div>
+          ) : (
+            <div
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.5rem 0.75rem',
+                backgroundColor: 'var(--bg)',
+                borderRadius: '4px',
+                fontSize: '0.85rem',
+                color: 'var(--text-muted)'
+              }}
+            >
+              {language === 'es'
+                ? `Suma acumulada: ${userSelectedSum} / ${target} (faltan ${target - userSelectedSum} unidades para alcanzar el objetivo).`
+                : `Accumulated sum: ${userSelectedSum} / ${target} (need ${target - userSelectedSum} more units to reach target).`}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Pruning Efficiency Comparison Card */}
@@ -240,16 +444,16 @@ export const SubsetSumPlayground: React.FC = () => {
           <span className="comparison-stat-title">{language === 'es' ? 'Fuerza Bruta (2^n)' : 'Brute Force (2^n)'}</span>
           <span className="comparison-stat-number">{traceStats.bruteForce}</span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? 'Subconjuntos posibles' : 'Total possible subsets'}
+            {language === 'es' ? 'Subconjuntos totales' : 'Total subsets'}
           </span>
         </div>
         <div className="comparison-stat-box">
-          <span className="comparison-stat-title">{language === 'es' ? 'Nodos con Podas' : 'Nodes with Pruning'}</span>
+          <span className="comparison-stat-title">{language === 'es' ? 'Nodos Explorados' : 'Explored Nodes'}</span>
           <span className="comparison-stat-number" style={{ color: '#3b82f6' }}>
             {traceStats.explored}
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? 'Visitados en Backtracking' : 'Visited by Backtracking'}
+            {language === 'es' ? 'Visitados en Backtracking' : 'Visited in Backtracking'}
           </span>
         </div>
         <div className="comparison-stat-box">
@@ -258,7 +462,7 @@ export const SubsetSumPlayground: React.FC = () => {
             {traceStats.pruned}
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? 'Descartadas por exceso/déficit' : 'Cut by excess/deficit'}
+            {language === 'es' ? 'Descartadas por cota' : 'Cut by bound'}
           </span>
         </div>
         <div className="comparison-stat-box">
@@ -267,7 +471,7 @@ export const SubsetSumPlayground: React.FC = () => {
             {traceStats.savingsPct}%
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-            {language === 'es' ? 'Del árbol no explorado' : 'Of state space pruned'}
+            {language === 'es' ? 'Espacio podado' : 'State space pruned'}
           </span>
         </div>
       </div>
@@ -276,17 +480,27 @@ export const SubsetSumPlayground: React.FC = () => {
       <div className="all-solutions-box">
         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
           {language === 'es'
-            ? `Todos los ${canonicalSolutions.length} subconjuntos óptimos que suman S = ${target}:`
-            : `All ${canonicalSolutions.length} optimal subsets summing to S = ${target}:`}
+            ? `Todos los ${canonicalSolutions.length} subconjuntos válidos que suman S = ${target}:`
+            : `All ${canonicalSolutions.length} valid subsets summing to S = ${target}:`}
         </span>
         {canonicalSolutions.length === 0 ? (
-          <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
             {language === 'es' ? 'No existe ningún subconjunto que sume exactamente la meta.' : 'No subset sums to the target.'}
           </span>
         ) : (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {canonicalSolutions.map((sol, idx) => (
-              <span key={`sol-can-${idx}`} className="solution-badge">
+              <span
+                key={`sol-can-${idx}`}
+                style={{
+                  padding: '3px 8px',
+                  backgroundColor: 'var(--surface)',
+                  borderRadius: '4px',
+                  border: '1px solid var(--border)',
+                  fontSize: '0.8rem',
+                  fontFamily: 'var(--font-mono)'
+                }}
+              >
                 #{idx + 1}: [{sol.join(', ')}]
               </span>
             ))}

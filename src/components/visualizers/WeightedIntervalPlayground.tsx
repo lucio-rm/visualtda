@@ -69,6 +69,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
   const [activePresetIndex, setActivePresetIndex] = useState<number | 'custom'>(0);
   const [customIntervals, setCustomIntervals] = useState<WeightedInterval[]>(INITIAL_CUSTOM_INTERVALS);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [hoveredTaskId, setHoveredTaskId] = useState<string | null>(null);
 
   // Custom interval form state
   const [newId, setNewId] = useState<string>('');
@@ -81,6 +82,30 @@ export const WeightedIntervalPlayground: React.FC = () => {
     if (activePresetIndex === 'custom') return customIntervals;
     return PRESETS[activePresetIndex].intervals;
   }, [activePresetIndex, customIntervals]);
+
+  // Sort intervals by finish time to compute p(j)
+  const sortedIntervals = useMemo(() => {
+    return [...intervals].sort((a, b) => a.end - b.end);
+  }, [intervals]);
+
+  // Compute p(j) for every interval in sortedIntervals
+  // p(j) is the highest index i < j such that sortedIntervals[i].end <= sortedIntervals[j].start
+  const pMap = useMemo(() => {
+    const map: Record<string, { predId: string | null; predIndex: number }> = {};
+    for (let j = 0; j < sortedIntervals.length; j++) {
+      let predId: string | null = null;
+      let predIndex = -1;
+      for (let i = j - 1; i >= 0; i--) {
+        if (sortedIntervals[i].end <= sortedIntervals[j].start) {
+          predId = sortedIntervals[i].id;
+          predIndex = i;
+          break;
+        }
+      }
+      map[sortedIntervals[j].id] = { predId, predIndex };
+    }
+    return map;
+  }, [sortedIntervals]);
 
   const maxTime = useMemo(() => {
     return Math.max(...intervals.map((i) => i.end), 12);
@@ -146,16 +171,22 @@ export const WeightedIntervalPlayground: React.FC = () => {
     setSelectedIds(greedySolution.map((t) => t.id));
   };
 
+  const loadOptimal = () => {
+    setSelectedIds(optimalSolution.map((t) => t.id));
+  };
+
   const handlePreset = (idx: number) => {
     setActivePresetIndex(idx);
     setSelectedIds([]);
     setCustomError(null);
+    setHoveredTaskId(null);
   };
 
   const handleCustomMode = () => {
     setActivePresetIndex('custom');
     setSelectedIds([]);
     setCustomError(null);
+    setHoveredTaskId(null);
   };
 
   const handleAddCustomInterval = (e: React.FormEvent) => {
@@ -205,6 +236,9 @@ export const WeightedIntervalPlayground: React.FC = () => {
     setSelectedIds(selectedIds.filter((itemId) => itemId !== id));
   };
 
+  const hoveredTask = intervals.find((t) => t.id === hoveredTaskId);
+  const hoveredPred = hoveredTaskId ? pMap[hoveredTaskId]?.predId : null;
+
   return (
     <div className="weighted-interval-playground">
       <div className="playground-header">
@@ -215,8 +249,8 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Hacé clic en las tareas para seleccionarlas. Las tareas seleccionadas deben ser mutuamente compatibles (sin solapamiento temporal). El objetivo es maximizar la suma de pesos.'
-            : 'Click on tasks to select them. Selected tasks must be mutually compatible (no temporal overlap). The objective is to maximize the sum of weights.'}
+            ? 'Haz clic en las tareas para seleccionarlas. Pasa el cursor por cualquier intervalo para visualizar su función predecesora p(j), la clave matemática que permite formular la recurrencia de Bellman en O(n log n).'
+            : 'Click tasks to select them. Hover over any interval to inspect its predecessor function p(j), the mathematical key enabling Bellman recurrence in O(n log n).'}
         </p>
       </div>
 
@@ -323,13 +357,63 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </div>
       )}
 
+      {/* Predecessor Function Callout Banner */}
+      {hoveredTask && (
+        <div
+          style={{
+            padding: '0.65rem 0.85rem',
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            borderLeft: '4px solid #38bdf8',
+            borderRadius: '4px',
+            fontSize: '0.85rem',
+            color: 'var(--text)'
+          }}
+        >
+          <strong>
+            {language === 'es'
+              ? `Función Predecesora p(${hoveredTask.id}):`
+              : `Predecessor Function p(${hoveredTask.id}):`}
+          </strong>{' '}
+          {hoveredPred ? (
+            language === 'es' ? (
+              <span>
+                Última tarea compatible antes de {hoveredTask.start}:{' '}
+                <strong style={{ color: '#10b981' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
+                <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))</code>.
+              </span>
+            ) : (
+              <span>
+                Latest compatible task before {hoveredTask.start}:{' '}
+                <strong style={{ color: '#10b981' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
+                <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))</code>.
+              </span>
+            )
+          ) : language === 'es' ? (
+            <span>
+              Ninguna tarea previa es compatible (p({hoveredTask.id}) = 0). Si se elige {hoveredTask.id}, el beneficio es simplemente su peso ${hoveredTask.weight}.
+            </span>
+          ) : (
+            <span>
+              No previous task is compatible (p({hoveredTask.id}) = 0). If {hoveredTask.id} is chosen, reward is its weight ${hoveredTask.weight}.
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Interactive Schedule */}
       <div className="interactive-tracks-box">
         <div className="tracks-header">
-          <span>{language === 'es' ? 'Toca las tareas para activar/desactivar:' : 'Click tasks to toggle:'}</span>
+          <span>{language === 'es' ? 'Toca las tareas para armar tu subconjunto:' : 'Click tasks to assemble subset:'}</span>
           <div className="quick-buttons">
             <button className="btn-load greedy-load" onClick={loadGreedy}>
-              {language === 'es' ? 'Probar Heurística Greedy' : 'Test Greedy Heuristic'}
+              {language === 'es' ? 'Probar Greedy' : 'Test Greedy'}
+            </button>
+            <button
+              className="btn-load"
+              onClick={loadOptimal}
+              style={{ borderColor: '#10b981', color: '#10b981' }}
+            >
+              ★ {language === 'es' ? 'Cargar Óptimo (DP)' : 'Load Optimal (DP)'}
             </button>
             <button
               className="btn-load clear-load"
@@ -342,9 +426,12 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </div>
 
         <div className="tracks-list">
-          {intervals.map((task) => {
+          {sortedIntervals.map((task, j) => {
             const isSelected = selectedIds.includes(task.id);
             const isOpt = optimalSolution.some((t) => t.id === task.id);
+            const predInfo = pMap[task.id];
+            const isPredOfHovered = hoveredPred === task.id;
+            const isHovered = hoveredTaskId === task.id;
 
             const leftPct = (task.start / maxTime) * 100;
             const widthPct = ((task.end - task.start) / maxTime) * 100;
@@ -357,10 +444,36 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 key={task.id}
                 className={rowClass}
                 onClick={() => toggleTask(task.id)}
+                onMouseEnter={() => setHoveredTaskId(task.id)}
+                onMouseLeave={() => setHoveredTaskId(null)}
+                style={{
+                  backgroundColor: isHovered
+                    ? 'rgba(56, 189, 248, 0.08)'
+                    : isPredOfHovered
+                    ? 'rgba(16, 185, 129, 0.12)'
+                    : undefined,
+                  borderLeft: isHovered
+                    ? '3px solid #38bdf8'
+                    : isPredOfHovered
+                    ? '3px solid #10b981'
+                    : undefined
+                }}
               >
                 <div className="task-meta">
-                  <span className="task-title">{task.id}</span>
+                  <span className="task-title">
+                    {task.id} <small style={{ color: 'var(--text-muted)' }}>({j + 1})</small>
+                  </span>
                   <span className="task-val">${task.weight}</span>
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      color: predInfo?.predId ? '#10b981' : 'var(--text-muted)',
+                      fontFamily: 'var(--font-mono)'
+                    }}
+                    title={language === 'es' ? 'Predecesor compatible' : 'Compatible predecessor'}
+                  >
+                    p={predInfo?.predId || '0'}
+                  </span>
                   {activePresetIndex === 'custom' && (
                     <button
                       type="button"
@@ -375,7 +488,11 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 <div className="track-lane">
                   <div
                     className={`lane-interval-bar ${isSelected ? 'selected' : ''} ${isOpt && userStatus.isOptimal ? 'opt-match' : ''}`}
-                    style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+                    style={{
+                      left: `${leftPct}%`,
+                      width: `${widthPct}%`,
+                      border: isPredOfHovered ? '2px dashed #10b981' : undefined
+                    }}
                   >
                     <span className="lane-text">{task.id} (${task.weight})</span>
                     <span className="lane-range">[{task.start}, {task.end}]</span>
@@ -409,7 +526,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
               </span>
             ) : userStatus.isOptimal ? (
               <span className="status-ok">
-                {language === 'es' ? 'Subconjunto de tareas compatibles de peso máximo alcanzado.' : 'Maximum weight compatible subset reached.'}
+                🎉 {language === 'es' ? 'Subconjunto de tareas compatibles de peso máximo alcanzado.' : 'Maximum weight compatible subset reached.'}
               </span>
             ) : selectedIds.length > 0 ? (
               <span className="status-warn">
@@ -431,19 +548,15 @@ export const WeightedIntervalPlayground: React.FC = () => {
             {language === 'es' ? 'Óptimo (Programación Dinámica)' : 'Optimal (Dynamic Programming)'}
           </div>
           <div className="card-main">
-            <span className="main-stat">${optimalWeight}</span>
+            <span className="main-stat" style={{ color: '#10b981' }}>${optimalWeight}</span>
             <span className="main-items">
-              {userStatus.isOptimal
-                ? `[${optimalSolution.map((t) => t.id).join(', ')}]`
-                : language === 'es'
-                ? '[No revelado (alcance el óptimo mediante experimentación)]'
-                : '[Hidden (reach optimum via experimentation)]'}
+              [{optimalSolution.map((t) => t.id).join(', ')}]
             </span>
           </div>
           <div className="card-feedback status-ok">
             {language === 'es'
-              ? 'Garantizado por Bellman en O(n log n).'
-              : 'Guaranteed by Bellman in O(n log n).'}
+              ? 'Calculado mediante búsqueda binaria de p(j) + memoización en O(n log n).'
+              : 'Computed via binary search for p(j) + memoization in O(n log n).'}
           </div>
         </div>
 

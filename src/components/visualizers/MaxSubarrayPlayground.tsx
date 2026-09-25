@@ -27,7 +27,7 @@ const PRESETS: Preset[] = [
     array: [-5, -2, -8]
   },
   {
-    name: { es: 'Clásico LeetCode / Bentley', en: 'Classic LeetCode / Bentley' },
+    name: { es: 'Clásico Bentley / LeetCode (Kadane vs DyC)', en: 'Classic Bentley / LeetCode' },
     array: [-2, 1, -3, 4, -1, 2, 1, -5, 4]
   }
 ];
@@ -38,6 +38,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
   const [arrayStr, setArrayStr] = useState<string>('5, -4, 2, 4, -1');
   const [userStart, setUserStart] = useState<number | null>(null);
   const [userEnd, setUserEnd] = useState<number | null>(null);
+  const [showDcPartition, setShowDcPartition] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const parsedArray = useMemo(() => {
@@ -46,15 +47,12 @@ export const MaxSubarrayPlayground: React.FC = () => {
         .split(',')
         .map((s) => s.trim())
         .filter((s) => s.length > 0);
-      if (parts.length === 0) {
-        return [];
-      }
-      const nums = parts.map((s) => {
+      if (parts.length === 0) return [];
+      return parts.map((s) => {
         const n = Number(s);
-        if (isNaN(n)) throw new Error(`"${s}" no es un número válido`);
+        if (isNaN(n) || !Number.isFinite(n)) throw new Error(`"${s}" no es un número válido`);
         return n;
       });
-      return nums;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error al procesar el arreglo');
       return [];
@@ -64,6 +62,67 @@ export const MaxSubarrayPlayground: React.FC = () => {
   const optimal = useMemo(() => {
     if (parsedArray.length === 0) return null;
     return computeOptimalMaxSubarray(parsedArray);
+  }, [parsedArray]);
+
+  // Compute Divide and Conquer 3-way partition:
+  // 1. Left [0..mid], 2. Right [mid+1..n-1], 3. Crossing mid
+  const dcPartition = useMemo(() => {
+    const n = parsedArray.length;
+    if (n < 2) return null;
+    const mid = Math.floor((n - 1) / 2);
+
+    // Left half
+    const leftSlice = parsedArray.slice(0, mid + 1);
+    const leftOpt = computeOptimalMaxSubarray(leftSlice);
+
+    // Right half
+    const rightSlice = parsedArray.slice(mid + 1);
+    const rightOpt = computeOptimalMaxSubarray(rightSlice);
+    const rightAdjusted = {
+      ...rightOpt,
+      startIndex: rightOpt.startIndex + mid + 1,
+      endIndex: rightOpt.endIndex + mid + 1
+    };
+
+    // Crossing midpoint
+    let maxLeftCrossingSum = -Infinity;
+    let bestLeftCrossingIdx = mid;
+    let currLeftSum = 0;
+    for (let i = mid; i >= 0; i--) {
+      currLeftSum += parsedArray[i];
+      if (currLeftSum > maxLeftCrossingSum) {
+        maxLeftCrossingSum = currLeftSum;
+        bestLeftCrossingIdx = i;
+      }
+    }
+
+    let maxRightCrossingSum = -Infinity;
+    let bestRightCrossingIdx = mid + 1;
+    let currRightSum = 0;
+    for (let j = mid + 1; j < n; j++) {
+      currRightSum += parsedArray[j];
+      if (currRightSum > maxRightCrossingSum) {
+        maxRightCrossingSum = currRightSum;
+        bestRightCrossingIdx = j;
+      }
+    }
+
+    const crossingSum = maxLeftCrossingSum + maxRightCrossingSum;
+    const crossingOpt = {
+      maxSum: crossingSum,
+      startIndex: bestLeftCrossingIdx,
+      endIndex: bestRightCrossingIdx
+    };
+
+    const overallBest = Math.max(leftOpt.maxSum, crossingOpt.maxSum, rightAdjusted.maxSum);
+
+    return {
+      mid,
+      leftOpt,
+      rightOpt: rightAdjusted,
+      crossingOpt,
+      overallBest
+    };
   }, [parsedArray]);
 
   const userSum = useMemo(() => {
@@ -110,11 +169,9 @@ export const MaxSubarrayPlayground: React.FC = () => {
     setError(null);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setArrayStr(e.target.value);
-    setUserStart(null);
-    setUserEnd(null);
-    setError(null);
+  const handleSelectRange = (start: number, end: number) => {
+    setUserStart(start);
+    setUserEnd(end);
   };
 
   return (
@@ -122,13 +179,13 @@ export const MaxSubarrayPlayground: React.FC = () => {
       <div className="playground-intro">
         <h3>
           {language === 'es'
-            ? 'Laboratorio Interactivo: Subarreglo de Máxima Suma'
-            : 'Interactive Playground: Maximum Subarray'}
+            ? 'Laboratorio Interactivo: Subarreglo de Máxima Suma (División y Conquista)'
+            : 'Interactive Playground: Maximum Subarray (Divide and Conquer)'}
         </h3>
         <p>
           {language === 'es'
-            ? 'Haz clic en los elementos para definir un subarreglo contiguo [inicio..fin]. ¿Logras encontrar la subsecuencia contigua que produce la máxima suma posible?'
-            : 'Click elements to select a contiguous subarray [start..end]. Can you find the contiguous slice yielding the absolute maximum sum?'}
+            ? 'Haz clic en los elementos para definir un subarreglo contiguo [inicio..fin] o examina la tripartición DyC para comprender cómo se combinan las mitades en tiempo O(n log n).'
+            : 'Click elements to select a contiguous subarray [start..end] or inspect the D&C tripartition to understand how halves combine in O(n log n).'}
         </p>
       </div>
 
@@ -161,7 +218,12 @@ export const MaxSubarrayPlayground: React.FC = () => {
           id="array-input"
           type="text"
           value={arrayStr}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            setArrayStr(e.target.value);
+            setUserStart(null);
+            setUserEnd(null);
+            setError(null);
+          }}
           placeholder="Ej: 5, -4, 2, 4, -1"
           className="array-text-input"
         />
@@ -171,21 +233,123 @@ export const MaxSubarrayPlayground: React.FC = () => {
       {/* Visual Array Presentation */}
       {parsedArray.length > 0 && (
         <div className="array-visualization-box">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
             <span className="box-title">
               {language === 'es'
                 ? 'Toca dos índices para marcar el rango contiguo [i..j]:'
                 : 'Click two items to select range [i..j]:'}
             </span>
-            <button
-              className="chip-btn"
-              onClick={handleClearSelection}
-              disabled={userStart === null}
-            >
-              {language === 'es' ? 'Limpiar Selección' : 'Clear Selection'}
-            </button>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() => setShowDcPartition(!showDcPartition)}
+                style={{
+                  backgroundColor: showDcPartition ? 'var(--accent)' : 'var(--bg)',
+                  color: showDcPartition ? '#fff' : 'var(--text)',
+                  borderColor: 'var(--accent)'
+                }}
+              >
+                {showDcPartition
+                  ? (language === 'es' ? 'Ocultar Tripartición DyC' : 'Hide D&C Tripartition')
+                  : (language === 'es' ? '⚖️ Ver Tripartición DyC' : '⚖️ Show D&C Tripartition')}
+              </button>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={handleClearSelection}
+                disabled={userStart === null}
+              >
+                {language === 'es' ? 'Limpiar Selección' : 'Clear Selection'}
+              </button>
+            </div>
           </div>
 
+          {/* D&C Tripartition Cards Banner */}
+          {showDcPartition && dcPartition && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: '0.75rem',
+                padding: '0.75rem',
+                backgroundColor: 'var(--surface)',
+                borderRadius: '6px',
+                border: '1px solid var(--border)'
+              }}
+            >
+              {/* Left Subproblem */}
+              <div
+                style={{
+                  padding: '0.6rem',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--bg)',
+                  border: dcPartition.leftOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleSelectRange(dcPartition.leftOpt.startIndex, dcPartition.leftOpt.endIndex)}
+                title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
+              >
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {language === 'es' ? '1. Mejor a la Izquierda [0..m]' : '1. Best Left [0..m]'}
+                </div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text)' }}>
+                  Suma = {dcPartition.leftOpt.maxSum}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                  [{dcPartition.leftOpt.startIndex}..{dcPartition.leftOpt.endIndex}]
+                </div>
+              </div>
+
+              {/* Crossing Subproblem */}
+              <div
+                style={{
+                  padding: '0.6rem',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--bg)',
+                  border: dcPartition.crossingOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleSelectRange(dcPartition.crossingOpt.startIndex, dcPartition.crossingOpt.endIndex)}
+                title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
+              >
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {language === 'es' ? '2. Mejor Cruzado por Centro' : '2. Best Crossing Mid'}
+                </div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#f59e0b' }}>
+                  Suma = {dcPartition.crossingOpt.maxSum}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                  [{dcPartition.crossingOpt.startIndex}..{dcPartition.crossingOpt.endIndex}]
+                </div>
+              </div>
+
+              {/* Right Subproblem */}
+              <div
+                style={{
+                  padding: '0.6rem',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--bg)',
+                  border: dcPartition.rightOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleSelectRange(dcPartition.rightOpt.startIndex, dcPartition.rightOpt.endIndex)}
+                title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
+              >
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {language === 'es' ? '3. Mejor a la Derecha [m+1..n-1]' : '3. Best Right [m+1..n-1]'}
+                </div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text)' }}>
+                  Suma = {dcPartition.rightOpt.maxSum}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                  [{dcPartition.rightOpt.startIndex}..{dcPartition.rightOpt.endIndex}]
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Cards Strip */}
           <div className="items-row">
             {parsedArray.map((val, idx) => {
               const isUserSelected =
@@ -193,6 +357,8 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 userEnd !== null &&
                 idx >= userStart &&
                 idx <= userEnd;
+
+              const isMid = dcPartition && dcPartition.mid === idx;
 
               return (
                 <div
@@ -207,7 +373,11 @@ export const MaxSubarrayPlayground: React.FC = () => {
                     }
                   }}
                   className={`item-card ${isUserSelected ? 'selected' : 'unselected'}`}
-                  style={{ cursor: 'pointer' }}
+                  style={{
+                    cursor: 'pointer',
+                    position: 'relative',
+                    borderRight: isMid && showDcPartition ? '3px dashed #f59e0b' : undefined
+                  }}
                 >
                   <span className="item-idx">i={idx}</span>
                   <span className={`item-val ${val >= 0 ? 'pos' : 'neg'}`}>
@@ -222,6 +392,19 @@ export const MaxSubarrayPlayground: React.FC = () => {
                         : idx === userEnd
                         ? '[fin]'
                         : '•'}
+                    </span>
+                  )}
+                  {isMid && showDcPartition && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: '-16px',
+                        fontSize: '9px',
+                        color: '#f59e0b',
+                        fontWeight: 800
+                      }}
+                    >
+                      m
                     </span>
                   )}
                 </div>
@@ -251,7 +434,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
               <span className="stat-value">
                 {isOptimal ? (
                   <span style={{ color: '#10b981', fontWeight: 800 }}>
-                    {language === 'es' ? 'Subarreglo de suma máxima identificado' : 'Maximum sum subarray identified'}
+                    🎉 {language === 'es' ? '¡Subarreglo de suma máxima verificado!' : 'Maximum sum subarray verified!'}
                   </span>
                 ) : userSum !== null ? (
                   <span style={{ color: '#f59e0b' }}>
@@ -268,7 +451,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
             {optimal && (
               <div className="summary-stat">
                 <span className="stat-label">
-                  {language === 'es' ? 'Cota Máxima Teórica:' : 'Theoretical Maximum:'}
+                  {language === 'es' ? 'Cota Máxima Óptima:' : 'Optimal Maximum:'}
                 </span>
                 <span className="stat-value highlight">
                   {isOptimal ? (

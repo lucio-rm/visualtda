@@ -8,12 +8,16 @@ interface LPPreset {
   name: { es: string; en: string };
   objective: [number, number];
   constraints: LinearConstraint[];
+  maxX: number;
+  maxY: number;
 }
 
 const PRESETS: LPPreset[] = [
   {
     name: { es: 'Problema de Producción (3 restricciones)', en: 'Production Problem (3 constraints)' },
     objective: [3, 2],
+    maxX: 14,
+    maxY: 18,
     constraints: [
       { a: 2, b: 1, c: 18, label: '2x + y <= 18' },
       { a: 2, b: 3, c: 42, label: '2x + 3y <= 42' },
@@ -23,6 +27,8 @@ const PRESETS: LPPreset[] = [
   {
     name: { es: 'Wyndor Glass (Hillier & Lieberman)', en: 'Wyndor Glass (Hillier & Lieberman)' },
     objective: [3, 5],
+    maxX: 8,
+    maxY: 10,
     constraints: [
       { a: 1, b: 0, c: 4, label: 'x <= 4 (Planta 1)' },
       { a: 0, b: 2, c: 12, label: '2y <= 12 (Planta 2)' },
@@ -32,6 +38,8 @@ const PRESETS: LPPreset[] = [
   {
     name: { es: 'Mochila Continua 2 Ítems', en: 'Continuous Knapsack 2 Items' },
     objective: [5, 6],
+    maxX: 6,
+    maxY: 6,
     constraints: [
       { a: 2, b: 3, c: 12, label: '2x + 3y <= 12 (Capacidad)' },
       { a: 1, b: 0, c: 4, label: 'x <= 4' },
@@ -49,6 +57,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
   const [c1, setC1] = useState<number>(3);
   const [c2, setC2] = useState<number>(2);
   const [activePreset, setActivePreset] = useState<LPPreset>(PRESETS[0]);
+  const [selectedVertex, setSelectedVertex] = useState<[number, number] | null>(null);
 
   const solution = useMemo(() => {
     return solveLP2D([c1, c2], activePreset.constraints);
@@ -64,7 +73,70 @@ export const LinearProgrammingPlayground: React.FC = () => {
     setActivePreset(p);
     setC1(p.objective[0]);
     setC2(p.objective[1]);
+    setSelectedVertex(null);
   };
+
+  // SVG dimensions and scaling
+  const svgWidth = 480;
+  const svgHeight = 360;
+  const padding = 45;
+  const maxX = activePreset.maxX;
+  const maxY = activePreset.maxY;
+
+  const toSvgX = (x: number) => padding + (x / maxX) * (svgWidth - 2 * padding);
+  const toSvgY = (y: number) => svgHeight - padding - (y / maxY) * (svgHeight - 2 * padding);
+
+  // Feasible polygon points sorted counter-clockwise
+  const polygonPoints = useMemo(() => {
+    if (solution.vertices.length < 3) return '';
+    const cx = solution.vertices.reduce((s, v) => s + v[0], 0) / solution.vertices.length;
+    const cy = solution.vertices.reduce((s, v) => s + v[1], 0) / solution.vertices.length;
+
+    const sorted = [...solution.vertices].sort((a, b) => {
+      const angleA = Math.atan2(a[1] - cy, a[0] - cx);
+      const angleB = Math.atan2(b[1] - cy, b[0] - cx);
+      return angleA - angleB;
+    });
+
+    return sorted.map(([x, y]) => `${toSvgX(x)},${toSvgY(y)}`).join(' ');
+  }, [solution.vertices, maxX, maxY]);
+
+  // Optimal level set line segment (c1*x + c2*y = z*)
+  const levelCurveLine = useMemo(() => {
+    if (!solution.optimalPoint || solution.optimalValue === -Infinity) return null;
+    const z = solution.optimalValue;
+    // Points where c1*x + c2*y = z intersects borders of display [0, maxX], [0, maxY]
+    const pts: [number, number][] = [];
+
+    // Intersect with x = 0 -> y = z / c2
+    if (c2 !== 0) {
+      const yAt0 = z / c2;
+      if (yAt0 >= 0 && yAt0 <= maxY * 1.2) pts.push([0, yAt0]);
+    }
+    // Intersect with y = 0 -> x = z / c1
+    if (c1 !== 0) {
+      const xAt0 = z / c1;
+      if (xAt0 >= 0 && xAt0 <= maxX * 1.2) pts.push([xAt0, 0]);
+    }
+    // Intersect with x = maxX -> y = (z - c1*maxX) / c2
+    if (c2 !== 0) {
+      const yAtMax = (z - c1 * maxX) / c2;
+      if (yAtMax >= 0 && yAtMax <= maxY * 1.2) pts.push([maxX, yAtMax]);
+    }
+    // Intersect with y = maxY -> x = (z - c2*maxY) / c1
+    if (c1 !== 0) {
+      const xAtMax = (z - c2 * maxY) / c1;
+      if (xAtMax >= 0 && xAtMax <= maxX * 1.2) pts.push([xAtMax, maxY]);
+    }
+
+    if (pts.length < 2) return null;
+    return {
+      x1: toSvgX(pts[0][0]),
+      y1: toSvgY(pts[0][1]),
+      x2: toSvgX(pts[1][0]),
+      y2: toSvgY(pts[1][1])
+    };
+  }, [solution.optimalPoint, solution.optimalValue, c1, c2, maxX, maxY]);
 
   return (
     <div className="lp-playground">
@@ -76,8 +148,8 @@ export const LinearProgrammingPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Explora la geometría de las soluciones óptimas en el plano continuo o inspecciona la formulación formal en Programación Lineal Entera de problemas clásicos de la cátedra.'
-            : 'Explore the geometry of optimal solutions on the continuous plane or inspect the integer linear programming formulation of classic course problems.'}
+            ? 'Explora la geometría continua de las soluciones factibles y el Teorema Fundamental de Programación Lineal, o inspecciona las formulaciones enteras canónicas de problemas de la cátedra.'
+            : 'Explore the continuous geometry of feasible solutions and the Fundamental Theorem of LP, or inspect canonical integer formulations of course problems.'}
         </p>
       </div>
 
@@ -120,32 +192,237 @@ export const LinearProgrammingPlayground: React.FC = () => {
           {/* Objective Function Sliders */}
           <div className="controls-card">
             <div className="card-title">
-              {language === 'es' ? 'Ajustar Vector Objetivo c = (c1, c2):' : 'Adjust Objective Vector c = (c1, c2):'}
+              {language === 'es' ? 'Ajustar Vector Objetivo c = (c1, c2):' : 'Adjust Objective Vector c = (c1, c2):'}{' '}
+              <code style={{ color: 'var(--accent)', fontWeight: 800 }}>
+                max z = {c1}x + {c2}y
+              </code>
             </div>
             <div className="sliders-row">
               <div className="slider-group">
                 <label>c1 (coeficiente X): <strong>{c1}</strong></label>
                 <input
                   type="range"
-                  min={-5}
-                  max={10}
+                  min={-3}
+                  max={8}
                   step={1}
                   value={c1}
                   onChange={(e) => setC1(Number(e.target.value))}
+                  style={{ accentColor: 'var(--accent)' }}
                 />
               </div>
               <div className="slider-group">
                 <label>c2 (coeficiente Y): <strong>{c2}</strong></label>
                 <input
                   type="range"
-                  min={-5}
-                  max={10}
+                  min={-3}
+                  max={8}
                   step={1}
                   value={c2}
                   onChange={(e) => setC2(Number(e.target.value))}
+                  style={{ accentColor: 'var(--accent)' }}
                 />
               </div>
             </div>
+          </div>
+
+          {/* 2D Polytope SVG Canvas */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              backgroundColor: 'var(--surface)',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              padding: '0.75rem',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}
+          >
+            <svg
+              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+              style={{ maxWidth: '480px', width: '100%', height: 'auto' }}
+              role="img"
+              aria-label="Plano cartesiano 2D con región factible y curvas de nivel"
+            >
+              {/* Coordinate Grid */}
+              {Array.from({ length: 7 }).map((_, i) => {
+                const gx = Math.round((maxX / 6) * i);
+                const gy = Math.round((maxY / 6) * i);
+                return (
+                  <g key={`grid-lp-${i}`}>
+                    <line
+                      x1={toSvgX(gx)}
+                      y1={toSvgY(0)}
+                      x2={toSvgX(gx)}
+                      y2={toSvgY(maxY)}
+                      stroke="var(--border)"
+                      strokeDasharray="2 3"
+                      strokeWidth="1"
+                      opacity={0.5}
+                    />
+                    <text
+                      x={toSvgX(gx)}
+                      y={toSvgY(0) + 16}
+                      fontSize="10"
+                      textAnchor="middle"
+                      fill="var(--text-muted)"
+                      fontFamily="var(--font-mono)"
+                    >
+                      {gx}
+                    </text>
+                    <line
+                      x1={toSvgX(0)}
+                      y1={toSvgY(gy)}
+                      x2={toSvgX(maxX)}
+                      y2={toSvgY(gy)}
+                      stroke="var(--border)"
+                      strokeDasharray="2 3"
+                      strokeWidth="1"
+                      opacity={0.5}
+                    />
+                    <text
+                      x={toSvgX(0) - 10}
+                      y={toSvgY(gy) + 4}
+                      fontSize="10"
+                      textAnchor="end"
+                      fill="var(--text-muted)"
+                      fontFamily="var(--font-mono)"
+                    >
+                      {gy}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* Axes X and Y */}
+              <line
+                x1={toSvgX(0)}
+                y1={toSvgY(0)}
+                x2={toSvgX(maxX)}
+                y2={toSvgY(0)}
+                stroke="var(--text)"
+                strokeWidth="2"
+              />
+              <line
+                x1={toSvgX(0)}
+                y1={toSvgY(0)}
+                x2={toSvgX(0)}
+                y2={toSvgY(maxY)}
+                stroke="var(--text)"
+                strokeWidth="2"
+              />
+              <text x={toSvgX(maxX) - 5} y={toSvgY(0) + 18} fill="var(--text)" fontSize="11" fontWeight="700">X</text>
+              <text x={toSvgX(0) - 15} y={toSvgY(maxY) + 10} fill="var(--text)" fontSize="11" fontWeight="700">Y</text>
+
+              {/* Shaded Feasible Polytope */}
+              {polygonPoints && (
+                <polygon
+                  points={polygonPoints}
+                  fill="rgba(59, 130, 246, 0.22)"
+                  stroke="#3b82f6"
+                  strokeWidth="2.5"
+                />
+              )}
+
+              {/* Constraint boundary lines */}
+              {activePreset.constraints.map((c, idx) => {
+                // Find endpoints where a*x + b*y = c intersects the axes
+                let p1: [number, number] | null = null;
+                let p2: [number, number] | null = null;
+                if (c.b !== 0 && c.a !== 0) {
+                  p1 = [0, c.c / c.b];
+                  p2 = [c.c / c.a, 0];
+                } else if (c.b === 0 && c.a !== 0) {
+                  p1 = [c.c / c.a, 0];
+                  p2 = [c.c / c.a, maxY];
+                } else if (c.a === 0 && c.b !== 0) {
+                  p1 = [0, c.c / c.b];
+                  p2 = [maxX, c.c / c.b];
+                }
+
+                if (!p1 || !p2) return null;
+
+                return (
+                  <line
+                    key={`constr-line-${idx}`}
+                    x1={toSvgX(p1[0])}
+                    y1={toSvgY(p1[1])}
+                    x2={toSvgX(p2[0])}
+                    y2={toSvgY(p2[1])}
+                    stroke="#94a3b8"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 2"
+                    opacity={0.7}
+                  />
+                );
+              })}
+
+              {/* Optimal Level Curve Line */}
+              {levelCurveLine && (
+                <line
+                  x1={levelCurveLine.x1}
+                  y1={levelCurveLine.y1}
+                  x2={levelCurveLine.x2}
+                  y2={levelCurveLine.y2}
+                  stroke="#10b981"
+                  strokeWidth="2"
+                  strokeDasharray="5 3"
+                />
+              )}
+
+              {/* Polytope Vertices */}
+              {solution.vertices.map(([vx, vy], idx) => {
+                const isOpt =
+                  solution.optimalPoint &&
+                  Math.abs(solution.optimalPoint[0] - vx) < 1e-4 &&
+                  Math.abs(solution.optimalPoint[1] - vy) < 1e-4;
+                const isSel =
+                  selectedVertex &&
+                  Math.abs(selectedVertex[0] - vx) < 1e-4 &&
+                  Math.abs(selectedVertex[1] - vy) < 1e-4;
+
+                const zVal = Number((c1 * vx + c2 * vy).toFixed(2));
+
+                return (
+                  <g
+                    key={`vertex-lp-${idx}`}
+                    onClick={() => setSelectedVertex([vx, vy])}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <circle
+                      cx={toSvgX(vx)}
+                      cy={toSvgY(vy)}
+                      r={isOpt ? 7 : 5}
+                      fill={isOpt ? '#10b981' : isSel ? '#38bdf8' : 'var(--accent)'}
+                      stroke="#ffffff"
+                      strokeWidth={2}
+                    />
+                    <text
+                      x={toSvgX(vx)}
+                      y={toSvgY(vy) - 10}
+                      fontSize="10"
+                      textAnchor="middle"
+                      fill={isOpt ? '#10b981' : 'var(--text)'}
+                      fontFamily="var(--font-mono)"
+                      fontWeight={isOpt ? '800' : '600'}
+                    >
+                      ({vx.toFixed(1)}, {vy.toFixed(1)}) z={zVal}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* Gradient Vector arrow c */}
+              <g transform={`translate(${toSvgX(0)}, ${toSvgY(0)})`}>
+                <line
+                  x1={0}
+                  y1={0}
+                  x2={(c1 / maxX) * (svgWidth - 2 * padding) * 0.75}
+                  y2={-(c2 / maxY) * (svgHeight - 2 * padding) * 0.75}
+                  stroke="#f59e0b"
+                  strokeWidth="2.5"
+                />
+              </g>
+            </svg>
           </div>
 
           {/* Live Solution Card */}
@@ -154,7 +431,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <span className="stat-label">
                 {language === 'es' ? 'Vértice Óptimo (x*, y*):' : 'Optimal Vertex (x*, y*):'}
               </span>
-              <span className="stat-value highlight">
+              <span className="stat-value highlight" style={{ color: '#10b981' }}>
                 {solution.optimalPoint ? `(${solution.optimalPoint[0]}, ${solution.optimalPoint[1]})` : 'N/A'}
               </span>
             </div>
@@ -162,16 +439,26 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <span className="stat-label">
                 {language === 'es' ? 'Valor Máximo z*:' : 'Maximum Value z*:'}
               </span>
-              <span className="stat-value highlight">
+              <span className="stat-value highlight" style={{ color: '#10b981' }}>
                 {solution.optimalValue !== -Infinity ? solution.optimalValue : 'N/A'}
               </span>
             </div>
             <div className="summary-col">
               <span className="stat-label">
-                {language === 'es' ? 'Vértices Factibles Totales:' : 'Total Feasible Vertices:'}
+                {language === 'es' ? 'Vértices Factibles:' : 'Feasible Vertices:'}
               </span>
               <span className="stat-value">{solution.vertices.length}</span>
             </div>
+            {selectedVertex && (
+              <div className="summary-col">
+                <span className="stat-label">
+                  {language === 'es' ? 'Vértice Inspeccionado:' : 'Inspected Vertex:'}
+                </span>
+                <span className="stat-value" style={{ color: 'var(--accent)' }}>
+                  ({selectedVertex[0]}, {selectedVertex[1]}) → z = {Number((c1 * selectedVertex[0] + c2 * selectedVertex[1]).toFixed(2))}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Educational Callout */}
@@ -183,8 +470,8 @@ export const LinearProgrammingPlayground: React.FC = () => {
             </h4>
             <p>
               {language === 'es'
-                ? 'Como la función objetivo es lineal y la región factible es un polítopo convexo, las curvas de nivel son hiperplanos paralelos. El valor máximo siempre se alcanza en al menos un vértice extremo. Por esta razón, algoritmos como Simplex sólo necesitan recorrer los vértices a lo largo de aristas sin tener que explorar el interior continuo.'
-                : 'Because the objective function is linear and the feasible region is a convex polytope, level curves are parallel hyperplanes. The maximum is always attained at an extreme vertex. This is why algorithms like Simplex only need to traverse vertices along edges.'}
+                ? 'Como la función objetivo es lineal y la región factible es un polítopo convexo, las curvas de nivel c₁x + c₂y = z son rectas paralelas con vector normal c = (c₁, c₂). Al desplazar la recta en la dirección de máximo crecimiento, el valor máximo siempre se alcanza en al menos un vértice extremo (marcado en verde). Por esta razón, el método Simplex sólo necesita evaluar vértices extremos en lugar de explorar el interior infinito.'
+                : 'Because the objective function is linear and the feasible region is a convex polytope, the level curves c₁x + c₂y = z are parallel lines with normal vector c = (c₁, c₂). Shifting this line in the direction of steepest ascent guarantees the maximum is attained at an extreme vertex (marked green). Hence Simplex only tests extreme vertices instead of searching the infinite continuous interior.'}
             </p>
           </div>
         </div>

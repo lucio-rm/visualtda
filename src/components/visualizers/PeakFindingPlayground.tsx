@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import { solvePeakFinding, peakFindingValidator } from '../../engine/algorithms/peakFindingValidator';
@@ -32,6 +32,15 @@ const PRESETS: Preset[] = [
   }
 ];
 
+interface DcStepState {
+  left: number;
+  right: number;
+  mid: number;
+  stepCount: number;
+  foundPeak: number | null;
+  explanation: { es: string; en: string };
+}
+
 export const PeakFindingPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
@@ -39,6 +48,14 @@ export const PeakFindingPlayground: React.FC = () => {
   const [userSelectedIndex, setUserSelectedIndex] = useState<number | null>(null);
   const [discoveredPeaks, setDiscoveredPeaks] = useState<Set<number>>(new Set());
   const [error, setError] = useState<string | null>(null);
+
+  // Divide and Conquer Step Simulation State
+  const [dcState, setDcState] = useState<DcStepState | null>(null);
+
+  // Dragging state for interactive bar heights
+  const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
+  const dragStartYRef = useRef<number>(0);
+  const dragStartValRef = useRef<number>(0);
 
   const array = useMemo(() => {
     try {
@@ -58,7 +75,7 @@ export const PeakFindingPlayground: React.FC = () => {
     }
   }, [arrayStr]);
 
-  const maxVal = useMemo(() => Math.max(...array, 1), [array]);
+  const maxVal = useMemo(() => Math.max(...array, 30), [array]);
 
   // Find all peaks in the array
   const allPeaks = useMemo(() => {
@@ -86,6 +103,7 @@ export const PeakFindingPlayground: React.FC = () => {
   }, [userSelectedIndex, array]);
 
   const handleBarClick = (idx: number) => {
+    if (draggingIdx !== null) return;
     setUserSelectedIndex(idx);
     if (allPeaks.includes(idx)) {
       setDiscoveredPeaks((prev) => {
@@ -106,19 +124,138 @@ export const PeakFindingPlayground: React.FC = () => {
     setArrayStr(preset.array.join(', '));
     setUserSelectedIndex(null);
     setDiscoveredPeaks(new Set());
+    setDcState(null);
     setError(null);
   };
 
   const handleRandom = () => {
-    const size = Math.floor(Math.random() * 6) + 6; // 6 to 11 elements
+    const size = Math.floor(Math.random() * 5) + 7; // 7 to 11 elements
     const randoms: number[] = [];
     for (let i = 0; i < size; i++) {
-      randoms.push(Math.floor(Math.random() * 40) + 1);
+      randoms.push(Math.floor(Math.random() * 35) + 3);
     }
     setArrayStr(randoms.join(', '));
     setUserSelectedIndex(null);
     setDiscoveredPeaks(new Set());
+    setDcState(null);
     setError(null);
+  };
+
+  // Dragging handler to adjust bar height interactively
+  const handlePointerDown = (idx: number, e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    setDraggingIdx(idx);
+    dragStartYRef.current = e.clientY;
+    dragStartValRef.current = array[idx];
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (draggingIdx === null) return;
+    const dy = dragStartYRef.current - e.clientY;
+    // Every 4px of movement changes height by 1 unit
+    const delta = Math.round(dy / 4);
+    const newVal = Math.max(1, Math.min(50, dragStartValRef.current + delta));
+
+    if (newVal !== array[draggingIdx]) {
+      const nextArray = [...array];
+      nextArray[draggingIdx] = newVal;
+      setArrayStr(nextArray.join(', '));
+      setDcState(null);
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingIdx !== null) {
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // Pointer capture release safety
+      }
+      setDraggingIdx(null);
+    }
+  };
+
+  // Divide and conquer step simulation
+  const handleStartDcSimulation = () => {
+    if (array.length === 0) return;
+    const left = 0;
+    const right = array.length - 1;
+    const mid = Math.floor((left + right) / 2);
+
+    const val = array[mid];
+    const leftOk = mid === 0 || val >= array[mid - 1];
+    const rightOk = mid === right || val >= array[mid + 1];
+
+    if (leftOk && rightOk) {
+      setDcState({
+        left,
+        right,
+        mid,
+        stepCount: 1,
+        foundPeak: mid,
+        explanation: {
+          es: `Paso 1: M = [${mid}] (valor ${val}) es mayor o igual a sus vecinos inmediatos. ¡Cima encontrada directamente!`,
+          en: `Step 1: M = [${mid}] (value ${val}) is >= immediate neighbors. Peak found directly!`
+        }
+      });
+      return;
+    }
+
+    setDcState({
+      left,
+      right,
+      mid,
+      stepCount: 1,
+      foundPeak: null,
+      explanation: {
+        es: `Paso 1: Inspeccionando punto medio M = [${mid}] (valor ${val}). Comparando con vecinos [${mid - 1}] y [${mid + 1}].`,
+        en: `Step 1: Inspecting midpoint M = [${mid}] (value ${val}). Comparing with neighbors [${mid - 1}] and [${mid + 1}].`
+      }
+    });
+  };
+
+  const handleNextDcStep = () => {
+    if (!dcState || dcState.foundPeak !== null) return;
+    const { left, right, mid, stepCount } = dcState;
+    const val = array[mid];
+
+    let nextLeft = left;
+    let nextRight = right;
+    let reasonEs = '';
+    let reasonEn = '';
+
+    if (mid > 0 && array[mid - 1] > val) {
+      nextRight = mid - 1;
+      reasonEs = `Como A[${mid - 1}] = ${array[mid - 1]} > A[${mid}] = ${val}, el gradiente ascendente garantiza un pico a la izquierda [${nextLeft}..${nextRight}].`;
+      reasonEn = `Since A[${mid - 1}] = ${array[mid - 1]} > A[${mid}] = ${val}, gradient invariant guarantees a peak in left half [${nextLeft}..${nextRight}].`;
+    } else {
+      nextLeft = mid + 1;
+      reasonEs = `Como A[${mid + 1}] = ${array[mid + 1]} > A[${mid}] = ${val}, el gradiente ascendente garantiza un pico a la derecha [${nextLeft}..${nextRight}].`;
+      reasonEn = `Since A[${mid + 1}] = ${array[mid + 1]} > A[${mid}] = ${val}, gradient invariant guarantees a peak in right half [${nextLeft}..${nextRight}].`;
+    }
+
+    const nextMid = Math.floor((nextLeft + nextRight) / 2);
+    const nextVal = array[nextMid];
+    const isPeak =
+      (nextMid === 0 || nextVal >= array[nextMid - 1]) &&
+      (nextMid === array.length - 1 || nextVal >= array[nextMid + 1]);
+
+    setDcState({
+      left: nextLeft,
+      right: nextRight,
+      mid: nextMid,
+      stepCount: stepCount + 1,
+      foundPeak: isPeak ? nextMid : null,
+      explanation: {
+        es: `Paso ${stepCount + 1}: ${reasonEs} ${isPeak ? `¡M = [${nextMid}] (${nextVal}) es una cumbre local!` : `Nuevo punto medio M = [${nextMid}] (${nextVal}).`}`,
+        en: `Step ${stepCount + 1}: ${reasonEn} ${isPeak ? `M = [${nextMid}] (${nextVal}) is a local peak!` : `New midpoint M = [${nextMid}] (${nextVal}).`}`
+      }
+    });
+
+    if (isPeak) {
+      setDiscoveredPeaks((prev) => new Set([...prev, nextMid]));
+    }
   };
 
   return (
@@ -131,8 +268,8 @@ export const PeakFindingPlayground: React.FC = () => {
         </h3>
         <p>
           {language === 'es'
-            ? 'Haz clic en cualquier barra del perfil de elevación para verificar si es un pico local. Compara tu intuición con la búsqueda binaria en O(log n).'
-            : 'Click on any bar in the elevation profile to check if it is a local peak. Compare your intuition against binary search in O(log n).'}
+            ? 'Arrastra verticalmente cualquier columna para moldear el relieve. Haz clic para probar picos locales o activa el paso a paso de División y Conquista para ver cómo se descarta la mitad del arreglo en cada paso.'
+            : 'Drag vertically on any column to reshape the terrain. Click to test local peaks or step through Divide and Conquer to see how half the array is pruned each step.'}
         </p>
       </div>
 
@@ -152,7 +289,7 @@ export const PeakFindingPlayground: React.FC = () => {
             </button>
           ))}
           <button className="chip-button random-btn" onClick={handleRandom}>
-            {language === 'es' ? 'Generar Aleatorio' : 'Generate Random'}
+            🎲 {language === 'es' ? 'Generar Aleatorio' : 'Generate Random'}
           </button>
         </div>
       </div>
@@ -170,6 +307,7 @@ export const PeakFindingPlayground: React.FC = () => {
             setArrayStr(e.target.value);
             setUserSelectedIndex(null);
             setDiscoveredPeaks(new Set());
+            setDcState(null);
             setError(null);
           }}
           className="array-input"
@@ -183,20 +321,73 @@ export const PeakFindingPlayground: React.FC = () => {
           <div className="mountain-interactive-header">
             <span>
               {language === 'es'
-                ? 'Haz clic en una columna para inspeccionar si es cima:'
-                : 'Click a column to test if it is a summit:'}
+                ? 'Arrastra arriba/abajo para cambiar alturas, o toca para probar cima:'
+                : 'Drag up/down to adjust heights, or click to test summit:'}
             </span>
-            <span className="peaks-count-tag">
-              {language === 'es'
-                ? `Picos descubiertos: ${discoveredPeaks.size} / ${allPeaks.length}`
-                : `Discovered peaks: ${discoveredPeaks.size} / ${allPeaks.length}`}
-            </span>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <span className="peaks-count-tag">
+                {language === 'es'
+                  ? `Picos descubiertos: ${discoveredPeaks.size} / ${allPeaks.length}`
+                  : `Discovered peaks: ${discoveredPeaks.size} / ${allPeaks.length}`}
+              </span>
+              <button
+                type="button"
+                className="chip-button"
+                onClick={dcState ? handleNextDcStep : handleStartDcSimulation}
+                disabled={dcState !== null && dcState.foundPeak !== null}
+                style={{
+                  backgroundColor: dcState ? '#3b82f6' : 'var(--accent)',
+                  color: '#fff',
+                  border: 'none',
+                  fontWeight: 600
+                }}
+              >
+                {dcState === null
+                  ? (language === 'es' ? '▶ Paso a Paso DyC' : '▶ Step DyC')
+                  : dcState.foundPeak !== null
+                  ? (language === 'es' ? '✓ Pico Hallado' : '✓ Peak Found')
+                  : (language === 'es' ? `Siguiente Paso (${dcState.stepCount + 1}) ⏭` : `Next Step (${dcState.stepCount + 1}) ⏭`)}
+              </button>
+              {dcState && (
+                <button
+                  type="button"
+                  className="chip-button"
+                  onClick={() => setDcState(null)}
+                  style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+                >
+                  ✕ {language === 'es' ? 'Reiniciar DyC' : 'Reset DyC'}
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="interactive-bars-strip">
+          {/* D&C Step Banner */}
+          {dcState && (
+            <div
+              style={{
+                padding: '0.5rem 0.8rem',
+                backgroundColor: 'rgba(59, 130, 246, 0.12)',
+                borderLeft: '4px solid #3b82f6',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.85rem',
+                color: 'var(--text)'
+              }}
+            >
+              {dcState.explanation[language]}
+            </div>
+          )}
+
+          {/* Bar Strip */}
+          <div
+            className="interactive-bars-strip"
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+          >
             {array.map((val, idx) => {
               const isSelected = userSelectedIndex === idx;
               const isFoundPeak = discoveredPeaks.has(idx);
+              const isDcMid = dcState && dcState.mid === idx;
+              const isDcActiveRange = dcState ? idx >= dcState.left && idx <= dcState.right : true;
 
               const heightPct = Math.max(15, Math.round((val / maxVal) * 100));
 
@@ -205,20 +396,61 @@ export const PeakFindingPlayground: React.FC = () => {
               if (isFoundPeak) colClass += ' is-peak';
 
               return (
-                <button
+                <div
                   key={idx}
-                  type="button"
                   className={colClass}
+                  style={{
+                    opacity: isDcActiveRange ? 1 : 0.35,
+                    position: 'relative'
+                  }}
                   onClick={() => handleBarClick(idx)}
                 >
+                  {/* Midpoint Indicator */}
+                  {isDcMid && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '-24px',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        color: '#3b82f6',
+                        background: 'var(--surface)',
+                        padding: '1px 5px',
+                        borderRadius: '3px',
+                        border: '1px solid #3b82f6'
+                      }}
+                    >
+                      M [{idx}]
+                    </div>
+                  )}
+
                   {isFoundPeak && <span className="peak-indicator-badge">▲</span>}
+
                   <div className="clickable-bar-val">{val}</div>
+
+                  {/* Drag Handle Bar */}
                   <div
                     className="clickable-bar-fill"
-                    style={{ height: `${heightPct}%` }}
-                  ></div>
+                    style={{
+                      height: `${heightPct}%`,
+                      borderTop: isDcMid ? '3px solid #3b82f6' : undefined,
+                      cursor: 'ns-resize'
+                    }}
+                    onPointerDown={(e) => handlePointerDown(idx, e)}
+                    title={language === 'es' ? 'Arrastra verticalmente para ajustar la altura' : 'Drag vertically to adjust height'}
+                  >
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '6px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                        borderRadius: '2px 2px 0 0'
+                      }}
+                    />
+                  </div>
+
                   <div className="clickable-bar-idx">[{idx}]</div>
-                </button>
+                </div>
               );
             })}
           </div>
@@ -255,8 +487,8 @@ export const PeakFindingPlayground: React.FC = () => {
             <div className="card-prompt">
               <em>
                 {language === 'es'
-                  ? 'Haz clic en una barra para probar.'
-                  : 'Click on a bar above to inspect.'}
+                  ? 'Haz clic en una columna para inspeccionar.'
+                  : 'Click on a column above to inspect.'}
               </em>
             </div>
           )}
@@ -300,7 +532,7 @@ export const PeakFindingPlayground: React.FC = () => {
         </h4>
         <p>
           {language === 'es'
-            ? 'A diferencia de la búsqueda binaria clásica que requiere un arreglo ordenado, la búsqueda de pico no busca un valor específico, sino una cresta local. Al comparar el punto medio con sus vecinos, si uno de ellos es más alto, el invariante de gradiente garantiza matemáticamente que en esa mitad existe al menos un pico. Esta reducción geométrica a la mitad en cada paso otorga una cota asintótica de O(log n): para un arreglo de n = 1.000.000 elementos, el algoritmo localiza un pico en a lo sumo 20 comparaciones.'
+            ? 'A diferencia de la búsqueda binaria clásica que requiere un arreglo ordenado, la búsqueda de pico busca una cresta local. Al comparar el punto medio con sus vecinos, si uno de ellos es más alto, el invariante de gradiente garantiza matemáticamente que en esa mitad existe al menos un pico. Esta reducción geométrica a la mitad en cada paso otorga una cota asintótica de O(log n): para un arreglo de n = 1.000.000 elementos, el algoritmo localiza un pico en a lo sumo 20 comparaciones.'
             : 'Unlike classic binary search which requires sorted elements, peak finding seeks a local crest. The gradient invariant guarantees at least one peak lies in the uphill half. This geometric halving yields an O(log n) bound: for an array of n = 1,000,000 elements, it locates a peak in at most 20 comparisons.'}
         </p>
       </div>
