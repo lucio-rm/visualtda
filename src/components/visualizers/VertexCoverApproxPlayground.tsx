@@ -60,16 +60,6 @@ export const VertexCoverApproxPlayground: React.FC = () => {
     setMatching([...matching, [u, v]]);
   };
 
-  const handleGreedyStep = () => {
-    for (const [u, v] of edges) {
-      const isMatched = matching.some((m) => (m[0] === u && m[1] === v) || (m[0] === v && m[1] === u));
-      if (!isMatched && !coverSet.has(u) && !coverSet.has(v)) {
-        setMatching((prev) => [...prev, [u, v]]);
-        return;
-      }
-    }
-  };
-
   const handleClear = () => {
     setMatching([]);
   };
@@ -128,15 +118,6 @@ export const VertexCoverApproxPlayground: React.FC = () => {
           </p>
         </div>
         <div className="playground-button-group" style={{ display: 'flex', gap: '0.5rem' }}>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleGreedyStep}
-            disabled={isAllCovered}
-            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-          >
-            {language === 'es' ? 'Paso Voraz (Siguiente Arista Disjunta) →' : 'Greedy Step (Next Disjoint Edge) →'}
-          </button>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar' : 'Clear'}
           </button>
@@ -192,7 +173,9 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         <div className="approx-stat-card">
           <h5>{language === 'es' ? 'Factor de Aproximación' : 'Approximation Factor'}</h5>
           <span className="stat-num" style={{ color: isAllCovered ? '#10b981' : 'var(--text)' }}>
-            {isAllCovered ? '≤ 2.0 × Óptimo' : 'En progreso'}
+            {isAllCovered
+              ? (language === 'es' ? '≤ 2.0 × Óptimo' : '≤ 2.0 × Optimal')
+              : (language === 'es' ? 'En progreso' : 'In progress')}
           </span>
           <span style={{ fontSize: '0.75rem', color: isAllCovered ? '#10b981' : 'var(--text-muted)', fontWeight: 600 }}>
             {isAllCovered

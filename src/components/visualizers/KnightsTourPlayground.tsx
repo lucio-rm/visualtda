@@ -113,11 +113,6 @@ export const KnightsTourPlayground: React.FC = () => {
     }
   };
 
-  const handleWarnsdorffStep = () => {
-    if (bestWarnsdorffMove) {
-      applyMove(bestWarnsdorffMove.r, bestWarnsdorffMove.c);
-    }
-  };
 
   const handleUndo = () => {
     if (history.length <= 1) return;
@@ -172,20 +167,6 @@ export const KnightsTourPlayground: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleWarnsdorffStep}
-            disabled={!bestWarnsdorffMove || isComplete}
-            title={
-              language === 'es'
-                ? 'Avanza hacia la casilla con menor grado de salida (Regla de Warnsdorff)'
-                : "Step to square with fewest onward exits (Warnsdorff's Rule)"
-            }
-            style={{ fontWeight: 600, color: 'var(--accent)', borderColor: 'var(--accent)' }}
-          >
-            ★ {language === 'es' ? 'Paso Warnsdorff' : 'Warnsdorff Step'}
-          </button>
           <button
             type="button"
             className="btn-tool"
@@ -264,7 +245,7 @@ export const KnightsTourPlayground: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
         <svg
           viewBox={`-24 -24 ${boardSize + 48} ${boardSize + 48}`}
-          style={{ maxWidth: '540px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
+          style={{ maxWidth: '580px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
           role="img"
           aria-label="Tablero de ajedrez interactivo para el Recorrido del Caballo"
         >

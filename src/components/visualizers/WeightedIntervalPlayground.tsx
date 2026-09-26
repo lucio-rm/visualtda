@@ -171,10 +171,6 @@ export const WeightedIntervalPlayground: React.FC = () => {
     setSelectedIds(greedySolution.map((t) => t.id));
   };
 
-  const loadOptimal = () => {
-    setSelectedIds(optimalSolution.map((t) => t.id));
-  };
-
   const handlePreset = (idx: number) => {
     setActivePresetIndex(idx);
     setSelectedIds([]);
@@ -407,13 +403,6 @@ export const WeightedIntervalPlayground: React.FC = () => {
           <div className="quick-buttons">
             <button className="btn-load greedy-load" onClick={loadGreedy}>
               {language === 'es' ? 'Probar Greedy' : 'Test Greedy'}
-            </button>
-            <button
-              className="btn-load"
-              onClick={loadOptimal}
-              style={{ borderColor: '#10b981', color: '#10b981' }}
-            >
-              ★ {language === 'es' ? 'Cargar Óptimo (DP)' : 'Load Optimal (DP)'}
             </button>
             <button
               className="btn-load clear-load"

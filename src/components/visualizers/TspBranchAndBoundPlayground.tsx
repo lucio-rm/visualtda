@@ -192,10 +192,6 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
     setTour([0]);
   };
 
-  const handleLoadOptimal = () => {
-    setTour(optimalSolution.tour);
-    markAttempted('tsp-branch-and-bound');
-  };
 
   const handleResetCities = () => {
     setCities(DEFAULT_TSP_CITIES);
@@ -299,14 +295,6 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                 {language === 'es' ? 'Reset Mapa' : 'Reset Map'}
               </button>
             )}
-            <button
-              type="button"
-              className="btn-preset active"
-              onClick={handleLoadOptimal}
-              title={language === 'es' ? 'Cargar solución óptima calculada por B&B' : 'Load B&B optimal solution'}
-            >
-              ★ {language === 'es' ? 'Ver Tour Óptimo B&B' : 'Show Optimal B&B Tour'}
-            </button>
           </div>
         </div>
 

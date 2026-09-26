@@ -379,6 +379,8 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 height={30}
                 rx={6}
                 fill={barFill}
+                stroke={isConflict ? '#b91c1c' : isSelected ? '#059669' : 'var(--border-strong)'}
+                strokeWidth={1.5}
               />
               <text
                 x={x1 + 10}

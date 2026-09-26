@@ -188,10 +188,10 @@ export const MinimizeLatenessPlayground: React.FC = () => {
               className={`btn-preset ${isOptimal ? 'active' : ''}`}
               onClick={handleSortEDF}
             >
-              ★ {language === 'es' ? 'Criterio Óptimo EDF (d_i creciente)' : 'Optimal EDF (ascending d_i)'}
+              {language === 'es' ? 'Ordenar por Deadline (d_i)' : 'Sort by Deadline (d_i)'}
             </button>
             <button type="button" className="btn-preset" onClick={handleSortSPT}>
-              {language === 'es' ? 'Heurística Ingenua SPT (t_i creciente)' : 'Naive SPT (ascending t_i)'}
+              {language === 'es' ? 'Ordenar por Duración (t_i)' : 'Sort by Processing Time (t_i)'}
             </button>
             <button type="button" className="btn-preset" onClick={handleResetShuffled}>
               ↺ {language === 'es' ? 'Desordenar Tareas' : 'Shuffle Jobs'}
@@ -399,7 +399,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                   >
-                    INVERSIÓN ({itemA.deadline} &gt; {itemB.deadline})
+                    {language === 'es' ? 'INVERSIÓN' : 'INVERSION'} ({itemA.deadline} &gt; {itemB.deadline})
                   </text>
                 </g>
               );

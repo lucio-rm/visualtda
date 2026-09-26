@@ -195,12 +195,6 @@ export const HamiltonianCyclePlayground: React.FC = () => {
     setPath([0]);
   };
 
-  const handleLoadOptimal = () => {
-    if (currentPreset.optimalCycle) {
-      setPath(currentPreset.optimalCycle);
-      markAttempted('hamiltonian-cycle-backtracking');
-    }
-  };
 
   // 2D Pointer Drag Handlers
   const handlePointerDown = (nodeId: number, e: React.PointerEvent) => {
@@ -274,16 +268,6 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             <button type="button" className="btn-preset" onClick={handleReset}>
               ↺ {language === 'es' ? 'Reiniciar' : 'Reset'}
             </button>
-            {currentPreset.optimalCycle && (
-              <button
-                type="button"
-                className="btn-preset active"
-                onClick={handleLoadOptimal}
-                title={language === 'es' ? 'Cargar solución canónica' : 'Load canonical solution'}
-              >
-                ★ {language === 'es' ? 'Ver Ciclo Óptimo' : 'Show Optimal Cycle'}
-              </button>
-            )}
           </div>
         </div>
 

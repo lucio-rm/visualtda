@@ -139,25 +139,6 @@ export const CoinChangePlayground: React.FC = () => {
     setError(null);
   };
 
-  const handleApplyGreedyToTray = () => {
-    if (!greedySolution) return;
-    const counts: Record<number, number> = {};
-    for (const c of greedySolution) {
-      counts[c] = (counts[c] || 0) + 1;
-    }
-    setUserCoinsCount(counts);
-  };
-
-  const handleApplyDpToTray = () => {
-    if (optimalSolution.length === 0) return;
-    const counts: Record<number, number> = {};
-    for (const c of optimalSolution) {
-      counts[c] = (counts[c] || 0) + 1;
-    }
-    setUserCoinsCount(counts);
-    markAttempted('coin-change-dp');
-  };
-
   // Drag and drop event handlers
   const handleDragStart = (e: React.DragEvent, c: number) => {
     e.dataTransfer.setData('text/plain', String(c));
@@ -309,24 +290,6 @@ export const CoinChangePlayground: React.FC = () => {
             {language === 'es' ? '1. Dispensador de Monedas (Hacé clic o arrastrá hacia la bandeja)' : '1. Coin Dispenser (Click or drag to tray)'}
           </span>
           <div className="quick-actions" style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              type="button"
-              className="btn-preset"
-              onClick={handleApplyGreedyToTray}
-              disabled={!greedySolution}
-              style={{ fontSize: '0.8rem' }}
-            >
-              {language === 'es' ? 'Cargar Greedy' : 'Load Greedy'}
-            </button>
-            <button
-              type="button"
-              className="btn-preset active"
-              onClick={handleApplyDpToTray}
-              disabled={optimalSolution.length === 0}
-              style={{ fontSize: '0.8rem' }}
-            >
-              {language === 'es' ? 'Cargar Óptimo PD' : 'Load Optimal DP'}
-            </button>
             <button
               type="button"
               className="btn-preset"

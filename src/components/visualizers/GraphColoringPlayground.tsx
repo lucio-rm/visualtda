@@ -397,7 +397,7 @@ export const GraphColoringPlayground: React.FC = () => {
           viewBox="0 0 500 350"
           style={{
             width: '100%',
-            maxWidth: '540px',
+            maxWidth: '600px',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

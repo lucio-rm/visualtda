@@ -129,10 +129,10 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                 <span className="track-book-ref">{t(matchingTrack.bookReference)}</span>
               </div>
               <h3 className="track-title">
-                <span className="badge badge-technique" style={{ marginRight: '0.5rem', fontSize: '0.8rem' }}>
+                <span className="badge badge-technique" style={{ fontSize: '0.8rem' }}>
                   {matchingTrack.code}
-                </span>{' '}
-                {t(matchingTrack.title)}
+                </span>
+                <span>{t(matchingTrack.title)}</span>
               </h3>
               <p className="track-desc">{t(matchingTrack.description)}</p>
               <div className="track-progress-bar-container">
@@ -183,10 +183,10 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
               </div>
               <div className="track-title-row">
                 <h3 id={`track-${track.id}-title`} className="track-title">
-                  <span className="badge badge-technique" style={{ marginRight: '0.5rem', fontSize: '0.8rem' }}>
+                  <span className="badge badge-technique" style={{ fontSize: '0.8rem' }}>
                     {track.code}
-                  </span>{' '}
-                  {t(track.title)}
+                  </span>
+                  <span>{t(track.title)}</span>
                 </h3>
                 <span className="track-count-badge">
                   {trackExercises.length} {language === 'es' ? 'ejercicios' : 'exercises'}

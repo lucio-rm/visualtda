@@ -201,24 +201,7 @@ export const SudokuPlayground: React.FC = () => {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [selectedCell, board, fixedCells, activePreset, language]);
 
-  const handleStepMRV = () => {
-    if (!domainInfo.bestCell) {
-      setConflictMsg(
-        language === 'es'
-          ? 'No hay celdas vacías o existe un callejón sin salida (dominio vacío).'
-          : 'No empty cells or a dead-end exists (empty domain).'
-      );
-      return;
-    }
-    const [r, c] = domainInfo.bestCell;
-    const valid = domainInfo.legalDigits[`${r},${c}`];
-    if (valid && valid.length > 0) {
-      setSelectedCell([r, c]);
-      handleSetNumber(valid[0]);
-    }
-  };
-
-  const cellSize = 52;
+  const cellSize = 58;
   const boardWidth = cellSize * 9;
 
   return (
@@ -259,16 +242,6 @@ export const SudokuPlayground: React.FC = () => {
             {showDomainSizes
               ? (language === 'es' ? 'Ocultar Opciones (MRV)' : 'Hide Options (MRV)')
               : (language === 'es' ? 'Mostrar Opciones (MRV)' : 'Show Options (MRV)')}
-          </button>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleStepMRV}
-            disabled={!domainInfo.bestCell || domainInfo.totalEmpty === 0}
-            title={language === 'es' ? 'Avanzar 1 paso con la variable más restringida' : 'Step 1 move with most constrained variable'}
-            style={{ color: '#10b981', borderColor: '#10b981', fontWeight: 600 }}
-          >
-            ★ {language === 'es' ? 'Paso MRV' : 'Step MRV'}
           </button>
         </div>
       </div>
@@ -481,24 +454,31 @@ export const SudokuPlayground: React.FC = () => {
 
       {/* Number Pad for Fast Tactile Input */}
       <div className="sdk-pg-numpad">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-          <button
-            key={`num-${num}`}
-            type="button"
-            className="btn-num"
-            onClick={() => handleSetNumber(num)}
-            aria-label={`Ingresar ${num}`}
-          >
-            {num}
-          </button>
-        ))}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => {
+          const isCurrentVal = selectedValue === num;
+          const isCandidate = selectedCell
+            ? domainInfo.legalDigits[`${selectedCell[0]},${selectedCell[1]}`]?.includes(num)
+            : false;
+
+          return (
+            <button
+              key={`num-${num}`}
+              type="button"
+              className={`btn-num ${isCurrentVal ? 'active' : ''} ${isCandidate && !isCurrentVal ? 'is-candidate' : ''}`}
+              onClick={() => handleSetNumber(num)}
+              aria-label={`Ingresar ${num}`}
+            >
+              {num}
+            </button>
+          );
+        })}
         <button
           type="button"
           className="btn-num btn-clear"
           onClick={() => handleSetNumber(0)}
           aria-label="Borrar número de la celda"
         >
-          {language === 'es' ? 'Borrar' : 'Clear'}
+          {language === 'es' ? 'Borrar (Del)' : 'Clear (Del)'}
         </button>
       </div>
 

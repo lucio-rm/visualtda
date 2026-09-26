@@ -38,7 +38,14 @@
      - `LcsPlayground`: Interactive SVG alignment ribbons, non-crossing matching invariant, crossing detection, and auto-align DP button.
      - `WeightedIntervalPlayground`: Predecessor function $p(j)$ calculation, hover highlight, and dynamic programming recurrence callout.
   9. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, 22/22 real Chromium browser QA scenarios passed across 5 viewports, and static `dist/` build in ~1.6s.
-- **BASELINE_COMMIT**: `363c7fe`
+  10. Conducted University-Grade Pedagogical & Visual Overhaul (Prompt V4 & V5 Full Compliance):
+      - **Cheat / Auto-Solve Removal**: Eradicated all spoiler auto-step / auto-fill buttons across 10 Playgrounds (`CoinChangePlayground`, `KruskalPlayground`, `VertexCoverApproxPlayground`, `HamiltonianCyclePlayground`, `TspBranchAndBoundPlayground`, `WeightedIntervalPlayground`, `HuffmanPlayground`, `SudokuPlayground`, `KnightsTourPlayground`, `MinimizeLatenessPlayground`), requiring students to actively construct, experiment, and discover algorithmic properties.
+      - **Design Tokens Restoration**: Restored missing CSS custom properties in `variables.css` (`--text-xs`, `--text-sm`, `--text-base`, `--text-lg`, `--text-xl`, `--transition-fast`, `--transition-normal`, `--transition-slow`, `--radius-full`, `--border-hover`, `--border-muted`, `--primary`, `--primary-bg`, `--color-primary-rgb`).
+      - **Light Mode High-Contrast Calibration**: Saturated borders and added clear 4px solid top indicator bars to completed cards; added explicit strokes to SVG chessboard cells and interval scheduling bars.
+      - **Canvas & Board Sizing**: Enforced prominent university-grade board sizes (Sudoku 560px with 48x48px digit buttons and full keyboard editing, N-Queens 580px, Knight's Tour 580px, Knapsack 580px, LP 580px, Graph Coloring 600px).
+      - **Phase 3 Layout & Typography**: Balanced asymmetric two-column layout in Understand phase; scrubbed residual Spanish text and fixed track spacing.
+  11. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, and static `dist/` build in ~1.58s.
+- **BASELINE_COMMIT**: `897fc6c`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 293 tests, 0 lint errors, 0 type errors)
   - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.6s)

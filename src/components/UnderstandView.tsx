@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExerciseMetadata } from '../types';
+import { ExerciseMetadata, formatTechniqueLabel } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { isExerciseSolutionAuthorized } from '../utils/cryptoAuth';
@@ -204,7 +204,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 <span className="metric-label">{language === 'es' ? 'Técnica / Paradigma' : 'Technique / Paradigm'}</span>
               </div>
               <div className="metric-value-box">
-                <span className="metric-paradigm-badge">{exercise.techniqueId ? exercise.techniqueId.replace(/-/g, ' ').toUpperCase() : 'CANÓNICO'}</span>
+                <span className="metric-paradigm-badge">{formatTechniqueLabel(exercise.techniqueId, language).toUpperCase()}</span>
               </div>
               <span className="metric-description">
                 {language === 'es' ? 'Estrategia algorítmica canónica' : 'Canonical algorithmic strategy'}

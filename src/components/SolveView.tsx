@@ -418,7 +418,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
             <div className="editor-header">
               <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span className="editor-lang-badge">Python 3</span>
-                <span className="editor-filename">solucion.py</span>
+                <span className="editor-filename">{language === 'es' ? 'solucion.py' : 'solution.py'}</span>
               </div>
               <button
                 type="button"

@@ -114,19 +114,6 @@ export const KruskalPlayground: React.FC = () => {
     }
   };
 
-  // Next Kruskal Step Assistant
-  const handleNextKruskalStep = () => {
-    for (const e of sortedEdges) {
-      if (selectedEdgeIds.includes(e.id)) continue;
-      const rootU = find(e.u);
-      const rootV = find(e.v);
-      if (rootU !== rootV) {
-        handleToggleEdge(e.id);
-        return;
-      }
-    }
-  };
-
   const handleReset = () => {
     setSelectedEdgeIds([]);
     setFeedback(null);
@@ -160,20 +147,11 @@ export const KruskalPlayground: React.FC = () => {
             <strong style={{ color: currentTotalWeight === 10 ? '#10b981' : '#38bdf8' }}>
               {currentTotalWeight}
             </strong>{' '}
-            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>(Óptimo = 10)</span>
+            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = 10)</span>
           </span>
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleNextKruskalStep}
-            disabled={selectedEdgeIds.length === nodes.length - 1}
-            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-          >
-            {language === 'es' ? 'Paso Voraz (Siguiente Arista Liviana) →' : 'Greedy Step (Next Light Edge) →'}
-          </button>
           <button type="button" className="btn-tool" onClick={handleReset}>
             {language === 'es' ? 'Limpiar Selección ↺' : 'Reset Selection ↺'}
           </button>

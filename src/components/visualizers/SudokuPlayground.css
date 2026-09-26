@@ -63,14 +63,14 @@
 }
 
 .btn-num {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-sm);
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
@@ -84,10 +84,23 @@
   transform: translateY(-1px);
 }
 
+.btn-num.active {
+  background-color: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), var(--shadow-sm);
+}
+
+.btn-num.is-candidate {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+}
+
 .btn-clear {
-  padding: 0 1rem;
-  height: 44px;
-  font-size: 0.875rem;
+  padding: 0 1.25rem;
+  height: 48px;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 

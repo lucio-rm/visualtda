@@ -199,7 +199,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
             </div>
             <div className="sliders-row">
               <div className="slider-group">
-                <label>c1 (coeficiente X): <strong>{c1}</strong></label>
+                <label>c1 ({language === 'es' ? 'coeficiente X' : 'X coefficient'}): <strong>{c1}</strong></label>
                 <input
                   type="range"
                   min={-3}
@@ -211,7 +211,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                 />
               </div>
               <div className="slider-group">
-                <label>c2 (coeficiente Y): <strong>{c2}</strong></label>
+                <label>c2 ({language === 'es' ? 'coeficiente Y' : 'Y coefficient'}): <strong>{c2}</strong></label>
                 <input
                   type="range"
                   min={-3}
@@ -239,9 +239,13 @@ export const LinearProgrammingPlayground: React.FC = () => {
           >
             <svg
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              style={{ maxWidth: '480px', width: '100%', height: 'auto' }}
+              style={{ maxWidth: '580px', width: '100%', height: 'auto' }}
               role="img"
-              aria-label="Plano cartesiano 2D con región factible y curvas de nivel"
+              aria-label={
+                language === 'es'
+                  ? 'Plano cartesiano 2D con región factible y curvas de nivel'
+                  : '2D Cartesian plane with feasible region and level curves'
+              }
             >
               {/* Coordinate Grid */}
               {Array.from({ length: 7 }).map((_, i) => {

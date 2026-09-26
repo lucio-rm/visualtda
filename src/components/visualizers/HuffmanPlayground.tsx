@@ -173,43 +173,6 @@ export const HuffmanPlayground: React.FC = () => {
     setJustMergedId(parentId);
   };
 
-  // Auto-execute one optimal greedy step (for learning assistance)
-  const handleAutoStep = () => {
-    if (forestRoots.length < 2) return;
-    const [idA, idB] = currentLowestIds;
-    setSelectedNodeIds([idA, idB]);
-    setGreedyError(null);
-
-    const nodeA = allNodes[idA];
-    const nodeB = allNodes[idB];
-    if (!nodeA || !nodeB) return;
-
-    const leftId = nodeA.freq <= nodeB.freq ? idA : idB;
-    const rightId = nodeA.freq <= nodeB.freq ? idB : idA;
-    const parentId = `parent_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-    const newFreq = nodeA.freq + nodeB.freq;
-
-    const newParent: HuffmanTraceItem = {
-      id: parentId,
-      char: null,
-      freq: newFreq,
-      leftId,
-      rightId
-    };
-
-    setAllNodes((prev) => ({
-      ...prev,
-      [parentId]: newParent
-    }));
-
-    setForestRoots((prev) => {
-      const remaining = prev.filter((id) => id !== idA && id !== idB);
-      return [...remaining, parentId];
-    });
-
-    setSelectedNodeIds([]);
-    setJustMergedId(parentId);
-  };
 
   const isCompletedNow = forestRoots.length === 1 && uniqueChars.length > 1;
   const totalChars = text.length;
@@ -323,15 +286,6 @@ export const HuffmanPlayground: React.FC = () => {
                 onClick={handleMergeSelected}
               >
                 {language === 'es' ? 'Fusionar 2 Nodos Seleccionados (Merge)' : 'Merge 2 Selected Nodes'}
-              </button>
-              <button
-                type="button"
-                className="btn-huff-step"
-                disabled={forestRoots.length < 2}
-                onClick={handleAutoStep}
-                title="Avanzar automáticamente un paso Greedy óptimo"
-              >
-                {language === 'es' ? 'Paso Greedy Óptimo' : 'Optimal Greedy Step'}
               </button>
               <button
                 type="button"
