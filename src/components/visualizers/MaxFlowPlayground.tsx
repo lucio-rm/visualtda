@@ -293,68 +293,7 @@ export const MaxFlowPlayground: React.FC = () => {
     });
   };
 
-  // Auto-solve full max flow with Ford-Fulkerson
-  const handleSolveFullMaxFlow = () => {
-    const currentEdges = edges.map((e) => ({ ...e }));
-    let augmented = true;
 
-    while (augmented) {
-      augmented = false;
-      const parent: Record<string, string> = {};
-      const visited = new Set<string>([activePreset.source]);
-      const queue = [activePreset.source];
-      let reached = false;
-
-      while (queue.length > 0) {
-        const curr = queue.shift()!;
-        if (curr === activePreset.sink) {
-          reached = true;
-          break;
-        }
-        for (const node of activePreset.nodes) {
-          if (!visited.has(node.id) && getResidualCapacity(curr, node.id, currentEdges) > 0) {
-            visited.add(node.id);
-            parent[node.id] = curr;
-            queue.push(node.id);
-          }
-        }
-      }
-
-      if (reached) {
-        const path: string[] = [];
-        let curr: string | undefined = activePreset.sink;
-        while (curr) {
-          path.unshift(curr);
-          curr = parent[curr];
-        }
-
-        let delta = Infinity;
-        for (let i = 0; i < path.length - 1; i++) {
-          const cap = getResidualCapacity(path[i], path[i + 1], currentEdges);
-          if (cap < delta) delta = cap;
-        }
-
-        if (delta > 0 && delta !== Infinity) {
-          augmented = true;
-          for (let i = 0; i < path.length - 1; i++) {
-            const u = path[i];
-            const v = path[i + 1];
-            const fwd = currentEdges.find((e) => e.u === u && e.v === v);
-            if (fwd) {
-              fwd.flow += delta;
-            } else {
-              const bwd = currentEdges.find((e) => e.u === v && e.v === u);
-              if (bwd) bwd.flow -= delta;
-            }
-          }
-        }
-      }
-    }
-
-    setEdges(currentEdges);
-    setSelectedPath([activePreset.source]);
-    markAttempted('max-flow');
-  };
 
   // Find reachable nodes from s in residual graph (Cut S)
   const reachableNodes = useMemo(() => {
@@ -596,17 +535,17 @@ export const MaxFlowPlayground: React.FC = () => {
                 <circle
                   cx={pos.x}
                   cy={pos.y}
-                  r={18}
+                  r={24}
                   fill={n.isSource ? '#3b82f6' : n.isSink ? '#10b981' : isSelected ? 'var(--accent)' : 'var(--surface)'}
                   stroke={isSelected ? '#ffffff' : n.isSource ? '#2563eb' : n.isSink ? '#059669' : 'var(--border)'}
                   strokeWidth={isSelected ? 3 : 2}
                 />
                 <text
                   x={pos.x}
-                  y={pos.y + 4}
+                  y={pos.y + 5}
                   textAnchor="middle"
                   fill={n.isSource || n.isSink || isSelected ? '#ffffff' : 'var(--text)'}
-                  fontSize="11px"
+                  fontSize="14px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -616,8 +555,8 @@ export const MaxFlowPlayground: React.FC = () => {
                 {isMaxFlowAchieved && (
                   <text
                     x={pos.x}
-                    y={pos.y + 28}
-                    fontSize="10px"
+                    y={pos.y + 34}
+                    fontSize="11px"
                     textAnchor="middle"
                     fill={isReachable ? '#3b82f6' : '#10b981'}
                     fontWeight="800"
@@ -665,14 +604,6 @@ export const MaxFlowPlayground: React.FC = () => {
             {language === 'es'
               ? `Aumentar Flujo (+${bottleneck || 0})`
               : `Push Flow (+${bottleneck || 0})`}
-          </button>
-          <button
-            type="button"
-            className="btn-preset"
-            onClick={handleSolveFullMaxFlow}
-            disabled={isMaxFlowAchieved}
-          >
-            ★ {language === 'es' ? 'Resolver Ford-Fulkerson' : 'Solve Max-Flow'}
           </button>
           <button
             type="button"

@@ -167,9 +167,9 @@ export const HuffmanVisualizer: React.FC = () => {
           <span className={`huff-phase-pill ${action.toLowerCase()}`}>
             {action.replace(/_/g, ' ')}
           </span>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Tamaño del Min-Heap:' : 'Min-Heap Size:'}{' '}
-            <strong style={{ color: 'var(--text, #f8fafc)' }}>
+            <strong style={{ color: 'var(--text)' }}>
               {queue.length} {language === 'es' ? 'nodos' : 'nodes'}
             </strong>
           </span>

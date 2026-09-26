@@ -148,7 +148,7 @@ export const ClosestPairVisualizer: React.FC = () => {
                   x={p.x}
                   y={p.y - 12}
                   textAnchor="middle"
-                  fill="var(--text, #f8fafc)"
+                  fill="var(--text)"
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="700"

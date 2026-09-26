@@ -120,19 +120,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
     setSelectedIds([]);
   };
 
-  const handleSolveGreedyEFT = () => {
-    const sorted = [...allTasks].sort((a, b) => a.end - b.end);
-    const chosenIds: string[] = [];
-    let lastEnd = -Infinity;
-    for (const t of sorted) {
-      if (t.start >= lastEnd) {
-        chosenIds.push(t.id);
-        lastEnd = t.end;
-      }
-    }
-    setSelectedIds(chosenIds);
-    markAttempted('interval-scheduling');
-  };
+
 
   // Check overlaps
   const selectedIntervals: Interval[] = selectedIds
@@ -189,7 +177,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
   // SVG coordinate mapping
   const svgWidth = 600;
-  const svgHeight = allTasks.length * 36 + 40;
+  const svgHeight = allTasks.length * 42 + 45;
   const paddingLeft = 50;
   const paddingRight = 30;
   const usableWidth = svgWidth - paddingLeft - paddingRight;
@@ -212,9 +200,6 @@ export const IntervalSchedulingPlayground: React.FC = () => {
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Limpiar Selección' : 'Clear Selection'}
-          </button>
-          <button type="button" className="btn-primary" onClick={handleSolveGreedyEFT}>
-            ★ {language === 'es' ? 'Resolver con Greedy EFT (f_i creciente)' : 'Solve with Greedy EFT (ascending f_i)'}
           </button>
         </div>
       </div>
@@ -353,7 +338,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
         {/* Tasks */}
         {allTasks.map((task, idx) => {
-          const y = idx * 36 + 20;
+          const y = idx * 42 + 20;
           const x1 = getX(task.start);
           const x2 = getX(task.end);
           const width = Math.max(16, x2 - x1);
@@ -391,16 +376,16 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 x={x1}
                 y={y}
                 width={width}
-                height={24}
-                rx={5}
+                height={30}
+                rx={6}
                 fill={barFill}
               />
               <text
-                x={x1 + 8}
-                y={y + 15}
-                fill={isSelected ? '#ffffff' : 'var(--color-text)'}
-                fontSize="11"
-                fontWeight="600"
+                x={x1 + 10}
+                y={y + 19}
+                fill={isSelected ? '#ffffff' : 'var(--text)'}
+                fontSize="13"
+                fontWeight="700"
                 fontFamily="var(--font-sans)"
               >
                 {isConflict ? '[!] ' : isSelected ? '[Sel] ' : ''}{task.id} [{task.start}-{task.end}]
@@ -408,9 +393,9 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               {activePresetId === 'custom' && (
                 <text
                   x={x2 - 14}
-                  y={y + 16}
+                  y={y + 20}
                   fill="#ef4444"
-                  fontSize="12"
+                  fontSize="13"
                   fontWeight="bold"
                   style={{ cursor: 'pointer' }}
                   onClick={(e) => handleRemoveCustomInterval(idx, e)}

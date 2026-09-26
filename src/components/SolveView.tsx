@@ -7,6 +7,71 @@ import { pythonService } from '../runtime/pythonExecutionService';
 import { useStudentProgress } from '../context/StudentProgressContext';
 import { recordLegitimateExercisePass, recordHonestSkipPass } from '../utils/cryptoAuth';
 
+function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
+  if (lang === 'es') return rawCode;
+
+  return rawCode
+    .replace(/# Escribí tu solución aquí en Python 3/g, '# Write your solution here in Python 3')
+    .replace(/# Escribe tu algoritmo de backtracking con podas aquí/g, '# Write your backtracking algorithm with pruning here')
+    .replace(/# Escribe tu algoritmo de programación dinámica aquí/g, '# Write your dynamic programming algorithm here')
+    .replace(/# Escribe tu algoritmo divide y vencerás aquí/g, '# Write your divide-and-conquer algorithm here')
+    .replace(/# Escribe tu lógica voraz aquí/g, '# Write your greedy logic here')
+    .replace(/# Escribe tu algoritmo aquí/g, '# Write your algorithm here')
+    .replace(/# Tu implementación aquí/g, '# Your implementation here')
+    .replace(/# Implementación aquí/g, '# Implementation here')
+    .replace(/Coloca n reinas en un tablero de n x n sin que se amenacen\./g, 'Place n queens on an n x n chessboard with no threats.')
+    .replace(/Retorna la lista de todas las soluciones válidas\./g, 'Return the list of all valid solutions.')
+    .replace(/Encuentra todos los subconjuntos cuya suma sea igual al objetivo\./g, 'Find all subsets whose sum equals target.')
+    .replace(/Asigna a cada vértice un color del 1 al k sin aristas monocromáticas\./g, 'Assign each vertex a color 1..k without monochromatic edges.')
+    .replace(/Resuelve el tablero de Sudoku in-place respetando restricciones\./g, 'Solve Sudoku board in-place satisfying constraints.')
+    .replace(/Encuentra un ciclo simple cerrado que visite todos los vértices\./g, 'Find a simple closed cycle visiting all vertices.')
+    .replace(/Calcula el costo del tour de costo mínimo para el TSP\./g, 'Compute the minimum cost tour for TSP.')
+    .replace(/Maximiza el valor de los objetos empacados sin exceder la capacidad\./g, 'Maximize packed items value without exceeding capacity.')
+    .replace(/Encuentra un recorrido de caballo completo en tablero n x n\./g, "Find a complete knight's tour on an n x n chessboard.")
+    .replace(/Ordena el arreglo utilizando el paradigma divide y vencerás\./g, 'Sort the array using divide and conquer paradigm.')
+    .replace(/Encuentra el subarreglo contiguo de máxima suma\./g, 'Find contiguous subarray with maximum sum.')
+    .replace(/Encuentra un elemento que sea mayor o igual a sus vecinos contiguos\./g, 'Find an element greater than or equal to adjacent neighbors.')
+    .replace(/Cuenta la cantidad de inversiones en tiempo O\(n log n\)\./g, 'Count inversions in O(n log n) time.')
+    .replace(/Selecciona el conjunto máximo de intervalos compatibles\./g, 'Select maximum set of mutually compatible intervals.')
+    .replace(/Resuelve la mochila fraccionaria con estrategia voraz\./g, 'Solve fractional knapsack with greedy strategy.')
+    .replace(/Calcula posiciones óptimas de antenas para cubrir todas las casas\./g, 'Compute optimal antenna positions to cover all houses.')
+    .replace(/Construye los códigos de Huffman para los caracteres dados\./g, 'Build Huffman codes for given characters.')
+    .replace(/Minimiza la cantidad de aulas para dar todas las clases\./g, 'Minimize number of classrooms to schedule all lectures.')
+    .replace(/Minimiza el retraso máximo de las tareas planificadas\./g, 'Minimize maximum lateness of scheduled jobs.')
+    .replace(/Calcula distancias mínimas desde el vértice origen\./g, 'Compute shortest path distances from source vertex.')
+    .replace(/Encuentra el árbol generador mínimo utilizando el algoritmo de Kruskal\./g, 'Find minimum spanning tree using Kruskal algorithm.')
+    .replace(/Maximiza ganancias sin trabajar dos días consecutivos\./g, 'Maximize earnings without working consecutive days.')
+    .replace(/Calcula la menor cantidad de monedas para dar cambio exacto\./g, 'Compute minimum coins to give exact change.')
+    .replace(/Encuentra la subsecuencia común más larga entre dos cadenas\./g, 'Find longest common subsequence between two strings.')
+    .replace(/Maximiza el peso total de intervalos compatibles ponderados\./g, 'Maximize total weight of compatible weighted intervals.')
+    .replace(/Calcula la partición óptima balanceando error y penalización\./g, 'Compute optimal partition balancing error and penalty.')
+    .replace(/Calcula el flujo máximo desde la fuente hasta el sumidero\./g, 'Compute maximum flow from source to sink.');
+}
+
+function formatTestOutput(text: string | undefined, lang: 'es' | 'en'): string {
+  if (!text) return '';
+  if (lang === 'es') return text;
+  return text
+    .replace(/Código incompleto o sin implementar \(plantilla inicial\)/g, 'Incomplete code or unimplement stub (starter template)')
+    .replace(/Exploración sistemática con podas de columnas y diagonales/g, 'Systematic exploration with pruning of columns and diagonals')
+    .replace(/Exploración exhaustiva de ramas con backtracking y podas/g, 'Exhaustive exploration with backtracking and pruning')
+    .replace(/Búsqueda exhaustiva sistemática con poda de filas, columnas y subcuadrículas 3x3/g, 'Exhaustive search with pruning of rows, columns, and 3x3 boxes')
+    .replace(/Sin colisiones en columnas ni diagonales/g, 'No collisions in columns or diagonals')
+    .replace(/Sin días adyacentes/g, 'No adjacent days')
+    .replace(/soluciones válidas/g, 'valid solutions')
+    .replace(/subconjuntos/g, 'subsets')
+    .replace(/monedas/g, 'coins')
+    .replace(/aulas/g, 'classrooms')
+    .replace(/tareas disjuntas/g, 'disjoint jobs')
+    .replace(/Antenas en/g, 'Antennas at')
+    .replace(/Costo total/g, 'Total cost')
+    .replace(/Flujo máximo/g, 'Maximum flow')
+    .replace(/Retraso máximo/g, 'Maximum lateness')
+    .replace(/Valor óptimo/g, 'Optimal value')
+    .replace(/Costo óptimo/g, 'Optimal cost')
+    .replace(/Vértice óptimo/g, 'Optimal vertex');
+}
+
 interface SolveViewProps {
   exercise: ExerciseMetadata;
   onSuccess: () => void;
@@ -30,7 +95,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
   }, [exercise.id]);
 
   const storageKey = `visual_tda_code_${exercise.id}`;
-  const defaultCode = starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n';
+  const rawStarter = starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n';
+  const defaultCode = useMemo(() => localizeStarterCode(rawStarter, language), [rawStarter, language]);
 
   const [code, setCodeState] = useState<string>(() => {
     try {
@@ -59,20 +125,97 @@ export const SolveView: React.FC<SolveViewProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const target = e.currentTarget;
+    const start = target.selectionStart;
+    const end = target.selectionEnd;
+
     if (e.key === 'Tab') {
       e.preventDefault();
-      const target = e.currentTarget;
-      const start = target.selectionStart;
-      const end = target.selectionEnd;
-      const spaces = '    ';
-      const newCode = code.substring(0, start) + spaces + code.substring(end);
-      setCode(newCode);
-      requestAnimationFrame(() => {
-        target.selectionStart = target.selectionEnd = start + 4;
-      });
+
+      if (e.shiftKey) {
+        // Shift + Tab: Unindent selected lines or current line
+        const beforeSelection = code.substring(0, start);
+        const lineStartIndex = beforeSelection.lastIndexOf('\n') + 1;
+        let lineEndIndex = code.indexOf('\n', end);
+        if (lineEndIndex === -1) lineEndIndex = code.length;
+
+        const affectedBlock = code.substring(lineStartIndex, lineEndIndex);
+        const lines = affectedBlock.split('\n');
+
+        let removedFromFirstLine = 0;
+        let totalRemoved = 0;
+
+        const unindentedLines = lines.map((line, idx) => {
+          let spacesToRemove = 0;
+          if (line.startsWith('    ')) {
+            spacesToRemove = 4;
+          } else if (line.startsWith('\t')) {
+            spacesToRemove = 1;
+          } else {
+            const match = line.match(/^ +/);
+            if (match) spacesToRemove = match[0].length;
+          }
+
+          if (spacesToRemove > 0) {
+            totalRemoved += spacesToRemove;
+            if (idx === 0) removedFromFirstLine = spacesToRemove;
+            return line.substring(spacesToRemove);
+          }
+          return line;
+        });
+
+        const newBlock = unindentedLines.join('\n');
+        const newCode = code.substring(0, lineStartIndex) + newBlock + code.substring(lineEndIndex);
+        setCode(newCode);
+
+        requestAnimationFrame(() => {
+          const newStart = Math.max(lineStartIndex, start - removedFromFirstLine);
+          const newEnd = Math.max(newStart, end - totalRemoved);
+          target.setSelectionRange(newStart, newEnd);
+        });
+      } else {
+        // Tab: Indent
+        if (start !== end) {
+          // Multi-line selection: indent all selected lines
+          const beforeSelection = code.substring(0, start);
+          const lineStartIndex = beforeSelection.lastIndexOf('\n') + 1;
+          let lineEndIndex = code.indexOf('\n', end);
+          if (lineEndIndex === -1) lineEndIndex = code.length;
+
+          const affectedBlock = code.substring(lineStartIndex, lineEndIndex);
+          const lines = affectedBlock.split('\n');
+          const indentedLines = lines.map((line) => '    ' + line);
+          const newBlock = indentedLines.join('\n');
+
+          const newCode = code.substring(0, lineStartIndex) + newBlock + code.substring(lineEndIndex);
+          setCode(newCode);
+
+          requestAnimationFrame(() => {
+            target.setSelectionRange(start + 4, end + (4 * lines.length));
+          });
+        } else {
+          // Single cursor: insert 4 spaces
+          const spaces = '    ';
+          const newCode = code.substring(0, start) + spaces + code.substring(end);
+          setCode(newCode);
+          requestAnimationFrame(() => {
+            target.setSelectionRange(start + 4, start + 4);
+          });
+        }
+      }
+    } else if (e.key === 'Backspace' && start === end) {
+      // Smart dedent on Backspace if preceded only by 4 spaces
+      const currentLineBeforeCursor = code.substring(0, start).split('\n').pop() || '';
+      if (/^ {2,4}$/.test(currentLineBeforeCursor)) {
+        e.preventDefault();
+        const removeCount = currentLineBeforeCursor.length;
+        const newCode = code.substring(0, start - removeCount) + code.substring(end);
+        setCode(newCode);
+        requestAnimationFrame(() => {
+          target.setSelectionRange(start - removeCount, start - removeCount);
+        });
+      }
     } else if (e.key === 'Enter') {
-      const target = e.currentTarget;
-      const start = target.selectionStart;
       const currentLine = code.substring(0, start).split('\n').pop() || '';
       const indentMatch = currentLine.match(/^\s*/);
       let indent = indentMatch ? indentMatch[0] : '';
@@ -81,11 +224,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
       }
       if (indent.length > 0) {
         e.preventDefault();
-        const end = target.selectionEnd;
         const newCode = code.substring(0, start) + '\n' + indent + code.substring(end);
         setCode(newCode);
         requestAnimationFrame(() => {
-          target.selectionStart = target.selectionEnd = start + 1 + indent.length;
+          target.setSelectionRange(start + 1 + indent.length, start + 1 + indent.length);
         });
       }
     }
@@ -405,7 +547,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                         {tr.message && <span className="test-case-msg">{tr.message}</span>}
                         {tr.actual && !tr.passed && (
                           <span className="test-case-actual">
-                            {language === 'es' ? 'Obtenido' : 'Actual'}: {tr.actual} | {language === 'es' ? 'Esperado' : 'Expected'}: {tr.expected}
+                            {language === 'es' ? 'Obtenido' : 'Actual'}: {formatTestOutput(tr.actual, language)} | {language === 'es' ? 'Esperado' : 'Expected'}: {formatTestOutput(tr.expected, language)}
                           </span>
                         )}
                       </div>

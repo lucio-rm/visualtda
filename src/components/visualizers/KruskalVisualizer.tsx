@@ -147,12 +147,12 @@ export const KruskalVisualizer: React.FC = () => {
                   strokeWidth={strokeWidth}
                   strokeDasharray={strokeDash}
                 />
-                <circle cx={midX} cy={midY} r={11} fill="var(--surface, #0f172a)" stroke={strokeColor} strokeWidth={1} />
+                <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={strokeColor} strokeWidth={1} />
                 <text
                   x={midX}
                   y={midY + 4}
                   textAnchor="middle"
-                  fill="var(--text, #f8fafc)"
+                  fill="var(--text)"
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="700"
@@ -174,7 +174,7 @@ export const KruskalVisualizer: React.FC = () => {
                   cx={node.x}
                   cy={node.y}
                   r={22}
-                  fill="var(--surface, #0f172a)"
+                  fill="var(--surface)"
                   stroke={rootColor}
                   strokeWidth={3}
                 />
@@ -182,7 +182,7 @@ export const KruskalVisualizer: React.FC = () => {
                   x={node.x}
                   y={node.y + 5}
                   textAnchor="middle"
-                  fill="var(--text, #f8fafc)"
+                  fill="var(--text)"
                   fontFamily="var(--font-mono)"
                   fontSize="14px"
                   fontWeight="700"

@@ -41,7 +41,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
   onCellClick,
   interactive = false
 }) => {
-  const cellSize = 50;
+  const cellSize = n <= 4 ? 76 : n <= 5 ? 68 : n <= 6 ? 62 : 54;
   const boardPixelSize = n * cellSize;
 
   return (

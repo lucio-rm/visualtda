@@ -137,10 +137,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
     setSelectedIS([]);
   };
 
-  const handleAutoOptimal = () => {
-    setSelectedIS(currentPreset.optimalIS);
-    markAttempted('vertex-cover-reduction');
-  };
+
 
   // Complement C = V \ S
   const vertexCover = vertices.filter((v) => !selectedIS.includes(v));
@@ -228,9 +225,6 @@ export const ReductionIsVcPlayground: React.FC = () => {
         <div className="playground-button-group" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button type="button" className="btn-secondary" onClick={handleClear}>
             {language === 'es' ? 'Vaciar Selección' : 'Clear Selection'}
-          </button>
-          <button type="button" className="btn-primary" onClick={handleAutoOptimal}>
-            ★ {language === 'es' ? 'Ver Solución Dual Óptima' : 'Show Optimal Dual Solution'}
           </button>
         </div>
       </div>
@@ -430,10 +424,10 @@ export const ReductionIsVcPlayground: React.FC = () => {
                     <circle
                       cx={pos.x}
                       cy={pos.y}
-                      r={24}
+                      r={28}
                       fill="none"
                       stroke={inIS ? '#10b981' : '#8b5cf6'}
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       opacity={0.5}
                     />
                   )}
@@ -441,7 +435,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                   <circle
                     cx={pos.x}
                     cy={pos.y}
-                    r={18}
+                    r={22}
                     fill={fillColor}
                     stroke={strokeColor}
                     strokeWidth={isConflict ? 3 : 2}
@@ -449,10 +443,10 @@ export const ReductionIsVcPlayground: React.FC = () => {
 
                   <text
                     x={pos.x}
-                    y={pos.y + 4}
+                    y={pos.y + 5}
                     textAnchor="middle"
                     fill={inIS || inVC ? '#ffffff' : 'var(--text)'}
-                    fontSize="11px"
+                    fontSize="14px"
                     fontWeight="700"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"
@@ -463,10 +457,10 @@ export const ReductionIsVcPlayground: React.FC = () => {
                   {/* Dual membership tag */}
                   <text
                     x={pos.x}
-                    y={pos.y - 22}
+                    y={pos.y - 25}
                     textAnchor="middle"
                     fill={inIS ? '#10b981' : '#8b5cf6'}
-                    fontSize="9px"
+                    fontSize="11px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"

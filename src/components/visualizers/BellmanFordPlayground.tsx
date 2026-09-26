@@ -286,7 +286,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   x={midX}
                   y={midY + 4}
                   textAnchor="middle"
-                  fill={isNeg ? '#ef4444' : 'var(--text, #f8fafc)'}
+                  fill={isNeg ? '#ef4444' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="700"
@@ -314,7 +314,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   cx={n.x}
                   cy={n.y}
                   r={22}
-                  fill="var(--surface, #0f172a)"
+                  fill="var(--surface)"
                   stroke={isSource ? '#10b981' : isDragging ? '#38bdf8' : 'var(--accent, #6366f1)'}
                   strokeWidth={isDragging ? 3.5 : 2.5}
                 />
@@ -322,7 +322,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   x={n.x}
                   y={n.y + 5}
                   textAnchor="middle"
-                  fill="var(--text, #f8fafc)"
+                  fill="var(--text)"
                   fontFamily="var(--font-mono)"
                   fontSize="14px"
                   fontWeight="700"

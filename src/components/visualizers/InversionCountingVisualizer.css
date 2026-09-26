@@ -20,9 +20,9 @@
 }
 
 .inv-preset-btn {
-  background: var(--surface-light, #1e293b);
-  border: 1px solid var(--border, #334155);
-  color: var(--text, #f8fafc);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  color: var(--text);
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -31,8 +31,8 @@
 }
 
 .inv-preset-btn:hover {
-  background: var(--surface-hover, #334155);
-  border-color: var(--accent, #3b82f6);
+  background: var(--surface-hover);
+  border-color: var(--accent);
 }
 
 .inv-preset-btn.active {
@@ -155,8 +155,8 @@
 }
 
 .inv-half-box {
-  background: var(--surface-light, #1e293b);
-  border: 1px solid var(--border, #334155);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.75rem;
 }
@@ -262,17 +262,17 @@
 }
 
 .inv-merged-box {
-  background: var(--surface-light, #1e293b);
-  border: 1px solid var(--border, #334155);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.75rem;
-  border-left: 3px solid #10b981;
+  border-left: 3px solid var(--success);
 }
 
 .inv-merged-header {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -282,20 +282,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid #10b981;
+  background: var(--success-bg, rgba(16, 185, 129, 0.15));
+  border: 1px solid var(--success, #10b981);
   border-radius: 6px;
-  font-family: monospace;
+  font-family: var(--font-mono, monospace);
   font-weight: 700;
+  color: var(--success, #15803d);
+}
+
+[data-theme='dark'] .inv-merged-cell {
+  background: rgba(16, 185, 129, 0.2);
   color: #a7f3d0;
 }
 
 .inv-explanation-card {
-  background: var(--surface-light, #1e293b);
-  border-left: 4px solid var(--accent, #3b82f6);
+  background: var(--surface-light);
+  border-left: 4px solid var(--accent);
   padding: 0.85rem 1.15rem;
   border-radius: 0 6px 6px 0;
   font-size: 0.88rem;
   line-height: 1.5;
-  color: var(--text, #f1f5f9);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
 }

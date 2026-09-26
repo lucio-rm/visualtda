@@ -74,6 +74,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
 
     await act(async () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
     });
 
     // Should display invalid error and remain inactive
@@ -87,6 +88,7 @@ describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
 
     await act(async () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
     });
 
     // Modal should close and instructor mode becomes active

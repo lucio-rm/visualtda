@@ -25,7 +25,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-completed"
             title={language === 'es' ? 'Has completado el análisis y la solución' : 'You have mastered the analysis and solution'}
           >
-            {language === 'es' ? 'Completado' : 'Completed'}
+            {language === 'es' ? '✓ Completado' : '✓ Completed'}
           </span>
         );
       case 'passed':
@@ -34,7 +34,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
             className="badge badge-passed badge-completed"
             title={language === 'es' ? 'Solución algorítmica verificada con éxito' : 'Algorithmic solution successfully verified'}
           >
-            {language === 'es' ? 'Resuelto' : 'Solved'}
+            {language === 'es' ? '✓ Resuelto' : '✓ Solved'}
           </span>
         );
       case 'testing':

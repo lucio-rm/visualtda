@@ -183,9 +183,9 @@ export const InversionCountingVisualizer: React.FC = () => {
           <span className={`inv-phase-pill ${action.toLowerCase()}`}>
             {action.replace(/_/g, ' ')}
           </span>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Rango Activo:' : 'Active Range:'}{' '}
-            <strong style={{ color: 'var(--text, #f8fafc)' }}>
+            <strong style={{ color: 'var(--text)' }}>
               [{range[0]}..{range[1]}]
             </strong>
           </span>

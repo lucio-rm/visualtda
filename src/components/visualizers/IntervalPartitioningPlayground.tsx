@@ -158,31 +158,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
     setUserAssignments(next);
   };
 
-  const handleAutoGreedy = () => {
-    // Run greedy earliest start time sorting
-    const sorted = [...lectures].sort((a, b) => a.start - b.start);
-    const roomEnds: number[] = [];
-    const assignments: Record<string, number> = {};
 
-    for (const lec of sorted) {
-      let chosen = -1;
-      for (let r = 0; r < roomEnds.length; r++) {
-        if (roomEnds[r] <= lec.start) {
-          chosen = r;
-          break;
-        }
-      }
-      if (chosen >= 0) {
-        roomEnds[chosen] = lec.end;
-        assignments[lec.id] = chosen + 1;
-      } else {
-        roomEnds.push(lec.end);
-        assignments[lec.id] = roomEnds.length;
-      }
-    }
-    setUserAssignments(assignments);
-    markAttempted('interval-partitioning-greedy');
-  };
 
   const handleSelectPreset = (preset: InstancePreset) => {
     setActivePresetId(preset.id);
@@ -300,14 +276,6 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              type="button"
-              className="btn-preset active"
-              onClick={handleAutoGreedy}
-              title={language === 'es' ? 'Asignar automáticamente con Greedy (orden s_i creciente)' : 'Greedy earliest start'}
-            >
-              ★ {language === 'es' ? 'Resolver con Greedy (s_i creciente)' : 'Solve with Greedy'}
-            </button>
             <button
               type="button"
               className="btn-preset"

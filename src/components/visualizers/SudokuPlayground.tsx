@@ -1,8 +1,27 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
-import { isValidSudokuCell, solveSudoku } from '../../engine/algorithms/sudokuValidator';
+import { isValidSudokuCell } from '../../engine/algorithms/sudokuValidator';
 import './SudokuPlayground.css';
+
+function isCellInConflict(b: number[][], r: number, c: number): boolean {
+  const val = b[r][c];
+  if (val === 0) return false;
+  for (let ci = 0; ci < 9; ci++) {
+    if (ci !== c && b[r][ci] === val) return true;
+  }
+  for (let ri = 0; ri < 9; ri++) {
+    if (ri !== r && b[ri][c] === val) return true;
+  }
+  const startR = Math.floor(r / 3) * 3;
+  const startC = Math.floor(c / 3) * 3;
+  for (let ri = startR; ri < startR + 3; ri++) {
+    for (let ci = startC; ci < startC + 3; ci++) {
+      if ((ri !== r || ci !== c) && b[ri][ci] === val) return true;
+    }
+  }
+  return false;
+}
 
 const PRESET_EASY: number[][] = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -116,23 +135,26 @@ export const SudokuPlayground: React.FC = () => {
       return;
     }
 
-    if (num !== 0 && !isValidSudokuCell(board, r, c, num)) {
-      setConflictMsg(
-        language === 'es'
-          ? `Restricción violada: el dígito ${num} ya se encuentra presente en la fila ${r + 1}, columna ${c + 1} o en el cuadrante 3×3 correspondiente.`
-          : `Constraint violated: digit ${num} already present in row ${r + 1}, column ${c + 1} or 3x3 block.`
-      );
-      return;
-    }
-
-    setConflictMsg(null);
-    const newBoard = board.map((row, ri) =>
+    const tempBoard = board.map((row, ri) =>
       row.map((val, ci) => (ri === r && ci === c ? num : val))
     );
-    setBoard(newBoard);
 
-    // Check if fully solved
-    const isComplete = newBoard.every((row) => row.every((v) => v !== 0));
+    if (num !== 0 && isCellInConflict(tempBoard, r, c)) {
+      setConflictMsg(
+        language === 'es'
+          ? `Conflicto detectado: el dígito ${num} se repite en su fila ${r + 1}, columna ${c + 1} o cuadrante 3×3. Backtracking podaría esta rama.`
+          : `Conflict detected: digit ${num} is duplicated in its row ${r + 1}, column ${c + 1} or 3x3 block. Backtracking would prune this branch.`
+      );
+    } else {
+      setConflictMsg(null);
+    }
+
+    setBoard(tempBoard);
+
+    // Check if fully solved without any conflicts
+    const isComplete = tempBoard.every((row, ri) =>
+      row.every((v, ci) => v !== 0 && !isCellInConflict(tempBoard, ri, ci))
+    );
     if (isComplete) {
       setSolvedMessage(
         language === 'es'
@@ -142,6 +164,42 @@ export const SudokuPlayground: React.FC = () => {
       markAttempted('sudoku-backtracking');
     }
   };
+
+  // Keyboard navigation & quick digit entry
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (!selectedCell) return;
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+
+      const [r, c] = selectedCell;
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedCell([Math.max(0, r - 1), c]);
+        setConflictMsg(null);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedCell([Math.min(8, r + 1), c]);
+        setConflictMsg(null);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setSelectedCell([r, Math.max(0, c - 1)]);
+        setConflictMsg(null);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setSelectedCell([r, Math.min(8, c + 1)]);
+        setConflictMsg(null);
+      } else if (e.key >= '1' && e.key <= '9') {
+        e.preventDefault();
+        handleSetNumber(Number(e.key));
+      } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+        e.preventDefault();
+        handleSetNumber(0);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [selectedCell, board, fixedCells, activePreset, language]);
 
   const handleStepMRV = () => {
     if (!domainInfo.bestCell) {
@@ -160,28 +218,7 @@ export const SudokuPlayground: React.FC = () => {
     }
   };
 
-  const handleSolveWithBacktracking = () => {
-    const boardCopy = board.map((row) => [...row]);
-    const success = solveSudoku(boardCopy);
-    if (success) {
-      setBoard(boardCopy);
-      setConflictMsg(null);
-      setSolvedMessage(
-        language === 'es'
-          ? 'Solución completa hallada mediante Backtracking sistemático con poda MRV (Minimum Remaining Values).'
-          : 'Complete solution found via systematic Backtracking with MRV pruning.'
-      );
-      markAttempted('sudoku-backtracking');
-    } else {
-      setConflictMsg(
-        language === 'es'
-          ? 'No existe solución válida para la configuración actual de números (inconsistencia).'
-          : 'No valid solution exists for current configuration.'
-      );
-    }
-  };
-
-  const cellSize = 44;
+  const cellSize = 52;
   const boardWidth = cellSize * 9;
 
   return (
@@ -233,14 +270,6 @@ export const SudokuPlayground: React.FC = () => {
           >
             ★ {language === 'es' ? 'Paso MRV' : 'Step MRV'}
           </button>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleSolveWithBacktracking}
-            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-          >
-            ⚡ {language === 'es' ? 'Resolver con Backtracking' : 'Solve with Backtracking'}
-          </button>
         </div>
       </div>
 
@@ -288,7 +317,7 @@ export const SudokuPlayground: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <svg
           viewBox={`-8 -8 ${boardWidth + 16} ${boardWidth + 16}`}
-          style={{ maxWidth: '440px', width: '100%', height: 'auto', borderRadius: '6px', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
+          style={{ maxWidth: '520px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
           role="img"
           aria-label="Tablero de Sudoku interactivo con heurística MRV"
         >
@@ -319,28 +348,35 @@ export const SudokuPlayground: React.FC = () => {
               const blockIndex = Math.floor(r / 3) * 3 + Math.floor(c / 3);
               const isAltBlock = blockIndex % 2 === 1;
 
-              let fill = isAltBlock ? 'var(--surface-hover)' : 'var(--surface)';
-              let stroke = 'var(--border)';
+              let fill = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let stroke = 'var(--board-border)';
               let strokeWidth = 1;
 
               if (isCrosshair) {
-                fill = isAltBlock ? 'rgba(99, 102, 241, 0.08)' : 'rgba(99, 102, 241, 0.04)';
+                fill = isAltBlock ? 'rgba(99, 102, 241, 0.12)' : 'rgba(99, 102, 241, 0.06)';
               }
 
               if (isSameNum) {
-                fill = 'rgba(56, 189, 248, 0.2)';
+                fill = 'rgba(56, 189, 248, 0.25)';
               }
 
               if (isMRVBest) {
-                fill = 'rgba(16, 185, 129, 0.2)';
+                fill = 'rgba(16, 185, 129, 0.25)';
                 stroke = '#10b981';
+                strokeWidth = 2.5;
+              }
+
+              const inConflict = isCellInConflict(board, r, c);
+              if (inConflict) {
+                fill = 'var(--board-conflict)';
+                stroke = 'var(--danger, #ef4444)';
                 strokeWidth = 2;
               }
 
               if (isSelected) {
-                fill = 'rgba(99, 102, 241, 0.3)';
-                stroke = 'var(--accent, #6366f1)';
-                strokeWidth = 2.5;
+                fill = inConflict ? 'var(--board-conflict)' : 'rgba(99, 102, 241, 0.35)';
+                stroke = inConflict ? 'var(--danger, #ef4444)' : 'var(--accent, #6366f1)';
+                strokeWidth = 3;
               }
 
               const domainSize = domainInfo.domainSizes[r]?.[c] ?? 0;
@@ -373,12 +409,12 @@ export const SudokuPlayground: React.FC = () => {
                   {val !== 0 ? (
                     <text
                       x={x + cellSize / 2}
-                      y={y + cellSize / 2 + 7}
+                      y={y + cellSize / 2 + 8}
                       textAnchor="middle"
                       fill={isFixed ? 'var(--text)' : 'var(--accent)'}
                       fontFamily="var(--font-mono)"
-                      fontSize="20px"
-                      fontWeight={isFixed ? '800' : '600'}
+                      fontSize="24px"
+                      fontWeight={isFixed ? '800' : '700'}
                     >
                       {val}
                     </text>
@@ -386,14 +422,14 @@ export const SudokuPlayground: React.FC = () => {
                     showDomainSizes && (
                       <g>
                         <text
-                          x={x + cellSize - 5}
-                          y={y + cellSize - 4}
+                          x={x + cellSize - 6}
+                          y={y + cellSize - 5}
                           textAnchor="end"
                           fill={domainSize === 1 ? '#10b981' : domainSize === 0 ? '#ef4444' : 'var(--text-muted)'}
                           fontFamily="var(--font-mono)"
-                          fontSize="10px"
-                          fontWeight={domainSize <= 2 ? '800' : '400'}
-                          opacity={0.8}
+                          fontSize="11px"
+                          fontWeight={domainSize <= 2 ? '800' : '600'}
+                          opacity={0.85}
                         >
                           {domainSize}
                         </text>

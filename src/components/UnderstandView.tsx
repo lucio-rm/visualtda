@@ -161,27 +161,92 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           </div>
         </div>
 
-        {/* Correctness & Complexity Analysis Cards */}
-        <div className="understand-theory-row">
-          <div className="card-panel theory-card">
-            <h4>{t(dict.understandCorrectnessHeading)}</h4>
-            <div className="theory-body">
-              <TheoryMarkdown content={correctnessExplanation} />
+        {/* Executive Complexity & Theoretical Bounds Dashboard */}
+        <div className="card-panel complexity-dashboard-panel">
+          <div className="complexity-dashboard-header">
+            <h4>{language === 'es' ? 'Análisis Asintótico y Garantías Formales' : 'Asymptotic Analysis & Formal Guarantees'}</h4>
+            <span className="complexity-subtitle">
+              {language === 'es'
+                ? 'Cotas de complejidad temporal, espacial y garantías del paradigma según Kleinberg & Tardos'
+                : 'Time and space complexity bounds with paradigm guarantees per Kleinberg & Tardos'}
+            </span>
+          </div>
+          <div className="complexity-dashboard-grid">
+            <div className="complexity-metric-card complexity-item">
+              <div className="metric-header">
+                <span className="metric-icon" aria-hidden="true">⏱</span>
+                <span className="metric-label">{t(dict.understandTimeComplexity)}</span>
+              </div>
+              <div className="metric-value-box">
+                <code className="metric-value complexity-value">{timeComplexity}</code>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Peor caso asintótico demostrable' : 'Provable worst-case bound'}
+              </span>
+            </div>
+
+            <div className="complexity-metric-card complexity-item">
+              <div className="metric-header">
+                <span className="metric-icon" aria-hidden="true">💾</span>
+                <span className="metric-label">{t(dict.understandSpaceComplexity)}</span>
+              </div>
+              <div className="metric-value-box">
+                <code className="metric-value complexity-value">{spaceComplexity}</code>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Memoria auxiliar adicional' : 'Auxiliary memory overhead'}
+              </span>
+            </div>
+
+            <div className="complexity-metric-card">
+              <div className="metric-header">
+                <span className="metric-icon" aria-hidden="true">⚙️</span>
+                <span className="metric-label">{language === 'es' ? 'Técnica / Paradigma' : 'Technique / Paradigm'}</span>
+              </div>
+              <div className="metric-value-box">
+                <span className="metric-paradigm-badge">{exercise.techniqueId ? exercise.techniqueId.replace(/-/g, ' ').toUpperCase() : 'CANÓNICO'}</span>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Estrategia algorítmica canónica' : 'Canonical algorithmic strategy'}
+              </span>
+            </div>
+
+            <div className="complexity-metric-card">
+              <div className="metric-header">
+                <span className="metric-icon" aria-hidden="true">🎯</span>
+                <span className="metric-label">{language === 'es' ? 'Garantía Teórica' : 'Theoretical Guarantee'}</span>
+              </div>
+              <div className="metric-value-box">
+                <span className="metric-guarantee-badge">
+                  {exercise.techniqueId === 'approximation'
+                    ? (language === 'es' ? '2-Aproximación Demostrable' : 'Provable 2-Approximation')
+                    : exercise.techniqueId === 'randomized'
+                      ? (language === 'es' ? 'Esperanza O(1) / Las Vegas' : 'Expected O(1) / Las Vegas')
+                      : (language === 'es' ? 'Óptimo Global Exacto' : 'Exact Global Optimum')}
+                </span>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Certificado de correctitud matemática' : 'Mathematical certificate of correctness'}
+              </span>
             </div>
           </div>
+        </div>
 
-          <div className="card-panel complexity-card">
-            <h4>{t({ es: 'Análisis de Complejidad y Cotas', en: 'Complexity Analysis & Bounds' })}</h4>
-            <div className="complexity-grid">
-              <div className="complexity-item">
-                <span className="complexity-label">{t(dict.understandTimeComplexity)}</span>
-                <code className="complexity-value">{timeComplexity}</code>
-              </div>
-              <div className="complexity-item">
-                <span className="complexity-label">{t(dict.understandSpaceComplexity)}</span>
-                <code className="complexity-value">{spaceComplexity}</code>
-              </div>
+        {/* Full-width Academic Theory Paper Panel */}
+        <div className="card-panel theory-card full-width-theory-panel">
+          <div className="theory-header">
+            <div className="theory-title-group">
+              <span className="badge badge-technique" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                {language === 'es' ? 'Fundamento Teórico' : 'Theoretical Foundation'}
+              </span>
+              <h4 style={{ margin: 0 }}>{t(dict.understandCorrectnessHeading)}</h4>
             </div>
+            <span className="theory-academic-seal">
+              {language === 'es' ? 'Cátedra 75.29 / 95.06 · Teoría de Algoritmos FIUBA' : '75.29 / 95.06 · Theory of Algorithms FIUBA'}
+            </span>
+          </div>
+          <div className="theory-body">
+            <TheoryMarkdown content={correctnessExplanation} />
           </div>
         </div>
 

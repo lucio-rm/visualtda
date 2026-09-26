@@ -377,8 +377,8 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                 <circle
                   cx={n.x}
                   cy={n.y}
-                  r={isSelected ? 18 : 14}
-                  fill={isSelected ? nodeColor : 'var(--surface, #1e293b)'}
+                  r={isSelected ? 22 : 17}
+                  fill={isSelected ? nodeColor : 'var(--surface)'}
                   stroke={strokeColor}
                   strokeWidth={isSelected ? 3 : 2}
                 />
@@ -386,9 +386,9 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   x={n.x}
                   y={n.y + 4}
                   textAnchor="middle"
-                  fill={isSelected ? '#ffffff' : 'var(--text, #f8fafc)'}
+                  fill={isSelected ? '#ffffff' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="10px"
+                  fontSize="11px"
                   fontWeight="700"
                 >
                   ${n.value}

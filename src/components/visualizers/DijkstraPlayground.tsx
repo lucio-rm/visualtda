@@ -337,7 +337,7 @@ export const DijkstraPlayground: React.FC = () => {
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={isTreeEdge ? '#10b981' : isNeg ? '#ef4444' : 'var(--text, #f8fafc)'}
+                    fill={isTreeEdge ? '#10b981' : isNeg ? '#ef4444' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="11px"
                     fontWeight="700"
@@ -370,7 +370,7 @@ export const DijkstraPlayground: React.FC = () => {
                     cx={n.x}
                     cy={n.y}
                     r={22}
-                    fill="var(--surface, #0f172a)"
+                    fill="var(--surface)"
                     stroke={strokeColor}
                     strokeWidth={isCurrent || isDragging ? 3.5 : 2.5}
                   />
@@ -378,7 +378,7 @@ export const DijkstraPlayground: React.FC = () => {
                     x={n.x}
                     y={n.y + 5}
                     textAnchor="middle"
-                    fill="var(--text, #f8fafc)"
+                    fill="var(--text)"
                     fontFamily="var(--font-mono)"
                     fontSize="14px"
                     fontWeight="700"

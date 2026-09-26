@@ -83,11 +83,11 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           {/* Items flying in */}
           <g transform="translate(130, 20)">
             <rect x="0" y="0" width="45" height="24" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--success, #10b981)" strokeWidth="1.5" />
-            <text x="22" y="15" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9">w:10 v:60</text>
+            <text x="22" y="15" textAnchor="middle" fill="var(--text)" fontSize="9">w:10 v:60</text>
             <rect x="50" y="15" width="45" height="24" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-            <text x="72" y="30" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9">w:20 v:100</text>
+            <text x="72" y="30" textAnchor="middle" fill="var(--text)" fontSize="9">w:20 v:100</text>
             <rect x="15" y="45" width="50" height="24" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--warning, #f59e0b)" strokeWidth="1.5" />
-            <text x="40" y="60" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9">w:30 v:120</text>
+            <text x="40" y="60" textAnchor="middle" fill="var(--text)" fontSize="9">w:30 v:120</text>
             {/* Arrow pointing to backpack */}
             <path d="M-5 45 L-20 45" stroke="var(--accent, #6366f1)" strokeWidth="2" strokeDasharray="3 3" />
             <polygon points="-20,41 -28,45 -20,49" fill="var(--accent, #6366f1)" />
@@ -103,7 +103,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <line x1="120" y1="105" x2="120" y2="75" stroke="var(--text-muted, #94a3b8)" strokeWidth="2" />
           {/* Beam */}
           <line x1="50" y1="65" x2="190" y2="65" stroke="var(--accent, #6366f1)" strokeWidth="3" strokeLinecap="round" />
-          <circle cx="120" cy="65" r="4" fill="var(--text, #f8fafc)" />
+          <circle cx="120" cy="65" r="4" fill="var(--text)" />
           {/* Left Pan (Subset weights) */}
           <line x1="55" y1="65" x2="40" y2="85" stroke="var(--border, #475569)" strokeWidth="1.5" />
           <line x1="55" y1="65" x2="70" y2="85" stroke="var(--border, #475569)" strokeWidth="1.5" />
@@ -189,7 +189,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           ].map((item, idx) => (
             <g key={idx}>
               <rect x={item.x} y="20" width="30" height="24" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-              <text x={item.x + 15} y="36" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="11" fontWeight="bold">{item.val}</text>
+              <text x={item.x + 15} y="36" textAnchor="middle" fill="var(--text)" fontSize="11" fontWeight="bold">{item.val}</text>
             </g>
           ))}
           {/* Target sorted array row */}
@@ -231,7 +231,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="155" y="44" fill="var(--warning, #f59e0b)" fontSize="8" fontWeight="bold">1</text>
           {/* Left Child (Leaf: 'A', freq 45) */}
           <circle cx="65" cy="72" r="12" fill="var(--surface-active, #334155)" stroke="var(--success, #10b981)" strokeWidth="2" />
-          <text x="65" y="75" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9" fontWeight="bold">'A'</text>
+          <text x="65" y="75" textAnchor="middle" fill="var(--text)" fontSize="9" fontWeight="bold">'A'</text>
           <text x="65" y="94" textAnchor="middle" fill="var(--success, #10b981)" fontSize="8">cód: "0"</text>
           {/* Right Subtree Node */}
           <circle cx="170" cy="62" r="11" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
@@ -242,9 +242,9 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <line x1="178" y1="71" x2="200" y2="88" stroke="var(--border, #475569)" strokeWidth="1.5" />
           <text x="194" y="80" fill="var(--warning, #f59e0b)" fontSize="7">1</text>
           <circle cx="138" cy="98" r="9" fill="var(--surface-active, #334155)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-          <text x="138" y="101" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="8">'B'</text>
+          <text x="138" y="101" textAnchor="middle" fill="var(--text)" fontSize="8">'B'</text>
           <circle cx="202" cy="98" r="9" fill="var(--surface-active, #334155)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-          <text x="202" y="101" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="8">'C'</text>
+          <text x="202" y="101" textAnchor="middle" fill="var(--text)" fontSize="8">'C'</text>
         </svg>
       );
 
@@ -482,9 +482,9 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="50" y="64" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">s</text>
           {/* Intermediate nodes */}
           <circle cx="105" cy="30" r="11" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #475569)" strokeWidth="2" />
-          <text x="105" y="34" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9">u</text>
+          <text x="105" y="34" textAnchor="middle" fill="var(--text)" fontSize="9">u</text>
           <circle cx="105" cy="90" r="11" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #475569)" strokeWidth="2" />
-          <text x="105" y="94" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="9">v</text>
+          <text x="105" y="94" textAnchor="middle" fill="var(--text)" fontSize="9">v</text>
           {/* Sink node 't' */}
           <circle cx="160" cy="60" r="14" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
           <text x="160" y="64" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">t</text>
@@ -551,7 +551,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
         <svg {...commonProps} aria-label="Árbol divide y conquista de ordenamiento por mezcla">
           {/* Root array */}
           <rect x="80" y="10" width="80" height="18" rx="3" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-          <text x="120" y="22" textAnchor="middle" fill="var(--text, #f8fafc)" fontSize="8">[38, 27, 43, 3]</text>
+          <text x="120" y="22" textAnchor="middle" fill="var(--text)" fontSize="8">[38, 27, 43, 3]</text>
           {/* Divide arrows */}
           <path d="M100 28 L65 44" stroke="var(--border, #475569)" strokeWidth="1.5" />
           <path d="M140 28 L175 44" stroke="var(--border, #475569)" strokeWidth="1.5" />

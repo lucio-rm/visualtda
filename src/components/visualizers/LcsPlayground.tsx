@@ -55,40 +55,6 @@ export const LcsPlayground: React.FC = () => {
     return solveLcs(s1, s2);
   }, [s1, s2]);
 
-  // Compute optimal links via dynamic programming traceback
-  const optimalLinks = useMemo(() => {
-    const m = s1.length;
-    const n = s2.length;
-    const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        if (s1[i - 1] === s2[j - 1]) {
-          dp[i][j] = dp[i - 1][j - 1] + 1;
-        } else {
-          dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-        }
-      }
-    }
-
-    // Traceback
-    const res: AlignmentLink[] = [];
-    let i = m;
-    let j = n;
-    while (i > 0 && j > 0) {
-      if (s1[i - 1] === s2[j - 1]) {
-        res.unshift({ i: i - 1, j: j - 1 });
-        i--;
-        j--;
-      } else if (dp[i - 1][j] >= dp[i][j - 1]) {
-        i--;
-      } else {
-        j--;
-      }
-    }
-    return res;
-  }, [s1, s2]);
-
   // Check if any links cross each other
   const crossingInfo = useMemo(() => {
     const sorted = [...links].sort((a, b) => a.i - b.i);
@@ -192,13 +158,6 @@ export const LcsPlayground: React.FC = () => {
     setRibbonError(null);
   };
 
-  const handleAlignOptimal = () => {
-    setLinks(optimalLinks);
-    setSelectedS1Index(null);
-    setRibbonError(null);
-    setUserGuess(optimalLcs);
-  };
-
   const handleClearRibbons = () => {
     setLinks([]);
     setSelectedS1Index(null);
@@ -207,12 +166,12 @@ export const LcsPlayground: React.FC = () => {
   };
 
   // Dimensions for ribbon canvas
-  const charWidth = 40;
+  const charWidth = 46;
   const gapWidth = 14;
   const svgWidth = Math.max(s1.length, s2.length) * (charWidth + gapWidth) + 60;
-  const svgHeight = 180;
+  const svgHeight = 200;
   const s1Y = 35;
-  const s2Y = 145;
+  const s2Y = 155;
 
   return (
     <div className="lcs-playground">
@@ -315,14 +274,6 @@ export const LcsPlayground: React.FC = () => {
           </span>
 
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              type="button"
-              className="chip-button"
-              onClick={handleAlignOptimal}
-              style={{ borderColor: '#10b981', color: '#10b981', fontWeight: 600 }}
-            >
-              ★ {language === 'es' ? 'Alinear Óptimo (DP)' : 'Align Optimal (DP)'}
-            </button>
             <button
               type="button"
               className="chip-button"
@@ -443,11 +394,11 @@ export const LcsPlayground: React.FC = () => {
                   />
                   <text
                     x={x + charWidth / 2}
-                    y={y + charWidth / 2 + 6}
+                    y={y + charWidth / 2 + 7}
                     textAnchor="middle"
                     fill={isSelected ? '#38bdf8' : isLinked ? '#10b981' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
-                    fontSize="18px"
+                    fontSize="22px"
                     fontWeight="800"
                   >
                     {char}
@@ -457,7 +408,7 @@ export const LcsPlayground: React.FC = () => {
                     y={y - 8}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="10px"
+                    fontSize="11px"
                     fontFamily="var(--font-mono)"
                   >
                     i={i}
@@ -490,21 +441,21 @@ export const LcsPlayground: React.FC = () => {
                   />
                   <text
                     x={x + charWidth / 2}
-                    y={y + charWidth / 2 + 6}
+                    y={y + charWidth / 2 + 7}
                     textAnchor="middle"
                     fill={isLinked ? '#10b981' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
-                    fontSize="18px"
+                    fontSize="22px"
                     fontWeight="800"
                   >
                     {char}
                   </text>
                   <text
                     x={x + charWidth / 2}
-                    y={y + charWidth + 14}
+                    y={y + charWidth + 16}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="10px"
+                    fontSize="11px"
                     fontFamily="var(--font-mono)"
                   >
                     j={j}

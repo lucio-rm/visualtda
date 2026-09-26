@@ -110,12 +110,12 @@ export const BellmanFordVisualizer: React.FC = () => {
               return (
                 <g key={`bf-e-${e.u}-${e.v}-${idx}`}>
                   <line x1={u.x} y1={u.y} x2={v.x} y2={v.y} stroke={stroke} strokeWidth={strokeWidth} markerEnd={marker} />
-                  <circle cx={midX} cy={midY} r={11} fill="var(--surface, #0f172a)" stroke={stroke} strokeWidth={1} />
+                  <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={stroke} strokeWidth={1} />
                   <text
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={isNeg ? 'var(--danger, #ef4444)' : 'var(--text, #f8fafc)'}
+                    fill={isNeg ? 'var(--danger, #ef4444)' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="11px"
                     fontWeight="700"
@@ -138,7 +138,7 @@ export const BellmanFordVisualizer: React.FC = () => {
                     cx={n.x}
                     cy={n.y}
                     r={22}
-                    fill={isUpdated ? 'rgba(16, 185, 129, 0.3)' : 'var(--surface, #0f172a)'}
+                    fill={isUpdated ? 'rgba(16, 185, 129, 0.3)' : 'var(--surface)'}
                     stroke={isUpdated ? '#10b981' : 'var(--accent, #6366f1)'}
                     strokeWidth={isUpdated ? 3.5 : 2}
                   />
@@ -146,7 +146,7 @@ export const BellmanFordVisualizer: React.FC = () => {
                     x={n.x}
                     y={n.y + 5}
                     textAnchor="middle"
-                    fill="var(--text, #f8fafc)"
+                    fill="var(--text)"
                     fontFamily="var(--font-mono)"
                     fontSize="14px"
                     fontWeight="700"

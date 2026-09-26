@@ -242,15 +242,15 @@ export const KruskalPlayground: React.FC = () => {
                     cx={midX}
                     cy={midY}
                     r={12}
-                    fill={isSelected ? '#10b981' : 'var(--surface, #0f172a)'}
-                    stroke={isSelected ? '#059669' : 'var(--border, #64748b)'}
+                    fill={isSelected ? '#10b981' : 'var(--surface)'}
+                    stroke={isSelected ? '#059669' : 'var(--border)'}
                     strokeWidth={1.5}
                   />
                   <text
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={isSelected ? '#ffffff' : 'var(--text, #f8fafc)'}
+                    fill={isSelected ? '#ffffff' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="11px"
                     fontWeight="700"
@@ -272,7 +272,7 @@ export const KruskalPlayground: React.FC = () => {
                     cx={node.x}
                     cy={node.y}
                     r={20}
-                    fill="var(--surface, #0f172a)"
+                    fill="var(--surface)"
                     stroke={color}
                     strokeWidth={3}
                   />
@@ -280,7 +280,7 @@ export const KruskalPlayground: React.FC = () => {
                     x={node.x}
                     y={node.y + 5}
                     textAnchor="middle"
-                    fill="var(--text, #f8fafc)"
+                    fill="var(--text)"
                     fontFamily="var(--font-mono)"
                     fontSize="14px"
                     fontWeight="700"

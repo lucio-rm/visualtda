@@ -16,13 +16,13 @@
 .huff-presets-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
 }
 
 .huff-preset-btn {
-  background: var(--surface-light, #1e293b);
-  border: 1px solid var(--border, #334155);
-  color: var(--text, #f8fafc);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  color: var(--text);
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -31,13 +31,13 @@
 }
 
 .huff-preset-btn:hover {
-  background: var(--surface-hover, #334155);
-  border-color: var(--accent, #3b82f6);
+  background: var(--surface-hover);
+  border-color: var(--accent);
 }
 
 .huff-preset-btn.active {
-  background: var(--accent, #3b82f6);
-  border-color: var(--accent, #3b82f6);
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
   font-weight: 600;
 }
@@ -133,8 +133,8 @@
   justify-content: center;
   min-width: 68px;
   padding: 0.6rem 0.75rem;
-  background: var(--surface-light, #1e293b);
-  border: 2px solid var(--border, #475569);
+  background: var(--surface-light);
+  border: 2px solid var(--border);
   border-radius: 8px;
   transition: all 0.25s ease;
   position: relative;
@@ -143,14 +143,14 @@
 .huff-node-card .char {
   font-size: 1.15rem;
   font-weight: 800;
-  font-family: monospace;
-  color: #fff;
+  font-family: var(--font-mono, monospace);
+  color: var(--text);
 }
 
 .huff-node-card .freq {
   font-size: 0.75rem;
-  color: var(--text-muted, #94a3b8);
-  font-family: monospace;
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-node-card.selected-min {
@@ -183,8 +183,8 @@
 }
 
 .huff-codebook-card {
-  background: var(--surface, #0f172a);
-  border: 1px solid var(--border, #334155);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   display: flex;
@@ -201,16 +201,17 @@
 .huff-table th {
   text-align: left;
   padding: 0.5rem 0.75rem;
-  background: var(--surface-light, #1e293b);
-  color: var(--text-muted, #94a3b8);
-  border-bottom: 1px solid var(--border, #334155);
+  background: var(--surface-hover);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
   font-weight: 600;
 }
 
 .huff-table td {
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
-  font-family: monospace;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-code-tag {
@@ -229,19 +230,20 @@
 }
 
 .huff-explanation-card {
-  background: var(--surface-light, #1e293b);
-  border-left: 4px solid var(--accent, #3b82f6);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
   padding: 0.85rem 1.15rem;
   border-radius: 0 6px 6px 0;
   font-size: 0.88rem;
   line-height: 1.5;
-  color: var(--text, #f1f5f9);
+  color: var(--text);
 }
 
 /* Huffman Tree SVG Visualization */
 .huff-tree-container {
-  background: var(--surface, #0f172a);
-  border: 1px solid var(--border, #334155);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   display: flex;
@@ -308,13 +310,13 @@
 .huff-edge-bit-text {
   font-size: 11px;
   font-weight: 800;
-  fill: #ffffff;
-  font-family: monospace;
+  fill: var(--text);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-leaf-rect {
-  fill: var(--surface-light, #1e293b);
-  stroke: #38bdf8;
+  fill: var(--surface-light);
+  stroke: var(--accent);
   stroke-width: 2px;
   transition: all 0.25s ease;
 }
@@ -328,32 +330,32 @@
 .huff-leaf-char {
   font-size: 16px;
   font-weight: 800;
-  fill: #ffffff;
-  font-family: monospace;
+  fill: var(--text);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-leaf-freq {
   font-size: 10px;
-  fill: #94a3b8;
-  font-family: monospace;
+  fill: var(--text-muted);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-code-tag-bg {
-  fill: rgba(30, 41, 59, 0.95);
-  stroke: #3b82f6;
+  fill: var(--surface-hover);
+  stroke: var(--accent);
   stroke-width: 1px;
 }
 
 .huff-code-tag-text {
   font-size: 10px;
   font-weight: bold;
-  fill: #93c5fd;
-  font-family: monospace;
+  fill: var(--accent);
+  font-family: var(--font-mono, monospace);
 }
 
 .huff-internal-circle {
-  fill: #1e293b;
-  stroke: #64748b;
+  fill: var(--surface-light);
+  stroke: var(--border-strong);
   stroke-width: 2px;
   transition: all 0.25s ease;
 }

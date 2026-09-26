@@ -376,8 +376,8 @@ export const EXERCISES: ExerciseMetadata[] = [
       en: 'Reduction: Independent Set to Vertex Cover'
     },
     subtitle: {
-      es: 'Demostración constructiva de dualidad complementaria: S es IS ⟺ V \\ S es VC',
-      en: 'Constructive proof of complementary duality: S is IS ⟺ V \\ S is VC'
+      es: 'Demostración constructiva de dualidad complementaria: S es IS ⟺ V ∖ S es VC',
+      en: 'Constructive proof of complementary duality: S is IS ⟺ V ∖ S is VC'
     },
     supportedPhases: ['discover', 'solve', 'understand'],
     tags: ['reductions', 'np-completeness', 'graphs', 'independent-set', 'vertex-cover', 'duality']

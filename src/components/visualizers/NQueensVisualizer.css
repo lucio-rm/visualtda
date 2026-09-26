@@ -129,16 +129,16 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 440px;
+  max-width: 520px;
 }
 
 .nqueens-board-svg {
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-radius: var(--radius-sm);
-  border: 2px solid var(--border);
+  border: 2px solid var(--board-border-strong);
 }
 
 /* Cells */
@@ -152,58 +152,35 @@ g[role='button']:focus-visible rect {
 }
 
 .cell-light {
-  fill: #f1f5f9;
-}
-
-[data-theme='dark'] .cell-light {
-  fill: #334155;
+  fill: var(--board-cell-light);
 }
 
 .cell-dark {
-  fill: #cbd5e1;
-}
-
-[data-theme='dark'] .cell-dark {
-  fill: #1e293b;
+  fill: var(--board-cell-dark);
 }
 
 .cell-candidate {
-  fill: #bfdbfe !important;
-}
-
-[data-theme='dark'] .cell-candidate {
-  fill: #1e3a8a !important;
+  fill: var(--board-candidate) !important;
 }
 
 .cell-conflict-source {
-  fill: #fecaca !important;
-}
-
-[data-theme='dark'] .cell-conflict-source {
-  fill: #7f1d1d !important;
+  fill: var(--board-conflict) !important;
 }
 
 .cell-conflict-target {
-  fill: #fee2e2 !important;
-}
-
-[data-theme='dark'] .cell-conflict-target {
-  fill: #991b1b !important;
+  fill: var(--board-conflict) !important;
 }
 
 .cell-solution {
-  fill: #dcfce7 !important;
-}
-
-[data-theme='dark'] .cell-solution {
-  fill: #064e3b !important;
+  fill: var(--board-solution) !important;
 }
 
 .cell-coord-text {
-  font-size: 10px;
+  font-size: 12px;
   font-family: var(--font-mono);
+  font-weight: 700;
   fill: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.85;
   user-select: none;
 }
 

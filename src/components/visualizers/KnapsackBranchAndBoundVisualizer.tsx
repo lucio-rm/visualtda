@@ -153,7 +153,7 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
                   x={node.x}
                   y={node.y - 2}
                   textAnchor="middle"
-                  fill="var(--text, #f8fafc)"
+                  fill="var(--text)"
                   fontFamily="var(--font-mono)"
                   fontSize="9px"
                   fontWeight="700"

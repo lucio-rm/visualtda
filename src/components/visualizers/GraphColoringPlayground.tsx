@@ -168,14 +168,7 @@ export const GraphColoringPlayground: React.FC = () => {
     setFeedback(null);
   };
 
-  const handleAutoCanonical = () => {
-    setColoring(currentPreset.canonicalColoring);
-    setFeedback({
-      valid: true,
-      text: language === 'es' ? 'Coloreo canónico óptimo verificado sin conflictos.' : 'Canonical optimal coloring verified with 0 conflicts.'
-    });
-    markAttempted('graph-coloring-backtracking');
-  };
+
 
   const coloredCount = Object.keys(coloring).length;
 
@@ -258,13 +251,6 @@ export const GraphColoringPlayground: React.FC = () => {
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button type="button" className="btn-preset" onClick={handleClear}>
               {language === 'es' ? 'Limpiar' : 'Clear'}
-            </button>
-            <button
-              type="button"
-              className="btn-preset active"
-              onClick={handleAutoCanonical}
-            >
-              ★ {language === 'es' ? 'Coloreo Óptimo' : 'Optimal Coloring'}
             </button>
             <button
               type="button"
@@ -490,17 +476,17 @@ export const GraphColoringPlayground: React.FC = () => {
                   <circle
                     cx={pos.x}
                     cy={pos.y}
-                    r={20}
+                    r={24}
                     fill={fillColor}
                     stroke={strokeColor}
                     strokeWidth={2.5}
                   />
                   <text
                     x={pos.x}
-                    y={pos.y + 4}
+                    y={pos.y + 5}
                     textAnchor="middle"
                     fill={assignedColor ? '#ffffff' : 'var(--text)'}
-                    fontSize="12px"
+                    fontSize="14px"
                     fontWeight="700"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"

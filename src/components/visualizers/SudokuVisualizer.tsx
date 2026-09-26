@@ -43,7 +43,7 @@ export const SudokuVisualizer: React.FC = () => {
 
   const filledCount = board.reduce((acc, row) => acc + row.filter((v) => v !== 0).length, 0);
 
-  const cellSize = 48;
+  const cellSize = 52;
   const boardWidth = cellSize * 9;
 
   return (
@@ -87,12 +87,12 @@ export const SudokuVisualizer: React.FC = () => {
               const blockIndex = Math.floor(r / 3) * 3 + Math.floor(c / 3);
               const isAltBlock = blockIndex % 2 === 1;
 
-              let fillColor = isAltBlock ? 'var(--surface-hover, #1e293b)' : 'var(--surface, #0f172a)';
-              let strokeColor = 'var(--border, #334155)';
+              let fillColor = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let strokeColor = 'var(--board-border)';
               let strokeWidth = 1;
 
               if (isConflict) {
-                fillColor = 'rgba(239, 68, 68, 0.35)';
+                fillColor = 'var(--board-conflict)';
                 strokeColor = 'var(--danger, #ef4444)';
                 strokeWidth = 2;
               } else if (isCurrent) {
@@ -118,7 +118,7 @@ export const SudokuVisualizer: React.FC = () => {
                       x={x + cellSize / 2}
                       y={y + cellSize / 2 + 8}
                       textAnchor="middle"
-                      fill={isFixed ? 'var(--text, #f8fafc)' : 'var(--accent, #38bdf8)'}
+                      fill={isFixed ? 'var(--board-text)' : 'var(--accent)'}
                       className="sdk-cell-text"
                       fontWeight={isFixed ? '800' : '600'}
                     >
@@ -150,7 +150,7 @@ export const SudokuVisualizer: React.FC = () => {
                 y1={b * cellSize * 3}
                 x2={boardWidth}
                 y2={b * cellSize * 3}
-                stroke="var(--text, #94a3b8)"
+                stroke="var(--board-border-strong)"
                 strokeWidth={b === 0 || b === 3 ? 3 : 2}
               />
               {/* Vertical line */}
@@ -159,7 +159,7 @@ export const SudokuVisualizer: React.FC = () => {
                 y1={0}
                 x2={b * cellSize * 3}
                 y2={boardWidth}
-                stroke="var(--text, #94a3b8)"
+                stroke="var(--board-border-strong)"
                 strokeWidth={b === 0 || b === 3 ? 3 : 2}
               />
             </React.Fragment>

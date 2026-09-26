@@ -84,8 +84,8 @@ export const KnightsTourVisualizer: React.FC = () => {
               const isVisited = val !== -1;
               const cand = candidates.find((cand) => cand.r === r && cand.c === c);
 
-              let fill = isDark ? 'var(--surface-hover, #1e293b)' : 'var(--surface, #0f172a)';
-              let stroke = 'var(--border, #334155)';
+              let fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let stroke = 'var(--board-border)';
               let strokeWidth = 1;
 
               if (isCurrent) {
@@ -124,7 +124,7 @@ export const KnightsTourVisualizer: React.FC = () => {
                       x={x + cellSize / 2}
                       y={y + cellSize / 2 + 5}
                       textAnchor="middle"
-                      fill="var(--text, #f8fafc)"
+                      fill="var(--text)"
                       fontFamily="var(--font-mono)"
                       fontSize="14px"
                       fontWeight="700"

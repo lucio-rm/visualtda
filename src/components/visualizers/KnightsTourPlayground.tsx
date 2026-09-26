@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
-import { KNIGHT_MOVES, solveKnightsTour } from '../../engine/algorithms/knightsTourValidator';
+import { KNIGHT_MOVES } from '../../engine/algorithms/knightsTourValidator';
 
 export const KnightsTourPlayground: React.FC = () => {
   const { language } = useLanguage();
@@ -130,27 +130,7 @@ export const KnightsTourPlayground: React.FC = () => {
     setIsPickingStart(false);
   };
 
-  const handleAutoSolve = () => {
-    const solved = solveKnightsTour(n);
-    if (solved) {
-      setBoard(solved);
-      const newHist: Array<[number, number]> = Array(n * n);
-      for (let r = 0; r < n; r++) {
-        for (let c = 0; c < n; c++) {
-          newHist[solved[r][c]] = [r, c];
-        }
-      }
-      setHistory(newHist);
-      setMessage(
-        language === 'es'
-          ? `Recorrido de ${n * n} casillas completado exitosamente mediante la Regla Heurística de Warnsdorff.`
-          : `Tour of ${n * n} squares solved successfully via Warnsdorff's Heuristic Rule.`
-      );
-      markAttempted('knights-tour-backtracking');
-    }
-  };
-
-  const cellSize = n === 5 ? 64 : 54;
+  const cellSize = n === 5 ? 78 : 66;
   const boardSize = cellSize * n;
 
   return (
@@ -221,14 +201,6 @@ export const KnightsTourPlayground: React.FC = () => {
           >
             {language === 'es' ? 'Reiniciar' : 'Reset'}
           </button>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={handleAutoSolve}
-            style={{ borderColor: '#10b981', color: '#10b981' }}
-          >
-            ⚡ {language === 'es' ? 'Auto-Resolver' : 'Auto-Solve'}
-          </button>
         </div>
       </div>
 
@@ -292,7 +264,7 @@ export const KnightsTourPlayground: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
         <svg
           viewBox={`-24 -24 ${boardSize + 48} ${boardSize + 48}`}
-          style={{ maxWidth: '420px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
+          style={{ maxWidth: '540px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
           role="img"
           aria-label="Tablero de ajedrez interactivo para el Recorrido del Caballo"
         >
@@ -303,8 +275,8 @@ export const KnightsTourPlayground: React.FC = () => {
             width={boardSize + 2}
             height={boardSize + 2}
             fill="none"
-            stroke="var(--border)"
-            strokeWidth={2}
+            stroke="var(--board-border-strong)"
+            strokeWidth={2.5}
             rx={4}
           />
 
@@ -316,7 +288,7 @@ export const KnightsTourPlayground: React.FC = () => {
               y={-8}
               textAnchor="middle"
               fill="var(--text-muted)"
-              fontSize="11px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
               fontWeight="600"
             >
@@ -329,10 +301,10 @@ export const KnightsTourPlayground: React.FC = () => {
             <text
               key={`row-lbl-${r}`}
               x={-10}
-              y={r * cellSize + cellSize / 2 + 4}
+              y={r * cellSize + cellSize / 2 + 5}
               textAnchor="middle"
               fill="var(--text-muted)"
-              fontSize="11px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
               fontWeight="600"
             >
@@ -351,8 +323,8 @@ export const KnightsTourPlayground: React.FC = () => {
               const legal = legalMoves.find((m) => m.r === r && m.c === c);
               const isBest = bestWarnsdorffMove && bestWarnsdorffMove.r === r && bestWarnsdorffMove.c === c;
 
-              let fill = isDark ? 'var(--surface-hover)' : 'var(--surface)';
-              let stroke = 'var(--border)';
+              let fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let stroke = 'var(--board-border)';
               let strokeWidth = 1;
 
               if (isCur) {
@@ -399,11 +371,11 @@ export const KnightsTourPlayground: React.FC = () => {
                   {isVis && (
                     <text
                       x={x + cellSize / 2}
-                      y={y + cellSize / 2 + 5}
+                      y={y + cellSize / 2 + 6}
                       textAnchor="middle"
                       fill={isCur ? '#38bdf8' : 'var(--text)'}
                       fontFamily="var(--font-mono)"
-                      fontSize={n === 5 ? '15px' : '13px'}
+                      fontSize={n === 5 ? '18px' : '15px'}
                       fontWeight="700"
                     >
                       {val + 1}

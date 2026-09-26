@@ -1,11 +1,13 @@
 :root {
   /* Color palette - Light mode default (Calibrated for high contrast & zero eye-strain) */
-  --bg: #f1f5f9;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --surface-hover: #f8fafc;
+  --surface-raised: #ffffff;
+  --surface-light: #f8fafc;
+  --surface-hover: #f1f5f9;
   --surface-active: #e2e8f0;
   --border: #cbd5e1;
-  --border-strong: #94a3b8;
+  --border-strong: #64748b;
   --text: #0f172a;
   --text-muted: #475569;
   --accent: #2563eb;
@@ -66,6 +68,21 @@
   --state-pruned: var(--error);
   --state-pruned-bg: var(--error-bg);
 
+  /* Visualizer Board & Chessboard Tokens (Distinct high contrast in Light Mode) */
+  --board-bg: #ffffff;
+  --board-cell-light: #ffffff;
+  --board-cell-dark: #e2e8f0;
+  --board-border: #94a3b8;
+  --board-border-strong: #475569;
+  --board-text: #0f172a;
+  --board-text-muted: #475569;
+  --board-hover: #dbeafe;
+  --board-active: #bfdbfe;
+  --board-accent: #2563eb;
+  --board-candidate: #fef3c7;
+  --board-conflict: #fee2e2;
+  --board-solution: #dcfce7;
+
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
@@ -83,10 +100,12 @@
 [data-theme='dark'] {
   --bg: #0b1120;
   --surface: #1e293b;
+  --surface-raised: #1e293b;
+  --surface-light: #1e293b;
   --surface-hover: #334155;
   --surface-active: #475569;
   --border: #334155;
-  --border-strong: #475569;
+  --border-strong: #64748b;
   --text: #f8fafc;
   --text-muted: #94a3b8;
   --accent: #3b82f6;
@@ -136,6 +155,21 @@
   --state-visited: #94a3b8;
   --state-pruned: var(--error);
   --state-pruned-bg: var(--error-bg);
+
+  /* Visualizer Board & Chessboard Tokens Dark */
+  --board-bg: #0f172a;
+  --board-cell-light: #334155;
+  --board-cell-dark: #1e293b;
+  --board-border: #475569;
+  --board-border-strong: #94a3b8;
+  --board-text: #f8fafc;
+  --board-text-muted: #94a3b8;
+  --board-hover: #1e3a8a;
+  --board-active: #1d4ed8;
+  --board-accent: #3b82f6;
+  --board-candidate: #78350f;
+  --board-conflict: #7f1d1d;
+  --board-solution: #064e3b;
 }
 
 /* System preference when theme is 'system' or not explicitly set */
@@ -143,10 +177,12 @@
   :root:not([data-theme='light']) {
     --bg: #0b1120;
     --surface: #1e293b;
+    --surface-raised: #1e293b;
+    --surface-light: #1e293b;
     --surface-hover: #334155;
     --surface-active: #475569;
     --border: #334155;
-    --border-strong: #475569;
+    --border-strong: #64748b;
     --text: #f8fafc;
     --text-muted: #94a3b8;
     --accent: #3b82f6;
@@ -179,7 +215,6 @@
     --info: var(--accent);
     --info-bg: rgba(59, 130, 246, 0.15);
 
-    /* Semantic Algorithm State Tokens Dark */
     --state-normal: var(--text-muted);
     --state-active: var(--accent);
     --state-active-bg: rgba(59, 130, 246, 0.2);
@@ -196,5 +231,19 @@
     --state-visited: #94a3b8;
     --state-pruned: var(--error);
     --state-pruned-bg: var(--error-bg);
+
+    --board-bg: #0f172a;
+    --board-cell-light: #334155;
+    --board-cell-dark: #1e293b;
+    --board-border: #475569;
+    --board-border-strong: #94a3b8;
+    --board-text: #f8fafc;
+    --board-text-muted: #94a3b8;
+    --board-hover: #1e3a8a;
+    --board-active: #1d4ed8;
+    --board-accent: #3b82f6;
+    --board-candidate: #78350f;
+    --board-conflict: #7f1d1d;
+    --board-solution: #064e3b;
   }
 }
