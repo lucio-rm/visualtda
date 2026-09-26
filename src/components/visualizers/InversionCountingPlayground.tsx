@@ -21,7 +21,7 @@ export const InversionCountingPlayground: React.FC = () => {
   const [discoveredPairs, setDiscoveredPairs] = useState<DiscoveredInversion[]>([]);
   const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'info' | 'error' } | null>(null);
   const [guessInput, setGuessInput] = useState<string>('');
-  const [guessFeedback, setGuessFeedback] = useState<string | null>(null);
+  const [guessFeedback, setGuessFeedback] = useState<{ text: string; correct: boolean } | null>(null);
   const [showDivideExplanation, setShowDivideExplanation] = useState<boolean>(false);
   const [customInputStr, setCustomInputStr] = useState<string>('2, 3, 8, 6, 1');
   const [customInputError, setCustomInputError] = useState<string | null>(null);
@@ -137,24 +137,22 @@ export const InversionCountingPlayground: React.FC = () => {
     if (isNaN(num)) return;
 
     if (num === trueTotalInversions) {
-      setGuessFeedback(
-        language === 'es'
-          ? `Conteo exacto verificado: el arreglo contiene ${trueTotalInversions} inversiones.`
-          : `Exact count verified: the array contains ${trueTotalInversions} inversions.`
-      );
+      setGuessFeedback({
+        text:
+          language === 'es'
+            ? `¡Respuesta correcta! El arreglo contiene exactamente ${trueTotalInversions} inversiones.`
+            : `Correct answer! The array contains exactly ${trueTotalInversions} inversions.`,
+        correct: true
+      });
       markAttempted('inversion-counting-dyc');
-    } else if (num < trueTotalInversions) {
-      setGuessFeedback(
-        language === 'es'
-          ? `Tu estimación (${num}) es inferior al número real. Hay más pares desordenados en el arreglo.`
-          : `Your estimate (${num}) is too low. There are more out-of-order pairs.`
-      );
     } else {
-      setGuessFeedback(
-        language === 'es'
-          ? `Tu estimación (${num}) supera el número real. Recordá que solo se cuentan pares (i, j) con i < j y A[i] > A[j].`
-          : `Your estimate (${num}) is too high. Remember only pairs (i, j) with i < j and A[i] > A[j] count.`
-      );
+      setGuessFeedback({
+        text:
+          language === 'es'
+            ? `Respuesta incorrecta. Indicaste ${num} inversiones, pero no coincide con el total real. ¡Seguí explorando e intentando!`
+            : `Incorrect answer. You entered ${num} inversions, which does not match the actual total. Keep exploring and try again!`,
+        correct: false
+      });
     }
   };
 
@@ -270,13 +268,12 @@ export const InversionCountingPlayground: React.FC = () => {
         <div className="inv-pg-array-display">
           {array.map((val, idx) => {
             const isSelected = firstSelectedIdx === idx;
-            const isInvolvedInDiscovered = discoveredPairs.some((p) => p.i === idx || p.j === idx);
 
             return (
               <div key={idx} className="inv-pg-item">
                 <button
                   type="button"
-                  className={`inv-pg-bar ${isSelected ? 'selected-left' : ''} ${isInvolvedInDiscovered ? 'has-inversions' : ''}`}
+                  className={`inv-pg-bar ${isSelected ? 'selected-left' : ''}`}
                   onClick={() => handleBarClick(idx)}
                   title={`Índice i=${idx}, Valor=${val}`}
                 >
@@ -295,47 +292,11 @@ export const InversionCountingPlayground: React.FC = () => {
           </div>
         )}
 
-        {/* Victory Card */}
-        {allInversionsDiscovered && (
-          <div className="inv-victory-card" role="status">
-            
-            <div>
-              <strong>
-                {language === 'es'
-                  ? `Total de inversiones deducido: ${trueTotalInversions}.`
-                  : `Brilliant deduction! You found all ${trueTotalInversions} inversions in the array.`}
-              </strong>
-              <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
-                {language === 'es'
-                  ? `El número total de inversiones representa la cantidad mínima de intercambios adyacentes necesarios para ordenar el arreglo (distancia tau de Kendall).`
-                  : `Total inversions represent the minimum adjacent swaps required to sort the array (Kendall tau distance).`}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {isZeroDisorder && (
-          <div className="inv-victory-card" role="status">
-            <div>
-              <strong>
-                {language === 'es'
-                  ? 'Arreglo ordenado: 0 inversiones.'
-                  : 'Sorted array: 0 inversions.'}
-              </strong>
-              <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
-                {language === 'es'
-                  ? 'Todos los pares (i, j) con i < j satisfacen A[i] ≤ A[j]. Desorden nulo.'
-                  : 'All pairs (i, j) with i < j satisfy A[i] ≤ A[j].'}
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Progress & Discovered Inversions */}
         <div className="inv-pg-discovery-panel">
           <div className="inv-discovery-header">
             <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>
-              {language === 'es' ? 'Inversiones descubiertas:' : 'Discovered inversions:'}
+              {language === 'es' ? 'Inversiones descubiertas por exploración:' : 'Discovered inversions from exploration:'}
             </span>
             <span className="inv-discovery-counter">
               <strong>{discoveredPairs.length}</strong> {language === 'es' ? 'pares encontrados' : 'pairs found'}
@@ -359,39 +320,73 @@ export const InversionCountingPlayground: React.FC = () => {
           )}
         </div>
 
-        {/* Challenge Guessing Box */}
-        <div className="inv-challenge-box">
-          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text)' }}>
-            {language === 'es' ? 'Desafío de Estimación Matemática:' : 'Mathematical Estimation Challenge:'}
-          </div>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            {language === 'es'
-              ? `¿Cuántas inversiones totales creés que tiene este arreglo de tamaño ${n} (máximo posible: ${maxPossibleInversions})?`
-              : `How many total inversions do you think this size-${n} array has (max possible: ${maxPossibleInversions})?`}
-          </p>
-          <div className="inv-challenge-input-row">
-            <input
-              type="number"
-              className="inv-challenge-input"
-              value={guessInput}
-              onChange={(e) => setGuessInput(e.target.value)}
-              placeholder="0"
-              min={0}
-              max={maxPossibleInversions}
-            />
-            <button
-              type="button"
-              className="inv-pg-btn accent"
-              onClick={handleVerifyGuess}
-            >
-              {language === 'es' ? 'Verificar Hipótesis' : 'Verify Guess'}
-            </button>
-          </div>
-          {guessFeedback && (
-            <div className="inv-guess-feedback" role="status">
-              {guessFeedback}
+        {/* Answer Verification Box (RTA) */}
+        <div
+          className="inv-challenge-box"
+          style={{
+            background: 'var(--surface)',
+            border: '1.5px solid var(--border)',
+            borderRadius: 'var(--radius-md)',
+            padding: '1.25rem',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <span
+                style={{
+                  fontWeight: 800,
+                  fontSize: '1.05rem',
+                  color: 'var(--accent)',
+                  letterSpacing: '0.05em',
+                  fontFamily: 'var(--font-mono)'
+                }}
+              >
+                RTA:
+              </span>
+              <input
+                type="number"
+                className="inv-challenge-input"
+                value={guessInput}
+                onChange={(e) => {
+                  setGuessInput(e.target.value);
+                  setGuessFeedback(null);
+                }}
+                placeholder={language === 'es' ? '¿Cuántas inversiones?' : 'Total inversions?'}
+                min={0}
+                max={maxPossibleInversions}
+                style={{
+                  padding: '0.5rem 0.75rem',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  fontFamily: 'var(--font-mono)',
+                  width: '180px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1.5px solid var(--border)',
+                  background: 'var(--bg)',
+                  color: 'var(--text)'
+                }}
+              />
+              <button
+                type="button"
+                className="inv-pg-btn accent"
+                onClick={handleVerifyGuess}
+                style={{ padding: '0.5rem 1.25rem', fontWeight: 700 }}
+              >
+                {language === 'es' ? 'Verificar Respuesta' : 'Verify Answer'}
+              </button>
             </div>
-          )}
+
+            {guessFeedback && (
+              <div
+                className={`inv-feedback-banner ${guessFeedback.correct ? 'success' : 'error'}`}
+                role="status"
+                style={{ marginTop: '0.25rem' }}
+              >
+                <strong>{guessFeedback.text}</strong>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Divide and Conquer Pedagogical Explanation */}
@@ -406,7 +401,7 @@ export const InversionCountingPlayground: React.FC = () => {
 
           {showDivideExplanation && (
             <div className="inv-dnc-explanation-content">
-              <h4>{language === 'es' ? 'Principio de División y Conquista (Kleinberg & Tardos, Cap. 5.3)' : 'Divide & Conquer Principle (Kleinberg & Tardos, Ch. 5.3)'}</h4>
+              <h4>{language === 'es' ? 'Principio de División y Conquista (Divide & Conquer)' : 'Divide & Conquer Principle (Divide & Conquer)'}</h4>
               <p>
                 {language === 'es'
                   ? 'Una búsqueda exhaustiva por pares compara cada elemento con los demás en tiempo O(N²). Merge Sort cuenta las inversiones cruzadas en tiempo lineal O(N) durante la mezcla:'

@@ -141,7 +141,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               markerHeight="6"
               orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--color-border)" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--color-border-strong)" />
             </marker>
             <marker
               id="arrow-sat"
@@ -263,7 +263,7 @@ export const MaxFlowVisualizer: React.FC = () => {
 
       {/* Max-Flow Min-Cut Theorem Card (Section 12, 23 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Teorema de Flujo Máximo / Corte Mínimo (K&T §7.2):' : 'Max-Flow Min-Cut Theorem (K&T §7.2):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Teorema de Flujo Máximo / Corte Mínimo:' : 'Max-Flow Min-Cut Theorem:'}</strong>{' '}
         {language === 'es'
           ? 'En cualquier red de flujo con capacidades enteras, el valor del flujo máximo equivale exactamente a la capacidad del corte s-t mínimo: max v(f) = min cap(A, B). Mientras exista un camino s-t en el grafo residual G_f, aumentamos por el cuello de botella. Al agotarse los caminos aumentantes, los vértices alcanzables desde s definen un corte saturado (A, B) que certifica matemáticamente la optimalidad del flujo.'
           : 'In any flow network, the maximum flow value equals the capacity of the minimum s-t cut: max v(f) = min cap(A, B). While an augmenting path exists in residual graph G_f, flow increases by bottleneck capacity. When no s-t paths remain in G_f, reachable nodes from s form a saturated cut (A, B) rigorously proving global optimality.'}

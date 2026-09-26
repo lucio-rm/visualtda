@@ -28,6 +28,7 @@ export const KnapsackPlayground: React.FC = () => {
   const [activePreset, setActivePreset] = useState<KnapsackPreset>('standard');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showGreedyComparison, setShowGreedyComparison] = useState<boolean>(false);
+  const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verified'>('idle');
 
   // Custom case state
   const [customCapacity, setCustomCapacity] = useState<number>(6);
@@ -52,9 +53,11 @@ export const KnapsackPlayground: React.FC = () => {
   useEffect(() => {
     setSelectedIds([]);
     setShowGreedyComparison(false);
+    setVerificationStatus('idle');
   }, [activePreset]);
 
   const toggleItem = (id: string) => {
+    setVerificationStatus('idle');
     if (selectedIds.includes(id)) {
       setSelectedIds(selectedIds.filter((itemId) => itemId !== id));
     } else {
@@ -64,6 +67,7 @@ export const KnapsackPlayground: React.FC = () => {
 
   const handleClear = () => {
     setSelectedIds([]);
+    setVerificationStatus('idle');
   };
 
   const handleAddCustomItem = (e: React.FormEvent) => {
@@ -368,29 +372,59 @@ export const KnapsackPlayground: React.FC = () => {
           </span>
         </div>
 
-        {isOptimal ? (
-          <div className="status-alert success">
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              setVerificationStatus('verified');
+              if (isOptimal) {
+                markAttempted('knapsack-dp');
+              }
+            }}
+            disabled={selectedIds.length === 0}
+            style={{ fontWeight: 600 }}
+          >
+            {language === 'es' ? '✓ Verificar Mochila' : '✓ Verify Knapsack'}
+          </button>
+          {selectedIds.length > 0 && (
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleClear}
+            >
+              {language === 'es' ? 'Vaciar Mochila' : 'Empty Knapsack'}
+            </button>
+          )}
+        </div>
+
+        {verificationStatus === 'idle' ? (
+          <div className="status-alert info" style={{ marginTop: '0.75rem' }}>
             {language === 'es'
-              ? `Combinación factible de valor máximo alcanzada ($${totalValue}) con peso total de ${totalWeight} kg.`
-              : `Optimal feasible combination reached ($${totalValue}) with total weight of ${totalWeight} kg.`}
+              ? selectedIds.length === 0
+                ? 'Hacé clic en los objetos superiores para agregarlos a la mochila y luego presiona "Verificar Mochila".'
+                : `Selección actual: $${totalValue} (${totalWeight} / ${capacity} kg). Presiona "Verificar Mochila" para validar si alcanzaste el valor óptimo.`
+              : selectedIds.length === 0
+                ? 'Click on the items above to pack them into the knapsack, then click "Verify Knapsack".'
+                : `Current selection: $${totalValue} (${totalWeight} / ${capacity} kg). Click "Verify Knapsack" to validate if optimal.`}
           </div>
         ) : isOverweight ? (
-          <div className="status-alert warning">
+          <div className="status-alert warning" style={{ marginTop: '0.75rem' }}>
             {language === 'es'
               ? `Capacidad máxima excedida por ${totalWeight - capacity} kg. Retirá algún ítem para restablecer la factibilidad.`
               : `Maximum capacity exceeded by ${totalWeight - capacity} kg. Remove an item to restore feasibility.`}
           </div>
-        ) : selectedIds.length > 0 ? (
-          <div className="status-alert info">
+        ) : isOptimal ? (
+          <div className="status-alert success" style={{ marginTop: '0.75rem' }}>
             {language === 'es'
-              ? `Selección factible actual: $${totalValue} (${totalWeight} kg). Aún quedan ${capacity - totalWeight} kg libres en la mochila.`
-              : `Current feasible selection: $${totalValue} (${totalWeight} kg). Remaining capacity: ${capacity - totalWeight} kg.`}
+              ? `¡Excelente! Has alcanzado la combinación factible de valor máximo ($${totalValue}) con peso total de ${totalWeight} kg.`
+              : `Excellent! You reached the optimal feasible combination ($${totalValue}) with total weight of ${totalWeight} kg.`}
           </div>
         ) : (
-          <div className="status-alert info">
+          <div className="status-alert warning" style={{ marginTop: '0.75rem' }}>
             {language === 'es'
-              ? 'Hacé clic en los objetos superiores para agregarlos a la mochila.'
-              : 'Click on the items above to pack them into the knapsack.'}
+              ? `Tu selección es factible ($${totalValue}, ${totalWeight} kg), pero aún no es el valor máximo posible. ¡Sigue intentando!`
+              : `Your selection is feasible ($${totalValue}, ${totalWeight} kg), but not yet the maximum possible value. Keep trying!`}
           </div>
         )}
       </div>
@@ -401,16 +435,13 @@ export const KnapsackPlayground: React.FC = () => {
           type="button"
           className="btn-secondary"
           onClick={() => setShowGreedyComparison(!showGreedyComparison)}
-          style={{ width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
         >
+          <span>{showGreedyComparison ? '▲' : '▼'}</span>
           <span>
-            {showGreedyComparison ? '▲' : '▼'}{' '}
             {language === 'es'
               ? 'Análisis Crítico: ¿Por qué la heurística Greedy falla en la Mochila 0/1?'
               : 'Critical Analysis: Why does the Greedy heuristic fail in 0/1 Knapsack?'}
-          </span>
-          <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>
-            {language === 'es' ? 'Ver demostración' : 'View proof'}
           </span>
         </button>
 

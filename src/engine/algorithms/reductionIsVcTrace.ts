@@ -164,8 +164,8 @@ export function generateReductionTrace(
       coveredEdges: [],
       phase: 'complement_calculation',
       explanation: {
-        es: `Por el Teorema K&T 8.1, al retirar los vértices independientes S, el complemento C debe cubrir obligatoriamente todas las aristas de G.`,
-        en: `By Theorem K&T 8.1, removing independent vertices S leaves a complement C that must cover all edges in G.`
+        es: `Por dualidad complementaria, al retirar los vértices independientes S, el complemento C debe cubrir obligatoriamente todas las aristas de G.`,
+        en: `By complementary duality, removing independent vertices S leaves a complement C that must cover all edges in G.`
       }
     }
   });

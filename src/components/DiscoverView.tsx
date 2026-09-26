@@ -62,7 +62,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
 
           <div className="academic-context-box" style={{ marginTop: '1rem' }}>
             <h5 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.5rem' }}>
-              {language === 'es' ? 'Contexto y Perspectiva Algorítmica (Kleinberg & Tardos):' : 'Context & Algorithmic Perspective (Kleinberg & Tardos):'}
+              {language === 'es' ? 'Contexto y Perspectiva Algorítmica:' : 'Context & Algorithmic Perspective:'}
             </h5>
             <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
               {t(insight.historicalContext)}

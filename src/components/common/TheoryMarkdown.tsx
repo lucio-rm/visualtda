@@ -1,7 +1,61 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../i18n/LanguageContext';
 
 interface TheoryMarkdownProps {
   content: string;
+  language?: 'es' | 'en';
+}
+
+function translateTheoryLine(text: string, lang: 'es' | 'en'): string {
+  if (lang === 'es') return text;
+  return text
+    .replace(/# (.+): Análisis Teórico, Correctness y Complejidad/g, '# $1: Theoretical Analysis, Correctness, and Complexity')
+    .replace(/## 1\. Planteo del Problema/g, '## 1. Problem Statement')
+    .replace(/## 2\. Estrategia Algorítmica/g, '## 2. Algorithmic Strategy')
+    .replace(/## 3\. Demostración de Corrección \(Correctness\)/g, '## 3. Correctness Proof')
+    .replace(/## 3\. Demostración de Corrección/g, '## 3. Correctness Proof')
+    .replace(/## 4\. Análisis de Complejidad/g, '## 4. Complexity Analysis')
+    .replace(/### ¿Por qué no Fuerza Bruta\?/g, '### Why Not Brute Force?')
+    .replace(/### Invariante de Bucle \/ Recursión/g, '### Loop / Recursion Invariant')
+    .replace(/### Invariante de Bucle/g, '### Loop Invariant')
+    .replace(/### Pasos de Inducción:/g, '### Induction Steps:')
+    .replace(/### Pasos de Inducción/g, '### Induction Steps')
+    .replace(/### Complejidad Temporal:/g, '### Time Complexity:')
+    .replace(/### Complejidad Espacial:/g, '### Space Complexity:')
+    .replace(/### Complejidad Temporal/g, '### Time Complexity')
+    .replace(/### Complejidad Espacial/g, '### Space Complexity')
+    .replace(/### Argumento de Intercambio/g, '### Exchange Argument')
+    .replace(/### Propiedad de Elección Voraz/g, '### Greedy-Choice Property')
+    .replace(/### Subestructura Óptima/g, '### Optimal Substructure')
+    .replace(/### Recurrencia y Casos Base/g, '### Recurrence and Base Cases')
+    .replace(/### Garantía de 2-Aproximación/g, '### 2-Approximation Guarantee')
+    .replace(/### Teorema de Reducción Polinomial/g, '### Polynomial Reduction Theorem')
+    .replace(/\*\*Invariante\*\*:/g, '**Invariant**:')
+    .replace(/\*\*Base\*\*:/g, '**Base Case**:')
+    .replace(/\*\*Paso Inductivo\*\*:/g, '**Inductive Step**:')
+    .replace(/\*\*Terminación\*\*:/g, '**Termination**:')
+    .replace(/\*\*Teorema\*\*:/g, '**Theorem**:')
+    .replace(/\*\*Demostración\*\*:/g, '**Proof**:')
+    .replace(/\*\*Lema\*\*:/g, '**Lemma**:')
+    .replace(/\*\*Corolario\*\*:/g, '**Corollary**:')
+    .replace(/Teorema:/g, 'Theorem:')
+    .replace(/Demostración:/g, 'Proof:')
+    .replace(/En el peor caso,/g, 'In the worst case,')
+    .replace(/En el mejor caso,/g, 'In the best case,')
+    .replace(/por inducción sobre/g, 'by induction on')
+    .replace(/Hipótesis inductiva/g, 'Inductive hypothesis')
+    .replace(/Caso base/g, 'Base case')
+    .replace(/Caso inductivo/g, 'Inductive case')
+    .replace(/Paso inductivo/g, 'Inductive step')
+    .replace(/Cota superior/g, 'Upper bound')
+    .replace(/Cota inferior/g, 'Lower bound')
+    .replace(/Teorema Maestro/g, 'Master Theorem')
+    .replace(/Árbol de recursión/g, 'Recursion tree')
+    .replace(/Entrada:/g, 'Input:')
+    .replace(/Salida:/g, 'Output:')
+    .replace(/Definición:/g, 'Definition:')
+    .replace(/Propiedad:/g, 'Property:')
+    .replace(/Observación:/g, 'Remark:');
 }
 
 // Cleanly replaces LaTeX symbols and formatting into standard mathematical Unicode typography
@@ -180,7 +234,9 @@ export function renderInlineFormatting(line: string): React.ReactNode[] {
   return parts;
 }
 
-export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
+export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, language: propLanguage }) => {
+  const langContext = useContext(LanguageContext);
+  const language = propLanguage || langContext?.language || 'es';
   if (!content) return null;
 
   const lines = content.split('\n');
@@ -189,7 +245,8 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content }) => {
 
   while (i < lines.length) {
     const rawLine = lines[i];
-    const line = rawLine.trim();
+    const translatedLine = translateTheoryLine(rawLine, language);
+    const line = translatedLine.trim();
 
     // 1. Skip empty lines
     if (line === '') {

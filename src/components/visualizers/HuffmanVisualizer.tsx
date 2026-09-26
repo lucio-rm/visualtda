@@ -299,9 +299,9 @@ export const HuffmanVisualizer: React.FC = () => {
       {/* Step Explanation Card */}
       <div className="huff-explanation-card">{desc}</div>
 
-      {/* Huffman Optimality & Exchange Argument Rationale (Section 12, 23 & 48) */}
+      {/* Huffman Optimality & Exchange Argument Rationale */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Fundamento Teórico: Invariante Greedy y Argumento de Intercambio (K&T §4.8):' : 'Theoretical Rationale: Greedy Invariant & Exchange Argument (K&T §4.8):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Fundamento Teórico: Invariante Greedy y Argumento de Intercambio:' : 'Theoretical Rationale: Greedy Invariant & Exchange Argument:'}</strong>{' '}
         {language === 'es'
           ? 'Existe un árbol de prefijo binario óptimo donde los dos caracteres de menor frecuencia x e y son nodos hermanos en el nivel más profundo. Al fusionarlos recursivamente en un nodo z con frecuencia f(z) = f(x) + f(y), el costo del árbol satisface B(T) = B(T\') + f(x) + f(y). Mediante un Min-Heap de n símbolos, cada extracción y reinserción cuesta O(log n), alcanzando un tiempo óptimo total de O(n log n).'
           : 'An optimal prefix tree exists wherein the two lowest-frequency symbols x and y are sibling leaves at maximum depth. Merging them into a composite node z with f(z) = f(x) + f(y) yields B(T) = B(T\') + f(x) + f(y). Implementing the priority queue via a Min-Heap yields O(log n) per step, guaranteeing an overall construction runtime of O(n log n).'}

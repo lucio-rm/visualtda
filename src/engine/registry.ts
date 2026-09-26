@@ -137,9 +137,9 @@ export const EXERCISES: ExerciseMetadata[] = [
     categoryId: 'divide-and-conquer',
     order: 1,
     difficulty: 1,
-    title: { es: 'Ordenamiento por Fusión (Merge Sort)', en: 'Merge Sort' },
+    title: { es: 'Merge Sort', en: 'Merge Sort' },
     subtitle: {
-      es: 'Dividir arreglo a la mitad, ordenar recursivamente y combinar en tiempo lineal',
+      es: 'Dividir arreglo a la mitad, ordenar recursivamente y hacer merge en tiempo lineal',
       en: 'Divide array into halves, sort recursively, and merge in linear time'
     },
     supportedPhases: ['discover', 'solve', 'understand'],
@@ -244,7 +244,7 @@ export const EXERCISES: ExerciseMetadata[] = [
     difficulty: 2,
     title: { es: 'Codificación de Huffman (Min-Heap)', en: 'Huffman Coding (Min-Heap)' },
     subtitle: {
-      es: 'Construir códigos libres de prefijo de longitud variable óptimos fusionando mediante Greedy los nodos de menor frecuencia',
+      es: 'Construir códigos libres de prefijo de longitud variable óptimos haciendo merge mediante Greedy de los nodos de menor frecuencia',
       en: 'Construct optimal prefix-free variable-length codes by greedily merging the lowest frequency nodes'
     },
     supportedPhases: ['discover', 'solve', 'understand'],

@@ -118,7 +118,7 @@ export const KruskalVisualizer: React.FC = () => {
             const isCurrent = currentEdge && currentEdge.id === edge.id;
 
             let strokeColor = 'var(--border-strong, #64748b)';
-            let strokeWidth = 1.5;
+            let strokeWidth = 2.5;
             let strokeDash: string | undefined = undefined;
 
             if (isAccepted) {
@@ -225,7 +225,7 @@ export const KruskalVisualizer: React.FC = () => {
 
       {/* Cut Property & Union-Find Rationale Card (Section 12, 23 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Propiedad del Corte y Estructura Union-Find (K&T §4.5):' : 'Cut Property & Disjoint-Set Union-Find (K&T §4.5):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Propiedad del Corte y Estructura Union-Find:' : 'Cut Property & Disjoint-Set Union-Find:'}</strong>{' '}
         {language === 'es'
           ? 'Propiedad del corte: para cualquier partición (S, V \\ S), la arista de menor peso que cruza el corte pertenece a todo MST. Al evaluar aristas ordenadas, si (u, v) une dos componentes distintas, es la arista más barata que conecta ambas componentes y es seguro agregarla. Mediante Union-Find con compresión de caminos, la detección de ciclos toma tiempo casi lineal O(|E| α(|V|)), dominando el ordenamiento en O(|E| log |V|).'
           : 'Cut Property: for any cut (S, V \\ S), the minimum-weight crossing edge belongs to every MST. When iterating sorted edges, if (u, v) links distinct components, it is the cheapest crossing edge and can be safely included. Disjoint-Set with path compression handles cycle detection in near-linear O(|E| α(|V|)), with total cost dominated by sorting O(|E| log |V|).'}

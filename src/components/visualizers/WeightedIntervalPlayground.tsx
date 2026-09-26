@@ -29,8 +29,8 @@ const PRESETS: Preset[] = [
   },
   {
     name: {
-      es: 'Kleinberg & Tardos (Ejemplo 6.1)',
-      en: 'Kleinberg & Tardos (Example 6.1)'
+      es: 'Instancia Canónica (Ejemplo 6.1)',
+      en: 'Canonical Instance (Example 6.1)'
     },
     intervals: [
       { id: 'A', start: 0, end: 4, weight: 3 },

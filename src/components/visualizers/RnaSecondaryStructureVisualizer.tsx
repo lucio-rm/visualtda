@@ -225,9 +225,9 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
         </table>
       </div>
 
-      {/* Interval DP & Nussinov Recurrence Card (Section 12, 25 & 44) */}
+      {/* Interval DP & Nussinov Recurrence Card */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia DP sobre Intervalos (Algoritmo de Nussinov, K&T §6.5):' : 'Interval DP Recurrence (Nussinov’s Algorithm, K&T §6.5):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP sobre Intervalos (Algoritmo de Nussinov):' : 'Interval DP Recurrence (Nussinov’s Algorithm):'}</strong>{' '}
         {language === 'es'
           ? 'Para aparear bases Watson-Crick (A-U, C-G) sin pseudonudos y con separación mínima j - t > 4: OPT(i, j) = max(OPT(i, j-1), max_{t} (1 + OPT(i, t-1) + OPT(t+1, j-1))). Dicotomía: la base j o bien queda libre (heredando OPT(i, j-1)), o se aparea con alguna base complementaria t, dividiendo el problema en dos subintervalos disjuntos independientes. Llenado por diagonales (longitud creciente L=j-i): tiempo O(n³) y memoria O(n²).'
           : 'To pair Watson-Crick bases (A-U, C-G) without pseudoknots and with minimum hairpin loop separation j - t > 4: OPT(i, j) = max(OPT(i, j-1), max_{t} (1 + OPT(i, t-1) + OPT(t+1, j-1))). Dichotomy: base j either remains unpaired (OPT(i, j-1)) or binds to base t, splitting into two independent subproblems. Filled along diagonals of increasing length L=j-i: time O(n³), space O(n²).'}

@@ -250,7 +250,7 @@ export const HuffmanPlayground: React.FC = () => {
                 </strong>
                 <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
                   {language === 'es'
-                    ? 'Has fusionado sistemáticamente todos los nodos respetando la regla Greedy. El árbol resultante garantiza un código de prefijo óptimo y libre de ambigüedad.'
+                    ? 'Has aplicado merge sistemáticamente a todos los nodos respetando la regla Greedy. El árbol resultante garantiza un código de prefijo óptimo y libre de ambigüedad.'
                     : 'You systematically merged all nodes following the Greedy rule. The resulting prefix-free code is provably optimal.'}
                 </p>
               </div>
@@ -259,7 +259,7 @@ export const HuffmanPlayground: React.FC = () => {
             <div className="huff-pending-box">
               <span>
                 {language === 'es'
-                  ? `Bosque activo: ${forestRoots.length} árboles restantes. Seleccioná los 2 árboles con menor frecuencia para fusionarlos.`
+                  ? `Bosque activo: ${forestRoots.length} árboles restantes. Seleccioná los 2 árboles con menor frecuencia para aplicarles merge.`
                   : `Active forest: ${forestRoots.length} trees remaining. Select the 2 trees with lowest frequency to merge.`}
               </span>
             </div>
@@ -285,7 +285,7 @@ export const HuffmanPlayground: React.FC = () => {
                 disabled={selectedNodeIds.length !== 2 || isCompletedNow}
                 onClick={handleMergeSelected}
               >
-                {language === 'es' ? 'Fusionar 2 Nodos Seleccionados (Merge)' : 'Merge 2 Selected Nodes'}
+                {language === 'es' ? 'Hacer Merge de los 2 Nodos Seleccionados' : 'Merge 2 Selected Nodes'}
               </button>
               <button
                 type="button"

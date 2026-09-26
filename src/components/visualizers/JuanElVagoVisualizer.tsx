@@ -176,7 +176,7 @@ export const JuanElVagoVisualizer: React.FC = () => {
 
       {/* Non-Adjacent DP Recurrence Card (Section 12, 25 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia DP de Selección No Adyacente (K&T §6.1):' : 'Non-Adjacent DP Selection Recurrence (K&T §6.1):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP de Selección No Adyacente:' : 'Non-Adjacent DP Selection Recurrence:'}</strong>{' '}
         {language === 'es'
           ? 'Para cada día i: OPT(i) = max(w_i + OPT(i-2), OPT(i-1)). Dicotomía: o Juan trabaja el día i (ganando w_i y descansando obligatoriamente el día i-1 para sumar OPT(i-2)), o descansa el día i (conservando la ganancia acumulada OPT(i-1)). Esta estructura resuelve el problema en tiempo lineal O(n) y O(1) de memoria auxiliar.'
           : 'For each day i: OPT(i) = max(w_i + OPT(i-2), OPT(i-1)). Dichotomy: either Juan works on day i (earning w_i, mandating rest on day i-1 and collecting OPT(i-2)), or rests on day i (keeping accumulated OPT(i-1)). This optimal substructure runs in linear O(n) time with O(1) auxiliary space.'}

@@ -19,6 +19,59 @@ interface UnderstandViewProps {
   onNavigateToExercise?: (exerciseId: string) => void;
 }
 
+function localizeComplexityText(text: string, lang: 'es' | 'en'): string {
+  if (lang === 'es' || !text) return text;
+  return text
+    .replace(/en mejor, promedio y peor caso/g, 'in best, average, and worst case')
+    .replace(/ordenamiento por densidad valor\/peso/g, 'sorting by value/weight density')
+    .replace(/lista de ítems/g, 'item list')
+    .replace(/para el arreglo auxiliar de fusión/g, 'for auxiliary merge buffer')
+    .replace(/para el arreglo auxiliar de merge/g, 'for auxiliary merge buffer')
+    .replace(/buffers de fusión/g, 'merge buffers')
+    .replace(/buffers de merge/g, 'merge buffers')
+    .replace(/arreglos auxiliares para la banda de fusión/g, 'auxiliary arrays for merge strip')
+    .replace(/arreglos auxiliares para la banda de merge/g, 'auxiliary arrays for merge strip')
+    .replace(/arreglos auxiliares para la franja de merge/g, 'auxiliary arrays for merge strip')
+    .replace(/D&C estándar \/ O\(N\) vía Kadane/g, 'standard D&C / O(N) via Kadane')
+    .replace(/para la pila de recursión/g, 'recursion call stack')
+    .replace(/para la red residual/g, 'for the residual network')
+    .replace(/Simplex en peor caso \/ O\(poly\(n\)\) métodos de punto interior/g, 'worst-case Simplex / O(poly(n)) interior point methods')
+    .replace(/matriz del tablero Simplex/g, 'Simplex tableau matrix')
+    .replace(/reducción a Vertex Cover/g, 'reduction to Vertex Cover')
+    .replace(/grafo transformado/g, 'transformed graph')
+    .replace(/2-aproximación por matching maximal/g, '2-approximation via maximal matching')
+    .replace(/árbol de combinaciones/g, 'combination tree')
+    .replace(/algoritmo de von Neumann/g, 'von Neumann algorithm')
+    .replace(/sin memoria adicional/g, 'no auxiliary memory')
+    .replace(/greedy por extremo derecho/g, 'greedy by right endpoint')
+    .replace(/puntos ordenados/g, 'sorted points')
+    .replace(/tabla DP/g, 'DP table')
+    .replace(/búsqueda binaria/g, 'binary search')
+    .replace(/matriz DP/g, 'DP matrix')
+    .replace(/pila de recursión/g, 'recursion stack')
+    .replace(/árbol y tabla de códigos/g, 'tree and code table')
+    .replace(/construcción de árbol y tabla de codificación/g, 'tree construction and code table')
+    .replace(/árbol de estados de backtracking/g, 'backtracking state tree')
+    .replace(/tablero/g, 'board')
+    .replace(/tablero y conjuntos de restricciones/g, 'board and constraint sets')
+    .replace(/heurística de Warnsdorff/g, 'Warnsdorff heuristic')
+    .replace(/cola de prioridad \(min-heap\)/g, 'min-heap priority queue')
+    .replace(/árbol de búsqueda con podas/g, 'search tree with branch & bound pruning')
+    .replace(/cola de prioridad de nodos/g, 'priority queue of branch & bound nodes')
+    .replace(/ordenamiento por tiempo de finalización/g, 'sorting by completion deadline')
+    .replace(/ordenamiento de tareas/g, 'task sorting')
+    .replace(/multiplicaciones recursivas/g, 'recursive multiplications')
+    .replace(/pila de llamadas recursivas/g, 'recursive call stack')
+    .replace(/algoritmo D&C de Boyer-Moore/g, 'Boyer-Moore D&C algorithm')
+    .replace(/selección lineal/g, 'linear selection')
+    .replace(/cálculo de errores cuadráticos/g, 'least-squares error computation')
+    .replace(/árbol de permutaciones con podas/g, 'permutation tree with pruning')
+    .replace(/en el peor caso/g, 'in the worst case')
+    .replace(/peor caso/g, 'worst case')
+    .replace(/caso promedio/g, 'average case')
+    .replace(/mejor caso/g, 'best case');
+}
+
 export const UnderstandView: React.FC<UnderstandViewProps> = ({
   exercise,
   canonicalPython,
@@ -167,8 +220,8 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
             <h4>{language === 'es' ? 'Análisis Asintótico y Garantías Formales' : 'Asymptotic Analysis & Formal Guarantees'}</h4>
             <span className="complexity-subtitle">
               {language === 'es'
-                ? 'Cotas de complejidad temporal, espacial y garantías del paradigma según Kleinberg & Tardos'
-                : 'Time and space complexity bounds with paradigm guarantees per Kleinberg & Tardos'}
+                ? 'Cotas asintóticas formales de complejidad temporal y espacial'
+                : 'Formal asymptotic bounds for time and space complexity'}
             </span>
           </div>
           <div className="complexity-dashboard-grid">
@@ -178,7 +231,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 <span className="metric-label">{t(dict.understandTimeComplexity)}</span>
               </div>
               <div className="metric-value-box">
-                <code className="metric-value complexity-value">{timeComplexity}</code>
+                <code className="metric-value complexity-value">{localizeComplexityText(timeComplexity, language)}</code>
               </div>
               <span className="metric-description">
                 {language === 'es' ? 'Peor caso asintótico demostrable' : 'Provable worst-case bound'}
@@ -191,7 +244,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 <span className="metric-label">{t(dict.understandSpaceComplexity)}</span>
               </div>
               <div className="metric-value-box">
-                <code className="metric-value complexity-value">{spaceComplexity}</code>
+                <code className="metric-value complexity-value">{localizeComplexityText(spaceComplexity, language)}</code>
               </div>
               <span className="metric-description">
                 {language === 'es' ? 'Memoria auxiliar adicional' : 'Auxiliary memory overhead'}

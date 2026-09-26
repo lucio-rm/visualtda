@@ -269,7 +269,7 @@
 
 .exercise-card {
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   display: flex;
@@ -584,6 +584,52 @@
   background-color: var(--surface-active);
 }
 
+.btn-sm {
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.8125rem !important;
+  min-width: 32px;
+  height: 32px;
+}
+
+/* Standardized Compact Timeline & Playback Control Buttons */
+.ctrl-btn,
+.btn-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ctrl-btn:hover:not(:disabled),
+.btn-control:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ctrl-btn:disabled,
+.btn-control:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ctrl-play-btn,
+.btn-play {
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 40px;
+}
+
 /* Discover Phase */
 .discover-header-card {
   display: flex;
@@ -637,10 +683,11 @@
 
 .problem-narrative-card,
 .interactive-playground-card {
-  background-color: var(--bg);
-  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.5rem;
+  box-shadow: var(--shadow-card);
 }
 
 /* Unified Algorithm Playground Layout */
@@ -1001,10 +1048,11 @@
 
 .hints-card,
 .skip-solution-card {
-  background-color: var(--bg);
-  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.25rem;
+  box-shadow: var(--shadow-card);
 }
 
 .hints-card h4,
@@ -1105,10 +1153,11 @@
 }
 
 .card-panel {
-  background-color: var(--bg);
-  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.5rem;
+  box-shadow: var(--shadow-card);
 }
 
 .card-panel h4 {
@@ -1200,11 +1249,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background-color: var(--bg);
-  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .complexity-metric-card:hover {

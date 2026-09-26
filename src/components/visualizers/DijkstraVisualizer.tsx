@@ -117,37 +117,54 @@ export const DijkstraVisualizer: React.FC = () => {
             const isTreeEdge = predecessors[edge.v] === edge.u;
 
             let strokeColor = 'var(--border-strong, #64748b)';
-            let strokeWidth = 1.5;
+            let strokeWidth = 2.5;
             let marker = 'url(#djk-arrow)';
 
             if (isTreeEdge) {
               strokeColor = '#10b981';
-              strokeWidth = 3;
+              strokeWidth = 3.5;
               marker = 'url(#djk-arrow-tree)';
             } else if (isRelaxing) {
               strokeColor = '#f59e0b';
-              strokeWidth = 2.5;
+              strokeWidth = 3;
               marker = 'url(#djk-arrow-active)';
             }
 
+            const hasOpposite = edges.some((other) => other.u === edge.v && other.v === edge.u);
             const midX = (uNode.x + vNode.x) / 2;
             const midY = (uNode.y + vNode.y) / 2;
 
+            let pathD = `M ${uNode.x} ${uNode.y} L ${vNode.x} ${vNode.y}`;
+            let labelX = midX;
+            let labelY = midY;
+
+            if (hasOpposite) {
+              const dx = vNode.x - uNode.x;
+              const dy = vNode.y - uNode.y;
+              const len = Math.hypot(dx, dy) || 1;
+              const nx = -dy / len;
+              const ny = dx / len;
+              const curveOffset = 26;
+              const cx = midX + nx * curveOffset;
+              const cy = midY + ny * curveOffset;
+              pathD = `M ${uNode.x} ${uNode.y} Q ${cx} ${cy} ${vNode.x} ${vNode.y}`;
+              labelX = midX + nx * (curveOffset * 0.65);
+              labelY = midY + ny * (curveOffset * 0.65);
+            }
+
             return (
               <g key={`edge-${edge.u}-${edge.v}`}>
-                <line
-                  x1={uNode.x}
-                  y1={uNode.y}
-                  x2={vNode.x}
-                  y2={vNode.y}
+                <path
+                  d={pathD}
                   stroke={strokeColor}
                   strokeWidth={strokeWidth}
                   markerEnd={marker}
+                  fill="none"
                 />
-                <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={strokeColor} strokeWidth={1} />
+                <circle cx={labelX} cy={labelY} r={11} fill="var(--surface)" stroke={strokeColor} strokeWidth={1.5} />
                 <text
-                  x={midX}
-                  y={midY + 4}
+                  x={labelX}
+                  y={labelY + 4}
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
@@ -169,8 +186,8 @@ export const DijkstraVisualizer: React.FC = () => {
             const distLabel = dist === Infinity ? '∞' : String(dist);
 
             let fill = 'var(--surface)';
-            let stroke = 'var(--border)';
-            let strokeWidth = 2;
+            let stroke = 'var(--border-strong)';
+            let strokeWidth = 2.5;
 
             if (isU) {
               fill = 'rgba(56, 189, 248, 0.3)';
@@ -258,9 +275,9 @@ export const DijkstraVisualizer: React.FC = () => {
         </table>
       )}
 
-      {/* Dijkstra Invariant & Non-Negative Weights Card (Section 12, 23 & 44) */}
+      {/* Dijkstra Invariant & Non-Negative Weights Card */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Invariante de Dijkstra y Restricción de Pesos No Negativos (K&T §4.4):' : 'Dijkstra Invariant & Non-Negative Edge Constraint (K&T §4.4):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Invariante de Dijkstra y Restricción de Pesos No Negativos:' : 'Dijkstra Invariant & Non-Negative Edge Constraint:'}</strong>{' '}
         {language === 'es'
           ? 'Para todo nodo explorado u ∈ S, d[u] es su distancia mínima definitiva. Al extraer el nodo frontera v con d[v] mínimo, cualquier camino alternativo debe salir de S cruzando alguna arista (x, y). Como los pesos son no negativos (w_e ≥ 0), la longitud de dicho camino satisface d[x] + w_{xy} ≥ d[y] ≥ d[v], impidiendo que exista un camino más corto posterior. Con min-heap, el costo es O((|V| + |E|) log |V|).'
           : 'For every explored vertex u ∈ S, d[u] is its exact shortest distance. When extracting frontier node v with minimal d[v], any alternate path must leave S via some edge (x, y). Since edge weights are non-negative (w_e ≥ 0), path length is d[x] + w_{xy} ≥ d[y] ≥ d[v], precluding any shorter route. With a binary min-heap, runtime is O((|V| + |E|) log |V|).'}

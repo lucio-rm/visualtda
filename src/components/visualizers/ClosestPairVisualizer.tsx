@@ -128,7 +128,7 @@ export const ClosestPairVisualizer: React.FC = () => {
             const inStrip = stripPoints.some((sp) => sp.id === p.id);
 
             let fill = 'var(--surface, #0f172a)';
-            let stroke = 'var(--border, #64748b)';
+            let stroke = 'var(--border-strong, #64748b)';
             let r = 7;
 
             if (isBest) {
@@ -143,7 +143,7 @@ export const ClosestPairVisualizer: React.FC = () => {
 
             return (
               <g key={`pt-${p.id}`}>
-                <circle cx={p.x} cy={p.y} r={r} fill={fill} stroke={stroke} strokeWidth={2} />
+                <circle cx={p.x} cy={p.y} r={r} fill={fill} stroke={stroke} strokeWidth={2.5} />
                 <text
                   x={p.x}
                   y={p.y - 12}

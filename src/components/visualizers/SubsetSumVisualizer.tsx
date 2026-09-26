@@ -219,7 +219,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
 
       {/* DP Recurrence & Pseudopolynomial Complexity Rationale Card (Section 12, 25 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia DP y Complejidad Pseudopolinomial (K&T §6.4):' : 'DP Recurrence & Pseudopolynomial Complexity (K&T §6.4):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP y Complejidad Pseudopolinomial:' : 'DP Recurrence & Pseudopolynomial Complexity:'}</strong>{' '}
         {language === 'es'
           ? 'Para cada elemento i y suma w: M[i, w] = M[i-1, w] ∨ (w ≥ w_i ∧ M[i-1, w - w_i]). El tiempo de ejecución es O(n · W). Como la longitud en bits de la entrada es log₂ W, el valor numérico W = 2^(log₂ W) crece exponencialmente con la representación binaria. Es un algoritmo pseudopolinomial: eficiente para capacidades moderadas, pero NP-completo en el caso general.'
           : 'For each item i and capacity w: M[i, w] = M[i-1, w] ∨ (w ≥ w_i ∧ M[i-1, w - w_i]). The running time is O(n · W). Since input bit length is log₂ W, numerical value W = 2^(log₂ W) is exponential in representation size. Hence it is pseudopolynomial: highly practical for moderate sums, yet NP-complete in general.'}
@@ -229,7 +229,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
       <div className="timeline-controls" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn-control"
           onClick={stepBackward}
           disabled={isAtStart}
           title={language === 'es' ? 'Paso anterior (←)' : 'Previous step (←)'}
@@ -239,7 +239,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </button>
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn-control btn-play"
           onClick={isPlaying ? pause : play}
           title={isPlaying ? (language === 'es' ? 'Pausar (Espacio)' : 'Pause (Space)') : (language === 'es' ? 'Reproducir (Espacio)' : 'Play (Space)')}
           aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
@@ -248,7 +248,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </button>
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn-control"
           onClick={stepForward}
           disabled={isAtEnd}
           title={language === 'es' ? 'Paso siguiente (→)' : 'Next step (→)'}
@@ -258,7 +258,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </button>
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn-control"
           onClick={reset}
           title={language === 'es' ? 'Reiniciar (r)' : 'Reset (r)'}
           aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}

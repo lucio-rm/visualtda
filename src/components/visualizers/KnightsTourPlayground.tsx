@@ -451,7 +451,7 @@ export const KnightsTourPlayground: React.FC = () => {
         </strong>
         <p style={{ margin: '0.35rem 0 0', color: 'var(--text-muted)' }}>
           {language === 'es'
-            ? 'En cada paso, el caballo se mueve hacia la casilla que tiene el menor número de salidas posibles hacia casillas no visitadas (grado mínimo, marcado con ★). Esta heurística voraz evita dejar casillas aisladas en las esquinas o bordes que luego se convertirían en callejones sin salida imposibles de visitar.'
+            ? 'En cada paso, el caballo se mueve hacia la casilla que tiene el menor número de salidas posibles hacia casillas no visitadas (grado mínimo, marcado con ★). Esta heurística Greedy evita dejar casillas aisladas en las esquinas o bordes que luego se convertirían en callejones sin salida imposibles de visitar.'
             : 'At each step, the knight moves to the square with the minimum number of onward unvisited exits (minimum degree, marked with ★). This greedy heuristic prevents isolating corner and edge squares that would later become dead-ends.'}
         </p>
       </div>

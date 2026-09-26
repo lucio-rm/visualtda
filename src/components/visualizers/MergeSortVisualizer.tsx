@@ -152,11 +152,11 @@ export const MergeSortVisualizer: React.FC = () => {
         })}
       </div>
 
-      {/* Master Theorem & Recursion Tree Rationale Card (Section 12, 44) */}
+      {/* Master Theorem & Recursion Tree Rationale Card */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Fundamento Teórico: Árbol de Recursión y Teorema Maestro (K&T §5.1):' : 'Theoretical Rationale: Recursion Tree & Master Theorem (K&T §5.1):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Fundamento Teórico: Árbol de Recursión y Teorema Maestro:' : 'Theoretical Rationale: Recursion Tree & Master Theorem:'}</strong>{' '}
         {language === 'es'
-          ? 'Merge Sort divide el arreglo en 2 subproblemas de tamaño n/2 y fusiona las mitades ordenadas en tiempo lineal O(n). La recurrencia es T(n) = 2T(n/2) + c·n. El árbol tiene log₂ n niveles y en cada nivel se realiza un trabajo acumulado constante de c·n. Multiplicando el trabajo por nivel por la altura total del árbol: O(n) · log₂ n = O(n log n), demostrando la cota inferior asintótica óptima para ordenamiento basado en comparaciones.'
+          ? 'Merge Sort divide el arreglo en 2 subproblemas de tamaño n/2 y realiza el merge de las mitades ordenadas en tiempo lineal O(n). La recurrencia es T(n) = 2T(n/2) + c·n. El árbol tiene log₂ n niveles y en cada nivel se realiza un trabajo acumulado constante de c·n. Multiplicando el trabajo por nivel por la altura total del árbol: O(n) · log₂ n = O(n log n), demostrando la cota inferior asintótica óptima para ordenamiento basado en comparaciones.'
           : 'Merge Sort splits into 2 subproblems of size n/2 and merges in linear O(n) time: T(n) = 2T(n/2) + c·n. The recursion tree has height log₂ n, and each level executes exactly c·n total work. Total cost is c·n · log₂ n = O(n log n), achieving the information-theoretic lower bound for comparison sorting.'}
       </div>
 

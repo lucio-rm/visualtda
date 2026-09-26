@@ -148,7 +148,7 @@ export function generateClosestPairTrace(
       globalBestPair,
       strip,
       null,
-      `Fusión en Banda δ: Se construye la franja [x_mid - δ, x_mid + δ] con ${strip.length} puntos ordenados por Y. δ = ${Math.round(globalDelta * 10) / 10}.`,
+      `Merge en Banda δ: Se construye la franja [x_mid - δ, x_mid + δ] con ${strip.length} puntos ordenados por Y. δ = ${Math.round(globalDelta * 10) / 10}.`,
       `Strip Merge: Constructing band [x_mid - δ, x_mid + δ] with ${strip.length} points sorted by Y. δ = ${Math.round(globalDelta * 10) / 10}.`
     );
 

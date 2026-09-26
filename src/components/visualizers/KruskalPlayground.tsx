@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
-import { DEFAULT_KRUSKAL_GRAPH } from '../../engine/algorithms/kruskalTrace';
+import { DEFAULT_KRUSKAL_GRAPH, KruskalNode } from '../../engine/algorithms/kruskalTrace';
 
 const COMPONENT_COLORS: Record<string, string> = {
   A: '#10b981',
@@ -16,10 +16,14 @@ export const KruskalPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
 
-  const { nodes, edges } = DEFAULT_KRUSKAL_GRAPH;
+  const [nodes, setNodes] = useState<KruskalNode[]>(DEFAULT_KRUSKAL_GRAPH.nodes);
+  const edges = DEFAULT_KRUSKAL_GRAPH.edges;
   const [selectedEdgeIds, setSelectedEdgeIds] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isCycleWarning, setIsCycleWarning] = useState<boolean>(false);
+  const [verificationStatus, setVerificationStatus] = useState<'idle' | 'success' | 'incomplete' | 'suboptimal'>('idle');
+  const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   // Edges sorted ascending by weight (Kruskal canonical order)
   const sortedEdges = useMemo(() => {
@@ -59,11 +63,16 @@ export const KruskalPlayground: React.FC = () => {
   const handleToggleEdge = (edgeId: string) => {
     const edge = edges.find((e) => e.id === edgeId);
     if (!edge) return;
+    setVerificationStatus('idle');
 
     if (selectedEdgeIds.includes(edgeId)) {
       const updated = selectedEdgeIds.filter((id) => id !== edgeId);
       setSelectedEdgeIds(updated);
-      setFeedback(null);
+      setFeedback(
+        language === 'es'
+          ? `Arista ${edge.u}—${edge.v} removida. Aristas seleccionadas: ${updated.length} / ${nodes.length - 1}.`
+          : `Edge ${edge.u}—${edge.v} removed. Selected edges: ${updated.length} / ${nodes.length - 1}.`
+      );
       setIsCycleWarning(false);
       return;
     }
@@ -75,7 +84,7 @@ export const KruskalPlayground: React.FC = () => {
       setIsCycleWarning(true);
       setFeedback(
         language === 'es'
-          ? `Ciclo detectado: los vértices ${edge.u} y ${edge.v} ya están en la misma componente conexa (raíz ${rootU}). Por la Propiedad del Ciclo (Kleinberg & Tardos), esta arista es redundante y se debe descartar.`
+          ? `Ciclo detectado: los vértices ${edge.u} y ${edge.v} ya están en la misma componente conexa (raíz ${rootU}). Por la Propiedad del Ciclo (Cycle Property), esta arista es redundante y se debe descartar.`
           : `Cycle detected: vertices ${edge.u} and ${edge.v} already connected in same component (root ${rootU}). By the Cycle Property, this edge is redundant.`
       );
       return;
@@ -85,31 +94,44 @@ export const KruskalPlayground: React.FC = () => {
     setSelectedEdgeIds(updated);
     setIsCycleWarning(false);
 
-    const totalWeight = updated.reduce((acc, id) => {
+    setFeedback(
+      language === 'es'
+        ? `Arista ${edge.u}—${edge.v} (peso ${edge.weight}) agregada. Se unieron las componentes de ${edge.u} y ${edge.v}. Aristas en el árbol: ${updated.length} / ${nodes.length - 1}. Presioná "Verificar AGM" para validar.`
+        : `Edge ${edge.u}—${edge.v} added. Merged components of ${edge.u} and ${edge.v}. Tree edges: ${updated.length} / ${nodes.length - 1}. Click "Check MST" to evaluate.`
+    );
+  };
+
+  const handleVerify = () => {
+    setIsCycleWarning(false);
+    if (selectedEdgeIds.length !== nodes.length - 1) {
+      setVerificationStatus('incomplete');
+      setFeedback(
+        language === 'es'
+          ? `Árbol incompleto: un Árbol Generador Mínimo para |V| = ${nodes.length} vértices requiere exactamente |V| - 1 = ${nodes.length - 1} aristas. Actualmente tenés ${selectedEdgeIds.length}. Continuá seleccionando aristas.`
+          : `Incomplete tree: an MST with |V| = ${nodes.length} vertices requires exactly ${nodes.length - 1} edges. Currently selected: ${selectedEdgeIds.length}. Keep exploring.`
+      );
+      return;
+    }
+
+    const totalWeight = selectedEdgeIds.reduce((acc, id) => {
       const e = edges.find((item) => item.id === id);
       return acc + (e ? e.weight : 0);
     }, 0);
 
-    if (updated.length === nodes.length - 1) {
-      if (totalWeight === 10) {
-        setFeedback(
-          language === 'es'
-            ? `¡Árbol Generador Mínimo factible y óptimo verificado! Costo total: ${totalWeight} (igual al costo canónico de Kruskal).`
-            : `Feasible and optimal Minimum Spanning Tree verified! Total cost: ${totalWeight}.`
-        );
-        markAttempted('kruskal-mst-greedy');
-      } else {
-        setFeedback(
-          language === 'es'
-            ? `Todos los vértices están conectados, pero el costo total (${totalWeight}) excede el óptimo (10). Se deben priorizar aristas de menor peso según la Propiedad del Corte.`
-            : `Connected all vertices, but weight (${totalWeight}) exceeds optimal (10). Prioritize lighter edges.`
-        );
-      }
-    } else {
+    if (totalWeight === 10) {
+      setVerificationStatus('success');
       setFeedback(
         language === 'es'
-          ? `Arista ${edge.u}—${edge.v} (peso ${edge.weight}) agregada. Se unieron las componentes de ${edge.u} y ${edge.v}. Aristas en el árbol: ${updated.length} / ${nodes.length - 1}.`
-          : `Edge ${edge.u}—${edge.v} added. Merged components of ${edge.u} and ${edge.v}. Tree edges: ${updated.length} / ${nodes.length - 1}.`
+          ? `¡Excelente! Árbol Generador Mínimo factible y óptimo verificado. Costo total: ${totalWeight} (óptimo según Kruskal).`
+          : `Excellent! Feasible and optimal Minimum Spanning Tree verified. Total cost: ${totalWeight}.`
+      );
+      markAttempted('kruskal-mst-greedy');
+    } else {
+      setVerificationStatus('suboptimal');
+      setFeedback(
+        language === 'es'
+          ? `El conjunto de aristas conecta el grafo, pero el costo total (${totalWeight}) excede el óptimo (10). Según la regla Greedy de Kruskal, priorizá aristas de menor peso que conecten componentes disjuntas.`
+          : `Connected all vertices, but weight (${totalWeight}) exceeds optimal (10). Prioritize lighter edges.`
       );
     }
   };
@@ -118,6 +140,47 @@ export const KruskalPlayground: React.FC = () => {
     setSelectedEdgeIds([]);
     setFeedback(null);
     setIsCycleWarning(false);
+    setVerificationStatus('idle');
+  };
+
+  const handleResetLayout = () => {
+    setNodes(DEFAULT_KRUSKAL_GRAPH.nodes);
+  };
+
+  const handlePointerDown = (id: string, e: React.PointerEvent) => {
+    e.stopPropagation();
+    try {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+    setDraggingNodeId(id);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (!draggingNodeId || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const scaleX = 460 / rect.width;
+    const scaleY = 280 / rect.height;
+    const rawX = (e.clientX - rect.left) * scaleX;
+    const rawY = (e.clientY - rect.top) * scaleY;
+    const clampedX = Math.max(25, Math.min(435, Math.round(rawX)));
+    const clampedY = Math.max(25, Math.min(255, Math.round(rawY)));
+
+    setNodes((prev) =>
+      prev.map((n) => (n.id === draggingNodeId ? { ...n, x: clampedX, y: clampedY } : n))
+    );
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (draggingNodeId) {
+      try {
+        (e.currentTarget as Element).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+      setDraggingNodeId(null);
+    }
   };
 
   const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
@@ -151,9 +214,25 @@ export const KruskalPlayground: React.FC = () => {
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn-preset"
+            onClick={handleVerify}
+            style={{ fontWeight: 700 }}
+          >
+            {language === 'es' ? '✓ Verificar AGM' : '✓ Check MST'}
+          </button>
           <button type="button" className="btn-tool" onClick={handleReset}>
             {language === 'es' ? 'Limpiar Selección ↺' : 'Reset Selection ↺'}
+          </button>
+          <button
+            type="button"
+            className="btn-tool"
+            onClick={handleResetLayout}
+            title={language === 'es' ? 'Reiniciar posiciones' : 'Reset positions'}
+          >
+            ⤢
           </button>
         </div>
       </div>
@@ -163,7 +242,7 @@ export const KruskalPlayground: React.FC = () => {
           className={
             isCycleWarning
               ? 'sdk-conflict-banner'
-              : selectedEdgeIds.length === nodes.length - 1
+              : verificationStatus === 'success'
               ? 'sdk-success-banner'
               : 'sdk-description-box'
           }
@@ -184,10 +263,13 @@ export const KruskalPlayground: React.FC = () => {
           </div>
 
           <svg
+            ref={svgRef}
             viewBox="0 0 460 280"
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            style={{ width: '100%', height: 'auto', display: 'block', touchAction: 'none' }}
             role="img"
             aria-label="Grafo interactivo para seleccionar aristas del AGM"
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
           >
             {/* Edges */}
             {edges.map((edge) => {
@@ -213,15 +295,15 @@ export const KruskalPlayground: React.FC = () => {
                     y1={u.y}
                     x2={v.x}
                     y2={v.y}
-                    stroke={isSelected ? '#10b981' : 'var(--border, #475569)'}
-                    strokeWidth={isSelected ? 4 : 2}
+                    stroke={isSelected ? '#10b981' : 'var(--border-strong, #64748b)'}
+                    strokeWidth={isSelected ? 4 : 2.5}
                   />
                   <circle
                     cx={midX}
                     cy={midY}
                     r={12}
                     fill={isSelected ? '#10b981' : 'var(--surface)'}
-                    stroke={isSelected ? '#059669' : 'var(--border)'}
+                    stroke={isSelected ? '#059669' : 'var(--border-strong, #64748b)'}
                     strokeWidth={1.5}
                   />
                   <text
@@ -245,7 +327,11 @@ export const KruskalPlayground: React.FC = () => {
               const color = COMPONENT_COLORS[rootId] || '#38bdf8';
 
               return (
-                <g key={`kru-pg-node-${node.id}`}>
+                <g
+                  key={`kru-pg-node-${node.id}`}
+                  onPointerDown={(e) => handlePointerDown(node.id, e)}
+                  style={{ cursor: draggingNodeId === node.id ? 'grabbing' : 'grab' }}
+                >
                   <circle
                     cx={node.x}
                     cy={node.y}

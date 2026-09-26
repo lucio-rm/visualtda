@@ -628,7 +628,7 @@ export const CoinChangePlayground: React.FC = () => {
       >
         <h4 style={{ margin: '0 0 0.5rem 0', color: 'var(--accent)' }}>
           {language === 'es'
-            ? 'Fundamento: Sistemas Canónicos vs Arbitrarios (Kleinberg & Tardos)'
+            ? 'Fundamento: Sistemas Canónicos vs Arbitrarios'
             : 'Theoretical Foundation: Canonical vs Arbitrary Systems'}
         </h4>
         <p style={{ margin: 0, lineHeight: 1.5 }}>

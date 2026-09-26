@@ -205,7 +205,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
 
       {/* Greedy 0/1 Failure Rationale Card (Section 12, 50 & 94) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Por qué Falla Greedy en Mochila 0/1 (K&T §6.4):' : 'Why Greedy Fails in 0/1 Knapsack (K&T §6.4):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Por qué Falla Greedy en Mochila 0/1:' : 'Why Greedy Fails in 0/1 Knapsack:'}</strong>{' '}
         {language === 'es'
           ? 'En la variante fraccionaria, ordenar por densidad v_i / w_i es óptimo por argumento de intercambio. Pero en la mochila 0/1, la indivisibilidad impide rellenar el espacio residual con fracciones de los mejores objetos. Un objeto denso pero liviano puede bloquear la inclusión de combinaciones más pesadas que llenan mejor la capacidad, perdiendo el óptimo global y haciendo indispensable la programación dinámica.'
           : 'For fractional knapsack, sorting by density v_i / w_i is optimal by exchange argument. In 0/1 knapsack, indivisibility forbids taking partial fractions. High-density items can leave unfilled capacity that could have yielded higher total value if packed with complementary items, making dynamic programming essential.'}

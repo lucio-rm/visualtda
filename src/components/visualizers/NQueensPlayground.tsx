@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { NQueensBoard, QueenConflictPair } from './NQueensBoard';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
@@ -20,6 +20,7 @@ export const NQueensPlayground: React.FC = () => {
   const [queens, setQueens] = useState<QueenPos[]>([]);
 
   const handleCellClick = (row: number, col: number) => {
+    setVerificationStatus('idle');
     setQueens((prev) => {
       const exists = prev.some((q) => q.row === row && q.col === col);
       if (exists) {
@@ -32,15 +33,18 @@ export const NQueensPlayground: React.FC = () => {
 
   const handleClear = () => {
     setQueens([]);
+    setVerificationStatus('idle');
   };
 
   const handleResize = (newN: number) => {
     setN(newN);
     setQueens([]);
+    setVerificationStatus('idle');
   };
 
   // Presets for quick pedagogical experimentation of conflicts
   const handlePresetHorizontal = () => {
+    setVerificationStatus('idle');
     setQueens([
       { row: 0, col: 0 },
       { row: 0, col: Math.min(3, n - 1) }
@@ -48,6 +52,7 @@ export const NQueensPlayground: React.FC = () => {
   };
 
   const handlePresetDiagonal = () => {
+    setVerificationStatus('idle');
     setQueens([
       { row: 0, col: 0 },
       { row: 2, col: 2 }
@@ -110,13 +115,18 @@ export const NQueensPlayground: React.FC = () => {
 
   const placedCount = queens.length;
   const isCompleteSolution = placedCount === n && conflicts.length === 0;
+  const [verificationStatus, setVerificationStatus] = useState<'idle' | 'success' | 'incomplete' | 'conflicts'>('idle');
 
-  // Mark exercise completed when student successfully finds a complete collision-free configuration
-  useEffect(() => {
-    if (isCompleteSolution) {
+  const handleVerify = () => {
+    if (placedCount === n && conflicts.length === 0) {
+      setVerificationStatus('success');
       markAttempted('n-queens');
+    } else if (placedCount < n) {
+      setVerificationStatus('incomplete');
+    } else {
+      setVerificationStatus('conflicts');
     }
-  }, [isCompleteSolution]);
+  };
 
   return (
     <div className="nqueens-playground nqueens-playground-box">
@@ -192,16 +202,57 @@ export const NQueensPlayground: React.FC = () => {
           </span>
         </div>
 
-        {isCompleteSolution ? (
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn-tool"
+            onClick={handleVerify}
+            style={{
+              padding: '0.5rem 1.25rem',
+              fontWeight: 700,
+              borderColor: 'var(--accent)',
+              color: 'var(--accent)',
+              background: 'var(--surface)'
+            }}
+          >
+            {language === 'es' ? 'Verificar Tablero' : 'Verify Board'}
+          </button>
+        </div>
+
+        {verificationStatus === 'success' && (
           <div className="playground-success-banner" role="status" style={{ marginTop: '0.75rem' }}>
             <strong>
-              {language === 'es' ? 'Configuración factible verificada:' : 'Feasible configuration verified:'}
+              {language === 'es' ? '¡Configuración factible verificada!' : 'Feasible configuration verified!'}
             </strong>{' '}
             {language === 'es'
-              ? `Se ubicaron las ${n} reinas en el tablero de ${n}×${n} sin conflictos en filas, columnas ni diagonales.`
-              : `${n} queens placed on the ${n}×${n} board without row, column, or diagonal conflicts.`}
+              ? `Se ubicaron las ${n} reinas en el tablero de ${n}×${n} sin ningún conflicto.`
+              : `${n} queens placed on the ${n}×${n} board without any conflict.`}
           </div>
-        ) : conflicts.length > 0 ? (
+        )}
+
+        {verificationStatus === 'incomplete' && (
+          <div className="playground-warning-banner" role="alert" style={{ marginTop: '0.75rem' }}>
+            <strong>
+              {language === 'es' ? 'Tablero Incompleto:' : 'Incomplete Board:'}
+            </strong>{' '}
+            {language === 'es'
+              ? `Colocaste ${placedCount} de las ${n} reinas requeridas. ¡Seguí ubicando reinas en casillas libres!`
+              : `You placed ${placedCount} of ${n} required queens. Keep placing queens in free squares!`}
+          </div>
+        )}
+
+        {verificationStatus === 'conflicts' && (
+          <div className="playground-warning-banner" role="alert" style={{ marginTop: '0.75rem' }}>
+            <strong>
+              {language === 'es' ? 'Configuración Inválida:' : 'Invalid Configuration:'}
+            </strong>{' '}
+            {language === 'es'
+              ? `Hay ${conflicts.length} conflicto(s) activo(s). Revisá las colisiones marcadas y reubicá las piezas.`
+              : `There are ${conflicts.length} active conflict(s). Check highlighted collisions and reposition queens.`}
+          </div>
+        )}
+
+        {conflicts.length > 0 && (
           <div className="playground-warning-banner" role="alert" style={{ marginTop: '0.75rem' }}>
             <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
               {language === 'es' ? `Conflictos detectados (${conflicts.length}):` : `Conflicts detected (${conflicts.length}):`}
@@ -229,7 +280,9 @@ export const NQueensPlayground: React.FC = () => {
                 : 'Advancing row by row, as soon as a candidate queen conflicts along a column or diagonal (|row₁ - row₂| = |col₁ - col₂|), the algorithm prunes immediately without exploring deeper, cutting off up to N^(N - k) subtree evaluations.'}
             </div>
           </div>
-        ) : (
+        )}
+
+        {conflicts.length === 0 && verificationStatus === 'idle' && (
           <div className="playground-hint-text" style={{ marginTop: '0.75rem' }}>
             {placedCount === 0
               ? (language === 'es'

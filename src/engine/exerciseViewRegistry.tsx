@@ -143,7 +143,7 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
     pseudocode: RAW_EXERCISE_ASSETS['merge-sort'].pseudocode,
     correctnessExplanation: RAW_EXERCISE_ASSETS['merge-sort'].theory,
     timeComplexity: 'O(N log N) en mejor, promedio y peor caso',
-    spaceComplexity: 'O(N) para el arreglo auxiliar de fusión'
+    spaceComplexity: 'O(N) para el arreglo auxiliar de merge'
   },
 
   'max-subarray-dyc': {
@@ -282,7 +282,7 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
     pseudocode: RAW_EXERCISE_ASSETS['inversion-counting-dyc'].pseudocode,
     correctnessExplanation: RAW_EXERCISE_ASSETS['inversion-counting-dyc'].theory,
     timeComplexity: 'O(N log N) idéntico a Merge Sort',
-    spaceComplexity: 'O(N) buffers de fusión'
+    spaceComplexity: 'O(N) buffers de merge'
   },
 
   'huffman-coding-greedy': {
@@ -362,7 +362,7 @@ export const EXERCISE_VIEW_REGISTRY: Record<string, ExerciseViewConfig> = {
     pseudocode: RAW_EXERCISE_ASSETS['closest-pair-dyc']?.pseudocode,
     correctnessExplanation: RAW_EXERCISE_ASSETS['closest-pair-dyc']?.theory,
     timeComplexity: 'O(N log N) recurrencia T(N) = 2T(N/2) + O(N) vía ordenamiento previo en Y',
-    spaceComplexity: 'O(N) arreglos auxiliares para la banda de fusión'
+    spaceComplexity: 'O(N) arreglos auxiliares para la franja de merge'
   },
 
   'knapsack-branch-and-bound': {

@@ -464,8 +464,8 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
         en: 'Hint 2: To combine in O(n), filter points with horizontal distance to split line < delta: strip = [p for p in py if abs(p[0] - mid_x) < delta].'
       },
       {
-        es: 'Pista 3: Por el Teorema K&T 5.10 (propiedad de empaquetamiento geométrico), para cada punto en la franja sólo se compara contra a lo sumo 7 vecinos ordenados por Y.',
-        en: 'Hint 3: By Theorem K&T 5.10 (geometric packing), each point in the strip only needs comparison with at most 7 neighbors sorted by Y.'
+        es: 'Pista 3: Por la propiedad de empaquetamiento geométrico, para cada punto en la franja sólo se compara contra a lo sumo 7 vecinos ordenados por Y.',
+        en: 'Hint 3: By the geometric packing property, each point in the strip only needs comparison with at most 7 neighbors sorted by Y.'
       }
     ],
     runTests: async (code: string) => {

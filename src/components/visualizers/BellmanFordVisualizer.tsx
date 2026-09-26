@@ -95,7 +95,7 @@ export const BellmanFordVisualizer: React.FC = () => {
               const isNeg = e.weight < 0;
 
               let stroke = isNeg ? 'var(--danger, #ef4444)' : 'var(--border-strong, #64748b)';
-              let strokeWidth = isNeg ? 2.5 : 1.5;
+              let strokeWidth = isNeg ? 3 : 2.5;
               let marker = isNeg ? 'url(#bf-arr-neg)' : 'url(#bf-arr)';
 
               if (isCurrent) {
@@ -110,7 +110,7 @@ export const BellmanFordVisualizer: React.FC = () => {
               return (
                 <g key={`bf-e-${e.u}-${e.v}-${idx}`}>
                   <line x1={u.x} y1={u.y} x2={v.x} y2={v.y} stroke={stroke} strokeWidth={strokeWidth} markerEnd={marker} />
-                  <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={stroke} strokeWidth={1} />
+                  <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={stroke} strokeWidth={1.5} />
                   <text
                     x={midX}
                     y={midY + 4}
@@ -139,8 +139,8 @@ export const BellmanFordVisualizer: React.FC = () => {
                     cy={n.y}
                     r={22}
                     fill={isUpdated ? 'rgba(16, 185, 129, 0.3)' : 'var(--surface)'}
-                    stroke={isUpdated ? '#10b981' : 'var(--accent, #6366f1)'}
-                    strokeWidth={isUpdated ? 3.5 : 2}
+                    stroke={isUpdated ? '#10b981' : 'var(--border-strong, #64748b)'}
+                    strokeWidth={isUpdated ? 3.5 : 2.5}
                   />
                   <text
                     x={n.x}
@@ -229,7 +229,7 @@ export const BellmanFordVisualizer: React.FC = () => {
 
       {/* DP Recurrence & Negative Cycle Detection Card (Section 12, 25 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia DP y Detección de Ciclos Negativos (K&T §6.8):' : 'DP Recurrence & Negative-Cycle Detection (K&T §6.8):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP y Detección de Ciclos Negativos:' : 'DP Recurrence & Negative-Cycle Detection:'}</strong>{' '}
         {language === 'es'
           ? 'Recurrencia: OPT(i, v) = min(OPT(i-1, v), min_{(u,v) ∈ E} (OPT(i-1, u) + c_{uv})). En grafos sin ciclos negativos, el camino más corto simple usa a lo sumo |V| - 1 aristas. Por tanto, |V| - 1 pasadas garantizan convergencia óptima en O(|V| · |E|). Si en la pasada |V|-ésima alguna distancia continúa disminuyendo (d[v] > d[u] + c_{uv}), el algoritmo detecta y certifica la presencia de un ciclo de peso negativo.'
           : 'Recurrence: OPT(i, v) = min(OPT(i-1, v), min_{(u,v) ∈ E} (OPT(i-1, u) + c_{uv})). In graphs without negative cycles, any shortest simple path uses at most |V| - 1 edges. Thus, |V| - 1 edge relaxation passes guarantee optimal convergence in O(|V| · |E|). If any distance shrinks in the |V|-th pass, a negative cycle is formally proven to exist.'}

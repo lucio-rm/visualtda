@@ -354,8 +354,8 @@ export const IntervalPartitioningPlayground: React.FC = () => {
         >
           <strong>{language === 'es' ? 'Configuración Óptima Alcanzada' : 'Optimal Configuration Reached'}</strong>:{' '}
           {language === 'es'
-            ? `Todas las tareas fueron asignadas sin conflictos utilizando exactamente d = ${depth} aulas (cota mínima teórica demostrada por Kleinberg & Tardos).`
-            : `All tasks assigned with zero conflicts using exactly d = ${depth} classrooms (theoretical minimum bound).`}
+            ? `Todas las tareas fueron asignadas sin conflictos utilizando exactamente d = ${depth} aulas (cota mínima teórica demostrada formalmente).`
+            : `All tasks assigned with zero conflicts using exactly d = ${depth} classrooms (provable theoretical lower bound).`}
         </div>
       ) : (
         <div

@@ -255,8 +255,8 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
         en: 'Hint 1: In the polynomial reduction from IS to VC, graph G = (V, E) remains identical. Only the target size parameter changes.'
       },
       {
-        es: 'Pista 2: Por el Teorema K&T 8.1, si G tiene un Conjunto Independiente S de tamaño k, su complemento V \\ S tiene exactamente |V| - k vértices. Por tanto, k_prima = len(vertices) - k.',
-        en: 'Hint 2: By Theorem K&T 8.1, if G has an Independent Set S of size k, its complement V \\ S has exactly |V| - k vertices. Therefore k_prima = len(vertices) - k.'
+        es: 'Pista 2: Por dualidad complementaria, si G tiene un Conjunto Independiente S de tamaño k, su complemento V \\ S tiene exactamente |V| - k vértices. Por tanto, k_prima = len(vertices) - k.',
+        en: 'Hint 2: By complementary duality, if G has an Independent Set S of size k, its complement V \\ S has exactly |V| - k vertices. Therefore k_prima = len(vertices) - k.'
       },
       {
         es: 'Pista 3: Para recuperar S a partir de una cobertura C, utiliza comprensión de listas o conjuntos: S = [v for v in vertices if v not in set(cobertura)].',
@@ -326,8 +326,8 @@ def transformar_solucion_vc_a_is(vertices: list[str], cobertura: list[str]) -> l
       results.push({
         testId: 'reduction-duality-invariance',
         description: {
-          es: 'Teorema K&T 8.1: S es Conjunto Independiente ⟺ V \\ S es Cobertura de Vértices.',
-          en: 'Theorem K&T 8.1: S is Independent Set ⟺ V \\ S is Vertex Cover.'
+          es: 'Invariante de Dualidad: S es Conjunto Independiente ⟺ V \\ S es Cobertura de Vértices.',
+          en: 'Duality Invariant: S is Independent Set ⟺ V \\ S is Vertex Cover.'
         },
         passed: passesHeuristic && fullCheck.valid,
         message: passesHeuristic && fullCheck.valid ? 'Dualidad complementaria verificada sin aristas descubiertas ni conflictos.' : 'Falta equivalencia entre conjuntos complementarios'

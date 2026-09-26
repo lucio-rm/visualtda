@@ -63,8 +63,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Mutually compatible subset of maximum cardinality.'
     },
     historicalContext: {
-      es: 'Caso fundacional del libro Algorithm Design (Kleinberg & Tardos, Cap. 4.1). Modela planificación de tiempo de telescopios orbitales y procesadores en clusters.',
-      en: 'Foundational problem of Algorithm Design (Kleinberg & Tardos, Ch. 4.1). Models satellite telescope scheduling and CPU job management.'
+      es: 'Caso fundacional del diseño de algoritmos de planificación. Modela planificación de tiempo de telescopios orbitales y procesadores en clusters.',
+      en: 'Foundational problem in algorithm design. Models satellite telescope scheduling and CPU job management.'
     },
     algorithmicPerspective: {
       es: 'La demostración de optimalidad se basa en el método de argumento de intercambio: la tarea con fin más temprano se adelanta a cualquier solución óptima competidora, dejando el máximo tiempo libre residual.',
@@ -136,8 +136,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Developed by David A. Huffman in 1952 at MIT. Cornerstone of lossless compression (DEFLATE, GZIP, JPEG, and MP3).'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §4.8. Construye el árbol de abajo hacia arriba combinando sucesivamente los dos árboles con menores pesos en un Min-Heap en tiempo O(n log n).',
-      en: 'Kleinberg & Tardos §4.8. Bottom-up binary tree construction iteratively merging the two lowest-frequency trees via a Min-Heap in O(n log n).'
+      es: 'Construye el árbol de abajo hacia arriba combinando sucesivamente los dos árboles con menores pesos en un Min-Heap en tiempo O(n log n).',
+      en: 'Bottom-up binary tree construction iteratively merging the two lowest-frequency trees via a Min-Heap in O(n log n).'
     },
     naiveTrapWarning: {
       es: 'Asignar códigos de longitud fija o intentar dividir las frecuencias de arriba hacia abajo (Shannon-Fano), lo cual produce códigos subóptimos con mayor longitud media.',
@@ -159,8 +159,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Conceived in 1956 by Edsger W. Dijkstra and published in 1959. Core algorithm for OSPF and IS-IS Internet routing protocols.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §4.4. Invariante Greedy Stays Ahead: al extraer un nodo de la cola de prioridad, su distancia tentativa ya es el camino más corto definitivo hacia él.',
-      en: 'Kleinberg & Tardos §4.4. Greedy Stays Ahead invariant: upon priority queue extraction, the tentative distance is proven minimal and finalized.'
+      es: 'Invariante Greedy Stays Ahead: al extraer un nodo de la cola de prioridad, su distancia tentativa ya es el camino más corto definitivo hacia él.',
+      en: 'Greedy Stays Ahead invariant: upon priority queue extraction, the tentative distance is proven minimal and finalized.'
     },
     naiveTrapWarning: {
       es: 'Dijkstra falla catastróficamente con aristas de peso negativo: al declarar definitivo un nodo nunca retrocede para actualizarlo tras descubrir un atajo negativo posterior.',
@@ -182,8 +182,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Proposed by Joseph Kruskal in 1956. Essential in power grid distribution networks and single-linkage hierarchical clustering.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §4.5. Aplica la Cut Property seleccionando la arista más liviana global que no forme ciclo, gestionando componentes conexas mediante Union-Find en O(m log n).',
-      en: 'Kleinberg & Tardos §4.5. Exploits the Cut Property by picking the globally lightest edge avoiding cycles, managing components with Union-Find in O(m log n).'
+      es: 'Aplica la Cut Property seleccionando la arista más liviana global que no forme ciclo, gestionando componentes conexas mediante Union-Find en O(m log n).',
+      en: 'Exploits the Cut Property by picking the globally lightest edge avoiding cycles, managing components with Union-Find in O(m log n).'
     },
     naiveTrapWarning: {
       es: 'Confundir el MST con un árbol de caminos mínimos: el MST minimiza el costo total de la red, no la distancia individual desde un origen a cada nodo.',
@@ -201,8 +201,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Minimum coin count and exact combination summing to V.'
     },
     historicalContext: {
-      es: 'Problema clásico de cambio analizado en Kleinberg & Tardos §6.4. Modela optimización de reservas en cajas automáticas y despacho de divisas.',
-      en: 'Classic change-making problem analyzed in Kleinberg & Tardos §6.4. Models ATM cash reserve dispensing.'
+      es: 'Problema clásico de cambio y optimización de recursos. Modela despacho en cajeros automáticos y conversión de divisas.',
+      en: 'Classic change-making problem. Models ATM cash reserve dispensing and currency exchange.'
     },
     algorithmicPerspective: {
       es: 'Ecuación de Bellman dp[v] = 1 + min_{c ≤ v} dp[v - c]. Evalúa todas las transiciones posibles en tiempo O(V · k) garantizando el mínimo global.',
@@ -232,7 +232,7 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Linear recurrence OPT(i) = max(OPT(i-1), g_i + OPT(i-2)). Binary rest/work dichotomy with O(n) memoization.'
     },
     naiveTrapWarning: {
-      es: 'Elegir vorazmente los días de mayor ganancia puede bloquear dos días contiguos cuya suma combinada superaría al día central (ej. [10, 100, 10] vs [80, 100, 80]).',
+      es: 'Elegir de forma greedy los días de mayor ganancia puede bloquear dos días contiguos cuya suma combinada superaría al día central (ej. [10, 100, 10] vs [80, 100, 80]).',
       en: 'Greedily picking peak days can lock out adjacent days whose combined sum exceeds the isolated peak (e.g. [80, 100, 80]).'
     }
   },
@@ -251,8 +251,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Studied by Sankoff and Paterson in the 1970s for bioinformatics and underlying Unix diff utility.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §6.7. Matriz 2D de subproblemas: si s1[i-1] == s2[j-1], dp[i][j] = 1 + dp[i-1][j-1]; sino max(arriba, izquierda). Reconstrucción en O(m+n).',
-      en: 'Kleinberg & Tardos §6.7. 2D DP matrix: diagonal match emission vs. max(up, left) propagation. Backtracking path in O(m+n).'
+      es: 'Matriz 2D de subproblemas: si s1[i-1] == s2[j-1], dp[i][j] = 1 + dp[i-1][j-1]; sino max(arriba, izquierda). Reconstrucción en O(m+n).',
+      en: '2D DP matrix: diagonal match emission vs. max(up, left) propagation. Backtracking path in O(m+n).'
     },
     naiveTrapWarning: {
       es: 'Confundir subcadena contigua con subsecuencia, o realizar saltos greedy que omiten caracteres iniciales bloqueando subsecuencias posteriores más largas.',
@@ -270,8 +270,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Subset of compatible jobs maximizing total cumulative value.'
     },
     historicalContext: {
-      es: 'Problema introductorio de Programación Dinámica en Kleinberg & Tardos (Cap. 6.1). Modela subastas de cómputo en la nube con tarifas variables.',
-      en: 'Introductory DP problem in Kleinberg & Tardos (Ch. 6.1). Models cloud computing slot auctions with variable pricing.'
+      es: 'Problema canónico de Programación Dinámica con compatibilidad temporal. Modela subastas de cómputo en la nube con tarifas variables.',
+      en: 'Canonical DP problem with temporal compatibility. Models cloud computing slot auctions with variable pricing.'
     },
     algorithmicPerspective: {
       es: 'Ordenar por fin y calcular p(j) con búsqueda binaria en O(log n). Recurrencia: OPT(j) = max(OPT(j-1), v_j + OPT(p(j))) en O(n log n).',
@@ -297,8 +297,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Formulated by Shamos and Hoey in 1975. Foundational in computational geometry and collision-avoidance radar systems.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §5.4. Divide por la mediana x_mid y combina en la franja central δ. Por el lema de empaquetamiento, cada punto solo compite con a lo sumo 7 vecinos, logrando O(n log n).',
-      en: 'Kleinberg & Tardos §5.4. Bisect by median x_mid and merge across strip δ. By packing lemma, each point tests at most 7 neighbors, yielding O(n log n).'
+      es: 'Divide por la mediana x_mid y combina en la franja central δ. Por el lema de empaquetamiento, cada punto solo compite con a lo sumo 7 vecinos, logrando O(n log n).',
+      en: 'Bisect by median x_mid and merge across strip δ. By packing lemma, each point tests at most 7 neighbors, yielding O(n log n).'
     },
     naiveTrapWarning: {
       es: 'Comparar todos los pares de la franja central degrada la combinación a O(n²), anulando toda ganancia de la división recursiva.',
@@ -320,8 +320,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Discovered in 1960 by Anatoly Karatsuba at age 23, refuting Andrei Kolmogorov’s conjecture of an Ω(n²) multiplication lower bound.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §5.5. Calcula el término cruzado con 3 multiplicaciones en vez de 4: (x1 + x0)(y1 + y0) - z2 - z0, logrando T(n) = 3T(n/2) + O(n).',
-      en: 'Kleinberg & Tardos §5.5. Computes the cross term with 3 multiplications instead of 4, yielding T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585).'
+      es: 'Calcula el término cruzado con 3 multiplicaciones en vez de 4: (x1 + x0)(y1 + y0) - z2 - z0, logrando T(n) = 3T(n/2) + O(n).',
+      en: 'Computes the cross term with 3 multiplications instead of 4, yielding T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585).'
     },
     naiveTrapWarning: {
       es: 'La división en mitades sin la reformulación algebraica de Gauss realiza 4 llamadas recursivas de tamaño n/2, lo que resulta en T(n) = 4T(n/2) + O(n) = O(n²).',
@@ -343,8 +343,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Kendall tau rank correlation metric (1938). Used in collaborative filtering recommendation engines to quantify preference divergence.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §5.3. Merge Sort modificado: al mezclar dos mitades ordenadas, un elemento de la derecha menor que uno de la izquierda cuenta múltiples inversiones cruzadas en O(1).',
-      en: 'Kleinberg & Tardos §5.3. Modified Merge Sort: when merging sorted halves, an inverted right element counts remaining left elements in O(1).'
+      es: 'Merge Sort modificado: al hacer merge de dos mitades ordenadas, un elemento de la derecha menor que uno de la izquierda cuenta múltiples inversiones cruzadas en O(1).',
+      en: 'Modified Merge Sort: when merging sorted halves, an inverted right element counts remaining left elements in O(1).'
     },
     naiveTrapWarning: {
       es: 'Un doble bucle anidado evalúa todas las parejas en O(n²), impracticable para rankings masivos en sistemas web reales.',
@@ -389,8 +389,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Introduced by Boyer and Moore in 1981 for real-time stream processing with constant auxiliary space.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §5.2. Si un elemento es mayoritario global, debe serlo en al menos una de las dos mitades. Evalúa a lo sumo 2 candidatos y verifica sus frecuencias en O(n log n).',
-      en: 'Kleinberg & Tardos §5.2. A global majority must be majority in at least one half. Tests at most 2 candidates in O(n log n).'
+      es: 'Si un elemento es mayoritario global, debe serlo en al menos una de las dos mitades. Evalúa a lo sumo 2 candidatos y verifica sus frecuencias en O(n log n).',
+      en: 'A global majority must be majority in at least one half. Tests at most 2 candidates in O(n log n).'
     },
     naiveTrapWarning: {
       es: 'Confundir el elemento más frecuente (moda) con el mayoritario estricto (> n/2), o usar hash maps que consumen memoria O(n).',
@@ -454,8 +454,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Minimum number of classrooms needed and conflict-free schedule.'
     },
     historicalContext: {
-      es: 'Kleinberg & Tardos §4.1. Modela asignación de registros de hardware en compiladores y coloración de grafos de intervalos.',
-      en: 'Kleinberg & Tardos §4.1. Models hardware register allocation in compilers and interval graph coloring.'
+      es: 'Modela asignación de registros de hardware en compiladores y coloración de grafos de intervalos.',
+      en: 'Models hardware register allocation in compilers and interval graph coloring.'
     },
     algorithmicPerspective: {
       es: 'La profundidad d (máximo número de intervalos solapados en un instante) es una cota inferior absoluta. Procesar por tiempo de inicio con Min-Heap garantiza usar exactamente d aulas en O(n log n).',
@@ -477,8 +477,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Contiguous schedule minimizing maximum lateness L = max_i max(0, c_i - d_i).'
     },
     historicalContext: {
-      es: 'Kleinberg & Tardos §4.2. Conocido como Earliest Deadline First (EDF) o regla de Jackson (1955) en teoría de scheduling.',
-      en: 'Kleinberg & Tardos §4.2. Known as Earliest Deadline First (EDF) or Jackson’s rule (1955) in real-time scheduling.'
+      es: 'Conocido como Earliest Deadline First (EDF) o regla de Jackson (1955) en teoría de scheduling.',
+      en: 'Known as Earliest Deadline First (EDF) or Jackson’s rule (1955) in real-time scheduling.'
     },
     algorithmicPerspective: {
       es: 'Demostración por intercambio de inversiones adyacentes: ordenar por deadline creciente d_1 ≤ d_2 ≤ ... elimina todas las inversiones sin incrementar la latencia máxima en O(n log n).',
@@ -546,8 +546,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Point partition into segments minimizing squared error plus C × (number of segments).'
     },
     historicalContext: {
-      es: 'Kleinberg & Tardos §6.3. Problema central en compresión de series temporales y equilibrio de complejidad de modelos estadísticos.',
-      en: 'Kleinberg & Tardos §6.3. Foundational in time series compression and statistical model parsimony.'
+      es: 'Problema central en compresión de series temporales y equilibrio de complejidad de modelos estadísticos.',
+      en: 'Foundational in time series compression and statistical model parsimony.'
     },
     algorithmicPerspective: {
       es: 'Recurrencia OPT(j) = min_{1 ≤ i ≤ j} (e_{i, j} + C + OPT(i-1)). Precalcula errores e_{i, j} en O(n²) y resuelve la tabla en O(n²).',
@@ -573,8 +573,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Nussinov’s algorithm (1978). Foundational in molecular bioinformatics for predicting RNA secondary folding.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §6.5. DP por intervalos sobre la longitud de subcadena: disyuntiva entre base j no apareada vs. apareamiento con t que divide en subproblemas disjuntos.',
-      en: 'Kleinberg & Tardos §6.5. Interval DP: disjunction between base j unpaired vs. pairing with t splitting into independent subproblems.'
+      es: 'DP por intervalos sobre la longitud de subcadena: disyuntiva entre base j no apareada vs. apareamiento con t que divide en subproblemas disjuntos.',
+      en: 'Interval DP: disjunction between base j unpaired vs. pairing with t splitting into independent subproblems.'
     },
     naiveTrapWarning: {
       es: 'Aparear bases de forma miope genera cruces que violan la física molecular y bloquea estructuras globales con más enlaces de hidrógeno.',
@@ -596,8 +596,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Proposed by Shimbel (1955), Bellman (1958), and Ford (1956). Basis for the RIP distance-vector routing protocol.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §6.8. DP sobre longitud de caminos: tras |V|-1 iteraciones, una reducción adicional en la iteración |V| prueba un ciclo negativo.',
-      en: 'Kleinberg & Tardos §6.8. DP over path edge count: after |V|-1 relaxation passes, further improvement on pass |V| proves a negative cycle.'
+      es: 'DP sobre longitud de caminos: tras |V|-1 iteraciones, una reducción adicional en la iteración |V| prueba un ciclo negativo.',
+      en: 'DP over path edge count: after |V|-1 relaxation passes, further improvement on pass |V| proves a negative cycle.'
     },
     naiveTrapWarning: {
       es: 'Sumar una constante a todas las aristas para usar Dijkstra altera los caminos mínimos relativos penalizando rutas con más aristas.',
@@ -711,8 +711,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Branch & Bound introduced by Land and Doig (1960). Industry standard for integer programming solvers.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §8.9. En cada nodo calcula una cota superior optimista (UB) con Greedy fraccionario. Si UB ≤ incumbent, poda el subárbol completo.',
-      en: 'Kleinberg & Tardos §8.9. Computes an optimistic upper bound (UB) via fractional greedy. If UB ≤ incumbent, prunes the subtree.'
+      es: 'En cada nodo calcula una cota superior optimista (UB) con Greedy fraccionario. Si UB ≤ incumbent, poda el subárbol completo.',
+      en: 'Computes an optimistic upper bound (UB) via fractional greedy. If UB ≤ incumbent, prunes the subtree.'
     },
     naiveTrapWarning: {
       es: 'Podar únicamente por desborde de peso es backtracking ingenuo; la cota matemática continua es la que evita recorrer ramas enteras inviables.',
@@ -757,8 +757,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Ford and Fulkerson (1956) and Edmonds-Karp (1972). Max-Flow Min-Cut theorem: max flow value equals min cut capacity.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos Cap. 7. Grafo residual con aristas hacia atrás que permiten corregir flujos previos. BFS garantiza O(V · E²).',
-      en: 'Kleinberg & Tardos Ch. 7. Residual graph with backward edges allowing flow correction. BFS guarantees O(V · E²).'
+      es: 'Grafo residual con aristas hacia atrás que permiten corregir flujos previos. BFS garantiza O(V · E²).',
+      en: 'Residual graph with backward edges allowing flow correction. BFS guarantees O(V · E²).'
     },
     naiveTrapWarning: {
       es: 'Sin aristas residuales hacia atrás, un algoritmo miope satura caminos impidiendo descubrir combinaciones que alcanzan el flujo global máximo.',
@@ -826,8 +826,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Karp’s 1972 reduction between two foundational NP-complete problems.'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §8.2. Cada arista (u, v) debe tener al menos un extremo en V ∖ S para que no haya aristas internas en S, demostrando complementariedad exacta.',
-      en: 'Kleinberg & Tardos §8.2. Every edge (u, v) must have an endpoint in V ∖ S so S has no internal edges, proving exact complementarity.'
+      es: 'Cada arista (u, v) debe tener al menos un extremo en V ∖ S para que no haya aristas internas en S, demostrando complementariedad exacta.',
+      en: 'Every edge (u, v) must have an endpoint in V ∖ S so S has no internal edges, proving exact complementarity.'
     },
     naiveTrapWarning: {
       es: 'Intentar buscar un algoritmo exacto polinomial para resolverlos: la reducción prueba que ambos pertenecen a la clase NP-completo.',
@@ -849,8 +849,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: '2-approximation algorithm via maximal matching designed by Gavril and Yannakakis (1974).'
     },
     algorithmicPerspective: {
-      es: 'Kleinberg & Tardos §11.1. Selecciona aristas disjuntas M y toma ambos extremos. Como todo VC óptimo debe tomar al menos un vértice de cada arista de M, |C| = 2|M| ≤ 2|C*|.',
-      en: 'Kleinberg & Tardos §11.1. Selects disjoint edges M and takes both endpoints. Since any optimal VC takes ≥1 vertex per edge in M, |C| = 2|M| ≤ 2|C*|.'
+      es: 'Selecciona aristas disjuntas M y toma ambos extremos. Como todo VC óptimo debe tomar al menos un vértice de cada arista de M, |C| = 2|M| ≤ 2|C*|.',
+      en: 'Selects disjoint edges M and takes both endpoints. Since any optimal VC takes ≥1 vertex per edge in M, |C| = 2|M| ≤ 2|C*|.'
     },
     naiveTrapWarning: {
       es: 'Tomar el vértice de mayor grado parece más intuitivo, pero solo logra cota logarítmica O(log n); el matching simple garantiza factor 2 constante.',
@@ -990,8 +990,8 @@ export function getExerciseInsight(exerciseId: string, categoryId: string): Exer
         en: 'Validity certificate or optimal value subject to constraints.'
       },
       historicalContext: {
-        es: 'Problema canónico de las ciencias de la computación analizado en los textos de Kleinberg & Tardos y Cormen et al.',
-        en: 'Canonical computer science problem analyzed in Kleinberg & Tardos and Cormen et al.'
+        es: 'Problema canónico de las ciencias de la computación y análisis de algoritmos.',
+        en: 'Canonical computer science problem and algorithm design benchmark.'
       },
       algorithmicPerspective: {
         es: 'Requiere caracterizar la subestructura del problema y clasificar su complejidad temporal y espacial.',

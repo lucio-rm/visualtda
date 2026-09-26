@@ -294,7 +294,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
 
       {/* DP Table & Reconstruction Rationale Card (Section 12, 25 & 50) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia de Mochila 0/1 y Reconstrucción Óptima (K&T §6.4):' : '0/1 Knapsack DP Recurrence & Reconstruction (K&T §6.4):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia de Mochila 0/1 y Reconstrucción Óptima:' : '0/1 Knapsack DP Recurrence & Reconstruction:'}</strong>{' '}
         {language === 'es'
           ? 'Para el objeto i y capacidad w: si w_i > w se hereda M[i-1, w]; si w_i ≤ w se elige max(M[i-1, w], v_i + M[i-1, w - w_i]). Para reconstruir el subconjunto óptimo, se retrocede desde M[n, W]: si M[i, w] > M[i-1, w], el objeto i fue tomado obligatoriamente, se añade a la mochila y se salta a la capacidad remanente w - w_i. Tiempo y memoria: O(n · W).'
           : 'For item i and capacity w: if w_i > w inherit M[i-1, w]; if w_i ≤ w pick max(M[i-1, w], v_i + M[i-1, w - w_i]). To reconstruct optimal items, backtrack from M[n, W]: if M[i, w] > M[i-1, w], item i was included, and capacity decrements to w - w_i. Runtime and memory: O(n · W).'}

@@ -146,8 +146,8 @@ export const MedianOfMediansVisualizer: React.FC = () => {
                         ? 'rgba(56, 189, 248, 0.25)'
                         : 'var(--surface)'
                     }
-                    stroke={isPivot ? '#f59e0b' : isMedian ? 'var(--accent)' : 'var(--border)'}
-                    strokeWidth={isPivot ? 2 : 1}
+                    stroke={isPivot ? '#f59e0b' : isMedian ? 'var(--accent)' : 'var(--border-strong)'}
+                    strokeWidth={isPivot ? 2.5 : isMedian ? 2 : 1.5}
                   />
                   <text
                     x={x + (colWidth - 8) / 2}
@@ -204,7 +204,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
 
       {/* Median of Medians Worst-Case Linear Time Proof Card (K&T §13.5 / CLRS §9.3) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Fundamento Teórico: Garantía de Tiempo Lineal en el Peor Caso (CLRS §9.3 / K&T §13.5):' : 'Theoretical Foundation: Worst-Case Linear Time Guarantee (CLRS §9.3 / K&T §13.5):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Fundamento Teórico: Garantía de Tiempo Lineal en el Peor Caso:' : 'Theoretical Foundation: Worst-Case Linear Time Guarantee:'}</strong>{' '}
         {language === 'es'
           ? 'Al particionar n elementos en ⌈n/5⌉ grupos de 5 y obtener recursivamente la mediana de sus medianas p, al menos la mitad de las medianas de grupo son ≤ p. Como en cada grupo al menos 3 de sus 5 elementos son menores o iguales a su respectiva mediana, se garantiza que al menos 3 · ⌈⌈n/5⌉ / 2⌉ ≥ 3n/10 elementos son menores o iguales que p (y análogamente ≥ p). Por lo tanto, el peor subproblema recursivo tiene tamaño a lo sumo 7n/10. La recurrencia T(n) ≤ T(n/5) + T(7n/10) + c·n satisface que (1/5 + 7/10) = 9/10 < 1, lo que por inducción acota la suma geométrica demostrando T(n) = O(n) determinístico en el peor caso.'
           : 'Partitioning n items into ⌈n/5⌉ groups of 5 and recursively choosing the median of medians p ensures at least half the group medians are ≤ p. Because each group has at least 3 elements ≤ its group median, at least 3 · ⌈⌈n/5⌉ / 2⌉ ≥ 3n/10 elements are guaranteed ≤ p (and symmetrically ≥ p). Thus, the surviving recursive subproblem after partitioning has at most 7n/10 elements. The recurrence T(n) ≤ T(n/5) + T(7n/10) + c·n satisfies (1/5 + 7/10) = 9/10 < 1, which bounds the recursion by a converging geometric series, establishing deterministic worst-case O(n) selection.'}

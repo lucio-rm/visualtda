@@ -310,9 +310,9 @@ export const LinearProgrammingVisualizer: React.FC = () => {
         </p>
       </div>
 
-      {/* Fundamental Theorem of Linear Programming Card (Section 12, 23 & 44) */}
+      {/* Fundamental Theorem of Linear Programming Card */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Teorema Fundamental de la Programación Lineal (K&T §11):' : 'Fundamental Theorem of Linear Programming (K&T §11):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Teorema Fundamental de la Programación Lineal:' : 'Fundamental Theorem of Linear Programming:'}</strong>{' '}
         {language === 'es'
           ? 'En cualquier programa lineal con región factible convexa acotada y no vacía, el valor óptimo de la función objetivo se alcanza obligatoriamente en al menos un vértice extremo del poliedro. Mover las rectas de nivel c^T x = k en la dirección del gradiente c maximiza la ganancia hasta el último punto de contacto, que siempre contiene un vértice. Esto permite al algoritmo Simplex restringir la búsqueda a pivotear exclusivamente entre vértices adyacentes.'
           : 'For any LP with a bounded non-empty convex feasible region, an optimal solution is guaranteed to exist at one of the extreme vertices of the polyhedron. Sliding level lines c^T x = k in direction c hits the boundary at an extreme point. This geometric property allows the Simplex algorithm to find the global optimum by pivoting strictly along adjacent vertices.'}

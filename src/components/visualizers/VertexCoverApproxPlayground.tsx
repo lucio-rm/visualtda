@@ -343,7 +343,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
 
       {/* Theorem Banner */}
       <div className="approx-theorem-banner">
-        <strong>{language === 'es' ? 'Cota de Calidad de Kleinberg & Tardos (Cap. 11.1):' : 'Kleinberg & Tardos Quality Bound (Ch. 11.1):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Cota Formal de Calidad (2-Aproximación):' : 'Formal Quality Bound (2-Approximation):'}</strong>{' '}
         {language === 'es'
           ? 'Como las aristas del matching M son disjuntas en vértices, cualquier cobertura óptima C* debe elegir al menos un vértice distinto de cada arista de M, lo que impone |C*| ≥ |M|. Como el algoritmo 2-Aprox toma ambos extremos de cada arista de M, |C| = 2|M| ≤ 2|C*|.'
           : 'Because matched edges share no vertices, any optimal cover C* must pick at least one distinct vertex from each matched edge, requiring |C*| ≥ |M|. As the algorithm takes both endpoints, |C| = 2|M| ≤ 2|C*|.'}

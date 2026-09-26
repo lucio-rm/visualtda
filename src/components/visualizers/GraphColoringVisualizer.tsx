@@ -127,7 +127,9 @@ export const GraphColoringVisualizer: React.FC = () => {
               const colorObj = assignedColor ? COLOR_PALETTE[assignedColor] : (isActive && attemptedColor ? COLOR_PALETTE[attemptedColor] : null);
 
               const fillColor = colorObj ? colorObj.fill : 'var(--surface)';
-              const strokeColor = colorObj ? colorObj.stroke : 'var(--border)';
+              const strokeColor = colorObj ? colorObj.stroke : 'var(--border-strong)';
+              const isYellow = assignedColor === 4 || (isActive && attemptedColor === 4);
+              const labelFill = (assignedColor || (isActive && attemptedColor)) ? (isYellow ? '#0f172a' : '#ffffff') : 'var(--text)';
 
               return (
                 <g key={`vertex-${v}`} className={`gc-node-group ${isActive ? 'gc-node-active' : ''}`}>
@@ -153,7 +155,7 @@ export const GraphColoringVisualizer: React.FC = () => {
                     y={pos.y}
                     dy="0.35em"
                     textAnchor="middle"
-                    fill={assignedColor || (isActive && attemptedColor) ? '#ffffff' : 'var(--text)'}
+                    fill={labelFill}
                     className="gc-node-label"
                   >
                     {v}
@@ -197,7 +199,7 @@ export const GraphColoringVisualizer: React.FC = () => {
       <div className="gc-controls-card">
         <div className="gc-playback-buttons">
           <button
-            className="btn btn-secondary btn-sm"
+            className="ctrl-btn"
             onClick={reset}
             title={language === 'es' ? 'Reiniciar traza (r)' : 'Reset trace (r)'}
             aria-label={language === 'es' ? 'Reiniciar' : 'Reset'}
@@ -205,7 +207,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             ↺
           </button>
           <button
-            className="btn btn-secondary btn-sm"
+            className="ctrl-btn"
             onClick={stepBackward}
             disabled={currentStepIndex === 0}
             title={language === 'es' ? 'Paso anterior (←)' : 'Step back (←)'}
@@ -214,7 +216,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             ←
           </button>
           <button
-            className="btn btn-primary btn-sm"
+            className="ctrl-btn ctrl-play-btn"
             onClick={togglePlay}
             title={language === 'es' ? 'Reproducir / Pausar (Espacio)' : 'Play / Pause (Space)'}
             aria-label={isPlaying ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Reproducir' : 'Play')}
@@ -222,7 +224,7 @@ export const GraphColoringVisualizer: React.FC = () => {
             {isPlaying ? '❚❚' : '▶'}
           </button>
           <button
-            className="btn btn-secondary btn-sm"
+            className="ctrl-btn"
             onClick={stepForward}
             disabled={currentStepIndex >= totalSteps - 1}
             title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'}

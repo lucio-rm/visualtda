@@ -48,13 +48,15 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
   const [showFrictionModal, setShowFrictionModal] = useState(false);
 
   React.useEffect(() => {
-    if (initialPhase) {
-      if (initialPhase === 'understand' && !isEffectiveUnlocked) {
-        setShowFrictionModal(true);
-      } else {
-        setPhase(initialPhase);
-      }
+    const nextPhase = initialPhase || 'discover';
+    if (nextPhase === 'understand' && !isEffectiveUnlocked) {
+      setShowFrictionModal(true);
+      setPhase('discover');
+    } else {
+      setPhase(nextPhase);
     }
+    setSolutionUnlocked(false);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [exercise.id, initialPhase]);
 
   React.useEffect(() => {
@@ -72,6 +74,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
       markAttempted(exercise.id);
     }
     setPhase(newPhase);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleSolveSuccess = () => {
@@ -85,6 +88,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
     recordHonestSkipPass(exercise.id);
     setSolutionUnlocked(true);
     setPhase('understand');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   return (

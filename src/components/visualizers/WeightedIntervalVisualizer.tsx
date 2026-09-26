@@ -271,7 +271,7 @@ export const WeightedIntervalVisualizer: React.FC = () => {
 
       {/* DP Recurrence Rationale Card (Section 12, 25 & 44) */}
       <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Recurrencia de Intervalos Pesados (K&T §6.1):' : 'Weighted Interval DP Recurrence (K&T §6.1):'}</strong>{' '}
+        <strong>{language === 'es' ? 'Recurrencia DP de Intervalos Pesados:' : 'Weighted Interval DP Recurrence:'}</strong>{' '}
         {language === 'es'
           ? 'Para cada intervalo j ordenado por tiempo de finalización: OPT(j) = max(v_j + OPT(p(j)), OPT(j-1)), donde p(j) es el mayor índice incompatible anterior (f_{p(j)} ≤ s_j). Todo subconjunto óptimo contiene al intervalo j (sumando v_j y resolviendo recursivamente hasta p(j)) o lo excluye (quedando OPT(j-1)). Usando búsqueda binaria para calcular p(j), el algoritmo corre en O(n log n).'
           : 'For each interval j sorted by finish time: OPT(j) = max(v_j + OPT(p(j)), OPT(j-1)), where p(j) is the latest compatible predecessor (f_{p(j)} ≤ s_j). The optimal solution either includes j (gaining v_j and solving subproblem p(j)) or excludes it (yielding OPT(j-1)). Binary searching p(j) delivers overall O(n log n) runtime.'}

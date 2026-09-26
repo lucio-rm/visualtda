@@ -44,11 +44,21 @@
       - **Light Mode High-Contrast Calibration**: Saturated borders and added clear 4px solid top indicator bars to completed cards; added explicit strokes to SVG chessboard cells and interval scheduling bars.
       - **Canvas & Board Sizing**: Enforced prominent university-grade board sizes (Sudoku 560px with 48x48px digit buttons and full keyboard editing, N-Queens 580px, Knight's Tour 580px, Knapsack 580px, LP 580px, Graph Coloring 600px).
       - **Phase 3 Layout & Typography**: Balanced asymmetric two-column layout in Understand phase; scrubbed residual Spanish text and fixed track spacing.
-  11. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, and static `dist/` build in ~1.58s.
+   11. Conducted Full Mission V6 UX, Pedagogical & Contrast Polish:
+       - **Canonical CS Terminology**: Preserved untranslated canonical terminology ("Greedy", "Merge", "Backtracking", etc.) across traces, content, and playgrounds to prevent student friction.
+       - **English Mode Academic Localization**: Full English translation of "Theoretical Foundation" academic paper sections and Time/Space complexity explanations via `TheoryMarkdown.tsx` and `UnderstandView.tsx`.
+       - **Author Reference Hygiene**: Scrubbed over-referencing across all 24 visualizers, theory insights, and algorithm traces. Preserved formal syllabus references strictly in track headers.
+       - **Navigation & Phase Reset**: Instant scroll-to-top (`window.scrollTo({ top: 0, behavior: 'instant' })`) and phase 1 (`discover`) reset whenever switching exercises or phases.
+       - **Active Verification Flow**: Removed premature celebratory spoilers and added explicit verification buttons (`[Verificar Respuesta]`, `[Verificar Tablero]`, `[✓ Verificar Mochila]`, `[Verificar Coloreo]`, `[✓ Verificar AGM]`) with RTA input and constructive feedback across playgrounds.
+       - **Phase 3 Control Standard**: Standardized compact playback and timeline buttons (`.ctrl-btn`, `.btn-control`, `.btn-play`, `.btn-sm`) in `App.css`, eradicating oversized full-width buttons.
+       - **Karatsuba Visualizer Overhaul**: Redesigned SVG structure (`660x260`), standard algebraic notation $P=(x_1+x_0)(y_1+y_0)$ and $z_1=P-z_2-z_0$, complete recombination formula, zero number overlapping.
+       - **Graph Visualizer & Playground Enhancements**: Curved opposing directed edges in Dijkstra ($A \leftrightarrow B$) to prevent overlapping badges and lines; multi-click color cycling ($1 \dots k \to \text{uncolored}$), user-selectable vertex count ($|V| \in [3, 8]$), and threshold-based 2D dragging in Graph Coloring; 2D node dragging in Kruskal; crisp high-contrast node strokes and badges.
+       - **Light & Dark Mode Contrast Calibration**: Added explicit `[data-theme='light']` custom properties, `--shadow-card` tokens, and 1.5px/2px solid borders for clean, clearly delineated section separation cards.
+   12. Passed full quality gates: 293 vitest tests across 39 files, 0 lint errors, 0 typecheck errors, and static `dist/` build in ~1.56s.
 - **BASELINE_COMMIT**: `897fc6c`
 - **EXPLICIT_COMPONENT_STATES**:
   - **Toolchain & Build Engine**: [VERIFIED] (Vite 6.4.3, React 19.0.0, TS 5.7.3, Vitest 3.2.7, ESLint 9.20.1 — 100% PASS across 39 test files, 293 tests, 0 lint errors, 0 type errors)
-  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.6s)
+  - **Static Bundle Generation**: [VERIFIED] (Pure client static output to `dist/`, zero backend server dependencies, code-split manualChunks by paradigm, builds in ~1.56s)
   - **Security & Instructor Mode**: [VERIFIED]
     - One-way SHA-256 token verification (`cryptoAuth.ts`). Plaintext password (`MEL75.29`) is never stored or transmitted.
     - Central anti-tamper gate `isExerciseSolutionAuthorized()` protects against DevTools inspection manipulation.
@@ -69,5 +79,4 @@
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
   - `npm test`: 39 test files, 293 passed (100% PASS)
-  - `node scripts/browserQA.mjs`: 22 / 22 real Chromium scenarios passed (100% PASS)
-  - `npm run build`: static production build succeeds in ~1.6s (`dist/`)
+  - `npm run build`: static production build succeeds in ~1.56s (`dist/`)

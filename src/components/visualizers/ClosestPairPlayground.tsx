@@ -396,8 +396,8 @@ export const ClosestPairPlayground: React.FC = () => {
       <div style={{ backgroundColor: 'var(--surface)', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
         <strong>{language === 'es' ? 'Arrastre Interactivo e Intuición de División y Conquista:' : 'Interactive Drag & Divide and Conquer Intuition'}:</strong>{' '}
         {language === 'es'
-          ? 'Arrastrá cualquier punto con el mouse para ver cómo la distancia mínima δ y la franja central (±δ) se recalculan en tiempo real. Hacé clic en áreas libres para agregar nuevos puntos. En la franja de combinación central, el algoritmo de Kleinberg & Tardos garantiza que solo se requiere comparar cada punto contra a lo sumo 7 u 8 vecinos ordenados por coordenada Y, preservando la complejidad O(n log n).'
-          : 'Drag any point with the mouse to see min distance δ and the central strip (±δ) update dynamically. Click empty space to add points. In the merge strip, Kleinberg & Tardos guarantees each point is tested against at most 7-8 neighbors sorted by Y coordinate, preserving O(n log n).'}
+          ? 'Arrastrá cualquier punto con el mouse para ver cómo la distancia mínima δ y la franja central (±δ) se recalculan en tiempo real. Hacé clic en áreas libres para agregar nuevos puntos. En la franja de combinación central, el lema de empaquetamiento geométrico garantiza que solo se requiere comparar cada punto contra a lo sumo 7 u 8 vecinos ordenados por coordenada Y, preservando la complejidad O(n log n).'
+          : 'Drag any point with the mouse to see min distance δ and the central strip (±δ) update dynamically. Click empty space to add points. In the merge strip, the geometric packing lemma guarantees each point is tested against at most 7-8 neighbors sorted by Y coordinate, preserving O(n log n).'}
       </div>
     </div>
   );

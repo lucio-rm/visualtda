@@ -188,7 +188,7 @@ export const DijkstraPlayground: React.FC = () => {
     <div
       className="algorithm-playground dijkstra-playground"
       role="region"
-      aria-label="Laboratorio de Dijkstra y Exploración Voraz"
+      aria-label="Laboratorio de Dijkstra y Exploración Greedy"
     >
       {/* Controls Bar */}
       <div className="sdk-pg-controls">
@@ -266,9 +266,9 @@ export const DijkstraPlayground: React.FC = () => {
 
       {hasNegativeEdge && (
         <div className="sdk-conflict-banner" role="alert" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444' }}>
-          <strong style={{ color: '#ef4444' }}>{language === 'es' ? 'Falla de Invariante Voraz (Greedy Stays Ahead)' : 'Greedy Invariant Failure'}:</strong>{' '}
+          <strong style={{ color: '#ef4444' }}>{language === 'es' ? 'Falla del Invariante Greedy (Greedy Stays Ahead)' : 'Greedy Invariant Failure'}:</strong>{' '}
           {language === 'es'
-            ? 'Dijkstra asume que una vez que un nodo entra al conjunto explorado S, su distancia es mínima e irrevocable. Pero al existir pesos negativos, el camino S → B → A tiene costo 3 + (-2) = 1, superando la elección voraz de d[A] = 2. Para grafos con aristas negativas, se debe usar Bellman-Ford.'
+            ? 'Dijkstra asume que una vez que un nodo entra al conjunto explorado S, su distancia es mínima e irrevocable. Pero al existir pesos negativos, el camino S → B → A tiene costo 3 + (-2) = 1, superando la elección greedy de d[A] = 2. Para grafos con aristas negativas, se debe usar Bellman-Ford.'
             : 'Dijkstra permanently fixes distances when entering S. With negative weights, S → B → A costs 1, breaking d[A]=2. Use Bellman-Ford DP for negative weights.'}
         </div>
       )}

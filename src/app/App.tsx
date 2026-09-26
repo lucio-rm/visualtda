@@ -41,12 +41,14 @@ const AppContent: React.FC = () => {
 
   const handleSelectExercise = (id: string, phase?: ExercisePhase) => {
     setSelectedExerciseId(id);
-    setTargetPhase(phase);
+    setTargetPhase(phase || 'discover');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleHomeClick = () => {
     setSelectedExerciseId(null);
     setTargetPhase(undefined);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const exerciseConfig = selectedExercise ? getExerciseViewConfig(selectedExercise.id) : {};

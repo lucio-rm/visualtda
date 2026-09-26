@@ -119,7 +119,42 @@ export const GraphColoringPlayground: React.FC = () => {
   const [draggingNode, setDraggingNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const { vertices, edges } = currentPreset;
+  const [customN, setCustomN] = useState<number>(5);
+
+  const customGraph = useMemo(() => {
+    const n = customN;
+    const verts = Array.from({ length: n }, (_, i) => String(i + 1));
+    const eds: [string, string][] = [];
+    for (let i = 0; i < n; i++) {
+      eds.push([String(i + 1), String(((i + 1) % n) + 1)]);
+    }
+    if (n >= 5) {
+      eds.push(['1', '3']);
+      eds.push(['2', '4']);
+    }
+    if (n >= 7) {
+      eds.push(['3', '6']);
+    }
+    const R = 115;
+    const cx = 250;
+    const cy = 175;
+    const lay: Record<string, { x: number; y: number }> = {};
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      lay[String(i + 1)] = {
+        x: Math.round(cx + R * Math.cos(angle)),
+        y: Math.round(cy + R * Math.sin(angle))
+      };
+    }
+    return { vertices: verts, edges: eds, layout: lay };
+  }, [customN]);
+
+  const { vertices, edges } = useMemo(() => {
+    if (activePresetId === 'custom') {
+      return { vertices: customGraph.vertices, edges: customGraph.edges };
+    }
+    return { vertices: currentPreset.vertices, edges: currentPreset.edges };
+  }, [activePresetId, customGraph, currentPreset]);
 
   const conflicts = useMemo(() => {
     const list: [string, string][] = [];
@@ -133,22 +168,53 @@ export const GraphColoringPlayground: React.FC = () => {
 
   const handleSelectPreset = (presetId: string) => {
     setActivePresetId(presetId);
-    const target = COLORING_PRESETS.find((p) => p.id === presetId) || COLORING_PRESETS[0];
-    setPositions(target.layout);
-    setK(target.chromaticNumber);
+    if (presetId === 'custom') {
+      setPositions(customGraph.layout);
+      setK(3);
+    } else {
+      const target = COLORING_PRESETS.find((p) => p.id === presetId) || COLORING_PRESETS[0];
+      setPositions(target.layout);
+      setK(target.chromaticNumber);
+    }
+    setColoring({});
+    setFeedback(null);
+  };
+
+  const handleCustomNChange = (newN: number) => {
+    setCustomN(newN);
+    const n = newN;
+    const R = 115;
+    const cx = 250;
+    const cy = 175;
+    const lay: Record<string, { x: number; y: number }> = {};
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+      lay[String(i + 1)] = {
+        x: Math.round(cx + R * Math.cos(angle)),
+        y: Math.round(cy + R * Math.sin(angle))
+      };
+    }
+    setPositions(lay);
     setColoring({});
     setFeedback(null);
   };
 
   const handleVertexClick = (v: string) => {
+    if (hasDraggedRef.current) {
+      hasDraggedRef.current = false;
+      return;
+    }
     setColoring((prev) => {
-      // Paint with currently selected brush color, or cycle if already painted with that color
       const current = prev[v];
-      let nextColor = selectedColor;
-      if (current === selectedColor) {
-        nextColor = (current % k) + 1;
+      const next = { ...prev };
+      if (current === undefined) {
+        next[v] = 1;
+      } else if (current < k) {
+        next[v] = current + 1;
+      } else {
+        delete next[v];
       }
-      return { ...prev, [v]: nextColor };
+      return next;
     });
     setFeedback(null);
   };
@@ -189,16 +255,25 @@ export const GraphColoringPlayground: React.FC = () => {
     );
   };
 
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
+
   // Pointer Dragging Handlers
   const handlePointerDown = (nodeId: string, e: React.PointerEvent) => {
     e.stopPropagation();
     (e.target as Element).setPointerCapture(e.pointerId);
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
     setDraggingNode(nodeId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingNode || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 4) {
+        hasDraggedRef.current = true;
+      }
       const rect = svgRef.current.getBoundingClientRect();
       const rawX = ((e.clientX - rect.left) / rect.width) * 500;
       const rawY = ((e.clientY - rect.top) / rect.height) * 350;
@@ -246,9 +321,42 @@ export const GraphColoringPlayground: React.FC = () => {
                 {p.name[language]}
               </button>
             ))}
+            <button
+              type="button"
+              className={`btn-preset ${activePresetId === 'custom' ? 'active' : ''}`}
+              onClick={() => handleSelectPreset('custom')}
+              style={{ fontWeight: 600 }}
+            >
+              {language === 'es' ? '★ Grafo Personalizado' : '★ Custom Graph'}
+            </button>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            {activePresetId === 'custom' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+                  {language === 'es' ? 'Vértices (|V|):' : 'Vertices (|V|):'}
+                </label>
+                <select
+                  value={customN}
+                  onChange={(e) => handleCustomNChange(Number(e.target.value))}
+                  style={{
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1.5px solid var(--border)',
+                    background: 'var(--surface)',
+                    color: 'var(--text)',
+                    fontWeight: 700
+                  }}
+                >
+                  {[3, 4, 5, 6, 7, 8].map((num) => (
+                    <option key={num} value={num}>
+                      |V| = {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <button type="button" className="btn-preset" onClick={handleClear}>
               {language === 'es' ? 'Limpiar' : 'Clear'}
             </button>
@@ -425,9 +533,9 @@ export const GraphColoringPlayground: React.FC = () => {
                     y1={posU.y}
                     x2={posV.x}
                     y2={posV.y}
-                    stroke={inConflict ? '#ef4444' : bothColored ? 'var(--text-muted)' : 'var(--border)'}
-                    strokeWidth={inConflict ? 3 : 1.5}
-                    opacity={inConflict ? 1 : 0.6}
+                    stroke={inConflict ? '#ef4444' : bothColored ? 'var(--accent)' : 'var(--border-strong)'}
+                    strokeWidth={inConflict ? 3.5 : 2.5}
+                    opacity={1}
                   />
                   {inConflict && (
                     <circle
@@ -460,10 +568,12 @@ export const GraphColoringPlayground: React.FC = () => {
               const pos = positions[v] || { x: 50, y: 50 };
               const assignedColor = coloring[v];
               const colorObj = assignedColor ? COLOR_PALETTE[assignedColor] : null;
+              const isNodeInConflict = conflicts.some(([x, y]) => x === v || y === v);
 
               const fillColor = colorObj ? colorObj.fill : 'var(--surface)';
-              const strokeColor = colorObj ? colorObj.stroke : 'var(--border)';
+              const strokeColor = isNodeInConflict ? '#ef4444' : colorObj ? colorObj.stroke : 'var(--border-strong)';
               const isDragging = draggingNode === v;
+              const isYellow = assignedColor === 4;
 
               return (
                 <g
@@ -485,7 +595,7 @@ export const GraphColoringPlayground: React.FC = () => {
                     x={pos.x}
                     y={pos.y + 5}
                     textAnchor="middle"
-                    fill={assignedColor ? '#ffffff' : 'var(--text)'}
+                    fill={assignedColor ? (isYellow ? '#0f172a' : '#ffffff') : 'var(--text)'}
                     fontSize="14px"
                     fontWeight="700"
                     fontFamily="var(--font-mono)"

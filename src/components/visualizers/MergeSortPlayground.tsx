@@ -257,12 +257,12 @@ export const MergeSortPlayground: React.FC = () => {
       <div className="playground-intro">
         <h3>
           {language === 'es'
-            ? 'Laboratorio Interactivo: Fusión de Subarreglos y Árbol de División'
+            ? 'Laboratorio Interactivo: Operación Merge y Árbol de División'
             : 'Interactive Playground: Subarray Merging & Divide Tree'}
         </h3>
         <p>
           {language === 'es'
-            ? 'Experimenta con la operación fundamental de Merge Sort: la fusión lineal O(N) mediante 2 punteros monótonos y la descomposición recursiva en O(log N) niveles.'
+            ? 'Experimenta con la operación fundamental de Merge Sort: el merge lineal O(N) mediante 2 punteros monótonos y la descomposición recursiva en O(log N) niveles.'
             : 'Experiment with the fundamental operation of Merge Sort: linear O(N) two-pointer merge and recursive decomposition across O(log N) levels.'}
         </p>
       </div>
@@ -314,7 +314,7 @@ export const MergeSortPlayground: React.FC = () => {
           className={`tab-btn ${activeTab === 'merge' ? 'active' : ''}`}
           onClick={() => setActiveTab('merge')}
         >
-          {language === 'es' ? 'Fusión 2 Punteros (Merge Step)' : 'Two-Pointer Merge'}
+          {language === 'es' ? 'Operación Merge (2 Punteros)' : 'Two-Pointer Merge'}
         </button>
         <button
           role="tab"
@@ -405,7 +405,7 @@ export const MergeSortPlayground: React.FC = () => {
                 : `Take from R[${rightPointer}] ${rightPointer < rightHalf.length ? `(${rightHalf[rightPointer]})` : ''}`}
             </button>
             <button className="chip-btn" onClick={resetSimulation}>
-              {language === 'es' ? 'Reiniciar Fusión' : 'Reset Merge'}
+              {language === 'es' ? 'Reiniciar Merge' : 'Reset Merge'}
             </button>
           </div>
 
@@ -418,7 +418,7 @@ export const MergeSortPlayground: React.FC = () => {
           <div className="merged-output-card">
             <div className="merged-title">
               {language === 'es'
-                ? `Arreglo Fusionado Resultante (${mergedList.length}/${leftHalf.length + rightHalf.length})`
+                ? `Arreglo Resultante del Merge (${mergedList.length}/${leftHalf.length + rightHalf.length})`
                 : `Resulting Merged Array (${mergedList.length}/${leftHalf.length + rightHalf.length})`}
             </div>
             <div className="elements-row">
@@ -430,7 +430,7 @@ export const MergeSortPlayground: React.FC = () => {
               {mergedList.length === 0 && (
                 <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   {language === 'es'
-                    ? 'Selecciona los elementos de L o R para construir la fusión ordenada.'
+                    ? 'Selecciona los elementos de L o R para construir el arreglo ordenado (Merge).'
                     : 'Select elements from L or R to construct the sorted merge.'}
                 </span>
               )}
@@ -453,7 +453,7 @@ export const MergeSortPlayground: React.FC = () => {
             </div>
             <div className="stat-item">
               <span className="stat-item-label">
-                {language === 'es' ? 'Complejidad de Fusión:' : 'Merge Complexity:'}
+                {language === 'es' ? 'Complejidad del Merge:' : 'Merge Complexity:'}
               </span>
               <span className="stat-item-value">O(N)</span>
             </div>
@@ -462,7 +462,7 @@ export const MergeSortPlayground: React.FC = () => {
           {isMergeComplete && (
             <div className="feedback-banner success" style={{ fontWeight: 600 }}>
               {language === 'es'
-                ? 'Fusión completada con éxito. Ambos punteros alcanzaron el final en exactamente O(N) pasos sin ningún retroceso.'
+                ? 'Merge completado con éxito. Ambos punteros alcanzaron el final en exactamente O(N) pasos sin ningún retroceso.'
                 : 'Merge successfully completed. Both pointers reached the end in exactly O(N) steps without any backtracking.'}
             </div>
           )}

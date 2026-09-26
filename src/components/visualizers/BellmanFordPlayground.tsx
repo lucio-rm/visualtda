@@ -162,7 +162,7 @@ export const BellmanFordPlayground: React.FC = () => {
             className={`btn-preset ${mode === 'cycle' ? 'active' : ''}`}
             onClick={() => handleReset('cycle')}
           >
-            {language === 'es' ? 'Grafo con Ciclo Negativo (Kleinberg Cap. 6.8)' : 'Negative Cycle Graph'}
+            {language === 'es' ? 'Grafo con Ciclo Negativo' : 'Negative Cycle Graph'}
           </button>
         </div>
 
@@ -363,7 +363,7 @@ export const BellmanFordPlayground: React.FC = () => {
       {/* Dynamic Programming Table M[i, v] */}
       <div style={{ marginTop: '0.75rem' }}>
         <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.35rem' }}>
-          {language === 'es' ? 'Matriz de Programación Dinámica M[i, v] (Kleinberg & Tardos):' : 'Dynamic Programming Matrix M[i, v]:'}
+          {language === 'es' ? 'Matriz de Programación Dinámica M[i, v]:' : 'Dynamic Programming Matrix M[i, v]:'}
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table className="djk-pq-table" style={{ width: '100%', fontSize: '0.85rem' }} aria-label="Tabla M[i, v] Bellman-Ford">

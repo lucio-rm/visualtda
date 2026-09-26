@@ -79,98 +79,108 @@ export const KaratsubaVisualizer: React.FC = () => {
       </div>
 
       {/* SVG Algebraic Structure Canvas */}
-      <div className="kt-canvas-container">
+      <div className="kt-canvas-container" style={{ background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
         <svg
-          viewBox="0 0 540 220"
-          style={{ width: '100%', maxWidth: '540px', height: 'auto', display: 'block' }}
+          viewBox="0 0 660 260"
+          style={{ width: '100%', maxWidth: '660px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Estructura de la descomposición de Karatsuba"
+          aria-label={language === 'es' ? 'Estructura algebraica del algoritmo de Karatsuba' : 'Karatsuba algebraic structure decomposition'}
         >
           {/* Main Top Node: (x, y) */}
-          <rect x={180} y={15} width={180} height={40} rx={6} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
-          <text x={270} y={38} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
-            {x} × {y} (n=4, m={m})
+          <rect x={220} y={12} width={220} height={46} rx={8} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2.5} />
+          <text x={330} y={34} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+            {x} × {y}
+          </text>
+          <text x={330} y={49} textAnchor="middle" fill="var(--text-muted)" fontSize="10px" fontFamily="var(--font-mono)">
+            x₁={x1}, x₀={x0} | y₁={y1}, y₀={y0} (m={m})
           </text>
 
           {/* Connectors to 3 Karatsuba branches */}
-          <line x1={220} y1={55} x2={90} y2={105} stroke="var(--border)" strokeWidth={1.5} />
-          <line x1={270} y1={55} x2={270} y2={105} stroke="var(--border)" strokeWidth={1.5} />
-          <line x1={320} y1={55} x2={450} y2={105} stroke="var(--border)" strokeWidth={1.5} />
+          <path d="M 260 58 L 105 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 330 58 L 330 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 400 58 L 555 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
 
           {/* Branch 1: z2 = x1 * y1 */}
           <g>
             <rect
-              x={20}
+              x={15}
               y={105}
-              width={140}
-              height={55}
-              rx={6}
-              fill={subcalc === 'Z2' ? 'rgba(56, 189, 248, 0.15)' : 'var(--bg)'}
+              width={180}
+              height={62}
+              rx={8}
+              fill={subcalc === 'Z2' ? 'rgba(56, 189, 248, 0.18)' : 'var(--surface)'}
               stroke={subcalc === 'Z2' ? 'var(--accent)' : 'var(--border)'}
-              strokeWidth={subcalc === 'Z2' ? 2 : 1}
+              strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
-            <text x={90} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              {language === 'es' ? '1. Término Alto (z₂)' : '1. High Term (z₂)'}
+            <text x={105} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? 'Rama 1: Término Alto (z₂)' : 'Branch 1: High Term (z₂)'}
             </text>
-            <text x={90} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-              {x1} × {y1} = {z2 ?? '?'}
+            <text x={105} y={150} textAnchor="middle" fill={subcalc === 'Z2' ? 'var(--accent)' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+              {x1} × {y1} = {z2 ?? '—'}
             </text>
           </g>
 
-          {/* Branch 2: zSum = (x1+x0)*(y1+y0) */}
+          {/* Branch 2: Cross Product = (x1+x0)*(y1+y0) */}
           <g>
             <rect
-              x={185}
+              x={225}
               y={105}
-              width={170}
-              height={55}
-              rx={6}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg)'}
+              width={210}
+              height={62}
+              rx={8}
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(16, 185, 129, 0.18)' : 'var(--surface)'}
               stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? '#10b981' : 'var(--border)'}
-              strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2 : 1}
+              strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={270} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              {language === 'es' ? '2. Suma Cruzada (z_sum)' : '2. Cross Sum (z_sum)'}
+            <text x={330} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? 'Rama 2: Producto Cruzado' : 'Branch 2: Cross Product'}
             </text>
-            <text x={270} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-              ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '?'}
+            <text x={330} y={150} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? '#10b981' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+              ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '—'}
             </text>
           </g>
 
           {/* Branch 3: z0 = x0 * y0 */}
           <g>
             <rect
-              x={380}
+              x={465}
               y={105}
-              width={140}
-              height={55}
-              rx={6}
-              fill={subcalc === 'Z0' ? 'rgba(245, 158, 11, 0.15)' : 'var(--bg)'}
+              width={180}
+              height={62}
+              rx={8}
+              fill={subcalc === 'Z0' ? 'rgba(245, 158, 11, 0.18)' : 'var(--surface)'}
               stroke={subcalc === 'Z0' ? '#f59e0b' : 'var(--border)'}
-              strokeWidth={subcalc === 'Z0' ? 2 : 1}
+              strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />
-            <text x={450} y={126} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600">
-              {language === 'es' ? '3. Término Bajo (z₀)' : '3. Low Term (z₀)'}
+            <text x={555} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? 'Rama 3: Término Bajo (z₀)' : 'Branch 3: Low Term (z₀)'}
             </text>
-            <text x={450} y={146} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-              {x0} × {y0} = {z0 ?? '?'}
+            <text x={555} y={150} textAnchor="middle" fill={subcalc === 'Z0' ? '#f59e0b' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+              {x0} × {y0} = {z0 ?? '—'}
             </text>
           </g>
 
-          {/* Recombination Result Bar */}
+          {/* Recombination & Middle Term Bar */}
           <g>
             <rect
-              x={70}
-              y={175}
-              width={400}
-              height={36}
-              rx={6}
-              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(56, 189, 248, 0.1)' : 'var(--surface)'}
-              stroke="var(--border)"
+              x={50}
+              y={185}
+              width={560}
+              height={55}
+              rx={8}
+              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(37, 99, 235, 0.12)' : 'var(--surface)'}
+              stroke={subcalc === 'COMBINE' || result !== null ? 'var(--accent)' : 'var(--border)'}
+              strokeWidth={subcalc === 'COMBINE' || result !== null ? 2 : 1.5}
             />
-            <text x={270} y={198} textAnchor="middle" fill="var(--text)" fontSize="12px" fontFamily="var(--font-mono)">
-              z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
-              <tspan fill="#38bdf8" fontWeight="700">
+            <text x={330} y={207} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
+              {language === 'es' ? 'Término medio:' : 'Middle term:'} z₁ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
+              <tspan fill="#10b981" fontWeight="800">
+                {z1 ?? '—'}
+              </tspan>
+            </text>
+            <text x={330} y={226} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+              {language === 'es' ? 'Recombinación:' : 'Recombination:'} z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
+              <tspan fill="var(--accent)" fontWeight="800">
                 {result ?? '...'}
               </tspan>
             </text>
@@ -185,11 +195,11 @@ export const KaratsubaVisualizer: React.FC = () => {
           <span className="kt-term-val">{z2 !== null ? z2 : '—'}</span>
         </div>
         <div className={`kt-term-card ${subcalc === 'ZSUM' ? 'active' : ''}`}>
-          <span className="kt-term-title">z_sum = (x₁+x₀)(y₁+y₀)</span>
+          <span className="kt-term-title">{language === 'es' ? 'P = (x₁+x₀)(y₁+y₀)' : 'P = (x₁+x₀)(y₁+y₀)'}</span>
           <span className="kt-term-val">{zSum !== null ? zSum : '—'}</span>
         </div>
         <div className={`kt-term-card ${subcalc === 'Z1' ? 'active' : ''}`}>
-          <span className="kt-term-title">z₁ = z_sum - z₂ - z₀</span>
+          <span className="kt-term-title">z₁ = P - z₂ - z₀</span>
           <span className="kt-term-val">{z1 !== null ? z1 : '—'}</span>
         </div>
         <div className={`kt-term-card ${subcalc === 'Z0' ? 'active' : ''}`}>

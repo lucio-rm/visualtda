@@ -269,8 +269,8 @@ export const MinimizeLatenessPlayground: React.FC = () => {
         >
           <strong>{language === 'es' ? 'Cronograma Óptimo Confirmado' : 'Optimal Schedule Confirmed'}</strong>:{' '}
           {language === 'es'
-            ? '0 inversiones. El argumento de intercambio de Kleinberg & Tardos demuestra que todo ordenamiento con inversiones puede transformarse en EDF sin empeorar el retraso máximo L.'
-            : '0 inversions. Kleinberg & Tardos exchange argument proves EDF is strictly optimal.'}
+            ? '0 inversiones. El argumento de intercambio demuestra que todo ordenamiento con inversiones puede transformarse en EDF sin empeorar el retraso máximo L.'
+            : '0 inversions. The exchange argument proves Earliest Deadline First (EDF) is strictly optimal.'}
         </div>
       ) : (
         <div

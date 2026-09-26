@@ -568,8 +568,8 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
       results.push({
         testId: 'lateness-kt-classic',
         description: {
-          es: 'Instancia clásica K&T (6 tareas): retraso máximo alcanzado = 1.',
-          en: 'Classic K&T instance (6 tasks): maximum lateness attained = 1.'
+          es: 'Instancia canónica (6 tareas): retraso máximo alcanzado = 1.',
+          en: 'Canonical instance (6 tasks): maximum lateness attained = 1.'
         },
         passed: passesHeuristic,
         expected: 'Retraso máximo = 1',

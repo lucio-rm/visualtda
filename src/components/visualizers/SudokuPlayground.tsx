@@ -150,16 +150,41 @@ export const SudokuPlayground: React.FC = () => {
     }
 
     setBoard(tempBoard);
+  };
 
-    // Check if fully solved without any conflicts
-    const isComplete = tempBoard.every((row, ri) =>
-      row.every((v, ci) => v !== 0 && !isCellInConflict(tempBoard, ri, ci))
-    );
-    if (isComplete) {
+  const handleVerify = () => {
+    let hasConflict = false;
+    let emptyCount = 0;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (board[r][c] === 0) {
+          emptyCount++;
+        } else if (isCellInConflict(board, r, c)) {
+          hasConflict = true;
+        }
+      }
+    }
+
+    if (hasConflict) {
+      setConflictMsg(
+        language === 'es'
+          ? 'El tablero tiene conflictos activos (dígitos duplicados en una fila, columna o bloque 3×3). Corrige las celdas resaltadas.'
+          : 'Board contains active conflicts (duplicated digits in a row, column, or 3x3 block). Fix the highlighted cells.'
+      );
+      setSolvedMessage(null);
+    } else if (emptyCount > 0) {
+      setConflictMsg(
+        language === 'es'
+          ? `Aún quedan ${emptyCount} celdas vacías sin completar. La asignación actual no tiene conflictos; sigue intentando.`
+          : `There are still ${emptyCount} empty cells. Current assignment has no conflicts; keep trying.`
+      );
+      setSolvedMessage(null);
+    } else {
+      setConflictMsg(null);
       setSolvedMessage(
         language === 'es'
-          ? '¡Asignación completa y factible! Todas las restricciones de fila, columna y bloque 3×3 se satisfacen.'
-          : 'Complete feasible assignment! All row, column, and 3x3 block constraints satisfied.'
+          ? '¡Felicitaciones! Has completado el Sudoku respetando todas las restricciones de fila, columna y bloque 3×3.'
+          : 'Congratulations! You solved the Sudoku respecting all row, column, and 3x3 block constraints.'
       );
       markAttempted('sudoku-backtracking');
     }
@@ -232,16 +257,24 @@ export const SudokuPlayground: React.FC = () => {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             className="btn-tool"
-            onClick={() => setShowDomainSizes(!showDomainSizes)}
+            onClick={setShowDomainSizes.bind(null, !showDomainSizes)}
             style={{ color: showDomainSizes ? 'var(--accent)' : 'inherit' }}
           >
             {showDomainSizes
               ? (language === 'es' ? 'Ocultar Opciones (MRV)' : 'Hide Options (MRV)')
               : (language === 'es' ? 'Mostrar Opciones (MRV)' : 'Show Options (MRV)')}
+          </button>
+          <button
+            type="button"
+            className="btn-tool"
+            onClick={handleVerify}
+            style={{ fontWeight: 700, backgroundColor: 'var(--accent)', color: '#ffffff' }}
+          >
+            {language === 'es' ? '✓ Verificar Tablero' : '✓ Check Board'}
           </button>
         </div>
       </div>

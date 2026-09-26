@@ -195,7 +195,7 @@ export function generateHuffmanTrace(
       step: stepIndex++,
       type: 'MERGE_NODES',
       message: {
-        es: `Fusión: Creado nodo padre con frecuencia suma ${parent.freq} = ${left.freq} + ${right.freq}. Reinsertado en el heap.`,
+        es: `Merge: Creado nodo padre con frecuencia suma ${parent.freq} = ${left.freq} + ${right.freq}. Reinsertado en el heap.`,
         en: `Merge: Created parent node with sum frequency ${parent.freq} = ${left.freq} + ${right.freq}. Reinserted into heap.`
       },
       data: {
