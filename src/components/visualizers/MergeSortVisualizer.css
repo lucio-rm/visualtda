@@ -45,21 +45,21 @@
 }
 
 .subproblem-badge.left {
-  background: rgba(59, 130, 246, 0.15);
-  color: #2563eb;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--surface-hover);
+  color: var(--accent);
+  border: 1px solid var(--border-strong);
 }
 
 .subproblem-badge.right {
-  background: rgba(249, 115, 22, 0.15);
-  color: #ea580c;
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: var(--state-candidate-bg);
+  color: var(--warning);
+  border: 1px solid var(--warning);
 }
 
 .subproblem-badge.merge {
   background: var(--state-solution-bg);
-  color: #059669;
-  border: 1px solid var(--state-solution-bg);
+  color: var(--success);
+  border: 1px solid var(--success);
 }
 
 /* Array Bar Chart Canvas */
@@ -88,40 +88,51 @@
 .bar-pill {
   width: 40px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  background: var(--color-primary);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-strong);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding-top: 4px;
-  color: #ffffff;
+  color: var(--text);
   font-weight: 700;
   font-size: var(--text-xs);
   transition: all var(--transition-fast);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .bar-column.in-left .bar-pill {
-  background: #3b82f6;
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .bar-column.in-right .bar-pill {
-  background: #f97316;
+  background: var(--state-candidate-bg);
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .bar-column.is-left-ptr .bar-pill {
-  background: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
+  background: var(--accent);
+  border-color: var(--accent-hover);
+  color: var(--accent-contrast);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
   transform: translateY(-4px);
 }
 
 .bar-column.is-right-ptr .bar-pill {
-  background: #ea580c;
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.4);
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.25);
   transform: translateY(-4px);
 }
 
 .bar-column.is-dest .bar-pill {
   background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
   box-shadow: 0 0 0 3px var(--state-solution-bg);
 }
 
@@ -137,11 +148,11 @@
 }
 
 .bar-pointer-tag.left-ptr {
-  color: #2563eb;
+  color: var(--accent);
 }
 
 .bar-pointer-tag.right-ptr {
-  color: #ea580c;
+  color: var(--warning);
 }
 
 .bar-pointer-tag.dest-ptr {

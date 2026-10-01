@@ -110,14 +110,14 @@ export const BellmanFordVisualizer: React.FC = () => {
               return (
                 <g key={`bf-e-${e.u}-${e.v}-${idx}`}>
                   <line x1={u.x} y1={u.y} x2={v.x} y2={v.y} stroke={stroke} strokeWidth={strokeWidth} markerEnd={marker} />
-                  <circle cx={midX} cy={midY} r={11} fill="var(--surface)" stroke={stroke} strokeWidth={1.5} />
+                  <circle cx={midX} cy={midY} r={13} fill="var(--surface)" stroke={stroke} strokeWidth={1.5} />
                   <text
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
                     fill={isNeg ? 'var(--danger, var(--error))' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontWeight="700"
                   >
                     {e.weight}
@@ -155,21 +155,21 @@ export const BellmanFordVisualizer: React.FC = () => {
                   </text>
                   {/* Distance label */}
                   <rect
-                    x={n.x - 16}
-                    y={n.y - 38}
-                    width={32}
-                    height={15}
-                    rx={3}
-                    fill="var(--surface-hover, #1e293b)"
-                    stroke="var(--border, #475569)"
+                    x={n.x - 20}
+                    y={n.y - 42}
+                    width={40}
+                    height={19}
+                    rx={4}
+                    fill="var(--surface-hover)"
+                    stroke="var(--border)"
                   />
                   <text
                     x={n.x}
-                    y={n.y - 27}
+                    y={n.y - 28}
                     textAnchor="middle"
                     fill="var(--accent)"
                     fontFamily="var(--font-mono)"
-                    fontSize="10px"
+                    fontSize="13px"
                     fontWeight="800"
                   >
                     {distStr}

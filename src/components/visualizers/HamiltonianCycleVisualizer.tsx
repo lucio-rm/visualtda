@@ -134,12 +134,12 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                   r={18}
                   fill={
                     isCurrent
-                      ? 'var(--warning)'
+                      ? 'var(--warning-bg)'
                       : isVisited
-                      ? (isCycleFound ? 'var(--success)' : 'var(--surface-active, var(--accent))')
+                      ? (isCycleFound ? 'var(--success-bg)' : 'var(--accent-subtle)')
                       : 'var(--surface)'
                   }
-                  stroke={isCurrent ? '#ffffff' : isVisited ? 'var(--accent)' : 'var(--border)'}
+                  stroke={isCurrent ? 'var(--warning)' : isVisited ? (isCycleFound ? 'var(--success)' : 'var(--accent)') : 'var(--border-strong)'}
                   strokeWidth={isCurrent ? 3 : 2}
                 />
                 <text
@@ -156,10 +156,10 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                 {/* Step badge if visited */}
                 {pathIndex >= 0 && (
                   <text
-                    x={node.x + 18}
-                    y={node.y - 8}
+                    x={node.x + 20}
+                    y={node.y - 10}
                     fill="var(--accent)"
-                    fontSize="10px"
+                    fontSize="13px"
                     fontWeight="700"
                     fontFamily="var(--font-mono)"
                   >

@@ -79,7 +79,7 @@
 }
 
 .day-header {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -96,18 +96,18 @@
 .badge-work {
   background-color: var(--success);
   color: white;
-  font-size: 0.6rem;
+  font-size: 0.8125rem;
   font-weight: 800;
-  padding: 0.1rem 0.35rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
 }
 
 .badge-rest {
   background-color: #6b7280;
   color: white;
-  font-size: 0.6rem;
+  font-size: 0.8125rem;
   font-weight: 800;
-  padding: 0.1rem 0.35rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
 }
 
@@ -149,7 +149,7 @@
 }
 
 .dp-cell-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-family: monospace;
   color: var(--text-muted);
 }
@@ -165,20 +165,20 @@
 }
 
 .tag-skip {
-  font-size: 0.6rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   background-color: #8b5cf6;
   color: white;
-  padding: 0.1rem 0.3rem;
+  padding: 0.15rem 0.4rem;
   border-radius: 3px;
 }
 
 .tag-work {
-  font-size: 0.6rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   background-color: #ec4899;
   color: white;
-  padding: 0.1rem 0.3rem;
+  padding: 0.15rem 0.4rem;
   border-radius: 3px;
 }
 

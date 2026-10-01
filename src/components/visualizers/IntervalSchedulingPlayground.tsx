@@ -256,7 +256,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 setSelectedIds([]);
                 setCustomError(null);
               }}
-              style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.25rem 0.5rem' }}
             >
               {language === 'es' ? 'Restablecer' : 'Reset'}
             </button>
@@ -264,7 +264,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
           <form onSubmit={handleAddCustomInterval} className="custom-editor-row">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '90px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+              <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
                 {language === 'es' ? 'Inicio:' : 'Start:'}
               </label>
               <input
@@ -277,7 +277,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '90px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+              <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
                 {language === 'es' ? 'Fin:' : 'End:'}
               </label>
               <input
@@ -328,7 +328,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               y={svgHeight - 5}
               textAnchor="middle"
               fill="var(--color-text-muted)"
-              fontSize="10"
+              fontSize="13"
               fontFamily="var(--font-mono)"
             >
               {t}h
@@ -345,9 +345,18 @@ export const IntervalSchedulingPlayground: React.FC = () => {
           const isSelected = selectedIds.includes(task.id);
           const isConflict = isSelected && hasOverlap;
 
-          let barFill = 'rgba(59, 130, 246, 0.2)';
-          if (isConflict) barFill = 'var(--error)';
-          else if (isSelected) barFill = 'var(--success)';
+          let barFill = 'var(--surface)';
+          let barStroke = 'var(--border-strong)';
+          let textFill = 'var(--text)';
+          if (isConflict) {
+            barFill = 'var(--state-conflict-bg)';
+            barStroke = 'var(--error)';
+            textFill = 'var(--error)';
+          } else if (isSelected) {
+            barFill = 'var(--state-solution-bg)';
+            barStroke = 'var(--success)';
+            textFill = 'var(--success)';
+          }
 
           const statusDesc = isConflict
             ? (language === 'es' ? 'en conflicto' : 'conflicted')
@@ -379,15 +388,15 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 height={30}
                 rx={6}
                 fill={barFill}
-                stroke={isConflict ? '#b91c1c' : isSelected ? '#059669' : 'var(--border-strong)'}
-                strokeWidth={1.5}
+                stroke={barStroke}
+                strokeWidth={isSelected || isConflict ? 2 : 1.5}
               />
               <text
                 x={x1 + 10}
                 y={y + 19}
-                fill={isSelected ? '#ffffff' : 'var(--text)'}
+                fill={textFill}
                 fontSize="13"
-                fontWeight="700"
+                fontWeight="600"
                 fontFamily="var(--font-sans)"
               >
                 {isConflict ? '[!] ' : isSelected ? '[Sel] ' : ''}{task.id} [{task.start}-{task.end}]

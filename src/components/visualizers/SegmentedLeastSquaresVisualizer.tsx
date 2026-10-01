@@ -123,7 +123,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
               y={scaleY(0) + 16}
               textAnchor="middle"
               fill="var(--text-muted)"
-              fontSize="10px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
             >
               {tx}
@@ -136,7 +136,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
               y={scaleY(ty) + 4}
               textAnchor="end"
               fill="var(--text-muted)"
-              fontSize="10px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
             >
               {ty}
@@ -187,7 +187,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
                   y={scaleY(p.y) - 8}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   p{idx + 1}

@@ -55,21 +55,21 @@
 }
 
 .huff-phase-pill {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  padding: 0.25rem 0.6rem;
+  padding: 0.25rem 0.65rem;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: #334155;
-  color: #f1f5f9;
+  background: var(--surface-active);
+  color: var(--text);
 }
 
-.huff-phase-pill.init { background: #475569; }
-.huff-phase-pill.select_two_min { background: #d97706; color: #fff; }
-.huff-phase-pill.merge_nodes { background: #2563eb; color: #fff; }
-.huff-phase-pill.generate_codes { background: #0d9488; }
-.huff-phase-pill.complete { background: #8b5cf6; }
+.huff-phase-pill.init { background: var(--surface-active); }
+.huff-phase-pill.select_two_min { background: var(--warning); color: #fff; }
+.huff-phase-pill.merge_nodes { background: var(--accent); color: #fff; }
+.huff-phase-pill.generate_codes { background: var(--success); color: #fff; }
+.huff-phase-pill.complete { background: var(--accent-hover); color: #fff; }
 
 .huff-metrics-summary {
   display: flex;
@@ -84,8 +84,8 @@
 }
 
 .huff-metric-badge .label {
-  font-size: 0.7rem;
-  color: var(--text-muted, #94a3b8);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .huff-node-card .freq {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   font-family: var(--font-mono, monospace);
 }
@@ -165,7 +165,7 @@
   top: -8px;
   background: var(--warning);
   color: #000;
-  font-size: 0.6rem;
+  font-size: 0.8125rem;
   font-weight: 800;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
@@ -266,8 +266,8 @@
 }
 
 .huff-tree-subtitle {
-  font-size: 0.78rem;
-  color: var(--text-muted, #94a3b8);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
 }
 
 .huff-svg-wrapper {
@@ -275,8 +275,8 @@
   overflow-x: auto;
   display: flex;
   justify-content: center;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(51, 65, 85, 0.5);
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.75rem 0.5rem;
 }
@@ -289,28 +289,28 @@
 }
 
 .huff-edge-line {
-  stroke: #64748b;
+  stroke: var(--border-strong);
   stroke-width: 2px;
   stroke-linecap: round;
   transition: all 0.3s ease;
 }
 
 .huff-edge-bit-bg.bit-0 {
-  fill: #0284c7;
+  fill: var(--accent);
   stroke: var(--accent);
   stroke-width: 1px;
 }
 
 .huff-edge-bit-bg.bit-1 {
-  fill: #d97706;
-  stroke: #fbbf24;
+  fill: var(--warning);
+  stroke: var(--warning);
   stroke-width: 1px;
 }
 
 .huff-edge-bit-text {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  fill: var(--text);
+  fill: #ffffff;
   font-family: var(--font-mono, monospace);
 }
 
@@ -335,7 +335,7 @@
 }
 
 .huff-leaf-freq {
-  font-size: 10px;
+  font-size: 13px;
   fill: var(--text-muted);
   font-family: var(--font-mono, monospace);
 }
@@ -347,7 +347,7 @@
 }
 
 .huff-code-tag-text {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: bold;
   fill: var(--accent);
   font-family: var(--font-mono, monospace);
@@ -367,28 +367,28 @@
 }
 
 .huff-internal-circle.highlight-merge {
-  stroke: #3b82f6;
+  stroke: var(--accent);
   stroke-width: 3px;
-  fill: rgba(59, 130, 246, 0.35);
+  fill: var(--state-active-bg);
 }
 
 .huff-internal-freq {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
-  fill: #ffffff;
+  fill: var(--text);
   font-family: monospace;
 }
 
 .huff-badge-text {
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 800;
   fill: var(--warning);
   font-family: sans-serif;
 }
 
 .huff-badge-merge-text {
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 800;
-  fill: #60a5fa;
+  fill: var(--accent);
   font-family: sans-serif;
 }

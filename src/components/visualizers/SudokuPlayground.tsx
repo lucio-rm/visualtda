@@ -359,7 +359,7 @@ export const SudokuPlayground: React.FC = () => {
               let strokeWidth = 1;
 
               if (isCrosshair) {
-                fill = isAltBlock ? 'rgba(99, 102, 241, 0.12)' : 'rgba(99, 102, 241, 0.06)';
+                fill = isAltBlock ? 'var(--board-hover)' : 'var(--accent-subtle)';
               }
 
               if (isSameNum) {
@@ -380,7 +380,7 @@ export const SudokuPlayground: React.FC = () => {
               }
 
               if (isSelected) {
-                fill = inConflict ? 'var(--board-conflict)' : 'rgba(99, 102, 241, 0.35)';
+                fill = inConflict ? 'var(--board-conflict)' : 'var(--board-active)';
                 stroke = inConflict ? 'var(--danger, var(--error))' : 'var(--accent)';
                 strokeWidth = 3;
               }
@@ -433,7 +433,7 @@ export const SudokuPlayground: React.FC = () => {
                           textAnchor="end"
                           fill={domainSize === 1 ? 'var(--success)' : domainSize === 0 ? 'var(--error)' : 'var(--text-muted)'}
                           fontFamily="var(--font-mono)"
-                          fontSize="11px"
+                          fontSize="13px"
                           fontWeight={domainSize <= 2 ? '800' : '600'}
                           opacity={0.85}
                         >
@@ -442,9 +442,9 @@ export const SudokuPlayground: React.FC = () => {
                         {isMRVBest && (
                           <text
                             x={x + 5}
-                            y={y + 12}
+                            y={y + 14}
                             fill="var(--success)"
-                            fontSize="9px"
+                            fontSize="13px"
                             fontWeight="800"
                             fontFamily="var(--font-mono)"
                           >

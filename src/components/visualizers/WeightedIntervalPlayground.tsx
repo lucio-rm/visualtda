@@ -289,7 +289,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 setSelectedIds([]);
                 setCustomError(null);
               }}
-              style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.25rem 0.5rem' }}
             >
               {language === 'es' ? 'Restablecer tareas' : 'Reset tasks'}
             </button>
@@ -455,7 +455,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
                   <span className="task-val">${task.weight}</span>
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.8125rem',
                       color: predInfo?.predId ? 'var(--success)' : 'var(--text-muted)',
                       fontFamily: 'var(--font-mono)'
                     }}

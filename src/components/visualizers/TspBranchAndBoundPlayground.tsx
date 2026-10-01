@@ -421,7 +421,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -481,7 +481,8 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                       y={midY - 2}
                       textAnchor="middle"
                       fill="var(--text-muted)"
-                      fontSize="9px"
+                      fontSize="13px"
+                      fontWeight="600"
                       fontFamily="var(--font-mono)"
                       pointerEvents="none"
                     >
@@ -549,7 +550,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                   <circle
                     cx={city.x}
                     cy={city.y}
-                    r={isCurrent ? 22 : 18}
+                    r={isCurrent ? 24 : 20}
                     fill="none"
                     stroke={isCurrent ? 'var(--warning)' : 'var(--success)'}
                     strokeWidth={2}
@@ -561,7 +562,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                 <circle
                   cx={city.x}
                   cy={city.y}
-                  r={isStart ? 16 : 14}
+                  r={isStart ? 18 : 16}
                   fill={isCurrent ? 'var(--warning)' : inTour ? 'var(--success)' : isAvailable ? 'var(--surface-hover)' : 'var(--surface)'}
                   stroke={isCurrent ? 'var(--warning)' : inTour ? 'var(--success)' : isAvailable ? 'var(--success)' : 'var(--border)'}
                   strokeWidth={2}
@@ -571,8 +572,8 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                   x={city.x}
                   y={city.y + 4}
                   textAnchor="middle"
-                  fill={isCurrent || inTour ? '#0f172a' : 'var(--text)'}
-                  fontSize="11px"
+                  fill={isCurrent || inTour ? '#ffffff' : 'var(--text)'}
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -582,10 +583,10 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
 
                 <text
                   x={city.x}
-                  y={city.y - 18}
+                  y={city.y - 20}
                   textAnchor="middle"
                   fill="var(--text)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight={isCurrent ? '700' : '600'}
                   pointerEvents="none"
                 >
@@ -594,11 +595,11 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
 
                 {tourOrder >= 0 && (
                   <text
-                    x={city.x + 14}
-                    y={city.y + 16}
+                    x={city.x + 16}
+                    y={city.y + 18}
                     textAnchor="middle"
                     fill="var(--accent)"
-                    fontSize="9px"
+                    fontSize="13px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"

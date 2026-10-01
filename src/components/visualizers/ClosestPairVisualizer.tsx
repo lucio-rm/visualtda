@@ -91,7 +91,7 @@ export const ClosestPairVisualizer: React.FC = () => {
                 strokeWidth={2}
                 strokeDasharray="6 4"
               />
-              <text x={splitX + 6} y={20} fill="var(--accent)" fontSize="11px" fontFamily="var(--font-mono)" fontWeight="700">
+              <text x={splitX + 6} y={20} fill="var(--accent)" fontSize="13px" fontFamily="var(--font-mono)" fontWeight="700">
                 x = {splitX}
               </text>
             </g>
@@ -150,7 +150,7 @@ export const ClosestPairVisualizer: React.FC = () => {
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   {p.id}

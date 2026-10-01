@@ -38,8 +38,8 @@
 }
 
 .sdk-action-badge.action-mrv_select {
-  border-color: #06b6d4;
-  color: #06b6d4;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .sdk-action-badge.action-prune_conflict {
@@ -91,9 +91,9 @@
 
 .sdk-cell-domain {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 13px;
   fill: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.75;
 }
 
 .sdk-description-box {

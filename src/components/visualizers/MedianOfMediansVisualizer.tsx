@@ -100,7 +100,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
               y={22}
               textAnchor="middle"
               fill="var(--text-muted)"
-              fontSize="10px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
             >
               G{colIdx + 1}

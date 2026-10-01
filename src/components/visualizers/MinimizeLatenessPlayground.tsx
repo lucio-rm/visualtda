@@ -307,7 +307,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -354,7 +354,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     y={102}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="9px"
+                    fontSize="13px"
                     fontFamily="var(--font-mono)"
                   >
                     {t}
@@ -395,7 +395,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     y={16}
                     textAnchor="middle"
                     fill="#ffffff"
-                    fontSize="8px"
+                    fontSize="13px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                   >
@@ -452,7 +452,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   y={52}
                   textAnchor="middle"
                   fill={isDragging ? '#0f172a' : '#ffffff'}
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -465,7 +465,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   y={66}
                   textAnchor="middle"
                   fill={isDragging ? '#0f172a' : 'rgba(255, 255, 255, 0.85)'}
-                  fontSize="8.5px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
                 >
@@ -488,7 +488,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   y={18}
                   textAnchor="middle"
                   fill="var(--error)"
-                  fontSize="8px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                 >
@@ -511,7 +511,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                       y={122}
                       textAnchor="middle"
                       fill="var(--error)"
-                      fontSize="9px"
+                      fontSize="13px"
                       fontWeight="700"
                       fontFamily="var(--font-mono)"
                     >

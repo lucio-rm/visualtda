@@ -288,7 +288,7 @@ export const BellmanFordPlayground: React.FC = () => {
 
       {/* Interactive SVG Graph */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ width: '100%', maxWidth: '480px', display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
+        <div style={{ width: '100%', maxWidth: '480px', display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
           <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos para moverlos):' : 'Directed Graph (Drag nodes to rearrange):'}</span>
           <span>{language === 'es' ? 'Iteración actual i =' : 'Current iter i ='} <strong>{iteration}</strong></span>
         </div>
@@ -366,7 +366,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill={isNeg ? 'var(--error)' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   {e.weight}
@@ -426,7 +426,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill={dist === Infinity ? 'var(--text-muted)' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="10px"
+                  fontSize="13px"
                   fontWeight="800"
                   style={{ userSelect: 'none' }}
                 >
@@ -499,7 +499,7 @@ export const BellmanFordPlayground: React.FC = () => {
                         >
                           {val === Infinity ? '∞' : val}
                           {hasDecreased && (
-                            <span style={{ fontSize: '0.7rem', marginLeft: '3px' }}>
+                            <span style={{ fontSize: '0.8125rem', marginLeft: '3px' }}>
                               {isCycleDetectionRow ? '▼!' : '▼'}
                             </span>
                           )}

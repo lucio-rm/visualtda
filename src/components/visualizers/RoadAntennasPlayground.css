@@ -97,7 +97,7 @@
 }
 
 .challenge-stat-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-text-muted);
   text-transform: uppercase;
@@ -118,33 +118,21 @@
 }
 
 .challenge-feedback-banner.success {
-  background: var(--state-solution-bg);
+  background: var(--success-bg);
   border: 1px solid var(--success);
-  color: #065f46;
+  color: var(--success);
 }
 
 .challenge-feedback-banner.suboptimal {
-  background: var(--state-candidate-bg);
+  background: var(--warning-bg);
   border: 1px solid var(--warning);
-  color: #92400e;
+  color: var(--warning);
 }
 
 .challenge-feedback-banner.incomplete {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid #3b82f6;
-  color: #1e40af;
-}
-
-[data-theme='dark'] .challenge-feedback-banner.success {
-  color: #34d399;
-}
-
-[data-theme='dark'] .challenge-feedback-banner.suboptimal {
-  color: #fbbf24;
-}
-
-[data-theme='dark'] .challenge-feedback-banner.incomplete {
-  color: #93c5fd;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent);
+  color: var(--accent);
 }
 
 .interactive-road-svg:focus-visible {

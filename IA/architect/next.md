@@ -36,11 +36,13 @@ Este documento define la hoja de ruta y estado operativo tras la finalización d
    - Módulo criptográfico `src/utils/solutionCrypto.ts` con encapsulación dual (Slot 1 Docente: `MEL75.29`, Slot 2 Estudiante: token de aprobación de pruebas).
    - Desencriptación en memoria en `UnderstandView.tsx`. Cero código Python en texto plano en `dist/`.
    - Test de regresión en `tests/solutionCrypto.test.ts` y especificación en `docs/security.md`.
-10. ✅ **Sección 3 — Oráculos Independientes (G11) y Accesibilidad por Teclado**:
-    - 16 oráculos independientes basados en fuerza bruta y definiciones axiomáticas en `tests/oracles/referenceSolvers.ts`.
-    - Suite de validación en `tests/independentOraclesNewExercises.test.ts` (16/16 tests PASS).
-    - Navegación por teclado completa (Flechas, Enter, Espacio, Delete, inputs numéricos) en los 9 playgrounds con arrastre 2D.
-    - 100% de directorios e identificadores verificados en kebab-case estricto.
+11. ✅ **Sección 4 — Restricción Docente, Historial de Intentos y Pistas Gated por Esfuerzo**:
+    - Código Python canónico y pseudocódigo restringidos en memoria exclusivamente a docentes autenticados.
+    - Historial de intentos del estudiante con persistencia de ejecuciones, métricas de tests y restauración al editor en un click.
+    - Desbloqueo dinámico de pistas escalado según el paradigma algorítmico (DP/Flujo: 16/22/28; Backtracking/D&C/LP/Reducciones: 10/15/20; Greedy/Aprox: 8/12/16; Aleatorizados: 6/10/14 líneas de lógica real).
+    - Erradicación universal de emojis decorativos y candados en favor de SVGs vectoriales limpios y tipografía académica.
+    - Rediseño de Fase 3 (Comprender) a un formato secuencial full-width eliminando desbalances de columnas.
+    - Editores interactivos de grafos y pesos en Dijkstra, Kruskal, Bellman-Ford y Flujo Máximo.
 
 ---
 
@@ -51,7 +53,7 @@ Este documento define la hoja de ruta y estado operativo tras la finalización d
 2. **Auditoría Periódica de Contraste y Autocompletado**:
    - Ejecutar periódicamente la verificación manual de autofill en perfiles limpios de navegadores web según el protocolo de `docs/known-issues.md`.
 3. **Mantenimiento de los Quality Gates**:
-   - `npm run lint`: 0 errores.
+   - `npm run lint`: 0 errores, 0 advertencias.
    - `npm run typecheck`: 0 errores.
-   - `npm test`: 45 test files, 339 tests (100% PASS).
-   - `npm run build`: compilación estática a `dist/` con encriptación pre-build automática.
+   - `npm test`: 46 test files, 355 tests (100% PASS).
+   - `npm run build`: compilación estática a `dist/` con encriptación pre-build automática en ~1.8s.

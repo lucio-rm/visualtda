@@ -362,7 +362,7 @@ export const PeakFindingPlayground: React.FC = () => {
                   type="button"
                   className="chip-button"
                   onClick={() => setDcState(null)}
-                  style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+                  style={{ fontSize: '0.8125rem', padding: '0.2rem 0.5rem' }}
                 >
                   ✕ {language === 'es' ? 'Reiniciar DyC' : 'Reset DyC'}
                 </button>
@@ -446,7 +446,7 @@ export const PeakFindingPlayground: React.FC = () => {
                       style={{
                         position: 'absolute',
                         top: '-24px',
-                        fontSize: '11px',
+                        fontSize: '13px',
                         fontWeight: 800,
                         color: '#3b82f6',
                         background: 'var(--surface)',

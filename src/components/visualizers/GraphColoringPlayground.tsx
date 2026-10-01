@@ -149,12 +149,49 @@ export const GraphColoringPlayground: React.FC = () => {
     return { vertices: verts, edges: eds, layout: lay };
   }, [customN]);
 
+  const [customEdges, setCustomEdges] = useState<[string, string][] | null>(null);
+  const [edgeU, setEdgeU] = useState<string>('1');
+  const [edgeV, setEdgeV] = useState<string>('2');
+  const [edgeError, setEdgeError] = useState<string | null>(null);
+
   const { vertices, edges } = useMemo(() => {
     if (activePresetId === 'custom') {
-      return { vertices: customGraph.vertices, edges: customGraph.edges };
+      return { vertices: customGraph.vertices, edges: customEdges ?? customGraph.edges };
     }
     return { vertices: currentPreset.vertices, edges: currentPreset.edges };
-  }, [activePresetId, customGraph, currentPreset]);
+  }, [activePresetId, customGraph, customEdges, currentPreset]);
+
+  const handleAddEdge = () => {
+    if (edgeU === edgeV) {
+      setEdgeError(language === 'es' ? 'No se permiten bucles reflexivos (u = v).' : 'Self-loops are not allowed (u = v).');
+      return;
+    }
+    const current = customEdges ?? customGraph.edges;
+    const exists = current.some(([u, v]) => (u === edgeU && v === edgeV) || (u === edgeV && v === edgeU));
+    if (exists) {
+      setEdgeError(language === 'es' ? 'La arista ya existe.' : 'Edge already exists.');
+      return;
+    }
+    setEdgeError(null);
+    setCustomEdges([...current, [edgeU, edgeV]]);
+    setColoring({});
+    setFeedback(null);
+    markAttempted('graph-coloring');
+  };
+
+  const handleRemoveEdge = (uToRemove: string, vToRemove: string) => {
+    const current = customEdges ?? customGraph.edges;
+    setCustomEdges(current.filter(([u, v]) => !((u === uToRemove && v === vToRemove) || (u === vToRemove && v === uToRemove))));
+    setColoring({});
+    setFeedback(null);
+  };
+
+  const handleResetEdges = () => {
+    setCustomEdges(null);
+    setColoring({});
+    setFeedback(null);
+    setEdgeError(null);
+  };
 
   const conflicts = useMemo(() => {
     const list: [string, string][] = [];
@@ -476,6 +513,92 @@ export const GraphColoringPlayground: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {/* Custom Edge Topology Editor */}
+        {activePresetId === 'custom' && (
+          <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)' }}>
+                {language === 'es' ? 'Editor de Topología de Aristas:' : 'Custom Edge Topology Editor:'}
+              </span>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleResetEdges}
+                style={{ fontSize: '0.8125rem', padding: '0.2rem 0.6rem' }}
+              >
+                {language === 'es' ? 'Reiniciar Aristas' : 'Reset Edges'}
+              </button>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '0.8125rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <span>{language === 'es' ? 'De (u):' : 'From (u):'}</span>
+                <select
+                  value={edgeU}
+                  onChange={(e) => setEdgeU(e.target.value)}
+                  style={{ padding: '0.25rem 0.5rem', background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+                >
+                  {vertices.map((v) => (
+                    <option key={`opt-u-${v}`} value={v}>{v}</option>
+                  ))}
+                </select>
+              </label>
+              <label style={{ fontSize: '0.8125rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <span>{language === 'es' ? 'A (v):' : 'To (v):'}</span>
+                <select
+                  value={edgeV}
+                  onChange={(e) => setEdgeV(e.target.value)}
+                  style={{ padding: '0.25rem 0.5rem', background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+                >
+                  {vertices.map((v) => (
+                    <option key={`opt-v-${v}`} value={v}>{v}</option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleAddEdge}
+                style={{ fontSize: '0.8125rem', padding: '0.25rem 0.75rem' }}
+              >
+                {language === 'es' ? '+ Conectar Arista' : '+ Connect Edge'}
+              </button>
+            </div>
+            {edgeError && (
+              <div style={{ marginTop: '0.35rem', color: 'var(--error)', fontSize: '0.8125rem' }}>
+                {edgeError}
+              </div>
+            )}
+            <div style={{ marginTop: '0.6rem', display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+              {edges.map(([u, v], eIdx) => (
+                <span
+                  key={`edge-tag-${eIdx}`}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.2rem 0.5rem',
+                    background: 'var(--bg)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-sm)',
+                    fontSize: '0.8125rem',
+                    fontFamily: 'var(--font-mono)'
+                  }}
+                >
+                  <span>({u}, {v})</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveEdge(u, v)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--error)', fontWeight: 'bold', padding: 0 }}
+                    title={language === 'es' ? 'Eliminar arista' : 'Remove edge'}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* SVG Canvas with 2D Dragging */}
@@ -494,7 +617,7 @@ export const GraphColoringPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -561,7 +684,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       y={(posU.y + posV.y) / 2 + 3}
                       textAnchor="middle"
                       fill="#ffffff"
-                      fontSize="9px"
+                      fontSize="13px"
                       fontWeight="800"
                     >
                       !
@@ -647,7 +770,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       y={pos.y + 32}
                       textAnchor="middle"
                       fill="var(--text-muted)"
-                      fontSize="9px"
+                      fontSize="13px"
                       fontFamily="var(--font-mono)"
                       pointerEvents="none"
                     >

@@ -219,7 +219,7 @@
 }
 
 .huff-node-pill .pill-freq {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-family: var(--font-mono);
   background-color: rgba(0, 0, 0, 0.08);
   padding: 0.1rem 0.35rem;
@@ -260,7 +260,7 @@
 }
 
 .huff-pg-metric-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   text-transform: uppercase;
   color: var(--text-muted, #64748b);
   font-weight: 600;
@@ -278,7 +278,7 @@
 }
 
 .huff-pg-metric-desc {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted, #64748b);
 }
 
@@ -319,7 +319,7 @@
 }
 
 .huff-len-tag {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted, #64748b);
 }
 
@@ -348,18 +348,18 @@
   align-items: center;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border, #cbd5e1);
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
 }
 
 .huff-stream-token .token-char {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--accent, #2563eb);
   font-weight: 700;
 }
 
 .huff-stream-token .token-bits {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-family: var(--font-mono);
   color: var(--text, #0f172a);
 }

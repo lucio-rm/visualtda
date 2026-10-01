@@ -266,7 +266,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                     <text
                       x={toSvgX(gx)}
                       y={toSvgY(0) + 16}
-                      fontSize="10"
+                      fontSize="13"
                       textAnchor="middle"
                       fill="var(--text-muted)"
                       fontFamily="var(--font-mono)"
@@ -286,7 +286,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                     <text
                       x={toSvgX(0) - 10}
                       y={toSvgY(gy) + 4}
-                      fontSize="10"
+                      fontSize="13"
                       textAnchor="end"
                       fill="var(--text-muted)"
                       fontFamily="var(--font-mono)"
@@ -314,8 +314,8 @@ export const LinearProgrammingPlayground: React.FC = () => {
                 stroke="var(--text)"
                 strokeWidth="2"
               />
-              <text x={toSvgX(maxX) - 5} y={toSvgY(0) + 18} fill="var(--text)" fontSize="11" fontWeight="700">X</text>
-              <text x={toSvgX(0) - 15} y={toSvgY(maxY) + 10} fill="var(--text)" fontSize="11" fontWeight="700">Y</text>
+              <text x={toSvgX(maxX) - 5} y={toSvgY(0) + 18} fill="var(--text)" fontSize="13" fontWeight="700">X</text>
+              <text x={toSvgX(0) - 15} y={toSvgY(maxY) + 10} fill="var(--text)" fontSize="13" fontWeight="700">Y</text>
 
               {/* Shaded Feasible Polytope */}
               {polygonPoints && (
@@ -403,7 +403,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                     <text
                       x={toSvgX(vx)}
                       y={toSvgY(vy) - 10}
-                      fontSize="10"
+                      fontSize="13"
                       textAnchor="middle"
                       fill={isOpt ? 'var(--success)' : 'var(--text)'}
                       fontFamily="var(--font-mono)"

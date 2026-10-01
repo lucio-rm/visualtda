@@ -48,21 +48,9 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     code: 'GREEDY'
   },
   {
-    id: 'dynamic-programming',
-    categoryIds: ['dynamic-programming'],
-    trackNumber: 3,
-    title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 6', en: 'Kleinberg & Tardos — Chapter 6' },
-    description: {
-      es: 'Subestructura óptima y subproblemas superpuestos tabulados sistemáticamente evitando recomputación exponencial.',
-      en: 'Optimal substructure and overlapping subproblems tabulated to eliminate exponential recomputation.'
-    },
-    code: 'DP'
-  },
-  {
     id: 'backtracking',
     categoryIds: ['backtracking'],
-    trackNumber: 4,
+    trackNumber: 3,
     title: { es: 'Backtracking y Ramificación', en: 'Backtracking & Branching' },
     bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
     description: {
@@ -72,28 +60,76 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     code: 'BT'
   },
   {
-    id: 'network-flow-lp',
-    categoryIds: ['network-flow', 'linear-programming'],
-    trackNumber: 5,
-    title: { es: 'Flujo en Redes y Programación Lineal', en: 'Network Flow & Linear Programming' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulos 7 y 11', en: 'Kleinberg & Tardos — Chapters 7 & 11' },
+    id: 'dynamic-programming',
+    categoryIds: ['dynamic-programming'],
+    trackNumber: 4,
+    title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 6', en: 'Kleinberg & Tardos — Chapter 6' },
     description: {
-      es: 'Flujo en redes (Ford-Fulkerson, corte mínimo) y formulación en programación lineal continua.',
-      en: 'Network flow (Ford-Fulkerson, min-cut) and continuous linear programming formulations.'
+      es: 'Subestructura óptima y subproblemas superpuestos tabulados sistemáticamente evitando recomputación exponencial.',
+      en: 'Optimal substructure and overlapping subproblems tabulated to eliminate exponential recomputation.'
     },
-    code: 'FLOW-LP'
+    code: 'DP'
   },
   {
-    id: 'reductions-approx-random',
-    categoryIds: ['reductions', 'approximation', 'randomized'],
-    trackNumber: 6,
-    title: { es: 'Reducciones, Aproximación y Aleatorizados', en: 'Reductions, Approximation & Randomized' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulos 8, 11 y 13', en: 'Kleinberg & Tardos — Chapters 8, 11 & 13' },
+    id: 'linear-programming',
+    categoryIds: ['linear-programming'],
+    trackNumber: 5,
+    title: { es: 'Programación Lineal', en: 'Linear Programming' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 11', en: 'Kleinberg & Tardos — Chapter 11' },
     description: {
-      es: 'Transformaciones polinomiales para caracterizar NP-completitud, cotas de aproximación y algoritmos probabilísticos.',
-      en: 'Polynomial-time reductions for NP-completeness, approximation bounds, and probabilistic algorithms.'
+      es: 'Optimización de una función objetivo continua sujeta a un poliedro convexo de restricciones lineales.',
+      en: 'Continuous objective function optimization subject to a convex polyhedron of linear constraints.'
     },
-    code: 'ADV'
+    code: 'PL'
+  },
+  {
+    id: 'network-flow',
+    categoryIds: ['network-flow'],
+    trackNumber: 6,
+    title: { es: 'Redes de Flujo', en: 'Network Flow' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 7', en: 'Kleinberg & Tardos — Chapter 7' },
+    description: {
+      es: 'Conservación de flujo, capacidades residuales, teorema de flujo máximo y corte mínimo (Max-Flow Min-Cut).',
+      en: 'Flow conservation, residual capacities, and the Max-Flow Min-Cut theorem on directed networks.'
+    },
+    code: 'FLOW'
+  },
+  {
+    id: 'reductions',
+    categoryIds: ['reductions'],
+    trackNumber: 7,
+    title: { es: 'Reducciones de Problemas y NP-Completitud', en: 'Problem Reductions & NP-Completeness' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
+    description: {
+      es: 'Mapeos polinomiales (X ≤_p Y) entre problemas para caracterizar intratabilidad computacional y completitud.',
+      en: 'Polynomial-time mappings (X ≤_p Y) to classify computational intractability and completeness.'
+    },
+    code: 'RED'
+  },
+  {
+    id: 'approximation',
+    categoryIds: ['approximation'],
+    trackNumber: 8,
+    title: { es: 'Algoritmos de Aproximación', en: 'Approximation Algorithms' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 11', en: 'Kleinberg & Tardos — Chapter 11' },
+    description: {
+      es: 'Garantías matemáticas de rendimiento acotado (factor ρ-aproximación) en tiempo polinomial para problemas NP-hard.',
+      en: 'Provable bounded performance guarantees (ρ-approximation factor) in polynomial time for NP-hard problems.'
+    },
+    code: 'APX'
+  },
+  {
+    id: 'randomized',
+    categoryIds: ['randomized'],
+    trackNumber: 9,
+    title: { es: 'Algoritmos Randomizados', en: 'Randomized Algorithms' },
+    bookReference: { es: 'Kleinberg & Tardos — Capítulo 13', en: 'Kleinberg & Tardos — Chapter 13' },
+    description: {
+      es: 'Uso de variables aleatorias e independencia probabilística para simplificar algoritmos o acotar tiempos esperados.',
+      en: 'Harnessing random variables and probabilistic independence for simplicity and bounded expected runtime.'
+    },
+    code: 'RAND'
   }
 ];
 

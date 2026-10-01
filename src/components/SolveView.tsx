@@ -693,26 +693,28 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 return (
                   <div key={idx} className={`hint-item ${unlockStatus.isUnlocked ? 'hint-unlocked' : 'hint-locked'}`}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.35rem' }}>
-                      {unlockStatus.isUnlocked ? (
-                        <button
-                          type="button"
-                          className={`btn-toggle-hint ${isRevealed ? 'revealed' : ''}`}
-                          onClick={() => toggleHint(idx)}
-                          aria-expanded={isRevealed}
-                        >
-                          {isRevealed
-                            ? `${t(dict.hintLabel)} ${idx + 1}`
-                            : `${t(dict.viewHintLabel)} ${idx + 1}`}
-                        </button>
-                      ) : (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                          </svg>
-                          <span>{t(dict.hintLabel)} {idx + 1}</span>
-                        </span>
-                      )}
+                      <button
+                        type="button"
+                        className={`btn-toggle-hint ${isRevealed ? 'revealed' : ''} ${!unlockStatus.isUnlocked ? 'locked' : ''}`}
+                        onClick={() => {
+                          if (unlockStatus.isUnlocked) toggleHint(idx);
+                        }}
+                        disabled={!unlockStatus.isUnlocked}
+                        aria-expanded={isRevealed}
+                      >
+                        {!unlockStatus.isUnlocked ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
+                            <span style={{ fontSize: '0.75rem', padding: '0.1rem 0.35rem', background: 'var(--surface-hover)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                              {language === 'es' ? 'Bloqueada' : 'Locked'}
+                            </span>
+                            <span>{t(dict.hintLabel)} {idx + 1}</span>
+                          </span>
+                        ) : isRevealed ? (
+                          `${t(dict.hintLabel)} ${idx + 1}`
+                        ) : (
+                          `${t(dict.viewHintLabel)} ${idx + 1}`
+                        )}
+                      </button>
                       <HintRequirementWidget status={unlockStatus} language={language} />
                     </div>
                     {unlockStatus.isUnlocked && isRevealed && (

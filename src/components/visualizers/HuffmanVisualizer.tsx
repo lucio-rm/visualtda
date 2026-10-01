@@ -207,7 +207,7 @@ export const HuffmanVisualizer: React.FC = () => {
               ? 'Cola de Prioridad (Min-Heap ordenado por frecuencia):'
               : 'Priority Queue (Min-Heap sorted by frequency):'}
           </span>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+          <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
             {language === 'es' ? 'Extracción Greedy de la izquierda' : 'Greedy extract from the left'}
           </span>
         </div>
@@ -242,7 +242,7 @@ export const HuffmanVisualizer: React.FC = () => {
                   <span className="freq">
                     freq: <strong>{node.freq}</strong>
                   </span>
-                  <span style={{ fontSize: '0.65rem', color: '#64748b' }}>#{idx + 1}</span>
+                  <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>#{idx + 1}</span>
                 </div>
               );
             })
@@ -365,7 +365,7 @@ export const HuffmanVisualizer: React.FC = () => {
               key={s}
               className={`timeline-btn ${playbackSpeed === s ? 'active' : ''}`}
               onClick={() => setSpeed(s)}
-              style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.2rem 0.4rem' }}
             >
               {s}x
             </button>

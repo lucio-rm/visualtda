@@ -26,7 +26,7 @@
 }
 
 .subset-metric-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-text-muted);
   text-transform: uppercase;
@@ -71,12 +71,12 @@
 
 .sum-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, var(--accent));
+  background: var(--accent);
   transition: width 0.3s ease;
 }
 
 .sum-progress-fill.target-reached {
-  background: linear-gradient(90deg, var(--success), #059669);
+  background: var(--success);
 }
 
 .elements-status-strip {
@@ -108,27 +108,27 @@
 }
 
 .element-chip .chip-label {
-  font-size: 0.65rem;
-  font-weight: 500;
+  font-size: 0.8125rem;
+  font-weight: 600;
   color: var(--color-text-muted);
   text-transform: uppercase;
 }
 
 .element-chip.included {
-  background: #3b82f6;
-  border-color: #2563eb;
-  color: white;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  background: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--success);
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
 }
 
 .element-chip.included .chip-label {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--success);
 }
 
 .element-chip.evaluating {
   border-color: var(--warning);
   background: var(--state-candidate-bg);
-  color: #d97706;
+  color: var(--warning);
   animation: pulseChip 1.2s infinite alternate;
 }
 
@@ -160,37 +160,25 @@
 .pruning-status-banner.excess {
   background: var(--state-conflict-bg);
   border: 1px solid var(--error);
-  color: #b91c1c;
+  color: var(--error);
 }
 
 .pruning-status-banner.deficit {
   background: var(--state-candidate-bg);
   border: 1px solid var(--warning);
-  color: #b45309;
+  color: var(--warning);
 }
 
 .pruning-status-banner.solution {
   background: var(--state-solution-bg);
   border: 1px solid var(--success);
-  color: #047857;
+  color: var(--success);
 }
 
 .pruning-status-banner.exploring {
-  background: rgba(59, 130, 246, 0.08);
+  background: var(--surface-hover);
   border: 1px solid var(--color-border);
   color: var(--color-text);
-}
-
-[data-theme='dark'] .pruning-status-banner.excess {
-  color: #f87171;
-}
-
-[data-theme='dark'] .pruning-status-banner.deficit {
-  color: #fbbf24;
-}
-
-[data-theme='dark'] .pruning-status-banner.solution {
-  color: #34d399;
 }
 
 .solutions-preview-shelf {
@@ -217,15 +205,11 @@
 
 .solution-badge {
   padding: 4px 10px;
-  background: var(--state-solution-bg);
+  background: var(--success-bg);
   border: 1px solid var(--success);
-  color: #047857;
+  color: var(--success);
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 600;
   font-feature-settings: 'tnum';
-}
-
-[data-theme='dark'] .solution-badge {
-  color: #34d399;
 }

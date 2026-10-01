@@ -133,7 +133,7 @@
 }
 
 .item-idx {
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -155,7 +155,7 @@
   bottom: -6px;
   background-color: var(--success);
   color: white;
-  font-size: 0.55rem;
+  font-size: 0.8125rem;
   font-weight: 800;
   padding: 0.05rem 0.3rem;
   border-radius: 3px;
@@ -178,7 +178,7 @@
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   text-transform: uppercase;
   font-weight: 600;

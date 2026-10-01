@@ -279,7 +279,7 @@ export const LcsPlayground: React.FC = () => {
               className="chip-button"
               onClick={handleClearRibbons}
               disabled={links.length === 0}
-              style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.2rem 0.5rem' }}
             >
               ✕ {language === 'es' ? 'Limpiar líneas' : 'Clear lines'}
             </button>
@@ -407,7 +407,7 @@ export const LcsPlayground: React.FC = () => {
                     y={y - 8}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontFamily="var(--font-mono)"
                   >
                     i={i}
@@ -454,7 +454,7 @@ export const LcsPlayground: React.FC = () => {
                     y={y + charWidth + 16}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontFamily="var(--font-mono)"
                   >
                     j={j}

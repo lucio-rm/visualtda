@@ -27,13 +27,13 @@
 }
 
 .axis-label {
-  font-size: 11px;
+  font-size: 13px;
   font-family: var(--font-mono);
   fill: var(--text-muted);
 }
 
 .task-row-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   fill: var(--text);
   font-family: var(--font-mono);
@@ -47,49 +47,35 @@
 
 /* Bars */
 .interval-bar {
-  fill: var(--surface-hover);
-  stroke: var(--border);
+  fill: var(--surface);
+  stroke: var(--border-strong);
   stroke-width: 1.5;
   transition: all 0.2s ease;
 }
 
 .interval-bar.bar-evaluating {
-  fill: #bfdbfe;
-  stroke: #2563eb;
+  fill: var(--state-candidate-bg);
+  stroke: var(--warning);
   stroke-width: 2;
-  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.25));
-}
-
-[data-theme='dark'] .interval-bar.bar-evaluating {
-  fill: #1e3a8a;
-  stroke: #60a5fa;
+  filter: drop-shadow(0 1px 3px rgba(180, 83, 9, 0.15));
 }
 
 .interval-bar.bar-selected {
-  fill: #dcfce7;
-  stroke: #16a34a;
+  fill: var(--state-solution-bg);
+  stroke: var(--success);
   stroke-width: 2;
-}
-
-[data-theme='dark'] .interval-bar.bar-selected {
-  fill: #064e3b;
-  stroke: #22c55e;
+  filter: drop-shadow(0 1px 3px rgba(21, 128, 61, 0.15));
 }
 
 .interval-bar.bar-rejected {
-  fill: #fee2e2;
-  stroke: #dc2626;
+  fill: var(--surface-hover);
+  stroke: var(--border);
   opacity: 0.5;
 }
 
-[data-theme='dark'] .interval-bar.bar-rejected {
-  fill: #450a0a;
-  stroke: var(--error);
-}
-
 .bar-text {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   font-family: var(--font-mono);
   fill: var(--text);
   pointer-events: none;

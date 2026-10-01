@@ -339,7 +339,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -509,7 +509,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                     y={pos.y - 25}
                     textAnchor="middle"
                     fill={inIS ? 'var(--success)' : '#8b5cf6'}
-                    fontSize="11px"
+                    fontSize="13px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"

@@ -397,7 +397,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -447,7 +447,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   y={marginTop - 12}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   {h}:00
@@ -479,7 +479,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   y={rowY + rowHeight / 2 + 1}
                   textAnchor="end"
                   fill={isBoundExceeded ? 'var(--error)' : 'var(--text)'}
-                  fontSize="11px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                   fontWeight="700"
                 >
@@ -505,7 +505,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             y={marginTop + numRooms * rowHeight + 12}
             textAnchor="middle"
             fill="var(--warning)"
-            fontSize="8.5px"
+            fontSize="13px"
             fontWeight="700"
             fontFamily="var(--font-mono)"
           >
@@ -581,7 +581,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   y={rowY + rowHeight / 2 + 1}
                   textAnchor="middle"
                   fill={isDragging ? '#0f172a' : '#ffffff'}
-                  fontSize="10px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -690,7 +690,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
               border: '1px solid var(--border)',
               borderRadius: '4px',
               padding: '0.15rem 0.45rem',
-              fontSize: '0.75rem'
+              fontSize: '0.8125rem'
             }}
           >
             <strong>{lec.name}</strong> ({lec.start}h-{lec.end}h)

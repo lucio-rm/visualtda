@@ -145,14 +145,14 @@
 
 .feed-chip.bit-0 {
   background-color: var(--state-candidate-bg);
-  border-color: var(--state-candidate-bg);
-  color: #d97706;
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .feed-chip.bit-1 {
-  background-color: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  background-color: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .comparison-container {
@@ -216,7 +216,7 @@
 }
 
 .bar-fill.fill-1 {
-  background-color: #3b82f6;
+  background-color: var(--accent);
 }
 
 .bar-fill.fill-fair-0 {
@@ -224,7 +224,7 @@
 }
 
 .bar-fill.fill-fair-1 {
-  background-color: #059669;
+  background-color: var(--success);
 }
 
 .dist-sub {

@@ -429,7 +429,7 @@ export const RoadAntennasPlayground: React.FC = () => {
               y={roadY - 18}
               textAnchor="middle"
               fill="var(--warning)"
-              fontSize="10"
+              fontSize="13"
               fontWeight="700"
             >
               {cursorKm}k
@@ -448,7 +448,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   y={roadY + 34}
                   textAnchor="middle"
                   fill="var(--color-text-muted)"
-                  fontSize="10"
+                  fontSize="13"
                   fontFamily="sans-serif"
                 >
                   {km}k
@@ -537,7 +537,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   y={roadY - 72}
                   textAnchor="middle"
                   fill="var(--accent)"
-                  fontSize="10"
+                  fontSize="13"
                   fontWeight="bold"
                 >
                   {antKm}k
@@ -573,7 +573,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                     y={roadY - 87}
                     textAnchor="middle"
                     fill="var(--success)"
-                    fontSize="11"
+                    fontSize="13"
                     fontWeight="bold"
                   >
                     Opt: {gKm}k
@@ -642,7 +642,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   y={roadY - 26}
                   textAnchor="middle"
                   fill="var(--color-text)"
-                  fontSize="10"
+                  fontSize="13"
                   fontFamily="sans-serif"
                 >
                   {hKm}k

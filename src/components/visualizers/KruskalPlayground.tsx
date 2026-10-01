@@ -304,7 +304,7 @@ export const KruskalPlayground: React.FC = () => {
             <strong style={{ color: currentTotalWeight === optimalMSTWeight ? 'var(--success)' : 'var(--accent)' }}>
               {currentTotalWeight}
             </strong>{' '}
-            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = {optimalMSTWeight})</span>
+            <span style={{ fontSize: '0.8125rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = {optimalMSTWeight})</span>
           </span>
         </div>
 
@@ -351,7 +351,7 @@ export const KruskalPlayground: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 240px', gap: '1rem', alignItems: 'start' }}>
         {/* Interactive SVG Graph */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.35rem', display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.35rem', display: 'flex', justifyContent: 'space-between' }}>
             <span>{language === 'es' ? 'Grafo (Hacé clic en aristas para sumar/quitar):' : 'Graph (Click edges to add/remove):'}</span>
             <span>{language === 'es' ? 'Colores = Componentes Conexas (Union-Find)' : 'Colors = Connected Components'}</span>
           </div>
@@ -406,7 +406,7 @@ export const KruskalPlayground: React.FC = () => {
                     textAnchor="middle"
                     fill={isSelected ? '#ffffff' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontWeight="700"
                   >
                     {edge.weight}
@@ -462,7 +462,7 @@ export const KruskalPlayground: React.FC = () => {
                     textAnchor="middle"
                     fill="#ffffff"
                     fontFamily="var(--font-mono)"
-                    fontSize="9px"
+                    fontSize="13px"
                     fontWeight="800"
                   >
                     {rootId}
@@ -502,7 +502,7 @@ export const KruskalPlayground: React.FC = () => {
                       : 'var(--bg)',
                     border: `1px solid ${isSelected ? 'var(--success)' : wouldFormCycle ? 'var(--state-conflict-bg)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.75rem',
+                    fontSize: '0.8125rem',
                     cursor: 'pointer'
                   }}
                 >
@@ -512,7 +512,7 @@ export const KruskalPlayground: React.FC = () => {
 
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.8125rem',
                       fontWeight: 700,
                       color: isSelected ? 'var(--success)' : wouldFormCycle ? 'var(--error)' : 'var(--text-muted)'
                     }}

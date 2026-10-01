@@ -276,7 +276,7 @@ export const ClosestPairPlayground: React.FC = () => {
                 x={dividerX + 6}
                 y={18}
                 fill="var(--accent)"
-                fontSize="10px"
+                fontSize="13px"
                 fontWeight="700"
                 fontFamily="var(--font-mono)"
               >
@@ -286,16 +286,16 @@ export const ClosestPairPlayground: React.FC = () => {
                 x={stripLeft + 6}
                 y={272}
                 fill="var(--text-muted)"
-                fontSize="9px"
+                fontSize="13px"
                 fontFamily="var(--font-mono)"
               >
                 L - δ
               </text>
               <text
-                x={stripLeft + stripWidth - 28}
+                x={stripLeft + stripWidth - 36}
                 y={272}
                 fill="var(--text-muted)"
-                fontSize="9px"
+                fontSize="13px"
                 fontFamily="var(--font-mono)"
               >
                 L + δ
@@ -333,10 +333,10 @@ export const ClosestPairPlayground: React.FC = () => {
               />
               {/* Distance midpoint label */}
               <rect
-                x={(bestPair[0].x + bestPair[1].x) / 2 - 24}
-                y={(bestPair[0].y + bestPair[1].y) / 2 - 10}
-                width={48}
-                height={20}
+                x={(bestPair[0].x + bestPair[1].x) / 2 - 32}
+                y={(bestPair[0].y + bestPair[1].y) / 2 - 12}
+                width={64}
+                height={24}
                 rx={4}
                 fill="var(--surface)"
                 stroke="var(--success)"
@@ -344,11 +344,11 @@ export const ClosestPairPlayground: React.FC = () => {
               />
               <text
                 x={(bestPair[0].x + bestPair[1].x) / 2}
-                y={(bestPair[0].y + bestPair[1].y) / 2 + 4}
+                y={(bestPair[0].y + bestPair[1].y) / 2 + 5}
                 textAnchor="middle"
                 fill="var(--success)"
                 fontFamily="var(--font-mono)"
-                fontSize="10px"
+                fontSize="13px"
                 fontWeight="700"
               >
                 δ={minDistance}
@@ -419,11 +419,11 @@ export const ClosestPairPlayground: React.FC = () => {
                 />
                 <text
                   x={p.x}
-                  y={p.y - 10}
+                  y={p.y - 12}
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
-                  fontSize="10px"
+                  fontSize="13px"
                   fontWeight="700"
                   pointerEvents="none"
                 >

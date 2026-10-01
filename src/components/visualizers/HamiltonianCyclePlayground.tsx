@@ -133,9 +133,52 @@ export const HamiltonianCyclePlayground: React.FC = () => {
   const dragStartPos = useRef({ x: 0, y: 0 });
   const hasDraggedRef = useRef(false);
 
+  const [customEdges, setCustomEdges] = useState<Record<string, HamEdge[]>>({});
+  const [edgeU, setEdgeU] = useState<number>(0);
+  const [edgeV, setEdgeV] = useState<number>(1);
+  const [edgeError, setEdgeError] = useState<string | null>(null);
+
   const nodes = currentPreset.nodes;
-  const edges = currentPreset.edges;
+  const edges = customEdges[selectedPresetId] || currentPreset.edges;
   const numV = nodes.length;
+
+  const handleAddEdge = (e: React.FormEvent) => {
+    e.preventDefault();
+    setEdgeError(null);
+    if (edgeU === edgeV) {
+      setEdgeError(language === 'es' ? 'Los bucles no están permitidos.' : 'Self-loops are not allowed.');
+      return;
+    }
+    const exists = edges.some(
+      (ed) => (ed.u === edgeU && ed.v === edgeV) || (ed.u === edgeV && ed.v === edgeU)
+    );
+    if (exists) {
+      setEdgeError(language === 'es' ? 'La arista ya existe en el grafo.' : 'Edge already exists in graph.');
+      return;
+    }
+    const newEdges = [...edges, { u: edgeU, v: edgeV }];
+    setCustomEdges((prev) => ({ ...prev, [selectedPresetId]: newEdges }));
+    setPath([0]);
+    markAttempted('hamiltonian-cycle-backtracking');
+  };
+
+  const handleRemoveEdge = (u: number, v: number) => {
+    const newEdges = edges.filter(
+      (ed) => !((ed.u === u && ed.v === v) || (ed.u === v && ed.v === u))
+    );
+    setCustomEdges((prev) => ({ ...prev, [selectedPresetId]: newEdges }));
+    setPath([0]);
+  };
+
+  const handleResetEdges = () => {
+    setCustomEdges((prev) => {
+      const copy = { ...prev };
+      delete copy[selectedPresetId];
+      return copy;
+    });
+    setPath([0]);
+    setEdgeError(null);
+  };
 
   const adj = useMemo(() => {
     const map = new Map<number, number[]>();
@@ -310,6 +353,48 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {/* Interactive Edge Editor */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', backgroundColor: 'var(--surface)', padding: '0.5rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.85rem' }}>
+          <form onSubmit={handleAddEdge} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <span style={{ fontWeight: 600, color: 'var(--text)' }}>
+              {language === 'es' ? 'Editar Aristas:' : 'Edit Edges:'}
+            </span>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <span>u:</span>
+              <select value={edgeU} onChange={(e) => setEdgeU(Number(e.target.value))} style={{ padding: '0.2rem 0.4rem', borderRadius: '4px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}>
+                {nodes.map((n) => (
+                  <option key={n.id} value={n.id}>v{n.id}</option>
+                ))}
+              </select>
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <span>v:</span>
+              <select value={edgeV} onChange={(e) => setEdgeV(Number(e.target.value))} style={{ padding: '0.2rem 0.4rem', borderRadius: '4px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}>
+                {nodes.map((n) => (
+                  <option key={n.id} value={n.id}>v{n.id}</option>
+                ))}
+              </select>
+            </label>
+            <button type="submit" className="btn-secondary" style={{ padding: '0.25rem 0.6rem', fontSize: '0.8125rem' }}>
+              + {language === 'es' ? 'Conectar' : 'Connect'}
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => handleRemoveEdge(edgeU, edgeV)}
+              style={{ padding: '0.25rem 0.6rem', fontSize: '0.8125rem' }}
+            >
+              - {language === 'es' ? 'Desconectar' : 'Disconnect'}
+            </button>
+            {customEdges[selectedPresetId] && (
+              <button type="button" className="btn-secondary" onClick={handleResetEdges} style={{ padding: '0.25rem 0.6rem', fontSize: '0.8125rem' }}>
+                {language === 'es' ? 'Restablecer Aristas' : 'Reset Edges'}
+              </button>
+            )}
+            {edgeError && <span style={{ color: 'var(--error)', fontSize: '0.8125rem' }}>{edgeError}</span>}
+          </form>
+        </div>
       </div>
 
       {/* Status banner */}
@@ -396,7 +481,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -462,17 +547,17 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   <circle
                     cx={(uPos.x + vPos.x) / 2}
                     cy={(uPos.y + vPos.y) / 2}
-                    r={7}
+                    r={12}
                     fill={isCompleteCycle ? 'var(--success)' : 'var(--accent)'}
                   />
                 )}
                 {inPath && (
                   <text
                     x={(uPos.x + vPos.x) / 2}
-                    y={(uPos.y + vPos.y) / 2 + 3}
+                    y={(uPos.y + vPos.y) / 2 + 4}
                     textAnchor="middle"
-                    fill="#0f172a"
-                    fontSize="8px"
+                    fill="#ffffff"
+                    fontSize="13px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"
                   >
@@ -535,7 +620,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   <circle
                     cx={pos.x}
                     cy={pos.y}
-                    r={24}
+                    r={26}
                     fill="none"
                     stroke={isCurrent ? 'var(--warning)' : 'var(--success)'}
                     strokeWidth={2}
@@ -547,34 +632,34 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                 <circle
                   cx={pos.x}
                   cy={pos.y}
-                  r={18}
+                  r={22}
                   fill={
                     isCurrent
-                      ? 'var(--warning)'
+                      ? 'var(--warning-bg)'
                       : isSelectable
-                      ? 'var(--state-solution-bg)'
+                      ? 'var(--state-candidate-bg)'
                       : isVisited
-                      ? 'var(--surface-hover)'
+                      ? 'var(--accent-subtle)'
                       : 'var(--surface)'
                   }
                   stroke={
                     isCurrent
                       ? 'var(--warning)'
                       : isSelectable
-                      ? 'var(--success)'
+                      ? 'var(--state-candidate)'
                       : isVisited
                       ? 'var(--accent)'
-                      : 'var(--border)'
+                      : 'var(--border-strong)'
                   }
                   strokeWidth={isCurrent || isSelectable ? 2.5 : 1.5}
                 />
 
                 <text
                   x={pos.x}
-                  y={pos.y + 4}
+                  y={pos.y + 5}
                   textAnchor="middle"
                   fill={isCurrent ? '#0f172a' : 'var(--text)'}
-                  fontSize="12px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -586,19 +671,19 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                 {pathIdx >= 0 && (
                   <g pointerEvents="none">
                     <rect
-                      x={pos.x + 10}
-                      y={pos.y - 20}
-                      width={16}
-                      height={14}
+                      x={pos.x + 12}
+                      y={pos.y - 24}
+                      width={22}
+                      height={18}
                       rx={3}
-                      fill={isStart && pathIdx === 0 ? 'var(--accent)' : '#0ea5e9'}
+                      fill={isStart && pathIdx === 0 ? 'var(--accent)' : 'var(--accent)'}
                     />
                     <text
-                      x={pos.x + 18}
-                      y={pos.y - 10}
+                      x={pos.x + 23}
+                      y={pos.y - 11}
                       textAnchor="middle"
                       fill="#ffffff"
-                      fontSize="9px"
+                      fontSize="13px"
                       fontWeight="800"
                       fontFamily="var(--font-mono)"
                     >

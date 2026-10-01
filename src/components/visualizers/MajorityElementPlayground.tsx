@@ -230,7 +230,7 @@ export const MajorityElementPlayground: React.FC = () => {
                   minWidth: '48px'
                 }}
               >
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   [{idx}]
                 </span>
                 <span style={{ fontSize: '1.25rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.15rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
@@ -240,7 +240,7 @@ export const MajorityElementPlayground: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, 1)}
-                    style={{ padding: '0 0.3rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
+                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
                   >
                     +
@@ -248,7 +248,7 @@ export const MajorityElementPlayground: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, -1)}
-                    style={{ padding: '0 0.3rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
+                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
                   >
                     -
@@ -257,7 +257,7 @@ export const MajorityElementPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 1}
-                    style={{ padding: '0 0.3rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
+                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
                   >
                     ×

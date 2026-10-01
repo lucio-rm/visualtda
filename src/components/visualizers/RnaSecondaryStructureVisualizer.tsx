@@ -157,10 +157,10 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                 />
                 <text
                   x={x}
-                  y={baselineY + 4}
+                  y={baselineY + 5}
                   textAnchor="middle"
                   fill={isJ || isT ? '#0f172a' : 'var(--text)'}
-                  fontSize="12px"
+                  fontSize="14px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                 >
@@ -168,10 +168,10 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                 </text>
                 <text
                   x={x}
-                  y={baselineY + 24}
+                  y={baselineY + 26}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   {idx}

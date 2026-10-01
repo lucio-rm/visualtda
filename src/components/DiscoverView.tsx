@@ -43,7 +43,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
 
           <div className="formal-spec-box" style={{ margin: '1rem 0', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
             <div style={{ marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>
                 {language === 'es' ? 'Entrada Formal (Input):' : 'Formal Input:'}
               </span>
               <span style={{ fontSize: '0.9rem', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
@@ -51,7 +51,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
               </span>
             </div>
             <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>
                 {language === 'es' ? 'Salida Esperada (Output):' : 'Expected Output:'}
               </span>
               <span style={{ fontSize: '0.9rem', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>

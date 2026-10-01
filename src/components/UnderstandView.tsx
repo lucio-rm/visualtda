@@ -103,7 +103,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   });
 
   const authStatus = isExerciseSolutionAuthorized(exercise.id, isInstructorMode, solutionUnlocked);
-  const canViewCanonicalPython = isFacultyAuthenticated;
+  const canViewCanonicalPython = authStatus.authorized;
   const isTampered = authStatus.isTampered;
   const relatedExercises = getRelatedExercisesFor(exercise.id);
   const insight = getExerciseInsight(exercise.id, exercise.categoryId);
@@ -152,7 +152,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           <div className="card-panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <h4 style={{ margin: 0 }}>{t(dict.understandVisualizerHeading)}</h4>
-              <span className="keyboard-hints" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+              <span className="keyboard-hints" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                 {language === 'es' ? 'Atajos: [← / →] pasos · [Espacio] reproducir · [R] reiniciar' : 'Shortcuts: [← / →] step · [Space] play · [R] reset'}
               </span>
             </div>
@@ -200,7 +200,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                   onClick={() => setCodeMode('pseudocode')}
                   aria-pressed={codeMode === 'pseudocode'}
                 >
-                  {language === 'es' ? 'Pseudocódigo (Docentes)' : 'Pseudocode (Faculty)'}
+                  {language === 'es' ? 'Pseudocódigo' : 'Pseudocode'}
                 </button>
               </div>
             </div>
@@ -224,7 +224,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                     background: 'rgba(239, 68, 68, 0.15)',
                     borderRadius: 'var(--radius-sm)',
                     border: '1px solid rgba(239, 68, 68, 0.4)',
-                    fontSize: '0.75rem',
+                    fontSize: '0.8125rem',
                     fontWeight: 600,
                     color: '#ef4444',
                     marginBottom: '0.75rem',
@@ -263,7 +263,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                         <span style={{ color: '#22c55e', fontWeight: 600 }}>
                           ✓ {language === 'es' ? 'Código Aprobado por la Batería de Pruebas' : 'Code Approved by Test Suite'}
                         </span>
-                        <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
                           {approvedSolution.passedTestsCount} {language === 'es' ? 'tests superados' : 'tests passed'} · {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -273,7 +273,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                     </div>
                   ) : (
                     <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         {language === 'es' ? 'Sin Código Aprobado' : 'No Approved Code Yet'}
                       </div>
                       <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
@@ -306,7 +306,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 {(codeMode === 'python' || codeMode === 'pseudocode') && (
                   !canViewCanonicalPython ? (
                     <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         {language === 'es' ? 'Acceso Exclusivo Docente' : 'Faculty Access Only'}
                       </div>
                       <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
@@ -480,7 +480,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           <div className="card-panel related-exercises-section" style={{ marginTop: '2rem' }}>
             <div className="related-section-header" style={{ marginBottom: '1.25rem' }}>
               <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text)' }}>
-                <span className="badge badge-technique" style={{ fontSize: '0.75rem' }}>
+                <span className="badge badge-technique" style={{ fontSize: '0.8125rem' }}>
                   {language === 'es' ? 'Conexiones' : 'Connections'}
                 </span>
                 <span>{language === 'es' ? 'Problemas Relacionados y Comparación de Paradigmas' : 'Related Problems & Paradigm Comparison'}</span>
@@ -509,7 +509,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 >
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                      <span className="badge badge-technique" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                      <span className="badge badge-technique" style={{ fontSize: '0.8125rem', fontWeight: 600 }}>
                         {t(rel.paradigmBadge)}
                       </span>
                     </div>

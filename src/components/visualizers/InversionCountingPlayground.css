@@ -41,9 +41,9 @@
   background: var(--surface-hover, #f8fafc);
   border: 1px solid var(--border, #cbd5e1);
   color: var(--text, #0f172a);
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.8rem;
   border-radius: var(--radius-md, 6px);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -115,7 +115,7 @@
 }
 
 .inv-pg-bar-idx {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-family: var(--font-mono);
   color: var(--text-muted, #64748b);
 }
@@ -189,11 +189,11 @@
 }
 
 .inv-pair-pill {
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-family: var(--font-mono);
-  background: rgba(37, 99, 235, 0.1);
-  border: 1px solid var(--accent, #2563eb);
-  color: var(--accent, #2563eb);
+  background: var(--surface-hover);
+  border: 1px solid var(--accent);
+  color: var(--accent);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
 }

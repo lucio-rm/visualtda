@@ -125,7 +125,12 @@ const AppContent: React.FC = () => {
                     className="btn-start-recommended"
                     onClick={() => {
                       const st = records[inProgressExercise.id]?.state;
-                      const phase: ExercisePhase = st === 'attempted' || st === 'testing' ? 'solve' : 'discover';
+                      const phase: ExercisePhase =
+                        st === 'passed' || st === 'completed'
+                          ? 'understand'
+                          : st === 'attempted' || st === 'testing'
+                            ? 'solve'
+                            : 'discover';
                       handleSelectExercise(inProgressExercise.id, phase);
                     }}
                   >

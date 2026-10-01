@@ -107,7 +107,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                   y={marginTop - 16}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   {hour}:00
@@ -139,7 +139,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                   y={y + (rowHeight - 6) / 2 + 4}
                   textAnchor="end"
                   fill={room ? 'var(--text)' : 'var(--text-muted)'}
-                  fontSize="12px"
+                  fontSize="13px"
                   fontWeight={room ? '600' : '400'}
                   fontFamily="var(--font-mono)"
                 >
@@ -183,7 +183,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                     x={x1 + 6}
                     y={y + h / 2 + 4}
                     fill="#0f172a"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontWeight="700"
                     fontFamily="sans-serif"
                     clipPath={`url(#clip-${lecture.id})`}

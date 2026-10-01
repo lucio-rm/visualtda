@@ -120,7 +120,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
               <text
                 x={toSvgX(gx)}
                 y={toSvgY(0) + 18}
-                fontSize="11"
+                fontSize="13"
                 textAnchor="middle"
                 fill="var(--text-muted)"
               >
@@ -143,7 +143,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
               <text
                 x={toSvgX(0) - 10}
                 y={toSvgY(gy) + 4}
-                fontSize="11"
+                fontSize="13"
                 textAnchor="end"
                 fill="var(--text-muted)"
               >
@@ -170,10 +170,10 @@ export const LinearProgrammingVisualizer: React.FC = () => {
             strokeWidth="2"
           />
 
-          <text x={toSvgX(maxX) - 10} y={toSvgY(0) - 8} fontSize="12" fontWeight="bold" fill="var(--text)">
+          <text x={toSvgX(maxX) - 10} y={toSvgY(0) - 8} fontSize="13" fontWeight="bold" fill="var(--text)">
             X
           </text>
-          <text x={toSvgX(0) + 10} y={toSvgY(maxY) + 12} fontSize="12" fontWeight="bold" fill="var(--text)">
+          <text x={toSvgX(0) + 10} y={toSvgY(maxY) + 12} fontSize="13" fontWeight="bold" fill="var(--text)">
             Y
           </text>
 
@@ -209,7 +209,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                 <text
                   x={toSvgX(p2.x / 2) + 10}
                   y={toSvgY(p1.y / 2) - 8}
-                  fontSize="10"
+                  fontSize="13"
                   fontWeight="bold"
                   fill="#ec4899"
                 >
@@ -261,7 +261,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                 <text
                   x={toSvgX(vx) + 8}
                   y={toSvgY(vy) - 8}
-                  fontSize="11"
+                  fontSize="13"
                   fontWeight="bold"
                   fill="var(--text)"
                 >

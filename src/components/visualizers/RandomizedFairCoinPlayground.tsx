@@ -212,7 +212,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             >
               {coinState.flip1}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
               {coinState.flip1 === 1 ? 'Cara (1)' : 'Cruz (0)'}
             </span>
           </div>
@@ -245,7 +245,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             >
               {coinState.flip2}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
               {coinState.flip2 === 1 ? 'Cara (1)' : 'Cruz (0)'}
             </span>
           </div>
@@ -291,7 +291,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             >
               {coinState.extractedBit !== null ? coinState.extractedBit : '✕'}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
               {coinState.extractedBit !== null
                 ? `${coinState.tossCount} tiros`
                 : language === 'es'

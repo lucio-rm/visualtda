@@ -385,7 +385,7 @@ export const InversionCountingVisualizer: React.FC = () => {
               className={`timeline-btn ${playbackSpeed === s ? 'active' : ''}`}
               onClick={() => setSpeed(s)}
               aria-label={language === 'es' ? `Velocidad ${s}x` : `Speed ${s}x`}
-              style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.2rem 0.4rem' }}
             >
               {s}x
             </button>

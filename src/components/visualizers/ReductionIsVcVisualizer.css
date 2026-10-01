@@ -33,13 +33,13 @@
 }
 
 .reduction-metric-badge.vc-badge {
-  border-color: #8b5cf6;
-  color: #8b5cf6;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .reduction-metric-badge.duality-badge {
-  border-color: #0284c7;
-  color: #0284c7;
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .reduction-graph-canvas {
@@ -62,7 +62,7 @@
 }
 
 .graph-edge.covered {
-  stroke: #8b5cf6;
+  stroke: var(--accent);
   stroke-width: 3.5;
 }
 
@@ -86,20 +86,20 @@
 
 .node-circle {
   fill: var(--surface);
-  stroke: var(--border);
+  stroke: var(--border-strong);
   stroke-width: 2;
   transition: all 0.2s ease;
 }
 
 .graph-node.in-is .node-circle {
   fill: var(--success);
-  stroke: #059669;
+  stroke: var(--success);
   stroke-width: 3;
 }
 
 .graph-node.in-vc .node-circle {
-  fill: #8b5cf6;
-  stroke: #7c3aed;
+  fill: var(--accent);
+  stroke: var(--accent-hover);
   stroke-width: 3;
 }
 
@@ -130,24 +130,24 @@
 
 .node-subtext {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   text-anchor: middle;
   pointer-events: none;
 }
 
 .node-subtext.is-sub {
-  fill: #059669;
+  fill: var(--success);
 }
 
 .node-subtext.vc-sub {
-  fill: #7c3aed;
+  fill: var(--accent);
 }
 
 .reduction-explanation-box {
   padding: 0.85rem 1rem;
   background-color: var(--bg);
-  border-left: 4px solid #8b5cf6;
+  border-left: 4px solid var(--accent);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
   line-height: 1.5;

@@ -356,10 +356,10 @@ export const DijkstraPlayground: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1fr) 220px', gap: '1rem', alignItems: 'start' }}>
         {/* SVG Canvas */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem', display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.35rem', display: 'flex', justifyContent: 'space-between' }}>
             <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos):' : 'Directed Graph (Drag nodes):'}</span>
             <span>
-              <span style={{ color: 'var(--success)' }}>● En S (Fijado)</span> · <span style={{ color: 'var(--accent)' }}>● En Cola Q</span>
+              <span style={{ color: 'var(--text-muted)' }}>○ No visitado</span> · <span style={{ color: 'var(--accent)' }}>● En Cola Q</span> · <span style={{ color: 'var(--success)' }}>● En S (Fijado)</span>
             </span>
           </div>
 
@@ -418,7 +418,7 @@ export const DijkstraPlayground: React.FC = () => {
                     textAnchor="middle"
                     fill={isTreeEdge ? 'var(--success)' : isNeg ? 'var(--error)' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
-                    fontSize="11px"
+                    fontSize="13px"
                     fontWeight="700"
                   >
                     {e.weight}
@@ -435,9 +435,28 @@ export const DijkstraPlayground: React.FC = () => {
               const distStr = dist === Infinity ? '∞' : String(dist);
               const isDragging = draggingNodeId === n.id;
 
-              let strokeColor = 'var(--accent)';
-              if (isSettled) strokeColor = 'var(--success)';
-              if (isCurrent) strokeColor = 'var(--accent)';
+              const isInQueue = dist < Infinity && !isSettled;
+
+              let strokeColor = 'var(--border-strong)';
+              let fillColor = 'var(--surface)';
+              let tagStroke = 'var(--border)';
+              let tagFill = 'var(--text-muted)';
+
+              if (isSettled) {
+                strokeColor = 'var(--success)';
+                fillColor = 'var(--success-bg)';
+                tagStroke = 'var(--success)';
+                tagFill = 'var(--success)';
+              } else if (isCurrent) {
+                strokeColor = 'var(--accent)';
+                fillColor = 'var(--accent-subtle)';
+                tagStroke = 'var(--accent)';
+                tagFill = 'var(--accent)';
+              } else if (isInQueue) {
+                strokeColor = 'var(--accent)';
+                tagStroke = 'var(--accent)';
+                tagFill = 'var(--accent)';
+              }
 
               return (
                 <g
@@ -449,9 +468,9 @@ export const DijkstraPlayground: React.FC = () => {
                     cx={n.x}
                     cy={n.y}
                     r={22}
-                    fill="var(--surface)"
+                    fill={fillColor}
                     stroke={strokeColor}
-                    strokeWidth={isCurrent || isDragging ? 3.5 : 2.5}
+                    strokeWidth={isCurrent || isDragging ? 3.5 : 2}
                   />
                   <text
                     x={n.x}
@@ -460,7 +479,7 @@ export const DijkstraPlayground: React.FC = () => {
                     fill="var(--text)"
                     fontFamily="var(--font-mono)"
                     fontSize="14px"
-                    fontWeight="700"
+                    fontWeight="600"
                     style={{ userSelect: 'none' }}
                   >
                     {n.id}
@@ -468,23 +487,23 @@ export const DijkstraPlayground: React.FC = () => {
 
                   {/* Distance Tag */}
                   <rect
-                    x={n.x - 20}
+                    x={n.x - 22}
                     y={n.y - 38}
-                    width={40}
-                    height={16}
-                    rx={3}
-                    fill="var(--bg, #1e293b)"
-                    stroke={isSettled ? 'var(--success)' : 'var(--accent)'}
+                    width={44}
+                    height={18}
+                    rx={4}
+                    fill="var(--surface)"
+                    stroke={tagStroke}
                     strokeWidth={1}
                   />
                   <text
                     x={n.x}
-                    y={n.y - 26}
+                    y={n.y - 25}
                     textAnchor="middle"
-                    fill={isSettled ? 'var(--success)' : 'var(--accent)'}
+                    fill={tagFill}
                     fontFamily="var(--font-mono)"
-                    fontSize="10px"
-                    fontWeight="800"
+                    fontSize="13px"
+                    fontWeight="600"
                     style={{ userSelect: 'none' }}
                   >
                     d={distStr}
@@ -496,17 +515,18 @@ export const DijkstraPlayground: React.FC = () => {
         </div>
 
         {/* Min-Heap Priority Queue Q & Settled S Panel */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.65rem' }}>
-          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.4rem' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.75rem' }}>
+          <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.45rem' }}>
             {language === 'es' ? 'Cola de Prioridad Q (Min-Heap):' : 'Min-Heap Priority Queue Q:'}
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             {nodes.map((n) => {
               const isSettled = currentStep.settled.includes(n.id);
               const dist = currentStep.dists[n.id];
               const distStr = dist === Infinity ? '∞' : String(dist);
               const isCurrent = currentStep.currentU === n.id;
+              const isInQueue = dist < Infinity && !isSettled;
 
               return (
                 <div
@@ -515,33 +535,35 @@ export const DijkstraPlayground: React.FC = () => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '0.3rem 0.5rem',
+                    padding: '0.35rem 0.65rem',
                     background: isCurrent
-                      ? 'var(--state-active-bg)'
+                      ? 'var(--accent-subtle)'
                       : isSettled
-                      ? 'var(--state-solution-bg)'
-                      : 'var(--bg)',
-                    border: `1px solid ${isCurrent ? 'var(--accent)' : isSettled ? 'var(--success)' : 'var(--border)'}`,
+                      ? 'var(--success-bg)'
+                      : 'var(--surface)',
+                    border: `1px solid ${isCurrent ? 'var(--accent)' : isSettled ? 'rgba(21, 128, 61, 0.3)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.75rem'
+                    fontSize: '0.8125rem'
                   }}
                 >
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text)' }}>
                     {n.id}: d = {distStr}
                   </span>
 
                   <span
                     style={{
-                      fontSize: '0.7rem',
-                      fontWeight: 700,
-                      color: isSettled ? 'var(--success)' : isCurrent ? 'var(--accent)' : 'var(--text-muted)'
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      color: isSettled ? 'var(--success)' : isCurrent ? 'var(--accent)' : isInQueue ? 'var(--accent)' : 'var(--text-muted)'
                     }}
                   >
                     {isCurrent
                       ? (language === 'es' ? 'Extrayendo' : 'Extracting')
                       : isSettled
-                      ? (language === 'es' ? '✓ En S' : '✓ In S')
-                      : (language === 'es' ? 'En Q' : 'In Q')}
+                      ? (language === 'es' ? 'En S' : 'In S')
+                      : isInQueue
+                      ? (language === 'es' ? 'En Q' : 'In Q')
+                      : (language === 'es' ? 'Pendiente' : 'Pending')}
                   </span>
                 </div>
               );

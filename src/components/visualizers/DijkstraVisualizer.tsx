@@ -161,14 +161,14 @@ export const DijkstraVisualizer: React.FC = () => {
                   markerEnd={marker}
                   fill="none"
                 />
-                <circle cx={labelX} cy={labelY} r={11} fill="var(--surface)" stroke={strokeColor} strokeWidth={1.5} />
+                <circle cx={labelX} cy={labelY} r={13} fill="var(--surface)" stroke={strokeColor} strokeWidth={1.5} />
                 <text
                   x={labelX}
                   y={labelY + 4}
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   {edge.weight}
@@ -219,21 +219,21 @@ export const DijkstraVisualizer: React.FC = () => {
                 </text>
                 {/* Distance Badge Above Node */}
                 <rect
-                  x={node.x - 18}
-                  y={node.y - 38}
-                  width={36}
-                  height={16}
+                  x={node.x - 22}
+                  y={node.y - 42}
+                  width={44}
+                  height={20}
                   rx={4}
-                  fill={isSettled ? 'var(--success)' : 'var(--surface-hover, #1e293b)'}
-                  stroke={isSettled ? '#059669' : 'var(--border, #475569)'}
+                  fill={isSettled ? 'var(--success)' : 'var(--surface-hover)'}
+                  stroke={isSettled ? 'var(--success)' : 'var(--border)'}
                 />
                 <text
                   x={node.x}
-                  y={node.y - 26}
+                  y={node.y - 28}
                   textAnchor="middle"
                   fill={isSettled ? '#ffffff' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="800"
                 >
                   d:{distLabel}

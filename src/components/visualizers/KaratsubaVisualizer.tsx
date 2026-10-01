@@ -91,7 +91,7 @@ export const KaratsubaVisualizer: React.FC = () => {
           <text x={360} y={32} textAnchor="middle" fill="var(--text)" fontSize="15px" fontWeight="800" fontFamily="var(--font-mono)">
             {x} × {y}
           </text>
-          <text x={360} y={50} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+          <text x={360} y={50} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
             x₁={x1}, x₀={x0} | y₁={y1}, y₀={y0} (m={m})
           </text>
 
@@ -112,7 +112,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               stroke={subcalc === 'Z2' ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
-            <text x={125} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+            <text x={125} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
               {language === 'es' ? '1. Término Alto (z₂)' : '1. High Term (z₂)'}
             </text>
             <text x={125} y={154} textAnchor="middle" fill={subcalc === 'Z2' ? 'var(--accent)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
@@ -128,14 +128,14 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--state-solution-bg)' : 'var(--surface)'}
-              stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--success)' : 'var(--border)'}
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--state-active-bg)' : 'var(--surface)'}
+              stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={360} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+            <text x={360} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
               {language === 'es' ? '2. Producto Cruzado (P)' : '2. Cross Product (P)'}
             </text>
-            <text x={360} y={154} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--success)' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+            <text x={360} y={154} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--accent)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
               ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '—'}
             </text>
           </g>
@@ -152,7 +152,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               stroke={subcalc === 'Z0' ? 'var(--warning)' : 'var(--border)'}
               strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />
-            <text x={595} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+            <text x={595} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
               {language === 'es' ? '3. Término Bajo (z₀)' : '3. Low Term (z₀)'}
             </text>
             <text x={595} y={154} textAnchor="middle" fill={subcalc === 'Z0' ? 'var(--warning)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
@@ -174,7 +174,7 @@ export const KaratsubaVisualizer: React.FC = () => {
             />
             <text x={360} y={222} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
               {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ = P - z₂ - z₀ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
-              <tspan fill="var(--success)" fontWeight="800">
+              <tspan fill="var(--accent)" fontWeight="700">
                 {z1 ?? '—'}
               </tspan>
             </text>

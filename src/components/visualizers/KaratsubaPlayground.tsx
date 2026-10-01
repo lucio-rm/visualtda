@@ -164,52 +164,52 @@ export const KaratsubaPlayground: React.FC = () => {
           <line x1={70} y1={90} x2={470} y2={90} stroke="var(--border)" strokeWidth={1.5} strokeDasharray="3 3" />
 
           {/* Labels for Top & Left factors */}
-          <text x={170} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+          <text x={170} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
             x₁·10^m ({x1}·{pot})
           </text>
-          <text x={370} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+          <text x={370} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
             x₀ ({x0})
           </text>
 
-          <text x={60} y={62} textAnchor="end" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+          <text x={60} y={62} textAnchor="end" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
             y₁ ({y1})
           </text>
-          <text x={60} y={127} textAnchor="end" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
+          <text x={60} y={127} textAnchor="end" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
             y₀ ({y0})
           </text>
 
           {/* Quadrant 1: z2 = x1 * y1 */}
           <rect x={74} y={29} width={192} height={57} rx={4} fill="var(--state-active-bg)" stroke="var(--accent)" strokeWidth={1.5} />
-          <text x={170} y={54} textAnchor="middle" fill="var(--accent)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+          <text x={170} y={54} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             z₂ = x₁ · y₁
           </text>
-          <text x={170} y={72} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="800" fontFamily="var(--font-mono)">
+          <text x={170} y={72} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {z2}
           </text>
 
           {/* Quadrants 2 & 3: Cross Terms combined as z1 */}
           <rect x={274} y={29} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={54} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontFamily="var(--font-mono)">
+          <text x={370} y={54} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontFamily="var(--font-mono)">
             x₀ · y₁ ({x0 * y1})
           </text>
 
           <rect x={74} y={94} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={119} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontFamily="var(--font-mono)">
+          <text x={170} y={119} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontFamily="var(--font-mono)">
             x₁ · y₀ ({x1 * y0})
           </text>
 
           {/* Cross terms bridge tag */}
-          <rect x={210} y={76} width={120} height={28} rx={14} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
-          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontWeight="700" fontFamily="var(--font-mono)">
+          <rect x={190} y={76} width={160} height={28} rx={14} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
+          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             z₁ = z_sum - z₂ - z₀ ({z1})
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
           <rect x={274} y={94} width={192} height={57} rx={4} fill="var(--state-solution-bg)" stroke="var(--success)" strokeWidth={1.5} />
-          <text x={370} y={119} textAnchor="middle" fill="var(--success)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+          <text x={370} y={119} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             z₀ = x₀ · y₀
           </text>
-          <text x={370} y={137} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="800" fontFamily="var(--font-mono)">
+          <text x={370} y={137} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {z0}
           </text>
         </svg>

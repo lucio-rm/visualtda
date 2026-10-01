@@ -215,13 +215,13 @@
 
 .pointer-badge {
   position: absolute;
-  top: -10px;
-  font-size: 0.7rem;
+  top: -12px;
+  font-size: 0.8125rem;
   background: var(--primary);
   color: #fff;
-  padding: 1px 4px;
-  border-radius: 3px;
-  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
 }
 
 .action-bar {
@@ -367,7 +367,7 @@
 }
 
 .stat-item-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text-muted);

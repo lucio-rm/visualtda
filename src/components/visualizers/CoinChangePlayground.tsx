@@ -341,7 +341,7 @@ export const CoinChangePlayground: React.FC = () => {
                   }}
                   title={language === 'es' ? `Hacé clic o arrastrá para agregar $${c}` : `Click or drag to add $${c}`}
                 >
-                  <span style={{ fontSize: '9px', lineHeight: 1 }}>$</span>
+                  <span style={{ fontSize: '13px', lineHeight: 1 }}>$</span>
                   <span style={{ fontSize: '16px', lineHeight: 1 }}>{c}</span>
                 </div>
 
@@ -450,7 +450,7 @@ export const CoinChangePlayground: React.FC = () => {
                 title={language === 'es' ? 'Hacé clic para remover' : 'Click to remove'}
               >
                 <span>${c}</span>
-                <span style={{ fontSize: '11px', opacity: 0.7 }}>×</span>
+                <span style={{ fontSize: '13px', opacity: 0.7 }}>×</span>
               </button>
             ))
           )}

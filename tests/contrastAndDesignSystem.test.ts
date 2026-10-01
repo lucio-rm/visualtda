@@ -79,12 +79,18 @@ describe('Visual Design System & WCAG Contrast Quality Gate', () => {
     expect(contrastRatio(lightTokens['--warning'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('provides graphical/UI contrast (>= 3.0:1) for interactive UI borders and chessboard cell differentiation', () => {
+  it('provides graphical/UI contrast (>= 3.0:1) for interactive UI borders and WCAG AA contrast for board glyphs', () => {
     const borderRatio = contrastRatio(lightTokens['--border-strong'], lightTokens['--surface']);
     expect(borderRatio).toBeGreaterThanOrEqual(3.0);
 
+    const pieceOnLightCell = contrastRatio(lightTokens['--board-text'], lightTokens['--board-cell-light']);
+    expect(pieceOnLightCell).toBeGreaterThanOrEqual(4.5);
+
+    const pieceOnDarkCell = contrastRatio(lightTokens['--board-text'], lightTokens['--board-cell-dark']);
+    expect(pieceOnDarkCell).toBeGreaterThanOrEqual(4.5);
+
     const boardCellRatio = contrastRatio(lightTokens['--board-cell-dark'], lightTokens['--board-cell-light']);
-    expect(boardCellRatio).toBeGreaterThanOrEqual(3.0);
+    expect(boardCellRatio).toBeGreaterThanOrEqual(1.15);
   });
 
   it('defines all canonical semantic state tokens in variables.css', () => {

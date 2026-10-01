@@ -279,22 +279,22 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
       {/* Metrics Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem' }}>
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos Naive (2^k)' : 'Naive Nodes (2^k)'}</div>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos Naive (2^k)' : 'Naive Nodes (2^k)'}</div>
           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, var(--error))' }}>{stats.totalNaive}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos B&B Explorados' : 'B&B Explored'}</div>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos B&B Explorados' : 'B&B Explored'}</div>
           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--accent)' }}>{stats.explored}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Cota (U < V*)' : 'Pruned by Bound'}</div>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Cota (U < V*)' : 'Pruned by Bound'}</div>
           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warning)' }}>{stats.prunedBound}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Capacidad (w > W)' : 'Pruned by Capacity'}</div>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Capacidad (w > W)' : 'Pruned by Capacity'}</div>
           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, var(--error))' }}>{stats.infeasible}</div>
         </div>
       </div>
@@ -305,7 +305,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
           <span>
             {language === 'es' ? 'Árbol de Decisiones (Hacé clic en cualquier nodo para inspeccionar su cota):' : 'Decision Tree (Click any node to inspect bound):'}
           </span>
-          <span style={{ fontSize: '0.75rem' }}>
+          <span style={{ fontSize: '0.8125rem' }}>
             <span style={{ color: 'var(--success)' }}>● Factible</span> · <span style={{ color: 'var(--warning)' }}>● Poda Cota</span> · <span style={{ color: 'var(--error)' }}>● Excede W</span>
           </span>
         </div>
@@ -337,7 +337,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   x={(e.from.x + e.to.x) / 2 + (e.decision === 'include' ? -12 : 12)}
                   y={(e.from.y + e.to.y) / 2}
                   fill={e.decision === 'include' ? 'var(--success)' : 'var(--text-muted)'}
-                  fontSize="10"
+                  fontSize="13"
                   fontFamily="var(--font-mono)"
                   fontWeight="700"
                   textAnchor="middle"
@@ -388,7 +388,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill={isSelected ? '#ffffff' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   ${n.value}
@@ -399,7 +399,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill={n.status === 'infeasible' ? 'var(--error)' : n.status === 'pruned' ? 'var(--warning)' : 'var(--text-muted)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontWeight="600"
                 >
                   {n.status === 'infeasible'
@@ -424,7 +424,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
             </h5>
             <span
               style={{
-                fontSize: '0.75rem',
+                fontSize: '0.8125rem',
                 fontWeight: 700,
                 padding: '0.2rem 0.5rem',
                 borderRadius: 'var(--radius-sm)',

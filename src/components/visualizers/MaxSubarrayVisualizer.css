@@ -73,7 +73,7 @@
 }
 
 .cell-index {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   margin-bottom: 0.25rem;
 }
@@ -99,9 +99,9 @@
 }
 
 .marker {
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  padding: 0.1rem 0.3rem;
+  padding: 0.15rem 0.4rem;
   border-radius: 3px;
   text-transform: uppercase;
 }

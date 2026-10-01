@@ -139,7 +139,7 @@ export const KnightsTourVisualizer: React.FC = () => {
                       textAnchor="end"
                       fill="var(--success)"
                       fontFamily="var(--font-mono)"
-                      fontSize="11px"
+                      fontSize="13px"
                       fontWeight="700"
                     >
                       <title>Grado de Warnsdorff</title>

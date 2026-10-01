@@ -129,7 +129,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   y={roadY + 34}
                   textAnchor="middle"
                   fill="var(--color-text-muted)"
-                  fontSize="10"
+                  fontSize="13"
                   fontFamily="sans-serif"
                 >
                   {km}k
@@ -223,7 +223,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   y={roadY - 96}
                   textAnchor="middle"
                   fill="var(--accent)"
-                  fontSize="11"
+                  fontSize="13"
                   fontWeight="bold"
                   fontFamily="sans-serif"
                 >
@@ -282,7 +282,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   y={roadY - 27}
                   textAnchor="middle"
                   fill={isCurrentUncovered ? 'var(--error)' : 'var(--color-text)'}
-                  fontSize="10"
+                  fontSize="13"
                   fontWeight={isCurrentUncovered ? 'bold' : 'normal'}
                   fontFamily="sans-serif"
                 >

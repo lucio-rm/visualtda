@@ -335,7 +335,7 @@ export const KnapsackPlayground: React.FC = () => {
                     <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
                     <span>{language === 'es' ? 'Valor' : 'Value'}: ${it.value}</span>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
                     {language === 'es' ? 'Densidad:' : 'Density:'} {density} $/kg
                   </div>
                 </div>

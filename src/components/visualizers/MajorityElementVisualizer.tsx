@@ -155,10 +155,10 @@ export const MajorityElementVisualizer: React.FC = () => {
                 {/* Index label below */}
                 <text
                   x={x + (cellWidth - 4) / 2}
-                  y={startY + cellHeight + 16}
+                  y={startY + cellHeight + 18}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="10px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   [{idx}]
@@ -171,9 +171,9 @@ export const MajorityElementVisualizer: React.FC = () => {
           {candLeft !== null && candLeft !== undefined && (
             <text
               x={startX + left * cellWidth + 6}
-              y={startY + cellHeight + 36}
+              y={startY + cellHeight + 38}
               fill="var(--accent)"
-              fontSize="11px"
+              fontSize="13px"
               fontWeight="600"
               fontFamily="var(--font-mono)"
             >
@@ -184,9 +184,9 @@ export const MajorityElementVisualizer: React.FC = () => {
           {candRight !== null && candRight !== undefined && (
             <text
               x={startX + (mid !== null && mid !== undefined ? (mid + 1) * cellWidth + 6 : (left + 1) * cellWidth)}
-              y={startY + cellHeight + 36}
+              y={startY + cellHeight + 38}
               fill="#ec4899"
-              fontSize="11px"
+              fontSize="13px"
               fontWeight="600"
               fontFamily="var(--font-mono)"
             >

@@ -157,7 +157,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         <div className="approx-stat-card">
           <h5>{language === 'es' ? 'Matching M (Disjunto)' : 'Matching M (Disjoint)'}</h5>
           <span className="stat-num">{matching.length} {language === 'es' ? 'aristas' : 'edges'}</span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--warning)', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--warning)', fontWeight: 600 }}>
             {language === 'es' ? 'Cota Inferior: |C*| ≥ ' + matching.length : 'Lower Bound: |C*| ≥ ' + matching.length}
           </span>
         </div>
@@ -165,7 +165,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         <div className="approx-stat-card">
           <h5>{language === 'es' ? 'Cobertura C (Extremos de M)' : 'Cover C (Endpoints)'}</h5>
           <span className="stat-num">{cover.length} {language === 'es' ? 'vértices' : 'vertices'}</span>
-          <span style={{ fontSize: '0.75rem', color: '#0284c7', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.8125rem', color: '#0284c7', fontWeight: 600 }}>
             |C| = 2 · {matching.length} = {cover.length}
           </span>
         </div>
@@ -177,7 +177,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
               ? (language === 'es' ? '≤ 2.0 × Óptimo' : '≤ 2.0 × Optimal')
               : (language === 'es' ? 'En progreso' : 'In progress')}
           </span>
-          <span style={{ fontSize: '0.75rem', color: isAllCovered ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.8125rem', color: isAllCovered ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
             {isAllCovered
               ? (language === 'es' ? '|C| ≤ 2 · |C*| Demostrado' : '|C| ≤ 2 · |C*| Verified')
               : (language === 'es' ? 'Cubre el 100% para verificar' : 'Reach 100% to verify')}
@@ -329,7 +329,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                     dy="-28"
                     fill="var(--accent)"
                     fontFamily="var(--font-mono)"
-                    fontSize="9px"
+                    fontSize="13px"
                     fontWeight="800"
                   >
                     ∈ C

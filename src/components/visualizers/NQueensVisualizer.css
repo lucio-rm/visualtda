@@ -56,7 +56,7 @@
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   text-transform: uppercase;
 }
@@ -99,7 +99,7 @@
 }
 
 .step-tag {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--text-muted);
   white-space: nowrap;
@@ -183,7 +183,7 @@ g[role='button']:focus-visible rect {
 }
 
 .cell-coord-text {
-  font-size: 12px;
+  font-size: 13px;
   font-family: var(--font-mono);
   font-weight: 700;
   fill: var(--text-muted);
@@ -193,28 +193,28 @@ g[role='button']:focus-visible rect {
 
 /* Queen Glyphs */
 .queen-bg-circle {
-  fill: #2563eb;
+  fill: var(--accent);
   transition: all 0.15s ease;
 }
 
 .queen-bg-circle.solution-circle {
-  fill: #16a34a;
+  fill: var(--success);
 }
 
 .queen-bg-circle.conflict-circle {
-  fill: #dc2626;
+  fill: var(--error);
 }
 
 .candidate-bg-circle {
-  fill: #60a5fa;
-  stroke: #2563eb;
+  fill: var(--state-candidate-bg);
+  stroke: var(--warning);
   stroke-width: 2;
   stroke-dasharray: 3 3;
 }
 
 .candidate-bg-circle.conflict-candidate-circle {
-  fill: #f87171;
-  stroke: #dc2626;
+  fill: var(--state-conflict-bg);
+  stroke: var(--error);
 }
 
 .queen-icon {
@@ -334,7 +334,7 @@ g[role='button']:focus-visible rect {
   border: 1px solid var(--border);
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 

@@ -33,12 +33,13 @@
 }
 
 .phase-badge-name {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  padding: 0.2rem 0.6rem;
+  background: var(--surface-hover);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.65rem;
   border-radius: 4px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.03em;
 }
 
@@ -79,29 +80,29 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: var(--state-candidate-bg);
-  border: 2px solid var(--warning);
-  color: #d97706;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text);
   border-radius: 20px;
   padding: 0.4rem 0.85rem;
-  font-weight: bold;
+  font-weight: 600;
   position: relative;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .coin-token.testing-token {
-  background: var(--state-conflict-bg);
-  border-color: var(--error);
-  color: #dc2626;
-  transform: scale(1.08);
-  box-shadow: 0 0 10px var(--state-conflict-bg);
+  background: var(--state-candidate-bg);
+  border-color: var(--warning);
+  color: var(--warning);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px var(--state-candidate-bg);
 }
 
 .token-probing-badge {
-  font-size: 0.65rem;
-  background: #dc2626;
-  color: white;
-  padding: 0.1rem 0.4rem;
+  font-size: 0.8125rem;
+  background: var(--warning);
+  color: #ffffff;
+  padding: 0.1rem 0.45rem;
   border-radius: 8px;
   margin-left: 0.35rem;
   text-transform: uppercase;
@@ -134,14 +135,14 @@
 }
 
 .coin-dp-cell.filled {
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: var(--border-strong);
 }
 
 .coin-dp-cell.cell-current {
-  border: 2px solid #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
+  border: 2px solid var(--accent);
+  background: var(--surface-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .coin-dp-cell.cell-antecedent {
@@ -156,11 +157,11 @@
 }
 
 .coin-dp-cell.cell-target {
-  box-shadow: 0 0 0 1px #8b5cf6;
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .cell-header {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   margin-bottom: 0.2rem;
 }
@@ -169,10 +170,11 @@
   font-size: 1.25rem;
   font-weight: 700;
   font-family: monospace;
+  color: var(--text);
 }
 
 .cell-choice {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   margin-top: 0.2rem;
 }
@@ -180,39 +182,39 @@
 .antecedent-indicator {
   position: absolute;
   top: -12px;
-  background: #d97706;
+  background: var(--warning);
   color: white;
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .current-indicator {
   position: absolute;
   bottom: -12px;
-  background: #2563eb;
+  background: var(--accent);
   color: white;
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .formula-callout {
-  background: rgba(59, 130, 246, 0.08);
-  border-left: 4px solid #3b82f6;
+  background: var(--surface-hover);
+  border-left: 4px solid var(--accent);
   padding: 0.75rem 1rem;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
 .callout-title {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--accent);
 }
 
 .callout-equation code {
@@ -242,23 +244,23 @@
 
 .strategy-card.dp-card {
   background: var(--state-solution-bg);
-  border: 1px solid var(--state-solution-bg);
+  border: 1px solid var(--success);
 }
 
 .strategy-card.greedy-card {
   background: var(--state-conflict-bg);
-  border: 1px solid var(--state-conflict-bg);
+  border: 1px solid var(--error);
 }
 
 .strategy-badge {
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: #059669;
+  color: var(--success);
   text-transform: uppercase;
 }
 
 .strategy-badge.greedy-badge {
-  color: #dc2626;
+  color: var(--error);
 }
 
 .strategy-result {
@@ -271,27 +273,28 @@
   font-size: 1.35rem;
   font-weight: bold;
   font-family: monospace;
+  color: var(--text);
 }
 
 .coin-count-highlight.greedy-worse {
-  color: #dc2626;
+  color: var(--error);
 }
 
 .coins-bag {
   font-family: monospace;
   font-weight: 600;
-  color: var(--text-muted, #666);
+  color: var(--text-muted);
 }
 
 .strategy-note {
   font-size: 0.85rem;
-  line-height: 1.35;
-  color: var(--text-muted, #666);
+  line-height: 1.4;
+  color: var(--text-muted);
 }
 
 .suboptimal-alert {
-  color: #b91c1c;
-  font-weight: 500;
+  color: var(--error);
+  font-weight: 600;
 }
 
 .narrative-box {

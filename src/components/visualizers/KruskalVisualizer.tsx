@@ -154,7 +154,7 @@ export const KruskalVisualizer: React.FC = () => {
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   {edge.weight}
@@ -205,7 +205,7 @@ export const KruskalVisualizer: React.FC = () => {
                   textAnchor="middle"
                   fill="#ffffff"
                   fontFamily="var(--font-mono)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontWeight="800"
                 >
                   comp:{root}

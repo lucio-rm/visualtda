@@ -21,14 +21,14 @@ interface KnapsackVisualBagProps {
 
 // Consistent color palette for knapsack items
 const ITEM_PALETTE = [
-  { bg: 'var(--state-solution-bg)', border: 'var(--success)', text: '#059669', badge: 'var(--success)' }, // Emerald
-  { bg: 'var(--state-candidate-bg)', border: 'var(--warning)', text: '#d97706', badge: 'var(--warning)' }, // Amber
-  { bg: 'rgba(2, 132, 199, 0.15)', border: '#0284c7', text: '#0284c7', badge: '#0284c7' }, // Sky
-  { bg: 'rgba(139, 92, 246, 0.15)', border: '#8b5cf6', text: '#7c3aed', badge: '#8b5cf6' }, // Violet
-  { bg: 'rgba(244, 63, 94, 0.15)', border: '#f43f5e', text: '#e11d48', badge: '#f43f5e' }, // Rose
-  { bg: 'rgba(6, 182, 212, 0.15)', border: '#06b6d4', text: '#0891b2', badge: '#06b6d4' }, // Cyan
-  { bg: 'rgba(234, 88, 12, 0.15)', border: '#ea580c', text: '#c2410c', badge: '#ea580c' }, // Orange
-  { bg: 'rgba(99, 102, 241, 0.15)', border: 'var(--accent)', text: '#4f46e5', badge: 'var(--accent)' }  // Indigo
+  { bg: 'var(--state-solution-bg)', border: 'var(--success)', text: 'var(--text)', badge: 'var(--success)' }, // Emerald
+  { bg: 'var(--state-candidate-bg)', border: 'var(--warning)', text: 'var(--text)', badge: 'var(--warning)' }, // Amber
+  { bg: 'rgba(2, 132, 199, 0.12)', border: '#0284c7', text: 'var(--text)', badge: '#0284c7' }, // Sky
+  { bg: 'rgba(139, 92, 246, 0.12)', border: '#8b5cf6', text: 'var(--text)', badge: '#8b5cf6' }, // Violet
+  { bg: 'rgba(244, 63, 94, 0.12)', border: '#f43f5e', text: 'var(--text)', badge: '#f43f5e' }, // Rose
+  { bg: 'rgba(6, 182, 212, 0.12)', border: '#06b6d4', text: 'var(--text)', badge: '#06b6d4' }, // Cyan
+  { bg: 'rgba(234, 88, 12, 0.12)', border: '#ea580c', text: 'var(--text)', badge: '#ea580c' }, // Orange
+  { bg: 'rgba(99, 102, 241, 0.12)', border: 'var(--accent)', text: 'var(--text)', badge: 'var(--accent)' }  // Indigo
 ];
 
 export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
@@ -132,11 +132,11 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
                     <div className="item-block-main">
                       <div className="item-block-title-row">
                         <span className="item-block-color-dot" style={{ backgroundColor: colorDef.badge }} />
-                        <span className="item-block-name" style={{ color: colorDef.text }}>
+                        <span className="item-block-name" style={{ color: 'var(--text)', fontWeight: 600 }}>
                           {item.name}
                         </span>
                         {isFractional && (
-                          <span style={{ fontSize: '0.72rem', padding: '0.1rem 0.45rem', borderRadius: '4px', background: 'var(--accent, #0284c7)', color: '#fff', fontWeight: 700 }}>
+                          <span style={{ fontSize: '0.8125rem', padding: '0.1rem 0.45rem', borderRadius: '4px', background: 'var(--accent)', color: '#fff', fontWeight: 600 }}>
                             {Math.round((visualItem.fractionTaken ?? 0) * 100)}%
                           </span>
                         )}

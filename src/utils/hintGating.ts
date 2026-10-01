@@ -52,8 +52,10 @@ export function getHintRequirements(hintIndex: number, exerciseId?: string): { a
   if (categoryId === 'dynamic-programming' || categoryId === 'network-flow') {
     lineBase = 16;
     lineStep = 6;
+  } else if (categoryId === 'backtracking') {
+    lineBase = 8;
+    lineStep = 4;
   } else if (
-    categoryId === 'backtracking' ||
     categoryId === 'divide-and-conquer' ||
     categoryId === 'linear-programming' ||
     categoryId === 'reductions'

@@ -151,7 +151,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                 type="button"
                 onClick={() => handleAppendBase(b)}
                 disabled={n >= 14}
-                style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', color: baseColors[b], cursor: 'pointer', fontWeight: '700' }}
+                style={{ padding: '0.1rem 0.35rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', color: baseColors[b], cursor: 'pointer', fontWeight: '700' }}
               >
                 +{b}
               </button>
@@ -160,7 +160,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
               type="button"
               onClick={handleRemoveLast}
               disabled={n <= 1}
-              style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
+              style={{ padding: '0.1rem 0.35rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
               title={language === 'es' ? 'Eliminar última base' : 'Remove last base'}
             >
               ×
@@ -231,7 +231,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                   y={baselineY + 4}
                   textAnchor="middle"
                   fill={color}
-                  fontSize="12px"
+                  fontSize="13px"
                   fontWeight="800"
                   fontFamily="var(--font-mono)"
                 >
@@ -243,7 +243,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                   y={baselineY + 26}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                 >
                   {idx}

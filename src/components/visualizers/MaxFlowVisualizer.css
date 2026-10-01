@@ -71,7 +71,7 @@
 
 .edge-label-text {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   fill: var(--color-text);
   text-anchor: middle;
@@ -79,11 +79,11 @@
 }
 
 .edge-label-text.augmenting {
-  fill: #d97706;
+  fill: var(--warning);
 }
 
 .edge-label-text.saturated {
-  fill: #059669;
+  fill: var(--success);
 }
 
 /* Nodes */

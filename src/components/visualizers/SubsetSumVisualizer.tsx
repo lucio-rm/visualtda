@@ -186,7 +186,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </div>
       ) : (
         <div className="pruning-status-banner exploring">
-          <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>●</span>
+          <span style={{ fontSize: '0.8125rem', opacity: 0.7 }}>●</span>
           <span>
             {language === 'es'
               ? `Subconjunto actual: [${currentSubset.join(', ') || 'vacío'}] con suma = ${currentSum}.`

@@ -104,12 +104,12 @@
 }
 
 .opt-load {
-  color: #059669;
+  color: var(--success);
   border-color: var(--state-solution-bg);
 }
 
 .greedy-load {
-  color: #d97706;
+  color: var(--warning);
   border-color: var(--state-candidate-bg);
 }
 
@@ -130,11 +130,11 @@
 }
 
 .interactive-track-row:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--surface-hover);
 }
 
 .interactive-track-row.task-active {
-  background: rgba(59, 130, 246, 0.08);
+  background: var(--accent-subtle);
 }
 
 .task-meta {
@@ -150,8 +150,8 @@
 }
 
 .task-val {
-  font-size: 0.8rem;
-  color: #059669;
+  font-size: 0.8125rem;
+  color: var(--success);
   font-weight: 600;
 }
 
@@ -268,7 +268,7 @@
 }
 
 .greedy-stat {
-  color: #d97706;
+  color: var(--warning);
 }
 
 .main-count,
@@ -284,16 +284,16 @@
 }
 
 .status-ok {
-  color: #059669;
+  color: var(--success);
   font-weight: 600;
 }
 
 .status-warn {
-  color: #d97706;
+  color: var(--warning);
 }
 
 .status-err {
-  color: #dc2626;
+  color: var(--error);
   font-weight: 600;
 }
 
@@ -302,15 +302,15 @@
 }
 
 .pedagogy-tip {
-  background: rgba(59, 130, 246, 0.06);
-  border-left: 4px solid #3b82f6;
+  background: var(--accent-subtle);
+  border-left: 4px solid var(--accent);
   padding: 1rem 1.25rem;
   border-radius: 0 6px 6px 0;
 }
 
 .pedagogy-tip h4 {
   margin: 0 0 0.5rem 0;
-  color: #2563eb;
+  color: var(--accent);
   font-size: 0.95rem;
 }
 
@@ -350,7 +350,7 @@
 }
 
 .custom-interval-group label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-muted);
 }

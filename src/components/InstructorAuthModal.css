@@ -60,7 +60,7 @@
 }
 
 .char-counter {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
 }
@@ -101,7 +101,7 @@
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;

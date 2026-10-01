@@ -96,7 +96,7 @@ export const SudokuVisualizer: React.FC = () => {
                 strokeColor = 'var(--danger, var(--error))';
                 strokeWidth = 2;
               } else if (isCurrent) {
-                fillColor = 'rgba(6, 182, 212, 0.25)';
+                fillColor = 'var(--state-active-bg)';
                 strokeColor = 'var(--accent)';
                 strokeWidth = 2.5;
               }

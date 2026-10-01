@@ -114,7 +114,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                     y={marginTop + 72}
                     textAnchor="middle"
                     fill="var(--text-muted)"
-                    fontSize="10px"
+                    fontSize="13px"
                     fontFamily="var(--font-mono)"
                   >
                     {t}
@@ -152,7 +152,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   y={marginTop + 24}
                   textAnchor="middle"
                   fill="#0f172a"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="sans-serif"
                 >
@@ -180,7 +180,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   y={marginTop - 28}
                   textAnchor="middle"
                   fill={isLate ? 'var(--error)' : 'var(--success)'}
-                  fontSize="9px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                 >

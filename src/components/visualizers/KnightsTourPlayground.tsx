@@ -367,20 +367,20 @@ export const KnightsTourPlayground: React.FC = () => {
                   {legal && (
                     <g transform={`translate(${x + cellSize - 22}, ${y + 5})`}>
                       <rect
-                        width={18}
-                        height={14}
-                        rx={3}
+                        width={22}
+                        height={18}
+                        rx={4}
                         fill={isBest ? 'var(--success)' : 'var(--surface)'}
                         stroke={isBest ? 'var(--success)' : 'var(--border)'}
                         strokeWidth={1}
                       />
                       <text
-                        x={9}
-                        y={10}
+                        x={11}
+                        y={13}
                         textAnchor="middle"
                         fill={isBest ? '#ffffff' : 'var(--text-muted)'}
                         fontFamily="var(--font-mono)"
-                        fontSize="9px"
+                        fontSize="13px"
                         fontWeight="800"
                       >
                         {legal.degree}
@@ -392,9 +392,9 @@ export const KnightsTourPlayground: React.FC = () => {
                   {isBest && (
                     <text
                       x={x + 7}
-                      y={y + 13}
+                      y={y + 14}
                       fill="var(--warning)"
-                      fontSize="12px"
+                      fontSize="14px"
                       fontWeight="900"
                     >
                       ★

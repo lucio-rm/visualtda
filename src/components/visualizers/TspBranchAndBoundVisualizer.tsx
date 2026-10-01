@@ -120,7 +120,8 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                       y={midY}
                       textAnchor="middle"
                       fill="var(--text-muted)"
-                      fontSize="9px"
+                      fontSize="13px"
+                      fontWeight="600"
                       fontFamily="var(--font-mono)"
                     >
                       {weight}
@@ -141,7 +142,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                 <circle
                   cx={city.x}
                   cy={city.y}
-                  r={isStart ? 16 : 14}
+                  r={isStart ? 18 : 16}
                   fill={isStart ? 'var(--accent)' : inTour ? 'var(--success)' : 'var(--surface)'}
                   stroke={isStart ? '#ffffff' : inTour ? 'var(--success)' : 'var(--border)'}
                   strokeWidth={2}
@@ -151,7 +152,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                   y={city.y + 4}
                   textAnchor="middle"
                   fill={isStart || inTour ? '#ffffff' : 'var(--text)'}
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                 >
@@ -159,10 +160,10 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                 </text>
                 <text
                   x={city.x}
-                  y={city.y - 18}
+                  y={city.y - 20}
                   textAnchor="middle"
                   fill="var(--text)"
-                  fontSize="11px"
+                  fontSize="13px"
                   fontWeight="600"
                 >
                   {city.name}

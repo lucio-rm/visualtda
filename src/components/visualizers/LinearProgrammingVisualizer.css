@@ -120,7 +120,7 @@
 .opt-star {
   background-color: var(--success);
   color: white;
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   font-weight: 800;
   padding: 0.1rem 0.35rem;
   border-radius: 3px;

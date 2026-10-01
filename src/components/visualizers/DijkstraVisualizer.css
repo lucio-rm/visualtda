@@ -48,8 +48,8 @@
 }
 
 .djk-action-badge.action-settle_node {
-  border-color: #818cf8;
-  color: #818cf8;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .djk-canvas-container {

@@ -442,7 +442,7 @@ export const MaxFlowPlayground: React.FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             color: 'var(--text-muted)',
             marginBottom: '0.25rem',
             padding: '0 0.5rem'
@@ -543,12 +543,13 @@ export const MaxFlowPlayground: React.FC = () => {
                   markerEnd={marker}
                   opacity={isSaturated ? 0.7 : 1}
                 />
+                <circle cx={midX} cy={midY} r={15} fill="var(--surface)" stroke="var(--border)" strokeWidth={1} />
                 <text
                   x={midX}
-                  y={midY}
+                  y={midY + 4}
                   textAnchor="middle"
-                  fill={isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--text-muted)'}
-                  fontSize="10px"
+                  fill={isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--text)'}
+                  fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -608,17 +609,17 @@ export const MaxFlowPlayground: React.FC = () => {
                   cx={pos.x}
                   cy={pos.y}
                   r={24}
-                  fill={n.isSource ? '#3b82f6' : n.isSink ? 'var(--success)' : isSelected ? 'var(--accent)' : 'var(--surface)'}
-                  stroke={isSelected ? '#ffffff' : n.isSource ? '#2563eb' : n.isSink ? '#059669' : 'var(--border)'}
+                  fill={n.isSource ? 'var(--accent)' : n.isSink ? 'var(--success)' : isSelected ? 'var(--accent)' : 'var(--surface)'}
+                  stroke={isSelected ? 'var(--text)' : n.isSource ? 'var(--accent-hover)' : n.isSink ? 'var(--success)' : 'var(--border-strong)'}
                   strokeWidth={isSelected ? 3 : 2}
                 />
                 <text
                   x={pos.x}
                   y={pos.y + 5}
                   textAnchor="middle"
-                  fill={n.isSource || n.isSink || isSelected ? '#ffffff' : 'var(--text)'}
+                  fill={n.isSource || n.isSink || isSelected ? 'var(--accent-contrast)' : 'var(--text)'}
                   fontSize="14px"
-                  fontWeight="700"
+                  fontWeight="600"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
                 >
@@ -627,11 +628,11 @@ export const MaxFlowPlayground: React.FC = () => {
                 {isMaxFlowAchieved && (
                   <text
                     x={pos.x}
-                    y={pos.y + 34}
-                    fontSize="11px"
+                    y={pos.y + 36}
+                    fontSize="13px"
                     textAnchor="middle"
-                    fill={isReachable ? '#3b82f6' : 'var(--success)'}
-                    fontWeight="800"
+                    fill={isReachable ? 'var(--accent)' : 'var(--text-muted)'}
+                    fontWeight="600"
                     pointerEvents="none"
                   >
                     {isReachable ? '∈ S' : '∈ T'}

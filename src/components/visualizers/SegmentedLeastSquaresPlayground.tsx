@@ -221,7 +221,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
               ? 'Lienzo interactivo: Arrastrá los puntos verticalmente para explorar el ajuste'
               : 'Interactive canvas: Drag points vertically to explore live fitting'}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem' }}>
             n = {n} {language === 'es' ? 'puntos' : 'points'}
           </span>
         </div>
@@ -287,10 +287,10 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
             <text
               key={`lbl-x-${val}`}
               x={scaleX(val)}
-              y={svgHeight - padBottom + 16}
+              y={svgHeight - padBottom + 18}
               textAnchor="middle"
               fill="var(--text-muted)"
-              fontSize="10px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
             >
               {val}
@@ -303,7 +303,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
               y={scaleY(val) + 4}
               textAnchor="end"
               fill="var(--text-muted)"
-              fontSize="10px"
+              fontSize="13px"
               fontFamily="var(--font-mono)"
             >
               {val}
@@ -399,10 +399,10 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
                 {/* Point index label */}
                 <text
                   x={scaleX(p.x)}
-                  y={scaleY(p.y) - 9}
+                  y={scaleY(p.y) - 11}
                   textAnchor="middle"
                   fill="var(--text)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                   fontWeight="600"
                 >

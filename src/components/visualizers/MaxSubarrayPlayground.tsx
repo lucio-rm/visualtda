@@ -290,13 +290,13 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 onClick={() => handleSelectRange(dcPartition.leftOpt.startIndex, dcPartition.leftOpt.endIndex)}
                 title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
               >
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                   {language === 'es' ? '1. Mejor a la Izquierda [0..m]' : '1. Best Left [0..m]'}
                 </div>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text)' }}>
                   Suma = {dcPartition.leftOpt.maxSum}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--accent)' }}>
                   [{dcPartition.leftOpt.startIndex}..{dcPartition.leftOpt.endIndex}]
                 </div>
               </div>
@@ -313,13 +313,13 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 onClick={() => handleSelectRange(dcPartition.crossingOpt.startIndex, dcPartition.crossingOpt.endIndex)}
                 title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
               >
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                   {language === 'es' ? '2. Mejor Cruzado por Centro' : '2. Best Crossing Mid'}
                 </div>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--warning)' }}>
                   Suma = {dcPartition.crossingOpt.maxSum}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--accent)' }}>
                   [{dcPartition.crossingOpt.startIndex}..{dcPartition.crossingOpt.endIndex}]
                 </div>
               </div>
@@ -336,13 +336,13 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 onClick={() => handleSelectRange(dcPartition.rightOpt.startIndex, dcPartition.rightOpt.endIndex)}
                 title={language === 'es' ? 'Haz clic para seleccionar este rango' : 'Click to select this range'}
               >
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                   {language === 'es' ? '3. Mejor a la Derecha [m+1..n-1]' : '3. Best Right [m+1..n-1]'}
                 </div>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text)' }}>
                   Suma = {dcPartition.rightOpt.maxSum}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--accent)' }}>
                   [{dcPartition.rightOpt.startIndex}..{dcPartition.rightOpt.endIndex}]
                 </div>
               </div>
@@ -399,7 +399,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                       style={{
                         position: 'absolute',
                         bottom: '-16px',
-                        fontSize: '9px',
+                        fontSize: '13px',
                         color: 'var(--warning)',
                         fontWeight: 800
                       }}

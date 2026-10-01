@@ -98,17 +98,17 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
                   x1={parent.x}
                   y1={parent.y + 12}
                   x2={node.x}
-                  y2={node.y - 12}
+                  y2={node.y - 18}
                   stroke={stroke}
                   strokeWidth={strokeWidth}
                 />
                 <text
-                  x={(parent.x + node.x) / 2 + (node.decision === 'include' ? -12 : 12)}
+                  x={(parent.x + node.x) / 2 + (node.decision === 'include' ? -14 : 14)}
                   y={(parent.y + node.y) / 2}
                   fill="var(--text-muted)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
-                  fontWeight="600"
+                  fontWeight="700"
                   textAnchor="middle"
                 >
                   {node.decision === 'include' ? '+1' : '0'}
@@ -140,11 +140,11 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             return (
               <g key={`bb-node-${node.id}`}>
                 <rect
-                  x={node.x - 28}
-                  y={node.y - 14}
-                  width={56}
-                  height={28}
-                  rx={4}
+                  x={node.x - 42}
+                  y={node.y - 18}
+                  width={84}
+                  height={36}
+                  rx={6}
                   fill={fill}
                   stroke={stroke}
                   strokeWidth={strokeWidth}
@@ -155,18 +155,18 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
                   textAnchor="middle"
                   fill="var(--text)"
                   fontFamily="var(--font-mono)"
-                  fontSize="9px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   v:{node.value} w:{node.weight}
                 </text>
                 <text
                   x={node.x}
-                  y={node.y + 10}
+                  y={node.y + 13}
                   textAnchor="middle"
                   fill={node.pruned ? 'var(--danger, var(--error))' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
-                  fontSize="8.5px"
+                  fontSize="13px"
                   fontWeight="700"
                 >
                   {node.pruned ? (node.pruneReason === 'capacity' ? 'Exceso W' : 'UB ≤ Best') : `UB:${node.upperBound}`}

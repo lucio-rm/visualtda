@@ -234,7 +234,7 @@ export const SubsetSumPlayground: React.FC = () => {
                 ? 'Elementos disponibles (arrastra a la balanza o haz clic):'
                 : 'Available elements (drag into bucket or click):'}
             </span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
               {numbers.length - selectedIndices.size} {language === 'es' ? 'en espera' : 'waiting'}
             </span>
           </div>
@@ -315,7 +315,7 @@ export const SubsetSumPlayground: React.FC = () => {
             <button
               type="button"
               className="chip-btn"
-              style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.2rem 0.5rem' }}
               onClick={() => setSelectedIndices(new Set())}
               disabled={selectedIndices.size === 0}
             >
@@ -441,7 +441,7 @@ export const SubsetSumPlayground: React.FC = () => {
         <div className="comparison-stat-box">
           <span className="comparison-stat-title">{language === 'es' ? 'Fuerza Bruta (2^n)' : 'Brute Force (2^n)'}</span>
           <span className="comparison-stat-number">{traceStats.bruteForce}</span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Subconjuntos totales' : 'Total subsets'}
           </span>
         </div>
@@ -450,7 +450,7 @@ export const SubsetSumPlayground: React.FC = () => {
           <span className="comparison-stat-number" style={{ color: '#3b82f6' }}>
             {traceStats.explored}
           </span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Visitados en Backtracking' : 'Visited in Backtracking'}
           </span>
         </div>
@@ -459,7 +459,7 @@ export const SubsetSumPlayground: React.FC = () => {
           <span className="comparison-stat-number" style={{ color: 'var(--warning)' }}>
             {traceStats.pruned}
           </span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Descartadas por cota' : 'Cut by bound'}
           </span>
         </div>
@@ -468,7 +468,7 @@ export const SubsetSumPlayground: React.FC = () => {
           <span className="comparison-stat-number" style={{ color: 'var(--success)' }}>
             {traceStats.savingsPct}%
           </span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Espacio podado' : 'State space pruned'}
           </span>
         </div>

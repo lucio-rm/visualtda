@@ -59,8 +59,8 @@
 }
 
 .random-btn {
-  border-color: #3b82f6;
-  color: #3b82f6;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .input-block {
@@ -86,7 +86,7 @@
 }
 
 .error-text {
-  color: #dc2626;
+  color: var(--error);
   font-size: 0.85rem;
 }
 
@@ -164,12 +164,12 @@
 .clickable-bar-fill {
   width: 100%;
   border-radius: 6px 6px 0 0;
-  background: #cbd5e1;
+  background: var(--border-strong);
   transition: background 0.2s, height 0.2s;
 }
 
 .clickable-bar-col.is-peak .clickable-bar-fill {
-  background: #3b82f6;
+  background: var(--accent);
 }
 
 .clickable-bar-col.dyc-chosen .clickable-bar-fill {
@@ -182,7 +182,7 @@
 }
 
 .clickable-bar-idx {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   margin-top: 0.4rem;
 }
@@ -210,7 +210,7 @@
 }
 
 .result-card.user-card {
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: var(--accent);
 }
 
 .result-card.dyc-card {
@@ -237,13 +237,13 @@
 }
 
 .status-success {
-  color: #059669;
+  color: var(--success);
   font-weight: 600;
   font-size: 0.9rem;
 }
 
 .status-fail {
-  color: #dc2626;
+  color: var(--error);
   font-size: 0.85rem;
   line-height: 1.35;
 }
@@ -268,15 +268,15 @@
 }
 
 .pedagogy-tip {
-  background: rgba(59, 130, 246, 0.06);
-  border-left: 4px solid #3b82f6;
+  background: var(--accent-subtle);
+  border-left: 4px solid var(--accent);
   padding: 1rem 1.25rem;
   border-radius: 0 6px 6px 0;
 }
 
 .pedagogy-tip h4 {
   margin: 0 0 0.5rem 0;
-  color: #2563eb;
+  color: var(--accent);
   font-size: 0.95rem;
 }
 

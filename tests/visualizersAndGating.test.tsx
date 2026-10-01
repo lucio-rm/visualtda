@@ -158,6 +158,11 @@ def resolver_scheduling(intervalos):
       expect(getHintRequirements(0, 'interval-scheduling')).toEqual({ attempts: 3, lines: 8 });
       expect(getHintRequirements(1, 'interval-scheduling')).toEqual({ attempts: 5, lines: 12 });
       expect(getHintRequirements(2, 'interval-scheduling')).toEqual({ attempts: 7, lines: 16 });
+
+      // Backtracking is simpler than Dynamic Programming
+      expect(getHintRequirements(0, 'n-queens')).toEqual({ attempts: 3, lines: 8 });
+      expect(getHintRequirements(1, 'n-queens')).toEqual({ attempts: 5, lines: 12 });
+      expect(getHintRequirements(2, 'n-queens')).toEqual({ attempts: 7, lines: 16 });
     });
 
     it('keeps Hint 1 locked when student has 0 attempts and 0 meaningful lines', () => {

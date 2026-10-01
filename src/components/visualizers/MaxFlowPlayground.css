@@ -87,7 +87,7 @@
 }
 
 .mf-edge-text {
-  font-size: 11px;
+  font-size: 13px;
   font-family: var(--font-mono, monospace);
   font-weight: 600;
   fill: var(--text);
@@ -168,7 +168,7 @@
 }
 
 .mf-metric-label {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text-muted);

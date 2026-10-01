@@ -210,7 +210,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   y={16}
                   textAnchor="middle"
                   fill={isPivotCol ? 'var(--warning)' : 'var(--text-muted)'}
-                  fontSize="10px"
+                  fontSize="13px"
                   fontFamily="var(--font-mono)"
                   fontWeight={isPivotCol ? '700' : '600'}
                 >
@@ -253,10 +253,10 @@ export const MedianOfMediansPlayground: React.FC = () => {
                       />
                       <text
                         x={x + 28}
-                        y={y + 18}
+                        y={y + 19}
                         textAnchor="middle"
                         fill={isPivotCell ? '#0f172a' : 'var(--text)'}
-                        fontSize="11px"
+                        fontSize="13px"
                         fontWeight={isPivotCell || isMedCell ? '700' : '500'}
                         fontFamily="var(--font-mono)"
                       >

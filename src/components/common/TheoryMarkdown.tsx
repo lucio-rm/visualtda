@@ -324,19 +324,50 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
       continue;
     }
     if (line.startsWith('## ')) {
-      elements.push(
-        <h4 key={`h2-${i}`} className="theory-h2">
-          {renderInlineFormatting(formatTitleSpacing(line.slice(3)))}
-        </h4>
-      );
+      const headingText = formatTitleSpacing(line.slice(3));
+      const sectionMatch = headingText.match(/^(\d+)\.\s*(.*)/);
+      if (sectionMatch) {
+        const num = sectionMatch[1].padStart(2, '0');
+        const title = sectionMatch[2];
+        elements.push(
+          <div key={`sec-${i}`} className="theory-section-header">
+            <span className="theory-section-badge">{num}</span>
+            <h4 className="theory-h2">{renderInlineFormatting(title)}</h4>
+          </div>
+        );
+      } else {
+        elements.push(
+          <h4 key={`h2-${i}`} className="theory-h2">
+            {renderInlineFormatting(headingText)}
+          </h4>
+        );
+      }
       i++;
       continue;
     }
     if (line.startsWith('### ')) {
+      const subHeading = formatTitleSpacing(line.slice(4));
+      const isInvariant = /invariante/i.test(subHeading);
+      const isTheorem = /teorema/i.test(subHeading);
+      const isExchange = /intercambio|greedy-choice/i.test(subHeading);
+      const isComplexity = /complejidad/i.test(subHeading);
+
+      const hasSpecialTag = isInvariant || isTheorem || isExchange || isComplexity;
+      const tagText = isInvariant
+        ? (language === 'es' ? 'INVARIANTE' : 'INVARIANT')
+        : isTheorem
+        ? (language === 'es' ? 'TEOREMA' : 'THEOREM')
+        : isExchange
+        ? (language === 'es' ? 'INTERCAMBIO' : 'EXCHANGE')
+        : isComplexity
+        ? (language === 'es' ? 'COTAS' : 'BOUNDS')
+        : null;
+
       elements.push(
-        <h5 key={`h3-${i}`} className="theory-h3">
-          {renderInlineFormatting(formatTitleSpacing(line.slice(4)))}
-        </h5>
+        <div key={`h3-wrap-${i}`} className={`theory-h3-wrap ${hasSpecialTag ? (isInvariant ? 'is-invariant' : isTheorem ? 'is-theorem' : isExchange ? 'is-exchange' : 'is-complexity') : ''}`}>
+          {tagText && <span className="theory-h3-tag">{tagText}</span>}
+          <h5 className="theory-h3">{renderInlineFormatting(subHeading)}</h5>
+        </div>
       );
       i++;
       continue;

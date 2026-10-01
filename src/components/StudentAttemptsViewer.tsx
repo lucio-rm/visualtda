@@ -84,7 +84,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
               <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--success, #16a34a)' }}>
                 {language === 'es' ? 'Solución Aprobada por Tests' : 'Solution Passed by Tests'}
               </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted, #64748b)' }}>
+              <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted, #64748b)' }}>
                 {approvedSolution.passedTestsCount} / {approvedSolution.totalTestsCount}{' '}
                 {language === 'es' ? 'casos superados' : 'cases passed'} ·{' '}
                 {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -94,7 +94,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
           <button
             type="button"
             className="btn-secondary"
-            style={{ fontSize: '0.75rem', padding: '0.3rem 0.65rem' }}
+            style={{ fontSize: '0.8125rem', padding: '0.3rem 0.65rem' }}
             onClick={() => setSelectedAttemptId(approvedSolution.id)}
           >
             {language === 'es' ? 'Ver esta solución' : 'View this solution'}
@@ -129,7 +129,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
                 padding: '0.5rem 0.75rem',
                 borderBottom: '1px solid var(--border, #cbd5e1)',
                 fontWeight: 600,
-                fontSize: '0.75rem',
+                fontSize: '0.8125rem',
                 color: 'var(--text-muted, #64748b)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -164,7 +164,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
                     </span>
                     <span
                       style={{
-                        fontSize: '0.68rem',
+                        fontSize: '0.8125rem',
                         fontWeight: 600,
                         padding: '0.1rem 0.35rem',
                         borderRadius: '3px',
@@ -177,7 +177,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
                         : `${att.passedTestsCount}/${att.totalTestsCount}`}
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted, #64748b)' }}>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted, #64748b)' }}>
                     {new Date(att.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · {att.meaningfulLinesCount} {language === 'es' ? 'línas' : 'lines'}
                   </div>
                 </button>
@@ -216,7 +216,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
                   <span style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text, #1e293b)' }}>
                     {language === 'es' ? 'Código Ejecutado' : 'Executed Code'}
                   </span>
-                  <span style={{ fontSize: '0.73rem', color: 'var(--text-muted, #64748b)', marginLeft: '0.5rem' }}>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted, #64748b)', marginLeft: '0.5rem' }}>
                     ({selectedAttempt.passedTestsCount} / {selectedAttempt.totalTestsCount} {language === 'es' ? 'tests' : 'tests'} · {new Date(selectedAttempt.timestamp).toLocaleString()})
                   </span>
                 </div>
@@ -224,7 +224,7 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
                   <button
                     type="button"
                     className="btn-secondary"
-                    style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem' }}
+                    style={{ fontSize: '0.8125rem', padding: '0.25rem 0.6rem' }}
                     onClick={() => onRestoreCode(selectedAttempt.code)}
                   >
                     {language === 'es' ? 'Restaurar en Editor' : 'Restore in Editor'}
