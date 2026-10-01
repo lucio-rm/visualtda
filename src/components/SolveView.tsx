@@ -5,7 +5,13 @@ import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseConten
 import { runPythonTests } from '../runtime/pythonTestRunner';
 import { pythonService } from '../runtime/pythonExecutionService';
 import { useStudentProgress } from '../context/StudentProgressContext';
+import { useInstructorMode } from '../context/InstructorModeContext';
 import { recordLegitimateExercisePass, recordHonestSkipPass } from '../utils/cryptoAuth';
+import { recordStudentAttempt, getStudentAttempts, getApprovedStudentSolution } from '../utils/studentAttempts';
+import { analyzeStudentCodeEffort } from '../utils/codeEffortAnalyzer';
+import { getHintUnlockStatus } from '../utils/hintGating';
+import { HintRequirementWidget } from './HintRequirementWidget';
+import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
@@ -89,6 +95,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
 }) => {
   const { language, t, dict } = useLanguage();
   const { markAttempted, markTesting, markPassed } = useStudentProgress();
+  const { isInstructorMode } = useInstructorMode();
+
+  const [attempts, setAttempts] = useState(() => getStudentAttempts(exercise.id));
+  const [showAttemptsViewer, setShowAttemptsViewer] = useState(false);
 
   const content = useMemo(() => {
     return EXERCISE_SOLVE_CONTENT[exercise.id] || null;
@@ -300,6 +310,19 @@ export const SolveView: React.FC<SolveViewProps> = ({
             : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check failed conditions and outputs below.`
         );
       }
+
+      const effort = analyzeStudentCodeEffort(code, rawStarter);
+      recordStudentAttempt(exercise.id, {
+        exerciseId: exercise.id,
+        code,
+        passed: evaluation.passed,
+        passedTestsCount: evaluation.totalPassed,
+        totalTestsCount: evaluation.totalTests,
+        meaningfulLinesCount: effort.meaningfulLinesAdded,
+        engine: 'ts',
+        executionTimeMs: null
+      });
+      setAttempts(getStudentAttempts(exercise.id));
     } else {
       // Evaluate against Python test runner with real test cases
       const evalResult = await runPythonTests(exercise.id, code);
@@ -323,6 +346,19 @@ export const SolveView: React.FC<SolveViewProps> = ({
             : `${evalResult.totalPassed} / ${evalResult.totalTests} passed. Code did not satisfy all constraints or contains errors.`
         );
       }
+
+      const effort = analyzeStudentCodeEffort(code, rawStarter);
+      recordStudentAttempt(exercise.id, {
+        exerciseId: exercise.id,
+        code,
+        passed: evalResult.passed,
+        passedTestsCount: evalResult.totalPassed,
+        totalTestsCount: evalResult.totalTests,
+        meaningfulLinesCount: effort.meaningfulLinesAdded,
+        engine: 'ts',
+        executionTimeMs: null
+      });
+      setAttempts(getStudentAttempts(exercise.id));
     }
   };
 
@@ -399,6 +435,19 @@ export const SolveView: React.FC<SolveViewProps> = ({
           : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed. Check failed test cases in table.`
       );
     }
+
+    const effort = analyzeStudentCodeEffort(code, rawStarter);
+    recordStudentAttempt(exercise.id, {
+      exerciseId: exercise.id,
+      code,
+      passed: evalResult.passed,
+      passedTestsCount: evalResult.totalPassed,
+      totalTestsCount: evalResult.totalTests,
+      meaningfulLinesCount: effort.meaningfulLinesAdded,
+      engine: 'pyodide',
+      executionTimeMs: evalResult.executionTimeMs
+    });
+    setAttempts(getStudentAttempts(exercise.id));
   };
 
   return (
@@ -574,6 +623,51 @@ export const SolveView: React.FC<SolveViewProps> = ({
               )}
             </div>
           )}
+
+          {/* Attempt History Card */}
+          <div className="card-panel attempts-history-card" style={{ marginTop: '1.25rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '1.1rem' }}>📋</span>
+                <h4 style={{ margin: 0, fontSize: '0.95rem' }}>
+                  {language === 'es' ? 'Historial de Intentos' : 'Attempt History'}
+                </h4>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    padding: '0.15rem 0.45rem',
+                    borderRadius: 'var(--radius-sm, 4px)',
+                    background: 'var(--surface-hover)',
+                    border: '1px solid var(--border)'
+                  }}
+                >
+                  {attempts.length}{' '}
+                  {attempts.length === 1
+                    ? (language === 'es' ? 'intento' : 'attempt')
+                    : (language === 'es' ? 'intentos' : 'attempts')}
+                </span>
+              </div>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                onClick={() => setShowAttemptsViewer(!showAttemptsViewer)}
+              >
+                {showAttemptsViewer
+                  ? (language === 'es' ? 'Ocultar Historial ▲' : 'Hide History ▲')
+                  : (language === 'es' ? 'Ver Intentos ▼' : 'View Attempts ▼')}
+              </button>
+            </div>
+            {showAttemptsViewer && (
+              <StudentAttemptsViewer
+                attempts={attempts}
+                language={language}
+                onRestoreCode={(restoredCode) => setCode(restoredCode)}
+                approvedSolution={getApprovedStudentSolution(exercise.id)}
+              />
+            )}
+          </div>
         </div>
 
         <aside className="solve-sidebar">
@@ -585,19 +679,38 @@ export const SolveView: React.FC<SolveViewProps> = ({
             <div className="hints-list">
               {hints.map((hint, idx) => {
                 const isRevealed = revealedHints.includes(idx);
+                const unlockStatus = getHintUnlockStatus(
+                  exercise.id,
+                  idx,
+                  code,
+                  rawStarter,
+                  isInstructorMode
+                );
+
                 return (
-                  <div key={idx} className="hint-item">
-                    <button
-                      type="button"
-                      className={`btn-toggle-hint ${isRevealed ? 'revealed' : ''}`}
-                      onClick={() => toggleHint(idx)}
-                      aria-expanded={isRevealed}
-                    >
-                      {isRevealed
-                        ? `▼ ${t(dict.hintLabel)} ${idx + 1}`
-                        : `▶ ${t(dict.viewHintLabel)} ${idx + 1}`}
-                    </button>
-                    {isRevealed && <div className="hint-content">{t(hint)}</div>}
+                  <div key={idx} className={`hint-item ${unlockStatus.isUnlocked ? 'hint-unlocked' : 'hint-locked'}`}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.35rem' }}>
+                      {unlockStatus.isUnlocked ? (
+                        <button
+                          type="button"
+                          className={`btn-toggle-hint ${isRevealed ? 'revealed' : ''}`}
+                          onClick={() => toggleHint(idx)}
+                          aria-expanded={isRevealed}
+                        >
+                          {isRevealed
+                            ? `▼ ${t(dict.hintLabel)} ${idx + 1}`
+                            : `▶ ${t(dict.viewHintLabel)} ${idx + 1}`}
+                        </button>
+                      ) : (
+                        <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                          🔒 {t(dict.hintLabel)} {idx + 1}
+                        </span>
+                      )}
+                      <HintRequirementWidget status={unlockStatus} language={language} />
+                    </div>
+                    {unlockStatus.isUnlocked && isRevealed && (
+                      <div className="hint-content">{t(hint)}</div>
+                    )}
                   </div>
                 );
               })}

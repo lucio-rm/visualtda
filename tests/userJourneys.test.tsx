@@ -317,7 +317,43 @@ describe('Phase D: Browser / User Journey Integration Verification (15 Core Flow
     expect(Number(scrubber.value)).toBe(0);
   });
 
-  it('Flow 10: Progressive hints reveal sequentially without penalty', async () => {
+  it('Flow 10: Progressive hints reveal sequentially after required effort without penalty', async () => {
+    const { recordStudentAttempt } = await import('../src/utils/studentAttempts');
+
+    // Provide 3 genuine attempts with 20+ non-boilerplate lines
+    const genuineAttemptCode = `def solve(n):
+    board = []
+    for r in range(n):
+        row = [0] * n
+        board.append(row)
+    cols = set()
+    diag1 = set()
+    diag2 = set()
+    def backtrack(r):
+        if r == n:
+            return True
+        for c in range(n):
+            if c in cols or (r - c) in diag1 or (r + c) in diag2:
+                continue
+            cols.add(c)
+            diag1.add(r - c)
+            diag2.add(r + c)
+            board[r][c] = 1
+            if backtrack(r + 1):
+                return True
+            board[r][c] = 0
+            cols.remove(c)
+            diag1.remove(r - c)
+            diag2.remove(r + c)
+        return False
+    backtrack(0)
+    return board`;
+
+    recordStudentAttempt('n-queens', genuineAttemptCode, 'def solve(): pass', false, 0, 4);
+    recordStudentAttempt('n-queens', genuineAttemptCode, 'def solve(): pass', false, 1, 4);
+    recordStudentAttempt('n-queens', genuineAttemptCode, 'def solve(): pass', false, 2, 4);
+    sessionStorage.setItem('visual_tda_code_n-queens', genuineAttemptCode);
+
     await act(async () => {
       root.render(<App />);
     });
@@ -335,7 +371,7 @@ describe('Phase D: Browser / User Journey Integration Verification (15 Core Flow
     const hintsCard = container.querySelector('.hints-card');
     expect(hintsCard).not.toBeNull();
 
-    // Unlock first hint
+    // Unlock first hint now that effort requirements are met
     const hintTrigger = container.querySelector('.btn-toggle-hint') as HTMLButtonElement;
     expect(hintTrigger).not.toBeNull();
 

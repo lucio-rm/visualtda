@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ExerciseMetadata, formatTechniqueLabel } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
-import { isExerciseSolutionAuthorized } from '../utils/cryptoAuth';
+import { isExerciseSolutionAuthorized, verifyInstructorAccess } from '../utils/cryptoAuth';
 import { getOrDecryptSolution, getDecryptedSolutionSync } from '../utils/solutionCrypto';
+import { getApprovedStudentSolution, getStudentAttempts } from '../utils/studentAttempts';
+import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 import { TheoryMarkdown } from './common/TheoryMarkdown';
 import { getRelatedExercisesFor } from '../engine/crossExerciseConnections';
 import { getExerciseInsight } from '../engine/exerciseContextInsights';
@@ -88,10 +90,20 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
 }) => {
   const { t, dict, language } = useLanguage();
   const { isInstructorMode } = useInstructorMode();
-  const [codeMode, setCodeMode] = useState<'python' | 'pseudocode'>('python');
+  const isFacultyAuthenticated = isInstructorMode && verifyInstructorAccess();
+
+  const studentAttempts = getStudentAttempts(exercise.id);
+  const approvedSolution = getApprovedStudentSolution(exercise.id);
+
+  const [codeMode, setCodeMode] = useState<'python' | 'pseudocode' | 'student' | 'attempts'>(() => {
+    if (isFacultyAuthenticated) return 'python';
+    if (approvedSolution) return 'student';
+    if (studentAttempts.length > 0) return 'attempts';
+    return 'student';
+  });
 
   const authStatus = isExerciseSolutionAuthorized(exercise.id, isInstructorMode, solutionUnlocked);
-  const canViewCanonicalPython = authStatus.authorized;
+  const canViewCanonicalPython = isFacultyAuthenticated;
   const isTampered = authStatus.isTampered;
   const relatedExercises = getRelatedExercisesFor(exercise.id);
   const insight = getExerciseInsight(exercise.id, exercise.categoryId);
@@ -152,7 +164,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           </div>
         </div>
 
-        {/* Code & Pseudocode toggle card */}
+        {/* Code, Pseudocode, and Student Attempts Card */}
         <div className="understand-code-container">
           <div className="card-panel">
             <div className="code-view-header">
@@ -160,11 +172,27 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
               <div className="code-toggle-group" role="group" aria-label={t(dict.codeToggleLabel)}>
                 <button
                   type="button"
+                  className={`btn-code-toggle ${codeMode === 'student' ? 'active' : ''}`}
+                  onClick={() => setCodeMode('student')}
+                  aria-pressed={codeMode === 'student'}
+                >
+                  {language === 'es' ? 'Tu Solución' : 'Your Solution'}
+                </button>
+                <button
+                  type="button"
+                  className={`btn-code-toggle ${codeMode === 'attempts' ? 'active' : ''}`}
+                  onClick={() => setCodeMode('attempts')}
+                  aria-pressed={codeMode === 'attempts'}
+                >
+                  {language === 'es' ? `Intentos (${studentAttempts.length})` : `Attempts (${studentAttempts.length})`}
+                </button>
+                <button
+                  type="button"
                   className={`btn-code-toggle ${codeMode === 'python' ? 'active' : ''}`}
                   onClick={() => setCodeMode('python')}
                   aria-pressed={codeMode === 'python'}
                 >
-                  {t(dict.understandPython3)}
+                  {language === 'es' ? 'Python 3 (Docentes)' : 'Python 3 (Faculty)'}
                 </button>
                 <button
                   type="button"
@@ -172,80 +200,154 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                   onClick={() => setCodeMode('pseudocode')}
                   aria-pressed={codeMode === 'pseudocode'}
                 >
-                  {t(dict.understandPseudocode)}
+                  {language === 'es' ? 'Pseudocódigo (Docentes)' : 'Pseudocode (Faculty)'}
                 </button>
               </div>
             </div>
 
-            {codeMode === 'python' && !canViewCanonicalPython ? (
-              isTampered ? (
+            {isTampered ? (
+              <div
+                className="solution-tamper-card"
+                role="alert"
+                style={{
+                  padding: '2rem',
+                  textAlign: 'center',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  borderRadius: 'var(--radius-md)'
+                }}
+              >
                 <div
-                  className="solution-tamper-card"
-                  role="alert"
                   style={{
-                    padding: '2rem',
-                    textAlign: 'center',
-                    background: 'rgba(239, 68, 68, 0.08)',
-                    border: '1px solid rgba(239, 68, 68, 0.35)',
-                    borderRadius: 'var(--radius-md)'
+                    display: 'inline-flex',
+                    padding: '0.35rem 0.75rem',
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    color: '#ef4444',
+                    marginBottom: '0.75rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      padding: '0.35rem 0.75rem',
-                      background: 'rgba(239, 68, 68, 0.15)',
-                      borderRadius: 'var(--radius-sm)',
-                      border: '1px solid rgba(239, 68, 68, 0.4)',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      color: '#ef4444',
-                      marginBottom: '0.75rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    {language === 'es' ? 'Firma Criptográfica Inválida' : 'Invalid Cryptographic Signature'}
-                  </div>
-                  <h4 style={{ marginBottom: '0.5rem', color: '#ef4444' }}>
-                    {language === 'es' ? 'Acceso Bloqueado contra Manipulación' : 'Access Blocked against Tampering'}
-                  </h4>
-                  <p style={{ maxWidth: '540px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    {language === 'es'
-                      ? 'Se detectó una alteración de variables en la consola/inspección de DevTools sin validación de credenciales. La solución oficial de la cátedra requiere ingresar la clave de 8 caracteres en "Modo Docente" o aprobar las pruebas unitarias en la fase Resolver.'
-                      : 'State variable modification detected in DevTools without valid credential signature. The official faculty solution requires entering the 8-character password in "Instructor Mode" or passing all unit tests in Solve.'}
-                  </p>
+                  {language === 'es' ? 'Firma Criptográfica Inválida' : 'Invalid Cryptographic Signature'}
                 </div>
-              ) : (
-                <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {language === 'es' ? 'Acceso Restringido' : 'Restricted Access'}
-                  </div>
-                  <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
-                    {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
-                  </h4>
-                  <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    {language === 'es'
-                      ? 'Para acceder a la solución oficial en Python, primero debés superar las pruebas automatizadas en la fase Resolver (o activar el Modo Docente en la barra superior).'
-                      : 'To access the official Python solution, you must first pass the automated test cases in the Solve phase (or activate Instructor Mode in the top bar).'}
-                  </p>
-                  {onGoToSolve && (
-                    <button type="button" className="btn-primary" onClick={onGoToSolve}>
-                      {language === 'es' ? 'Ir a Resolver el Ejercicio →' : 'Go to Solve Exercise →'}
-                    </button>
-                  )}
-                </div>
-              )
+                <h4 style={{ marginBottom: '0.5rem', color: '#ef4444' }}>
+                  {language === 'es' ? 'Acceso Bloqueado contra Manipulación' : 'Access Blocked against Tampering'}
+                </h4>
+                <p style={{ maxWidth: '540px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                  {language === 'es'
+                    ? 'Se detectó una alteración de variables en la consola/inspección de DevTools sin validación de credenciales. La solución oficial de la cátedra requiere ingresar la clave de 8 caracteres en "Modo Docente" o aprobar las pruebas unitarias en la fase Resolver.'
+                    : 'State variable modification detected in DevTools without valid credential signature. The official faculty solution requires entering the 8-character password in "Instructor Mode" or passing all unit tests in Solve.'}
+                </p>
+              </div>
             ) : (
-              <pre className="canonical-code-display">
-                <code>
-                  {codeMode === 'python'
-                    ? isDecrypting
-                      ? (language === 'es' ? '# Desencriptando solución oficial...' : '# Decrypting canonical solution...')
-                      : effectivePython || '# Solución protegida'
-                    : pseudocode}
-                </code>
-              </pre>
+              <>
+                {/* View 1: Student Approved Solution */}
+                {codeMode === 'student' && (
+                  approvedSolution ? (
+                    <div className="student-approved-code-box">
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.85rem',
+                        background: 'rgba(34, 197, 94, 0.1)',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        borderRadius: 'var(--radius-sm, 4px)',
+                        marginBottom: '0.75rem',
+                        fontSize: '0.82rem'
+                      }}>
+                        <span style={{ color: '#22c55e', fontWeight: 600 }}>
+                          ✓ {language === 'es' ? 'Código Aprobado por la Batería de Pruebas' : 'Code Approved by Test Suite'}
+                        </span>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                          {approvedSolution.passedTestsCount} {language === 'es' ? 'tests superados' : 'tests passed'} · {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                      <pre className="canonical-code-display">
+                        <code>{approvedSolution.code}</code>
+                      </pre>
+                    </div>
+                  ) : (
+                    <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {language === 'es' ? 'Sin Código Aprobado' : 'No Approved Code Yet'}
+                      </div>
+                      <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
+                        {language === 'es' ? 'Aún no aprobaste una solución' : 'No solution approved yet'}
+                      </h4>
+                      <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                        {language === 'es'
+                          ? 'Cuando resuelvas el ejercicio y superes los casos de prueba en la fase Resolver, tu código aprobado quedará registrado de forma permanente aquí para que puedas estudiarlo.'
+                          : 'Once you solve the exercise and pass all test cases in the Solve phase, your approved code will be permanently recorded here for review.'}
+                      </p>
+                      {onGoToSolve && (
+                        <button type="button" className="btn-primary" onClick={onGoToSolve}>
+                          {language === 'es' ? 'Ir a Resolver el Ejercicio →' : 'Go to Solve Exercise →'}
+                        </button>
+                      )}
+                    </div>
+                  )
+                )}
+
+                {/* View 2: Student Attempts History */}
+                {codeMode === 'attempts' && (
+                  <StudentAttemptsViewer
+                    attempts={studentAttempts}
+                    language={language}
+                    approvedSolution={approvedSolution}
+                  />
+                )}
+
+                {/* View 3 & 4: Python / Pseudocode (Docentes Only) */}
+                {(codeMode === 'python' || codeMode === 'pseudocode') && (
+                  !canViewCanonicalPython ? (
+                    <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+                      <div style={{ display: 'inline-flex', padding: '0.35rem 0.75rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {language === 'es' ? 'Acceso Exclusivo Docente' : 'Faculty Access Only'}
+                      </div>
+                      <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
+                        {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
+                      </h4>
+                      <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                        {language === 'es'
+                          ? 'Por el momento, el código canónico en Python y el pseudocódigo formal están reservados exclusivamente para los profesores de la cátedra. Podés consultar tu código aprobado y tu historial de ejecuciones en las pestañas "Tu Solución" e "Intentos".'
+                          : 'At this time, canonical Python code and formal pseudocode are restricted to faculty members. You can review your approved code and execution history in the "Your Solution" and "Attempts" tabs.'}
+                      </p>
+                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        {approvedSolution && (
+                          <button type="button" className="btn-primary" onClick={() => setCodeMode('student')}>
+                            {language === 'es' ? 'Ver mi Código Aprobado →' : 'View Approved Code →'}
+                          </button>
+                        )}
+                        {studentAttempts.length > 0 && !approvedSolution && (
+                          <button type="button" className="btn-primary" onClick={() => setCodeMode('attempts')}>
+                            {language === 'es' ? 'Ver mis Intentos →' : 'View My Attempts →'}
+                          </button>
+                        )}
+                        {onGoToSolve && (
+                          <button type="button" className="btn-secondary" onClick={onGoToSolve}>
+                            {language === 'es' ? 'Ir a Resolver el Ejercicio' : 'Go to Solve Exercise'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <pre className="canonical-code-display">
+                      <code>
+                        {codeMode === 'python'
+                          ? isDecrypting
+                            ? (language === 'es' ? '# Desencriptando solución oficial...' : '# Decrypting canonical solution...')
+                            : effectivePython || '# Solución protegida'
+                          : pseudocode}
+                      </code>
+                    </pre>
+                  )
+                )}
+              </>
             )}
           </div>
         </div>
