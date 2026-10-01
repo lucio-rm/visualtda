@@ -135,19 +135,19 @@ export const MajorityElementVisualizer: React.FC = () => {
                     isWinner
                       ? 'var(--state-solution-bg)'
                       : inActiveRange
-                      ? 'var(--surface-active, rgba(255,255,255,0.06))'
-                      : 'var(--bg)'
+                      ? 'var(--surface-hover)'
+                      : 'var(--surface)'
                   }
-                  stroke={isWinner ? 'var(--success)' : inActiveRange ? 'var(--border)' : 'var(--border-muted, rgba(255,255,255,0.08))'}
-                  strokeWidth={isWinner ? 2 : 1}
+                  stroke={isWinner ? 'var(--success)' : inActiveRange ? 'var(--accent)' : 'var(--border)'}
+                  strokeWidth={isWinner ? 2.5 : inActiveRange ? 1.5 : 1}
                 />
                 <text
                   x={x + (cellWidth - 4) / 2}
                   y={startY + cellHeight / 2 + 5}
                   textAnchor="middle"
-                  fill={inActiveRange ? 'var(--text)' : 'var(--text-muted)'}
+                  fill={isWinner ? 'var(--success)' : inActiveRange ? 'var(--text)' : 'var(--text-muted)'}
                   fontSize="16px"
-                  fontWeight="700"
+                  fontWeight="800"
                   fontFamily="var(--font-mono)"
                 >
                   {val}
@@ -158,7 +158,7 @@ export const MajorityElementVisualizer: React.FC = () => {
                   y={startY + cellHeight + 18}
                   textAnchor="middle"
                   fill="var(--text-muted)"
-                  fontSize="13px"
+                  fontSize="12px"
                   fontFamily="var(--font-mono)"
                 >
                   [{idx}]
@@ -174,7 +174,7 @@ export const MajorityElementVisualizer: React.FC = () => {
               y={startY + cellHeight + 38}
               fill="var(--accent)"
               fontSize="13px"
-              fontWeight="600"
+              fontWeight="700"
               fontFamily="var(--font-mono)"
             >
               {language === 'es' ? 'CandIzq' : 'LeftCand'}: {candLeft} {countLeft > 0 ? `(${countLeft}x)` : ''}
@@ -185,9 +185,9 @@ export const MajorityElementVisualizer: React.FC = () => {
             <text
               x={startX + (mid !== null && mid !== undefined ? (mid + 1) * cellWidth + 6 : (left + 1) * cellWidth)}
               y={startY + cellHeight + 38}
-              fill="#ec4899"
+              fill="var(--warning)"
               fontSize="13px"
-              fontWeight="600"
+              fontWeight="700"
               fontFamily="var(--font-mono)"
             >
               {language === 'es' ? 'CandDer' : 'RightCand'}: {candRight} {countRight > 0 ? `(${countRight}x)` : ''}

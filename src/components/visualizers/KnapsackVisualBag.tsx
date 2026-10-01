@@ -142,8 +142,8 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
                         )}
                       </div>
                       <div className="item-block-metrics">
-                        <span className="metric-chip">
-                          <strong>
+                        <span className="metric-chip" style={{ whiteSpace: 'nowrap' }}>
+                          <strong style={{ whiteSpace: 'nowrap' }}>
                             {isFractional
                               ? `${effectiveWeight.toFixed(1)} / ${item.weight} kg`
                               : `${item.weight} kg`}
@@ -197,9 +197,9 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
         {/* Backpack Footer Gauge */}
         <div className="bag-footer-gauge">
           <div className="gauge-text-row">
-            <span>
+            <span style={{ whiteSpace: 'nowrap' }}>
               {language === 'es' ? 'Ocupación de peso:' : 'Weight occupancy:'}{' '}
-              <strong>{Number.isInteger(totalWeight) ? totalWeight : totalWeight.toFixed(1)} kg / {capacity} kg</strong>
+              <strong style={{ whiteSpace: 'nowrap' }}>{Number.isInteger(totalWeight) ? totalWeight : totalWeight.toFixed(1)}&nbsp;kg / {capacity}&nbsp;kg</strong>
             </span>
             <span className={`gauge-status ${isOverweight ? 'status-invalid' : 'status-valid'}`}>
               {isOverweight

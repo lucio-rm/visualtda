@@ -395,11 +395,13 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 x={x1 + 10}
                 y={y + 19}
                 fill={textFill}
+                stroke="none"
                 fontSize="13"
                 fontWeight="600"
-                fontFamily="var(--font-sans)"
+                fontFamily="var(--font-mono)"
+                pointerEvents="none"
               >
-                {isConflict ? '[!] ' : isSelected ? '[Sel] ' : ''}{task.id} [{task.start}-{task.end}]
+                {isConflict ? '[!] ' : isSelected ? '✓ ' : ''}{task.id} [{task.start}h - {task.end}h]
               </text>
               {activePresetId === 'custom' && (
                 <text

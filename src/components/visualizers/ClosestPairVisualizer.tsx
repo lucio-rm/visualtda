@@ -67,16 +67,42 @@ export const ClosestPairVisualizer: React.FC = () => {
           aria-label={language === 'es' ? 'Plano 2D de puntos para par más cercano' : '2D point plane for closest pair'}
         >
           {/* Delta-Strip rectangle */}
+          {/* Delta-Strip rectangle with δ/2 columns */}
           {splitX !== null && splitX !== undefined && delta < 500 && (
-            <rect
-              x={Math.max(0, splitX - delta)}
-              y={0}
-              width={Math.min(500, delta * 2)}
-              height={280}
-              fill="var(--state-active-bg)"
-              stroke="var(--state-active-bg)"
-              strokeDasharray="4 4"
-            />
+            <g>
+              <rect
+                x={Math.max(0, splitX - delta)}
+                y={0}
+                width={Math.min(500, delta * 2)}
+                height={280}
+                fill="var(--state-active-bg)"
+                stroke="var(--accent)"
+                strokeOpacity={0.4}
+                strokeDasharray="4 4"
+              />
+              {delta > 15 && (
+                <>
+                  <line
+                    x1={splitX - delta / 2}
+                    y1={0}
+                    x2={splitX - delta / 2}
+                    y2={280}
+                    stroke="var(--accent)"
+                    strokeOpacity={0.25}
+                    strokeDasharray="2 3"
+                  />
+                  <line
+                    x1={splitX + delta / 2}
+                    y1={0}
+                    x2={splitX + delta / 2}
+                    y2={280}
+                    stroke="var(--accent)"
+                    strokeOpacity={0.25}
+                    strokeDasharray="2 3"
+                  />
+                </>
+              )}
+            </g>
           )}
 
           {/* Vertical dividing line */}
@@ -92,7 +118,7 @@ export const ClosestPairVisualizer: React.FC = () => {
                 strokeDasharray="6 4"
               />
               <text x={splitX + 6} y={20} fill="var(--accent)" fontSize="13px" fontFamily="var(--font-mono)" fontWeight="700">
-                x = {splitX}
+                x = {splitX} (L)
               </text>
             </g>
           )}
@@ -168,12 +194,14 @@ export const ClosestPairVisualizer: React.FC = () => {
         </div>
       )}
 
-      {/* 2D Strip Packing Lemma Explanation (Section 12 & 44) */}
-      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Fundamento: Lema de Empaquetamiento en la Franja δ:' : 'Rationale: δ-Strip Packing Lemma:'}</strong>{' '}
+      {/* 2D Strip Packing Lemma & 15-Point Upper Bound Explanation */}
+      <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+        <strong style={{ color: 'var(--accent)', display: 'block', marginBottom: '0.25rem' }}>
+          {language === 'es' ? 'Fundamento: Lema de Celdas δ/2 y Empaquetamiento de 15 Puntos (Kleinberg-Tardos §5.4):' : 'Rationale: δ/2 Grid Lemma & 15-Point Upper Bound (Kleinberg-Tardos §5.4):'}
+        </strong>
         {language === 'es'
-          ? 'En lugar de comparar todos los pares en la franja central (lo que costaría O(n²)), el lema de empaquetamiento demuestra que ninguna caja de dimensiones δ × 2δ puede contener más de 8 puntos sin violar que dos puntos del mismo lado disten al menos δ. Por tanto, al ordenar la franja por coordenada y, cada punto solo debe compararse con los siguientes 7 puntos contiguos, combinando las soluciones en O(n) lineal y logrando T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'
-          : 'Instead of comparing all pairs in the strip (O(n²)), the packing lemma proves that no δ × 2δ box can contain more than 8 points without violating the left/right minimal distance δ. Sorting the strip by y-coordinate allows each point to be compared against at most the next 7 points, yielding linear O(n) combine time and T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'}
+          ? 'Particionando la franja 2δ en celdas cuadradas de δ/2 × δ/2, la distancia diagonal interna es δ/√2 ≈ 0.707δ < δ. Por hipótesis de inducción, cada celda contiene a lo sumo 1 punto. Una caja de inspección 2δ × 2δ alrededor de cualquier punto contiene 4×4 = 16 celdas, conteniendo a lo sumo 15 otros puntos. Cualquier punto 16 en orden de Y dista verticalmente más de δ, permitiendo combinar en tiempo lineal O(n) y garantizando T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'
+          : 'Partitioning the 2δ strip into δ/2 × δ/2 square cells, each cell diagonal is δ/√2 ≈ 0.707δ < δ. By induction, each cell holds at most 1 point. A 2δ × 2δ inspection box contains 4×4 = 16 cells, hosting at most 15 other points. The 16th point onwards is guaranteed to be farther than δ vertically, achieving linear O(n) combine time and T(n) = 2T(n/2) + O(n) ⇒ O(n log n).'}
       </div>
 
       {/* Timeline Controls */}

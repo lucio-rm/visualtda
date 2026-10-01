@@ -50,29 +50,47 @@
 
 .kt-term-card {
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  transition: all 0.2s ease;
 }
 
-.kt-term-card.active {
+.kt-term-card.kt-term-z2.active {
   border-color: var(--accent);
+  background-color: rgba(37, 99, 235, 0.08);
   box-shadow: 0 0 0 1px var(--accent);
+}
+
+.kt-term-card.kt-term-zsum.active {
+  border-color: #8b5cf6;
+  background-color: rgba(139, 92, 246, 0.08);
+  box-shadow: 0 0 0 1px #8b5cf6;
+}
+
+.kt-term-card.kt-term-z1.active {
+  border-color: var(--warning);
+  background-color: rgba(217, 119, 6, 0.08);
+  box-shadow: 0 0 0 1px var(--warning);
+}
+
+.kt-term-card.kt-term-z0.active {
+  border-color: var(--success);
+  background-color: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 0 1px var(--success);
 }
 
 .kt-term-title {
   font-size: 0.8rem;
-  color: var(--text-muted);
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .kt-term-val {
   font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 800;
 }

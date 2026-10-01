@@ -51,6 +51,37 @@ export const ClosestPairPlayground: React.FC = () => {
     };
   }, [points, minDistance]);
 
+  const [inspectedStripPointId, setInspectedStripPointId] = useState<string | null>(null);
+  const [showGridBoxes, setShowGridBoxes] = useState<boolean>(true);
+
+  // Exact SVG coordinate translation accounting for responsive viewBox scaling
+  const getSvgCoords = (e: React.MouseEvent<SVGSVGElement> | MouseEvent) => {
+    const svg = svgRef.current;
+    if (!svg) return { x: 250, y: 140 };
+    if (typeof svg.createSVGPoint === 'function') {
+      const pt = svg.createSVGPoint();
+      const ctm = svg.getScreenCTM?.();
+      if (pt && typeof pt.matrixTransform === 'function' && ctm && typeof ctm.inverse === 'function') {
+        try {
+          pt.x = e.clientX;
+          pt.y = e.clientY;
+          const transformed = pt.matrixTransform(ctm.inverse());
+          return {
+            x: Math.round(transformed.x),
+            y: Math.round(transformed.y)
+          };
+        } catch {
+          // Fall through to bounding client rect calculation
+        }
+      }
+    }
+    const rect = svg.getBoundingClientRect();
+    return {
+      x: Math.round((e.clientX - rect.left) * (500 / Math.max(1, rect.width))),
+      y: Math.round((e.clientY - rect.top) * (280 / Math.max(1, rect.height)))
+    };
+  };
+
   const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement>) => {
     // If we just finished dragging, do not create a new point
     if (draggedPointId || hasDraggedRef.current) {
@@ -58,11 +89,9 @@ export const ClosestPairPlayground: React.FC = () => {
       return;
     }
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left);
-    const y = Math.round(e.clientY - rect.top);
+    const { x, y } = getSvgCoords(e);
 
-    if (x >= 20 && x <= 480 && y >= 20 && y <= 260) {
+    if (x >= 15 && x <= 485 && y >= 15 && y <= 265) {
       const newPt: Point2D = {
         id: `p${points.length + 1}`,
         x,
@@ -87,16 +116,16 @@ export const ClosestPairPlayground: React.FC = () => {
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!isMouseDownRef.current) return;
     const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
-    if (dist > 5) {
+    if (dist > 3) {
       hasDraggedRef.current = true;
     }
     if (!draggedPointId || !svgRef.current) return;
-    const rect = svgRef.current.getBoundingClientRect();
-    const x = Math.max(20, Math.min(480, Math.round(e.clientX - rect.left)));
-    const y = Math.max(20, Math.min(260, Math.round(e.clientY - rect.top)));
+    const { x, y } = getSvgCoords(e);
+    const clampedX = Math.max(15, Math.min(485, x));
+    const clampedY = Math.max(15, Math.min(265, y));
 
     setPoints((prev) =>
-      prev.map((p) => (p.id === draggedPointId ? { ...p, x, y } : p))
+      prev.map((p) => (p.id === draggedPointId ? { ...p, x: clampedX, y: clampedY } : p))
     );
   };
 
@@ -113,11 +142,22 @@ export const ClosestPairPlayground: React.FC = () => {
 
   const handleReset = () => {
     setPoints(DEFAULT_CLOSEST_PAIR_POINTS);
+    setInspectedStripPointId(null);
   };
 
   const handleClear = () => {
     setPoints([]);
+    setInspectedStripPointId(null);
   };
+
+  // Determine active inspected point in strip (defaults to first strip point if available)
+  const activeInspectedPoint = useMemo(() => {
+    if (inspectedStripPointId) {
+      const found = pointsInStrip.find((p) => p.id === inspectedStripPointId);
+      if (found) return found;
+    }
+    return pointsInStrip[0] || null;
+  }, [inspectedStripPointId, pointsInStrip]);
 
   return (
     <div
@@ -126,7 +166,7 @@ export const ClosestPairPlayground: React.FC = () => {
       aria-label="Laboratorio de Par Más Cercano 2D"
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem', userSelect: 'none' }}
     >
       {/* Controls Bar */}
       <div className="sdk-pg-controls" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -169,6 +209,25 @@ export const ClosestPairPlayground: React.FC = () => {
               ? (language === 'es' ? 'Ocultar Franja (±δ)' : 'Hide Strip (±δ)')
               : (language === 'es' ? 'Mostrar Franja (±δ)' : 'Show Strip (±δ)')}
           </button>
+          {showStrip && points.length >= 2 && (
+            <button
+              type="button"
+              className={`btn-tool ${showGridBoxes ? 'active' : ''}`}
+              onClick={() => setShowGridBoxes(!showGridBoxes)}
+              title={language === 'es' ? 'Mostrar celdas de tamaño δ/2 × δ/2 y caja de 16 celdas (Lema 15 Puntos)' : 'Toggle δ/2 × δ/2 cells and 16-cell box (15 Points Lemma)'}
+              style={{
+                padding: '0.35rem 0.75rem',
+                fontSize: '0.8rem',
+                backgroundColor: showGridBoxes ? 'var(--accent)' : 'var(--surface)',
+                color: showGridBoxes ? 'var(--accent-contrast)' : 'var(--text)',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              {language === 'es' ? 'Celdas δ/2 (Lema 15)' : 'δ/2 Cells (Lemma 15)'}
+            </button>
+          )}
           <button
             type="button"
             className="btn-tool"
@@ -230,7 +289,7 @@ export const ClosestPairPlayground: React.FC = () => {
           onClick={handleCanvasClick}
           onMouseMove={handleMouseMove}
           style={{
-            maxWidth: '680px',
+            maxWidth: '720px',
             width: '100%',
             height: 'auto',
             borderRadius: '6px',
@@ -253,23 +312,121 @@ export const ClosestPairPlayground: React.FC = () => {
           {/* D&C Median Strip (±δ) */}
           {points.length >= 2 && showStrip && stripWidth > 0 && (
             <g>
+              {/* Outer 2δ Strip Background */}
               <rect
                 x={stripLeft}
                 y={0}
                 width={stripWidth}
                 height={280}
-                fill="rgba(37, 99, 235, 0.08)"
+                fill="rgba(37, 99, 235, 0.06)"
                 stroke="rgba(37, 99, 235, 0.3)"
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
+
+              {/* δ/2 Subdivisions inside the entire strip */}
+              {showGridBoxes && minDistance > 12 && (
+                <g opacity={0.6}>
+                  {/* Vertical subdivision lines at L - δ/2 and L + δ/2 (making 4 columns of width δ/2) */}
+                  <line
+                    x1={dividerX - minDistance / 2}
+                    y1={0}
+                    x2={dividerX - minDistance / 2}
+                    y2={280}
+                    stroke="rgba(37, 99, 235, 0.35)"
+                    strokeWidth={1}
+                    strokeDasharray="2 3"
+                  />
+                  <line
+                    x1={dividerX + minDistance / 2}
+                    y1={0}
+                    x2={dividerX + minDistance / 2}
+                    y2={280}
+                    stroke="rgba(37, 99, 235, 0.35)"
+                    strokeWidth={1}
+                    strokeDasharray="2 3"
+                  />
+
+                  {/* Horizontal strip grid lines every δ/2 */}
+                  {Array.from({ length: Math.ceil(280 / (minDistance / 2)) }).map((_, rIdx) => {
+                    const lineY = rIdx * (minDistance / 2);
+                    return (
+                      <line
+                        key={`h-grid-${rIdx}`}
+                        x1={stripLeft}
+                        y1={lineY}
+                        x2={stripLeft + stripWidth}
+                        y2={lineY}
+                        stroke="rgba(37, 99, 235, 0.2)"
+                        strokeWidth={0.75}
+                        strokeDasharray="2 2"
+                      />
+                    );
+                  })}
+                </g>
+              )}
+
+              {/* 16-Cell Inspection Box (2δ × 2δ) around the active point */}
+              {showGridBoxes && activeInspectedPoint && minDistance > 10 && (
+                <g>
+                  {/* Bounding box of 2δ × 2δ */}
+                  <rect
+                    x={dividerX - minDistance}
+                    y={Math.max(0, activeInspectedPoint.y - minDistance)}
+                    width={minDistance * 2}
+                    height={Math.min(280, minDistance * 2)}
+                    fill="rgba(16, 185, 129, 0.07)"
+                    stroke="var(--success)"
+                    strokeWidth={1.5}
+                    strokeDasharray="3 3"
+                  />
+
+                  {/* 4x4 Grid of δ/2 × δ/2 cells inside the inspection window */}
+                  {[0, 1, 2, 3].map((col) =>
+                    [0, 1, 2, 3].map((row) => {
+                      const cellX = dividerX - minDistance + col * (minDistance / 2);
+                      const cellY = activeInspectedPoint.y - minDistance + row * (minDistance / 2);
+                      if (cellY + minDistance / 2 < 0 || cellY > 280) return null;
+                      return (
+                        <rect
+                          key={`cell-${col}-${row}`}
+                          x={cellX}
+                          y={cellY}
+                          width={minDistance / 2}
+                          height={minDistance / 2}
+                          fill="transparent"
+                          stroke="rgba(16, 185, 129, 0.35)"
+                          strokeWidth={0.8}
+                        />
+                      );
+                    })
+                  )}
+
+                  {/* Window explanation label */}
+                  <text
+                    x={dividerX}
+                    y={Math.max(16, activeInspectedPoint.y - minDistance - 6)}
+                    textAnchor="middle"
+                    fill="var(--success)"
+                    fontSize="11px"
+                    fontWeight="700"
+                    fontFamily="var(--font-mono)"
+                  >
+                    {language === 'es'
+                      ? `Caja 2δ×2δ (16 celdas de δ/2): ≤15 candidatos`
+                      : `2δ×2δ Box (16 δ/2 cells): ≤15 candidates`}
+                  </text>
+                </g>
+              )}
+
+              {/* Center dividing median line */}
               <line
                 x1={dividerX}
                 y1={0}
                 x2={dividerX}
                 y2={280}
                 stroke="var(--accent)"
-                strokeWidth={1.5}
+                strokeWidth={2}
                 strokeDasharray="6 4"
               />
               <text
@@ -286,7 +443,7 @@ export const ClosestPairPlayground: React.FC = () => {
                 x={stripLeft + 6}
                 y={272}
                 fill="var(--text-muted)"
-                fontSize="13px"
+                fontSize="12px"
                 fontFamily="var(--font-mono)"
               >
                 L - δ
@@ -295,7 +452,7 @@ export const ClosestPairPlayground: React.FC = () => {
                 x={stripLeft + stripWidth - 36}
                 y={272}
                 fill="var(--text-muted)"
-                fontSize="13px"
+                fontSize="12px"
                 fontFamily="var(--font-mono)"
               >
                 L + δ
@@ -356,16 +513,20 @@ export const ClosestPairPlayground: React.FC = () => {
             </g>
           )}
 
-          {/* Interactive Points (draggable) */}
+          {/* Interactive Points (draggable & selectable) */}
           {points.map((p) => {
             const isBest = bestPair && (bestPair[0].id === p.id || bestPair[1].id === p.id);
             const isDragged = draggedPointId === p.id;
             const inStrip = Math.abs(p.x - dividerX) <= minDistance;
+            const isInspected = activeInspectedPoint?.id === p.id;
 
             return (
               <g
                 key={`pg-pt-${p.id}`}
-                onMouseDown={(e) => handlePointMouseDown(p.id, e)}
+                onMouseDown={(e) => {
+                  handlePointMouseDown(p.id, e);
+                  if (inStrip) setInspectedStripPointId(p.id);
+                }}
                 tabIndex={0}
                 role="button"
                 aria-label={
@@ -379,16 +540,16 @@ export const ClosestPairPlayground: React.FC = () => {
                     setPoints((prev) => prev.filter((pt) => pt.id !== p.id));
                   } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.max(20, pt.y - 10) } : pt));
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.max(15, pt.y - 10) } : pt));
                   } else if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.min(260, pt.y + 10) } : pt));
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.min(265, pt.y + 10) } : pt));
                   } else if (e.key === 'ArrowLeft') {
                     e.preventDefault();
-                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.max(20, pt.x - 10) } : pt));
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.max(15, pt.x - 10) } : pt));
                   } else if (e.key === 'ArrowRight') {
                     e.preventDefault();
-                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.min(480, pt.x + 10) } : pt));
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.min(485, pt.x + 10) } : pt));
                   }
                 }}
                 style={{ cursor: isDragged ? 'grabbing' : 'grab' }}
@@ -396,8 +557,21 @@ export const ClosestPairPlayground: React.FC = () => {
                 {/* Drag target hitzone */}
                 <circle cx={p.x} cy={p.y} r={16} fill="transparent" />
 
+                {/* Outer halo if inspected strip point */}
+                {isInspected && showGridBoxes && (
+                  <circle
+                    cx={p.x}
+                    cy={p.y}
+                    r={13}
+                    fill="none"
+                    stroke="var(--success)"
+                    strokeWidth={2}
+                    strokeDasharray="3 3"
+                  />
+                )}
+
                 {/* Outer ring if in central strip */}
-                {inStrip && showStrip && points.length >= 2 && !isBest && (
+                {inStrip && showStrip && points.length >= 2 && !isBest && !isInspected && (
                   <circle
                     cx={p.x}
                     cy={p.y}
@@ -413,8 +587,8 @@ export const ClosestPairPlayground: React.FC = () => {
                   cx={p.x}
                   cy={p.y}
                   r={isDragged ? 9 : isBest ? 8 : 6}
-                  fill={isBest ? 'var(--success)' : isDragged ? 'var(--accent)' : 'var(--accent)'}
-                  stroke={isBest ? '#059669' : '#0284c7'}
+                  fill={isBest ? 'var(--success)' : isInspected ? 'var(--success)' : isDragged ? 'var(--accent)' : 'var(--accent)'}
+                  stroke={isBest || isInspected ? '#059669' : '#0284c7'}
                   strokeWidth={2}
                 />
                 <text
@@ -435,12 +609,26 @@ export const ClosestPairPlayground: React.FC = () => {
         </svg>
       </div>
 
-      {/* Explanatory Callout */}
-      <div style={{ backgroundColor: 'var(--surface)', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.5 }}>
-        <strong>{language === 'es' ? 'Arrastre Interactivo e Intuición de División y Conquista:' : 'Interactive Drag & Divide and Conquer Intuition'}:</strong>{' '}
-        {language === 'es'
-          ? 'Arrastrá cualquier punto con el mouse para ver cómo la distancia mínima δ y la franja central (±δ) se recalculan en tiempo real. Hacé clic en áreas libres para agregar nuevos puntos. En la franja de combinación central, el lema de empaquetamiento geométrico garantiza que solo se requiere comparar cada punto contra a lo sumo 7 u 8 vecinos ordenados por coordenada Y, preservando la complejidad O(n log n).'
-          : 'Drag any point with the mouse to see min distance δ and the central strip (±δ) update dynamically. Click empty space to add points. In the merge strip, the geometric packing lemma guarantees each point is tested against at most 7-8 neighbors sorted by Y coordinate, preserving O(n log n).'}
+      {/* Explanatory Callout with CLRS / Kleinberg-Tardos 15-Point Geometric Proof */}
+      <div style={{ backgroundColor: 'var(--surface)', padding: '0.85rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+        <strong style={{ color: 'var(--accent)', display: 'block', marginBottom: '0.25rem' }}>
+          {language === 'es' ? 'Fundamento Geométrico: Lema de las Celdas δ/2 y la Cota de 15 Puntos (Kleinberg-Tardos / CLRS):' : 'Geometric Foundation: δ/2 Cell Lemma & 15-Point Upper Bound (Kleinberg-Tardos / CLRS):'}
+        </strong>
+        {language === 'es' ? (
+          <div>
+            1. <strong>Celdas de tamaño δ/2 × δ/2:</strong> La franja central de ancho 2δ ([L - δ, L + δ]) se particiona en 4 columnas verticales de ancho δ/2 (2 a la izquierda de L y 2 a la derecha). La diagonal máxima interna de cada celda es √( (δ/2)² + (δ/2)² ) = δ/√2 ≈ 0.707δ &lt; δ.<br />
+            2. <strong>Principio del palomar:</strong> Como todo par de puntos del mismo lado dista al menos δ por hipótesis inductiva, <em>ninguna celda de δ/2 × δ/2 puede contener más de 1 punto</em>.<br />
+            3. <strong>Ventana de inspección 2δ × 2δ:</strong> Para cualquier punto p en la franja, cualquier candidato a distancia &lt; δ debe satisfacer |y_q - y_p| ≤ δ. Esta caja vertical de 2δ contiene exactamente 4 filas × 4 columnas = <strong>16 celdas</strong>.<br />
+            4. <strong>A lo sumo 15 candidatos:</strong> Como una de las 16 celdas está ocupada por el propio punto p, existen <em>a lo sumo 15 otros puntos</em> en toda la ventana. El punto número 16 en adelante en orden de Y está garantizado a distancia vertical &gt; δ. Por tanto, combinar la franja requiere solo O(1) comprobaciones por punto, logrando T(n) = 2T(n/2) + O(n) = O(n log n).
+          </div>
+        ) : (
+          <div>
+            1. <strong>δ/2 × δ/2 Grid Boxes:</strong> The 2δ strip [L - δ, L + δ] splits into 4 vertical columns of width δ/2. The diagonal inside any cell is √( (δ/2)² + (δ/2)² ) = δ/√2 ≈ 0.707δ &lt; δ.<br />
+            2. <strong>Pigeonhole Principle:</strong> Since all points on the same side are separated by at least δ, <em>no single δ/2 cell can contain more than 1 point</em>.<br />
+            3. <strong>2δ × 2δ Inspection Window:</strong> For any point p, candidates within distance δ must lie in [y_p - δ, y_p + δ], spanning 4 rows × 4 columns = <strong>16 cells</strong>.<br />
+            4. <strong>At most 15 candidate points:</strong> Point p occupies one cell, leaving <em>at most 15 other points</em> in the bounding box. The 16th point and beyond are guaranteed to have vertical distance &gt; δ. Strip merge is linear O(n), preserving T(n) = 2T(n/2) + O(n) ⇒ O(n log n).
+          </div>
+        )}
       </div>
     </div>
   );

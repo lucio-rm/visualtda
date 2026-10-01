@@ -715,6 +715,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+  transition: grid-template-columns 0.25s ease;
+}
+
+.discover-grid.fullwidth-playground {
+  grid-template-columns: 1fr;
 }
 
 .problem-narrative-card,
@@ -724,6 +729,31 @@
   border-radius: var(--radius-md);
   padding: 1.5rem;
   box-shadow: var(--shadow-card);
+}
+
+.interactive-playground-card.expanded-fullwidth {
+  width: 100%;
+}
+
+/* Prevent accidental text selection / highlighting on interactive playgrounds and SVGs */
+.algorithm-playground,
+.interactive-playground-card,
+.phase-view svg,
+.algorithm-playground svg,
+.inv-pg-bar,
+.task-bar-interactive,
+.closest-pair-playground svg,
+.interval-partitioning-playground svg,
+.timeline-toolbar,
+.trace-controls,
+.sdk-pg-controls,
+.kt-canvas-container svg,
+.me-canvas-container svg,
+.me-canvas-container text,
+.cp-svg-canvas text {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 /* Unified Algorithm Playground Layout */

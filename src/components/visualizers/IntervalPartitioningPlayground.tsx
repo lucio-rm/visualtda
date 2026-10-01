@@ -43,12 +43,29 @@ const PRESET_INSTANCES: InstancePreset[] = [
   }
 ];
 
+const getInitialAssignments = (lecs: LectureInterval[]): Record<string, number> => {
+  // Compute clean greedy interval partitioning (Earliest Start Time) so initial layout has zero conflicts
+  const sorted = [...lecs].sort((a, b) => a.start - b.start || a.end - b.end);
+  const roomEndTimes: Record<number, number> = {};
+  const initial: Record<string, number> = {};
+
+  for (const lec of sorted) {
+    let assignedRoom = 1;
+    while (roomEndTimes[assignedRoom] !== undefined && roomEndTimes[assignedRoom] > lec.start) {
+      assignedRoom++;
+    }
+    roomEndTimes[assignedRoom] = lec.end;
+    initial[lec.id] = assignedRoom;
+  }
+  return initial;
+};
+
 export const IntervalPartitioningPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
 
   const [lectures, setLectures] = useState<LectureInterval[]>(DEFAULT_LECTURES);
-  const [userAssignments, setUserAssignments] = useState<Record<string, number>>({});
+  const [userAssignments, setUserAssignments] = useState<Record<string, number>>(() => getInitialAssignments(DEFAULT_LECTURES));
   const [activePresetId, setActivePresetId] = useState<string>('standard');
 
   // Custom lecture inputs
@@ -165,19 +182,19 @@ export const IntervalPartitioningPlayground: React.FC = () => {
   const handleSelectPreset = (preset: InstancePreset) => {
     setActivePresetId(preset.id);
     setLectures(preset.lectures);
-    setUserAssignments({});
+    setUserAssignments(getInitialAssignments(preset.lectures));
   };
 
   // SVG coordinate conversions
   const minHour = 8;
   const maxHour = 18;
-  const svgWidth = 560;
-  const marginLeft = 60;
+  const svgWidth = 720;
+  const marginLeft = 65;
   const marginRight = 20;
   const marginTop = 30;
-  const rowHeight = 36;
+  const rowHeight = 40;
   const numRooms = 5;
-  const svgHeight = marginTop + numRooms * rowHeight + 15;
+  const svgHeight = marginTop + numRooms * rowHeight + 18;
   const chartWidth = svgWidth - marginLeft - marginRight;
 
   const timeToX = (t: number) => marginLeft + ((t - minHour) / (maxHour - minHour)) * chartWidth;
@@ -517,9 +534,17 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             const assignedRoom = userAssignments[lec.id] ?? 1;
             const rowY = marginTop + (assignedRoom - 1) * rowHeight;
             const x = timeToX(lec.start);
-            const w = Math.max(12, timeToX(lec.end) - x);
+            const w = Math.max(16, timeToX(lec.end) - x);
             const isConflicted = conflictingLectureIds.has(lec.id);
             const isDragging = draggingLectureId === lec.id;
+
+            // Formatted label strictly bounded to available block width
+            let displayLabel = `${lec.name} (${lec.start}h - ${lec.end}h)`;
+            if (w < 70) {
+              displayLabel = lec.id.toUpperCase();
+            } else if (w < 135) {
+              displayLabel = lec.name;
+            }
 
             return (
               <g
@@ -553,6 +578,17 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 }}
                 style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
               >
+                {/* SVG ClipPath guaranteeing text never spills outside block boundaries */}
+                <clipPath id={`lec-pg-clip-${lec.id}`}>
+                  <rect
+                    x={x + 3}
+                    y={rowY + 2}
+                    width={Math.max(0, w - 6)}
+                    height={rowHeight - 8}
+                    rx={4}
+                  />
+                </clipPath>
+
                 {/* Drag shadow */}
                 {isDragging && (
                   <rect
@@ -578,15 +614,17 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 />
                 <text
                   x={x + w / 2}
-                  y={rowY + rowHeight / 2 + 1}
+                  y={rowY + rowHeight / 2 + 4}
                   textAnchor="middle"
                   fill={isDragging ? '#0f172a' : '#ffffff'}
-                  fontSize="13px"
+                  fontSize="12px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
+                  stroke="none"
                   pointerEvents="none"
+                  clipPath={`url(#lec-pg-clip-${lec.id})`}
                 >
-                  {lec.name} ({lec.start}h - {lec.end}h)
+                  {displayLabel}
                 </text>
               </g>
             );

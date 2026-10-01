@@ -179,40 +179,65 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrant 1: z2 = x1 * y1 */}
-          <rect x={74} y={29} width={192} height={57} rx={4} fill="var(--state-active-bg)" stroke="var(--accent)" strokeWidth={1.5} />
-          <text x={170} y={54} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
+          <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
+          <text x={170} y={52} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             z₂ = x₁ · y₁
           </text>
-          <text x={170} y={72} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-            {z2}
+          <text x={170} y={72} textAnchor="middle" fill="var(--accent)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+            {x1} × {y1} = {z2}
           </text>
 
           {/* Quadrants 2 & 3: Cross Terms combined as z1 */}
-          <rect x={274} y={29} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={54} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontFamily="var(--font-mono)">
-            x₀ · y₁ ({x0 * y1})
+          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={370} y={62} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
+            x₀ · y₁ = {x0 * y1}
           </text>
 
-          <rect x={74} y={94} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={119} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontFamily="var(--font-mono)">
-            x₁ · y₀ ({x1 * y0})
+          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={170} y={127} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
+            x₁ · y₀ = {x1 * y0}
           </text>
 
           {/* Cross terms bridge tag */}
-          <rect x={190} y={76} width={160} height={28} rx={14} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
-          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
-            z₁ = z_sum - z₂ - z₀ ({z1})
+          <rect x={180} y={74} width={180} height={32} rx={6} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
+          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₁ = {zSum} - {z2} - {z0} = {z1}
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
-          <rect x={274} y={94} width={192} height={57} rx={4} fill="var(--state-solution-bg)" stroke="var(--success)" strokeWidth={1.5} />
-          <text x={370} y={119} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
+          <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="var(--success)" strokeWidth={1.5} />
+          <text x={370} y={117} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             z₀ = x₀ · y₀
           </text>
-          <text x={370} y={137} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-            {z0}
+          <text x={370} y={137} textAnchor="middle" fill="var(--success)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+            {x0} × {y0} = {z0}
           </text>
         </svg>
+
+        {/* Tabular Shifted Recombination Block (Aligned Column Addition) */}
+        <div style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.85rem 1rem', marginTop: '0.75rem' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+            {language === 'es' ? 'Alineación de Columnas y Recombinación en Base 10^m:' : 'Column Alignment & Base 10^m Recombination:'}
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '420px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 600 }}>z₂ · 10^{2 * m} ({z2} × 10^{2 * m}):</span>
+              <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{z2 * Math.pow(10, 2 * m)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <span style={{ color: 'var(--warning)', fontWeight: 600 }}>+ z₁ · 10^{m} ({z1} × 10^{m}):</span>
+              <span style={{ fontWeight: 700, color: 'var(--warning)' }}>{z1 * pot}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', borderBottom: '2px solid var(--border)', paddingBottom: '0.35rem' }}>
+              <span style={{ color: 'var(--success)', fontWeight: 600 }}>+ z₀ · 10⁰ ({z0} × 1):</span>
+              <span style={{ fontWeight: 700, color: 'var(--success)' }}>{z0}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '0.25rem' }}>
+              <span style={{ fontWeight: 800, color: 'var(--text)' }}>Total (x × y):</span>
+              <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--success)' }}>{finalResult}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Breakdown Decomposition Cards */}

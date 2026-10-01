@@ -223,33 +223,62 @@ export const MajorityElementPlayground: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  padding: '0.4rem 0.5rem',
-                  borderRadius: '6px',
-                  border: isMaj ? '2px solid var(--success)' : '1px solid var(--border)',
-                  backgroundColor: isMaj ? 'var(--state-solution-bg)' : 'var(--bg)',
-                  minWidth: '48px'
+                  padding: '0.5rem 0.6rem',
+                  borderRadius: '8px',
+                  border: isMaj ? '2px solid var(--success)' : '1.5px solid var(--border)',
+                  backgroundColor: isMaj ? 'var(--state-solution-bg)' : 'var(--surface)',
+                  boxShadow: 'var(--shadow-sm)',
+                  minWidth: '56px'
                 }}
               >
-                <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   [{idx}]
                 </span>
-                <span style={{ fontSize: '1.25rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.15rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.2rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
                   {val}
                 </span>
-                <div style={{ display: 'flex', gap: '0.2rem' }}>
+                <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.2rem' }}>
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, 1)}
-                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.95rem',
+                      fontWeight: 800,
+                      borderRadius: '4px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--success)',
+                      cursor: 'pointer'
+                    }}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
+                    aria-label={`Incrementar valor en posición ${idx}`}
                   >
                     +
                   </button>
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, -1)}
-                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'var(--surface)', cursor: 'pointer' }}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.95rem',
+                      fontWeight: 800,
+                      borderRadius: '4px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--warning)',
+                      cursor: 'pointer'
+                    }}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
+                    aria-label={`Decrementar valor en posición ${idx}`}
                   >
                     -
                   </button>
@@ -257,8 +286,23 @@ export const MajorityElementPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 1}
-                    style={{ padding: '0 0.3rem', fontSize: '0.8125rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.95rem',
+                      fontWeight: 800,
+                      borderRadius: '4px',
+                      border: '1px solid transparent',
+                      backgroundColor: 'transparent',
+                      color: 'var(--error)',
+                      cursor: array.length <= 1 ? 'not-allowed' : 'pointer',
+                      opacity: array.length <= 1 ? 0.4 : 1
+                    }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
+                    aria-label={`Eliminar elemento en posición ${idx}`}
                   >
                     ×
                   </button>

@@ -108,15 +108,15 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'Z2' ? 'var(--state-active-bg)' : 'var(--surface)'}
-              stroke={subcalc === 'Z2' ? 'var(--accent)' : 'var(--border)'}
+              fill={subcalc === 'Z2' ? 'rgba(37, 99, 235, 0.15)' : 'var(--surface)'}
+              stroke="var(--accent)"
               strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
-            <text x={125} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
+            <text x={125} y={127} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700">
               {language === 'es' ? '1. Término Alto (z₂)' : '1. High Term (z₂)'}
             </text>
-            <text x={125} y={154} textAnchor="middle" fill={subcalc === 'Z2' ? 'var(--accent)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-              {x1} × {y1} = {z2 ?? '—'}
+            <text x={125} y={154} textAnchor="middle" fill="var(--accent)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+              {x1} × {y1} = {z2 !== null && z2 !== undefined ? z2 : '—'}
             </text>
           </g>
 
@@ -128,15 +128,15 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--state-active-bg)' : 'var(--surface)'}
-              stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--accent)' : 'var(--border)'}
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(139, 92, 246, 0.15)' : 'var(--surface)'}
+              stroke="#8b5cf6"
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={360} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
+            <text x={360} y={127} textAnchor="middle" fill="#8b5cf6" fontSize="13px" fontWeight="700">
               {language === 'es' ? '2. Producto Cruzado (P)' : '2. Cross Product (P)'}
             </text>
-            <text x={360} y={154} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--accent)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-              ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '—'}
+            <text x={360} y={154} textAnchor="middle" fill="#8b5cf6" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+              ({x1}+{x0}) × ({y1}+{y0}) = {zSum !== null && zSum !== undefined ? zSum : '—'}
             </text>
           </g>
 
@@ -148,15 +148,15 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'Z0' ? 'var(--state-candidate-bg)' : 'var(--surface)'}
-              stroke={subcalc === 'Z0' ? 'var(--warning)' : 'var(--border)'}
+              fill={subcalc === 'Z0' ? 'rgba(16, 185, 129, 0.15)' : 'var(--surface)'}
+              stroke="var(--success)"
               strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />
-            <text x={595} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontWeight="700">
+            <text x={595} y={127} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700">
               {language === 'es' ? '3. Término Bajo (z₀)' : '3. Low Term (z₀)'}
             </text>
-            <text x={595} y={154} textAnchor="middle" fill={subcalc === 'Z0' ? 'var(--warning)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-              {x0} × {y0} = {z0 ?? '—'}
+            <text x={595} y={154} textAnchor="middle" fill="var(--success)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+              {x0} × {y0} = {z0 !== null && z0 !== undefined ? z0 : '—'}
             </text>
           </g>
 
@@ -168,43 +168,68 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={660}
               height={75}
               rx={10}
-              fill={subcalc === 'COMBINE' || result !== null ? 'var(--state-active-bg)' : 'var(--surface)'}
+              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(37, 99, 235, 0.08)' : 'var(--surface)'}
               stroke={subcalc === 'COMBINE' || result !== null ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'COMBINE' || result !== null ? 2 : 1.5}
             />
             <text x={360} y={222} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
               {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ = P - z₂ - z₀ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
-              <tspan fill="var(--accent)" fontWeight="700">
-                {z1 ?? '—'}
+              <tspan fill="var(--warning)" fontWeight="800">
+                {z1 !== null && z1 !== undefined ? z1 : '—'}
               </tspan>
             </text>
             <text x={360} y={250} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
               {language === 'es' ? 'Resultado Final:' : 'Final Result:'} z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
-              <tspan fill="var(--accent)" fontWeight="800">
-                {result ?? '...'}
+              <tspan fill="var(--success)" fontWeight="800">
+                {result !== null && result !== undefined ? result : '...'}
               </tspan>
             </text>
           </g>
         </svg>
       </div>
 
+      {/* Tabular Shifted Recombination Block (Aligned Column Addition) */}
+      <div className="kt-recombination-block" style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '1rem' }}>
+        <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+          {language === 'es' ? 'Alineación de Columnas y Recombinación en Base 10^m:' : 'Column Alignment & Base 10^m Recombination:'}
+        </div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '420px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>z₂ · 10⁴ ({z2 ?? 'z₂'} × 10000):</span>
+            <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{z2 !== null && z2 !== undefined ? `${z2 * 10000}` : '—'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <span style={{ color: 'var(--warning)', fontWeight: 600 }}>+ z₁ · 10² ({z1 ?? 'z₁'} × 100):</span>
+            <span style={{ fontWeight: 700, color: 'var(--warning)' }}>{z1 !== null && z1 !== undefined ? `${z1 * 100}` : '—'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', borderBottom: '2px solid var(--border)', paddingBottom: '0.35rem' }}>
+            <span style={{ color: 'var(--success)', fontWeight: 600 }}>+ z₀ · 10⁰ ({z0 ?? 'z₀'} × 1):</span>
+            <span style={{ fontWeight: 700, color: 'var(--success)' }}>{z0 !== null && z0 !== undefined ? `${z0}` : '—'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '0.25rem' }}>
+            <span style={{ fontWeight: 800, color: 'var(--text)' }}>Total (x × y):</span>
+            <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--success)' }}>{result !== null && result !== undefined ? result : '...'}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Formula Detail Cards */}
       <div className="kt-formula-panel">
-        <div className={`kt-term-card ${subcalc === 'Z2' ? 'active' : ''}`}>
-          <span className="kt-term-title">z₂ = x₁ · y₁</span>
-          <span className="kt-term-val">{z2 !== null ? z2 : '—'}</span>
+        <div className={`kt-term-card kt-term-z2 ${subcalc === 'Z2' ? 'active' : ''}`}>
+          <span className="kt-term-title" style={{ color: 'var(--accent)' }}>z₂ = x₁ · y₁</span>
+          <span className="kt-term-val" style={{ color: 'var(--accent)' }}>{z2 !== null ? z2 : '—'}</span>
         </div>
-        <div className={`kt-term-card ${subcalc === 'ZSUM' ? 'active' : ''}`}>
-          <span className="kt-term-title">{language === 'es' ? 'P = (x₁+x₀)(y₁+y₀)' : 'P = (x₁+x₀)(y₁+y₀)'}</span>
-          <span className="kt-term-val">{zSum !== null ? zSum : '—'}</span>
+        <div className={`kt-term-card kt-term-zsum ${subcalc === 'ZSUM' ? 'active' : ''}`}>
+          <span className="kt-term-title" style={{ color: '#8b5cf6' }}>{language === 'es' ? 'P = (x₁+x₀)(y₁+y₀)' : 'P = (x₁+x₀)(y₁+y₀)'}</span>
+          <span className="kt-term-val" style={{ color: '#8b5cf6' }}>{zSum !== null ? zSum : '—'}</span>
         </div>
-        <div className={`kt-term-card ${subcalc === 'Z1' ? 'active' : ''}`}>
-          <span className="kt-term-title">z₁ = P - z₂ - z₀</span>
-          <span className="kt-term-val">{z1 !== null ? z1 : '—'}</span>
+        <div className={`kt-term-card kt-term-z1 ${subcalc === 'Z1' ? 'active' : ''}`}>
+          <span className="kt-term-title" style={{ color: 'var(--warning)' }}>z₁ = P - z₂ - z₀</span>
+          <span className="kt-term-val" style={{ color: 'var(--warning)' }}>{z1 !== null ? z1 : '—'}</span>
         </div>
-        <div className={`kt-term-card ${subcalc === 'Z0' ? 'active' : ''}`}>
-          <span className="kt-term-title">z₀ = x₀ · y₀</span>
-          <span className="kt-term-val">{z0 !== null ? z0 : '—'}</span>
+        <div className={`kt-term-card kt-term-z0 ${subcalc === 'Z0' ? 'active' : ''}`}>
+          <span className="kt-term-title" style={{ color: 'var(--success)' }}>z₀ = x₀ · y₀</span>
+          <span className="kt-term-val" style={{ color: 'var(--success)' }}>{z0 !== null ? z0 : '—'}</span>
         </div>
       </div>
 

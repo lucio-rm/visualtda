@@ -25,6 +25,7 @@ export const InversionCountingPlayground: React.FC = () => {
   const [showDivideExplanation, setShowDivideExplanation] = useState<boolean>(false);
   const [customInputStr, setCustomInputStr] = useState<string>('2, 3, 8, 6, 1');
   const [customInputError, setCustomInputError] = useState<string | null>(null);
+  const [newElemVal, setNewElemVal] = useState<number>(4);
 
   const handleApplyCustomInput = () => {
     try {
@@ -51,6 +52,33 @@ export const InversionCountingPlayground: React.FC = () => {
     } catch (err: unknown) {
       setCustomInputError(err instanceof Error ? err.message : 'Error');
     }
+  };
+
+  const handleAdjustValue = (index: number, delta: number) => {
+    const next = [...array];
+    next[index] = Math.max(0, next[index] + delta);
+    setArray(next);
+    setCustomInputStr(next.join(', '));
+  };
+
+  const handleRemoveElement = (index: number) => {
+    if (array.length <= 2) return;
+    const next = array.filter((_, i) => i !== index);
+    setArray(next);
+    setCustomInputStr(next.join(', '));
+  };
+
+  const handleAddElement = () => {
+    if (array.length >= 10) return;
+    const next = [...array, newElemVal];
+    setArray(next);
+    setCustomInputStr(next.join(', '));
+  };
+
+  const handleReverseArray = () => {
+    const next = [...array].reverse();
+    setArray(next);
+    setCustomInputStr(next.join(', '));
   };
 
   // Secret calculation for verification (not revealed to student prematurely)
@@ -229,42 +257,90 @@ export const InversionCountingPlayground: React.FC = () => {
           </div>
         </div>
 
-        {/* Custom Input (Caso propio) */}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-            {language === 'es' ? 'Caso propio:' : 'Custom case:'}
-          </label>
-          <input
-            type="text"
-            value={customInputStr}
-            onChange={(e) => setCustomInputStr(e.target.value)}
-            placeholder="ej: 7, 2, 9, 1, 5"
-            style={{
-              padding: '0.35rem 0.65rem',
-              fontSize: '0.85rem',
-              backgroundColor: 'var(--bg)',
-              color: 'var(--text)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-sm)',
-              width: '180px'
+        {/* Custom Input & Array Builder Form */}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleApplyCustomInput();
             }}
-          />
-          <button
-            type="button"
-            className="inv-pg-btn"
-            onClick={handleApplyCustomInput}
-            style={{ padding: '0.35rem 0.75rem', fontSize: '0.825rem' }}
+            style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}
           >
-            {language === 'es' ? 'Cargar' : 'Load'}
-          </button>
+            <label htmlFor="inv-custom-input-box" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Caso propio:' : 'Custom case:'}
+            </label>
+            <input
+              id="inv-custom-input-box"
+              type="text"
+              value={customInputStr}
+              onChange={(e) => setCustomInputStr(e.target.value)}
+              placeholder="ej: 7, 2, 9, 1, 5"
+              style={{
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.85rem',
+                backgroundColor: 'var(--bg)',
+                color: 'var(--text)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                width: '180px'
+              }}
+            />
+            <button
+              type="submit"
+              className="inv-pg-btn"
+              style={{ padding: '0.35rem 0.75rem', fontSize: '0.825rem' }}
+            >
+              {language === 'es' ? 'Cargar' : 'Load'}
+            </button>
+          </form>
+
+          <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+            <button
+              type="button"
+              className="inv-pg-btn"
+              onClick={handleReverseArray}
+              title={language === 'es' ? 'Invertir orden del arreglo' : 'Reverse array order'}
+              style={{ padding: '0.35rem 0.6rem', fontSize: '0.825rem' }}
+            >
+              ⇄ {language === 'es' ? 'Invertir' : 'Reverse'}
+            </button>
+
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: '0.25rem' }}>
+              {language === 'es' ? 'Agregar:' : 'Add:'}
+            </span>
+            <input
+              type="number"
+              value={newElemVal}
+              onChange={(e) => setNewElemVal(Number(e.target.value))}
+              style={{
+                width: '45px',
+                padding: '0.2rem 0.35rem',
+                backgroundColor: 'var(--bg)',
+                color: 'var(--text)',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                fontSize: '0.85rem'
+              }}
+            />
+            <button
+              type="button"
+              className="inv-pg-btn accent"
+              onClick={handleAddElement}
+              disabled={array.length >= 10}
+              style={{ padding: '0.35rem 0.6rem', fontSize: '0.825rem' }}
+            >
+              + {language === 'es' ? 'Agregar' : 'Add'}
+            </button>
+          </div>
+
           {customInputError && (
-            <span style={{ fontSize: '0.8rem', color: 'var(--color-error)' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--error)' }}>
               {customInputError}
             </span>
           )}
         </div>
 
-        {/* Array Visualization */}
+        {/* Array Visualization with Direct Item Controls */}
         <div className="inv-pg-array-display">
           {array.map((val, idx) => {
             const isSelected = firstSelectedIdx === idx;
@@ -275,22 +351,100 @@ export const InversionCountingPlayground: React.FC = () => {
                   type="button"
                   className={`inv-pg-bar ${isSelected ? 'selected-left' : ''}`}
                   onClick={() => handleBarClick(idx)}
-                  title={`Índice i=${idx}, Valor=${val}`}
+                  aria-label={`Elemento en posición ${idx}, valor ${val}`}
                 >
                   {val}
                 </button>
                 <span className="inv-pg-bar-idx">pos={idx}</span>
+                <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleAdjustValue(idx, 1)}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.85rem',
+                      fontWeight: 800,
+                      borderRadius: '3px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--success)',
+                      cursor: 'pointer'
+                    }}
+                    aria-label={`Incrementar valor en posición ${idx}`}
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleAdjustValue(idx, -1)}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.85rem',
+                      fontWeight: 800,
+                      borderRadius: '3px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--warning)',
+                      cursor: 'pointer'
+                    }}
+                    aria-label={`Decrementar valor en posición ${idx}`}
+                  >
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveElement(idx)}
+                    disabled={array.length <= 2}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.85rem',
+                      fontWeight: 800,
+                      borderRadius: '3px',
+                      border: '1px solid transparent',
+                      backgroundColor: 'transparent',
+                      color: 'var(--error)',
+                      cursor: array.length <= 2 ? 'not-allowed' : 'pointer',
+                      opacity: array.length <= 2 ? 0.3 : 1
+                    }}
+                    aria-label={`Eliminar elemento en posición ${idx}`}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Immediate Feedback Banner */}
-        {feedbackMsg && (
-          <div className={`inv-feedback-banner ${feedbackMsg.type}`} role="status">
-            {feedbackMsg.text}
-          </div>
-        )}
+        {/* Permanent Stable Feedback Slot (No layout shift, no flickering) */}
+        <div style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}>
+          {feedbackMsg ? (
+            <div className={`inv-feedback-banner ${feedbackMsg.type}`} role="status" style={{ width: '100%' }}>
+              {feedbackMsg.text}
+            </div>
+          ) : (
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Hacé clic en dos casillas para verificar si forman una inversión (A[i] > A[j] con i < j).'
+                : 'Click two cards to test if they form an inversion (A[i] > A[j] with i < j).'}
+            </div>
+          )}
+        </div>
 
         {/* Progress & Discovered Inversions */}
         <div className="inv-pg-discovery-panel">
