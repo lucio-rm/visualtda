@@ -32,12 +32,13 @@
 }
 
 .phase-badge-name {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  padding: 0.2rem 0.6rem;
+  background: var(--surface-hover);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.65rem;
   border-radius: 4px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .status-counter {
@@ -84,7 +85,7 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -127,7 +128,7 @@
 }
 
 .task-pred-badge {
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   font-family: monospace;
 }
@@ -144,28 +145,33 @@
   position: absolute;
   top: 2px;
   bottom: 2px;
-  background: #3b82f6;
-  color: white;
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--border-strong);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: bold;
+  font-size: 0.8125rem;
+  font-weight: 600;
   transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .task-interval-bar.bar-evaluating {
-  background: var(--warning);
-  box-shadow: 0 0 10px var(--state-candidate-bg);
-  transform: scaleY(1.1);
+  background: var(--state-candidate-bg);
+  border-color: var(--warning);
+  color: var(--text);
+  box-shadow: 0 0 6px var(--state-candidate-bg);
+  transform: scaleY(1.05);
 }
 
 .task-interval-bar.bar-selected {
-  background: var(--success);
-  box-shadow: 0 0 12px var(--state-solution-bg);
+  background: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--text);
+  box-shadow: 0 0 8px var(--state-solution-bg);
 }
 
 .bar-task-name {
@@ -173,14 +179,15 @@
 }
 
 .bar-task-weight {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.08);
   padding: 0.1rem 0.35rem;
   border-radius: 3px;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
 
 .bar-task-range {
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   opacity: 0.85;
 }
 
@@ -188,7 +195,7 @@
   width: 70px;
   display: flex;
   gap: 0.3rem;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
 }
 
 .flag-dp {
@@ -242,12 +249,12 @@
 
 .dp-opt-table th {
   background: var(--surface);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .th-active {
-  background: rgba(59, 130, 246, 0.15) !important;
-  color: #2563eb;
+  background: var(--surface-hover) !important;
+  color: var(--accent);
 }
 
 .row-hdr {
@@ -258,12 +265,12 @@
 .td-active {
   background: var(--state-candidate-bg);
   font-weight: bold;
-  color: #d97706;
+  color: var(--warning);
 }
 
 .eval-callout-card {
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
   display: flex;
@@ -272,9 +279,9 @@
 }
 
 .callout-title {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--accent);
 }
 
 .choices-row {
@@ -303,7 +310,7 @@
 }
 
 .choice-title {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 

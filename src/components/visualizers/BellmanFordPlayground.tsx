@@ -42,15 +42,93 @@ export const BellmanFordPlayground: React.FC = () => {
   const [iteration, setIteration] = useState<number>(0);
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
 
-  // Editable / draggable node coordinates
+  // Editable / draggable node coordinates and edges
   const [stableNodes, setStableNodes] = useState<BellmanFordNode[]>(GRAPH_STABLE_DEFAULT.nodes);
+  const [stableEdges, setStableEdges] = useState<BellmanFordEdge[]>(GRAPH_STABLE_DEFAULT.edges);
   const [cycleNodes, setCycleNodes] = useState<BellmanFordNode[]>(GRAPH_CYCLE_DEFAULT.nodes);
+  const [cycleEdges, setCycleEdges] = useState<BellmanFordEdge[]>(GRAPH_CYCLE_DEFAULT.edges);
+
+  const [edgeU, setEdgeU] = useState<string>('S');
+  const [edgeV, setEdgeV] = useState<string>('A');
+  const [edgeWeight, setEdgeWeight] = useState<number>(-1);
+  const [editorError, setEditorError] = useState<string | null>(null);
 
   const activeGraph = useMemo(() => {
     return mode === 'stable'
-      ? { nodes: stableNodes, edges: GRAPH_STABLE_DEFAULT.edges }
-      : { nodes: cycleNodes, edges: GRAPH_CYCLE_DEFAULT.edges };
-  }, [mode, stableNodes, cycleNodes]);
+      ? { nodes: stableNodes, edges: stableEdges }
+      : { nodes: cycleNodes, edges: cycleEdges };
+  }, [mode, stableNodes, stableEdges, cycleNodes, cycleEdges]);
+
+  const handleAddOrUpdateEdge = () => {
+    if (edgeU === edgeV) {
+      setEditorError(language === 'es' ? 'No se permiten bucles reflexivos (u = v).' : 'Self-loops are not allowed (u = v).');
+      return;
+    }
+    setEditorError(null);
+    const updateEdges = (prev: BellmanFordEdge[]) => {
+      const idx = prev.findIndex((e) => e.u === edgeU && e.v === edgeV);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = { u: edgeU, v: edgeV, weight: edgeWeight };
+        return copy;
+      }
+      return [...prev, { u: edgeU, v: edgeV, weight: edgeWeight }];
+    };
+    if (mode === 'stable') {
+      setStableEdges(updateEdges);
+    } else {
+      setCycleEdges(updateEdges);
+    }
+    setIteration(0);
+    markAttempted('bellman-ford');
+  };
+
+  const handleDeleteEdge = (u: string, v: string) => {
+    const filterEdges = (prev: BellmanFordEdge[]) => prev.filter((e) => !(e.u === u && e.v === v));
+    if (mode === 'stable') {
+      setStableEdges(filterEdges);
+    } else {
+      setCycleEdges(filterEdges);
+    }
+    setIteration(0);
+  };
+
+  const handleAddNode = () => {
+    const activeNodes = mode === 'stable' ? stableNodes : cycleNodes;
+    const existingIds = new Set(activeNodes.map((n) => n.id));
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let nextId = '';
+    for (const char of alphabet) {
+      if (!existingIds.has(char)) {
+        nextId = char;
+        break;
+      }
+    }
+    if (!nextId) nextId = `N${activeNodes.length + 1}`;
+    const newNode: BellmanFordNode = {
+      id: nextId,
+      x: 120 + (activeNodes.length % 4) * 75,
+      y: 90 + Math.floor(activeNodes.length / 4) * 65
+    };
+    if (mode === 'stable') {
+      setStableNodes((prev) => [...prev, newNode]);
+    } else {
+      setCycleNodes((prev) => [...prev, newNode]);
+    }
+    setIteration(0);
+  };
+
+  const handleResetGraph = () => {
+    if (mode === 'stable') {
+      setStableNodes(GRAPH_STABLE_DEFAULT.nodes);
+      setStableEdges(GRAPH_STABLE_DEFAULT.edges);
+    } else {
+      setCycleNodes(GRAPH_CYCLE_DEFAULT.nodes);
+      setCycleEdges(GRAPH_CYCLE_DEFAULT.edges);
+    }
+    setIteration(0);
+    setEditorError(null);
+  };
 
   const { nodes, edges } = activeGraph;
   const maxIters = nodes.length - 1;
@@ -433,6 +511,139 @@ export const BellmanFordPlayground: React.FC = () => {
               })}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Interactive Custom Graph Editor for Bellman-Ford */}
+      <div style={{ marginTop: '1.25rem', padding: '1rem 1.25rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text)' }}>
+              {language === 'es' ? 'Editor Interactivo de Grafo (Aristas Dirigidas y Pesos ±)' : 'Interactive Graph Editor (Directed Edges & ± Weights)'}
+            </h4>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Conectá aristas con pesos positivos o negativos para observar cómo se propagan las relajaciones en la tabla DP o se provocan ciclos negativos.'
+                : 'Connect edges with positive or negative weights to see DP relaxations propagate or trigger negative cycles.'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleAddNode}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              + {language === 'es' ? 'Agregar Nodo' : 'Add Node'}
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleResetGraph}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              {language === 'es' ? 'Restaurar Predeterminado' : 'Reset to Default'}
+            </button>
+          </div>
+        </div>
+
+        {/* Edge Form Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'De (u):' : 'From (u):'}</span>
+            <select
+              value={edgeU}
+              onChange={(e) => setEdgeU(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Hacia (v):' : 'To (v):'}</span>
+            <select
+              value={edgeV}
+              onChange={(e) => setEdgeV(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Peso (±):' : 'Weight (±):'}</span>
+            <input
+              type="number"
+              value={edgeWeight}
+              onChange={(e) => setEdgeWeight(Number(e.target.value))}
+              style={{ width: '70px', padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleAddOrUpdateEdge}
+            style={{ fontSize: '0.8125rem', padding: '0.35rem 0.85rem' }}
+          >
+            {language === 'es' ? 'Conectar / Modificar' : 'Connect / Update'}
+          </button>
+        </div>
+
+        {editorError && (
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--error)' }}>
+            {editorError}
+          </div>
+        )}
+
+        {/* Existing Edges Badges */}
+        <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginRight: '0.35rem' }}>
+            {language === 'es' ? 'Aristas activas:' : 'Active edges:'}
+          </span>
+          {edges.map((e, idx) => (
+            <span
+              key={`bf-edge-badge-${idx}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.2rem 0.55rem',
+                background: 'var(--bg)',
+                border: `1px solid ${e.weight < 0 ? 'var(--error)' : 'var(--border)'}`,
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8125rem',
+                fontFamily: 'var(--font-mono)',
+                color: e.weight < 0 ? 'var(--error)' : 'var(--text)'
+              }}
+            >
+              <span>{e.u} → {e.v} (w={e.weight})</span>
+              <button
+                type="button"
+                onClick={() => handleDeleteEdge(e.u, e.v)}
+                title={language === 'es' ? 'Eliminar arista' : 'Delete edge'}
+                aria-label={language === 'es' ? `Eliminar arista ${e.u} a ${e.v}` : `Delete edge ${e.u} to ${e.v}`}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--error)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  lineHeight: 1
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </div>

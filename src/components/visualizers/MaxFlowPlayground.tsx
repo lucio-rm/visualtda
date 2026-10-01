@@ -126,6 +126,39 @@ export const MaxFlowPlayground: React.FC = () => {
     });
   }, []);
 
+  const [editU, setEditU] = useState<string>('s');
+  const [editV, setEditV] = useState<string>('u');
+  const [editCapacity, setEditCapacity] = useState<number>(10);
+  const [editorError, setEditorError] = useState<string | null>(null);
+
+  const handleAddOrUpdateEdge = () => {
+    if (editU === editV) {
+      setEditorError(language === 'es' ? 'No se permiten bucles reflexivos (u = v).' : 'Self-loops are not allowed (u = v).');
+      return;
+    }
+    if (editCapacity <= 0) {
+      setEditorError(language === 'es' ? 'La capacidad debe ser un entero positivo (> 0).' : 'Capacity must be positive (> 0).');
+      return;
+    }
+    setEditorError(null);
+    setEdges((prev) => {
+      const idx = prev.findIndex((e) => e.u === editU && e.v === editV);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = { ...copy[idx], capacity: editCapacity, flow: Math.min(copy[idx].flow, editCapacity) };
+        return copy;
+      }
+      return [...prev, { u: editU, v: editV, capacity: editCapacity, flow: 0 }];
+    });
+    setSelectedPath([activePreset.source]);
+    markAttempted('max-flow-ford-fulkerson');
+  };
+
+  const handleDeleteEdge = (u: string, v: string) => {
+    setEdges((prev) => prev.filter((e) => !(e.u === u && e.v === v)));
+    setSelectedPath([activePreset.source]);
+  };
+
   const handleSelectPreset = (idx: number) => {
     setSelectedPresetIndex(idx);
     resetNetwork(PRESETS[idx]);
@@ -632,7 +665,7 @@ export const MaxFlowPlayground: React.FC = () => {
             disabled={isMaxFlowAchieved}
             title={language === 'es' ? 'Buscar camino de aumento en la red residual con BFS' : 'Find augmenting path via BFS'}
           >
-            🔍 {language === 'es' ? 'Buscar Camino (BFS)' : 'Find Path (BFS)'}
+            {language === 'es' ? 'Buscar Camino (BFS)' : 'Find Path (BFS)'}
           </button>
           <button
             type="button"
@@ -720,6 +753,129 @@ export const MaxFlowPlayground: React.FC = () => {
               ).join(', ')}} defines the minimum cut with capacity identical to total flow (|f*| = ${totalFlow}).`}
         </div>
       )}
+
+      {/* Interactive Custom Capacity & Edge Editor for Max Flow */}
+      <div style={{ marginTop: '1.25rem', padding: '1rem 1.25rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text)' }}>
+              {language === 'es' ? 'Editor de Capacidades y Aristas de la Red' : 'Network Capacities & Edge Editor'}
+            </h4>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Modificá las capacidades de corte o agregá nuevos conductos para simular cuellos de botella personalizados.'
+                : 'Modify cut capacities or add new pipelines to simulate custom bottlenecks.'}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => resetNetwork(activePreset)}
+            style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+          >
+            {language === 'es' ? 'Restaurar Red' : 'Reset Network'}
+          </button>
+        </div>
+
+        {/* Edge Form Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'De (u):' : 'From (u):'}</span>
+            <select
+              value={editU}
+              onChange={(e) => setEditU(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {activePreset.nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.label || n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Hacia (v):' : 'To (v):'}</span>
+            <select
+              value={editV}
+              onChange={(e) => setEditV(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {activePreset.nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.label || n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Capacidad c(e):' : 'Capacity c(e):'}</span>
+            <input
+              type="number"
+              min={1}
+              value={editCapacity}
+              onChange={(e) => setEditCapacity(Number(e.target.value))}
+              style={{ width: '70px', padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleAddOrUpdateEdge}
+            style={{ fontSize: '0.8125rem', padding: '0.35rem 0.85rem' }}
+          >
+            {language === 'es' ? 'Fijar Capacidad' : 'Set Capacity'}
+          </button>
+        </div>
+
+        {editorError && (
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--error)' }}>
+            {editorError}
+          </div>
+        )}
+
+        {/* Existing Edges Badges */}
+        <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginRight: '0.35rem' }}>
+            {language === 'es' ? 'Conductos activos:' : 'Active pipes:'}
+          </span>
+          {edges.map((e, idx) => (
+            <span
+              key={`mf-edge-badge-${idx}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.2rem 0.55rem',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8125rem',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              <span>{e.u} → {e.v} (cap={e.capacity})</span>
+              <button
+                type="button"
+                onClick={() => handleDeleteEdge(e.u, e.v)}
+                title={language === 'es' ? 'Eliminar conducto' : 'Delete pipe'}
+                aria-label={language === 'es' ? `Eliminar conducto ${e.u} a ${e.v}` : `Delete pipe ${e.u} to ${e.v}`}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--error)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  lineHeight: 1
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

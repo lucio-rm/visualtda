@@ -627,17 +627,20 @@ export const SolveView: React.FC<SolveViewProps> = ({
           {/* Attempt History Card */}
           <div className="card-panel attempts-history-card" style={{ marginTop: '1.25rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.1rem' }}>📋</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--accent)' }}>
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                </svg>
                 <h4 style={{ margin: 0, fontSize: '0.95rem' }}>
                   {language === 'es' ? 'Historial de Intentos' : 'Attempt History'}
                 </h4>
                 <span
                   style={{
-                    fontSize: '0.72rem',
+                    fontSize: '0.8125rem',
                     fontWeight: 600,
-                    padding: '0.15rem 0.45rem',
-                    borderRadius: 'var(--radius-sm, 4px)',
+                    padding: '0.15rem 0.5rem',
+                    borderRadius: 'var(--radius-sm)',
                     background: 'var(--surface-hover)',
                     border: '1px solid var(--border)'
                   }}
@@ -651,12 +654,12 @@ export const SolveView: React.FC<SolveViewProps> = ({
               <button
                 type="button"
                 className="btn-secondary"
-                style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
                 onClick={() => setShowAttemptsViewer(!showAttemptsViewer)}
               >
                 {showAttemptsViewer
-                  ? (language === 'es' ? 'Ocultar Historial ▲' : 'Hide History ▲')
-                  : (language === 'es' ? 'Ver Intentos ▼' : 'View Attempts ▼')}
+                  ? (language === 'es' ? 'Ocultar Historial' : 'Hide History')
+                  : (language === 'es' ? 'Ver Intentos' : 'View Attempts')}
               </button>
             </div>
             {showAttemptsViewer && (
@@ -698,12 +701,16 @@ export const SolveView: React.FC<SolveViewProps> = ({
                           aria-expanded={isRevealed}
                         >
                           {isRevealed
-                            ? `▼ ${t(dict.hintLabel)} ${idx + 1}`
-                            : `▶ ${t(dict.viewHintLabel)} ${idx + 1}`}
+                            ? `${t(dict.hintLabel)} ${idx + 1}`
+                            : `${t(dict.viewHintLabel)} ${idx + 1}`}
                         </button>
                       ) : (
-                        <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                          🔒 {t(dict.hintLabel)} {idx + 1}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                          <span>{t(dict.hintLabel)} {idx + 1}</span>
                         </span>
                       )}
                       <HintRequirementWidget status={unlockStatus} language={language} />

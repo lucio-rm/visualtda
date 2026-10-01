@@ -79,8 +79,8 @@ describe('Visual Design System & WCAG Contrast Quality Gate', () => {
     expect(contrastRatio(lightTokens['--warning'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('provides graphical/UI contrast (>= 3.0:1) for borders and chessboard cell differentiation', () => {
-    const borderRatio = contrastRatio(lightTokens['--border'], lightTokens['--surface']);
+  it('provides graphical/UI contrast (>= 3.0:1) for interactive UI borders and chessboard cell differentiation', () => {
+    const borderRatio = contrastRatio(lightTokens['--border-strong'], lightTokens['--surface']);
     expect(borderRatio).toBeGreaterThanOrEqual(3.0);
 
     const boardCellRatio = contrastRatio(lightTokens['--board-cell-dark'], lightTokens['--board-cell-light']);

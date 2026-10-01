@@ -337,7 +337,7 @@ export const GraphColoringPlayground: React.FC = () => {
               onClick={() => handleSelectPreset('custom')}
               style={{ fontWeight: 600 }}
             >
-              {language === 'es' ? '★ Grafo Personalizado' : '★ Custom Graph'}
+              {language === 'es' ? 'Grafo Personalizado' : 'Custom Graph'}
             </button>
           </div>
 

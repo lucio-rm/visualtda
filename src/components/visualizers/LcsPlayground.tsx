@@ -312,7 +312,6 @@ export const LcsPlayground: React.FC = () => {
               color: 'var(--text)'
             }}
           >
-            ⚠{' '}
             <strong>
               {language === 'es' ? 'Violación de Invariante de Orden:' : 'Order Invariant Violation:'}
             </strong>{' '}
@@ -495,7 +494,7 @@ export const LcsPlayground: React.FC = () => {
                 <div className="feedback-banner">
                   {userValidation?.isOptimal ? (
                     <span className="status-opt" style={{ color: 'var(--success)', fontWeight: 800 }}>
-                      🎉 {language === 'es' ? '¡Subsecuencia Común Más Larga verificada!' : 'Longest Common Subsequence verified!'}
+                      {language === 'es' ? '¡Subsecuencia Común Más Larga verificada!' : 'Longest Common Subsequence verified!'}
                     </span>
                   ) : userValidation?.isSub1 && userValidation?.isSub2 ? (
                     <span className="status-subopt" style={{ color: 'var(--warning)', fontWeight: 600 }}>

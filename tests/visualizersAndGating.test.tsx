@@ -143,10 +143,21 @@ def resolver_scheduling(intervalos):
   });
 
   describe('3. Hint Gating Requirements and Unlock Calculation', () => {
-    it('defines expected tier thresholds for Hints 1, 2, and 3', () => {
-      expect(getHintRequirements(0)).toEqual({ attempts: 3, lines: 20 });
-      expect(getHintRequirements(1)).toEqual({ attempts: 5, lines: 25 });
-      expect(getHintRequirements(2)).toEqual({ attempts: 7, lines: 30 });
+    it('defines expected tier thresholds for Hints 1, 2, and 3 dynamically per category', () => {
+      // Default (unspecified or general)
+      expect(getHintRequirements(0)).toEqual({ attempts: 3, lines: 10 });
+      expect(getHintRequirements(1)).toEqual({ attempts: 5, lines: 15 });
+      expect(getHintRequirements(2)).toEqual({ attempts: 7, lines: 20 });
+
+      // Dynamic Programming requires more algorithmic structure
+      expect(getHintRequirements(0, 'knapsack-dp')).toEqual({ attempts: 3, lines: 16 });
+      expect(getHintRequirements(1, 'knapsack-dp')).toEqual({ attempts: 5, lines: 22 });
+      expect(getHintRequirements(2, 'knapsack-dp')).toEqual({ attempts: 7, lines: 28 });
+
+      // Greedy requires concise decision logic
+      expect(getHintRequirements(0, 'interval-scheduling')).toEqual({ attempts: 3, lines: 8 });
+      expect(getHintRequirements(1, 'interval-scheduling')).toEqual({ attempts: 5, lines: 12 });
+      expect(getHintRequirements(2, 'interval-scheduling')).toEqual({ attempts: 7, lines: 16 });
     });
 
     it('keeps Hint 1 locked when student has 0 attempts and 0 meaningful lines', () => {

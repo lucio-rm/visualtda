@@ -162,7 +162,7 @@ export const KnightsTourPlayground: React.FC = () => {
               );
             }}
           >
-            📍 {language === 'es' ? 'Cambiar Inicio' : 'Custom Start'}
+            {language === 'es' ? 'Cambiar Inicio' : 'Custom Start'}
           </button>
         </div>
 
@@ -209,7 +209,7 @@ export const KnightsTourPlayground: React.FC = () => {
 
         {legalMoves.length === 0 && !isComplete && (
           <span style={{ color: 'var(--danger, var(--error))', fontWeight: 700, fontSize: '0.85rem' }}>
-            ⚠ {language === 'es' ? 'Callejón sin salida (Dead-end). Presiona "Deshacer" para retroceder.' : 'Dead-end reached. Click "Undo" to backtrack.'}
+            {language === 'es' ? 'Callejón sin salida (Dead-end). Presiona "Deshacer" para retroceder.' : 'Dead-end reached. Click "Undo" to backtrack.'}
           </span>
         )}
 

@@ -7,8 +7,13 @@ describe('ExerciseRegistry', () => {
     expect(cats.length).toBe(CATEGORIES.length);
     expect(cats[0].id).toBe('divide-and-conquer');
     expect(cats[1].id).toBe('greedy');
-    expect(cats[2].id).toBe('dynamic-programming');
-    expect(cats[3].id).toBe('backtracking');
+    expect(cats[2].id).toBe('backtracking');
+    expect(cats[3].id).toBe('dynamic-programming');
+    expect(cats[4].id).toBe('linear-programming');
+    expect(cats[5].id).toBe('network-flow');
+    expect(cats[6].id).toBe('reductions');
+    expect(cats[7].id).toBe('approximation');
+    expect(cats[8].id).toBe('randomized');
   });
 
   it('retrieves category by ID', () => {

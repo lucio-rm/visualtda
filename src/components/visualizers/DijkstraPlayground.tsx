@@ -50,13 +50,92 @@ export const DijkstraPlayground: React.FC = () => {
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
 
   const [standardNodes, setStandardNodes] = useState<DijkstraNode[]>(GRAPH_STANDARD_DEFAULT.nodes);
+  const [standardEdges, setStandardEdges] = useState<DijkstraEdge[]>(GRAPH_STANDARD_DEFAULT.edges);
   const [negativeNodes, setNegativeNodes] = useState<DijkstraNode[]>(GRAPH_NEGATIVE_DEFAULT.nodes);
+  const [negativeEdges, setNegativeEdges] = useState<DijkstraEdge[]>(GRAPH_NEGATIVE_DEFAULT.edges);
+
+  const [edgeU, setEdgeU] = useState<string>('S');
+  const [edgeV, setEdgeV] = useState<string>('T');
+  const [edgeWeight, setEdgeWeight] = useState<number>(3);
+  const [editorError, setEditorError] = useState<string | null>(null);
 
   const activeGraph = useMemo(() => {
     return preset === 'standard'
-      ? { nodes: standardNodes, edges: GRAPH_STANDARD_DEFAULT.edges }
-      : { nodes: negativeNodes, edges: GRAPH_NEGATIVE_DEFAULT.edges };
-  }, [preset, standardNodes, negativeNodes]);
+      ? { nodes: standardNodes, edges: standardEdges }
+      : { nodes: negativeNodes, edges: negativeEdges };
+  }, [preset, standardNodes, standardEdges, negativeNodes, negativeEdges]);
+
+  const handleAddOrUpdateEdge = () => {
+    if (edgeU === edgeV) {
+      setEditorError(language === 'es' ? 'No se permiten bucles reflexivos (u = v).' : 'Self-loops are not allowed (u = v).');
+      return;
+    }
+    setEditorError(null);
+    const updateEdges = (prev: DijkstraEdge[]) => {
+      const idx = prev.findIndex((e) => e.u === edgeU && e.v === edgeV);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = { u: edgeU, v: edgeV, weight: edgeWeight };
+        return copy;
+      }
+      return [...prev, { u: edgeU, v: edgeV, weight: edgeWeight }];
+    };
+    if (preset === 'standard') {
+      setStandardEdges(updateEdges);
+    } else {
+      setNegativeEdges(updateEdges);
+    }
+    setStepIdx(0);
+    markAttempted('dijkstra');
+  };
+
+  const handleDeleteEdge = (u: string, v: string) => {
+    const filterEdges = (prev: DijkstraEdge[]) => prev.filter((e) => !(e.u === u && e.v === v));
+    if (preset === 'standard') {
+      setStandardEdges(filterEdges);
+    } else {
+      setNegativeEdges(filterEdges);
+    }
+    setStepIdx(0);
+  };
+
+  const handleAddNode = () => {
+    const activeNodes = preset === 'standard' ? standardNodes : negativeNodes;
+    const existingIds = new Set(activeNodes.map((n) => n.id));
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let nextId = '';
+    for (const char of alphabet) {
+      if (!existingIds.has(char)) {
+        nextId = char;
+        break;
+      }
+    }
+    if (!nextId) nextId = `N${activeNodes.length + 1}`;
+    const newNode: DijkstraNode = {
+      id: nextId,
+      label: nextId,
+      x: 130 + (activeNodes.length % 4) * 70,
+      y: 90 + Math.floor(activeNodes.length / 4) * 60
+    };
+    if (preset === 'standard') {
+      setStandardNodes((prev) => [...prev, newNode]);
+    } else {
+      setNegativeNodes((prev) => [...prev, newNode]);
+    }
+    setStepIdx(0);
+  };
+
+  const handleResetGraph = () => {
+    if (preset === 'standard') {
+      setStandardNodes(GRAPH_STANDARD_DEFAULT.nodes);
+      setStandardEdges(GRAPH_STANDARD_DEFAULT.edges);
+    } else {
+      setNegativeNodes(GRAPH_NEGATIVE_DEFAULT.nodes);
+      setNegativeEdges(GRAPH_NEGATIVE_DEFAULT.edges);
+    }
+    setStepIdx(0);
+    setEditorError(null);
+  };
 
   const { nodes, edges } = activeGraph;
   const svgRef = useRef<SVGSVGElement>(null);
@@ -469,10 +548,142 @@ export const DijkstraPlayground: React.FC = () => {
             })}
           </div>
 
-          <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+          <div style={{ marginTop: '0.75rem', fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
             <strong>{language === 'es' ? 'Conjunto Explorador S' : 'Settled Set S'}:</strong>{' '}
             {currentStep.settled.length > 0 ? `{ ${currentStep.settled.join(', ')} }` : '∅'}
           </div>
+        </div>
+      </div>
+
+      {/* Interactive Custom Graph Editor */}
+      <div style={{ marginTop: '1.25rem', padding: '1rem 1.25rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text)' }}>
+              {language === 'es' ? 'Editor Interactivo de Grafo (Aristas y Pesos)' : 'Interactive Graph Editor (Edges & Weights)'}
+            </h4>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Conectá nodos, modificá pesos de aristas o agregá nuevos vértices para experimentar.'
+                : 'Connect nodes, update edge weights, or insert new vertices to experiment.'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleAddNode}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              + {language === 'es' ? 'Agregar Nodo' : 'Add Node'}
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleResetGraph}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              {language === 'es' ? 'Restaurar Predeterminado' : 'Reset to Default'}
+            </button>
+          </div>
+        </div>
+
+        {/* Edge Form Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'De (u):' : 'From (u):'}</span>
+            <select
+              value={edgeU}
+              onChange={(e) => setEdgeU(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Hacia (v):' : 'To (v):'}</span>
+            <select
+              value={edgeV}
+              onChange={(e) => setEdgeV(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Peso:' : 'Weight:'}</span>
+            <input
+              type="number"
+              value={edgeWeight}
+              onChange={(e) => setEdgeWeight(Number(e.target.value))}
+              style={{ width: '70px', padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleAddOrUpdateEdge}
+            style={{ fontSize: '0.8125rem', padding: '0.35rem 0.85rem' }}
+          >
+            {language === 'es' ? 'Conectar / Modificar' : 'Connect / Update'}
+          </button>
+        </div>
+
+        {editorError && (
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--error)' }}>
+            {editorError}
+          </div>
+        )}
+
+        {/* Existing Edges Badges */}
+        <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginRight: '0.35rem' }}>
+            {language === 'es' ? 'Aristas activas:' : 'Active edges:'}
+          </span>
+          {edges.map((e, idx) => (
+            <span
+              key={`edge-badge-${idx}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.2rem 0.55rem',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8125rem',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              <span>{e.u} → {e.v} (w={e.weight})</span>
+              <button
+                type="button"
+                onClick={() => handleDeleteEdge(e.u, e.v)}
+                title={language === 'es' ? 'Eliminar arista' : 'Delete edge'}
+                aria-label={language === 'es' ? `Eliminar arista ${e.u} a ${e.v}` : `Delete edge ${e.u} to ${e.v}`}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--error)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  lineHeight: 1
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </div>

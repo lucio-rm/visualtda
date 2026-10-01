@@ -515,7 +515,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
               </span>
             ) : userStatus.isOptimal ? (
               <span className="status-ok">
-                🎉 {language === 'es' ? 'Subconjunto de tareas compatibles de peso máximo alcanzado.' : 'Maximum weight compatible subset reached.'}
+                {language === 'es' ? 'Subconjunto de tareas compatibles de peso máximo alcanzado.' : 'Maximum weight compatible subset reached.'}
               </span>
             ) : selectedIds.length > 0 ? (
               <span className="status-warn">

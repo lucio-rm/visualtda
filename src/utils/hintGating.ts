@@ -10,6 +10,7 @@
 
 import { analyzeStudentCodeEffort } from './codeEffortAnalyzer';
 import { getStudentAttemptCount } from './studentAttempts';
+import { registry } from '../engine/registry';
 
 export interface HintRequirementTier {
   hintIndex: number;
@@ -29,20 +30,52 @@ export interface HintUnlockStatus {
   attemptsProgress: number; // 0 - 100
   linesProgress: number; // 0 - 100
   isInstructorBypassed: boolean;
+  categoryLabel?: string;
 }
 
 /**
- * Returns the effort requirement thresholds for a given hint index (0-indexed).
+ * Returns the effort requirement thresholds calibrated per algorithmic technique/exercise.
+ * - Dynamic Programming & Network Flow: matrix loops, recurrence transitions, residual paths (16, 22, 28 lines)
+ * - Backtracking, D&C, Linear Programming, Reductions: recursive branches, bounding, pivots (10, 15, 20 lines)
+ * - Greedy, Approximation, Randomized: concise decision loops, sorting, heuristics (8, 12, 16 lines)
  */
-export function getHintRequirements(hintIndex: number): { attempts: number; lines: number } {
+export function getHintRequirements(hintIndex: number, exerciseId?: string): { attempts: number; lines: number } {
+  let categoryId: string | undefined;
+  if (exerciseId) {
+    const ex = registry.getExercise(exerciseId);
+    categoryId = ex?.categoryId;
+  }
+
+  let lineBase = 10;
+  let lineStep = 5;
+
+  if (categoryId === 'dynamic-programming' || categoryId === 'network-flow') {
+    lineBase = 16;
+    lineStep = 6;
+  } else if (
+    categoryId === 'backtracking' ||
+    categoryId === 'divide-and-conquer' ||
+    categoryId === 'linear-programming' ||
+    categoryId === 'reductions'
+  ) {
+    lineBase = 10;
+    lineStep = 5;
+  } else if (categoryId === 'greedy' || categoryId === 'approximation') {
+    lineBase = 8;
+    lineStep = 4;
+  } else if (categoryId === 'randomized') {
+    lineBase = 6;
+    lineStep = 4;
+  }
+
   switch (hintIndex) {
     case 0: // Hint 1
-      return { attempts: 3, lines: 20 };
+      return { attempts: 3, lines: lineBase };
     case 1: // Hint 2
-      return { attempts: 5, lines: 25 };
+      return { attempts: 5, lines: lineBase + lineStep };
     case 2: // Hint 3
     default:
-      return { attempts: 7, lines: 30 };
+      return { attempts: 7, lines: lineBase + lineStep * 2 };
   }
 }
 
@@ -56,7 +89,7 @@ export function getHintUnlockStatus(
   starterCode?: string,
   isInstructorMode?: boolean
 ): HintUnlockStatus {
-  const req = getHintRequirements(hintIndex);
+  const req = getHintRequirements(hintIndex, exerciseId);
 
   // Faculty bypass
   if (isInstructorMode) {

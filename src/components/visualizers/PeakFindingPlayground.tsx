@@ -298,7 +298,7 @@ export const PeakFindingPlayground: React.FC = () => {
             </button>
           ))}
           <button className="chip-button random-btn" onClick={handleRandom}>
-            🎲 {language === 'es' ? 'Generar Aleatorio' : 'Generate Random'}
+            {language === 'es' ? 'Generar Aleatorio' : 'Generate Random'}
           </button>
         </div>
       </div>

@@ -17,17 +17,19 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.35rem',
-          fontSize: '0.72rem',
+          gap: '0.4rem',
+          fontSize: '0.8125rem',
           fontWeight: 600,
-          color: 'var(--success, #16a34a)',
-          background: 'rgba(22, 163, 74, 0.1)',
-          padding: '0.15rem 0.5rem',
-          borderRadius: 'var(--radius-sm, 4px)',
-          border: '1px solid rgba(22, 163, 74, 0.25)'
+          color: 'var(--success)',
+          background: 'var(--success-bg)',
+          padding: '0.25rem 0.65rem',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border)'
         }}
       >
-        <span>✓</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
         <span>
           {status.isInstructorBypassed
             ? (language === 'es' ? 'Modo Docente' : 'Instructor Mode')
@@ -41,38 +43,42 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
     <div
       className="hint-requirement-card"
       style={{
-        marginTop: '0.5rem',
-        padding: '0.85rem 1rem',
-        background: 'var(--surface-hover, #f8fafc)',
-        border: '1px solid var(--border, #cbd5e1)',
-        borderRadius: 'var(--radius-md, 6px)',
-        fontSize: '0.8rem',
-        lineHeight: 1.5
+        marginTop: '0.6rem',
+        padding: '1rem 1.15rem',
+        background: 'var(--surface-hover)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-md)',
+        fontSize: '0.875rem',
+        lineHeight: 1.55
       }}
     >
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.4rem',
+          gap: '0.5rem',
           fontWeight: 600,
-          color: 'var(--text, #1e293b)',
-          marginBottom: '0.4rem'
+          color: 'var(--text)',
+          marginBottom: '0.45rem',
+          fontSize: '0.875rem'
         }}
       >
-        <span>🔒</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--text-muted)' }}>
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
         <span>
           {language === 'es'
-            ? `Pista ${status.hintIndex + 1} Bloqueada — Desbloqueo por Esfuerzo`
-            : `Hint ${status.hintIndex + 1} Locked — Effort-Gated`}
+            ? `Pista ${status.hintIndex + 1} Requerimiento de Esfuerzo`
+            : `Hint ${status.hintIndex + 1} Effort Requirement`}
         </span>
       </div>
 
       <p
         style={{
-          margin: '0 0 0.6rem 0',
-          color: 'var(--text-muted, #64748b)',
-          fontSize: '0.75rem'
+          margin: '0 0 0.75rem 0',
+          color: 'var(--text-muted)',
+          fontSize: '0.8125rem'
         }}
       >
         {language === 'es'
@@ -81,24 +87,24 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
       </p>
 
       {/* Progress Bars Container */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
         {/* Metric 1: Attempts */}
         <div>
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              marginBottom: '0.2rem',
-              fontSize: '0.73rem'
+              marginBottom: '0.25rem',
+              fontSize: '0.8125rem'
             }}
           >
             <span>
-              🎯 {language === 'es' ? 'Intentos de prueba ejecutados' : 'Test runs executed'}:
+              {language === 'es' ? 'Intentos de prueba ejecutados' : 'Test runs executed'}:
             </span>
             <span
               style={{
                 fontWeight: 600,
-                color: status.attemptsFulfilled ? 'var(--success, #16a34a)' : 'var(--text, #1e293b)'
+                color: status.attemptsFulfilled ? 'var(--success)' : 'var(--text)'
               }}
             >
               {status.currentAttempts} / {status.requiredAttempts}{' '}
@@ -107,9 +113,9 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
           </div>
           <div
             style={{
-              height: '6px',
-              background: 'var(--border, #e2e8f0)',
-              borderRadius: '3px',
+              height: '7px',
+              background: 'var(--border)',
+              borderRadius: '4px',
               overflow: 'hidden'
             }}
           >
@@ -117,7 +123,7 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
               style={{
                 height: '100%',
                 width: `${status.attemptsProgress}%`,
-                background: status.attemptsFulfilled ? 'var(--success, #16a34a)' : 'var(--accent, #3b82f6)',
+                background: status.attemptsFulfilled ? 'var(--success)' : 'var(--accent)',
                 transition: 'width 0.3s ease'
               }}
             />
@@ -130,17 +136,17 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              marginBottom: '0.2rem',
-              fontSize: '0.73rem'
+              marginBottom: '0.25rem',
+              fontSize: '0.8125rem'
             }}
           >
             <span>
-              💻 {language === 'es' ? 'Líneas de lógica agregadas' : 'Logic lines added'}:
+              {language === 'es' ? 'Líneas de lógica algorítmica agregadas' : 'Algorithmic logic lines added'}:
             </span>
             <span
               style={{
                 fontWeight: 600,
-                color: status.linesFulfilled ? 'var(--success, #16a34a)' : 'var(--text, #1e293b)'
+                color: status.linesFulfilled ? 'var(--success)' : 'var(--text)'
               }}
             >
               {status.currentLines} / {status.requiredLines}{' '}
@@ -149,9 +155,9 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
           </div>
           <div
             style={{
-              height: '6px',
-              background: 'var(--border, #e2e8f0)',
-              borderRadius: '3px',
+              height: '7px',
+              background: 'var(--border)',
+              borderRadius: '4px',
               overflow: 'hidden'
             }}
           >
@@ -159,7 +165,7 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
               style={{
                 height: '100%',
                 width: `${status.linesProgress}%`,
-                background: status.linesFulfilled ? 'var(--success, #16a34a)' : 'var(--accent, #3b82f6)',
+                background: status.linesFulfilled ? 'var(--success)' : 'var(--accent)',
                 transition: 'width 0.3s ease'
               }}
             />
@@ -169,15 +175,15 @@ export const HintRequirementWidget: React.FC<HintRequirementWidgetProps> = ({
 
       <div
         style={{
-          marginTop: '0.5rem',
-          fontSize: '0.7rem',
-          color: 'var(--text-muted, #64748b)',
-          fontStyle: 'italic'
+          marginTop: '0.65rem',
+          fontSize: '0.75rem',
+          color: 'var(--text-muted)',
+          lineHeight: 1.4
         }}
       >
         {language === 'es'
-          ? '* Se excluyen comentarios (#), líneas vacías, prints y código repetido.'
-          : '* Comments (#), empty lines, prints, and repeated lines are excluded.'}
+          ? 'Nota: Se excluyen comentarios (#), líneas vacías, prints y repeticiones de código.'
+          : 'Note: Comments (#), blank lines, prints, and duplicate code are excluded.'}
       </div>
     </div>
   );

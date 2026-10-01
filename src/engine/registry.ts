@@ -20,17 +20,8 @@ export const CATEGORIES: Category[] = [
     }
   },
   {
-    id: 'dynamic-programming',
-    order: 3,
-    title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
-    description: {
-      es: 'Resolver subproblemas superpuestos recordando resultados previos para evitar recomputación.',
-      en: 'Solve overlapping subproblems by memoizing previous results to avoid recomputation.'
-    }
-  },
-  {
     id: 'backtracking',
-    order: 4,
+    order: 3,
     title: { es: 'Backtracking', en: 'Backtracking' },
     description: {
       es: 'Exploración exhaustiva y sistemática del espacio de soluciones con poda de ramas inviables.',
@@ -38,21 +29,30 @@ export const CATEGORIES: Category[] = [
     }
   },
   {
-    id: 'network-flow',
-    order: 5,
-    title: { es: 'Redes de Flujo', en: 'Network Flow' },
+    id: 'dynamic-programming',
+    order: 4,
+    title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
     description: {
-      es: 'Modelar redes de capacidades y calcular flujos máximos y cortes mínimos.',
-      en: 'Model capacity networks and calculate maximum flow and minimum cut.'
+      es: 'Resolver subproblemas superpuestos recordando resultados previos para evitar recomputación.',
+      en: 'Solve overlapping subproblems by memoizing previous results to avoid recomputation.'
     }
   },
   {
     id: 'linear-programming',
-    order: 6,
+    order: 5,
     title: { es: 'Programación Lineal', en: 'Linear Programming' },
     description: {
       es: 'Optimización de una función objetivo lineal sujeta a restricciones de desigualdades lineales.',
       en: 'Optimization of a linear objective function subject to linear inequality constraints.'
+    }
+  },
+  {
+    id: 'network-flow',
+    order: 6,
+    title: { es: 'Redes de Flujo', en: 'Network Flow' },
+    description: {
+      es: 'Modelar redes de capacidades y calcular flujos máximos y cortes mínimos.',
+      en: 'Model capacity networks and calculate maximum flow and minimum cut.'
     }
   },
   {

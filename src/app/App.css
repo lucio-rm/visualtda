@@ -1311,16 +1311,12 @@
   line-height: 1.4;
 }
 
-/* Phase 3: Balanced Theory & Companion Grid */
+/* Phase 3: Full-Width Academic Architecture */
 .understand-theory-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  align-items: start;
-}
-
-.understand-theory-layout.single-column-collapse {
-  grid-template-columns: 1fr;
+  width: 100%;
 }
 
 .understand-theory-panel,
@@ -1330,12 +1326,7 @@
   border-radius: var(--radius-lg);
   padding: 2rem 2.25rem;
   box-shadow: var(--shadow-sm);
-}
-
-.understand-companion-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  width: 100%;
 }
 
 .understand-insights-card {
@@ -1344,6 +1335,7 @@
   border-radius: var(--radius-lg);
   padding: 1.5rem 1.75rem;
   box-shadow: var(--shadow-sm);
+  width: 100%;
 }
 
 .theory-header {

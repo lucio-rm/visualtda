@@ -34,7 +34,12 @@ export const StudentAttemptsViewer: React.FC<StudentAttemptsViewerProps> = ({
           color: 'var(--text-muted, #64748b)'
         }}
       >
-        <span style={{ fontSize: '1.75rem', display: 'block', marginBottom: '0.5rem' }}>📋</span>
+        <div style={{ display: 'inline-flex', marginBottom: '0.6rem', color: 'var(--text-muted)' }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+          </svg>
+        </div>
         <h5 style={{ margin: '0 0 0.35rem 0', color: 'var(--text, #1e293b)' }}>
           {language === 'es' ? 'Aún no registraste intentos' : 'No recorded attempts yet'}
         </h5>

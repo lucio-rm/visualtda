@@ -167,27 +167,32 @@
   position: absolute;
   top: 2px;
   bottom: 2px;
-  background: #94a3b8;
-  color: white;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: bold;
+  font-size: 0.8125rem;
+  font-weight: 600;
   transition: all 0.2s;
 }
 
 .lane-interval-bar.selected {
-  background: #3b82f6;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-  transform: scaleY(1.1);
+  background: var(--surface-hover);
+  border: 1.5px solid var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.2);
+  transform: scaleY(1.05);
 }
 
 .lane-interval-bar.opt-match {
-  background: var(--success);
-  box-shadow: 0 0 12px var(--state-solution-bg);
+  background: var(--state-solution-bg);
+  border: 1.5px solid var(--success);
+  color: var(--text);
+  box-shadow: 0 0 8px var(--state-solution-bg);
 }
 
 .lane-text {
@@ -195,8 +200,8 @@
 }
 
 .lane-range {
-  font-size: 0.65rem;
-  opacity: 0.85;
+  font-size: 0.8125rem;
+  opacity: 0.9;
 }
 
 .comparison-board {

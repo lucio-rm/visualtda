@@ -352,116 +352,126 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           </div>
         </div>
 
-        {/* Theory & Executive Formal Analysis Grid */}
-        <div className={`understand-theory-layout ${correctnessExplanation && correctnessExplanation.length < 350 ? 'single-column-collapse' : ''}`}>
-          {/* Main Column: Academic Theory Paper Panel */}
-          <div className="card-panel theory-card understand-theory-panel">
-            <div className="theory-header">
-              <div className="theory-title-group">
-                <span className="badge badge-technique" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
-                  {language === 'es' ? 'Fundamento Teórico' : 'Theoretical Foundation'}
-                </span>
-                <h4 style={{ margin: 0 }}>{t(dict.understandCorrectnessHeading)}</h4>
+        {/* Executive Complexity & Theoretical Bounds Dashboard (Full Width Bar) */}
+        <div className="card-panel complexity-dashboard-panel" style={{ width: '100%' }}>
+          <div className="complexity-dashboard-header">
+            <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.05rem', color: 'var(--text)' }}>
+              {language === 'es' ? 'Análisis Asintótico y Garantías' : 'Asymptotic Analysis & Guarantees'}
+            </h4>
+            <span className="complexity-subtitle" style={{ fontSize: '0.8125rem' }}>
+              {language === 'es'
+                ? 'Cotas asintóticas formales de complejidad temporal y espacial demostrables'
+                : 'Formal provable asymptotic bounds for time and space complexity'}
+            </span>
+          </div>
+          <div className="complexity-dashboard-grid">
+            <div className="complexity-metric-card complexity-item">
+              <div className="metric-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--accent)' }}>
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span className="metric-label">{t(dict.understandTimeComplexity)}</span>
               </div>
-              <span className="theory-academic-seal">
-                {language === 'es' ? 'Cátedra 75.29 / 95.06 · Teoría de Algoritmos FIUBA' : '75.29 / 95.06 · Theory of Algorithms FIUBA'}
+              <div className="metric-value-box">
+                <code className="metric-value complexity-value">{localizeComplexityText(timeComplexity, language)}</code>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Peor caso asintótico demostrable' : 'Provable worst-case bound'}
               </span>
             </div>
-            <div className="theory-body">
-              <TheoryMarkdown content={correctnessExplanation} />
-            </div>
-          </div>
 
-          {/* Companion Column: Executive Complexity, Core Principles & Traps */}
-          <div className="understand-companion-column">
-            {/* Executive Complexity & Theoretical Bounds Dashboard */}
-            <div className="card-panel complexity-dashboard-panel">
-              <div className="complexity-dashboard-header">
-                <h4>{language === 'es' ? 'Análisis Asintótico y Garantías' : 'Asymptotic Analysis & Guarantees'}</h4>
-                <span className="complexity-subtitle">
-                  {language === 'es'
-                    ? 'Cotas asintóticas formales de complejidad temporal y espacial'
-                    : 'Formal asymptotic bounds for time and space complexity'}
+            <div className="complexity-metric-card complexity-item">
+              <div className="metric-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--accent)' }}>
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                  <line x1="6" y1="6" x2="6.01" y2="6" />
+                  <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+                <span className="metric-label">{t(dict.understandSpaceComplexity)}</span>
+              </div>
+              <div className="metric-value-box">
+                <code className="metric-value complexity-value">{localizeComplexityText(spaceComplexity, language)}</code>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Memoria auxiliar adicional' : 'Auxiliary memory overhead'}
+              </span>
+            </div>
+
+            <div className="complexity-metric-card">
+              <div className="metric-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--accent)' }}>
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+                <span className="metric-label">{language === 'es' ? 'Técnica / Paradigma' : 'Technique / Paradigm'}</span>
+              </div>
+              <div className="metric-value-box">
+                <span className="metric-paradigm-badge">{formatTechniqueLabel(exercise.techniqueId, language).toUpperCase()}</span>
+              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Estrategia algorítmica canónica' : 'Canonical algorithmic strategy'}
+              </span>
+            </div>
+
+            <div className="complexity-metric-card">
+              <div className="metric-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--success)' }}>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <polyline points="9 12 11 14 15 10" />
+                </svg>
+                <span className="metric-label">{language === 'es' ? 'Garantía Teórica' : 'Theoretical Guarantee'}</span>
+              </div>
+              <div className="metric-value-box">
+                <span className="metric-guarantee-badge">
+                  {exercise.techniqueId === 'approximation'
+                    ? (language === 'es' ? '2-Aproximación Demostrable' : 'Provable 2-Approximation')
+                    : exercise.techniqueId === 'randomized'
+                      ? (language === 'es' ? 'Esperanza O(1) / Las Vegas' : 'Expected O(1) / Las Vegas')
+                      : (language === 'es' ? 'Óptimo Global Exacto' : 'Exact Global Optimum')}
                 </span>
               </div>
-              <div className="complexity-dashboard-grid">
-                <div className="complexity-metric-card complexity-item">
-                  <div className="metric-header">
-                    <span className="metric-icon" aria-hidden="true">⏱</span>
-                    <span className="metric-label">{t(dict.understandTimeComplexity)}</span>
-                  </div>
-                  <div className="metric-value-box">
-                    <code className="metric-value complexity-value">{localizeComplexityText(timeComplexity, language)}</code>
-                  </div>
-                  <span className="metric-description">
-                    {language === 'es' ? 'Peor caso asintótico demostrable' : 'Provable worst-case bound'}
-                  </span>
-                </div>
-
-                <div className="complexity-metric-card complexity-item">
-                  <div className="metric-header">
-                    <span className="metric-icon" aria-hidden="true">💾</span>
-                    <span className="metric-label">{t(dict.understandSpaceComplexity)}</span>
-                  </div>
-                  <div className="metric-value-box">
-                    <code className="metric-value complexity-value">{localizeComplexityText(spaceComplexity, language)}</code>
-                  </div>
-                  <span className="metric-description">
-                    {language === 'es' ? 'Memoria auxiliar adicional' : 'Auxiliary memory overhead'}
-                  </span>
-                </div>
-
-                <div className="complexity-metric-card">
-                  <div className="metric-header">
-                    <span className="metric-icon" aria-hidden="true">⚙️</span>
-                    <span className="metric-label">{language === 'es' ? 'Técnica / Paradigma' : 'Technique / Paradigm'}</span>
-                  </div>
-                  <div className="metric-value-box">
-                    <span className="metric-paradigm-badge">{formatTechniqueLabel(exercise.techniqueId, language).toUpperCase()}</span>
-                  </div>
-                  <span className="metric-description">
-                    {language === 'es' ? 'Estrategia algorítmica canónica' : 'Canonical algorithmic strategy'}
-                  </span>
-                </div>
-
-                <div className="complexity-metric-card">
-                  <div className="metric-header">
-                    <span className="metric-icon" aria-hidden="true">🎯</span>
-                    <span className="metric-label">{language === 'es' ? 'Garantía Teórica' : 'Theoretical Guarantee'}</span>
-                  </div>
-                  <div className="metric-value-box">
-                    <span className="metric-guarantee-badge">
-                      {exercise.techniqueId === 'approximation'
-                        ? (language === 'es' ? '2-Aproximación Demostrable' : 'Provable 2-Approximation')
-                        : exercise.techniqueId === 'randomized'
-                          ? (language === 'es' ? 'Esperanza O(1) / Las Vegas' : 'Expected O(1) / Las Vegas')
-                          : (language === 'es' ? 'Óptimo Global Exacto' : 'Exact Global Optimum')}
-                    </span>
-                  </div>
-                  <span className="metric-description">
-                    {language === 'es' ? 'Certificado de correctitud matemática' : 'Mathematical certificate of correctness'}
-                  </span>
-                </div>
-              </div>
+              <span className="metric-description">
+                {language === 'es' ? 'Certificado de correctitud matemática' : 'Mathematical certificate of correctness'}
+              </span>
             </div>
+          </div>
+        </div>
 
-            {/* Context & Intuition Traps Card */}
-            <div className="card-panel understand-insights-card">
-              <h5 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', fontWeight: 600, color: 'var(--text)' }}>
-                {language === 'es' ? 'Perspectiva y Trampas Frecuentes' : 'Perspective & Frequent Traps'}
-              </h5>
-              <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                {t(insight.historicalContext)}
-              </div>
-              <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--text)', background: 'var(--surface-hover)', borderLeft: '3px solid var(--accent)', padding: '0.5rem 0.75rem', borderRadius: '0 var(--radius-sm) var(--radius-sm) 0', marginBottom: '0.75rem' }}>
-                <strong>{language === 'es' ? 'Principio central: ' : 'Core principle: '}</strong>
-                {t(insight.algorithmicPerspective)}
-              </div>
-              <div style={{ fontSize: '0.85rem', lineHeight: 1.5, color: 'var(--error)', background: 'var(--error-bg)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
-                <strong>{language === 'es' ? 'Trampa de la intuición ingenua: ' : 'Naive heuristic trap: '}</strong>
-                {t(insight.naiveTrapWarning)}
-              </div>
+        {/* Context & Intuition Traps Card (Full Width Banner) */}
+        <div className="card-panel understand-insights-card" style={{ width: '100%' }}>
+          <h5 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', fontWeight: 600, color: 'var(--text)' }}>
+            {language === 'es' ? 'Perspectiva y Trampas Frecuentes' : 'Perspective & Frequent Traps'}
+          </h5>
+          <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+            {t(insight.historicalContext)}
+          </div>
+          <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--text)', background: 'var(--surface-hover)', borderLeft: '3px solid var(--accent)', padding: '0.65rem 0.85rem', borderRadius: '0 var(--radius-sm) var(--radius-sm) 0', marginBottom: '0.75rem' }}>
+            <strong>{language === 'es' ? 'Principio central: ' : 'Core principle: '}</strong>
+            {t(insight.algorithmicPerspective)}
+          </div>
+          <div style={{ fontSize: '0.85rem', lineHeight: 1.5, color: 'var(--error)', background: 'var(--error-bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+            <strong>{language === 'es' ? 'Trampa de la intuición ingenua: ' : 'Naive heuristic trap: '}</strong>
+            {t(insight.naiveTrapWarning)}
+          </div>
+        </div>
+
+        {/* Full-Width Academic Theory Paper Panel */}
+        <div className="card-panel theory-card understand-theory-panel" style={{ width: '100%' }}>
+          <div className="theory-header">
+            <div className="theory-title-group">
+              <span className="badge badge-technique" style={{ fontSize: '0.8125rem', fontWeight: 600 }}>
+                {language === 'es' ? 'Fundamento Teórico' : 'Theoretical Foundation'}
+              </span>
+              <h4 style={{ margin: 0 }}>{t(dict.understandCorrectnessHeading)}</h4>
             </div>
+            <span className="theory-academic-seal">
+              {language === 'es' ? 'Cátedra 75.29 / 95.06 · Teoría de Algoritmos FIUBA' : '75.29 / 95.06 · Theory of Algorithms FIUBA'}
+            </span>
+          </div>
+          <div className="theory-body">
+            <TheoryMarkdown content={correctnessExplanation} />
           </div>
         </div>
 

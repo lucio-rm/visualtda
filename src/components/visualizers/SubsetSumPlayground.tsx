@@ -301,7 +301,7 @@ export const SubsetSumPlayground: React.FC = () => {
         >
           <div className="builder-header" style={{ marginBottom: '0.5rem' }}>
             <span style={{ fontWeight: 700, color: 'var(--text)' }}>
-              ⚖️ {language === 'es' ? 'Balanza de Suma Objetivo' : 'Target Sum Balance'}:{' '}
+              {language === 'es' ? 'Balanza de Suma Objetivo' : 'Target Sum Balance'}:{' '}
               <strong
                 style={{
                   color: isExactMatch ? 'var(--success)' : isOverflow ? 'var(--error)' : 'var(--accent)',
@@ -391,7 +391,6 @@ export const SubsetSumPlayground: React.FC = () => {
                 color: 'var(--text)'
               }}
             >
-              🎉{' '}
               <strong>
                 {language === 'es' ? '¡Suma Exacta Factible!' : 'Exact Feasible Sum!'}
               </strong>{' '}
@@ -411,7 +410,6 @@ export const SubsetSumPlayground: React.FC = () => {
                 color: 'var(--text)'
               }}
             >
-              ⚠{' '}
               <strong>
                 {language === 'es' ? 'Poda Inmediata por Exceso:' : 'Immediate Excess Pruning:'}
               </strong>{' '}

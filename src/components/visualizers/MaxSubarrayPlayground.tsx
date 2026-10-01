@@ -252,7 +252,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
               >
                 {showDcPartition
                   ? (language === 'es' ? 'Ocultar Tripartición DyC' : 'Hide D&C Tripartition')
-                  : (language === 'es' ? '⚖️ Ver Tripartición DyC' : '⚖️ Show D&C Tripartition')}
+                  : (language === 'es' ? 'Ver Tripartición DyC' : 'Show D&C Tripartition')}
               </button>
               <button
                 type="button"
@@ -434,7 +434,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
               <span className="stat-value">
                 {isOptimal ? (
                   <span style={{ color: 'var(--success)', fontWeight: 800 }}>
-                    🎉 {language === 'es' ? '¡Subarreglo de suma máxima verificado!' : 'Maximum sum subarray verified!'}
+                    {language === 'es' ? '¡Subarreglo de suma máxima verificado!' : 'Maximum sum subarray verified!'}
                   </span>
                 ) : userSum !== null ? (
                   <span style={{ color: 'var(--warning)' }}>

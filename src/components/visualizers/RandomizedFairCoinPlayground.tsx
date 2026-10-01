@@ -180,7 +180,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             disabled={coinState.status === 'flipping'}
             style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem', background: 'var(--accent)', color: '#fff', border: 'none' }}
           >
-            🎲 {language === 'es' ? 'Lanzar Par de Monedas' : 'Toss Pair of Coins'}
+            {language === 'es' ? 'Lanzar Par de Monedas' : 'Toss Pair of Coins'}
           </button>
         </div>
 
@@ -326,7 +326,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           {language === 'es' ? 'Simular 3,000 Bits' : 'Simulate 3,000 Bits'}
         </button>
         <button className="btn-action massive" onClick={() => runBatch(20000)}>
-          ⚡ {language === 'es' ? 'Monte Carlo Masivo (20,000 Bits)' : 'Massive Monte Carlo (20,000 Bits)'}
+          {language === 'es' ? 'Monte Carlo Masivo (20,000 Bits)' : 'Massive Monte Carlo (20,000 Bits)'}
         </button>
       </div>
 

@@ -288,8 +288,8 @@ export const KnapsackPlayground: React.FC = () => {
           <div className="shelf-column-header">
             <h5>
               {language === 'es'
-                ? '📦 Objetos Disponibles (Hacé clic para empacar o quitar):'
-                : '📦 Available Items (Click to pack or unpack):'}
+                ? 'Objetos Disponibles (Hacé clic para empacar o quitar):'
+                : 'Available Items (Click to pack or unpack):'}
             </h5>
           </div>
           <div className="knapsack-items-shelf">

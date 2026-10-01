@@ -79,7 +79,11 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
         {/* Overflow Alert Header if items exceed capacity */}
         {isOverweight && (
           <div className="bag-overflow-banner" role="alert">
-            <span className="overflow-warning-icon">⚠️</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--error)' }}>
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
             <span>
               {language === 'es'
                 ? `¡Desborde! Excedido por +${overflowWeight.toFixed(1).replace(/\.0$/, '')} kg (No Factible)`
@@ -92,7 +96,10 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
         <div className="bag-cargo-compartment">
           {packedItems.length === 0 ? (
             <div className="bag-empty-state">
-              <span className="bag-empty-icon" aria-hidden="true">🎒</span>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--text-muted)' }}>
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
               <p>
                 {language === 'es'
                   ? 'Mochila vacía (0 kg empacados). Seleccioná objetos para empacarlos.'

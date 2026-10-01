@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
-import { DEFAULT_KRUSKAL_GRAPH, KruskalNode } from '../../engine/algorithms/kruskalTrace';
+import { DEFAULT_KRUSKAL_GRAPH, KruskalNode, KruskalEdge } from '../../engine/algorithms/kruskalTrace';
 
 const COMPONENT_COLORS: Record<string, string> = {
   A: 'var(--success)',
@@ -17,13 +17,107 @@ export const KruskalPlayground: React.FC = () => {
   const { markAttempted } = useStudentProgress();
 
   const [nodes, setNodes] = useState<KruskalNode[]>(DEFAULT_KRUSKAL_GRAPH.nodes);
-  const edges = DEFAULT_KRUSKAL_GRAPH.edges;
+  const [edges, setEdges] = useState<KruskalEdge[]>(DEFAULT_KRUSKAL_GRAPH.edges);
   const [selectedEdgeIds, setSelectedEdgeIds] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isCycleWarning, setIsCycleWarning] = useState<boolean>(false);
   const [verificationStatus, setVerificationStatus] = useState<'idle' | 'success' | 'incomplete' | 'suboptimal'>('idle');
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  const [edgeU, setEdgeU] = useState<string>('A');
+  const [edgeV, setEdgeV] = useState<string>('B');
+  const [edgeWeight, setEdgeWeight] = useState<number>(3);
+  const [editorError, setEditorError] = useState<string | null>(null);
+
+  // Dynamic true MST weight computation on current graph
+  const optimalMSTWeight = useMemo(() => {
+    const sorted = [...edges].sort((a, b) => a.weight - b.weight);
+    const p: Record<string, string> = {};
+    for (const n of nodes) p[n.id] = n.id;
+    function f(i: string): string {
+      if (p[i] === i) return i;
+      p[i] = f(p[i]);
+      return p[i];
+    }
+    let cost = 0;
+    let count = 0;
+    for (const e of sorted) {
+      const rU = f(e.u);
+      const rV = f(e.v);
+      if (rU !== rV) {
+        p[rU] = rV;
+        cost += e.weight;
+        count++;
+        if (count === nodes.length - 1) break;
+      }
+    }
+    return cost;
+  }, [nodes, edges]);
+
+  const handleAddOrUpdateEdge = () => {
+    if (edgeU === edgeV) {
+      setEditorError(language === 'es' ? 'No se permiten bucles reflexivos (u = v).' : 'Self-loops are not allowed (u = v).');
+      return;
+    }
+    setEditorError(null);
+    setEdges((prev) => {
+      const existingIdx = prev.findIndex(
+        (e) => (e.u === edgeU && e.v === edgeV) || (e.u === edgeV && e.v === edgeU)
+      );
+      if (existingIdx >= 0) {
+        const copy = [...prev];
+        copy[existingIdx] = { ...copy[existingIdx], weight: edgeWeight };
+        return copy;
+      }
+      const newEdge: KruskalEdge = {
+        id: `e-${edgeU}-${edgeV}-${Date.now()}`,
+        u: edgeU,
+        v: edgeV,
+        weight: edgeWeight
+      };
+      return [...prev, newEdge];
+    });
+    setSelectedEdgeIds([]);
+    setFeedback(null);
+    markAttempted('kruskal');
+  };
+
+  const handleDeleteEdge = (edgeId: string) => {
+    setEdges((prev) => prev.filter((e) => e.id !== edgeId));
+    setSelectedEdgeIds((prev) => prev.filter((id) => id !== edgeId));
+    setFeedback(null);
+  };
+
+  const handleAddNode = () => {
+    const existingIds = new Set(nodes.map((n) => n.id));
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let nextId = '';
+    for (const char of alphabet) {
+      if (!existingIds.has(char)) {
+        nextId = char;
+        break;
+      }
+    }
+    if (!nextId) nextId = `N${nodes.length + 1}`;
+    const newNode: KruskalNode = {
+      id: nextId,
+      label: nextId,
+      x: 100 + (nodes.length % 5) * 75,
+      y: 80 + Math.floor(nodes.length / 5) * 70
+    };
+    setNodes((prev) => [...prev, newNode]);
+    setSelectedEdgeIds([]);
+    setFeedback(null);
+  };
+
+  const handleResetGraph = () => {
+    setNodes(DEFAULT_KRUSKAL_GRAPH.nodes);
+    setEdges(DEFAULT_KRUSKAL_GRAPH.edges);
+    setSelectedEdgeIds([]);
+    setFeedback(null);
+    setEditorError(null);
+  };
 
   // Edges sorted ascending by weight (Kruskal canonical order)
   const sortedEdges = useMemo(() => {
@@ -207,10 +301,10 @@ export const KruskalPlayground: React.FC = () => {
 
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Costo acumulado:' : 'Current weight:'}{' '}
-            <strong style={{ color: currentTotalWeight === 10 ? 'var(--success)' : 'var(--accent)' }}>
+            <strong style={{ color: currentTotalWeight === optimalMSTWeight ? 'var(--success)' : 'var(--accent)' }}>
               {currentTotalWeight}
             </strong>{' '}
-            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = 10)</span>
+            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = {optimalMSTWeight})</span>
           </span>
         </div>
 
@@ -433,6 +527,138 @@ export const KruskalPlayground: React.FC = () => {
               );
             })}
           </div>
+        </div>
+      </div>
+
+      {/* Interactive Custom Graph Editor for Kruskal */}
+      <div style={{ marginTop: '1.25rem', padding: '1rem 1.25rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text)' }}>
+              {language === 'es' ? 'Editor Interactivo de Grafo (Aristas y Pesos)' : 'Interactive Graph Editor (Edges & Weights)'}
+            </h4>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+              {language === 'es'
+                ? 'Agregá o modificá aristas no dirigidas y experimentá cómo Kruskal detecta ciclos y construye el AGM.'
+                : 'Add or modify undirected edges and observe how Kruskal detects cycles and builds the MST.'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleAddNode}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              + {language === 'es' ? 'Agregar Nodo' : 'Add Node'}
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleResetGraph}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.75rem' }}
+            >
+              {language === 'es' ? 'Restaurar Predeterminado' : 'Reset to Default'}
+            </button>
+          </div>
+        </div>
+
+        {/* Edge Form Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Extremo 1 (u):' : 'Endpoint 1 (u):'}</span>
+            <select
+              value={edgeU}
+              onChange={(e) => setEdgeU(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Extremo 2 (v):' : 'Endpoint 2 (v):'}</span>
+            <select
+              value={edgeV}
+              onChange={(e) => setEdgeV(e.target.value)}
+              style={{ padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            >
+              {nodes.map((n) => (
+                <option key={n.id} value={n.id}>{n.id}</option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
+            <span>{language === 'es' ? 'Peso:' : 'Weight:'}</span>
+            <input
+              type="number"
+              value={edgeWeight}
+              onChange={(e) => setEdgeWeight(Number(e.target.value))}
+              style={{ width: '70px', padding: '0.25rem 0.5rem', background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleAddOrUpdateEdge}
+            style={{ fontSize: '0.8125rem', padding: '0.35rem 0.85rem' }}
+          >
+            {language === 'es' ? 'Conectar / Modificar' : 'Connect / Update'}
+          </button>
+        </div>
+
+        {editorError && (
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--error)' }}>
+            {editorError}
+          </div>
+        )}
+
+        {/* Existing Edges Badges */}
+        <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginRight: '0.35rem' }}>
+            {language === 'es' ? 'Aristas del grafo:' : 'Graph edges:'}
+          </span>
+          {edges.map((e) => (
+            <span
+              key={`kruskal-edge-badge-${e.id}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.2rem 0.55rem',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8125rem',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              <span>{e.u} — {e.v} (w={e.weight})</span>
+              <button
+                type="button"
+                onClick={() => handleDeleteEdge(e.id)}
+                title={language === 'es' ? 'Eliminar arista' : 'Delete edge'}
+                aria-label={language === 'es' ? `Eliminar arista ${e.u} a ${e.v}` : `Delete edge ${e.u} to ${e.v}`}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--error)',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  lineHeight: 1
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </div>
