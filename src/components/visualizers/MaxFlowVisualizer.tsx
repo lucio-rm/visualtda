@@ -152,7 +152,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               markerHeight="6"
               orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--success)" />
             </marker>
             <marker
               id="arrow-aug"
@@ -163,7 +163,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               markerHeight="7"
               orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--warning)" />
             </marker>
             <marker
               id="arrow-cut"
@@ -174,7 +174,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               markerHeight="6"
               orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--error)" />
             </marker>
           </defs>
 

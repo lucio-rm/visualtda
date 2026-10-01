@@ -46,7 +46,7 @@
 }
 
 .opt-val-tag strong {
-  color: #10b981;
+  color: var(--success);
 }
 
 .svg-container {
@@ -61,7 +61,7 @@
 
 .lp-svg {
   width: 100%;
-  max-width: 550px;
+  max-width: 680px;
   height: auto;
 }
 
@@ -102,10 +102,10 @@
 }
 
 .vertex-chip.is-optimal {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 2px 8px var(--state-solution-bg);
 }
 
 .v-coord {
@@ -118,7 +118,7 @@
 }
 
 .opt-star {
-  background-color: #10b981;
+  background-color: var(--success);
   color: white;
   font-size: 0.65rem;
   font-weight: 800;

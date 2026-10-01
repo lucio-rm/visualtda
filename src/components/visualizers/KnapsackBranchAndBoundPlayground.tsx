@@ -252,7 +252,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
 
           <span style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
             {language === 'es' ? 'Solución Óptima V*:' : 'Optimal Value V*:'}{' '}
-            <strong style={{ color: '#10b981', fontSize: '1.05rem' }}>${optimalVal}</strong>
+            <strong style={{ color: 'var(--success)', fontSize: '1.05rem' }}>${optimalVal}</strong>
           </span>
         </div>
 
@@ -280,22 +280,22 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem' }}>
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos Naive (2^k)' : 'Naive Nodes (2^k)'}</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, #ef4444)' }}>{stats.totalNaive}</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, var(--error))' }}>{stats.totalNaive}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Nodos B&B Explorados' : 'B&B Explored'}</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#38bdf8' }}>{stats.explored}</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--accent)' }}>{stats.explored}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Cota (U < V*)' : 'Pruned by Bound'}</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{stats.prunedBound}</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warning)' }}>{stats.prunedBound}</div>
         </div>
 
         <div style={{ padding: '0.6rem 0.8rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{language === 'es' ? 'Podas por Capacidad (w > W)' : 'Pruned by Capacity'}</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, #ef4444)' }}>{stats.infeasible}</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--danger, var(--error))' }}>{stats.infeasible}</div>
         </div>
       </div>
 
@@ -306,7 +306,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
             {language === 'es' ? 'Árbol de Decisiones (Hacé clic en cualquier nodo para inspeccionar su cota):' : 'Decision Tree (Click any node to inspect bound):'}
           </span>
           <span style={{ fontSize: '0.75rem' }}>
-            <span style={{ color: '#10b981' }}>● Factible</span> · <span style={{ color: '#f59e0b' }}>● Poda Cota</span> · <span style={{ color: '#ef4444' }}>● Excede W</span>
+            <span style={{ color: 'var(--success)' }}>● Factible</span> · <span style={{ color: 'var(--warning)' }}>● Poda Cota</span> · <span style={{ color: 'var(--error)' }}>● Excede W</span>
           </span>
         </div>
 
@@ -328,7 +328,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   y1={e.from.y}
                   x2={e.to.x}
                   y2={e.to.y}
-                  stroke={isSelected ? 'var(--accent, #38bdf8)' : isPrunedEdge ? 'var(--danger, #ef4444)' : 'var(--border, #475569)'}
+                  stroke={isSelected ? 'var(--accent)' : isPrunedEdge ? 'var(--danger, var(--error))' : 'var(--border, #475569)'}
                   strokeWidth={isSelected ? 3 : 1.5}
                   strokeDasharray={isPrunedEdge ? '4 3' : undefined}
                   opacity={isPrunedEdge ? 0.6 : 0.9}
@@ -336,7 +336,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                 <text
                   x={(e.from.x + e.to.x) / 2 + (e.decision === 'include' ? -12 : 12)}
                   y={(e.from.y + e.to.y) / 2}
-                  fill={e.decision === 'include' ? '#10b981' : 'var(--text-muted)'}
+                  fill={e.decision === 'include' ? 'var(--success)' : 'var(--text-muted)'}
                   fontSize="10"
                   fontFamily="var(--font-mono)"
                   fontWeight="700"
@@ -351,17 +351,17 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
           {/* Nodes */}
           {treeNodes.map((n) => {
             const isSelected = selectedNode && selectedNode.id === n.id;
-            let nodeColor = '#38bdf8';
+            let nodeColor = 'var(--accent)';
             let strokeColor = '#0284c7';
 
             if (n.status === 'optimal') {
-              nodeColor = '#10b981';
+              nodeColor = 'var(--success)';
               strokeColor = '#059669';
             } else if (n.status === 'infeasible') {
-              nodeColor = '#ef4444';
+              nodeColor = 'var(--error)';
               strokeColor = '#b91c1c';
             } else if (n.status === 'pruned') {
-              nodeColor = '#f59e0b';
+              nodeColor = 'var(--warning)';
               strokeColor = '#d97706';
             }
 
@@ -397,7 +397,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   x={n.x}
                   y={n.y + (n.depth % 2 === 0 ? -18 : 26)}
                   textAnchor="middle"
-                  fill={n.status === 'infeasible' ? '#ef4444' : n.status === 'pruned' ? '#f59e0b' : 'var(--text-muted)'}
+                  fill={n.status === 'infeasible' ? 'var(--error)' : n.status === 'pruned' ? 'var(--warning)' : 'var(--text-muted)'}
                   fontFamily="var(--font-mono)"
                   fontSize="9px"
                   fontWeight="600"
@@ -430,20 +430,20 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                 borderRadius: 'var(--radius-sm)',
                 background:
                   selectedNode.status === 'optimal'
-                    ? 'rgba(16, 185, 129, 0.2)'
+                    ? 'var(--state-solution-bg)'
                     : selectedNode.status === 'infeasible'
-                    ? 'rgba(239, 68, 68, 0.2)'
+                    ? 'var(--state-conflict-bg)'
                     : selectedNode.status === 'pruned'
-                    ? 'rgba(245, 158, 11, 0.2)'
-                    : 'rgba(56, 189, 248, 0.2)',
+                    ? 'var(--state-candidate-bg)'
+                    : 'var(--state-active-bg)',
                 color:
                   selectedNode.status === 'optimal'
-                    ? '#10b981'
+                    ? 'var(--success)'
                     : selectedNode.status === 'infeasible'
-                    ? '#ef4444'
+                    ? 'var(--error)'
                     : selectedNode.status === 'pruned'
-                    ? '#f59e0b'
-                    : '#38bdf8'
+                    ? 'var(--warning)'
+                    : 'var(--accent)'
               }}
             >
               {selectedNode.status === 'optimal'
@@ -459,17 +459,17 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.5rem', fontSize: '0.85rem' }}>
             <div>
               <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? 'Peso actual (w):' : 'Current weight (w):'}</span>{' '}
-              <strong style={{ color: selectedNode.weight > capacity ? '#ef4444' : 'var(--text)' }}>
+              <strong style={{ color: selectedNode.weight > capacity ? 'var(--error)' : 'var(--text)' }}>
                 {selectedNode.weight} / {capacity}
               </strong>
             </div>
             <div>
               <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? 'Valor acumulado (v):' : 'Current value (v):'}</span>{' '}
-              <strong style={{ color: '#10b981' }}>${selectedNode.value}</strong>
+              <strong style={{ color: 'var(--success)' }}>${selectedNode.value}</strong>
             </div>
             <div>
               <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? 'Cota Superior (U):' : 'Upper Bound (U):'}</span>{' '}
-              <strong style={{ color: '#38bdf8' }}>${selectedNode.upperBound}</strong>
+              <strong style={{ color: 'var(--accent)' }}>${selectedNode.upperBound}</strong>
             </div>
             <div>
               <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? 'Incumbent (V*):' : 'Incumbent (V*):'}</span>{' '}

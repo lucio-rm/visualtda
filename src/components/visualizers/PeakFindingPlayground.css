@@ -18,7 +18,7 @@
 
 .playground-header p {
   margin: 0;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -33,7 +33,7 @@
 .presets-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .preset-buttons {
@@ -110,7 +110,7 @@
 
 .peaks-count-tag {
   font-size: 0.8rem;
-  color: #10b981;
+  color: var(--success);
 }
 
 .interactive-bars-strip {
@@ -150,7 +150,7 @@
   position: absolute;
   top: -24px;
   font-size: 1rem;
-  color: #10b981;
+  color: var(--success);
 }
 
 .clickable-bar-val {
@@ -173,17 +173,17 @@
 }
 
 .clickable-bar-col.dyc-chosen .clickable-bar-fill {
-  background: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+  background: var(--success);
+  box-shadow: 0 0 12px var(--state-solution-bg);
 }
 
 .clickable-bar-col.selected .clickable-bar-fill {
-  outline: 3px solid #f59e0b;
+  outline: 3px solid var(--warning);
 }
 
 .clickable-bar-idx {
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   margin-top: 0.4rem;
 }
 
@@ -214,14 +214,14 @@
 }
 
 .result-card.dyc-card {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.03);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .card-tag {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -232,7 +232,7 @@
 }
 
 .card-prompt {
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -264,7 +264,7 @@
 }
 
 .pill-subtle {
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .pedagogy-tip {

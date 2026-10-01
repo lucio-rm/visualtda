@@ -78,10 +78,10 @@ export const BellmanFordVisualizer: React.FC = () => {
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
               </marker>
               <marker id="bf-arr-active" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
               </marker>
               <marker id="bf-arr-neg" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--danger, #ef4444)" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--danger, var(--error))" />
               </marker>
             </defs>
 
@@ -94,12 +94,12 @@ export const BellmanFordVisualizer: React.FC = () => {
               const isCurrent = currentEdge && currentEdge.u === e.u && currentEdge.v === e.v;
               const isNeg = e.weight < 0;
 
-              let stroke = isNeg ? 'var(--danger, #ef4444)' : 'var(--border-strong, #64748b)';
+              let stroke = isNeg ? 'var(--danger, var(--error))' : 'var(--border-strong, #64748b)';
               let strokeWidth = isNeg ? 3 : 2.5;
               let marker = isNeg ? 'url(#bf-arr-neg)' : 'url(#bf-arr)';
 
               if (isCurrent) {
-                stroke = '#38bdf8';
+                stroke = 'var(--accent)';
                 strokeWidth = 3.5;
                 marker = 'url(#bf-arr-active)';
               }
@@ -115,7 +115,7 @@ export const BellmanFordVisualizer: React.FC = () => {
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={isNeg ? 'var(--danger, #ef4444)' : 'var(--text)'}
+                    fill={isNeg ? 'var(--danger, var(--error))' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="11px"
                     fontWeight="700"
@@ -138,8 +138,8 @@ export const BellmanFordVisualizer: React.FC = () => {
                     cx={n.x}
                     cy={n.y}
                     r={22}
-                    fill={isUpdated ? 'rgba(16, 185, 129, 0.3)' : 'var(--surface)'}
-                    stroke={isUpdated ? '#10b981' : 'var(--border-strong, #64748b)'}
+                    fill={isUpdated ? 'var(--state-solution-bg)' : 'var(--surface)'}
+                    stroke={isUpdated ? 'var(--success)' : 'var(--border-strong, #64748b)'}
                     strokeWidth={isUpdated ? 3.5 : 2.5}
                   />
                   <text
@@ -167,7 +167,7 @@ export const BellmanFordVisualizer: React.FC = () => {
                     x={n.x}
                     y={n.y - 27}
                     textAnchor="middle"
-                    fill="var(--accent, #38bdf8)"
+                    fill="var(--accent)"
                     fontFamily="var(--font-mono)"
                     fontSize="10px"
                     fontWeight="800"

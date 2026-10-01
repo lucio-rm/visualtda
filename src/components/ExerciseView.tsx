@@ -9,6 +9,8 @@ import { DiscoverView } from './DiscoverView';
 import { SolveView } from './SolveView';
 import { UnderstandView } from './UnderstandView';
 
+import { formatTitleSpacing } from '../utils/textFormatting';
+
 interface ExerciseViewProps {
   exercise: ExerciseMetadata;
   initialPhase?: ExercisePhase;
@@ -124,9 +126,10 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
             </span>
           )}
         </div>
-        <h2 className="exercise-title">{t(exercise.title)}</h2>
+        <h2 className="exercise-title">{formatTitleSpacing(t(exercise.title))}</h2>
         <p className="exercise-subtitle">{t(exercise.subtitle)}</p>
       </div>
+
 
       <PhaseSwitcher
         currentPhase={phase}

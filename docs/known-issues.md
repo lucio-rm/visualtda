@@ -197,6 +197,80 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.14 — Browser autocomplete surfacing full solutions across code editor instances
+
+- **Reported Behavior**: In the Solve phase Python code editor, the browser offered autocomplete / autofill dropdowns suggesting full solutions previously typed into textarea fields in the browser profile.
+- **Severity**: High (Leaked complete solutions across exercises).
+- **Status**: **RESOLVED** (`current`).
+- **Root Cause Analysis**:
+  - The controlled `<textarea>` in `SolveView.tsx` lacked native browser autofill disabling attributes (`autoComplete="off"`, `autoCorrect="off"`, `autoCapitalize="off"`, `spellCheck={false}`).
+  - Lacked unique, exercise-isolated `name` and `id` bindings, allowing browser autofill heuristics to cross-populate input histories across different exercises.
+- **Resolution**:
+  1. Set `autoComplete="off"`, `autoCorrect="off"`, `autoCapitalize="off"`, `spellCheck={false}`, `data-lpignore="true"`, and `data-form-type="other"` on the code editor textarea in `SolveView.tsx`.
+  2. Dynamically bound `id={`vtda_code_${exercise.id}`}` and `name={`vtda_code_${exercise.id}`}` to isolate form histories per exercise.
+  3. Applied consistent protections to other input textareas (`HuffmanPlayground.tsx`).
+- **Permanent QA Verification Step (Mandatory Chrome/Safari/Firefox check)**:
+  1. Open any exercise in Solve phase (e.g. `n-queens`), type or paste a complete Python solution, and run tests.
+  2. Reload the page or navigate back to the home catalog.
+  3. Open a *different* exercise in Solve phase (e.g. `interval-scheduling`).
+  4. Focus the code editor and type the first few letters (e.g. `d`, `e`, `f`).
+  5. Verify that NO native browser autofill/autocomplete dropdown pops up with past code snippets or credentials.
+
+---
+
+### Issue 3.15 — Numbers displayed across visualizers and preset labels mismatching computed traces
+
+- **Reported Behavior**: Discrepancies between displayed UI numbers (metrics, preset buttons, comparison values) and trace/validator calculations.
+- **Severity**: High (Pedagogical dissonance: student sees contradicting numerical values on screen).
+- **Status**: **RESOLVED** (`current`).
+- **Comprehensive Sweep Findings & Resolutions**:
+  1. `inversion-counting-dyc`: Preset `'partial'` (`[1, 5, 2, 6, 3, 4]`) label promised `(4 inv)` but the algorithm correctly identified 5 inversions: `(5,2), (5,3), (5,4), (6,3), (6,4)`. Corrected label to `(5 inv)`.
+  2. `knapsack-dp`: Standard preset label claimed `Estándar (4 ítems, C = 7)` while `DEFAULT_DP_CAPACITY` was 6. Corrected label to `Estándar (4 ítems, C = 6)`.
+  3. `karatsuba-dyc`: Metric badge showed `Math.max(0, 4 - multCount)` under "Multiplicaciones Ahorradas", counting down from 4 to 1 during steps. Corrected to show constant theoretical savings: `1 de 4 (25%)` per level.
+  4. `median-of-medians-dyc`: On the `COMPLETE` event in `medianOfMediansTrace.ts`, `guaranteedEliminatedCount` passed `0`, causing the $\ge 30\%$ pruning badge to reset to 0 elements upon completion. Fixed to pass `Math.floor((3 * array.length) / 10)` (6 elements for $n=20$).
+  5. `weighted-interval-scheduling`: `dpWeight` only calculated weight from `reconstructedIds`. During subproblem evaluation, it showed `$0`, causing `greedyWeight < dpWeight` ($9 < 0$) to evaluate false and erroneously display "Coincide en este caso". Fixed by referencing the global optimum target ($18) and showing proper failure callout ($9 vs $18).
+- **37/37 Exercise Number Consistency Audit Log (All Checked & Clean)**:
+  - `merge-sort`: Clean. Array length, comparisons counter, and recursion depth match trace events.
+  - `max-subarray-dyc`: Clean. Subarray bounds, running sums, and Kadane optimal value (7) match.
+  - `peak-finding-dyc`: Clean. Window indices $[l, r]$, size $r - l + 1$, and local slopes match.
+  - `inversion-counting-dyc`: Clean after preset label fix.
+  - `closest-pair-dyc`: Clean. Euclidean distances and $\delta$ strip thresholds match brute-force oracle.
+  - `karatsuba-dyc`: Clean after savings metric fix. Products $1234 \times 5678 = 7006652$ match.
+  - `median-of-medians-dyc`: Clean after complete-step elimination retention fix.
+  - `majority-element-dyc`: Clean. Threshold $\lfloor n/2 \rfloor = 4$, winner frequency 5/8 match.
+  - `interval-scheduling`: Clean. Selected count 3, rejected count 3 match greedy EFT.
+  - `knapsack-greedy`: Clean. Fractional items total weight 50.0, total value $240.0 match.
+  - `road-antennas-greedy`: Clean. 3 antennas cover all 9 houses with radius $R=10$.
+  - `huffman-coding-greedy`: Clean. Min-heap frequencies, merge costs, and codeword lengths match.
+  - `interval-partitioning-greedy`: Clean. Depth $d=3$, classrooms allocated = 3 match.
+  - `minimize-lateness-greedy`: Clean. Schedule finishes at $t=15$, max lateness $L_{\max} = 1$ matches.
+  - `dijkstra-greedy`: Clean. Shortest path distances and priority queue counts match.
+  - `kruskal-mst-greedy`: Clean. MST edge count $|V|-1 = 5$, total weight matches.
+  - `knapsack-dp`: Clean after preset label fix. Table cells and backtrack items match.
+  - `juan-el-vago`: Clean. DP array and non-adjacent optimal days $[1, 4]$ sum to $90.
+  - `coin-change-dp`: Clean. Coin transitions and optimal count match.
+  - `lcs-dp`: Clean. Matrix dimensions $7 \times 6$, LCS length 4 ("BCBA") match.
+  - `weighted-interval-scheduling`: Clean after DP weight and comparison alert fix.
+  - `segmented-least-squares-dp`: Clean. Cost $C=3.5$, error matrix, and $OPT[j]$ match.
+  - `rna-secondary-structure-dp`: Clean. Base pair count 2, non-crossing bounds match.
+  - `bellman-ford-dp`: Clean. $|V|-1 = 5$ iterations, shortest path distances match.
+  - `n-queens`: Clean. States visited, backtracks, and $N \in \{4, 5, 6, 8\}$ solution counts match.
+  - `subset-sum-backtracking`: Clean. Running sums, target bounds, and pruning conditions match.
+  - `graph-coloring-backtracking`: Clean. Colored count, $k=3$, and conflict detections match.
+  - `sudoku-backtracking`: Clean. 81 cells, MRV candidate domain sizes match.
+  - `hamiltonian-cycle-backtracking`: Clean. Path vertex count $|V|+1 = 6$ matches.
+  - `tsp-branch-and-bound`: Clean. Lower bounds and optimal tour cost 30 match.
+  - `knapsack-branch-and-bound`: Clean. Fractional upper bounds and optimal value 110 match.
+  - `knights-tour-backtracking`: Clean. 25 visited squares and Warnsdorff degrees match.
+  - `max-flow`: Clean. Max flow 20 and min-cut capacity 20 match.
+  - `linear-programming-formulation`: Clean. 5 vertices and optimal vertex $(3, 12)$ with $z^* = 33$ match.
+  - `vertex-cover-reduction`: Clean. $|S| = 2$, $|C| = 3$, $k + k' = 5 = |V|$ match.
+  - `vertex-cover-approx`: Clean. Maximal matching $|M| = 2$, cover $|C| = 4 \le 2|C^*|$ match.
+  - `randomized-fair-coin`: Clean. Expected tosses $1/(p(1-p)) = 4.167$ for $p=0.4$ match.
+- **Automated Regression**: Added `tests/uiNumberAccuracy.test.ts` asserting all numerical properties and fixes.
+
+---
+
 ## 2. Complete Visual & Pedagogical Matrix (All 37 Exercises)
 
 | # | Exercise ID | Paradigm | Visualizer & Playground | Verified Status |
@@ -238,6 +312,105 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 | 35 | `vertex-cover-reduction` | Reductions & NP | Graph reduction: Independent Set to Vertex Cover | VERIFIED |
 | 36 | `vertex-cover-approx` | Approximations | Maximal matching edge selector + 2-approx bound | VERIFIED |
 | 37 | `randomized-fair-coin` | Randomized Algorithms | Von Neumann biased coin trials + Bernoulli histogram | VERIFIED |
+
+---
+
+### Issue 3.16 — "Understand" phase: badly imbalanced two-column layout
+
+- **Reported Behavior**: In the Understand phase, exercises with brief or long theory text presented an imbalanced layout (one column nearly full while the companion was ~1/8 full, reading as broken).
+- **Severity**: Medium (Visual/layout dissonance and poor use of horizontal viewport).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  - Theory Markdown was paired side-by-side with a small 4-line complexity card without contextual depth, or rendered full-width with large vertical voids.
+  - Furthermore, 16 newer exercises had brief 5–10 line theory files with incomplete proofs and corrupted LaTeX tags (`39043`).
+- **Resolution**:
+  1. Restructured `UnderstandView.tsx` into a balanced executive two-column grid (`.understand-theory-layout`):
+     - **Main Column** (minmax(0, 1.4fr)): Formal Academic Theory Paper with Cátedra 75.29 / 95.06 seal, invariants, inductive/exchange proofs, and asymptotic deductions.
+     - **Companion Column** (minmax(320px, 1fr)): Executive Complexity Dashboard (Time, Space, Paradigm, Theoretical Guarantee) + Context & Frequent Traps card (Historical context, Core Principle, Naive Heuristic Trap from `exerciseContextInsights.ts`).
+  2. Implemented responsive collapse: falls back to a clean single column on viewports $< 1024px$ and when theory content is under 350 characters via `.single-column-collapse`.
+  3. Enriched all 16 shorter theory files (`closest-pair-dyc`, `karatsuba-dyc`, `majority-element-dyc`, `median-of-medians-dyc`, `dijkstra-greedy`, `kruskal-mst-greedy`, `bellman-ford-dp`, `sudoku-backtracking`, `knapsack-branch-and-bound`, `knights-tour-backtracking`, `hamiltonian-cycle-backtracking`, `tsp-branch-and-bound`, `interval-partitioning-greedy`, `minimize-lateness-greedy`, `rna-secondary-structure-dp`, `segmented-least-squares-dp`) to complete mathematical derivations (32–83 lines each), fixing LaTeX formula syntax and removing repetitive textbook name references.
+  4. Verified layout balance across 5+ exercises spanning diverse theory lengths: `road-antennas-greedy`, `peak-finding-dyc`, `n-queens`, `juan-el-vago`, `majority-element-dyc`, and `dijkstra-greedy`.
+
+---
+
+### Issue 3.17 — Light mode: states still aren't distinguishable and section borders invisible
+
+- **Reported Behavior**: In light mode, board cells (light vs dark), section separation borders, graph edges, and node states were difficult to differentiate or washed out.
+- **Severity**: High (Accessibility & Ergonomics: fails WCAG contrast and impairs visual hierarchy).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  - `--border` was set to `#cbd5e1` (contrast 1.48:1 on white), rendering card outlines nearly invisible.
+  - `--board-cell-dark` was `#e2e8f0` (contrast 1.23:1 against `#ffffff`), rendering chessboard squares indistinguishable.
+  - Playgrounds and visualizers added after the initial 21 exercises contained hardcoded low-contrast hex values (`#38bdf8`, `#10b981`, `#f59e0b`, `#06b6d4`, `#60a5fa`) with contrast ratios as low as 2.15:1.
+  - In Karatsuba, complex formula text and raw arithmetic terms were cramped into an undersized SVG canvas with unformatted $z$ terms.
+- **Resolution**:
+  1. Calibrated `src/styles/variables.css` under `[data-theme='light']`:
+     - Set `--border: #64748b` (Slate 500, contrast 4.76:1) and `--border-strong: #334155` (contrast 10.35:1), ensuring all section borders are distinct.
+     - Set `--board-cell-dark: #64748b` (contrast 4.76:1) with `--board-border: #334155`, guaranteeing high-contrast chessboard differentiation.
+     - Calibrated semantic state tokens (`--state-candidate: #b45309`, `--state-visited: #475569`, `--state-active`, `--state-solution`).
+  2. Executed automated replacement across 106 visualizer/playground files, mapping ad-hoc hex values to canonical design tokens.
+  3. Redesigned `KaratsubaVisualizer.tsx` with a spacious $720 \times 290$ SVG canvas, numbered branch cards (1. Término Alto $z_2$, 2. Producto Cruzado $P$, 3. Término Bajo $z_0$, 4. Término Medio $z_1 = P - z_2 - z_0$), and clear recombination layout.
+  4. Added automated Vitest quality gate `tests/contrastAndDesignSystem.test.ts` verifying WCAG AA text contrast ($\ge 4.5:1$) and UI contrast ($\ge 3:1$).
+
+---
+
+### Issue 3.18 — Spanish Identifiers in Solution Code
+- **Reported Behavior**: Several `solution.py` files in exercises added after the initial 21 used Spanish identifiers (`reina`, `tablero`, `resolver`, `mochila`, `camino`, `nodo`, `grafo`, `arista`) for variables and helper functions, violating project convention of English identifiers with bilingual UI copy.
+- **Severity**: Low/Medium (Convention alignment).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  - Refactored 23 `exercises/*/solution.py` files to standard English identifiers (`board`, `graph`, `vertices`, `edges`, `knapsack`, `solve`, `capacity`).
+  - Preserved backwards-compatible entry-point aliases (`resolver_... = solve_...`) so older student scripts continue to run seamlessly.
+  - Verified `src/**/*.ts(x)` contains zero unlocalized Spanish code variables.
+
+---
+
+### Issue 3.19 — Title & Heading Spacing Inconsistency
+- **Reported Behavior**: Inconsistent spacing around separators (hyphens, en-dashes, slashes, parentheticals) in exercise titles, headings, and metric labels.
+- **Severity**: Low (Visual polish).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  - Implemented `src/utils/textFormatting.ts` providing centralized `formatTitle(text)` and `formatComplexity(text)` sanitizers.
+  - Normalized ASCII hyphens to formatted en-dashes (` – `) and ensured consistent spacing around colons and parens.
+  - Added regression test `tests/titleSpacing.test.ts`.
+
+---
+
+### Issue 3.20 — Drag-vs-Click Conflict Suppression & Visualizer Canvas Expansion
+- **Reported Behavior**: In playgrounds with 2D pointer dragging, subtle mouse movement during simple clicks triggered drag events instead of selection. Additionally, SVG canvas sizes were too small across visualizers.
+- **Severity**: Medium (Interaction ergonomics).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  - Implemented a $\ge 5\text{px}$ movement threshold (`dragStartPos` + `hasDraggedRef` + `isPointerDownRef`) across all 9 pointer-drag playgrounds. Clicks without movement cleanly select or toggle elements; pointer drags only engage when displacement exceeds 5px.
+  - Expanded default visualizer and playground SVG canvas `max-width` from 480–540px to 680–780px while maintaining responsive aspect ratios and above-the-fold layout ergonomics.
+  - Added regression test `tests/dragInteractionThreshold.test.tsx`.
+
+---
+
+### Issue 3.21 — Plaintext Canonical Solutions in Static Bundle (Section 2)
+- **Reported Behavior**: Canonical Python solutions in `exercises/*/solution.py` were imported via Vite `?raw` imports, bundling plaintext source code into `dist/assets/exercise-content-*.js`. Any student could inspect the Network tab or unzip `dist/` to read full solutions without interacting with the instructor gate or test runner.
+- **Severity**: High (Data-level security gap).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  - Replaced raw build-time Python imports with pre-build AES-256-GCM encryption (`scripts/encryptSolutions.mjs`).
+  - Generates `src/engine/encryptedSolutions.ts` containing solely base64 ciphertext and IVs. Zero plaintext Python definitions (`def resolver`, `while`, `return`) exist in the production bundle.
+  - Implemented Dual-Recipient Key Encapsulation Mechanism in `src/utils/solutionCrypto.ts`:
+    - **Slot 1 (Faculty/Instructor)**: Key derived via PBKDF2 (SHA-256, 100,000 iterations, constant salt) from the course credential (`MEL75.29`).
+    - **Slot 2 (Student Pass Token)**: Key derived via PBKDF2 from legitimate test-suite completion or voluntary honest skip confirmation.
+  - In-memory on-demand decryption in `UnderstandView.tsx` with session memory caching.
+  - Added comprehensive unit tests in `tests/solutionCrypto.test.ts` and detailed threat model in `docs/security.md`.
+
+---
+
+### Issue 3.22 — Independent Test Oracles (G11) & Keyboard Accessibility on 2D Drag Playgrounds (Section 3)
+- **Reported Behavior**: The 16 newer exercises relied only on internal trace consistency checks (`extendedTraces.test.ts`) rather than independent mathematical test oracles. Furthermore, 2D drag playgrounds lacked full keyboard navigation equivalents.
+- **Severity**: High (Pedagogical correctness & Accessibility).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  - Implemented 16 independent brute-force and combinatorial reference solvers in `tests/oracles/referenceSolvers.ts` covering: Sudoku, Knight's Tour, Dijkstra, Kruskal, Bellman-Ford, Closest Pair, Knapsack B&B, Interval Partitioning, Minimize Lateness, Karatsuba BigInt, Majority Element, Median of Medians, Segmented Least Squares, RNA Structure, Hamiltonian Cycle, and TSP.
+  - Added dedicated test suite `tests/independentOraclesNewExercises.test.ts` verifying all 16 oracles against mathematical ground truths.
+  - Implemented keyboard equivalents (Arrow keys for 2D positioning/resizing, Enter/Space for selection, Delete/Backspace for removal, explicit numeric fallback inputs) across all 2D drag playgrounds (`HamiltonianCycle`, `TspBranchAndBound`, `ReductionIsVc`, `MaxFlow`, `IntervalPartitioning`, `PeakFinding`, `RoadAntennas`, `GraphColoring`, `ClosestPair`).
+  - Confirmed 100% strict kebab-case naming for all 37 exercise directory names and 46 registry IDs.
 
 ---
 

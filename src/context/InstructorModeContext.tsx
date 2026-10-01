@@ -8,6 +8,11 @@ import {
   resetInstructorSession,
   verifyInstructorAccess
 } from '../utils/cryptoAuth';
+import {
+  deriveInstructorKey,
+  setInstructorCryptoKey,
+  clearDecryptedCache
+} from '../utils/solutionCrypto';
 
 export interface VerifyResult {
   success: boolean;
@@ -63,6 +68,12 @@ export const InstructorModeProvider: React.FC<{ children: React.ReactNode }> = (
     if (hash === INSTRUCTOR_CREDENTIAL_HASH) {
       activateInstructorSession();
       try {
+        const instKey = await deriveInstructorKey(password);
+        await setInstructorCryptoKey(instKey);
+      } catch {
+        // SubtleCrypto fallback if unsupported
+      }
+      try {
         localStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
         sessionStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
         localStorage.setItem('visual_tda_instructor_mode', 'true');
@@ -79,6 +90,7 @@ export const InstructorModeProvider: React.FC<{ children: React.ReactNode }> = (
 
   const deactivateInstructorMode = () => {
     resetInstructorSession();
+    clearDecryptedCache();
     try {
       localStorage.removeItem(INSTRUCTOR_AUTH_STORAGE_KEY);
       sessionStorage.removeItem(INSTRUCTOR_AUTH_STORAGE_KEY);

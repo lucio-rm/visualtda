@@ -269,7 +269,7 @@ export const NQueensPlayground: React.FC = () => {
                 </li>
               )}
             </ul>
-            <div style={{ marginTop: '0.65rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(239, 68, 68, 0.25)', fontSize: '0.825rem', lineHeight: 1.5 }}>
+            <div style={{ marginTop: '0.65rem', paddingTop: '0.5rem', borderTop: '1px solid var(--state-conflict-bg)', fontSize: '0.825rem', lineHeight: 1.5 }}>
               <strong>
                 {language === 'es'
                   ? '¿Cómo opera la poda de Backtracking en este estado?'

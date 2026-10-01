@@ -154,16 +154,16 @@
 }
 
 .huff-node-card.selected-min {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--warning);
+  background: var(--state-candidate-bg);
   transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 6px 12px var(--state-candidate-bg);
 }
 
 .huff-node-card.selected-min .min-badge {
   position: absolute;
   top: -8px;
-  background: #f59e0b;
+  background: var(--warning);
   color: #000;
   font-size: 0.6rem;
   font-weight: 800;
@@ -297,7 +297,7 @@
 
 .huff-edge-bit-bg.bit-0 {
   fill: #0284c7;
-  stroke: #38bdf8;
+  stroke: var(--accent);
   stroke-width: 1px;
 }
 
@@ -322,9 +322,9 @@
 }
 
 .huff-leaf-rect.highlight-min {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 3px;
-  fill: rgba(245, 158, 11, 0.2);
+  fill: var(--state-candidate-bg);
 }
 
 .huff-leaf-char {
@@ -361,9 +361,9 @@
 }
 
 .huff-internal-circle.highlight-min {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 3px;
-  fill: rgba(245, 158, 11, 0.25);
+  fill: var(--state-candidate-bg);
 }
 
 .huff-internal-circle.highlight-merge {
@@ -382,7 +382,7 @@
 .huff-badge-text {
   font-size: 9px;
   font-weight: 800;
-  fill: #f59e0b;
+  fill: var(--warning);
   font-family: sans-serif;
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { ExerciseMetadata, formatTechniqueLabel } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
+import { formatTitleSpacing } from '../utils/textFormatting';
 
 interface ExerciseCardProps {
   exercise: ExerciseMetadata;
@@ -12,10 +13,11 @@ interface ExerciseCardProps {
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, indexNumber }) => {
   const { t, dict, language } = useLanguage();
   const { isCompleted, getExerciseState } = useStudentProgress();
-  const title = t(exercise.title);
+  const title = formatTitleSpacing(t(exercise.title));
   const subtitle = t(exercise.subtitle);
   const state = getExerciseState(exercise.id);
   const completed = isCompleted(exercise.id);
+
 
   const renderStateBadge = () => {
     switch (state) {

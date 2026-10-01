@@ -154,7 +154,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                         cx={c * cellSize + cellSize - 8}
                         cy={r * cellSize + 8}
                         r={5}
-                        fill="#ef4444"
+                        fill="var(--error)"
                         stroke="#ffffff"
                         strokeWidth={1.5}
                       />

@@ -82,13 +82,13 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             let strokeWidth = 1.5;
 
             if (isCurrentEdge) {
-              stroke = '#38bdf8';
+              stroke = 'var(--accent)';
               strokeWidth = 2.5;
             } else if (node.pruned) {
-              stroke = 'rgba(239, 68, 68, 0.4)';
+              stroke = 'var(--state-conflict-bg)';
               strokeWidth = 1;
             } else if (node.isBest) {
-              stroke = '#10b981';
+              stroke = 'var(--success)';
               strokeWidth = 2.5;
             }
 
@@ -125,16 +125,16 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             let strokeWidth = 1.5;
 
             if (isCurrent) {
-              fill = 'rgba(56, 189, 248, 0.25)';
-              stroke = '#38bdf8';
+              fill = 'var(--state-active-bg)';
+              stroke = 'var(--accent)';
               strokeWidth = 3;
             } else if (node.isBest) {
-              fill = 'rgba(16, 185, 129, 0.25)';
-              stroke = '#10b981';
+              fill = 'var(--state-solution-bg)';
+              stroke = 'var(--success)';
               strokeWidth = 2.5;
             } else if (node.pruned) {
-              fill = 'rgba(239, 68, 68, 0.2)';
-              stroke = 'var(--danger, #ef4444)';
+              fill = 'var(--state-conflict-bg)';
+              stroke = 'var(--danger, var(--error))';
             }
 
             return (
@@ -164,7 +164,7 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
                   x={node.x}
                   y={node.y + 10}
                   textAnchor="middle"
-                  fill={node.pruned ? 'var(--danger, #ef4444)' : 'var(--accent, #38bdf8)'}
+                  fill={node.pruned ? 'var(--danger, var(--error))' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
                   fontSize="8.5px"
                   fontWeight="700"

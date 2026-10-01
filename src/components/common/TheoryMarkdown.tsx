@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { LanguageContext } from '../../i18n/LanguageContext';
+import { formatTitleSpacing } from '../../utils/textFormatting';
 
 interface TheoryMarkdownProps {
   content: string;
@@ -10,6 +11,8 @@ function translateTheoryLine(text: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return text;
   return text
     .replace(/# (.+): Análisis Teórico, Correctness y Complejidad/g, '# $1: Theoretical Analysis, Correctness, and Complexity')
+    .replace(/# (.+) [—–] Teoría y Fundamentos/g, '# $1 — Theory and Foundations')
+    .replace(/# (.+): Fundamento Teórico y Demostración/g, '# $1: Theoretical Foundations and Proof')
     .replace(/## 1\. Planteo del Problema/g, '## 1. Problem Statement')
     .replace(/## 2\. Estrategia Algorítmica/g, '## 2. Algorithmic Strategy')
     .replace(/## 3\. Demostración de Corrección \(Correctness\)/g, '## 3. Correctness Proof')
@@ -57,6 +60,7 @@ function translateTheoryLine(text: string, lang: 'es' | 'en'): string {
     .replace(/Propiedad:/g, 'Property:')
     .replace(/Observación:/g, 'Remark:');
 }
+
 
 // Cleanly replaces LaTeX symbols and formatting into standard mathematical Unicode typography
 export function formatMathText(text: string): string {
@@ -313,7 +317,7 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
     if (line.startsWith('# ')) {
       elements.push(
         <h3 key={`h1-${i}`} className="theory-h1">
-          {renderInlineFormatting(line.slice(2))}
+          {renderInlineFormatting(formatTitleSpacing(line.slice(2)))}
         </h3>
       );
       i++;
@@ -322,7 +326,7 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
     if (line.startsWith('## ')) {
       elements.push(
         <h4 key={`h2-${i}`} className="theory-h2">
-          {renderInlineFormatting(line.slice(3))}
+          {renderInlineFormatting(formatTitleSpacing(line.slice(3)))}
         </h4>
       );
       i++;
@@ -331,7 +335,7 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
     if (line.startsWith('### ')) {
       elements.push(
         <h5 key={`h3-${i}`} className="theory-h3">
-          {renderInlineFormatting(line.slice(4))}
+          {renderInlineFormatting(formatTitleSpacing(line.slice(4)))}
         </h5>
       );
       i++;

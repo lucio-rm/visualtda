@@ -56,6 +56,7 @@ export const PeakFindingPlayground: React.FC = () => {
   const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
   const dragStartYRef = useRef<number>(0);
   const dragStartValRef = useRef<number>(0);
+  const hasDraggedRef = useRef<boolean>(false);
 
   const array = useMemo(() => {
     try {
@@ -103,6 +104,10 @@ export const PeakFindingPlayground: React.FC = () => {
   }, [userSelectedIndex, array]);
 
   const handleBarClick = (idx: number) => {
+    if (hasDraggedRef.current) {
+      hasDraggedRef.current = false;
+      return;
+    }
     if (draggingIdx !== null) return;
     setUserSelectedIndex(idx);
     if (allPeaks.includes(idx)) {
@@ -145,6 +150,7 @@ export const PeakFindingPlayground: React.FC = () => {
   const handlePointerDown = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    hasDraggedRef.current = false;
     setDraggingIdx(idx);
     dragStartYRef.current = e.clientY;
     dragStartValRef.current = array[idx];
@@ -153,6 +159,9 @@ export const PeakFindingPlayground: React.FC = () => {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (draggingIdx === null) return;
     const dy = dragStartYRef.current - e.clientY;
+    if (Math.abs(dy) > 5) {
+      hasDraggedRef.current = true;
+    }
     // Every 4px of movement changes height by 1 unit
     const delta = Math.round(dy / 4);
     const newVal = Math.max(1, Math.min(50, dragStartValRef.current + delta));
@@ -402,6 +411,32 @@ export const PeakFindingPlayground: React.FC = () => {
                   style={{
                     opacity: isDcActiveRange ? 1 : 0.35,
                     position: 'relative'
+                  }}
+                  tabIndex={0}
+                  role="slider"
+                  aria-label={
+                    language === 'es'
+                      ? `Columna ${idx}, altura ${val}${isFoundPeak ? ' (pico descubierto)' : ''}`
+                      : `Column ${idx}, height ${val}${isFoundPeak ? ' (discovered peak)' : ''}`
+                  }
+                  aria-valuenow={val}
+                  aria-valuemin={1}
+                  aria-valuemax={100}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleBarClick(idx);
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      const next = [...array];
+                      next[idx] = Math.min(100, next[idx] + 1);
+                      setArrayStr(next.join(', '));
+                    } else if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      const next = [...array];
+                      next[idx] = Math.max(1, next[idx] - 1);
+                      setArrayStr(next.join(', '));
+                    }
                   }}
                   onClick={() => handleBarClick(idx)}
                 >

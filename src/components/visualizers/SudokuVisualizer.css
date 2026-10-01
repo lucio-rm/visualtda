@@ -43,24 +43,24 @@
 }
 
 .sdk-action-badge.action-prune_conflict {
-  border-color: var(--danger, #ef4444);
-  color: var(--danger, #ef4444);
+  border-color: var(--danger, var(--error));
+  color: var(--danger, var(--error));
 }
 
 .sdk-action-badge.action-place_digit {
-  border-color: var(--success, #10b981);
-  color: var(--success, #10b981);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .sdk-action-badge.action-backtrack {
-  border-color: var(--warning, #f59e0b);
-  color: var(--warning, #f59e0b);
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .sdk-action-badge.action-solved {
-  background-color: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .sdk-board-container {
@@ -71,7 +71,7 @@
 }
 
 .sdk-svg-board {
-  max-width: 560px;
+  max-width: 620px;
   width: 100%;
   height: auto;
   border-radius: 4px;

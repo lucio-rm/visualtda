@@ -108,13 +108,13 @@
 }
 
 .btn-action.massive {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border-color: #10b981;
+  background-color: var(--state-solution-bg);
+  color: var(--success);
+  border-color: var(--success);
 }
 
 .btn-action.massive:hover {
-  background-color: #10b981;
+  background-color: var(--success);
   color: white;
 }
 
@@ -144,8 +144,8 @@
 }
 
 .feed-chip.bit-0 {
-  background-color: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.3);
+  background-color: var(--state-candidate-bg);
+  border-color: var(--state-candidate-bg);
   color: #d97706;
 }
 
@@ -212,7 +212,7 @@
 }
 
 .bar-fill.fill-0 {
-  background-color: #f59e0b;
+  background-color: var(--warning);
 }
 
 .bar-fill.fill-1 {
@@ -220,7 +220,7 @@
 }
 
 .bar-fill.fill-fair-0 {
-  background-color: #10b981;
+  background-color: var(--success);
 }
 
 .bar-fill.fill-fair-1 {
@@ -233,7 +233,7 @@
 }
 
 .dist-sub.highlight-fair {
-  color: #10b981;
+  color: var(--success);
   font-weight: 600;
 }
 

@@ -18,7 +18,7 @@
 
 .playground-header p {
   margin: 0;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -33,7 +33,7 @@
 .presets-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .preset-buttons {
@@ -105,12 +105,12 @@
 
 .opt-load {
   color: #059669;
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: var(--state-solution-bg);
 }
 
 .greedy-load {
   color: #d97706;
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: var(--state-candidate-bg);
 }
 
 .tracks-list {
@@ -186,8 +186,8 @@
 }
 
 .lane-interval-bar.opt-match {
-  background: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  background: var(--success);
+  box-shadow: 0 0 12px var(--state-solution-bg);
 }
 
 .lane-text {
@@ -216,8 +216,8 @@
 }
 
 .score-card.card-opt {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.06);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
 }
 
 .score-card.card-subopt {
@@ -225,24 +225,24 @@
 }
 
 .score-card.card-collision {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.06);
+  border-color: var(--error);
+  background: var(--state-conflict-bg);
 }
 
 .score-card.dp-card {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.04);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .score-card.greedy-card {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.04);
+  border-color: var(--state-candidate-bg);
+  background: var(--state-candidate-bg);
 }
 
 .card-tag {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -269,7 +269,7 @@
 .main-count,
 .main-items {
   font-size: 0.85rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-family: monospace;
 }
 
@@ -293,7 +293,7 @@
 }
 
 .status-prompt {
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .pedagogy-tip {
@@ -370,6 +370,6 @@
 }
 
 .interval-remove-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: var(--state-conflict-bg);
+  color: var(--error);
 }

@@ -18,7 +18,7 @@
 
 .playground-header p {
   margin: 0;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -33,7 +33,7 @@
 .presets-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .preset-buttons {
@@ -121,7 +121,7 @@
 
 .btn-opt-load {
   background: var(--surface);
-  border: 1px solid #10b981;
+  border: 1px solid var(--success);
   color: #059669;
   padding: 0.5rem 0.9rem;
   border-radius: 6px;
@@ -132,7 +132,7 @@
 }
 
 .btn-opt-load:hover {
-  background: rgba(16, 185, 129, 0.1);
+  background: var(--state-solution-bg);
 }
 
 .comparison-board {
@@ -162,14 +162,14 @@
 }
 
 .score-card.dp-card {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.04);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .card-label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -185,7 +185,7 @@
 
 .card-len {
   font-size: 0.85rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .validation-checks {
@@ -224,13 +224,13 @@
 }
 
 .prompt-text {
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
 .card-explanation {
   font-size: 0.85rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .pedagogy-tip {

@@ -12,6 +12,9 @@ export const ClosestPairPlayground: React.FC = () => {
   const [showStrip, setShowStrip] = useState(true);
   const [draggedPointId, setDraggedPointId] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
+  const isMouseDownRef = useRef(false);
 
   // Compute brute force closest pair and distance
   const { minDistance, bestPair } = useMemo(() => {
@@ -50,7 +53,10 @@ export const ClosestPairPlayground: React.FC = () => {
 
   const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement>) => {
     // If we just finished dragging, do not create a new point
-    if (draggedPointId) return;
+    if (draggedPointId || hasDraggedRef.current) {
+      hasDraggedRef.current = false;
+      return;
+    }
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.round(e.clientX - rect.left);
@@ -72,10 +78,18 @@ export const ClosestPairPlayground: React.FC = () => {
 
   const handlePointMouseDown = (pId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
+    isMouseDownRef.current = true;
     setDraggedPointId(pId);
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!isMouseDownRef.current) return;
+    const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+    if (dist > 5) {
+      hasDraggedRef.current = true;
+    }
     if (!draggedPointId || !svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
     const x = Math.max(20, Math.min(480, Math.round(e.clientX - rect.left)));
@@ -87,9 +101,13 @@ export const ClosestPairPlayground: React.FC = () => {
   };
 
   const handleMouseUp = () => {
+    isMouseDownRef.current = false;
     if (draggedPointId) {
       setDraggedPointId(null);
       markAttempted('closest-pair-dyc');
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+      }, 50);
     }
   };
 
@@ -119,7 +137,7 @@ export const ClosestPairPlayground: React.FC = () => {
           </span>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Distancia mínima (δ):' : 'Min distance (δ):'}{' '}
-            <strong style={{ color: '#10b981', fontFamily: 'var(--font-mono)' }}>
+            <strong style={{ color: 'var(--success)', fontFamily: 'var(--font-mono)' }}>
               {minDistance === Infinity ? '—' : `${minDistance} px`}
             </strong>
           </span>
@@ -212,7 +230,7 @@ export const ClosestPairPlayground: React.FC = () => {
           onClick={handleCanvasClick}
           onMouseMove={handleMouseMove}
           style={{
-            maxWidth: '500px',
+            maxWidth: '680px',
             width: '100%',
             height: 'auto',
             borderRadius: '6px',
@@ -309,7 +327,7 @@ export const ClosestPairPlayground: React.FC = () => {
                 y1={bestPair[0].y}
                 x2={bestPair[1].x}
                 y2={bestPair[1].y}
-                stroke="#10b981"
+                stroke="var(--success)"
                 strokeWidth={3}
                 strokeLinecap="round"
               />
@@ -321,14 +339,14 @@ export const ClosestPairPlayground: React.FC = () => {
                 height={20}
                 rx={4}
                 fill="var(--surface)"
-                stroke="#10b981"
+                stroke="var(--success)"
                 strokeWidth={1}
               />
               <text
                 x={(bestPair[0].x + bestPair[1].x) / 2}
                 y={(bestPair[0].y + bestPair[1].y) / 2 + 4}
                 textAnchor="middle"
-                fill="#10b981"
+                fill="var(--success)"
                 fontFamily="var(--font-mono)"
                 fontSize="10px"
                 fontWeight="700"
@@ -348,6 +366,31 @@ export const ClosestPairPlayground: React.FC = () => {
               <g
                 key={`pg-pt-${p.id}`}
                 onMouseDown={(e) => handlePointMouseDown(p.id, e)}
+                tabIndex={0}
+                role="button"
+                aria-label={
+                  language === 'es'
+                    ? `Punto ${p.id} en (${Math.round(p.x)}, ${Math.round(p.y)})${isBest ? ' (par más cercano)' : inStrip ? ' (dentro de franja 2δ)' : ''}`
+                    : `Point ${p.id} at (${Math.round(p.x)}, ${Math.round(p.y)})${isBest ? ' (closest pair)' : inStrip ? ' (in 2δ strip)' : ''}`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Delete' || e.key === 'Backspace') {
+                    e.preventDefault();
+                    setPoints((prev) => prev.filter((pt) => pt.id !== p.id));
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.max(20, pt.y - 10) } : pt));
+                  } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, y: Math.min(260, pt.y + 10) } : pt));
+                  } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.max(20, pt.x - 10) } : pt));
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    setPoints((prev) => prev.map((pt) => pt.id === p.id ? { ...pt, x: Math.min(480, pt.x + 10) } : pt));
+                  }
+                }}
                 style={{ cursor: isDragged ? 'grabbing' : 'grab' }}
               >
                 {/* Drag target hitzone */}
@@ -370,7 +413,7 @@ export const ClosestPairPlayground: React.FC = () => {
                   cx={p.x}
                   cy={p.y}
                   r={isDragged ? 9 : isBest ? 8 : 6}
-                  fill={isBest ? '#10b981' : isDragged ? 'var(--accent)' : '#38bdf8'}
+                  fill={isBest ? 'var(--success)' : isDragged ? 'var(--accent)' : 'var(--accent)'}
                   stroke={isBest ? '#059669' : '#0284c7'}
                   strokeWidth={2}
                 />

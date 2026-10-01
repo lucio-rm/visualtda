@@ -1,39 +1,43 @@
-def mochila_branch_and_bound(capacidad: int, pesos: list[int], valores: list[int]) -> int:
+def mochila_branch_and_bound(capacity: int, weights: list[int], values: list[int]) -> int:
     """
     Retorna el valor optimo entero mediante Branch & Bound.
     """
-    n = len(pesos)
-    items = sorted(zip(pesos, valores), key=lambda x: x[1]/x[0], reverse=True)
-    mejor_valor = [0]
+    n = len(weights)
+    items = sorted(zip(weights, values), key=lambda item: item[1] / item[0], reverse=True)
+    best_value = [0]
 
-    def cota_superior(idx: int, peso_actual: int, valor_actual: int) -> float:
-        if peso_actual > capacidad:
+    def upper_bound(idx: int, current_weight: int, current_value: int) -> float:
+        if current_weight > capacity:
             return 0.0
-        cota = valor_actual
-        cap_restante = capacidad - peso_actual
+        bound = float(current_value)
+        remaining_capacity = capacity - current_weight
         for i in range(idx, n):
             w, v = items[i]
-            if w <= cap_restante:
-                cap_restante -= w
-                cota += v
+            if w <= remaining_capacity:
+                remaining_capacity -= w
+                bound += v
             else:
-                cota += v * (cap_restante / w)
+                bound += v * (remaining_capacity / w)
                 break
-        return cota
+        return bound
 
-    def explorar(idx: int, peso_actual: int, valor_actual: int):
-        if peso_actual <= capacidad and valor_actual > mejor_valor[0]:
-            mejor_valor[0] = valor_actual
-        if idx == n or peso_actual > capacidad:
+    def explore(idx: int, current_weight: int, current_value: int) -> None:
+        if current_weight <= capacity and current_value > best_value[0]:
+            best_value[0] = current_value
+        if idx == n or current_weight > capacity:
             return
 
-        if cota_superior(idx, peso_actual, valor_actual) <= mejor_valor[0]:
+        if upper_bound(idx, current_weight, current_value) <= best_value[0]:
             return
 
         w, v = items[idx]
-        if peso_actual + w <= capacidad:
-            explorar(idx + 1, peso_actual + w, valor_actual + v)
-        explorar(idx + 1, peso_actual, valor_actual)
+        if current_weight + w <= capacity:
+            explore(idx + 1, current_weight + w, current_value + v)
+        explore(idx + 1, current_weight, current_value)
 
-    explorar(0, 0, 0)
-    return mejor_valor[0]
+    explore(0, 0, 0)
+    return best_value[0]
+
+
+knapsack_branch_and_bound = mochila_branch_and_bound
+

@@ -25,7 +25,7 @@
 
 .playground-timeline-svg {
   width: 100%;
-  max-width: 600px;
+  max-width: 780px;
   height: auto;
   margin: 0 auto;
 }
@@ -45,9 +45,9 @@
 }
 
 .task-bar-interactive.conflict {
-  stroke: #ef4444;
+  stroke: var(--error);
   stroke-width: 3;
-  filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
+  filter: drop-shadow(0 0 4px var(--state-conflict-bg));
 }
 
 .task-bar-interactive:focus-visible {
@@ -86,15 +86,15 @@
 }
 
 .status-alert.success {
-  background: rgba(16, 185, 129, 0.15);
+  background: var(--state-solution-bg);
   color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid var(--state-solution-bg);
 }
 
 .status-alert.warning {
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--state-conflict-bg);
   color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid var(--state-conflict-bg);
 }
 
 .status-alert.info {

@@ -4,6 +4,8 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { InstructorAuthModal } from './InstructorAuthModal';
 
+import { formatTitleSpacing } from '../utils/textFormatting';
+
 interface HeaderProps {
   theme: ThemeMode;
   onThemeChange: (theme: ThemeMode) => void;
@@ -54,10 +56,11 @@ export const Header: React.FC<HeaderProps> = ({
         {currentExerciseTitle && (
           <div className="header-breadcrumb" aria-label="Breadcrumb">
             <span className="breadcrumb-separator" aria-hidden="true">/</span>
-            <span className="breadcrumb-current">{currentExerciseTitle}</span>
+            <span className="breadcrumb-current">{formatTitleSpacing(currentExerciseTitle)}</span>
           </div>
         )}
       </div>
+
 
       <div className="header-controls">
         <button

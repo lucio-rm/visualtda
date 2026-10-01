@@ -82,7 +82,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
     return Math.round((minY + normalized * (maxY - minY)) * 10) / 10;
   };
 
-  const segmentColors = ['#38bdf8', '#10b981', '#f59e0b', '#ec4899', '#a855f7', '#06b6d4'];
+  const segmentColors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#ec4899', '#a855f7', '#06b6d4'];
 
   const handlePresetC = (cVal: number) => {
     setCostC(cVal);
@@ -179,7 +179,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
           </span>
           <span>
             {language === 'es' ? 'Costo total OPT(n):' : 'Total OPT(n) cost:'}{' '}
-            <strong style={{ color: '#10b981' }}>{opt[n]}</strong>
+            <strong style={{ color: 'var(--success)' }}>{opt[n]}</strong>
           </span>
         </div>
       </div>
@@ -438,7 +438,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '600' }}>
             {language === 'es' ? 'COSTO TOTAL OPT(n)' : 'TOTAL OPT(n) COST'}
           </div>
-          <div style={{ marginTop: '0.25rem', fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: '700', color: '#10b981' }}>
+          <div style={{ marginTop: '0.25rem', fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: '700', color: 'var(--success)' }}>
             {opt[n]}
           </div>
         </div>

@@ -82,20 +82,20 @@
 }
 
 .legend-dot.house-covered {
-  background: #10b981;
+  background: var(--success);
 }
 
 .legend-dot.house-uncovered {
-  background: #f59e0b;
+  background: var(--warning);
 }
 
 .legend-dot.antenna {
-  background: #6366f1;
+  background: var(--accent);
 }
 
 .legend-dot.antenna-range {
   background: rgba(99, 102, 241, 0.25);
-  border: 1px dashed #6366f1;
+  border: 1px dashed var(--accent);
 }
 
 .step-explanation-box {

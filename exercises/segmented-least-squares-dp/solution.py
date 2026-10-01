@@ -1,18 +1,18 @@
-def minimos_cuadrados_segmentados(puntos: list[tuple[float, float]], costo_c: float) -> tuple[float, list[int]]:
+def minimos_cuadrados_segmentados(points: list[tuple[float, float]], penalty_c: float) -> tuple[float, list[int]]:
     """
-    puntos: lista de (x, y) ordenados por x.
-    costo_c: penalizacion por cada nuevo segmento.
-    Retorna (costo_optimo, particiones).
+    points: list of (x, y) sorted by x.
+    penalty_c: penalty per new line segment.
+    Returns (optimal_cost, partitions).
     """
-    n = len(puntos)
+    n = len(points)
     if n == 0:
         return 0.0, []
-    
-    # Precomputo de errores cuadraticos e[i][j]
+
+    # Precompute squared errors e[i][j]
     e = [[0.0] * n for _ in range(n)]
     for i in range(n):
         for j in range(i, n):
-            pts = puntos[i:j+1]
+            pts = points[i:j + 1]
             k = len(pts)
             if k <= 2:
                 e[i][j] = 0.0
@@ -32,23 +32,27 @@ def minimos_cuadrados_segmentados(puntos: list[tuple[float, float]], costo_c: fl
 
     # DP
     opt = [0.0] * (n + 1)
-    origen = [0] * (n + 1)
+    segment_start = [0] * (n + 1)
     for j in range(1, n + 1):
         min_cost = float('inf')
         best_i = 1
         for i in range(1, j + 1):
-            cost = e[i-1][j-1] + costo_c + opt[i-1]
+            cost = e[i - 1][j - 1] + penalty_c + opt[i - 1]
             if cost < min_cost:
                 min_cost = cost
                 best_i = i
         opt[j] = min_cost
-        origen[j] = best_i
+        segment_start[j] = best_i
 
-    # Reconstruccion
-    particiones = []
+    # Reconstruction
+    partitions = []
     curr = n
     while curr > 0:
-        particiones.append(curr)
-        curr = origen[curr] - 1
-    particiones.reverse()
-    return opt[n], particiones
+        partitions.append(curr)
+        curr = segment_start[curr] - 1
+    partitions.reverse()
+    return opt[n], partitions
+
+
+segmented_least_squares = minimos_cuadrados_segmentados
+

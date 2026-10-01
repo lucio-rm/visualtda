@@ -18,8 +18,9 @@
 
 .approx-interactive-svg {
   width: 100%;
-  max-width: 580px;
-  height: 300px;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 540 / 300;
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -32,7 +33,7 @@
 }
 
 .interactive-edge:hover {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 6;
 }
 
@@ -69,7 +70,7 @@
 .approx-theorem-banner {
   padding: 0.85rem 1rem;
   background-color: var(--bg);
-  border-left: 4px solid #10b981;
+  border-left: 4px solid var(--success);
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
   line-height: 1.5;
@@ -116,15 +117,15 @@
 }
 
 .approx-edge-btn.matched {
-  background-color: rgba(245, 158, 11, 0.2);
-  border-color: #f59e0b;
-  color: #f59e0b;
+  background-color: var(--state-candidate-bg);
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .approx-edge-btn.covered {
-  background-color: rgba(16, 185, 129, 0.15);
-  border-color: #10b981;
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .interactive-edge-group:focus-visible line.approx-edge {

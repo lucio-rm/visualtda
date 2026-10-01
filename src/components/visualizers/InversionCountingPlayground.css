@@ -111,7 +111,7 @@
 }
 
 .inv-pg-bar.has-inversions {
-  border-color: #f59e0b;
+  border-color: var(--warning);
 }
 
 .inv-pg-bar-idx {

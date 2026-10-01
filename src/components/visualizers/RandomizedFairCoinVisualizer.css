@@ -97,7 +97,7 @@
 }
 
 .coin-disc.face-0 {
-  background: radial-gradient(circle, #fcd34d, #f59e0b);
+  background: radial-gradient(circle, #fcd34d, var(--warning));
   border-color: #d97706;
   color: #78350f;
   transform: scale(1.05);
@@ -163,7 +163,7 @@
 }
 
 .rule-res.res-0 {
-  background-color: rgba(245, 158, 11, 0.15);
+  background-color: var(--state-candidate-bg);
   color: #d97706;
 }
 
@@ -173,8 +173,8 @@
 }
 
 .rule-res.res-discard {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background-color: var(--state-conflict-bg);
+  color: var(--error);
 }
 
 .rule-prob {
@@ -212,15 +212,15 @@
 }
 
 .history-chip.chip-discard {
-  background-color: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background-color: var(--state-conflict-bg);
+  border-color: var(--state-conflict-bg);
+  color: var(--error);
 }
 
 .history-chip.chip-success {
-  background-color: rgba(16, 185, 129, 0.12);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  border-color: var(--state-solution-bg);
+  color: var(--success);
   font-weight: 700;
 }
 
@@ -229,8 +229,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  background-color: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background-color: var(--state-solution-bg);
+  border: 1px solid var(--state-solution-bg);
   border-radius: 8px;
   padding: 1.25rem;
 }
@@ -238,13 +238,13 @@
 .final-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #10b981;
+  color: var(--success);
 }
 
 .final-bit-badge {
   font-size: 2.75rem;
   font-weight: 900;
-  color: #10b981;
+  color: var(--success);
 }
 
 .final-stats {

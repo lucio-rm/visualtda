@@ -188,7 +188,7 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
         >
           <defs>
             <filter id="huff-glow-selected" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#f59e0b" floodOpacity="0.8" />
+              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="var(--warning)" floodOpacity="0.8" />
             </filter>
             <filter id="huff-glow-merged" x="-30%" y="-30%" width="160%" height="160%">
               <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#3b82f6" floodOpacity="0.8" />

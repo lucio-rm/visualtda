@@ -7,121 +7,132 @@ Complejidad Temporal: O(V * E^2)
 """
 
 from collections import deque
-from typing import NamedTuple
+from typing import NamedTuple, Any
 
 
 class Edge(NamedTuple):
-    origen: str
-    destino: str
-    capacidad: int
+    source: str
+    target: str
+    capacity: int
 
 
-class FlujoResultado(NamedTuple):
-    flujo_maximo: int
-    flujo_aristas: dict[tuple[str, str], int]
-    corte_minimo_S: set[str]
-    corte_minimo_T: set[str]
+class FlowResult(NamedTuple):
+    max_flow: int
+    edge_flows: dict[tuple[str, str], int]
+    min_cut_S: set[str]
+    min_cut_T: set[str]
 
 
 def edmonds_karp(
     vertices: list[str],
-    aristas: list[Edge],
-    fuente: str,
-    sumidero: str
-) -> FlujoResultado:
+    edges: list[Any],
+    source: str,
+    sink: str
+) -> FlowResult:
     """
-    Calcula el flujo máximo y el corte mínimo en una red de capacidades usando Edmonds-Karp (BFS).
+    Computes maximum flow and minimum cut in a capacity network using Edmonds-Karp (BFS).
     """
-    # 1. Construir red residual
-    # residual[u][v] = capacidad residual de u a v
+    # 1. Build residual network
     residual: dict[str, dict[str, int]] = {v: {} for v in vertices}
-    aristas_originales: set[tuple[str, str]] = set()
+    original_edges: set[tuple[str, str]] = set()
 
-    for e in aristas:
-        residual[e.origen][e.destino] = e.capacidad
-        # Arista residual de retroceso con capacidad inicial 0
-        if e.destino not in residual or e.origen not in residual[e.destino]:
-            residual[e.destino][e.origen] = 0
-        aristas_originales.add((e.origen, e.destino))
+    for e in edges:
+        if isinstance(e, dict):
+            u = e.get("u") or e.get("origen")
+            v = e.get("v") or e.get("destino")
+            cap = e.get("capacity") if "capacity" in e else e.get("capacidad", 0)
+        else:
+            u = getattr(e, "source", None) or getattr(e, "origen", None) or getattr(e, "u", None) or e[0]
+            v = getattr(e, "target", None) or getattr(e, "destino", None) or getattr(e, "v", None) or e[1]
+            cap = getattr(e, "capacity", None) or getattr(e, "capacidad", None) or e[2]
 
-    def bfs_camino_aumento() -> tuple[list[str], int] | None:
-        """Encuentra un camino de aumento s -> t con la menor cantidad de aristas (BFS)."""
-        padre: dict[str, str] = {}
-        cola = deque([fuente])
-        visitados = {fuente}
+        residual[u][v] = cap
+        if v not in residual or u not in residual[v]:
+            residual[v][u] = 0
+        original_edges.add((u, v))
 
-        while cola:
-            actual = cola.popleft()
-            if actual == sumidero:
+    def bfs_augmenting_path() -> tuple[list[str], int] | None:
+        """Finds an s -> t augmenting path with the fewest edges (BFS)."""
+        parent: dict[str, str] = {}
+        queue = deque([source])
+        visited = {source}
+
+        while queue:
+            current = queue.popleft()
+            if current == sink:
                 break
 
-            for vecino, cap_residual in residual[actual].items():
-                if vecino not in visitados and cap_residual > 0:
-                    visitados.add(vecino)
-                    padre[vecino] = actual
-                    cola.append(vecino)
+            for neighbor, residual_cap in residual[current].items():
+                if neighbor not in visited and residual_cap > 0:
+                    visited.add(neighbor)
+                    parent[neighbor] = current
+                    queue.append(neighbor)
 
-        if sumidero not in padre:
+        if sink not in parent:
             return None
 
-        # Reconstruir camino y cuello de botella
-        camino = []
-        curr = sumidero
-        cuello_botella = float("inf")
+        # Reconstruct path and bottleneck
+        path = []
+        curr = sink
+        bottleneck = float("inf")
 
-        while curr != fuente:
-            p = padre[curr]
-            camino.append(curr)
-            cuello_botella = min(cuello_botella, residual[p][curr])
+        while curr != source:
+            p = parent[curr]
+            path.append(curr)
+            bottleneck = min(bottleneck, residual[p][curr])
             curr = p
-        camino.append(fuente)
-        camino.reverse()
+        path.append(source)
+        path.reverse()
 
-        return camino, int(cuello_botella)
+        return path, int(bottleneck)
 
-    flujo_total = 0
+    total_flow = 0
 
-    # 2. Iterar mientras existan caminos de aumento en la red residual
+    # 2. Iterate while augmenting paths exist in residual network
     while True:
-        resultado_bfs = bfs_camino_aumento()
-        if not resultado_bfs:
+        bfs_result = bfs_augmenting_path()
+        if not bfs_result:
             break
 
-        camino, cuello_botella = resultado_bfs
-        flujo_total += cuello_botella
+        path, bottleneck = bfs_result
+        total_flow += bottleneck
 
-        # Aumentar flujo a lo largo del camino
-        for i in range(len(camino) - 1):
-            u = camino[i]
-            v = camino[i + 1]
-            residual[u][v] -= cuello_botella
-            residual[v][u] += cuello_botella
+        for i in range(len(path) - 1):
+            u = path[i]
+            v = path[i + 1]
+            residual[u][v] -= bottleneck
+            residual[v][u] += bottleneck
 
-    # 3. Calcular flujo neto en aristas originales
-    flujo_aristas: dict[tuple[str, str], int] = {}
-    for e in aristas:
-        # flujo = capacidad_original - residual_restante
-        f = e.capacidad - residual[e.origen][e.destino]
-        flujo_aristas[(e.origen, e.destino)] = f
+    # 3. Calculate net flow on original edges
+    edge_flows: dict[tuple[str, str], int] = {}
+    for u, v in original_edges:
+        init_cap = residual[u][v] + residual[v][u]
+        # In simple directed graph, flow sent = initial capacity - remaining residual
+        flow_val = (residual[v][u]) if residual[v][u] <= init_cap else 0
+        edge_flows[(u, v)] = flow_val
 
-    # 4. Encontrar Corte Mínimo (S, T) mediante alcanzabilidad en la red residual final
-    alcanzables_desde_s: set[str] = set()
-    cola_corte = deque([fuente])
-    alcanzables_desde_s.add(fuente)
+    # 4. Find Minimum Cut (S, T) via BFS reachability in final residual graph
+    reachable_from_s: set[str] = set()
+    cut_queue = deque([source])
+    reachable_from_s.add(source)
 
-    while cola_corte:
-        actual = cola_corte.popleft()
-        for vecino, cap_res in residual[actual].items():
-            if vecino not in alcanzables_desde_s and cap_res > 0:
-                alcanzables_desde_s.add(vecino)
-                cola_corte.append(vecino)
+    while cut_queue:
+        current = cut_queue.popleft()
+        for neighbor, residual_cap in residual[current].items():
+            if neighbor not in reachable_from_s and residual_cap > 0:
+                reachable_from_s.add(neighbor)
+                cut_queue.append(neighbor)
 
-    corte_S = alcanzables_desde_s
-    corte_T = set(vertices) - corte_S
+    cut_S = reachable_from_s
+    cut_T = set(vertices) - cut_S
 
-    return FlujoResultado(
-        flujo_maximo=flujo_total,
-        flujo_aristas=flujo_aristas,
-        corte_minimo_S=corte_S,
-        corte_minimo_T=corte_T
+    return FlowResult(
+        max_flow=total_flow,
+        edge_flows=edge_flows,
+        min_cut_S=cut_S,
+        min_cut_T=cut_T
     )
+
+
+FlujoResultado = FlowResult
+

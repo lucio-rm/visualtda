@@ -38,19 +38,19 @@
 }
 
 .kt-action-badge.action-move_knight {
-  border-color: #38bdf8;
-  color: #38bdf8;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .kt-action-badge.action-backtrack {
-  border-color: var(--warning, #f59e0b);
-  color: var(--warning, #f59e0b);
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .kt-action-badge.action-complete {
-  background-color: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .kt-board-container {
@@ -61,7 +61,7 @@
 }
 
 .kt-svg-board {
-  max-width: 540px;
+  max-width: 620px;
   width: 100%;
   height: auto;
   border-radius: 4px;

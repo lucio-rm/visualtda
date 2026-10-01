@@ -118,14 +118,14 @@
 }
 
 .challenge-feedback-banner.success {
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid #10b981;
+  background: var(--state-solution-bg);
+  border: 1px solid var(--success);
   color: #065f46;
 }
 
 .challenge-feedback-banner.suboptimal {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid #f59e0b;
+  background: var(--state-candidate-bg);
+  border: 1px solid var(--warning);
   color: #92400e;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .interactive-road-svg:focus-visible {
-  outline: 2px solid var(--color-primary, #6366f1);
+  outline: 2px solid var(--color-primary, var(--accent));
   outline-offset: 4px;
 }
 
@@ -180,7 +180,7 @@
   gap: 6px;
   padding: 3px 8px;
   background: rgba(99, 102, 241, 0.12);
-  border: 1px solid #6366f1;
+  border: 1px solid var(--accent);
   border-radius: var(--radius-full, 9999px);
   font-size: 0.8rem;
   color: var(--color-text);
@@ -189,7 +189,7 @@
 .antenna-chip-remove {
   background: none;
   border: none;
-  color: #ef4444;
+  color: var(--error);
   font-size: 1.1rem;
   font-weight: bold;
   line-height: 1;
@@ -199,9 +199,9 @@
 }
 
 .antenna-chip-remove:hover {
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--state-conflict-bg);
 }
 
 .antenna-chip-remove:focus-visible {
-  outline: 2px solid #ef4444;
+  outline: 2px solid var(--error);
 }

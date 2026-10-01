@@ -65,9 +65,9 @@
 }
 
 .item-pick-card.in-pack {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.08);
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
+  box-shadow: 0 0 0 2px var(--state-solution-bg);
 }
 
 .item-pick-header {
@@ -105,8 +105,8 @@
 }
 
 .item-remove-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: var(--state-conflict-bg);
+  color: var(--error);
 }
 
 .knapsack-custom-editor {

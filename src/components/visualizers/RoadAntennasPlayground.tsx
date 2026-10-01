@@ -54,6 +54,7 @@ export const RoadAntennasPlayground: React.FC = () => {
   const [draggingAntennaIdx, setDraggingAntennaIdx] = useState<number | null>(null);
   const [draggingHouseIdx, setDraggingHouseIdx] = useState<number | null>(null);
   const isDraggingRef = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
 
   // Compute canonical greedy solution
   const greedyAntennas = useMemo(() => {
@@ -123,20 +124,26 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   const handlePointerDownAntenna = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
-    isDraggingRef.current = true;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    isDraggingRef.current = false;
     (e.target as Element).setPointerCapture(e.pointerId);
     setDraggingAntennaIdx(idx);
   };
 
   const handlePointerDownHouse = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
-    isDraggingRef.current = true;
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    isDraggingRef.current = false;
     (e.target as Element).setPointerCapture(e.pointerId);
     setDraggingHouseIdx(idx);
   };
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (draggingAntennaIdx === null && draggingHouseIdx === null) return;
+    const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+    if (dist > 5) {
+      isDraggingRef.current = true;
+    }
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
     const currentKm = xToKm(clickX);
@@ -247,7 +254,7 @@ export const RoadAntennasPlayground: React.FC = () => {
             <button
               type="button"
               className={`preset-btn ${activeTool === 'place_antenna' ? 'active' : ''}`}
-              style={activeTool === 'place_antenna' ? { background: '#6366f1', color: '#fff' } : {}}
+              style={activeTool === 'place_antenna' ? { background: 'var(--accent)', color: '#fff' } : {}}
               onClick={() => setActiveTool('place_antenna')}
             >
               {language === 'es' ? 'Colocar / Quitar Antena' : 'Place / Remove Antenna'}
@@ -255,7 +262,7 @@ export const RoadAntennasPlayground: React.FC = () => {
             <button
               type="button"
               className={`preset-btn ${activeTool === 'place_house' ? 'active' : ''}`}
-              style={activeTool === 'place_house' ? { background: '#f59e0b', color: '#fff' } : {}}
+              style={activeTool === 'place_house' ? { background: 'var(--warning)', color: '#fff' } : {}}
               onClick={() => setActiveTool('place_house')}
             >
               {language === 'es' ? 'Agregar / Quitar Casa' : 'Add / Remove House'}
@@ -317,13 +324,13 @@ export const RoadAntennasPlayground: React.FC = () => {
           </div>
           <div className="challenge-stat-item">
             <span className="challenge-stat-label">{language === 'es' ? 'Tus Antenas' : 'Your Antennas'}</span>
-            <span className="challenge-stat-val" style={{ color: '#6366f1' }}>
+            <span className="challenge-stat-val" style={{ color: 'var(--accent)' }}>
               {userAntennas.length}
             </span>
           </div>
           <div className="challenge-stat-item">
             <span className="challenge-stat-label">{language === 'es' ? 'Mínimo Óptimo (Greedy)' : 'Greedy Optimal Min'}</span>
-            <span className="challenge-stat-val" style={{ color: '#10b981' }}>
+            <span className="challenge-stat-val" style={{ color: 'var(--success)' }}>
               {greedyAntennas.length}
             </span>
           </div>
@@ -409,19 +416,19 @@ export const RoadAntennasPlayground: React.FC = () => {
               y1={roadY - 20}
               x2={kmToX(cursorKm)}
               y2={roadY + 24}
-              stroke="#f59e0b"
+              stroke="var(--warning)"
               strokeWidth="2"
               strokeDasharray="3 3"
             />
             <polygon
               points={`${kmToX(cursorKm)},${roadY - 2} ${kmToX(cursorKm) - 5},${roadY - 12} ${kmToX(cursorKm) + 5},${roadY - 12}`}
-              fill="#f59e0b"
+              fill="var(--warning)"
             />
             <text
               x={kmToX(cursorKm)}
               y={roadY - 18}
               textAnchor="middle"
-              fill="#f59e0b"
+              fill="var(--warning)"
               fontSize="10"
               fontWeight="700"
             >
@@ -480,6 +487,36 @@ export const RoadAntennasPlayground: React.FC = () => {
               <g
                 key={`user-ant-${aIdx}`}
                 onPointerDown={(e) => handlePointerDownAntenna(aIdx, e)}
+                tabIndex={0}
+                role="slider"
+                aria-label={
+                  language === 'es'
+                    ? `Antena ${aIdx + 1} en km ${antKm}`
+                    : `Antenna ${aIdx + 1} at km ${antKm}`
+                }
+                aria-valuenow={antKm}
+                aria-valuemin={0}
+                aria-valuemax={maxKm}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setUserAntennas((prev) => {
+                      const next = [...prev];
+                      next[aIdx] = Math.max(0, next[aIdx] - 1);
+                      return next;
+                    });
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    setUserAntennas((prev) => {
+                      const next = [...prev];
+                      next[aIdx] = Math.min(maxKm, next[aIdx] + 1);
+                      return next;
+                    });
+                  } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                    e.preventDefault();
+                    setUserAntennas((prev) => prev.filter((_, i) => i !== aIdx));
+                  }
+                }}
                 style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }}
               >
                 <rect
@@ -489,17 +526,17 @@ export const RoadAntennasPlayground: React.FC = () => {
                   height="55"
                   rx="10"
                   fill="rgba(99, 102, 241, 0.18)"
-                  stroke="#6366f1"
+                  stroke="var(--accent)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                 />
-                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="#6366f1" strokeWidth="2.5" />
-                <circle cx={antX} cy={roadY - 65} r="4.5" fill="#6366f1" />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="var(--accent)" strokeWidth="2.5" />
+                <circle cx={antX} cy={roadY - 65} r="4.5" fill="var(--accent)" />
                 <text
                   x={antX}
                   y={roadY - 72}
                   textAnchor="middle"
-                  fill="#6366f1"
+                  fill="var(--accent)"
                   fontSize="10"
                   fontWeight="bold"
                 >
@@ -525,17 +562,17 @@ export const RoadAntennasPlayground: React.FC = () => {
                     width={spanWidth}
                     height="60"
                     rx="10"
-                    fill="rgba(16, 185, 129, 0.15)"
-                    stroke="#10b981"
+                    fill="var(--state-solution-bg)"
+                    stroke="var(--success)"
                     strokeWidth="2"
                   />
-                  <line x1={gX} y1={roadY} x2={gX} y2={roadY - 80} stroke="#10b981" strokeWidth="2" strokeDasharray="3 3" />
-                  <circle cx={gX} cy={roadY - 80} r="5" fill="#10b981" />
+                  <line x1={gX} y1={roadY} x2={gX} y2={roadY - 80} stroke="var(--success)" strokeWidth="2" strokeDasharray="3 3" />
+                  <circle cx={gX} cy={roadY - 80} r="5" fill="var(--success)" />
                   <text
                     x={gX}
                     y={roadY - 87}
                     textAnchor="middle"
-                    fill="#10b981"
+                    fill="var(--success)"
                     fontSize="11"
                     fontWeight="bold"
                   >
@@ -549,12 +586,42 @@ export const RoadAntennasPlayground: React.FC = () => {
           {houses.map((hKm, hIdx) => {
             const hX = kmToX(hKm);
             const isCovered = userCoveredIndices.has(hIdx);
-            const houseColor = isCovered ? '#10b981' : '#f59e0b';
+            const houseColor = isCovered ? 'var(--success)' : 'var(--warning)';
 
             return (
               <g
                 key={`house-${hIdx}`}
                 onPointerDown={(e) => handlePointerDownHouse(hIdx, e)}
+                tabIndex={0}
+                role="slider"
+                aria-label={
+                  language === 'es'
+                    ? `Casa ${hIdx + 1} en km ${hKm}${isCovered ? ' (cubierta)' : ' (sin cobertura)'}`
+                    : `House ${hIdx + 1} at km ${hKm}${isCovered ? ' (covered)' : ' (uncovered)'}`
+                }
+                aria-valuenow={hKm}
+                aria-valuemin={0}
+                aria-valuemax={maxKm}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setHouses((prev) => {
+                      const next = [...prev];
+                      next[hIdx] = Math.max(0, next[hIdx] - 1);
+                      return next;
+                    });
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    setHouses((prev) => {
+                      const next = [...prev];
+                      next[hIdx] = Math.min(maxKm, next[hIdx] + 1);
+                      return next;
+                    });
+                  } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                    e.preventDefault();
+                    setHouses((prev) => prev.filter((_, i) => i !== hIdx));
+                  }
+                }}
                 style={{ cursor: draggingHouseIdx === hIdx ? 'grabbing' : 'grab' }}
               >
                 <polygon

@@ -2,25 +2,29 @@ def elemento_mayoritario(arr: list[int]) -> int | None:
     """
     Encuentra el elemento mayoritario (> n/2 apariciones) en O(n log n).
     """
-    def resolver(izq: int, der: int) -> int | None:
-        if izq == der:
-            return arr[izq]
-            
-        mid = (izq + der) // 2
-        cand_izq = resolver(izq, mid)
-        cand_der = resolver(mid + 1, der)
-        
-        if cand_izq == cand_der:
-            return cand_izq
-            
-        conteo_izq = sum(1 for i in range(izq, der + 1) if arr[i] == cand_izq) if cand_izq is not None else 0
-        conteo_der = sum(1 for i in range(izq, der + 1) if arr[i] == cand_der) if cand_der is not None else 0
-        
-        umbral = (der - izq + 1) // 2
-        if conteo_izq > umbral:
-            return cand_izq
-        if conteo_der > umbral:
-            return cand_der
+    def solve_rec(left: int, right: int) -> int | None:
+        if left == right:
+            return arr[left]
+
+        mid = (left + right) // 2
+        cand_left = solve_rec(left, mid)
+        cand_right = solve_rec(mid + 1, right)
+
+        if cand_left == cand_right:
+            return cand_left
+
+        count_left = sum(1 for i in range(left, right + 1) if arr[i] == cand_left) if cand_left is not None else 0
+        count_right = sum(1 for i in range(left, right + 1) if arr[i] == cand_right) if cand_right is not None else 0
+
+        threshold = (right - left + 1) // 2
+        if count_left > threshold:
+            return cand_left
+        if count_right > threshold:
+            return cand_right
         return None
 
-    return resolver(0, len(arr) - 1)
+    return solve_rec(0, len(arr) - 1)
+
+
+majority_element = elemento_mayoritario
+

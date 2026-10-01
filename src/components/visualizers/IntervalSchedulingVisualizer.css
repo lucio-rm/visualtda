@@ -16,7 +16,7 @@
 
 .interval-chart-svg {
   width: 100%;
-  max-width: 680px;
+  max-width: 780px;
   height: auto;
 }
 
@@ -84,7 +84,7 @@
 
 [data-theme='dark'] .interval-bar.bar-rejected {
   fill: #450a0a;
-  stroke: #ef4444;
+  stroke: var(--error);
 }
 
 .bar-text {

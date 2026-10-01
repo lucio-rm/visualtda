@@ -28,7 +28,7 @@
 
 .phase-badge-label {
   font-size: 0.85rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .target-badge {
-  color: #10b981;
+  color: var(--success);
   font-size: 1.1rem;
 }
 
@@ -79,8 +79,8 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: rgba(245, 158, 11, 0.15);
-  border: 2px solid #f59e0b;
+  background: var(--state-candidate-bg);
+  border: 2px solid var(--warning);
   color: #d97706;
   border-radius: 20px;
   padding: 0.4rem 0.85rem;
@@ -90,11 +90,11 @@
 }
 
 .coin-token.testing-token {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
+  background: var(--state-conflict-bg);
+  border-color: var(--error);
   color: #dc2626;
   transform: scale(1.08);
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 10px var(--state-conflict-bg);
 }
 
 .token-probing-badge {
@@ -145,13 +145,13 @@
 }
 
 .coin-dp-cell.cell-antecedent {
-  border: 2px dashed #f59e0b;
-  background: rgba(245, 158, 11, 0.15);
+  border: 2px dashed var(--warning);
+  background: var(--state-candidate-bg);
 }
 
 .coin-dp-cell.cell-recon {
-  border: 2px solid #10b981;
-  background: rgba(16, 185, 129, 0.18);
+  border: 2px solid var(--success);
+  background: var(--state-solution-bg);
   transform: scale(1.03);
 }
 
@@ -161,7 +161,7 @@
 
 .cell-header {
   font-size: 0.75rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
   margin-bottom: 0.2rem;
 }
 
@@ -173,7 +173,7 @@
 
 .cell-choice {
   font-size: 0.7rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
   margin-top: 0.2rem;
 }
 
@@ -241,13 +241,13 @@
 }
 
 .strategy-card.dp-card {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: var(--state-solution-bg);
+  border: 1px solid var(--state-solution-bg);
 }
 
 .strategy-card.greedy-card {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--state-conflict-bg);
+  border: 1px solid var(--state-conflict-bg);
 }
 
 .strategy-badge {

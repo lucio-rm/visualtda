@@ -358,8 +358,8 @@ export const WeightedIntervalPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.65rem 0.85rem',
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            borderLeft: '4px solid #38bdf8',
+            backgroundColor: 'var(--state-active-bg)',
+            borderLeft: '4px solid var(--accent)',
             borderRadius: '4px',
             fontSize: '0.85rem',
             color: 'var(--text)'
@@ -374,13 +374,13 @@ export const WeightedIntervalPlayground: React.FC = () => {
             language === 'es' ? (
               <span>
                 Última tarea compatible antes de {hoveredTask.start}:{' '}
-                <strong style={{ color: '#10b981' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
+                <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
                 <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))</code>.
               </span>
             ) : (
               <span>
                 Latest compatible task before {hoveredTask.start}:{' '}
-                <strong style={{ color: '#10b981' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
+                <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
                 <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))</code>.
               </span>
             )
@@ -437,14 +437,14 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 onMouseLeave={() => setHoveredTaskId(null)}
                 style={{
                   backgroundColor: isHovered
-                    ? 'rgba(56, 189, 248, 0.08)'
+                    ? 'var(--state-active-bg)'
                     : isPredOfHovered
-                    ? 'rgba(16, 185, 129, 0.12)'
+                    ? 'var(--state-solution-bg)'
                     : undefined,
                   borderLeft: isHovered
-                    ? '3px solid #38bdf8'
+                    ? '3px solid var(--accent)'
                     : isPredOfHovered
-                    ? '3px solid #10b981'
+                    ? '3px solid var(--success)'
                     : undefined
                 }}
               >
@@ -456,7 +456,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
                   <span
                     style={{
                       fontSize: '0.7rem',
-                      color: predInfo?.predId ? '#10b981' : 'var(--text-muted)',
+                      color: predInfo?.predId ? 'var(--success)' : 'var(--text-muted)',
                       fontFamily: 'var(--font-mono)'
                     }}
                     title={language === 'es' ? 'Predecesor compatible' : 'Compatible predecessor'}
@@ -480,7 +480,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
                     style={{
                       left: `${leftPct}%`,
                       width: `${widthPct}%`,
-                      border: isPredOfHovered ? '2px dashed #10b981' : undefined
+                      border: isPredOfHovered ? '2px dashed var(--success)' : undefined
                     }}
                   >
                     <span className="lane-text">{task.id} (${task.weight})</span>
@@ -537,7 +537,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
             {language === 'es' ? 'Óptimo (Programación Dinámica)' : 'Optimal (Dynamic Programming)'}
           </div>
           <div className="card-main">
-            <span className="main-stat" style={{ color: '#10b981' }}>${optimalWeight}</span>
+            <span className="main-stat" style={{ color: 'var(--success)' }}>${optimalWeight}</span>
             <span className="main-items">
               [{optimalSolution.map((t) => t.id).join(', ')}]
             </span>

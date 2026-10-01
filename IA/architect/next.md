@@ -1,56 +1,57 @@
-# Visual TDA — Master Product, UX & Pedagogical Mission V5 Roadmap
+# Visual TDA — Master Engineering Mission V6 Roadmap & Next Steps
 
-Este documento define la hoja de ruta y prioridades operativas de Visual TDA para la **Misión V5**, enfocada en la excelencia pedagógica universitaria (estándar FIUBA / Kleinberg & Tardos) y calidad visual real.
-
----
-
-## 1. Hitos Completados en Misión V5
-
-1. ✅ **Reorganización Curricular del Catálogo (P1, Prompt V5 §§8-10)**:
-   - Orden pedagógico Kleinberg & Tardos en pistas y filtros: Divide & Conquer -> Greedy -> DP -> Backtracking & Ramificación -> Flujo & LP -> Reducciones & Avanzados.
-   - Recomendación inicial redirigida a *Interval Scheduling* (Greedy, K&T Cap. 4) con foco en *Greedy Stays Ahead*.
-2. ✅ **Navegación con Fase Objetivo en Recomendaciones (P1, Prompt V5 §11)**:
-   - CTAs de recomendación conducen a la fase pedagógicamente prevista (`initialPhase: 'discover' | 'solve' | 'understand'`).
-3. ✅ **Modelo Visual de Mochila de Carga (P1, Prompt V5 §22, §28)**:
-   - Componente `KnapsackVisualBag.tsx` con manija, bloques proporcionales al peso, holgura libre, alerta de desborde y soporte fraccional.
-   - Integrado en `KnapsackPlayground`, `KnapsackDpVisualizer` y `KnapsackGreedyVisualizer`.
-4. ✅ **Optimización de Espacio Vertical y "Above-the-Fold" (P1, Prompt V5 §§20-21)**:
-   - `--max-width: 1440px` en `variables.css`.
-   - Compactación de paddings en `.phase-view`, `.discover-header-card` e ilustraciones para visualización de lienzos sin scroll en pantallas 1366x768 y 1440x900.
-5. ✅ **Entregables de Documentación V5 Generados (§§317–324)**:
-   - `docs/product-ux-audit.md` (Entregable 1)
-   - `docs/visual-design-system.md` (Entregable 2)
-   - `docs/exercise-quality-matrix.md` (Entregable 3)
-   - `docs/pedagogical-language-guide.md` (Entregable 4)
-   - `docs/known-issues.md` (Entregable 5)
-   - `IA/architect/state.md` (Entregable 6)
-   - `IA/architect/next.md` (Entregable 7)
-   - `IA/sessions/2026-09-25.md` (Entregable 8)
-6. ✅ **Seguridad Criptográfica y Modo Docente ("Ser Docente")**:
-   - Modal de autenticación de 8 caracteres exactos (`InstructorAuthModal.tsx`).
-   - Token SHA-256 criptográfico (`cryptoAuth.ts`) sin filtración de contraseñas en texto plano ni vulnerabilidad a inspección de DevTools (`false` -> `true`).
-7. ✅ **Overhaul de Playgrounds a Estándar Flagship (§350)**:
-   - Arrastre interactivo de puntos 2D en `ClosestPairPlayground.tsx` y `SegmentedLeastSquaresPlayground.tsx`.
-   - Cronograma Gantt interactivo de aulas en `IntervalPartitioningPlayground.tsx`.
-   - Cronograma interactivo de máquina única y deadlines en `MinimizeLatenessPlayground.tsx`.
-   - Modelo geométrico de áreas 2x2 en `KaratsubaPlayground.tsx`.
-   - Matriz de columnas de 5 BFPRT con cuadrantes de poda en `MedianOfMediansPlayground.tsx`.
-   - Diagrama de arcos de estructura secundaria en `RnaSecondaryStructurePlayground.tsx`.
-   - Arena de cancelación de Boyer-Moore e inspección D&C en `MajorityElementPlayground.tsx`.
+Este documento define la hoja de ruta y estado operativo tras la finalización del sprint de corrección prioritaria **Misión V6**.
 
 ---
 
-## 2. Próximas Prioridades Operativas
+## 1. Hitos Completados en Misión V6 (Priority Correction Sprint)
 
-1. **Revisión Continua de los Ejercicios Restantes**:
-   - `road-antennas-greedy`: Incorporar arrastre de estaciones a lo largo de la ruta y ajuste dinámico de radio $R$.
-   - `knights-tour-backtracking`: Agregar interacción de selección manual de casillas guiada por la heurística de Warnsdorff.
-   - `coin-change-dp`: Agregar comparación visual en vivo entre la solución voraz (subóptima en monedas arbitrarias) y la tabla DP.
-   - `vertex-cover-approx`: Interacción para seleccionar aristas maximales independientes y ver la cota 2-aproximada.
-2. **Monitoreo de Calidad**:
+1. ✅ **1.1 — Eliminación Definitiva de Autocompletado del Navegador**:
+   - `SolveView.tsx`: flags `autoComplete="off"`, `autoCorrect="off"`, `autoCapitalize="off"`, `spellCheck={false}`, `data-lpignore="true"` e identificadores aislados por ejercicio (`vtda_code_${exercise.id}`).
+   - Verificación manual permanente documentada en `docs/known-issues.md`.
+2. ✅ **1.2 — Barrido Integral de Precisión Numérica (37/37 Ejercicios)**:
+   - Corrección de 5 discrepancias reales: etiquetas de presets en Inversiones (`(5 inv)`) y Mochila DP (`C = 6`), indicador teórico constante en Karatsuba (`1 de 4 (25%)`), cota de poda retenida en Median of Medians, y alerta de fallo voraz con cota real ($18) en Intervalos Ponderados.
+   - Suite de regresión en `tests/uiNumberAccuracy.test.ts`.
+3. ✅ **1.3 — Balance y Densidad del Layout en Fase Comprender**:
+   - Grid ejecutivo de dos columnas con colapso responsivo (`.understand-theory-layout`, `.single-column-collapse`).
+   - Enriquecimiento de 16 documentos teóricos con demostraciones formales completas y formato LaTeX.
+4. ✅ **1.4 — Calibración de Contraste y Diferenciación en Modo Claro**:
+   - Calibración de `variables.css` bajo `[data-theme='light']` superando umbrales WCAG AA (texto $\ge 4.5:1$, UI $\ge 3:1$).
+   - Sustitución de colores ad-hoc por tokens semánticos en 106 componentes.
+   - Quality gate automatizado en `tests/contrastAndDesignSystem.test.ts`.
+5. ✅ **1.5 — Refactorización de Identificadores en Código a Inglés**:
+   - Refactorización de 23 archivos `solution.py` a identificadores estándar en inglés, preservando alias en español para retrocompatibilidad con scripts existentes.
+6. ✅ **1.6 — Normalización de Títulos y Encabezados**:
+   - Utilidad centralizada `src/utils/textFormatting.ts` con sanitización de espaciado y guiones largos (` – `).
+   - Test de regresión en `tests/titleSpacing.test.ts`.
+7. ✅ **1.7 — UX del Editor y Umbral de Movimiento en Arrastre 2D**:
+   - Verificación de identación y retención de tabulaciones en el editor.
+   - Umbral $\ge 5\text{px}$ implementado en 9 playgrounds con arrastre para suprimir conflictos entre click simple y drag.
+   - Test de regresión en `tests/dragInteractionThreshold.test.tsx`.
+8. ✅ **1.8 — Expansión de Lienzos SVG en Visualizadores**:
+   - Lienzos SVG ampliados a 680–780px con escalabilidad responsiva y balance above-the-fold.
+9. ✅ **Sección 2 — Encriptación de Payloads Canónicos (Protección a Nivel de Datos)**:
+   - Erradicación total de imports `solution.py?raw` en el bundle estático.
+   - Encriptación pre-build AES-256-GCM con PBKDF2 (100,000 iteraciones) en `scripts/encryptSolutions.mjs`.
+   - Módulo criptográfico `src/utils/solutionCrypto.ts` con encapsulación dual (Slot 1 Docente: `MEL75.29`, Slot 2 Estudiante: token de aprobación de pruebas).
+   - Desencriptación en memoria en `UnderstandView.tsx`. Cero código Python en texto plano en `dist/`.
+   - Test de regresión en `tests/solutionCrypto.test.ts` y especificación en `docs/security.md`.
+10. ✅ **Sección 3 — Oráculos Independientes (G11) y Accesibilidad por Teclado**:
+    - 16 oráculos independientes basados en fuerza bruta y definiciones axiomáticas en `tests/oracles/referenceSolvers.ts`.
+    - Suite de validación en `tests/independentOraclesNewExercises.test.ts` (16/16 tests PASS).
+    - Navegación por teclado completa (Flechas, Enter, Espacio, Delete, inputs numéricos) en los 9 playgrounds con arrastre 2D.
+    - 100% de directorios e identificadores verificados en kebab-case estricto.
+
+---
+
+## 2. Próximos Pasos Operativos
+
+1. **Monitoreo de Calidad de Nuevos Ejercicios**:
+   - Mantener las suites de oráculos independientes (`referenceSolvers.ts`) como requisito bloqueante ante la incorporación de futuros ejercicios.
+2. **Auditoría Periódica de Contraste y Autocompletado**:
+   - Ejecutar periódicamente la verificación manual de autofill en perfiles limpios de navegadores web según el protocolo de `docs/known-issues.md`.
+3. **Mantenimiento de los Quality Gates**:
    - `npm run lint`: 0 errores.
    - `npm run typecheck`: 0 errores.
-   - `npm test`: 292/292 pruebas vitest (100% PASS).
-   - `npm run build`: compilación estática a `dist/`.
-   - `node scripts/browserQA.mjs`: 22/22 escenarios Chromium en 5 resoluciones con 0 errores de consola.
-
+   - `npm test`: 45 test files, 339 tests (100% PASS).
+   - `npm run build`: compilación estática a `dist/` con encriptación pre-build automática.

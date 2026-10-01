@@ -302,7 +302,7 @@ export const SudokuPlayground: React.FC = () => {
         {domainInfo.bestCell && domainInfo.totalEmpty > 0 && (
           <span style={{ color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Variable más restringida (MRV):' : 'Most constrained variable (MRV):'}{' '}
-            <strong style={{ color: '#10b981' }}>
+            <strong style={{ color: 'var(--success)' }}>
               Fila {domainInfo.bestCell[0] + 1}, Col {domainInfo.bestCell[1] + 1} ({domainInfo.minSize} opciones)
             </strong>
           </span>
@@ -363,25 +363,25 @@ export const SudokuPlayground: React.FC = () => {
               }
 
               if (isSameNum) {
-                fill = 'rgba(56, 189, 248, 0.25)';
+                fill = 'var(--state-active-bg)';
               }
 
               if (isMRVBest) {
-                fill = 'rgba(16, 185, 129, 0.25)';
-                stroke = '#10b981';
+                fill = 'var(--state-solution-bg)';
+                stroke = 'var(--success)';
                 strokeWidth = 2.5;
               }
 
               const inConflict = isCellInConflict(board, r, c);
               if (inConflict) {
                 fill = 'var(--board-conflict)';
-                stroke = 'var(--danger, #ef4444)';
+                stroke = 'var(--danger, var(--error))';
                 strokeWidth = 2;
               }
 
               if (isSelected) {
                 fill = inConflict ? 'var(--board-conflict)' : 'rgba(99, 102, 241, 0.35)';
-                stroke = inConflict ? 'var(--danger, #ef4444)' : 'var(--accent, #6366f1)';
+                stroke = inConflict ? 'var(--danger, var(--error))' : 'var(--accent)';
                 strokeWidth = 3;
               }
 
@@ -431,7 +431,7 @@ export const SudokuPlayground: React.FC = () => {
                           x={x + cellSize - 6}
                           y={y + cellSize - 5}
                           textAnchor="end"
-                          fill={domainSize === 1 ? '#10b981' : domainSize === 0 ? '#ef4444' : 'var(--text-muted)'}
+                          fill={domainSize === 1 ? 'var(--success)' : domainSize === 0 ? 'var(--error)' : 'var(--text-muted)'}
                           fontFamily="var(--font-mono)"
                           fontSize="11px"
                           fontWeight={domainSize <= 2 ? '800' : '600'}
@@ -443,7 +443,7 @@ export const SudokuPlayground: React.FC = () => {
                           <text
                             x={x + 5}
                             y={y + 12}
-                            fill="#10b981"
+                            fill="var(--success)"
                             fontSize="9px"
                             fontWeight="800"
                             fontFamily="var(--font-mono)"

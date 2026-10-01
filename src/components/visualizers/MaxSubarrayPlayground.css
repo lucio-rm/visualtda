@@ -78,7 +78,7 @@
 }
 
 .error-message {
-  color: #ef4444;
+  color: var(--error);
   font-size: 0.85rem;
 }
 
@@ -126,10 +126,10 @@
 
 .item-card.selected {
   opacity: 1;
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.12);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 10px var(--state-solution-bg);
 }
 
 .item-idx {
@@ -143,17 +143,17 @@
 }
 
 .item-val.pos {
-  color: #10b981;
+  color: var(--success);
 }
 
 .item-val.neg {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .opt-tag {
   position: absolute;
   bottom: -6px;
-  background-color: #10b981;
+  background-color: var(--success);
   color: white;
   font-size: 0.55rem;
   font-weight: 800;
@@ -190,7 +190,7 @@
 }
 
 .stat-value.highlight {
-  color: #10b981;
+  color: var(--success);
 }
 
 .educational-callout {

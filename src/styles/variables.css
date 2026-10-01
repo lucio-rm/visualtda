@@ -7,9 +7,9 @@
   --surface-light: #f1f5f9;
   --surface-hover: #f1f5f9;
   --surface-active: #e2e8f0;
-  --border: #cbd5e1;
-  --border-strong: #475569;
-  --border-muted: #e2e8f0;
+  --border: #64748b;
+  --border-strong: #334155;
+  --border-muted: #94a3b8;
   --text: #0f172a;
   --text-muted: #334155;
   --accent: #2563eb;
@@ -22,7 +22,7 @@
   --warning: #b45309;
   --warning-bg: #fef3c7;
   --code-bg: #f1f5f9;
-  --code-border: #cbd5e1;
+  --code-border: #64748b;
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 
   /* Spacing Scale (8px rhythm) */
@@ -57,8 +57,8 @@
   --state-normal: var(--text-muted);
   --state-active: var(--accent);
   --state-active-bg: rgba(37, 99, 235, 0.12);
-  --state-candidate: #d97706;
-  --state-candidate-bg: rgba(217, 119, 6, 0.12);
+  --state-candidate: #b45309;
+  --state-candidate-bg: #fef3c7;
   --state-selected: var(--success);
   --state-selected-bg: var(--success-bg);
   --state-rejected: var(--text-muted);
@@ -67,18 +67,18 @@
   --state-conflict-bg: var(--error-bg);
   --state-solution: var(--success);
   --state-solution-bg: var(--success-bg);
-  --state-visited: #64748b;
+  --state-visited: #475569;
   --state-pruned: var(--error);
   --state-pruned-bg: var(--error-bg);
 
   /* Visualizer Board & Chessboard Tokens (Distinct high contrast in Light Mode) */
   --board-bg: #ffffff;
   --board-cell-light: #ffffff;
-  --board-cell-dark: #e2e8f0;
-  --board-border: #94a3b8;
-  --board-border-strong: #475569;
+  --board-cell-dark: #64748b;
+  --board-border: #334155;
+  --board-border-strong: #0f172a;
   --board-text: #0f172a;
-  --board-text-muted: #475569;
+  --board-text-muted: #334155;
   --board-hover: #dbeafe;
   --board-active: #bfdbfe;
   --board-accent: #2563eb;
@@ -216,8 +216,8 @@
     --surface-light: #1e293b;
     --surface-hover: #334155;
     --surface-active: #475569;
-    --border: #334155;
-    --border-strong: #64748b;
+    --border: #475569;
+    --border-strong: #94a3b8;
     --text: #f8fafc;
     --text-muted: #94a3b8;
     --accent: #3b82f6;

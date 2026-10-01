@@ -28,8 +28,8 @@
 }
 
 .approx-metric-badge.matching-badge {
-  border-color: #f59e0b;
-  color: #f59e0b;
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .approx-metric-badge.cover-badge {
@@ -38,14 +38,15 @@
 }
 
 .approx-metric-badge.ratio-badge {
-  border-color: #10b981;
-  color: #10b981;
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .approx-graph-canvas {
   width: 100%;
-  max-width: 580px;
-  height: 300px;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 540 / 300;
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -61,12 +62,12 @@
 }
 
 .approx-edge.matched {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 5;
 }
 
 .approx-edge.covered {
-  stroke: #38bdf8;
+  stroke: var(--accent);
   stroke-width: 3;
 }
 
@@ -110,7 +111,7 @@
 .approx-explanation-box {
   padding: 0.85rem 1rem;
   background-color: var(--bg);
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid var(--warning);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
   line-height: 1.5;

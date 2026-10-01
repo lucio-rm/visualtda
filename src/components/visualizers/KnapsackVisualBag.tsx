@@ -21,14 +21,14 @@ interface KnapsackVisualBagProps {
 
 // Consistent color palette for knapsack items
 const ITEM_PALETTE = [
-  { bg: 'rgba(16, 185, 129, 0.15)', border: '#10b981', text: '#059669', badge: '#10b981' }, // Emerald
-  { bg: 'rgba(245, 158, 11, 0.15)', border: '#f59e0b', text: '#d97706', badge: '#f59e0b' }, // Amber
+  { bg: 'var(--state-solution-bg)', border: 'var(--success)', text: '#059669', badge: 'var(--success)' }, // Emerald
+  { bg: 'var(--state-candidate-bg)', border: 'var(--warning)', text: '#d97706', badge: 'var(--warning)' }, // Amber
   { bg: 'rgba(2, 132, 199, 0.15)', border: '#0284c7', text: '#0284c7', badge: '#0284c7' }, // Sky
   { bg: 'rgba(139, 92, 246, 0.15)', border: '#8b5cf6', text: '#7c3aed', badge: '#8b5cf6' }, // Violet
   { bg: 'rgba(244, 63, 94, 0.15)', border: '#f43f5e', text: '#e11d48', badge: '#f43f5e' }, // Rose
   { bg: 'rgba(6, 182, 212, 0.15)', border: '#06b6d4', text: '#0891b2', badge: '#06b6d4' }, // Cyan
   { bg: 'rgba(234, 88, 12, 0.15)', border: '#ea580c', text: '#c2410c', badge: '#ea580c' }, // Orange
-  { bg: 'rgba(99, 102, 241, 0.15)', border: '#6366f1', text: '#4f46e5', badge: '#6366f1' }  // Indigo
+  { bg: 'rgba(99, 102, 241, 0.15)', border: 'var(--accent)', text: '#4f46e5', badge: 'var(--accent)' }  // Indigo
 ];
 
 export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({

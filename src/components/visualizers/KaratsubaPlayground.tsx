@@ -118,11 +118,11 @@ export const KaratsubaPlayground: React.FC = () => {
       <div
         style={{
           padding: '0.75rem 1rem',
-          backgroundColor: isMatch ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-          border: `1px solid ${isMatch ? '#10b981' : '#ef4444'}`,
+          backgroundColor: isMatch ? 'var(--state-solution-bg)' : 'var(--state-conflict-bg)',
+          border: `1px solid ${isMatch ? 'var(--success)' : 'var(--error)'}`,
           borderRadius: 'var(--radius-sm)',
           fontSize: '0.9rem',
-          color: isMatch ? '#10b981' : '#ef4444'
+          color: isMatch ? 'var(--success)' : 'var(--error)'
         }}
         role="status"
       >
@@ -145,7 +145,7 @@ export const KaratsubaPlayground: React.FC = () => {
               ? 'Modelo geométrico de áreas: 3 multiplicaciones computan los 4 cuadrantes'
               : 'Geometric area model: 3 multiplications resolve all 4 quadrants'}
           </span>
-          <span style={{ color: '#10b981', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ color: 'var(--success)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
             T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585)
           </span>
         </div>
@@ -179,7 +179,7 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrant 1: z2 = x1 * y1 */}
-          <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(56, 189, 248, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
+          <rect x={74} y={29} width={192} height={57} rx={4} fill="var(--state-active-bg)" stroke="var(--accent)" strokeWidth={1.5} />
           <text x={170} y={54} textAnchor="middle" fill="var(--accent)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
             z₂ = x₁ · y₁
           </text>
@@ -188,25 +188,25 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrants 2 & 3: Cross Terms combined as z1 */}
-          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={54} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontFamily="var(--font-mono)">
+          <rect x={274} y={29} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={370} y={54} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontFamily="var(--font-mono)">
             x₀ · y₁ ({x0 * y1})
           </text>
 
-          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={119} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontFamily="var(--font-mono)">
+          <rect x={74} y={94} width={192} height={57} rx={4} fill="var(--state-candidate-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={170} y={119} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontFamily="var(--font-mono)">
             x₁ · y₀ ({x1 * y0})
           </text>
 
           {/* Cross terms bridge tag */}
-          <rect x={210} y={76} width={120} height={28} rx={14} fill="var(--surface)" stroke="#f59e0b" strokeWidth={1.5} />
-          <text x={270} y={94} textAnchor="middle" fill="#f59e0b" fontSize="10px" fontWeight="700" fontFamily="var(--font-mono)">
+          <rect x={210} y={76} width={120} height={28} rx={14} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
+          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="10px" fontWeight="700" fontFamily="var(--font-mono)">
             z₁ = z_sum - z₂ - z₀ ({z1})
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
-          <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" strokeWidth={1.5} />
-          <text x={370} y={119} textAnchor="middle" fill="#10b981" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+          <rect x={274} y={94} width={192} height={57} rx={4} fill="var(--state-solution-bg)" stroke="var(--success)" strokeWidth={1.5} />
+          <text x={370} y={119} textAnchor="middle" fill="var(--success)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
             z₀ = x₀ · y₀
           </text>
           <text x={370} y={137} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="800" fontFamily="var(--font-mono)">

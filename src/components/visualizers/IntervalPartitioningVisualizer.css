@@ -34,11 +34,11 @@
 }
 
 .action-init { border-left-color: #64748b; }
-.action-sort_intervals { border-left-color: #38bdf8; }
-.action-examine_interval { border-left-color: #f59e0b; }
-.action-reuse_classroom { border-left-color: #10b981; }
+.action-sort_intervals { border-left-color: var(--accent); }
+.action-examine_interval { border-left-color: var(--warning); }
+.action-reuse_classroom { border-left-color: var(--success); }
 .action-open_new_classroom { border-left-color: #ec4899; }
-.action-complete { border-left-color: #10b981; }
+.action-complete { border-left-color: var(--success); }
 
 .ip-canvas-container {
   display: flex;

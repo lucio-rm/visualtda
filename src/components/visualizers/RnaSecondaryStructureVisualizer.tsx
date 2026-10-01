@@ -43,9 +43,9 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
 
   // Base colors
   const baseColorMap: Record<string, string> = {
-    A: '#38bdf8', // sky
-    U: '#f59e0b', // amber
-    C: '#10b981', // emerald
+    A: 'var(--accent)', // sky
+    U: 'var(--warning)', // amber
+    C: 'var(--success)', // emerald
     G: '#ec4899'  // pink
   };
 
@@ -74,7 +74,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
         </div>
         <div className="rna-metric-badge">
           <span>{language === 'es' ? 'Pares Emparejados:' : 'Paired Bases:'}</span>
-          <strong style={{ color: '#10b981' }}>{pairs.length}</strong>
+          <strong style={{ color: 'var(--success)' }}>{pairs.length}</strong>
         </div>
         <div className="rna-metric-badge rna-action-badge">
           <span>{language === 'es' ? 'Fase:' : 'Phase:'}</span>
@@ -102,7 +102,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
             width={(currentJ - currentI) * spacing + 32}
             height={36}
             rx={18}
-            fill="rgba(56, 189, 248, 0.08)"
+            fill="var(--state-active-bg)"
             stroke="var(--accent)"
             strokeWidth={1}
             strokeDasharray="3,3"
@@ -120,7 +120,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                 key={`pair-${idx}-${p.i}-${p.j}`}
                 d={`M ${x1} ${baselineY - 14} Q ${(x1 + x2) / 2} ${baselineY - 14 - arcH * 1.6} ${x2} ${baselineY - 14}`}
                 fill="none"
-                stroke="#10b981"
+                stroke="var(--success)"
                 strokeWidth={2.5}
                 strokeLinecap="round"
               />
@@ -132,7 +132,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
             <path
               d={`M ${padLeft + testedT * spacing} ${baselineY - 14} Q ${(padLeft + (testedT + currentJ) * spacing / 2)} ${baselineY - 14 - (currentJ - testedT) * 12} ${padLeft + currentJ * spacing} ${baselineY - 14}`}
               fill="none"
-              stroke="#f59e0b"
+              stroke="var(--warning)"
               strokeWidth={2}
               strokeDasharray="4,2"
             />
@@ -141,7 +141,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
           {/* Nucleotide nodes */}
           {Array.from(sequence).map((base, idx) => {
             const x = padLeft + idx * spacing;
-            const color = baseColorMap[base] || '#38bdf8';
+            const color = baseColorMap[base] || 'var(--accent)';
             const isJ = idx === currentJ;
             const isT = idx === testedT;
 
@@ -151,7 +151,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                   cx={x}
                   cy={baselineY}
                   r={isJ || isT ? 14 : 12}
-                  fill={isJ ? '#f59e0b' : isT ? '#38bdf8' : 'var(--surface)'}
+                  fill={isJ ? 'var(--warning)' : isT ? 'var(--accent)' : 'var(--surface)'}
                   stroke={color}
                   strokeWidth={2}
                 />
@@ -206,7 +206,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                       key={`cell-${rIdx}-${cIdx}`}
                       style={{
                         backgroundColor: isCur
-                          ? 'rgba(56, 189, 248, 0.25)'
+                          ? 'var(--state-active-bg)'
                           : isUpper
                           ? undefined
                           : 'rgba(0,0,0,0.05)',

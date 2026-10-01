@@ -3,8 +3,10 @@ import { ExerciseMetadata } from '../types';
 import { ExerciseCard } from './ExerciseCard';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
+import { formatTitleSpacing } from '../utils/textFormatting';
 
 interface ExerciseListProps {
+
   exercises: ExerciseMetadata[];
   activeCategoryId?: string | null;
   onSelectExercise: (id: string) => void;
@@ -132,7 +134,7 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                 <span className="badge badge-technique" style={{ fontSize: '0.8rem' }}>
                   {matchingTrack.code}
                 </span>
-                <span>{t(matchingTrack.title)}</span>
+                <span>{formatTitleSpacing(t(matchingTrack.title))}</span>
               </h3>
               <p className="track-desc">{t(matchingTrack.description)}</p>
               <div className="track-progress-bar-container">
@@ -186,7 +188,7 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                   <span className="badge badge-technique" style={{ fontSize: '0.8rem' }}>
                     {track.code}
                   </span>
-                  <span>{t(track.title)}</span>
+                  <span>{formatTitleSpacing(t(track.title))}</span>
                 </h3>
                 <span className="track-count-badge">
                   {trackExercises.length} {language === 'es' ? 'ejercicios' : 'exercises'}

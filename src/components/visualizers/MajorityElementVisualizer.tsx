@@ -69,7 +69,7 @@ export const MajorityElementVisualizer: React.FC = () => {
         </div>
         <div className="me-metric-badge">
           <span>{language === 'es' ? 'Ganador Actual:' : 'Current Winner:'}</span>
-          <strong style={{ color: winner !== null && winner !== undefined ? '#10b981' : '#f59e0b' }}>
+          <strong style={{ color: winner !== null && winner !== undefined ? 'var(--success)' : 'var(--warning)' }}>
             {winner !== null && winner !== undefined ? winner : language === 'es' ? 'Ninguno' : 'None'}
           </strong>
         </div>
@@ -99,7 +99,7 @@ export const MajorityElementVisualizer: React.FC = () => {
             width={(right - left + 1) * cellWidth + 8}
             height={cellHeight + 12}
             rx={8}
-            fill="rgba(56, 189, 248, 0.08)"
+            fill="var(--state-active-bg)"
             stroke="var(--accent)"
             strokeWidth={2}
             strokeDasharray="4,2"
@@ -112,7 +112,7 @@ export const MajorityElementVisualizer: React.FC = () => {
               y1={startY - 14}
               x2={startX + (mid + 1) * cellWidth}
               y2={startY + cellHeight + 20}
-              stroke="#f59e0b"
+              stroke="var(--warning)"
               strokeWidth={3}
             />
           )}
@@ -133,12 +133,12 @@ export const MajorityElementVisualizer: React.FC = () => {
                   rx={4}
                   fill={
                     isWinner
-                      ? 'rgba(16, 185, 129, 0.25)'
+                      ? 'var(--state-solution-bg)'
                       : inActiveRange
                       ? 'var(--surface-active, rgba(255,255,255,0.06))'
                       : 'var(--bg)'
                   }
-                  stroke={isWinner ? '#10b981' : inActiveRange ? 'var(--border)' : 'var(--border-muted, rgba(255,255,255,0.08))'}
+                  stroke={isWinner ? 'var(--success)' : inActiveRange ? 'var(--border)' : 'var(--border-muted, rgba(255,255,255,0.08))'}
                   strokeWidth={isWinner ? 2 : 1}
                 />
                 <text
@@ -172,7 +172,7 @@ export const MajorityElementVisualizer: React.FC = () => {
             <text
               x={startX + left * cellWidth + 6}
               y={startY + cellHeight + 36}
-              fill="#38bdf8"
+              fill="var(--accent)"
               fontSize="11px"
               fontWeight="600"
               fontFamily="var(--font-mono)"

@@ -127,18 +127,38 @@ To maintain honest, transparent engineering standards, the following limitations
 
 ---
 
-## 8. Instructor Mode & Honest Skip Modal Architecture
+## 8. Cryptographic Defense: UI Anti-Tamper & Payload Encryption (Mission V6 Section 2)
 
-### 8.1 Instructor Mode (`Modo Docente`)
-- **Purpose**: A local display preference enabling university faculty, teaching assistants, and demonstrators to present canonical solutions, interactive visual traces, and formal proofs without having to solve code exercises in live lectures.
-- **Persistence**: Stored exclusively in the user's browser via `localStorage.getItem('visual_tda_instructor_mode') === 'true'`.
-- **Honest Engineering Stance**: Instructor Mode is **NOT a security gate, authentication system, or role-based access control (RBAC)**.
-  - There are NO fake passwords, hidden master keys, obfuscated client-side hashes, or deceptive security modals.
-  - Because Visual TDA is a pure client-side static application with zero backend, all algorithms and solutions exist on the client by architectural design.
-  - Claiming client-side code hiding as "security" would violate Principle P9 (*No Hidden Magic*) and honest software engineering standards.
+### 8.1 The Core Challenge: Data Protection vs Client-Side Constraints
+In a pure static client application (zero backend servers), any data shipped to the browser is physically on the client device. Previous iterations secured the application's UI state (detecting when an attacker flips `isInstructorMode` or `solutionUnlocked` to `true` in React DevTools), but left `solution.py?raw` strings bundled in plaintext within the static JavaScript chunks. A student could inspect the Network tab or unzip `dist/` and read every algorithm without solving or authenticating.
 
-### 8.2 Honest Friction Skip Modal
-- **Purpose**: When a student encounters a challenging exercise in the *Solve* phase, the application provides a skip mechanism to reach the *Understand* phase.
-- **Pedagogical Cognitive Friction**: The modal communicates why solving independently is cognitively advantageous:
-  > *"Intentar resolver el problema por tu propia cuenta maximiza la retención y comprensión profunda. Sin embargo, en Visual TDA el objetivo es el aprendizaje honesto: puedes consultar la solución canónica comentada, la traza paso a paso y la demostración formal en cualquier momento sin penalización."*
-- **No Dark Patterns or Penalties**: The student is never locked out, mocked, or penalized for choosing to reveal the solution. Autonomous self-direction is preserved at all times.
+### 8.2 Dual-Recipient Key Encapsulation Mechanism (KEM)
+To defend the data itself, Visual TDA implements pre-build AES-256-GCM payload encryption via `scripts/encryptSolutions.mjs` and native browser in-memory WebCrypto decryption via `src/utils/solutionCrypto.ts`:
+
+1. **Zero Plaintext Code in Static Assets**:
+   All 37+ canonical Python solutions are encrypted with distinct, cryptographically random 256-bit AES-GCM data keys ($K_e$). The built static bundle (`dist/assets/encryptedSolutions-*.js`) contains **only base64 ciphertext and IVs**. Searching the bundle for Python definitions (`def resolver`, `while`, `return`) yields zero matches.
+
+2. **Instructor Credential Derivation (Slot 1)**:
+   - Faculty access is unlocked via the 8-character course credential (`MEL75.29`).
+   - The wrapping key $K_{\text{instructor}}$ is derived using **PBKDF2 with SHA-256, 100,000 iterations**, and a fixed cryptographic salt (`INSTRUCTOR_KDF_SALT`).
+   - $K_{\text{instructor}}$ unwraps the payload key $K_e$ to decrypt canonical code in memory.
+
+3. **Student Test-Pass Token Derivation (Slot 2)**:
+   - When a student legitimately passes the automated test suite in the *Solve* phase or voluntarily reveals the solution via the pedagogical skip modal, the application grants an exercise pass token.
+   - The student wrapping key $K_{\text{student}}(e)$ is derived via PBKDF2 with SHA-256 (10,000 iterations) from the exercise authorization token.
+   - Decryption occurs in memory and is cached in a runtime `Map` for instant display during the session.
+
+4. **Anti-Tamper Rejection**:
+   Attempting to manipulate React state flags (`isInstructorMode`, `solutionUnlocked`) without legitimate cryptographic proof causes `isExerciseSolutionAuthorized()` to return `isTampered: true`. The application refuses to decrypt, keeping ciphertexts sealed and rendering the academic tamper warning banner.
+
+### 8.3 Honest Security Boundaries & Threat Assessment
+Maintaining rigorous intellectual honesty regarding client-side limits:
+- **Offline Brute-Force Feasibility**: Any static web asset delivered to a client can be subjected to offline cryptanalysis. An attacker with both the ciphertext and source code can theoretically execute an offline dictionary attack against the 8-character credential.
+- **The PBKDF2 Barrier**: Because the key is derived via 100,000 PBKDF2 SHA-256 iterations rather than a simple single-round hash or plaintext comparison, offline guessing requires astronomical compute compared to standard web scrapes.
+- **Defeated Attack Vectors**:
+  - Direct bundle searching / grepping: **Defeated** (zero plaintext code).
+  - DevTools Network tab sniffing: **Defeated** (transferred as ciphertext).
+  - React state manipulation / variable flipping: **Defeated** (no key available to decrypt).
+- **Pedagogical Integrity**:
+  The system prevents unintended cognitive spoilers and stops casual cheating, while honoring the course philosophy: students who voluntarily choose to inspect the canonical solution via the honest skip modal may do so freely without penalty.
+

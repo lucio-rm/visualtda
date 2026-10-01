@@ -234,6 +234,11 @@ export const HuffmanPlayground: React.FC = () => {
             value={text}
             onChange={(e) => setText(e.target.value.toUpperCase())}
             placeholder={language === 'es' ? 'Ingresá cualquier texto...' : 'Enter any text...'}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            data-lpignore="true"
           />
         </div>
 

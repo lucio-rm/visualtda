@@ -26,12 +26,12 @@ def subsecuencia_comun_mas_larga(s1: str, s2: str) -> str:
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
 
     # Reconstrucción del camino óptimo
-    resultado = []
+    result = []
     i = m
     j = n
     while i > 0 and j > 0:
         if s1[i - 1] == s2[j - 1]:
-            resultado.append(s1[i - 1])
+            result.append(s1[i - 1])
             i -= 1
             j -= 1
         elif dp[i - 1][j] >= dp[i][j - 1]:
@@ -39,5 +39,9 @@ def subsecuencia_comun_mas_larga(s1: str, s2: str) -> str:
         else:
             j -= 1
 
-    resultado.reverse()
-    return "".join(resultado)
+    result.reverse()
+    return "".join(result)
+
+
+longest_common_subsequence = subsecuencia_comun_mas_larga
+

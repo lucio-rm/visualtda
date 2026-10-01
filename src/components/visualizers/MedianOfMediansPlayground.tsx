@@ -107,7 +107,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
           </span>
           <span>
             {language === 'es' ? 'Elemento esperado:' : 'Expected element:'}{' '}
-            <strong style={{ color: '#10b981' }}>{expectedElement}</strong>
+            <strong style={{ color: 'var(--success)' }}>{expectedElement}</strong>
           </span>
         </div>
       </div>
@@ -150,7 +150,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
       <div
         style={{
           padding: '0.75rem 1rem',
-          backgroundColor: 'rgba(56, 189, 248, 0.08)',
+          backgroundColor: 'var(--state-active-bg)',
           border: '1px solid var(--accent)',
           borderRadius: 'var(--radius-sm)',
           fontSize: '0.85rem'
@@ -171,7 +171,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
               ? 'Matriz BFPRT: Cada columna de 5 se ordena verticalmente. La fila central contiene las medianas.'
               : 'BFPRT Matrix: Each column of 5 is sorted vertically. Center row contains medians.'}
           </span>
-          <span style={{ color: '#10b981', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ color: 'var(--success)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
             {language === 'es' ? 'Poda garantizada ≥ 30%' : 'Guaranteed pruning ≥ 30%'}
           </span>
         </div>
@@ -189,7 +189,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
             width={groups.length * 64 + 10}
             height={32}
             rx={4}
-            fill="rgba(56, 189, 248, 0.08)"
+            fill="var(--state-active-bg)"
             stroke="var(--accent)"
             strokeWidth={1}
             strokeDasharray="4 2"
@@ -209,7 +209,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   x={x + 28}
                   y={16}
                   textAnchor="middle"
-                  fill={isPivotCol ? '#f59e0b' : 'var(--text-muted)'}
+                  fill={isPivotCol ? 'var(--warning)' : 'var(--text-muted)'}
                   fontSize="10px"
                   fontFamily="var(--font-mono)"
                   fontWeight={isPivotCol ? '700' : '600'}
@@ -235,11 +235,11 @@ export const MedianOfMediansPlayground: React.FC = () => {
                         rx={4}
                         fill={
                           isPivotCell
-                            ? '#f59e0b'
+                            ? 'var(--warning)'
                             : isGuaranteedLesser
-                            ? 'rgba(56, 189, 248, 0.12)'
+                            ? 'var(--state-active-bg)'
                             : isGuaranteedGreater
-                            ? 'rgba(16, 185, 129, 0.12)'
+                            ? 'var(--state-solution-bg)'
                             : 'var(--surface)'
                         }
                         stroke={
@@ -291,7 +291,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   key={`grp-row-${idx}`}
                   style={{
                     borderBottom: '1px solid var(--border)',
-                    backgroundColor: isPiv ? 'rgba(245, 158, 11, 0.08)' : 'transparent'
+                    backgroundColor: isPiv ? 'var(--state-candidate-bg)' : 'transparent'
                   }}
                 >
                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
@@ -305,7 +305,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   </td>
                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
                     {isPiv ? (
-                      <strong style={{ color: '#f59e0b' }}>PIVOTE ({pivot})</strong>
+                      <strong style={{ color: 'var(--warning)' }}>PIVOTE ({pivot})</strong>
                     ) : (
                       <span style={{ color: 'var(--text-muted)' }}>—</span>
                     )}
@@ -328,8 +328,8 @@ export const MedianOfMediansPlayground: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ backgroundColor: 'var(--surface)', padding: '0.75rem', borderRadius: '6px', border: '1px solid #f59e0b' }}>
-          <div style={{ fontSize: '0.8rem', color: '#f59e0b', fontWeight: '600' }}>
+        <div style={{ backgroundColor: 'var(--surface)', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--warning)' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--warning)', fontWeight: '600' }}>
             {language === 'es' ? 'PIVOTE SELECCIONADO (= p)' : 'SELECTED PIVOT (= p)'}
           </div>
           <div style={{ marginTop: '0.25rem', fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: '700' }}>

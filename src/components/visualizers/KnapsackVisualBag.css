@@ -40,7 +40,7 @@
 
 .knapsack-bag-container.overweight .bag-main-shell {
   border-color: var(--error);
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25), 0 4px 14px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 0 0 2px var(--state-conflict-bg), 0 4px 14px var(--state-conflict-bg);
 }
 
 .bag-shell-header {
@@ -100,7 +100,7 @@
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
   font-weight: 700;
-  border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+  border-bottom: 1px solid var(--state-conflict-bg);
 }
 
 .bag-cargo-compartment {

@@ -257,26 +257,35 @@ export const GraphColoringPlayground: React.FC = () => {
 
   const dragStartPos = useRef({ x: 0, y: 0 });
   const hasDraggedRef = useRef(false);
+  const isPointerDownRef = useRef(false);
 
   // Pointer Dragging Handlers
   const handlePointerDown = (nodeId: string, e: React.PointerEvent) => {
     e.stopPropagation();
-    (e.target as Element).setPointerCapture(e.pointerId);
+    try {
+      (e.target as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // Ignored
+    }
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     hasDraggedRef.current = false;
+    isPointerDownRef.current = true;
     setDraggingNode(nodeId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
-      if (!draggingNode || !svgRef.current) return;
+      if (!isPointerDownRef.current) return;
       const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
-      if (dist > 4) {
+      if (dist > 5) {
         hasDraggedRef.current = true;
       }
+      if (!draggingNode || !svgRef.current) return;
       const rect = svgRef.current.getBoundingClientRect();
-      const rawX = ((e.clientX - rect.left) / rect.width) * 500;
-      const rawY = ((e.clientY - rect.top) / rect.height) * 350;
+      const rectWidth = rect.width || 500;
+      const rectHeight = rect.height || 350;
+      const rawX = ((e.clientX - rect.left) / rectWidth) * 500;
+      const rawY = ((e.clientY - rect.top) / rectHeight) * 350;
 
       const clampedX = Math.max(25, Math.min(475, Math.round(rawX)));
       const clampedY = Math.max(25, Math.min(325, Math.round(rawY)));
@@ -290,6 +299,7 @@ export const GraphColoringPlayground: React.FC = () => {
   );
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    isPointerDownRef.current = false;
     if (draggingNode) {
       try {
         (e.target as Element).releasePointerCapture(e.pointerId);
@@ -454,13 +464,13 @@ export const GraphColoringPlayground: React.FC = () => {
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', fontSize: '0.85rem' }}>
             <span>
               {language === 'es' ? 'Coloreados:' : 'Colored:'}{' '}
-              <strong style={{ color: coloredCount === vertices.length ? '#10b981' : 'var(--text)' }}>
+              <strong style={{ color: coloredCount === vertices.length ? 'var(--success)' : 'var(--text)' }}>
                 {coloredCount}/{vertices.length}
               </strong>
             </span>
             <span>
               {language === 'es' ? 'Conflictos:' : 'Conflicts:'}{' '}
-              <strong style={{ color: conflicts.length > 0 ? '#ef4444' : '#10b981' }}>
+              <strong style={{ color: conflicts.length > 0 ? 'var(--error)' : 'var(--success)' }}>
                 {conflicts.length}
               </strong>
             </span>
@@ -533,7 +543,7 @@ export const GraphColoringPlayground: React.FC = () => {
                     y1={posU.y}
                     x2={posV.x}
                     y2={posV.y}
-                    stroke={inConflict ? '#ef4444' : bothColored ? 'var(--accent)' : 'var(--border-strong)'}
+                    stroke={inConflict ? 'var(--error)' : bothColored ? 'var(--accent)' : 'var(--border-strong)'}
                     strokeWidth={inConflict ? 3.5 : 2.5}
                     opacity={1}
                   />
@@ -542,7 +552,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       cx={(posU.x + posV.x) / 2}
                       cy={(posU.y + posV.y) / 2}
                       r={7}
-                      fill="#ef4444"
+                      fill="var(--error)"
                     />
                   )}
                   {inConflict && (
@@ -571,7 +581,7 @@ export const GraphColoringPlayground: React.FC = () => {
               const isNodeInConflict = conflicts.some(([x, y]) => x === v || y === v);
 
               const fillColor = colorObj ? colorObj.fill : 'var(--surface)';
-              const strokeColor = isNodeInConflict ? '#ef4444' : colorObj ? colorObj.stroke : 'var(--border-strong)';
+              const strokeColor = isNodeInConflict ? 'var(--error)' : colorObj ? colorObj.stroke : 'var(--border-strong)';
               const isDragging = draggingNode === v;
               const isYellow = assignedColor === 4;
 
@@ -581,6 +591,34 @@ export const GraphColoringPlayground: React.FC = () => {
                   onPointerDown={(e) => handlePointerDown(v, e)}
                   onClick={() => handleVertexClick(v)}
                   onContextMenu={(e) => handleVertexRightClick(e, v)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={
+                    language === 'es'
+                      ? `Vértice ${v}${assignedColor ? `, Color: ${COLOR_PALETTE[assignedColor].name.es}` : ', Sin color'}${isNodeInConflict ? ' (en conflicto)' : ''}`
+                      : `Vertex ${v}${assignedColor ? `, Color: ${COLOR_PALETTE[assignedColor].name.en}` : ', Uncolored'}${isNodeInConflict ? ' (conflicted)' : ''}`
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleVertexClick(v);
+                    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                      e.preventDefault();
+                      handleVertexRightClick(e as unknown as React.MouseEvent, v);
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.max(25, pos.y - 10) } }));
+                    } else if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.min(325, pos.y + 10) } }));
+                    } else if (e.key === 'ArrowLeft') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: Math.max(25, pos.x - 10), y: pos.y } }));
+                    } else if (e.key === 'ArrowRight') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: Math.min(475, pos.x + 10), y: pos.y } }));
+                    }
+                  }}
                   style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
                 >
                   <circle
@@ -628,10 +666,10 @@ export const GraphColoringPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: feedback.valid ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-            border: `1px solid ${feedback.valid ? '#10b981' : '#ef4444'}`,
+            backgroundColor: feedback.valid ? 'var(--state-solution-bg)' : 'var(--state-conflict-bg)',
+            border: `1px solid ${feedback.valid ? 'var(--success)' : 'var(--error)'}`,
             borderRadius: 'var(--radius-sm)',
-            color: feedback.valid ? '#10b981' : '#ef4444',
+            color: feedback.valid ? 'var(--success)' : 'var(--error)',
             fontSize: '0.85rem'
           }}
           role="alert"

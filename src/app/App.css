@@ -1311,12 +1311,38 @@
   line-height: 1.4;
 }
 
-/* Phase 3: Full Width Academic Theory Paper Panel */
+/* Phase 3: Balanced Theory & Companion Grid */
+.understand-theory-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.understand-theory-layout.single-column-collapse {
+  grid-template-columns: 1fr;
+}
+
+.understand-theory-panel,
 .full-width-theory-panel {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 2rem 2.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.understand-companion-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.understand-insights-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
   box-shadow: var(--shadow-sm);
 }
 
@@ -1672,6 +1698,12 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+  .understand-theory-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 840px) {
   .phase-steps {
     grid-template-columns: 1fr;

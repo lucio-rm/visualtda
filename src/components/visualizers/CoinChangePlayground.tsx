@@ -380,7 +380,7 @@ export const CoinChangePlayground: React.FC = () => {
         onDrop={handleDrop}
         style={{
           border: `2px dashed ${isDragOverTray ? 'var(--accent)' : 'var(--border)'}`,
-          backgroundColor: isDragOverTray ? 'rgba(56, 189, 248, 0.08)' : 'var(--surface)',
+          backgroundColor: isDragOverTray ? 'var(--state-active-bg)' : 'var(--surface)',
           borderRadius: '8px',
           padding: '1rem',
           display: 'flex',
@@ -396,7 +396,7 @@ export const CoinChangePlayground: React.FC = () => {
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', fontSize: '0.9rem' }}>
             <span>
               {language === 'es' ? 'Acumulado:' : 'Accumulated:'}{' '}
-              <strong style={{ color: userTotal === target ? '#10b981' : userTotal > target ? '#ef4444' : 'var(--accent)' }}>
+              <strong style={{ color: userTotal === target ? 'var(--success)' : userTotal > target ? 'var(--error)' : 'var(--accent)' }}>
                 ${userTotal}
               </strong>{' '}
               / ${target}
@@ -413,7 +413,7 @@ export const CoinChangePlayground: React.FC = () => {
             style={{
               height: '100%',
               width: `${progressPercent}%`,
-              backgroundColor: userTotal === target ? '#10b981' : userTotal > target ? '#ef4444' : 'var(--accent)',
+              backgroundColor: userTotal === target ? 'var(--success)' : userTotal > target ? 'var(--error)' : 'var(--accent)',
               transition: 'width 0.2s ease, background-color 0.2s ease'
             }}
           />
@@ -484,7 +484,7 @@ export const CoinChangePlayground: React.FC = () => {
             {language === 'es' ? 'Tu Selección Manual' : 'Your Selection'}
           </div>
           <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800' }}>
-            <span style={{ color: isOptimal ? '#10b981' : 'var(--text)' }}>
+            <span style={{ color: isOptimal ? 'var(--success)' : 'var(--text)' }}>
               ${userTotal} / ${target}
             </span>{' '}
             <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -500,12 +500,12 @@ export const CoinChangePlayground: React.FC = () => {
           </div>
           <div className="card-feedback" style={{ fontSize: '0.8rem', marginTop: 'auto' }}>
             {isOptimal && (
-              <span style={{ color: '#10b981', fontWeight: '700' }}>
+              <span style={{ color: 'var(--success)', fontWeight: '700' }}>
                 ✓ {language === 'es' ? 'Mínimo global alcanzado con éxito.' : 'Global minimum reached.'}
               </span>
             )}
             {isSuboptimal && (
-              <span style={{ color: '#f59e0b', fontWeight: '700' }}>
+              <span style={{ color: 'var(--warning)', fontWeight: '700' }}>
                 ! {language === 'es'
                   ? `Suma exacta alcanzada con ${userCoinsList.length} monedas. La cota óptima por PD requiere ${optimalSolution.length} monedas.`
                   : `Exact sum reached with ${userCoinsList.length} coins. Optimal DP bound requires ${optimalSolution.length} coins.`}
@@ -519,7 +519,7 @@ export const CoinChangePlayground: React.FC = () => {
               </span>
             )}
             {userTotal > target && (
-              <span style={{ color: '#ef4444' }}>
+              <span style={{ color: 'var(--error)' }}>
                 {language === 'es'
                   ? `Objetivo excedido por $${userTotal - target}.`
                   : `Target exceeded by $${userTotal - target}.`}
@@ -534,17 +534,17 @@ export const CoinChangePlayground: React.FC = () => {
           style={{
             padding: '1rem',
             borderRadius: '8px',
-            border: '1px solid #10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.04)',
+            border: '1px solid var(--success)',
+            backgroundColor: 'var(--state-solution-bg)',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5rem'
           }}
         >
-          <div className="card-header-label" style={{ fontSize: '0.85rem', fontWeight: '700', color: '#10b981' }}>
+          <div className="card-header-label" style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--success)' }}>
             {language === 'es' ? 'Programación Dinámica (Óptimo)' : 'Dynamic Programming (Optimal)'}
           </div>
-          <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800', color: '#10b981' }}>
+          <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--success)' }}>
             {optimalSolution.length > 0
               ? `${optimalSolution.length} ${language === 'es' ? 'monedas' : 'coins'}`
               : language === 'es'
@@ -567,7 +567,7 @@ export const CoinChangePlayground: React.FC = () => {
           style={{
             padding: '1rem',
             borderRadius: '8px',
-            border: `1px solid ${greedySolution && greedySolution.length > optimalSolution.length ? '#f59e0b' : 'var(--border)'}`,
+            border: `1px solid ${greedySolution && greedySolution.length > optimalSolution.length ? 'var(--warning)' : 'var(--border)'}`,
             backgroundColor: 'var(--surface)',
             display: 'flex',
             flexDirection: 'column',
@@ -593,19 +593,19 @@ export const CoinChangePlayground: React.FC = () => {
           </div>
           <div className="card-desc" style={{ fontSize: '0.8rem', marginTop: 'auto' }}>
             {greedySolution && greedySolution.length > optimalSolution.length ? (
-              <span style={{ color: '#f59e0b', fontWeight: '600' }}>
+              <span style={{ color: 'var(--warning)', fontWeight: '600' }}>
                 {language === 'es'
                   ? 'Falla: Greedy toma la mayor moneda pero requiere más monedas en total.'
                   : 'Fails: Greedy takes largest coin first but ends up with more coins.'}
               </span>
             ) : greedySolution ? (
-              <span style={{ color: '#10b981' }}>
+              <span style={{ color: 'var(--success)' }}>
                 {language === 'es'
                   ? 'Coincide con el óptimo en este caso.'
                   : 'Matches optimal in this instance.'}
               </span>
             ) : (
-              <span style={{ color: '#ef4444' }}>
+              <span style={{ color: 'var(--error)' }}>
                 {language === 'es'
                   ? 'Greedy queda atrapado sin dar el cambio exacto.'
                   : 'Greedy gets stuck without exact change.'}
@@ -620,7 +620,7 @@ export const CoinChangePlayground: React.FC = () => {
         className="pedagogy-box"
         style={{
           padding: '1rem',
-          backgroundColor: 'rgba(56, 189, 248, 0.05)',
+          backgroundColor: 'var(--state-active-bg)',
           border: '1px solid var(--accent)',
           borderRadius: '8px',
           fontSize: '0.85rem'

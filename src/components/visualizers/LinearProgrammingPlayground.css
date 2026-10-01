@@ -165,7 +165,7 @@
 }
 
 .stat-value.highlight {
-  color: #10b981;
+  color: var(--success);
 }
 
 .educational-note {

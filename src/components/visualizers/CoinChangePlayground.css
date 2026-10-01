@@ -18,7 +18,7 @@
 
 .playground-header p {
   margin: 0;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -33,7 +33,7 @@
 .presets-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .preset-buttons {
@@ -103,8 +103,8 @@
 }
 
 .error-banner {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid #ef4444;
+  background: var(--state-conflict-bg);
+  border: 1px solid var(--error);
   color: #dc2626;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
@@ -162,12 +162,12 @@
 
 .opt-btn {
   color: #059669;
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: var(--state-solution-bg);
 }
 
 .greedy-btn {
   color: #d97706;
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: var(--state-candidate-bg);
 }
 
 .coins-dispenser-rack {
@@ -267,34 +267,34 @@
 }
 
 .score-card.card-optimal {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.08);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
 }
 
 .score-card.card-suboptimal {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--warning);
+  background: var(--state-candidate-bg);
 }
 
 .score-card.card-excess {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
+  border-color: var(--error);
+  background: var(--state-conflict-bg);
 }
 
 .score-card.dp-benchmark {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.04);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .score-card.greedy-benchmark {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.04);
+  border-color: var(--state-candidate-bg);
+  background: var(--state-candidate-bg);
 }
 
 .card-header-label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -313,7 +313,7 @@
 
 .count-val {
   font-size: 0.9rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .card-bag code {
@@ -342,7 +342,7 @@
 }
 
 .feedback-badge.pending {
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .greedy-subopt-warning {
@@ -352,7 +352,7 @@
 
 .card-desc {
   font-size: 0.8rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   line-height: 1.35;
 }
 

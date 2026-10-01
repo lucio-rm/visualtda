@@ -38,13 +38,13 @@
 }
 
 .kbb-action-badge.action-prune_bound {
-  border-color: var(--warning, #f59e0b);
-  color: var(--warning, #f59e0b);
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .kbb-action-badge.action-update_incumbent {
-  border-color: var(--success, #10b981);
-  color: var(--success, #10b981);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .kbb-canvas-container {
@@ -55,7 +55,7 @@
 }
 
 .kbb-svg-canvas {
-  max-width: 520px;
+  max-width: 680px;
   width: 100%;
   height: auto;
   border-radius: 4px;

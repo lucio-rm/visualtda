@@ -92,7 +92,7 @@ export const DijkstraVisualizer: React.FC = () => {
               markerHeight="7"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--warning)" />
             </marker>
             <marker
               id="djk-arrow-tree"
@@ -103,7 +103,7 @@ export const DijkstraVisualizer: React.FC = () => {
               markerHeight="7"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--success)" />
             </marker>
           </defs>
 
@@ -121,11 +121,11 @@ export const DijkstraVisualizer: React.FC = () => {
             let marker = 'url(#djk-arrow)';
 
             if (isTreeEdge) {
-              strokeColor = '#10b981';
+              strokeColor = 'var(--success)';
               strokeWidth = 3.5;
               marker = 'url(#djk-arrow-tree)';
             } else if (isRelaxing) {
-              strokeColor = '#f59e0b';
+              strokeColor = 'var(--warning)';
               strokeWidth = 3;
               marker = 'url(#djk-arrow-active)';
             }
@@ -190,16 +190,16 @@ export const DijkstraVisualizer: React.FC = () => {
             let strokeWidth = 2.5;
 
             if (isU) {
-              fill = 'rgba(56, 189, 248, 0.3)';
-              stroke = '#38bdf8';
+              fill = 'var(--state-active-bg)';
+              stroke = 'var(--accent)';
               strokeWidth = 3.5;
             } else if (isV) {
-              fill = 'rgba(245, 158, 11, 0.3)';
-              stroke = '#f59e0b';
+              fill = 'var(--state-candidate-bg)';
+              stroke = 'var(--warning)';
               strokeWidth = 3;
             } else if (isSettled) {
-              fill = 'rgba(16, 185, 129, 0.25)';
-              stroke = '#10b981';
+              fill = 'var(--state-solution-bg)';
+              stroke = 'var(--success)';
               strokeWidth = 2.5;
             }
 
@@ -224,14 +224,14 @@ export const DijkstraVisualizer: React.FC = () => {
                   width={36}
                   height={16}
                   rx={4}
-                  fill={isSettled ? '#10b981' : 'var(--surface-hover, #1e293b)'}
+                  fill={isSettled ? 'var(--success)' : 'var(--surface-hover, #1e293b)'}
                   stroke={isSettled ? '#059669' : 'var(--border, #475569)'}
                 />
                 <text
                   x={node.x}
                   y={node.y - 26}
                   textAnchor="middle"
-                  fill={isSettled ? '#ffffff' : 'var(--accent, #38bdf8)'}
+                  fill={isSettled ? '#ffffff' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="800"

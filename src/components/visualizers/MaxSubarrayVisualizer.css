@@ -84,11 +84,11 @@
 }
 
 .cell-value.positive {
-  color: #10b981;
+  color: var(--success);
 }
 
 .cell-value.negative {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .cell-markers {
@@ -107,12 +107,12 @@
 }
 
 .mid-tag {
-  background-color: #f59e0b;
+  background-color: var(--warning);
   color: #000;
 }
 
 .scan-tag {
-  background-color: #6366f1;
+  background-color: var(--accent);
   color: #fff;
 }
 
@@ -122,11 +122,11 @@
 }
 
 .subarray-cell.in-active-range {
-  border-color: #6366f1;
+  border-color: var(--accent);
 }
 
 .subarray-cell.mid-element {
-  box-shadow: 0 0 0 2px #f59e0b;
+  box-shadow: 0 0 0 2px var(--warning);
 }
 
 .subarray-cell.left-scan {
@@ -142,9 +142,9 @@
 }
 
 .subarray-cell.in-highlight {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.18);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
+  box-shadow: 0 4px 12px var(--state-solution-bg);
   transform: scale(1.05);
 }
 
@@ -169,7 +169,7 @@
 }
 
 .candidate-card.cross-box {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid var(--warning);
 }
 
 .candidate-card.right-box {
@@ -204,8 +204,8 @@
 
 .winner-banner {
   padding: 0.75rem 1rem;
-  background-color: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background-color: var(--state-solution-bg);
+  border: 1px solid var(--state-solution-bg);
   border-radius: 6px;
   font-size: 0.95rem;
   color: var(--text);

@@ -38,13 +38,13 @@
 }
 
 .cp-action-badge.action-update_best {
-  border-color: var(--success, #10b981);
-  color: var(--success, #10b981);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .cp-action-badge.action-compare_strip {
-  border-color: #f59e0b;
-  color: #f59e0b;
+  border-color: var(--warning);
+  color: var(--warning);
 }
 
 .cp-canvas-container {
@@ -55,7 +55,7 @@
 }
 
 .cp-svg-canvas {
-  max-width: 520px;
+  max-width: 680px;
   width: 100%;
   height: auto;
   border-radius: 4px;

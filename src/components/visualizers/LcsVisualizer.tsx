@@ -188,7 +188,7 @@ export const LcsVisualizer: React.FC = () => {
               {' = '}
               <span>dp[{currentI - 1}][{currentJ - 1}] + 1</span>
               {' = '}
-              <span style={{ color: '#10b981', fontWeight: 600 }}>{(dp[currentI - 1]?.[currentJ - 1] ?? 0) + 1}</span>
+              <span style={{ color: 'var(--success)', fontWeight: 600 }}>{(dp[currentI - 1]?.[currentJ - 1] ?? 0) + 1}</span>
               {' '}
               <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                 ({language === 'es' ? `coincidencia '${s1[currentI - 1]}'` : `match '${s1[currentI - 1]}'`})
@@ -202,7 +202,7 @@ export const LcsVisualizer: React.FC = () => {
               {' = '}
               <span>max({dp[currentI - 1]?.[currentJ] ?? 0}, {dp[currentI]?.[currentJ - 1] ?? 0})</span>
               {' = '}
-              <span style={{ color: '#10b981', fontWeight: 600 }}>{Math.max(dp[currentI - 1]?.[currentJ] ?? 0, dp[currentI]?.[currentJ - 1] ?? 0)}</span>
+              <span style={{ color: 'var(--success)', fontWeight: 600 }}>{Math.max(dp[currentI - 1]?.[currentJ] ?? 0, dp[currentI]?.[currentJ - 1] ?? 0)}</span>
             </div>
           )}
         </div>

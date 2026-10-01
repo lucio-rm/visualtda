@@ -9,7 +9,9 @@ import { getExerciseViewConfig } from '../engine/exerciseViewRegistry';
 import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import { InstructorModeProvider } from '../context/InstructorModeContext';
 import { StudentProgressProvider, useStudentProgress } from '../context/StudentProgressContext';
+import { formatTitleSpacing } from '../utils/textFormatting';
 import './App.css';
+
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
@@ -82,7 +84,7 @@ const AppContent: React.FC = () => {
         theme={theme}
         onThemeChange={setTheme}
         onHomeClick={handleHomeClick}
-        currentExerciseTitle={selectedExercise ? t(selectedExercise.title) : undefined}
+        currentExerciseTitle={selectedExercise ? formatTitleSpacing(t(selectedExercise.title)) : undefined}
       />
 
       <main className="app-main" id="main-content">
@@ -111,7 +113,7 @@ const AppContent: React.FC = () => {
                 <div className="recommended-start-card">
                   <div className="recommended-text">
                     <span className="recommended-tag">{language === 'es' ? 'CONTINUAR APRENDIENDO' : 'CONTINUE LEARNING'}</span>
-                    <h4>{t(inProgressExercise.title)}</h4>
+                    <h4>{formatTitleSpacing(t(inProgressExercise.title))}</h4>
                     <p>
                       {language === 'es'
                         ? `Tu progreso actual en este problema está registrado. Retomá la exploración o implementación formal.`
@@ -134,7 +136,7 @@ const AppContent: React.FC = () => {
                 <div className="recommended-start-card">
                   <div className="recommended-text">
                     <span className="recommended-tag">{language === 'es' ? 'PUNTO DE PARTIDA SUGERIDO' : 'RECOMMENDED START'}</span>
-                    <h4>{language === 'es' ? 'Selección de Intervalos (Algoritmos Greedy)' : 'Interval Scheduling (Greedy Algorithms)'}</h4>
+                    <h4>{formatTitleSpacing(language === 'es' ? 'Selección de Intervalos (Algoritmos Greedy)' : 'Interval Scheduling (Greedy Algorithms)')}</h4>
                     <p>
                       {language === 'es'
                         ? 'Explorá por qué las heurísticas intuitivas (menor duración, inicio temprano) fallan con contraejemplos interactivos, y cómo Earliest Finish Time garantiza el óptimo global mediante argumento de intercambio.'
@@ -153,7 +155,7 @@ const AppContent: React.FC = () => {
                 <div className="recommended-start-card">
                   <div className="recommended-text">
                     <span className="recommended-tag">{language === 'es' ? 'SIGUIENTE EN LA CURRÍCULA' : 'NEXT IN CURRICULUM'}</span>
-                    <h4>{t(nextCurricularExercise.title)}</h4>
+                    <h4>{formatTitleSpacing(t(nextCurricularExercise.title))}</h4>
                     <p>{t(nextCurricularExercise.subtitle)}</p>
                   </div>
                   <button

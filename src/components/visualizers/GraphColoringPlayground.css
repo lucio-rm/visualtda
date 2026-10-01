@@ -51,7 +51,7 @@
 }
 
 .gc-stat-conflict strong {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .gc-playground-action-buttons {
@@ -72,7 +72,7 @@
 
 .gc-playground-svg {
   width: 100%;
-  max-width: 500px;
+  max-width: 680px;
   height: auto;
 }
 
@@ -101,15 +101,15 @@
 }
 
 .gc-feedback-valid {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid #10b981;
-  color: #10b981;
+  background: var(--state-solution-bg);
+  border: 1px solid var(--success);
+  color: var(--success);
 }
 
 .gc-feedback-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid #ef4444;
-  color: #ef4444;
+  background: var(--state-conflict-bg);
+  border: 1px solid var(--error);
+  color: var(--error);
 }
 
 .gc-feedback-banner p {

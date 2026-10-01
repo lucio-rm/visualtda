@@ -4,9 +4,9 @@ import { useStudentProgress } from '../../context/StudentProgressContext';
 import { DEFAULT_KRUSKAL_GRAPH, KruskalNode } from '../../engine/algorithms/kruskalTrace';
 
 const COMPONENT_COLORS: Record<string, string> = {
-  A: '#10b981',
-  B: '#6366f1',
-  C: '#f59e0b',
+  A: 'var(--success)',
+  B: 'var(--accent)',
+  C: 'var(--warning)',
   D: '#06b6d4',
   E: '#ec4899',
   F: '#8b5cf6'
@@ -200,14 +200,14 @@ export const KruskalPlayground: React.FC = () => {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Aristas en el árbol:' : 'Tree edges:'}{' '}
-            <strong style={{ color: selectedEdgeIds.length === nodes.length - 1 ? '#10b981' : 'var(--text)' }}>
+            <strong style={{ color: selectedEdgeIds.length === nodes.length - 1 ? 'var(--success)' : 'var(--text)' }}>
               {selectedEdgeIds.length} / {nodes.length - 1}
             </strong>
           </span>
 
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Costo acumulado:' : 'Current weight:'}{' '}
-            <strong style={{ color: currentTotalWeight === 10 ? '#10b981' : '#38bdf8' }}>
+            <strong style={{ color: currentTotalWeight === 10 ? 'var(--success)' : 'var(--accent)' }}>
               {currentTotalWeight}
             </strong>{' '}
             <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>({language === 'es' ? 'Óptimo' : 'Optimal'} = 10)</span>
@@ -247,7 +247,7 @@ export const KruskalPlayground: React.FC = () => {
               : 'sdk-description-box'
           }
           role={isCycleWarning ? 'alert' : 'status'}
-          style={isCycleWarning ? { background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444' } : undefined}
+          style={isCycleWarning ? { background: 'var(--state-conflict-bg)', border: '1px solid var(--error)' } : undefined}
         >
           {feedback}
         </div>
@@ -295,14 +295,14 @@ export const KruskalPlayground: React.FC = () => {
                     y1={u.y}
                     x2={v.x}
                     y2={v.y}
-                    stroke={isSelected ? '#10b981' : 'var(--border-strong, #64748b)'}
+                    stroke={isSelected ? 'var(--success)' : 'var(--border-strong, #64748b)'}
                     strokeWidth={isSelected ? 4 : 2.5}
                   />
                   <circle
                     cx={midX}
                     cy={midY}
                     r={12}
-                    fill={isSelected ? '#10b981' : 'var(--surface)'}
+                    fill={isSelected ? 'var(--success)' : 'var(--surface)'}
                     stroke={isSelected ? '#059669' : 'var(--border-strong, #64748b)'}
                     strokeWidth={1.5}
                   />
@@ -324,7 +324,7 @@ export const KruskalPlayground: React.FC = () => {
             {/* Nodes with Component Colors */}
             {nodes.map((node) => {
               const rootId = nodeRoots[node.id] || node.id;
-              const color = COMPONENT_COLORS[rootId] || '#38bdf8';
+              const color = COMPONENT_COLORS[rootId] || 'var(--accent)';
 
               return (
                 <g
@@ -402,11 +402,11 @@ export const KruskalPlayground: React.FC = () => {
                     alignItems: 'center',
                     padding: '0.3rem 0.5rem',
                     background: isSelected
-                      ? 'rgba(16, 185, 129, 0.15)'
+                      ? 'var(--state-solution-bg)'
                       : wouldFormCycle
-                      ? 'rgba(239, 68, 68, 0.08)'
+                      ? 'var(--state-conflict-bg)'
                       : 'var(--bg)',
-                    border: `1px solid ${isSelected ? '#10b981' : wouldFormCycle ? 'rgba(239, 68, 68, 0.4)' : 'var(--border)'}`,
+                    border: `1px solid ${isSelected ? 'var(--success)' : wouldFormCycle ? 'var(--state-conflict-bg)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.75rem',
                     cursor: 'pointer'
@@ -420,7 +420,7 @@ export const KruskalPlayground: React.FC = () => {
                     style={{
                       fontSize: '0.7rem',
                       fontWeight: 700,
-                      color: isSelected ? '#10b981' : wouldFormCycle ? '#ef4444' : 'var(--text-muted)'
+                      color: isSelected ? 'var(--success)' : wouldFormCycle ? 'var(--error)' : 'var(--text-muted)'
                     }}
                   >
                     {isSelected

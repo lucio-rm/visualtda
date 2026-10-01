@@ -38,18 +38,18 @@
 }
 
 .kru-action-badge.action-accept_edge {
-  border-color: var(--success, #10b981);
-  color: var(--success, #10b981);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .kru-action-badge.action-reject_cycle {
-  border-color: var(--danger, #ef4444);
-  color: var(--danger, #ef4444);
+  border-color: var(--danger, var(--error));
+  color: var(--danger, var(--error));
 }
 
 .kru-action-badge.action-consider_edge {
-  border-color: #38bdf8;
-  color: #38bdf8;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .kru-canvas-container {
@@ -60,7 +60,7 @@
 }
 
 .kru-svg-canvas {
-  max-width: 520px;
+  max-width: 680px;
   width: 100%;
   height: auto;
   border-radius: 4px;
@@ -92,19 +92,19 @@
 }
 
 .kru-edge-pill.current {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 1px #38bdf8;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 .kru-edge-pill.accepted {
-  background-color: rgba(16, 185, 129, 0.15);
-  border-color: #10b981;
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .kru-edge-pill.rejected {
-  background-color: rgba(239, 68, 68, 0.1);
-  border-color: var(--danger, #ef4444);
+  background-color: var(--state-conflict-bg);
+  border-color: var(--danger, var(--error));
   color: var(--text-muted);
   text-decoration: line-through;
 }

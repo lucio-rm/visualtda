@@ -130,6 +130,8 @@ export const HamiltonianCyclePlayground: React.FC = () => {
   // Dragging state for 2D vertex manipulation
   const [draggingNodeId, setDraggingNodeId] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
 
   const nodes = currentPreset.nodes;
   const edges = currentPreset.edges;
@@ -200,12 +202,18 @@ export const HamiltonianCyclePlayground: React.FC = () => {
   const handlePointerDown = (nodeId: number, e: React.PointerEvent) => {
     e.stopPropagation();
     (e.target as Element).setPointerCapture(e.pointerId);
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
     setDraggingNodeId(nodeId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (draggingNodeId === null || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
       const rect = svgRef.current.getBoundingClientRect();
       const rawX = ((e.clientX - rect.left) / rect.width) * 500;
       const rawY = ((e.clientY - rect.top) / rect.height) * 350;
@@ -292,13 +300,13 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', whiteSpace: 'nowrap' }}>
             <span>
               {language === 'es' ? 'Vértices visitados:' : 'Visited vertices:'}{' '}
-              <strong style={{ color: visitedSet.size === numV ? '#10b981' : 'var(--accent)' }}>
+              <strong style={{ color: visitedSet.size === numV ? 'var(--success)' : 'var(--accent)' }}>
                 {visitedSet.size} / {numV}
               </strong>
             </span>
             <span>
               {language === 'es' ? 'Vértice actual:' : 'Current vertex:'}{' '}
-              <strong style={{ color: '#f59e0b' }}>v{currentU}</strong>
+              <strong style={{ color: 'var(--warning)' }}>v{currentU}</strong>
             </span>
           </div>
         </div>
@@ -309,11 +317,11 @@ export const HamiltonianCyclePlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid #10b981',
+            backgroundColor: 'var(--state-solution-bg)',
+            border: '1px solid var(--success)',
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.9rem',
-            color: '#10b981'
+            color: 'var(--success)'
           }}
           role="status"
         >
@@ -328,10 +336,10 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           role="alert"
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid #ef4444',
+            backgroundColor: 'var(--state-conflict-bg)',
+            border: '1px solid var(--error)',
             borderRadius: 'var(--radius-sm)',
-            color: '#ef4444'
+            color: 'var(--error)'
           }}
         >
           <strong>{language === 'es' ? 'Poda por Inviabilidad (Dead End / Backtrack Obligatorio)' : 'Dead End State (Backtrack Required)'}:</strong>{' '}
@@ -343,11 +351,11 @@ export const HamiltonianCyclePlayground: React.FC = () => {
         <div
           style={{
             padding: '0.6rem 0.85rem',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid #f59e0b',
+            backgroundColor: 'var(--state-candidate-bg)',
+            border: '1px solid var(--warning)',
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.85rem',
-            color: '#f59e0b'
+            color: 'var(--warning)'
           }}
         >
           <strong>{language === 'es' ? 'Instancia No Hamiltoniana' : 'Non-Hamiltonian Instance'}:</strong>{' '}
@@ -366,7 +374,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           }}
         >
           {language === 'es' ? 'Candidatos adyacentes válidos para el siguiente paso:' : 'Valid adjacent candidates for next step:'}{' '}
-          <strong style={{ color: '#10b981' }}>
+          <strong style={{ color: 'var(--success)' }}>
             {validNext.map((v) => `v${v}`).join(', ') || (language === 'es' ? 'Ninguno' : 'None')}
           </strong>
         </div>
@@ -409,7 +417,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           viewBox="0 0 500 350"
           style={{
             width: '100%',
-            maxWidth: '540px',
+            maxWidth: '680px',
             height: 'auto',
             display: 'block',
             margin: '0 auto',
@@ -446,7 +454,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   y1={uPos.y}
                   x2={vPos.x}
                   y2={vPos.y}
-                  stroke={inPath ? (isCompleteCycle ? '#10b981' : 'var(--accent)') : 'var(--border)'}
+                  stroke={inPath ? (isCompleteCycle ? 'var(--success)' : 'var(--accent)') : 'var(--border)'}
                   strokeWidth={inPath ? 3.5 : 1.5}
                   opacity={inPath ? 1 : 0.35}
                 />
@@ -455,7 +463,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                     cx={(uPos.x + vPos.x) / 2}
                     cy={(uPos.y + vPos.y) / 2}
                     r={7}
-                    fill={isCompleteCycle ? '#10b981' : 'var(--accent)'}
+                    fill={isCompleteCycle ? 'var(--success)' : 'var(--accent)'}
                   />
                 )}
                 {inPath && (
@@ -489,7 +497,36 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                 key={`ham-node-${node.id}`}
                 onPointerDown={(e) => handlePointerDown(node.id, e)}
                 onClick={() => {
+                  if (hasDraggedRef.current) {
+                    hasDraggedRef.current = false;
+                    return;
+                  }
                   if (isSelectable) handleSelectNode(node.id);
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={
+                  language === 'es'
+                    ? `Vértice v${node.id}${isCurrent ? ' (actual)' : isSelectable ? ' (adyacente seleccionable)' : isVisited ? ' (visitado)' : ''}`
+                    : `Vertex v${node.id}${isCurrent ? ' (current)' : isSelectable ? ' (selectable neighbor)' : isVisited ? ' (visited)' : ''}`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (isSelectable) handleSelectNode(node.id);
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [node.id]: { x: pos.x, y: Math.max(25, pos.y - 10) } }));
+                  } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [node.id]: { x: pos.x, y: Math.min(325, pos.y + 10) } }));
+                  } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [node.id]: { x: Math.max(25, pos.x - 10), y: pos.y } }));
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [node.id]: { x: Math.min(475, pos.x + 10), y: pos.y } }));
+                  }
                 }}
                 style={{ cursor: isSelectable ? 'pointer' : 'grab' }}
               >
@@ -500,7 +537,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                     cy={pos.y}
                     r={24}
                     fill="none"
-                    stroke={isCurrent ? '#f59e0b' : '#10b981'}
+                    stroke={isCurrent ? 'var(--warning)' : 'var(--success)'}
                     strokeWidth={2}
                     strokeDasharray={isSelectable ? '3,3' : undefined}
                     opacity={0.8}
@@ -513,18 +550,18 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   r={18}
                   fill={
                     isCurrent
-                      ? '#f59e0b'
+                      ? 'var(--warning)'
                       : isSelectable
-                      ? 'rgba(16, 185, 129, 0.25)'
+                      ? 'var(--state-solution-bg)'
                       : isVisited
                       ? 'var(--surface-hover)'
                       : 'var(--surface)'
                   }
                   stroke={
                     isCurrent
-                      ? '#f59e0b'
+                      ? 'var(--warning)'
                       : isSelectable
-                      ? '#10b981'
+                      ? 'var(--success)'
                       : isVisited
                       ? 'var(--accent)'
                       : 'var(--border)'

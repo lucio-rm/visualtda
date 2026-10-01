@@ -75,6 +75,8 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
   const [cities, setCities] = useState<TspCity[]>(DEFAULT_TSP_CITIES);
   const [draggingCityId, setDraggingCityId] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
 
   // Dynamic distance matrix
   const dist: number[][] = useMemo(() => {
@@ -203,12 +205,18 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
     if (!useEuclideanMode) return;
     e.stopPropagation();
     (e.target as Element).setPointerCapture(e.pointerId);
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
     setDraggingCityId(cityId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (draggingCityId === null || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
       const rect = svgRef.current.getBoundingClientRect();
       const rawX = ((e.clientX - rect.left) / rect.width) * 480;
       const rawY = ((e.clientY - rect.top) / rect.height) * 280;
@@ -302,27 +310,27 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <div className="tsp-metric-badge">
             <span>{language === 'es' ? 'Costo Parcial (C):' : 'Current Cost (C):'}</span>
-            <strong style={{ color: isOptimal ? 'var(--color-success, #10b981)' : 'var(--accent)' }}>
+            <strong style={{ color: isOptimal ? 'var(--color-success, var(--success))' : 'var(--accent)' }}>
               {currentCost}
             </strong>
           </div>
           {!isComplete && (
             <div className="tsp-metric-badge">
               <span>{language === 'es' ? 'Cota Inferior (LB):' : 'Lower Bound (LB):'}</span>
-              <strong style={{ color: '#f59e0b' }}>+{lowerBound}</strong>
+              <strong style={{ color: 'var(--warning)' }}>+{lowerBound}</strong>
             </div>
           )}
           {!isComplete && (
             <div className="tsp-metric-badge">
               <span>{language === 'es' ? 'Proyectado (C + LB):' : 'Projected (C + LB):'}</span>
-              <strong style={{ color: isPruned ? '#ef4444' : 'var(--text)' }}>
+              <strong style={{ color: isPruned ? 'var(--error)' : 'var(--text)' }}>
                 {projectedTotalCost}
               </strong>
             </div>
           )}
           <div className="tsp-metric-badge">
             <span>{language === 'es' ? 'Incumbent Óptimo (UB):' : 'Incumbent Best (UB):'}</span>
-            <strong style={{ color: '#10b981' }}>{optimalCost}</strong>
+            <strong style={{ color: 'var(--success)' }}>{optimalCost}</strong>
           </div>
         </div>
       </div>
@@ -332,11 +340,11 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid #10b981',
+            backgroundColor: 'var(--state-solution-bg)',
+            border: '1px solid var(--success)',
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.9rem',
-            color: '#10b981'
+            color: 'var(--success)'
           }}
           role="status"
         >
@@ -351,10 +359,10 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           role="alert"
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid #ef4444',
+            backgroundColor: 'var(--state-conflict-bg)',
+            border: '1px solid var(--error)',
             borderRadius: 'var(--radius-sm)',
-            color: '#ef4444'
+            color: 'var(--error)'
           }}
         >
           <strong>{language === 'es' ? 'Poda por Cota (Branch & Bound Cutoff)' : 'Bound Cutoff (Pruned)'}:</strong>{' '}
@@ -366,11 +374,11 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid #f59e0b',
+            backgroundColor: 'var(--state-candidate-bg)',
+            border: '1px solid var(--warning)',
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.9rem',
-            color: '#f59e0b'
+            color: 'var(--warning)'
           }}
         >
           <strong>{language === 'es' ? 'Tour Válido pero Subóptimo' : 'Valid but Suboptimal Tour'}:</strong>{' '}
@@ -436,7 +444,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           viewBox="0 0 480 280"
           style={{
             width: '100%',
-            maxWidth: '520px',
+            maxWidth: '680px',
             height: 'auto',
             display: 'block',
             margin: '0 auto',
@@ -462,7 +470,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     y1={c1.y}
                     x2={c2.x}
                     y2={c2.y}
-                    stroke={inTour ? '#10b981' : 'var(--border)'}
+                    stroke={inTour ? 'var(--success)' : 'var(--border)'}
                     strokeWidth={inTour ? 3.5 : 1}
                     strokeDasharray={inTour ? undefined : '2,3'}
                     opacity={inTour ? 1 : 0.4}
@@ -498,9 +506,42 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
               <g
                 key={`city-pg-${city.id}`}
                 onPointerDown={(e) => handlePointerDown(city.id, e)}
-                onClick={() => isAvailable && handleAddCity(city.id)}
+                onClick={() => {
+                  if (hasDraggedRef.current) {
+                    hasDraggedRef.current = false;
+                    return;
+                  }
+                  if (isAvailable) handleAddCity(city.id);
+                }}
                 onMouseEnter={() => setHoveredCity(city.id)}
                 onMouseLeave={() => setHoveredCity(null)}
+                tabIndex={0}
+                role="button"
+                aria-label={
+                  language === 'es'
+                    ? `Ciudad ${city.name} (${city.id})${isCurrent ? ' - actual' : isAvailable ? ' - disponible para visitar' : inTour ? ' - ya visitada' : ''}`
+                    : `City ${city.name} (${city.id})${isCurrent ? ' - current' : isAvailable ? ' - available to visit' : inTour ? ' - already visited' : ''}`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (isAvailable) handleAddCity(city.id);
+                  } else if (useEuclideanMode) {
+                    if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      setCities((prev) => prev.map((c) => (c.id === city.id ? { ...c, y: Math.max(30, c.y - 10) } : c)));
+                    } else if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      setCities((prev) => prev.map((c) => (c.id === city.id ? { ...c, y: Math.min(320, c.y + 10) } : c)));
+                    } else if (e.key === 'ArrowLeft') {
+                      e.preventDefault();
+                      setCities((prev) => prev.map((c) => (c.id === city.id ? { ...c, x: Math.max(30, c.x - 10) } : c)));
+                    } else if (e.key === 'ArrowRight') {
+                      e.preventDefault();
+                      setCities((prev) => prev.map((c) => (c.id === city.id ? { ...c, x: Math.min(470, c.x + 10) } : c)));
+                    }
+                  }
+                }}
                 style={{ cursor: isAvailable ? 'pointer' : useEuclideanMode ? 'grab' : 'default' }}
               >
                 {/* Glow ring */}
@@ -510,7 +551,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     cy={city.y}
                     r={isCurrent ? 22 : 18}
                     fill="none"
-                    stroke={isCurrent ? '#f59e0b' : '#10b981'}
+                    stroke={isCurrent ? 'var(--warning)' : 'var(--success)'}
                     strokeWidth={2}
                     strokeDasharray={isAvailable && !isCurrent ? '3,3' : undefined}
                     opacity={isHovered ? 0.9 : 0.6}
@@ -521,8 +562,8 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                   cx={city.x}
                   cy={city.y}
                   r={isStart ? 16 : 14}
-                  fill={isCurrent ? '#f59e0b' : inTour ? '#10b981' : isAvailable ? 'var(--surface-hover)' : 'var(--surface)'}
-                  stroke={isCurrent ? '#f59e0b' : inTour ? '#10b981' : isAvailable ? '#10b981' : 'var(--border)'}
+                  fill={isCurrent ? 'var(--warning)' : inTour ? 'var(--success)' : isAvailable ? 'var(--surface-hover)' : 'var(--surface)'}
+                  stroke={isCurrent ? 'var(--warning)' : inTour ? 'var(--success)' : isAvailable ? 'var(--success)' : 'var(--border)'}
                   strokeWidth={2}
                 />
 

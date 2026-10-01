@@ -38,13 +38,13 @@
 }
 
 .greedy-item-card.evaluating {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  border-color: var(--warning);
+  box-shadow: 0 0 0 3px var(--state-candidate-bg);
 }
 
 .greedy-item-card.taken_full {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.05);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
 }
 
 .greedy-item-card.taken_partial {
@@ -109,7 +109,7 @@
 
 .fraction-fill {
   height: 100%;
-  background: #10b981;
+  background: var(--success);
   transition: width var(--transition-normal);
 }
 
@@ -120,8 +120,8 @@
 /* Counterexample Box */
 .counterexample-card {
   padding: var(--space-4);
-  background: rgba(239, 68, 68, 0.06);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: var(--state-conflict-bg);
+  border: 1px solid var(--state-conflict-bg);
   border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
@@ -154,13 +154,13 @@
 }
 
 .comparison-box.greedy-fail {
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.04);
+  border-color: var(--state-conflict-bg);
+  background: var(--state-conflict-bg);
 }
 
 .comparison-box.dp-optimal {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.04);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .comparison-box-title {

@@ -208,7 +208,7 @@ export function generateMedianOfMediansTrace(
     lesser,
     equal,
     greater,
-    0,
+    Math.floor((3 * array.length) / 10),
     `Búsqueda completada. El k-ésimo elemento (índice ${targetK}) es ${finalResult}. Ecuación de recurrencia demostrada: T(n) ≤ T(n/5) + T(7n/10) + O(n) ⇒ O(n) lineal estricto en peor caso.`,
     `Selection complete. Element at rank k = ${targetK} is ${finalResult}. Recurrence: T(n) ≤ T(n/5) + T(7n/10) + O(n) ⇒ strict worst-case O(n) linear time.`
   );

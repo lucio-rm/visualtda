@@ -182,7 +182,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
             <polygon
               points={polygonPoints}
               fill="rgba(99, 102, 241, 0.2)"
-              stroke="#6366f1"
+              stroke="var(--accent)"
               strokeWidth="2"
             />
           )}
@@ -227,7 +227,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                 cx={toSvgX(ix)}
                 cy={toSvgY(iy)}
                 r="3.5"
-                fill="#f59e0b"
+                fill="var(--warning)"
                 opacity="0.8"
               />
             ))}
@@ -237,14 +237,14 @@ export const LinearProgrammingVisualizer: React.FC = () => {
             const isOpt = optimalPoint && Math.abs(optimalPoint[0] - vx) < 1e-4 && Math.abs(optimalPoint[1] - vy) < 1e-4;
             const isCurrent = currentVertexIndex === idx;
 
-            let fill = '#6366f1';
+            let fill = 'var(--accent)';
             let r = 6;
             if (isCurrent) {
               fill = '#ec4899';
               r = 8;
             }
             if (isOpt && (phase === 'optimal_found' || phase === 'complete')) {
-              fill = '#10b981';
+              fill = 'var(--success)';
               r = 10;
             }
 

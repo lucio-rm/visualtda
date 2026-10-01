@@ -27,8 +27,9 @@
 
 .mf-network-svg {
   width: 100%;
-  max-width: 600px;
-  height: 280px;
+  max-width: 760px;
+  height: auto;
+  aspect-ratio: 500 / 280;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -61,12 +62,12 @@
 }
 
 .mf-node-circle.source {
-  stroke: #10b981;
+  stroke: var(--success);
   fill: var(--surface);
 }
 
 .mf-node-circle.sink {
-  stroke: #ef4444;
+  stroke: var(--error);
   fill: var(--surface);
 }
 

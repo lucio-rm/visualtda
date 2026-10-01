@@ -45,7 +45,7 @@
 }
 
 .duality-panel.is-panel {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid var(--success);
 }
 
 .duality-panel.vc-panel {
@@ -72,17 +72,18 @@
 }
 
 .status-ok {
-  color: #10b981;
+  color: var(--success);
 }
 
 .status-err {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .reduction-interactive-svg {
   width: 100%;
-  max-width: 580px;
-  height: 300px;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 540 / 300;
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);

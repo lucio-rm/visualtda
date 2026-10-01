@@ -290,8 +290,8 @@ export const LcsPlayground: React.FC = () => {
           <div
             style={{
               padding: '0.5rem 0.75rem',
-              backgroundColor: 'rgba(239, 68, 68, 0.12)',
-              borderLeft: '4px solid #ef4444',
+              backgroundColor: 'var(--state-conflict-bg)',
+              borderLeft: '4px solid var(--error)',
               borderRadius: '4px',
               fontSize: '0.85rem',
               color: 'var(--text)'
@@ -305,8 +305,8 @@ export const LcsPlayground: React.FC = () => {
           <div
             style={{
               padding: '0.5rem 0.75rem',
-              backgroundColor: 'rgba(245, 158, 11, 0.15)',
-              borderLeft: '4px solid #f59e0b',
+              backgroundColor: 'var(--state-candidate-bg)',
+              borderLeft: '4px solid var(--warning)',
               borderRadius: '4px',
               fontSize: '0.85rem',
               color: 'var(--text)'
@@ -349,7 +349,7 @@ export const LcsPlayground: React.FC = () => {
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke={isCrossing ? '#ef4444' : '#10b981'}
+                  stroke={isCrossing ? 'var(--error)' : 'var(--success)'}
                   strokeWidth={isCrossing ? 2 : 2.5}
                   strokeDasharray={isCrossing ? '4 3' : undefined}
                   opacity={0.85}
@@ -378,16 +378,16 @@ export const LcsPlayground: React.FC = () => {
                     rx={6}
                     fill={
                       isSelected
-                        ? 'rgba(56, 189, 248, 0.35)'
+                        ? 'var(--state-active-bg)'
                         : isLinked
-                        ? 'rgba(16, 185, 129, 0.25)'
+                        ? 'var(--state-solution-bg)'
                         : 'var(--surface)'
                     }
                     stroke={
                       isSelected
-                        ? '#38bdf8'
+                        ? 'var(--accent)'
                         : isLinked
-                        ? '#10b981'
+                        ? 'var(--success)'
                         : 'var(--border)'
                     }
                     strokeWidth={isSelected ? 2.5 : 1.5}
@@ -396,7 +396,7 @@ export const LcsPlayground: React.FC = () => {
                     x={x + charWidth / 2}
                     y={y + charWidth / 2 + 7}
                     textAnchor="middle"
-                    fill={isSelected ? '#38bdf8' : isLinked ? '#10b981' : 'var(--text)'}
+                    fill={isSelected ? 'var(--accent)' : isLinked ? 'var(--success)' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="22px"
                     fontWeight="800"
@@ -435,15 +435,15 @@ export const LcsPlayground: React.FC = () => {
                     width={charWidth}
                     height={charWidth}
                     rx={6}
-                    fill={isLinked ? 'rgba(16, 185, 129, 0.25)' : 'var(--surface)'}
-                    stroke={isLinked ? '#10b981' : 'var(--border)'}
+                    fill={isLinked ? 'var(--state-solution-bg)' : 'var(--surface)'}
+                    stroke={isLinked ? 'var(--success)' : 'var(--border)'}
                     strokeWidth={isLinked ? 2 : 1.5}
                   />
                   <text
                     x={x + charWidth / 2}
                     y={y + charWidth / 2 + 7}
                     textAnchor="middle"
-                    fill={isLinked ? '#10b981' : 'var(--text)'}
+                    fill={isLinked ? 'var(--success)' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="22px"
                     fontWeight="800"
@@ -494,17 +494,17 @@ export const LcsPlayground: React.FC = () => {
                 </div>
                 <div className="feedback-banner">
                   {userValidation?.isOptimal ? (
-                    <span className="status-opt" style={{ color: '#10b981', fontWeight: 800 }}>
+                    <span className="status-opt" style={{ color: 'var(--success)', fontWeight: 800 }}>
                       🎉 {language === 'es' ? '¡Subsecuencia Común Más Larga verificada!' : 'Longest Common Subsequence verified!'}
                     </span>
                   ) : userValidation?.isSub1 && userValidation?.isSub2 ? (
-                    <span className="status-subopt" style={{ color: '#f59e0b', fontWeight: 600 }}>
+                    <span className="status-subopt" style={{ color: 'var(--warning)', fontWeight: 600 }}>
                       {language === 'es'
                         ? `Es común pero subóptima (${userValidation.candidate.length} < ${optimalLcs.length}). ¿Puedes alinear más caracteres?`
                         : `Common but suboptimal (${userValidation.candidate.length} < ${optimalLcs.length}). Can you match more?`}
                     </span>
                   ) : (
-                    <span className="status-error" style={{ color: '#ef4444' }}>
+                    <span className="status-error" style={{ color: 'var(--error)' }}>
                       {language === 'es' ? 'Alineación inválida o con cruces.' : 'Invalid or crossing alignment.'}
                     </span>
                   )}
@@ -523,7 +523,7 @@ export const LcsPlayground: React.FC = () => {
           <div className="card-label">
             {language === 'es' ? 'Óptimo (Programación Dinámica)' : 'Optimal (Dynamic Programming)'}
           </div>
-          <div className="card-val" style={{ color: '#10b981' }}>
+          <div className="card-val" style={{ color: 'var(--success)' }}>
             "{optimalLcs || '∅'}"
             <span className="card-len">({optimalLcs.length} chars)</span>
           </div>

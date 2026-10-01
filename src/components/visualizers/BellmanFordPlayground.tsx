@@ -198,8 +198,8 @@ export const BellmanFordPlayground: React.FC = () => {
 
       {/* Cycle Detection Banner */}
       {hasNegativeCycleDetected && (
-        <div className="sdk-conflict-banner" role="alert" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444' }}>
-          <strong style={{ color: '#ef4444' }}>
+        <div className="sdk-conflict-banner" role="alert" style={{ background: 'var(--state-conflict-bg)', border: '1px solid var(--error)' }}>
+          <strong style={{ color: 'var(--error)' }}>
             {language === 'es' ? '¡Ciclo Negativo Identificado por la Ecuación de Bellman!' : 'Negative Cycle Detected via Bellman Equation!'}:
           </strong>{' '}
           {language === 'es'
@@ -219,7 +219,7 @@ export const BellmanFordPlayground: React.FC = () => {
           ref={svgRef}
           viewBox="0 0 460 260"
           style={{
-            maxWidth: '480px',
+            maxWidth: '680px',
             width: '100%',
             height: 'auto',
             borderRadius: 'var(--radius-md)',
@@ -237,10 +237,10 @@ export const BellmanFordPlayground: React.FC = () => {
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
             </marker>
             <marker id="bf-pg-arr-neg" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--error)" />
             </marker>
             <marker id="bf-pg-arr-cycle" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--warning)" />
             </marker>
           </defs>
 
@@ -255,11 +255,11 @@ export const BellmanFordPlayground: React.FC = () => {
             const midX = (u.x + v.x) / 2;
             const midY = (u.y + v.y) / 2;
 
-            let strokeColor = isNeg ? '#ef4444' : 'var(--border, #475569)';
+            let strokeColor = isNeg ? 'var(--error)' : 'var(--border, #475569)';
             let markerId = isNeg ? 'url(#bf-pg-arr-neg)' : 'url(#bf-pg-arr)';
 
             if (hasNegativeCycleDetected && isCycleEdge) {
-              strokeColor = '#f59e0b';
+              strokeColor = 'var(--warning)';
               markerId = 'url(#bf-pg-arr-cycle)';
             }
 
@@ -286,7 +286,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   x={midX}
                   y={midY + 4}
                   textAnchor="middle"
-                  fill={isNeg ? '#ef4444' : 'var(--text)'}
+                  fill={isNeg ? 'var(--error)' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
                   fontSize="11px"
                   fontWeight="700"
@@ -315,7 +315,7 @@ export const BellmanFordPlayground: React.FC = () => {
                   cy={n.y}
                   r={22}
                   fill="var(--surface)"
-                  stroke={isSource ? '#10b981' : isDragging ? '#38bdf8' : 'var(--accent, #6366f1)'}
+                  stroke={isSource ? 'var(--success)' : isDragging ? 'var(--accent)' : 'var(--accent)'}
                   strokeWidth={isDragging ? 3.5 : 2.5}
                 />
                 <text
@@ -339,14 +339,14 @@ export const BellmanFordPlayground: React.FC = () => {
                   height={18}
                   rx={4}
                   fill="var(--bg, #1e293b)"
-                  stroke={dist === Infinity ? 'var(--border)' : '#38bdf8'}
+                  stroke={dist === Infinity ? 'var(--border)' : 'var(--accent)'}
                   strokeWidth={1}
                 />
                 <text
                   x={n.x}
                   y={n.y - 27}
                   textAnchor="middle"
-                  fill={dist === Infinity ? 'var(--text-muted)' : '#38bdf8'}
+                  fill={dist === Infinity ? 'var(--text-muted)' : 'var(--accent)'}
                   fontFamily="var(--font-mono)"
                   fontSize="10px"
                   fontWeight="800"
@@ -387,9 +387,9 @@ export const BellmanFordPlayground: React.FC = () => {
                     key={`dp-row-${iIdx}`}
                     style={{
                       background: isCycleDetectionRow
-                        ? 'rgba(239, 68, 68, 0.15)'
+                        ? 'var(--state-conflict-bg)'
                         : isCurrentRow
-                        ? 'rgba(56, 189, 248, 0.12)'
+                        ? 'var(--state-active-bg)'
                         : 'transparent'
                     }}
                   >
@@ -413,8 +413,8 @@ export const BellmanFordPlayground: React.FC = () => {
                             fontFamily: 'var(--font-mono)',
                             color: hasDecreased
                               ? isCycleDetectionRow
-                                ? '#ef4444'
-                                : '#10b981'
+                                ? 'var(--error)'
+                                : 'var(--success)'
                               : 'var(--text)',
                             fontWeight: hasDecreased || isCurrentRow ? 700 : 400
                           }}

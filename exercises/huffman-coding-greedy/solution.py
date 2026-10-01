@@ -1,6 +1,7 @@
 import heapq
 
-def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
+
+def codificar_huffman(frequencies: dict[str, int]) -> dict[str, str]:
     """
     Construye los códigos binarios de Huffman libres de prefijo
     para un alfabeto de caracteres dado con sus frecuencias enteras.
@@ -10,47 +11,50 @@ def codificar_huffman(frecuencias: dict[str, int]) -> dict[str, str]:
 
     Retorna un diccionario {caracter: codigo_binario}, por ejemplo {'A': '0', 'B': '10'}.
     """
-    if not frecuencias:
+    if not frequencies:
         return {}
 
-    # Caso borde: un único carácter
-    if len(frecuencias) == 1:
-        unico = next(iter(frecuencias))
-        return {unico: '0'}
+    # Edge case: single character
+    if len(frequencies) == 1:
+        single = next(iter(frequencies))
+        return {single: '0'}
 
-    # Elementos en el min-heap: (frecuencia, orden_insercion, caracter, hijo_izq, hijo_der)
+    # Elements in min-heap: (frequency, insertion_order, char, left_child, right_child)
     heap = []
-    contador = 0
-    for char, freq in frecuencias.items():
-        heapq.heappush(heap, (freq, contador, char, None, None))
-        contador += 1
+    counter = 0
+    for char, freq in frequencies.items():
+        heapq.heappush(heap, (freq, counter, char, None, None))
+        counter += 1
 
-    # Bucle greedy (Greedy): fusionar los dos nodos de menor frecuencia
+    # Greedy loop: merge the two lowest-frequency nodes
     while len(heap) > 1:
-        freq1, _, char1, izq1, der1 = heapq.heappop(heap)
-        freq2, _, char2, izq2, der2 = heapq.heappop(heap)
+        freq1, _, char1, left1, right1 = heapq.heappop(heap)
+        freq2, _, char2, left2, right2 = heapq.heappop(heap)
 
-        nodo_izq = (freq1, char1, izq1, der1)
-        nodo_der = (freq2, char2, izq2, der2)
+        left_node = (freq1, char1, left1, right1)
+        right_node = (freq2, char2, left2, right2)
 
-        nodo_padre = (freq1 + freq2, contador, None, nodo_izq, nodo_der)
-        heapq.heappush(heap, nodo_padre)
-        contador += 1
+        parent_node = (freq1 + freq2, counter, None, left_node, right_node)
+        heapq.heappush(heap, parent_node)
+        counter += 1
 
-    # Recorrer el árbol desde la raíz para generar los códigos binarios
-    raiz = heapq.heappop(heap)
-    codigos: dict[str, str] = {}
+    root = heapq.heappop(heap)
+    codes: dict[str, str] = {}
 
-    def asignar_codigos(nodo, prefijo_actual: str):
-        _, _, char, izq, der = nodo if len(nodo) == 5 else (nodo[0], None, nodo[1], nodo[2], nodo[3])
+    def assign_codes(node, current_prefix: str) -> None:
+        _, _, char, left, right = node if len(node) == 5 else (node[0], None, node[1], node[2], node[3])
         if char is not None:
-            codigos[char] = prefijo_actual
+            codes[char] = current_prefix
             return
 
-        if izq is not None:
-            asignar_codigos(izq, prefijo_actual + '0')
-        if der is not None:
-            asignar_codigos(der, prefijo_actual + '1')
+        if left is not None:
+            assign_codes(left, current_prefix + '0')
+        if right is not None:
+            assign_codes(right, current_prefix + '1')
 
-    asignar_codigos(raiz, '')
-    return codigos
+    assign_codes(root, '')
+    return codes
+
+
+huffman_encoding = codificar_huffman
+

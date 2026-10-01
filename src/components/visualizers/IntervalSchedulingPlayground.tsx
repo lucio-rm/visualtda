@@ -346,8 +346,8 @@ export const IntervalSchedulingPlayground: React.FC = () => {
           const isConflict = isSelected && hasOverlap;
 
           let barFill = 'rgba(59, 130, 246, 0.2)';
-          if (isConflict) barFill = '#ef4444';
-          else if (isSelected) barFill = '#10b981';
+          if (isConflict) barFill = 'var(--error)';
+          else if (isSelected) barFill = 'var(--success)';
 
           const statusDesc = isConflict
             ? (language === 'es' ? 'en conflicto' : 'conflicted')
@@ -396,7 +396,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 <text
                   x={x2 - 14}
                   y={y + 20}
-                  fill="#ef4444"
+                  fill="var(--error)"
                   fontSize="13"
                   fontWeight="bold"
                   style={{ cursor: 'pointer' }}

@@ -284,7 +284,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                   padding: '0.6rem',
                   borderRadius: '4px',
                   backgroundColor: 'var(--bg)',
-                  border: dcPartition.leftOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  border: dcPartition.leftOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}
                 onClick={() => handleSelectRange(dcPartition.leftOpt.startIndex, dcPartition.leftOpt.endIndex)}
@@ -307,7 +307,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                   padding: '0.6rem',
                   borderRadius: '4px',
                   backgroundColor: 'var(--bg)',
-                  border: dcPartition.crossingOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  border: dcPartition.crossingOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}
                 onClick={() => handleSelectRange(dcPartition.crossingOpt.startIndex, dcPartition.crossingOpt.endIndex)}
@@ -316,7 +316,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   {language === 'es' ? '2. Mejor Cruzado por Centro' : '2. Best Crossing Mid'}
                 </div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#f59e0b' }}>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--warning)' }}>
                   Suma = {dcPartition.crossingOpt.maxSum}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
@@ -330,7 +330,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                   padding: '0.6rem',
                   borderRadius: '4px',
                   backgroundColor: 'var(--bg)',
-                  border: dcPartition.rightOpt.maxSum === dcPartition.overallBest ? '2px solid #10b981' : '1px solid var(--border)',
+                  border: dcPartition.rightOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}
                 onClick={() => handleSelectRange(dcPartition.rightOpt.startIndex, dcPartition.rightOpt.endIndex)}
@@ -376,7 +376,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                   style={{
                     cursor: 'pointer',
                     position: 'relative',
-                    borderRight: isMid && showDcPartition ? '3px dashed #f59e0b' : undefined
+                    borderRight: isMid && showDcPartition ? '3px dashed var(--warning)' : undefined
                   }}
                 >
                   <span className="item-idx">i={idx}</span>
@@ -400,7 +400,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                         position: 'absolute',
                         bottom: '-16px',
                         fontSize: '9px',
-                        color: '#f59e0b',
+                        color: 'var(--warning)',
                         fontWeight: 800
                       }}
                     >
@@ -433,11 +433,11 @@ export const MaxSubarrayPlayground: React.FC = () => {
               </span>
               <span className="stat-value">
                 {isOptimal ? (
-                  <span style={{ color: '#10b981', fontWeight: 800 }}>
+                  <span style={{ color: 'var(--success)', fontWeight: 800 }}>
                     🎉 {language === 'es' ? '¡Subarreglo de suma máxima verificado!' : 'Maximum sum subarray verified!'}
                   </span>
                 ) : userSum !== null ? (
-                  <span style={{ color: '#f59e0b' }}>
+                  <span style={{ color: 'var(--warning)' }}>
                     {language === 'es'
                       ? `Suma actual ${userSum}. ¿Puedes superarla?`
                       : `Current sum ${userSum}. Can you beat it?`}

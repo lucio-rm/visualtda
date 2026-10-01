@@ -1,20 +1,22 @@
 import heapq
 
-def dijkstra(grafo: dict[str, list[tuple[str, int]]], origen: str) -> dict[str, int]:
+
+def dijkstra(graph: dict[str, list[tuple[str, int]]], source: str) -> dict[str, int]:
     """
-    grafo: diccionario adyacencia {nodo: [(vecino, peso), ...]}.
-    Retorna diccionario de distancias minimas {nodo: dist}.
+    graph: adjacency dictionary {node: [(neighbor, weight), ...]}.
+    Returns dictionary of shortest distances {node: dist}.
     """
-    distancias = {nodo: float('inf') for nodo in grafo}
-    distancias[origen] = 0
-    cola = [(0, origen)]
-    while cola:
-        dist_u, u = heapq.heappop(cola)
-        if dist_u > distancias[u]:
+    distances = {node: float('inf') for node in graph}
+    distances[source] = 0
+    min_heap = [(0, source)]
+    while min_heap:
+        dist_u, u = heapq.heappop(min_heap)
+        if dist_u > distances[u]:
             continue
-        for v, peso in grafo.get(u, []):
-            nueva_dist = dist_u + peso
-            if nueva_dist < distancias[v]:
-                distancias[v] = nueva_dist
-                heapq.heappush(cola, (nueva_dist, v))
-    return distancias
+        for v, weight in graph.get(u, []):
+            new_dist = dist_u + weight
+            if new_dist < distances[v]:
+                distances[v] = new_dist
+                heapq.heappush(min_heap, (new_dist, v))
+    return distances
+

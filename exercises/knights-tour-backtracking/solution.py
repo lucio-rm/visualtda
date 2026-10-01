@@ -2,34 +2,38 @@ def recorrido_caballo(n: int) -> list[list[int]] | None:
     """
     Retorna tablero n x n con orden de visita [0 .. n^2 - 1] o None.
     """
-    tablero = [[-1] * n for _ in range(n)]
-    movimientos = [(2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1), (-1, -2), (1, -2), (2, -1)]
+    board = [[-1] * n for _ in range(n)]
+    moves = [(2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1), (-1, -2), (1, -2), (2, -1)]
 
-    def es_valido(r, c):
-        return 0 <= r < n and 0 <= c < n and tablero[r][c] == -1
+    def is_valid(r: int, c: int) -> bool:
+        return 0 <= r < n and 0 <= c < n and board[r][c] == -1
 
-    def grado_salida(r, c):
-        return sum(1 for dr, dc in movimientos if es_valido(r + dr, c + dc))
+    def out_degree(r: int, c: int) -> int:
+        return sum(1 for dr, dc in moves if is_valid(r + dr, c + dc))
 
-    def backtrack(r: int, c: int, paso: int) -> bool:
-        tablero[r][c] = paso
-        if paso == n * n - 1:
+    def backtrack(r: int, c: int, step: int) -> bool:
+        board[r][c] = step
+        if step == n * n - 1:
             return True
 
-        candidatos = []
-        for dr, dc in movimientos:
+        candidates = []
+        for dr, dc in moves:
             nr, nc = r + dr, c + dc
-            if es_valido(nr, nc):
-                candidatos.append((grado_salida(nr, nc), nr, nc))
-        candidatos.sort(key=lambda x: x[0])
+            if is_valid(nr, nc):
+                candidates.append((out_degree(nr, nc), nr, nc))
+        candidates.sort(key=lambda item: item[0])
 
-        for _, nr, nc in candidatos:
-            if backtrack(nr, nc, paso + 1):
+        for _, nr, nc in candidates:
+            if backtrack(nr, nc, step + 1):
                 return True
 
-        tablero[r][c] = -1
+        board[r][c] = -1
         return False
 
     if backtrack(0, 0, 0):
-        return tablero
+        return board
     return None
+
+
+knights_tour = recorrido_caballo
+

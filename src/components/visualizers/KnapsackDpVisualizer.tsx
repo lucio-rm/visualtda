@@ -13,7 +13,7 @@ import './KnapsackDpVisualizer.css';
 const PRESETS = [
   {
     id: 'standard',
-    label: { es: 'Estándar (4 ítems, C = 7)', en: 'Standard (4 items, C = 7)' },
+    label: { es: 'Estándar (4 ítems, C = 6)', en: 'Standard (4 items, C = 6)' },
     items: DEFAULT_DP_ITEMS,
     capacity: DEFAULT_DP_CAPACITY
   },

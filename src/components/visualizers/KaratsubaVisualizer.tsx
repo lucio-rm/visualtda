@@ -61,11 +61,11 @@ export const KaratsubaVisualizer: React.FC = () => {
         </div>
         <div className="kt-metric-badge">
           <span>{language === 'es' ? 'Multiplicaciones Realizadas:' : 'Multiplications Used:'}</span>
-          <strong style={{ color: '#10b981' }}>{multCount} / 3</strong>
+          <strong style={{ color: 'var(--success)' }}>{multCount} / 3</strong>
         </div>
         <div className="kt-metric-badge">
-          <span>{language === 'es' ? 'Multiplicaciones Ahorradas:' : 'Saved Multiplications:'}</span>
-          <strong style={{ color: '#38bdf8' }}>{Math.max(0, 4 - multCount)}</strong>
+          <span>{language === 'es' ? 'Ahorro vs Escolar (4 mult):' : 'Saved vs Naive (4 mult):'}</span>
+          <strong style={{ color: 'var(--accent)' }}>{language === 'es' ? '1 de 4 (25%)' : '1 of 4 (25%)'}</strong>
         </div>
         <div className="kt-metric-badge kt-action-badge">
           <span>{language === 'es' ? 'Fase:' : 'Phase:'}</span>
@@ -81,41 +81,41 @@ export const KaratsubaVisualizer: React.FC = () => {
       {/* SVG Algebraic Structure Canvas */}
       <div className="kt-canvas-container" style={{ background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
         <svg
-          viewBox="0 0 660 260"
-          style={{ width: '100%', maxWidth: '660px', height: 'auto', display: 'block' }}
+          viewBox="0 0 720 290"
+          style={{ width: '100%', maxWidth: '720px', height: 'auto', display: 'block', margin: '0 auto' }}
           role="img"
-          aria-label={language === 'es' ? 'Estructura algebraica del algoritmo de Karatsuba' : 'Karatsuba algebraic structure decomposition'}
+          aria-label={language === 'es' ? 'Diagrama de recursión de Karatsuba' : 'Karatsuba recursion diagram'}
         >
-          {/* Main Top Node: (x, y) */}
-          <rect x={220} y={12} width={220} height={46} rx={8} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2.5} />
-          <text x={330} y={34} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+          {/* Root Multiplication Node */}
+          <rect x={245} y={10} width={230} height={52} rx={8} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2.5} />
+          <text x={360} y={32} textAnchor="middle" fill="var(--text)" fontSize="15px" fontWeight="800" fontFamily="var(--font-mono)">
             {x} × {y}
           </text>
-          <text x={330} y={49} textAnchor="middle" fill="var(--text-muted)" fontSize="10px" fontFamily="var(--font-mono)">
+          <text x={360} y={50} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontFamily="var(--font-mono)">
             x₁={x1}, x₀={x0} | y₁={y1}, y₀={y0} (m={m})
           </text>
 
           {/* Connectors to 3 Karatsuba branches */}
-          <path d="M 260 58 L 105 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
-          <path d="M 330 58 L 330 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
-          <path d="M 400 58 L 555 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 300 62 L 125 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 360 62 L 360 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 420 62 L 595 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
 
           {/* Branch 1: z2 = x1 * y1 */}
           <g>
             <rect
-              x={15}
+              x={20}
               y={105}
-              width={180}
-              height={62}
+              width={210}
+              height={70}
               rx={8}
-              fill={subcalc === 'Z2' ? 'rgba(56, 189, 248, 0.18)' : 'var(--surface)'}
+              fill={subcalc === 'Z2' ? 'var(--state-active-bg)' : 'var(--surface)'}
               stroke={subcalc === 'Z2' ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
-            <text x={105} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
-              {language === 'es' ? 'Rama 1: Término Alto (z₂)' : 'Branch 1: High Term (z₂)'}
+            <text x={125} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? '1. Término Alto (z₂)' : '1. High Term (z₂)'}
             </text>
-            <text x={105} y={150} textAnchor="middle" fill={subcalc === 'Z2' ? 'var(--accent)' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+            <text x={125} y={154} textAnchor="middle" fill={subcalc === 'Z2' ? 'var(--accent)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
               {x1} × {y1} = {z2 ?? '—'}
             </text>
           </g>
@@ -123,19 +123,19 @@ export const KaratsubaVisualizer: React.FC = () => {
           {/* Branch 2: Cross Product = (x1+x0)*(y1+y0) */}
           <g>
             <rect
-              x={225}
+              x={255}
               y={105}
               width={210}
-              height={62}
+              height={70}
               rx={8}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(16, 185, 129, 0.18)' : 'var(--surface)'}
-              stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? '#10b981' : 'var(--border)'}
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--state-solution-bg)' : 'var(--surface)'}
+              stroke={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--success)' : 'var(--border)'}
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={330} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
-              {language === 'es' ? 'Rama 2: Producto Cruzado' : 'Branch 2: Cross Product'}
+            <text x={360} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? '2. Producto Cruzado (P)' : '2. Cross Product (P)'}
             </text>
-            <text x={330} y={150} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? '#10b981' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+            <text x={360} y={154} textAnchor="middle" fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--success)' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
               ({x1}+{x0}) × ({y1}+{y0}) = {zSum ?? '—'}
             </text>
           </g>
@@ -143,19 +143,19 @@ export const KaratsubaVisualizer: React.FC = () => {
           {/* Branch 3: z0 = x0 * y0 */}
           <g>
             <rect
-              x={465}
+              x={490}
               y={105}
-              width={180}
-              height={62}
+              width={210}
+              height={70}
               rx={8}
-              fill={subcalc === 'Z0' ? 'rgba(245, 158, 11, 0.18)' : 'var(--surface)'}
-              stroke={subcalc === 'Z0' ? '#f59e0b' : 'var(--border)'}
+              fill={subcalc === 'Z0' ? 'var(--state-candidate-bg)' : 'var(--surface)'}
+              stroke={subcalc === 'Z0' ? 'var(--warning)' : 'var(--border)'}
               strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />
-            <text x={555} y={127} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
-              {language === 'es' ? 'Rama 3: Término Bajo (z₀)' : 'Branch 3: Low Term (z₀)'}
+            <text x={595} y={128} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="700">
+              {language === 'es' ? '3. Término Bajo (z₀)' : '3. Low Term (z₀)'}
             </text>
-            <text x={555} y={150} textAnchor="middle" fill={subcalc === 'Z0' ? '#f59e0b' : 'var(--text)'} fontSize="13px" fontWeight="800" fontFamily="var(--font-mono)">
+            <text x={595} y={154} textAnchor="middle" fill={subcalc === 'Z0' ? 'var(--warning)' : 'var(--text)'} fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
               {x0} × {y0} = {z0 ?? '—'}
             </text>
           </g>
@@ -163,23 +163,23 @@ export const KaratsubaVisualizer: React.FC = () => {
           {/* Recombination & Middle Term Bar */}
           <g>
             <rect
-              x={50}
-              y={185}
-              width={560}
-              height={55}
-              rx={8}
-              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(37, 99, 235, 0.12)' : 'var(--surface)'}
+              x={30}
+              y={195}
+              width={660}
+              height={75}
+              rx={10}
+              fill={subcalc === 'COMBINE' || result !== null ? 'var(--state-active-bg)' : 'var(--surface)'}
               stroke={subcalc === 'COMBINE' || result !== null ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'COMBINE' || result !== null ? 2 : 1.5}
             />
-            <text x={330} y={207} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
-              {language === 'es' ? 'Término medio:' : 'Middle term:'} z₁ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
-              <tspan fill="#10b981" fontWeight="800">
+            <text x={360} y={222} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
+              {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ = P - z₂ - z₀ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
+              <tspan fill="var(--success)" fontWeight="800">
                 {z1 ?? '—'}
               </tspan>
             </text>
-            <text x={330} y={226} textAnchor="middle" fill="var(--text)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-              {language === 'es' ? 'Recombinación:' : 'Recombination:'} z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
+            <text x={360} y={250} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
+              {language === 'es' ? 'Resultado Final:' : 'Final Result:'} z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
               <tspan fill="var(--accent)" fontWeight="800">
                 {result ?? '...'}
               </tspan>

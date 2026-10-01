@@ -103,7 +103,7 @@
 }
 
 .inv-metric-badge .value.highlight {
-  color: #f59e0b;
+  color: var(--warning);
 }
 
 .inv-split-alert {
@@ -250,14 +250,14 @@
 }
 
 [data-theme='dark'] .inv-cell.inversion-cause {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: #ef4444;
+  background: var(--state-conflict-bg);
+  border-color: var(--error);
   color: #fca5a5;
 }
 
 [data-theme='dark'] .inv-cell.inversion-victim {
-  background: rgba(245, 158, 11, 0.25);
-  border-color: #f59e0b;
+  background: var(--state-candidate-bg);
+  border-color: var(--warning);
   color: #fde68a;
 }
 
@@ -282,8 +282,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--success-bg, rgba(16, 185, 129, 0.15));
-  border: 1px solid var(--success, #10b981);
+  background: var(--success-bg, var(--state-solution-bg));
+  border: 1px solid var(--success);
   border-radius: 6px;
   font-family: var(--font-mono, monospace);
   font-weight: 700;
@@ -291,7 +291,7 @@
 }
 
 [data-theme='dark'] .inv-merged-cell {
-  background: rgba(16, 185, 129, 0.2);
+  background: var(--state-solution-bg);
   color: #a7f3d0;
 }
 

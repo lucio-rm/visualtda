@@ -447,6 +447,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 ))}
               </div>
               <textarea
+                id={`vtda_code_${exercise.id}`}
+                name={`vtda_code_${exercise.id}`}
                 className="code-editor-input"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
@@ -459,6 +461,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 rows={14}
                 aria-label={t(dict.codeEditorAriaLabel)}
                 spellCheck={false}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                data-lpignore="true"
+                data-form-type="other"
               />
             </div>
             <div className="editor-actions">

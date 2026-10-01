@@ -34,11 +34,11 @@
 }
 
 .action-init { border-left-color: #64748b; }
-.action-explore_vertex { border-left-color: #38bdf8; }
-.action-dead_end { border-left-color: #ef4444; }
-.action-backtrack { border-left-color: #f59e0b; }
-.action-cycle_found { border-left-color: #10b981; }
-.action-complete { border-left-color: #10b981; }
+.action-explore_vertex { border-left-color: var(--accent); }
+.action-dead_end { border-left-color: var(--error); }
+.action-backtrack { border-left-color: var(--warning); }
+.action-cycle_found { border-left-color: var(--success); }
+.action-complete { border-left-color: var(--success); }
 
 .ham-canvas-container {
   display: flex;

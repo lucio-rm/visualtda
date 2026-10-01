@@ -34,10 +34,10 @@
 }
 
 .action-init { border-left-color: #64748b; }
-.action-sort_deadlines { border-left-color: #38bdf8; }
-.action-schedule_job { border-left-color: #f59e0b; }
+.action-sort_deadlines { border-left-color: var(--accent); }
+.action-schedule_job { border-left-color: var(--warning); }
 .action-evaluate_lateness { border-left-color: #ec4899; }
-.action-complete { border-left-color: #10b981; }
+.action-complete { border-left-color: var(--success); }
 
 .ml-canvas-container {
   display: flex;

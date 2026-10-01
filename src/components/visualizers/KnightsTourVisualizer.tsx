@@ -89,12 +89,12 @@ export const KnightsTourVisualizer: React.FC = () => {
               let strokeWidth = 1;
 
               if (isCurrent) {
-                fill = 'rgba(56, 189, 248, 0.3)';
-                stroke = '#38bdf8';
+                fill = 'var(--state-active-bg)';
+                stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (cand) {
-                fill = 'rgba(16, 185, 129, 0.2)';
-                stroke = '#10b981';
+                fill = 'var(--state-solution-bg)';
+                stroke = 'var(--success)';
                 strokeWidth = 2;
               }
 
@@ -115,7 +115,7 @@ export const KnightsTourVisualizer: React.FC = () => {
                       cy={y + cellSize / 2}
                       r={18}
                       fill="rgba(99, 102, 241, 0.25)"
-                      stroke="var(--accent, #6366f1)"
+                      stroke="var(--accent)"
                       strokeWidth={1.5}
                     />
                   )}
@@ -137,7 +137,7 @@ export const KnightsTourVisualizer: React.FC = () => {
                       x={x + cellSize - 6}
                       y={y + 14}
                       textAnchor="end"
-                      fill="#10b981"
+                      fill="var(--success)"
                       fontFamily="var(--font-mono)"
                       fontSize="11px"
                       fontWeight="700"
@@ -156,7 +156,7 @@ export const KnightsTourVisualizer: React.FC = () => {
             <polyline
               points={polylinePoints}
               fill="none"
-              stroke="var(--accent, #38bdf8)"
+              stroke="var(--accent)"
               strokeWidth={3}
               strokeLinecap="round"
               strokeLinejoin="round"

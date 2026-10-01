@@ -73,8 +73,8 @@ export const ClosestPairVisualizer: React.FC = () => {
               y={0}
               width={Math.min(500, delta * 2)}
               height={280}
-              fill="rgba(56, 189, 248, 0.08)"
-              stroke="rgba(56, 189, 248, 0.25)"
+              fill="var(--state-active-bg)"
+              stroke="var(--state-active-bg)"
               strokeDasharray="4 4"
             />
           )}
@@ -87,11 +87,11 @@ export const ClosestPairVisualizer: React.FC = () => {
                 y1={0}
                 x2={splitX}
                 y2={280}
-                stroke="var(--accent, #6366f1)"
+                stroke="var(--accent)"
                 strokeWidth={2}
                 strokeDasharray="6 4"
               />
-              <text x={splitX + 6} y={20} fill="var(--accent, #6366f1)" fontSize="11px" fontFamily="var(--font-mono)" fontWeight="700">
+              <text x={splitX + 6} y={20} fill="var(--accent)" fontSize="11px" fontFamily="var(--font-mono)" fontWeight="700">
                 x = {splitX}
               </text>
             </g>
@@ -104,7 +104,7 @@ export const ClosestPairVisualizer: React.FC = () => {
               y1={bestPair[0].y}
               x2={bestPair[1].x}
               y2={bestPair[1].y}
-              stroke="#10b981"
+              stroke="var(--success)"
               strokeWidth={3}
             />
           )}
@@ -116,7 +116,7 @@ export const ClosestPairVisualizer: React.FC = () => {
               y1={activePair[0].y}
               x2={activePair[1].x}
               y2={activePair[1].y}
-              stroke="#f59e0b"
+              stroke="var(--warning)"
               strokeWidth={2}
               strokeDasharray="3 3"
             />
@@ -132,11 +132,11 @@ export const ClosestPairVisualizer: React.FC = () => {
             let r = 7;
 
             if (isBest) {
-              fill = '#10b981';
+              fill = 'var(--success)';
               stroke = '#059669';
               r = 9;
             } else if (inStrip) {
-              fill = '#38bdf8';
+              fill = 'var(--accent)';
               stroke = '#0284c7';
               r = 8;
             }

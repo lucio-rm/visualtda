@@ -225,15 +225,15 @@ export const MajorityElementPlayground: React.FC = () => {
                   alignItems: 'center',
                   padding: '0.4rem 0.5rem',
                   borderRadius: '6px',
-                  border: isMaj ? '2px solid #10b981' : '1px solid var(--border)',
-                  backgroundColor: isMaj ? 'rgba(16, 185, 129, 0.12)' : 'var(--bg)',
+                  border: isMaj ? '2px solid var(--success)' : '1px solid var(--border)',
+                  backgroundColor: isMaj ? 'var(--state-solution-bg)' : 'var(--bg)',
                   minWidth: '48px'
                 }}
               >
                 <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   [{idx}]
                 </span>
-                <span style={{ fontSize: '1.25rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.15rem 0', color: isMaj ? '#10b981' : 'var(--text)' }}>
+                <span style={{ fontSize: '1.25rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.15rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
                   {val}
                 </span>
                 <div style={{ display: 'flex', gap: '0.2rem' }}>
@@ -257,7 +257,7 @@ export const MajorityElementPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 1}
-                    style={{ padding: '0 0.3rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: '#ef4444', cursor: 'pointer' }}
+                    style={{ padding: '0 0.3rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
                   >
                     ×
@@ -273,8 +273,8 @@ export const MajorityElementPlayground: React.FC = () => {
       <div
         style={{
           padding: '0.75rem 1rem',
-          backgroundColor: majorityElement !== null ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)',
-          border: `1px solid ${majorityElement !== null ? '#10b981' : '#ef4444'}`,
+          backgroundColor: majorityElement !== null ? 'var(--state-solution-bg)' : 'var(--state-conflict-bg)',
+          border: `1px solid ${majorityElement !== null ? 'var(--success)' : 'var(--error)'}`,
           borderRadius: '6px',
           fontSize: '0.9rem'
         }}
@@ -282,7 +282,7 @@ export const MajorityElementPlayground: React.FC = () => {
         {majorityElement !== null ? (
           <div>
             <strong>{language === 'es' ? 'Elemento Mayoritario Encontrado:' : 'Majority Element Found:'}</strong>{' '}
-            <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#10b981' }}>{majorityElement}</span>{' '}
+            <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--success)' }}>{majorityElement}</span>{' '}
             {`(${freqMap[majorityElement]} ${language === 'es' ? 'apariciones' : 'occurrences'} > ${threshold})`}
           </div>
         ) : (
@@ -392,7 +392,7 @@ export const MajorityElementPlayground: React.FC = () => {
                       </td>
                       <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
                         {isWinner ? (
-                          <strong style={{ color: '#10b981' }}>{language === 'es' ? 'MAYORITARIO' : 'MAJORITY'}</strong>
+                          <strong style={{ color: 'var(--success)' }}>{language === 'es' ? 'MAYORITARIO' : 'MAJORITY'}</strong>
                         ) : (
                           <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? 'Descartado' : 'Discarded'}</span>
                         )}
@@ -426,7 +426,7 @@ export const MajorityElementPlayground: React.FC = () => {
           <div
             style={{
               padding: '0.75rem 1rem',
-              backgroundColor: 'rgba(56, 189, 248, 0.08)',
+              backgroundColor: 'var(--state-active-bg)',
               border: '1px solid var(--accent)',
               borderRadius: 'var(--radius-sm)',
               fontSize: '0.85rem'

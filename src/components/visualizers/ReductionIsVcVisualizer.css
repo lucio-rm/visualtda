@@ -28,8 +28,8 @@
 }
 
 .reduction-metric-badge.is-badge {
-  border-color: #10b981;
-  color: #10b981;
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .reduction-metric-badge.vc-badge {
@@ -44,8 +44,9 @@
 
 .reduction-graph-canvas {
   width: 100%;
-  max-width: 580px;
-  height: 300px;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 540 / 300;
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -66,13 +67,13 @@
 }
 
 .graph-edge.active {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 4.5;
   stroke-dasharray: 4 2;
 }
 
 .graph-edge.conflict {
-  stroke: #ef4444;
+  stroke: var(--error);
   stroke-width: 4;
   stroke-dasharray: 6 3;
 }
@@ -91,7 +92,7 @@
 }
 
 .graph-node.in-is .node-circle {
-  fill: #10b981;
+  fill: var(--success);
   stroke: #059669;
   stroke-width: 3;
 }
@@ -103,12 +104,12 @@
 }
 
 .graph-node.active-node .node-circle {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 4;
 }
 
 .graph-node.conflict-node .node-circle {
-  stroke: #ef4444;
+  stroke: var(--error);
   stroke-width: 4;
 }
 

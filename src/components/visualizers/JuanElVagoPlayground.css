@@ -72,7 +72,7 @@
 }
 
 .error-text {
-  color: #ef4444;
+  color: var(--error);
   font-size: 0.85rem;
 }
 
@@ -157,13 +157,13 @@
 }
 
 .picker-card.user-selected {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.12);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
+  box-shadow: 0 4px 10px var(--state-solution-bg);
 }
 
 .picker-card.user-selected .picker-status {
-  color: #10b981;
+  color: var(--success);
 }
 
 .comparison-board {
@@ -194,11 +194,11 @@
 }
 
 .score-card.valid .score-number {
-  color: #10b981;
+  color: var(--success);
 }
 
 .score-card.invalid .score-number {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .score-card.optimal-card .score-number {
@@ -206,19 +206,19 @@
 }
 
 .status-error {
-  color: #ef4444;
+  color: var(--error);
   font-size: 0.8rem;
   font-weight: 600;
 }
 
 .status-success {
-  color: #10b981;
+  color: var(--success);
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .status-subopt {
-  color: #f59e0b;
+  color: var(--warning);
   font-size: 0.8rem;
 }
 

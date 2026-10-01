@@ -282,17 +282,17 @@ export const SubsetSumPlayground: React.FC = () => {
             backgroundColor: isDragOverBucket
               ? 'rgba(59, 130, 246, 0.15)'
               : isExactMatch
-              ? 'rgba(16, 185, 129, 0.12)'
+              ? 'var(--state-solution-bg)'
               : isOverflow
-              ? 'rgba(239, 68, 68, 0.12)'
+              ? 'var(--state-conflict-bg)'
               : 'var(--surface)',
             border: `2px dashed ${
               isDragOverBucket
                 ? '#3b82f6'
                 : isExactMatch
-                ? '#10b981'
+                ? 'var(--success)'
                 : isOverflow
-                ? '#ef4444'
+                ? 'var(--error)'
                 : 'var(--border)'
             }`,
             borderRadius: '8px',
@@ -304,7 +304,7 @@ export const SubsetSumPlayground: React.FC = () => {
               ⚖️ {language === 'es' ? 'Balanza de Suma Objetivo' : 'Target Sum Balance'}:{' '}
               <strong
                 style={{
-                  color: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                  color: isExactMatch ? 'var(--success)' : isOverflow ? 'var(--error)' : 'var(--accent)',
                   fontSize: '1.1rem'
                 }}
               >
@@ -340,7 +340,7 @@ export const SubsetSumPlayground: React.FC = () => {
               style={{
                 height: '100%',
                 width: `${fillPercentage}%`,
-                backgroundColor: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                backgroundColor: isExactMatch ? 'var(--success)' : isOverflow ? 'var(--error)' : 'var(--accent)',
                 transition: 'width 0.3s ease, background-color 0.3s ease'
               }}
             />
@@ -358,7 +358,7 @@ export const SubsetSumPlayground: React.FC = () => {
                   onClick={() => toggleNumber(idx)}
                   className="clickable-chip selected"
                   style={{
-                    backgroundColor: isExactMatch ? '#10b981' : isOverflow ? '#ef4444' : 'var(--accent)',
+                    backgroundColor: isExactMatch ? 'var(--success)' : isOverflow ? 'var(--error)' : 'var(--accent)',
                     borderColor: isExactMatch ? '#059669' : isOverflow ? '#dc2626' : '#2563eb',
                     cursor: 'pointer'
                   }}
@@ -384,8 +384,8 @@ export const SubsetSumPlayground: React.FC = () => {
               style={{
                 marginTop: '0.5rem',
                 padding: '0.6rem 0.85rem',
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                borderLeft: '4px solid #10b981',
+                backgroundColor: 'var(--state-solution-bg)',
+                borderLeft: '4px solid var(--success)',
                 borderRadius: '4px',
                 fontSize: '0.85rem',
                 color: 'var(--text)'
@@ -404,8 +404,8 @@ export const SubsetSumPlayground: React.FC = () => {
               style={{
                 marginTop: '0.5rem',
                 padding: '0.6rem 0.85rem',
-                backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                borderLeft: '4px solid #ef4444',
+                backgroundColor: 'var(--state-conflict-bg)',
+                borderLeft: '4px solid var(--error)',
                 borderRadius: '4px',
                 fontSize: '0.85rem',
                 color: 'var(--text)'
@@ -458,7 +458,7 @@ export const SubsetSumPlayground: React.FC = () => {
         </div>
         <div className="comparison-stat-box">
           <span className="comparison-stat-title">{language === 'es' ? 'Ramas Podadas' : 'Pruned Subtrees'}</span>
-          <span className="comparison-stat-number" style={{ color: '#f59e0b' }}>
+          <span className="comparison-stat-number" style={{ color: 'var(--warning)' }}>
             {traceStats.pruned}
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
@@ -467,7 +467,7 @@ export const SubsetSumPlayground: React.FC = () => {
         </div>
         <div className="comparison-stat-box">
           <span className="comparison-stat-title">{language === 'es' ? 'Ahorro de Cómputo' : 'Search Space Saved'}</span>
-          <span className="comparison-stat-number" style={{ color: '#10b981' }}>
+          <span className="comparison-stat-number" style={{ color: 'var(--success)' }}>
             {traceStats.savingsPct}%
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>

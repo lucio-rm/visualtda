@@ -100,6 +100,8 @@ export const MaxFlowPlayground: React.FC = () => {
 
   const [draggingNode, setDraggingNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
 
   const [edges, setEdges] = useState<PlaygroundEdge[]>(() =>
     activePreset.edges.map((e) => ({ ...e, flow: 0 }))
@@ -318,12 +320,18 @@ export const MaxFlowPlayground: React.FC = () => {
   const handlePointerDown = (nodeId: string, e: React.PointerEvent) => {
     e.stopPropagation();
     (e.target as Element).setPointerCapture(e.pointerId);
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
     setDraggingNode(nodeId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingNode || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
       const rect = svgRef.current.getBoundingClientRect();
       const rawX = ((e.clientX - rect.left) / rect.width) * 500;
       const rawY = ((e.clientY - rect.top) / rect.height) * 280;
@@ -452,7 +460,7 @@ export const MaxFlowPlayground: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--error)" />
             </marker>
             <marker
               id="arrow-flow"
@@ -463,7 +471,7 @@ export const MaxFlowPlayground: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--success)" />
             </marker>
           </defs>
 
@@ -497,7 +505,7 @@ export const MaxFlowPlayground: React.FC = () => {
                   y1={uPos.y}
                   x2={vPos.x}
                   y2={vPos.y}
-                  stroke={inAugmentingPath ? 'var(--accent)' : isSaturated ? '#ef4444' : hasFlow ? '#10b981' : 'var(--border)'}
+                  stroke={inAugmentingPath ? 'var(--accent)' : isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--border)'}
                   strokeWidth={inAugmentingPath ? 3.5 : hasFlow ? 2.5 : 1.5}
                   markerEnd={marker}
                   opacity={isSaturated ? 0.7 : 1}
@@ -506,7 +514,7 @@ export const MaxFlowPlayground: React.FC = () => {
                   x={midX}
                   y={midY}
                   textAnchor="middle"
-                  fill={isSaturated ? '#ef4444' : hasFlow ? '#10b981' : 'var(--text-muted)'}
+                  fill={isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--text-muted)'}
                   fontSize="10px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
@@ -529,14 +537,45 @@ export const MaxFlowPlayground: React.FC = () => {
               <g
                 key={n.id}
                 onPointerDown={(e) => handlePointerDown(n.id, e)}
-                onClick={() => handleNodeClick(n.id)}
+                onClick={() => {
+                  if (hasDraggedRef.current) {
+                    hasDraggedRef.current = false;
+                    return;
+                  }
+                  handleNodeClick(n.id);
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={
+                  language === 'es'
+                    ? `Nodo ${n.id}${n.isSource ? ' (Fuente s)' : n.isSink ? ' (Sumidero t)' : ''}${isSelected ? ' (seleccionado)' : ''}`
+                    : `Node ${n.id}${n.isSource ? ' (Source s)' : n.isSink ? ' (Sink t)' : ''}${isSelected ? ' (selected)' : ''}`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleNodeClick(n.id);
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [n.id]: { x: pos.x, y: Math.max(30, pos.y - 10) } }));
+                  } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [n.id]: { x: pos.x, y: Math.min(270, pos.y + 10) } }));
+                  } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [n.id]: { x: Math.max(30, pos.x - 10), y: pos.y } }));
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    setNodePositions((prev) => ({ ...prev, [n.id]: { x: Math.min(570, pos.x + 10), y: pos.y } }));
+                  }
+                }}
                 style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
               >
                 <circle
                   cx={pos.x}
                   cy={pos.y}
                   r={24}
-                  fill={n.isSource ? '#3b82f6' : n.isSink ? '#10b981' : isSelected ? 'var(--accent)' : 'var(--surface)'}
+                  fill={n.isSource ? '#3b82f6' : n.isSink ? 'var(--success)' : isSelected ? 'var(--accent)' : 'var(--surface)'}
                   stroke={isSelected ? '#ffffff' : n.isSource ? '#2563eb' : n.isSink ? '#059669' : 'var(--border)'}
                   strokeWidth={isSelected ? 3 : 2}
                 />
@@ -558,7 +597,7 @@ export const MaxFlowPlayground: React.FC = () => {
                     y={pos.y + 34}
                     fontSize="11px"
                     textAnchor="middle"
-                    fill={isReachable ? '#3b82f6' : '#10b981'}
+                    fill={isReachable ? '#3b82f6' : 'var(--success)'}
                     fontWeight="800"
                     pointerEvents="none"
                   >
@@ -642,7 +681,7 @@ export const MaxFlowPlayground: React.FC = () => {
           <span className="mf-metric-label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Cuello de Botella del Camino (Δ):' : 'Path Bottleneck (Δ):'}
           </span>
-          <div className="mf-metric-val" style={{ fontSize: '1.2rem', fontWeight: '800', color: '#f59e0b' }}>
+          <div className="mf-metric-val" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--warning)' }}>
             {bottleneck ?? 0}
           </div>
         </div>
@@ -650,7 +689,7 @@ export const MaxFlowPlayground: React.FC = () => {
           <span className="mf-metric-label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Estado del Teorema Min-Cut:' : 'Min-Cut Theorem State:'}
           </span>
-          <div className="mf-metric-val" style={{ fontSize: '1rem', fontWeight: '700', color: isMaxFlowAchieved ? '#10b981' : 'var(--text)' }}>
+          <div className="mf-metric-val" style={{ fontSize: '1rem', fontWeight: '700', color: isMaxFlowAchieved ? 'var(--success)' : 'var(--text)' }}>
             {isMaxFlowAchieved
               ? (language === 'es' ? 'Flujo Máximo = Cap(S, T)' : 'Max Flow = Cap(S, T)')
               : (language === 'es' ? 'Caminos residuales activos' : 'Residual paths active')}
@@ -662,8 +701,8 @@ export const MaxFlowPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderLeft: '4px solid #10b981',
+            backgroundColor: 'var(--state-solution-bg)',
+            borderLeft: '4px solid var(--success)',
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.85rem',
             lineHeight: 1.5

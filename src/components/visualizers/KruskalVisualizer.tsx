@@ -9,11 +9,11 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import './KruskalVisualizer.css';
 
 const COMPONENT_COLORS: Record<string, string> = {
-  A: '#38bdf8',
+  A: 'var(--accent)',
   B: '#f43f5e',
-  C: '#10b981',
+  C: 'var(--success)',
   D: '#a855f7',
-  E: '#f59e0b',
+  E: 'var(--warning)',
   F: '#06b6d4'
 };
 
@@ -122,13 +122,13 @@ export const KruskalVisualizer: React.FC = () => {
             let strokeDash: string | undefined = undefined;
 
             if (isAccepted) {
-              strokeColor = '#10b981';
+              strokeColor = 'var(--success)';
               strokeWidth = 3.5;
             } else if (isCurrent) {
-              strokeColor = '#38bdf8';
+              strokeColor = 'var(--accent)';
               strokeWidth = 3;
             } else if (isRejected) {
-              strokeColor = 'rgba(239, 68, 68, 0.4)';
+              strokeColor = 'var(--state-conflict-bg)';
               strokeWidth = 1.5;
               strokeDash = '4 4';
             }
@@ -166,7 +166,7 @@ export const KruskalVisualizer: React.FC = () => {
           {/* Nodes */}
           {nodes.map((node) => {
             const root = components[node.id] || node.id;
-            const rootColor = COMPONENT_COLORS[root] || 'var(--accent, #6366f1)';
+            const rootColor = COMPONENT_COLORS[root] || 'var(--accent)';
 
             return (
               <g key={`node-${node.id}`}>

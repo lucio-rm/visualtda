@@ -582,4 +582,485 @@ export function simulateVonNeumannCoin(
   return { fairZero, fairOne, discarded };
 }
 
+// ─── 19. Sudoku Backtracking Oracle ──────────────────────────────────────────
+export function bruteForceSudoku(board: number[][]): boolean {
+  const grid = board.map((r) => [...r]);
+
+  function isSafe(r: number, c: number, num: number): boolean {
+    for (let i = 0; i < 9; i++) {
+      if (grid[r][i] === num || grid[i][c] === num) return false;
+    }
+    const startRow = Math.floor(r / 3) * 3;
+    const startCol = Math.floor(c / 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[startRow + i][startCol + j] === num) return false;
+      }
+    }
+    return true;
+  }
+
+  function solve(): boolean {
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (grid[r][c] === 0) {
+          for (let num = 1; num <= 9; num++) {
+            if (isSafe(r, c, num)) {
+              grid[r][c] = num;
+              if (solve()) return true;
+              grid[r][c] = 0;
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  return solve();
+}
+
+// ─── 20. Knight's Tour Validator Oracle ───────────────────────────────────────
+export function verifyKnightsTour(
+  boardSize: number,
+  path: [number, number][]
+): { valid: boolean; error?: string } {
+  const totalCells = boardSize * boardSize;
+  if (path.length !== totalCells) {
+    return { valid: false, error: `Recorrido incompleto: ${path.length}/${totalCells} casillas` };
+  }
+
+  const visited = new Set<string>();
+  for (let i = 0; i < path.length; i++) {
+    const [r, c] = path[i];
+    if (r < 0 || r >= boardSize || c < 0 || c >= boardSize) {
+      return { valid: false, error: `Casilla fuera de límites en paso ${i}: (${r}, ${c})` };
+    }
+    const key = `${r},${c}`;
+    if (visited.has(key)) {
+      return { valid: false, error: `Casilla repetida en paso ${i}: (${r}, ${c})` };
+    }
+    visited.add(key);
+
+    if (i > 0) {
+      const [pr, pc] = path[i - 1];
+      const dr = Math.abs(r - pr);
+      const dc = Math.abs(c - pc);
+      const isKnightMove = (dr === 1 && dc === 2) || (dr === 2 && dc === 1);
+      if (!isKnightMove) {
+        return { valid: false, error: `Movimiento de caballo inválido de (${pr},${pc}) a (${r},${c}) en paso ${i}` };
+      }
+    }
+  }
+
+  return { valid: true };
+}
+
+// ─── 21. Dijkstra Shortest Paths Oracle ───────────────────────────────────────
+export function bruteForceDijkstra(
+  numVertices: number,
+  edges: [number, number, number][],
+  source: number
+): Record<number, number> {
+  const dist: Record<number, number> = {};
+  for (let i = 0; i < numVertices; i++) dist[i] = Infinity;
+  dist[source] = 0;
+
+  // Build adjacency list
+  const adj = new Map<number, [number, number][]>();
+  for (const [u, v, w] of edges) {
+    if (!adj.has(u)) adj.set(u, []);
+    adj.get(u)!.push([v, w]);
+  }
+
+  // Exhaustive simple path search
+  function dfs(curr: number, currDist: number, visited: Set<number>) {
+    if (currDist < dist[curr]) {
+      dist[curr] = currDist;
+    }
+    const neighbors = adj.get(curr) || [];
+    for (const [nxt, w] of neighbors) {
+      if (!visited.has(nxt)) {
+        visited.add(nxt);
+        dfs(nxt, currDist + w, visited);
+        visited.delete(nxt);
+      }
+    }
+  }
+
+  const vSet = new Set<number>([source]);
+  dfs(source, 0, vSet);
+  return dist;
+}
+
+// ─── 22. Kruskal MST Exhaustive Oracle ────────────────────────────────────────
+export function bruteForceMst(
+  numVertices: number,
+  edges: [number, number, number][]
+): { minWeight: number; edges: [number, number, number][] } {
+  const m = edges.length;
+  const k = numVertices - 1;
+  let minWeight = Infinity;
+  let bestTree: [number, number, number][] = [];
+
+  function checkConnected(chosen: [number, number, number][]): boolean {
+    const parent = Array.from({ length: numVertices }, (_, i) => i);
+    function find(i: number): number {
+      if (parent[i] === i) return i;
+      return (parent[i] = find(parent[i]));
+    }
+    function union(i: number, j: number): boolean {
+      const rootI = find(i);
+      const rootJ = find(j);
+      if (rootI === rootJ) return false;
+      parent[rootI] = rootJ;
+      return true;
+    }
+    let edgesCount = 0;
+    for (const [u, v] of chosen) {
+      if (!union(u, v)) return false; // Cycle detected
+      edgesCount++;
+    }
+    return edgesCount === k;
+  }
+
+  function combine(start: number, chosen: [number, number, number][], currentWeight: number) {
+    if (chosen.length === k) {
+      if (currentWeight < minWeight && checkConnected(chosen)) {
+        minWeight = currentWeight;
+        bestTree = [...chosen];
+      }
+      return;
+    }
+    for (let i = start; i < m; i++) {
+      chosen.push(edges[i]);
+      combine(i + 1, chosen, currentWeight + edges[i][2]);
+      chosen.pop();
+    }
+  }
+
+  combine(0, [], 0);
+  return { minWeight, edges: bestTree };
+}
+
+// ─── 23. Bellman-Ford Negative-Cycle Shortest Paths Oracle ───────────────────
+export function bruteForceBellmanFord(
+  numVertices: number,
+  edges: [number, number, number][],
+  source: number
+): { dist: Record<number, number>; hasNegativeCycle: boolean } {
+  const dist: Record<number, number> = {};
+  for (let i = 0; i < numVertices; i++) dist[i] = Infinity;
+  dist[source] = 0;
+
+  for (let i = 1; i <= numVertices - 1; i++) {
+    for (const [u, v, w] of edges) {
+      if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+        dist[v] = dist[u] + w;
+      }
+    }
+  }
+
+  let hasNegativeCycle = false;
+  for (const [u, v, w] of edges) {
+    if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+      hasNegativeCycle = true;
+      break;
+    }
+  }
+
+  return { dist, hasNegativeCycle };
+}
+
+// ─── 24. Closest Pair of Points O(N^2) Oracle ────────────────────────────────
+export function bruteForceClosestPair(
+  points: [number, number][]
+): { p1: [number, number]; p2: [number, number]; dist: number } {
+  if (points.length < 2) {
+    return { p1: [0, 0], p2: [0, 0], dist: Infinity };
+  }
+  let minDist = Infinity;
+  let bestP1 = points[0];
+  let bestP2 = points[1];
+
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i + 1; j < points.length; j++) {
+      const dx = points[i][0] - points[j][0];
+      const dy = points[i][1] - points[j][1];
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < minDist) {
+        minDist = d;
+        bestP1 = points[i];
+        bestP2 = points[j];
+      }
+    }
+  }
+
+  return { p1: bestP1, p2: bestP2, dist: minDist };
+}
+
+// ─── 25. Knapsack Branch and Bound Exhaustive Oracle ──────────────────────────
+export function bruteForceKnapsackBranchAndBound(
+  capacity: number,
+  weights: number[],
+  values: number[]
+): { maxValue: number; subset: number[] } {
+  const n = weights.length;
+  let maxVal = 0;
+  let bestSubset: number[] = [];
+
+  for (let mask = 0; mask < (1 << n); mask++) {
+    let curW = 0;
+    let curV = 0;
+    const subset: number[] = [];
+    for (let i = 0; i < n; i++) {
+      if ((mask & (1 << i)) !== 0) {
+        curW += weights[i];
+        curV += values[i];
+        subset.push(i);
+      }
+    }
+    if (curW <= capacity && curV > maxVal) {
+      maxVal = curV;
+      bestSubset = subset;
+    }
+  }
+
+  return { maxValue: maxVal, subset: bestSubset };
+}
+
+// ─── 26. Interval Partitioning Max-Overlap Oracle ─────────────────────────────
+export function bruteForceIntervalPartitioning(intervals: [number, number][]): number {
+  if (intervals.length === 0) return 0;
+  const events: { time: number; type: number }[] = [];
+  for (const [start, end] of intervals) {
+    events.push({ time: start, type: 1 });
+    events.push({ time: end, type: -1 });
+  }
+
+  // Sort events: end times before start times if identical time
+  events.sort((a, b) => a.time - b.time || a.type - b.type);
+
+  let currentRooms = 0;
+  let maxRooms = 0;
+  for (const ev of events) {
+    currentRooms += ev.type;
+    if (currentRooms > maxRooms) maxRooms = currentRooms;
+  }
+  return maxRooms;
+}
+
+// ─── 27. Minimize Maximum Lateness Exhaustive Oracle ──────────────────────────
+export function bruteForceMinimizeLateness(
+  tasks: { length: number; deadline: number }[]
+): { maxLateness: number; schedule: number[] } {
+  const n = tasks.length;
+  let minMaxLateness = Infinity;
+  let bestSchedule: number[] = [];
+
+  const indices = Array.from({ length: n }, (_, i) => i);
+
+  function permute(arr: number[], m = [] as number[]) {
+    if (arr.length === 0) {
+      let t = 0;
+      let lateness = 0;
+      for (const idx of m) {
+        t += tasks[idx].length;
+        const taskLateness = Math.max(0, t - tasks[idx].deadline);
+        if (taskLateness > lateness) lateness = taskLateness;
+      }
+      if (lateness < minMaxLateness) {
+        minMaxLateness = lateness;
+        bestSchedule = [...m];
+      }
+      return;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const curr = arr.slice();
+      const next = curr.splice(i, 1);
+      permute(curr, m.concat(next));
+    }
+  }
+
+  permute(indices);
+  return { maxLateness: minMaxLateness, schedule: bestSchedule };
+}
+
+// ─── 28. BigInt Multiplicative Oracle (Karatsuba) ─────────────────────────────
+export function oracleBigIntMultiply(x: number | string | bigint, y: number | string | bigint): bigint {
+  return BigInt(x) * BigInt(y);
+}
+
+// ─── 29. Majority Element Count Oracle ────────────────────────────────────────
+export function bruteForceMajorityElement(arr: number[]): number | null {
+  const counts = new Map<number, number>();
+  const threshold = Math.floor(arr.length / 2);
+  for (const num of arr) {
+    const c = (counts.get(num) || 0) + 1;
+    counts.set(num, c);
+    if (c > threshold) return num;
+  }
+  return null;
+}
+
+// ─── 30. K-th Element Sorting Oracle (Median of Medians) ──────────────────────
+export function oracleKthElement(arr: number[], k: number): number {
+  return [...arr].sort((a, b) => a - b)[k];
+}
+
+// ─── 31. Segmented Least Squares Combinatorial Partition Oracle ───────────────
+export function bruteForceSegmentedLeastSquares(
+  points: [number, number][],
+  costC: number
+): number {
+  const n = points.length;
+  if (n <= 1) return 0;
+  const pts = [...points].sort((a, b) => a[0] - b[0]);
+
+  // Precompute single-segment SSE error e(i, j)
+  function calcError(i: number, j: number): number {
+    const m = j - i + 1;
+    if (m <= 2) return 0;
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    for (let k = i; k <= j; k++) {
+      const [x, y] = pts[k];
+      sumX += x;
+      sumY += y;
+      sumXY += x * y;
+      sumX2 += x * x;
+    }
+    const denom = m * sumX2 - sumX * sumX;
+    const a = denom === 0 ? 0 : (m * sumXY - sumX * sumY) / denom;
+    const b = (sumY - a * sumX) / m;
+
+    let error = 0;
+    for (let k = i; k <= j; k++) {
+      const [x, y] = pts[k];
+      const diff = y - (a * x + b);
+      error += diff * diff;
+    }
+    return error;
+  }
+
+  // Recurse over partitions
+  function minCost(start: number): number {
+    if (start >= n) return 0;
+    let best = Infinity;
+    for (let end = start; end < n; end++) {
+      const err = calcError(start, end);
+      const total = err + costC + minCost(end + 1);
+      if (total < best) best = total;
+    }
+    return best;
+  }
+
+  return minCost(0);
+}
+
+// ─── 32. RNA Secondary Structure Exhaustive Oracle ───────────────────────────
+export function bruteForceRnaSecondaryStructure(sequence: string): number {
+  const n = sequence.length;
+
+  function canPair(a: string, b: string): boolean {
+    return (
+      (a === 'A' && b === 'U') ||
+      (a === 'U' && b === 'A') ||
+      (a === 'C' && b === 'G') ||
+      (a === 'G' && b === 'C') ||
+      (a === 'G' && b === 'U') ||
+      (a === 'U' && b === 'G')
+    );
+  }
+
+  function opt(i: number, j: number): number {
+    if (j - i <= 4) return 0; // Separation distance rule >= 4
+    let best = opt(i, j - 1); // j unpaired
+    for (let t = i; t < j - 4; t++) {
+      if (canPair(sequence[t], sequence[j])) {
+        const paired = 1 + (t > i ? opt(i, t - 1) : 0) + opt(t + 1, j - 1);
+        if (paired > best) best = paired;
+      }
+    }
+    return best;
+  }
+
+  return opt(0, n - 1);
+}
+
+// ─── 33. Hamiltonian Cycle Exhaustive Permutation Oracle ─────────────────────
+export function bruteForceHamiltonianCycle(
+  numVertices: number,
+  edges: [number, number][]
+): number[] | null {
+  const adj = new Set<string>();
+  for (const [u, v] of edges) {
+    adj.add(`${u},${v}`);
+    adj.add(`${v},${u}`);
+  }
+
+  const vertices = Array.from({ length: numVertices - 1 }, (_, i) => i + 1);
+
+  function permute(arr: number[], path: number[]): number[] | null {
+    if (arr.length === 0) {
+      // Check return edge from last vertex to 0
+      const last = path[path.length - 1];
+      if (adj.has(`${last},0`)) {
+        return [...path, 0];
+      }
+      return null;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const nextVert = arr[i];
+      const prevVert = path[path.length - 1];
+      if (adj.has(`${prevVert},${nextVert}`)) {
+        const remaining = arr.slice();
+        remaining.splice(i, 1);
+        const res = permute(remaining, [...path, nextVert]);
+        if (res) return res;
+      }
+    }
+    return null;
+  }
+
+  return permute(vertices, [0]);
+}
+
+// ─── 34. TSP Exhaustive Tour Cost Oracle ──────────────────────────────────────
+export function bruteForceTsp(
+  matrix: number[][]
+): { minCost: number; tour: number[] } {
+  const n = matrix.length;
+  if (n <= 1) return { minCost: 0, tour: [0] };
+
+  const vertices = Array.from({ length: n - 1 }, (_, i) => i + 1);
+  let minCost = Infinity;
+  let bestTour: number[] = [];
+
+  function permute(arr: number[], path: number[]) {
+    if (arr.length === 0) {
+      let cost = 0;
+      for (let i = 0; i < path.length; i++) {
+        const u = path[i];
+        const v = path[(i + 1) % path.length];
+        cost += matrix[u][v];
+      }
+      if (cost < minCost) {
+        minCost = cost;
+        bestTour = [...path, 0];
+      }
+      return;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const remaining = arr.slice();
+      const next = remaining.splice(i, 1)[0];
+      permute(remaining, [...path, next]);
+    }
+  }
+
+  permute(vertices, [0]);
+  return { minCost, tour: bestTour };
+}
+
+
 

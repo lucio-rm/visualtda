@@ -26,7 +26,7 @@ const PRESETS: InversionPreset[] = [
   },
   {
     id: 'partial',
-    label: { es: 'Parcial [1, 5, 2, 6, 3, 4] (4 inv)', en: 'Partial [1, 5, 2, 6, 3, 4] (4 inv)' },
+    label: { es: 'Parcial [1, 5, 2, 6, 3, 4] (5 inv)', en: 'Partial [1, 5, 2, 6, 3, 4] (5 inv)' },
     array: [1, 5, 2, 6, 3, 4]
   },
   {
@@ -173,7 +173,7 @@ export const InversionCountingVisualizer: React.FC = () => {
           >
             {language === 'es' ? 'Cargar Arreglo' : 'Load Array'}
           </button>
-          {customError && <span style={{ color: 'var(--color-danger, #ef4444)', fontSize: '0.8rem' }}>{customError}</span>}
+          {customError && <span style={{ color: 'var(--color-danger, var(--error))', fontSize: '0.8rem' }}>{customError}</span>}
         </div>
       )}
 

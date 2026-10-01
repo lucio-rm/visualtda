@@ -208,7 +208,7 @@ export const KnightsTourPlayground: React.FC = () => {
         </span>
 
         {legalMoves.length === 0 && !isComplete && (
-          <span style={{ color: 'var(--danger, #ef4444)', fontWeight: 700, fontSize: '0.85rem' }}>
+          <span style={{ color: 'var(--danger, var(--error))', fontWeight: 700, fontSize: '0.85rem' }}>
             ⚠ {language === 'es' ? 'Callejón sin salida (Dead-end). Presiona "Deshacer" para retroceder.' : 'Dead-end reached. Click "Undo" to backtrack.'}
           </span>
         )}
@@ -216,7 +216,7 @@ export const KnightsTourPlayground: React.FC = () => {
         {bestWarnsdorffMove && !isComplete && (
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Elección heurística óptima:' : 'Best heuristic move:'}{' '}
-            <strong style={{ color: '#10b981' }}>
+            <strong style={{ color: 'var(--success)' }}>
               ({String.fromCharCode(65 + bestWarnsdorffMove.c)}{n - bestWarnsdorffMove.r}) con {bestWarnsdorffMove.degree} salidas
             </strong>
           </span>
@@ -233,8 +233,8 @@ export const KnightsTourPlayground: React.FC = () => {
             borderRadius: 'var(--radius-sm)',
             fontSize: '0.85rem',
             lineHeight: 1.4,
-            borderLeft: isComplete ? '4px solid #10b981' : '4px solid #f59e0b',
-            backgroundColor: isComplete ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'
+            borderLeft: isComplete ? '4px solid var(--success)' : '4px solid var(--warning)',
+            backgroundColor: isComplete ? 'var(--state-solution-bg)' : 'var(--state-candidate-bg)'
           }}
         >
           {message}
@@ -309,16 +309,16 @@ export const KnightsTourPlayground: React.FC = () => {
               let strokeWidth = 1;
 
               if (isCur) {
-                fill = 'rgba(56, 189, 248, 0.35)';
-                stroke = '#38bdf8';
+                fill = 'var(--state-active-bg)';
+                stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (isBest) {
-                fill = 'rgba(16, 185, 129, 0.3)';
-                stroke = '#10b981';
+                fill = 'var(--state-solution-bg)';
+                stroke = 'var(--success)';
                 strokeWidth = 2.5;
               } else if (legal) {
-                fill = 'rgba(16, 185, 129, 0.15)';
-                stroke = 'rgba(16, 185, 129, 0.6)';
+                fill = 'var(--state-solution-bg)';
+                stroke = 'var(--state-solution-bg)';
                 strokeWidth = 1.5;
               }
 
@@ -354,7 +354,7 @@ export const KnightsTourPlayground: React.FC = () => {
                       x={x + cellSize / 2}
                       y={y + cellSize / 2 + 6}
                       textAnchor="middle"
-                      fill={isCur ? '#38bdf8' : 'var(--text)'}
+                      fill={isCur ? 'var(--accent)' : 'var(--text)'}
                       fontFamily="var(--font-mono)"
                       fontSize={n === 5 ? '18px' : '15px'}
                       fontWeight="700"
@@ -370,8 +370,8 @@ export const KnightsTourPlayground: React.FC = () => {
                         width={18}
                         height={14}
                         rx={3}
-                        fill={isBest ? '#10b981' : 'var(--surface)'}
-                        stroke={isBest ? '#10b981' : 'var(--border)'}
+                        fill={isBest ? 'var(--success)' : 'var(--surface)'}
+                        stroke={isBest ? 'var(--success)' : 'var(--border)'}
                         strokeWidth={1}
                       />
                       <text
@@ -393,7 +393,7 @@ export const KnightsTourPlayground: React.FC = () => {
                     <text
                       x={x + 7}
                       y={y + 13}
-                      fill="#f59e0b"
+                      fill="var(--warning)"
                       fontSize="12px"
                       fontWeight="900"
                     >

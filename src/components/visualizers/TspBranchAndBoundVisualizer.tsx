@@ -63,13 +63,13 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
       <div className="tsp-metrics-row">
         <div className="tsp-metric-badge">
           <span>{language === 'es' ? 'Incumbent Óptimo (UB):' : 'Optimal Incumbent (UB):'}</span>
-          <strong style={{ color: incumbentBest < Infinity ? '#10b981' : 'var(--text-muted)' }}>
+          <strong style={{ color: incumbentBest < Infinity ? 'var(--success)' : 'var(--text-muted)' }}>
             {incumbentBest < Infinity ? incumbentBest : '∞'}
           </strong>
         </div>
         <div className="tsp-metric-badge">
           <span>{language === 'es' ? 'Nodos Podados por Cota:' : 'Pruned by Bound:'}</span>
-          <strong style={{ color: '#ef4444' }}>{prunedCount}</strong>
+          <strong style={{ color: 'var(--error)' }}>{prunedCount}</strong>
         </div>
         <div className="tsp-metric-badge">
           <span>{language === 'es' ? 'Nodos Explorados:' : 'Explored Nodes:'}</span>
@@ -90,7 +90,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
       <div className="tsp-canvas-container">
         <svg
           viewBox="0 0 460 260"
-          style={{ width: '100%', maxWidth: '460px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '680px', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Mapa de ciudades y tour de TSP' : 'Cities map and TSP tour'}
         >
@@ -109,7 +109,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                     y1={c1.y}
                     x2={c2.x}
                     y2={c2.y}
-                    stroke={inTour ? '#10b981' : 'var(--border)'}
+                    stroke={inTour ? 'var(--success)' : 'var(--border)'}
                     strokeWidth={inTour ? 3.5 : 1}
                     strokeDasharray={inTour ? undefined : '2,3'}
                     opacity={inTour ? 1 : 0.4}
@@ -142,8 +142,8 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
                   cx={city.x}
                   cy={city.y}
                   r={isStart ? 16 : 14}
-                  fill={isStart ? 'var(--accent)' : inTour ? '#10b981' : 'var(--surface)'}
-                  stroke={isStart ? '#ffffff' : inTour ? '#10b981' : 'var(--border)'}
+                  fill={isStart ? 'var(--accent)' : inTour ? 'var(--success)' : 'var(--surface)'}
+                  stroke={isStart ? '#ffffff' : inTour ? 'var(--success)' : 'var(--border)'}
                   strokeWidth={2}
                 />
                 <text
@@ -176,7 +176,7 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
       {/* Tour readout */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
         <span>{language === 'es' ? 'Tour evaluado:' : 'Tour evaluated:'}</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: '#10b981' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--success)' }}>
           [{currentTour.map((cId) => cityMap.get(cId)?.name || cId).join(' → ')}]
         </span>
       </div>

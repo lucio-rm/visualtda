@@ -1,15 +1,15 @@
-def colorear_grafo(grafo: dict[str, list[str]], k: int) -> dict[str, int] | None:
+def colorear_grafo(graph: dict[str, list[str]], k: int) -> dict[str, int] | None:
     """
     Determina si existe un k-coloreo válido para el grafo no dirigido.
     Retorna un diccionario {vértice: color} con colores entre 1 y k,
     o None si no es posible colorear el grafo con k colores.
     """
-    vertices = list(grafo.keys())
-    colores = {}
+    vertices = list(graph.keys())
+    colors: dict[str, int] = {}
 
-    def es_seguro(v: str, c: int) -> bool:
-        for vecino in grafo.get(v, []):
-            if colores.get(vecino) == c:
+    def is_safe(v: str, c: int) -> bool:
+        for neighbor in graph.get(v, []):
+            if colors.get(neighbor) == c:
                 return False
         return True
 
@@ -19,12 +19,16 @@ def colorear_grafo(grafo: dict[str, list[str]], k: int) -> dict[str, int] | None
 
         v = vertices[idx]
         for c in range(1, k + 1):
-            if es_seguro(v, c):
-                colores[v] = c
+            if is_safe(v, c):
+                colors[v] = c
                 if backtrack(idx + 1):
                     return True
-                del colores[v]  # Backtrack
+                del colors[v]  # Backtrack
 
         return False
 
-    return colores if backtrack(0) else None
+    return colors if backtrack(0) else None
+
+
+color_graph = colorear_grafo
+

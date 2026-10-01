@@ -34,7 +34,7 @@
 
 .flow-graph-svg {
   width: 100%;
-  max-width: 620px;
+  max-width: 760px;
   height: auto;
 }
 
@@ -46,18 +46,18 @@
 }
 
 .flow-edge-line.saturated {
-  stroke: #10b981;
+  stroke: var(--success);
   stroke-width: 3.5;
 }
 
 .flow-edge-line.augmenting {
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 4.5;
-  filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.7));
+  filter: drop-shadow(0 0 5px var(--state-candidate-bg));
 }
 
 .flow-edge-line.mincut-crossing {
-  stroke: #ef4444;
+  stroke: var(--error);
   stroke-dasharray: 6, 4;
   stroke-width: 3.5;
 }
@@ -95,8 +95,8 @@
 }
 
 .graph-node-circle.source {
-  stroke: #10b981;
-  fill: rgba(16, 185, 129, 0.1);
+  stroke: var(--success);
+  fill: var(--state-solution-bg);
 }
 
 .graph-node-circle.sink {
@@ -105,13 +105,13 @@
 }
 
 .graph-node-circle.in-cut-s {
-  fill: rgba(16, 185, 129, 0.2);
-  stroke: #10b981;
+  fill: var(--state-solution-bg);
+  stroke: var(--success);
 }
 
 .graph-node-circle.in-cut-t {
-  fill: rgba(239, 68, 68, 0.15);
-  stroke: #ef4444;
+  fill: var(--state-conflict-bg);
+  stroke: var(--error);
 }
 
 .graph-node-label {
@@ -147,7 +147,7 @@
 .path-badge {
   display: inline-block;
   padding: 2px 8px;
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--state-candidate-bg);
   color: #b45309;
   border-radius: var(--radius-sm);
   font-weight: 700;
@@ -156,7 +156,7 @@
 .mincut-badge-s {
   display: inline-block;
   padding: 2px 8px;
-  background: rgba(16, 185, 129, 0.15);
+  background: var(--state-solution-bg);
   color: #059669;
   border-radius: var(--radius-sm);
   font-weight: 700;
@@ -165,7 +165,7 @@
 .mincut-badge-t {
   display: inline-block;
   padding: 2px 8px;
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--state-conflict-bg);
   color: #dc2626;
   border-radius: var(--radius-sm);
   font-weight: 700;

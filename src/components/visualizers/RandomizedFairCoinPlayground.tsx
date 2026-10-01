@@ -196,7 +196,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: coinState.flip1 === 1 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
+                background: coinState.flip1 === 1 ? 'linear-gradient(135deg, var(--warning), #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
                 border: '3px solid rgba(255, 255, 255, 0.4)',
                 boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
                 display: 'flex',
@@ -229,7 +229,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: coinState.flip2 === 1 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
+                background: coinState.flip2 === 1 ? 'linear-gradient(135deg, var(--warning), #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
                 border: '3px solid rgba(255, 255, 255, 0.4)',
                 boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
                 display: 'flex',
@@ -264,26 +264,26 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
                 borderRadius: '12px',
                 background:
                   coinState.extractedBit === 0
-                    ? 'rgba(16, 185, 129, 0.2)'
+                    ? 'var(--state-solution-bg)'
                     : coinState.extractedBit === 1
-                    ? 'rgba(56, 189, 248, 0.2)'
-                    : 'rgba(239, 68, 68, 0.1)',
+                    ? 'var(--state-active-bg)'
+                    : 'var(--state-conflict-bg)',
                 border: `2px solid ${
                   coinState.extractedBit === 0
-                    ? '#10b981'
+                    ? 'var(--success)'
                     : coinState.extractedBit === 1
-                    ? '#38bdf8'
-                    : '#ef4444'
+                    ? 'var(--accent)'
+                    : 'var(--error)'
                 }`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color:
                   coinState.extractedBit === 0
-                    ? '#10b981'
+                    ? 'var(--success)'
                     : coinState.extractedBit === 1
-                    ? '#38bdf8'
-                    : '#ef4444',
+                    ? 'var(--accent)'
+                    : 'var(--error)',
                 fontSize: '1.6rem',
                 fontWeight: '900',
                 fontFamily: 'var(--font-mono)'

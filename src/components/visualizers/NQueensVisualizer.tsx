@@ -223,7 +223,7 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
                       <td><strong>{row.nVal} × {row.nVal}</strong></td>
                       <td>{row.brute}</td>
                       <td>{row.perm}</td>
-                      <td><strong style={{ color: 'var(--color-primary, #6366f1)' }}>{row.states}</strong></td>
+                      <td><strong style={{ color: 'var(--color-primary, var(--accent))' }}>{row.states}</strong></td>
                       <td><span className="badge-solutions">{row.sols}</span></td>
                       <td><span className="badge-reduction">{row.reduction}</span></td>
                     </tr>

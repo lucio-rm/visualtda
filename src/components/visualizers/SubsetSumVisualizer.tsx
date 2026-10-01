@@ -72,7 +72,7 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
           <span className="subset-metric-label">{language === 'es' ? 'Suma Actual' : 'Current Sum'}</span>
           <span
             className="subset-metric-val"
-            style={{ color: currentSum === target ? '#10b981' : currentSum > target ? '#ef4444' : 'var(--color-text)' }}
+            style={{ color: currentSum === target ? 'var(--success)' : currentSum > target ? 'var(--error)' : 'var(--color-text)' }}
           >
             {currentSum} / {target}
           </span>
@@ -87,13 +87,13 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
         </div>
         <div className="subset-metric-card">
           <span className="subset-metric-label">{language === 'es' ? 'Nodos Podados' : 'Pruned Subtrees'}</span>
-          <span className="subset-metric-val" style={{ color: '#f59e0b' }}>
+          <span className="subset-metric-val" style={{ color: 'var(--warning)' }}>
             {prunedNodes}
           </span>
         </div>
         <div className="subset-metric-card">
           <span className="subset-metric-label">{language === 'es' ? 'Soluciones Halladas' : 'Solutions Found'}</span>
-          <span className="subset-metric-val" style={{ color: '#10b981' }}>
+          <span className="subset-metric-val" style={{ color: 'var(--success)' }}>
             {solutions.length}
           </span>
         </div>

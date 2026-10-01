@@ -134,7 +134,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
             {language === 'es' ? 'Progreso de Cobertura de Aristas:' : 'Edge Coverage Progress:'}{' '}
             <strong>{coveredCount} / {edges.length} ({coveragePercent}%)</strong>
           </span>
-          <span style={{ color: isAllCovered ? '#10b981' : 'var(--text-muted)', fontWeight: 600 }}>
+          <span style={{ color: isAllCovered ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
             {isAllCovered
               ? (language === 'es' ? '✓ Cobertura Factible Válida Alcanzada' : '✓ Feasible Cover Reached')
               : (language === 'es' ? 'Faltan aristas por cubrir' : 'Uncovered edges remain')}
@@ -145,7 +145,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
             style={{
               width: `${coveragePercent}%`,
               height: '100%',
-              background: isAllCovered ? '#10b981' : '#38bdf8',
+              background: isAllCovered ? 'var(--success)' : 'var(--accent)',
               transition: 'width 0.3s ease'
             }}
           />
@@ -157,7 +157,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         <div className="approx-stat-card">
           <h5>{language === 'es' ? 'Matching M (Disjunto)' : 'Matching M (Disjoint)'}</h5>
           <span className="stat-num">{matching.length} {language === 'es' ? 'aristas' : 'edges'}</span>
-          <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--warning)', fontWeight: 600 }}>
             {language === 'es' ? 'Cota Inferior: |C*| ≥ ' + matching.length : 'Lower Bound: |C*| ≥ ' + matching.length}
           </span>
         </div>
@@ -172,12 +172,12 @@ export const VertexCoverApproxPlayground: React.FC = () => {
 
         <div className="approx-stat-card">
           <h5>{language === 'es' ? 'Factor de Aproximación' : 'Approximation Factor'}</h5>
-          <span className="stat-num" style={{ color: isAllCovered ? '#10b981' : 'var(--text)' }}>
+          <span className="stat-num" style={{ color: isAllCovered ? 'var(--success)' : 'var(--text)' }}>
             {isAllCovered
               ? (language === 'es' ? '≤ 2.0 × Óptimo' : '≤ 2.0 × Optimal')
               : (language === 'es' ? 'En progreso' : 'In progress')}
           </span>
-          <span style={{ fontSize: '0.75rem', color: isAllCovered ? '#10b981' : 'var(--text-muted)', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.75rem', color: isAllCovered ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
             {isAllCovered
               ? (language === 'es' ? '|C| ≤ 2 · |C*| Demostrado' : '|C| ≤ 2 · |C*| Verified')
               : (language === 'es' ? 'Cubre el 100% para verificar' : 'Reach 100% to verify')}
@@ -282,7 +282,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                   x2={p2.x}
                   y2={p2.y}
                   className={edgeClass}
-                  stroke={isMatched ? '#f59e0b' : isCovered ? '#38bdf8' : 'var(--border, #475569)'}
+                  stroke={isMatched ? 'var(--warning)' : isCovered ? 'var(--accent)' : 'var(--border, #475569)'}
                   strokeWidth={isMatched ? 4.5 : isCovered ? 2.5 : 1.5}
                 />
               </g>
@@ -309,7 +309,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                 <circle
                   r={22}
                   fill={inCover ? '#0284c7' : 'var(--surface, #1e293b)'}
-                  stroke={inCover ? '#38bdf8' : 'var(--border, #64748b)'}
+                  stroke={inCover ? 'var(--accent)' : 'var(--border, #64748b)'}
                   strokeWidth={inCover ? 3 : 2}
                 />
                 <text
@@ -327,7 +327,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                   <text
                     textAnchor="middle"
                     dy="-28"
-                    fill="#38bdf8"
+                    fill="var(--accent)"
                     fontFamily="var(--font-mono)"
                     fontSize="9px"
                     fontWeight="800"

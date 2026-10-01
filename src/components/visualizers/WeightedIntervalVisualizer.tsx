@@ -8,6 +8,8 @@ import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './WeightedIntervalVisualizer.css';
 
+import { solveWeightedIntervals } from '../../engine/algorithms/weightedIntervalValidator';
+
 export const WeightedIntervalVisualizer: React.FC = () => {
   const { language } = useLanguage();
   const timeline = useMemo(() => generateWeightedIntervalTrace(DEFAULT_WEIGHTED_INTERVALS), []);
@@ -50,6 +52,11 @@ export const WeightedIntervalVisualizer: React.FC = () => {
   const greedyWeight = sorted
     .filter((t) => greedyIds.includes(t.id))
     .reduce((sum, t) => sum + t.weight, 0);
+
+  const optimalIntervals = useMemo(() => solveWeightedIntervals(sorted), [sorted]);
+  const optimalTotalWeight = useMemo(() => optimalIntervals.reduce((sum, t) => sum + t.weight, 0), [optimalIntervals]);
+  const isReconstructedOrDone = action === 'COMPLETE' || reconstructedIds.length > 0;
+  const displayedDpWeight = isReconstructedOrDone ? dpWeight : optimalTotalWeight;
 
   return (
     <div className="weighted-interval-visualizer">
@@ -231,9 +238,9 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           <div className="strategy-tag">
             {language === 'es' ? 'Óptimo Global (Programación Dinámica)' : 'Global Optimum (Dynamic Programming)'}
           </div>
-          <div className="strategy-stat">${dpWeight}</div>
+          <div className="strategy-stat">${displayedDpWeight}</div>
           <div className="strategy-items">
-            [{reconstructedIds.join(', ') || '...'}]
+            [{reconstructedIds.length > 0 ? reconstructedIds.join(', ') : (isReconstructedOrDone ? optimalIntervals.map((t) => t.id).join(', ') : '...')} ]
           </div>
           <div className="strategy-desc">
             {language === 'es'
@@ -249,11 +256,11 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           <div className="strategy-stat greedy-stat">${greedyWeight}</div>
           <div className="strategy-items">[{greedyIds.join(', ')}]</div>
           <div className="strategy-desc">
-            {greedyWeight < dpWeight ? (
+            {greedyWeight < optimalTotalWeight ? (
               <span className="greedy-fail-alert">
                 {language === 'es'
-                  ? `Falla al priorizar tareas cortas de bajo valor ($${greedyWeight} vs $${dpWeight}).`
-                  : `Fails by prioritizing short low-value tasks ($${greedyWeight} vs $${dpWeight}).`}
+                  ? `Falla al priorizar tareas cortas de bajo valor ($${greedyWeight} vs $${optimalTotalWeight}).`
+                  : `Fails by prioritizing short low-value tasks ($${greedyWeight} vs $${optimalTotalWeight}).`}
               </span>
             ) : (
               <span>{language === 'es' ? 'Coincide en este caso.' : 'Matches in this case.'}</span>

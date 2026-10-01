@@ -56,7 +56,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
   const scaleX = (x: number) => padLeft + ((x - minX) / (maxX - minX)) * (svgWidth - padLeft - padRight);
   const scaleY = (y: number) => svgHeight - padBottom - ((y - minY) / (maxY - minY)) * (svgHeight - padTop - padBottom);
 
-  const colors = ['#38bdf8', '#10b981', '#f59e0b', '#ec4899'];
+  const colors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#ec4899'];
 
   return (
     <div
@@ -208,7 +208,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
                 <th
                   key={`th-${j}`}
                   style={{
-                    backgroundColor: j === currentJ ? 'rgba(56, 189, 248, 0.2)' : undefined,
+                    backgroundColor: j === currentJ ? 'var(--state-active-bg)' : undefined,
                     color: j === currentJ ? 'var(--accent)' : undefined
                   }}
                 >
@@ -226,7 +226,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontWeight: j === currentJ ? '700' : '400',
-                    backgroundColor: j === currentJ ? 'rgba(56, 189, 248, 0.15)' : undefined
+                    backgroundColor: j === currentJ ? 'var(--state-active-bg)' : undefined
                   }}
                 >
                   {j < opt.length ? opt[j] : '—'}

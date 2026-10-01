@@ -1,13 +1,17 @@
-def minimizar_retraso_maximo(tareas: list[tuple[int, int]]) -> int:
+def minimizar_retraso_maximo(tasks: list[tuple[int, int]]) -> int:
     """
-    tareas: lista de tuplas (duracion t_i, deadline d_i).
-    Retorna el retraso maximo alcanzado.
+    tasks: list of tuples (duration t_i, deadline d_i).
+    Returns the maximum lateness achieved.
     """
-    ordenadas = sorted(tareas, key=lambda x: x[1])
-    tiempo_actual = 0
-    retraso_max = 0
-    for t_i, d_i in ordenadas:
-        tiempo_actual += t_i
-        retraso = max(0, tiempo_actual - d_i)
-        retraso_max = max(retraso_max, retraso)
-    return retraso_max
+    sorted_tasks = sorted(tasks, key=lambda item: item[1])
+    current_time = 0
+    max_lateness = 0
+    for t_i, d_i in sorted_tasks:
+        current_time += t_i
+        lateness = max(0, current_time - d_i)
+        max_lateness = max(max_lateness, lateness)
+    return max_lateness
+
+
+minimize_maximum_lateness = minimizar_retraso_maximo
+

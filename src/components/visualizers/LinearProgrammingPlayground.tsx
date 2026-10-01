@@ -367,7 +367,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                   y1={levelCurveLine.y1}
                   x2={levelCurveLine.x2}
                   y2={levelCurveLine.y2}
-                  stroke="#10b981"
+                  stroke="var(--success)"
                   strokeWidth="2"
                   strokeDasharray="5 3"
                 />
@@ -396,7 +396,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                       cx={toSvgX(vx)}
                       cy={toSvgY(vy)}
                       r={isOpt ? 7 : 5}
-                      fill={isOpt ? '#10b981' : isSel ? '#38bdf8' : 'var(--accent)'}
+                      fill={isOpt ? 'var(--success)' : isSel ? 'var(--accent)' : 'var(--accent)'}
                       stroke="#ffffff"
                       strokeWidth={2}
                     />
@@ -405,7 +405,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                       y={toSvgY(vy) - 10}
                       fontSize="10"
                       textAnchor="middle"
-                      fill={isOpt ? '#10b981' : 'var(--text)'}
+                      fill={isOpt ? 'var(--success)' : 'var(--text)'}
                       fontFamily="var(--font-mono)"
                       fontWeight={isOpt ? '800' : '600'}
                     >
@@ -422,7 +422,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                   y1={0}
                   x2={(c1 / maxX) * (svgWidth - 2 * padding) * 0.75}
                   y2={-(c2 / maxY) * (svgHeight - 2 * padding) * 0.75}
-                  stroke="#f59e0b"
+                  stroke="var(--warning)"
                   strokeWidth="2.5"
                 />
               </g>
@@ -435,7 +435,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <span className="stat-label">
                 {language === 'es' ? 'Vértice Óptimo (x*, y*):' : 'Optimal Vertex (x*, y*):'}
               </span>
-              <span className="stat-value highlight" style={{ color: '#10b981' }}>
+              <span className="stat-value highlight" style={{ color: 'var(--success)' }}>
                 {solution.optimalPoint ? `(${solution.optimalPoint[0]}, ${solution.optimalPoint[1]})` : 'N/A'}
               </span>
             </div>
@@ -443,7 +443,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
               <span className="stat-label">
                 {language === 'es' ? 'Valor Máximo z*:' : 'Maximum Value z*:'}
               </span>
-              <span className="stat-value highlight" style={{ color: '#10b981' }}>
+              <span className="stat-value highlight" style={{ color: 'var(--success)' }}>
                 {solution.optimalValue !== -Infinity ? solution.optimalValue : 'N/A'}
               </span>
             </div>

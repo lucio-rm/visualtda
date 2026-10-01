@@ -1,37 +1,38 @@
-def kruskal_mst(num_vertices: int, aristas: list[tuple[int, int, int]]) -> tuple[int, list[tuple[int, int, int]]]:
+def kruskal_mst(num_vertices: int, edges: list[tuple[int, int, int]]) -> tuple[int, list[tuple[int, int, int]]]:
     """
-    aristas: lista de tuplas (u, v, peso).
-    Retorna (costo_total, aristas_mst).
+    edges: list of tuples (u, v, weight).
+    Returns (total_cost, mst_edges).
     """
-    ordenadas = sorted(aristas, key=lambda x: x[2])
-    padre = list(range(num_vertices))
-    rango = [0] * num_vertices
+    sorted_edges = sorted(edges, key=lambda edge: edge[2])
+    parent = list(range(num_vertices))
+    rank = [0] * num_vertices
 
-    def encontrar(i: int) -> int:
-        if padre[i] != i:
-            padre[i] = encontrar(padre[i])
-        return padre[i]
+    def find_root(i: int) -> int:
+        if parent[i] != i:
+            parent[i] = find_root(parent[i])
+        return parent[i]
 
-    def unir(i: int, j: int) -> bool:
-        raiz_i = encontrar(i)
-        raiz_j = encontrar(j)
-        if raiz_i == raiz_j:
+    def union(i: int, j: int) -> bool:
+        root_i = find_root(i)
+        root_j = find_root(j)
+        if root_i == root_j:
             return False
-        if rango[raiz_i] < rango[raiz_j]:
-            padre[raiz_i] = raiz_j
-        elif rango[raiz_i] > rango[raiz_j]:
-            padre[raiz_j] = raiz_i
+        if rank[root_i] < rank[root_j]:
+            parent[root_i] = root_j
+        elif rank[root_i] > rank[root_j]:
+            parent[root_j] = root_i
         else:
-            padre[raiz_j] = raiz_i
-            rango[raiz_i] += 1
+            parent[root_j] = root_i
+            rank[root_i] += 1
         return True
 
-    costo_total = 0
+    total_cost = 0
     mst = []
-    for u, v, peso in ordenadas:
-        if unir(u, v):
-            costo_total += peso
-            mst.append((u, v, peso))
+    for u, v, weight in sorted_edges:
+        if union(u, v):
+            total_cost += weight
+            mst.append((u, v, weight))
             if len(mst) == num_vertices - 1:
                 break
-    return costo_total, mst
+    return total_cost, mst
+

@@ -230,13 +230,13 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
             <span>
               {language === 'es' ? 'Inversiones Totales:' : 'Total Inversions:'}{' '}
-              <strong style={{ color: inversions === 0 ? '#10b981' : '#ef4444' }}>
+              <strong style={{ color: inversions === 0 ? 'var(--success)' : 'var(--error)' }}>
                 {inversions}
               </strong>
             </span>
             <span>
               {language === 'es' ? 'Retraso Máximo Obtenido:' : 'Max Lateness:'}{' '}
-              <strong style={{ color: isOptimal ? '#10b981' : '#f59e0b' }}>
+              <strong style={{ color: isOptimal ? 'var(--success)' : 'var(--warning)' }}>
                 L = {maxLateness}
               </strong>
             </span>
@@ -259,10 +259,10 @@ export const MinimizeLatenessPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid #10b981',
+            backgroundColor: 'var(--state-solution-bg)',
+            border: '1px solid var(--success)',
             borderRadius: 'var(--radius-sm)',
-            color: '#10b981',
+            color: 'var(--success)',
             fontSize: '0.9rem'
           }}
           role="status"
@@ -278,10 +278,10 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           role="alert"
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid #f59e0b',
+            backgroundColor: 'var(--state-candidate-bg)',
+            border: '1px solid var(--warning)',
             borderRadius: 'var(--radius-sm)',
-            color: '#f59e0b'
+            color: 'var(--warning)'
           }}
         >
           <strong>{language === 'es' ? 'Argumento de Intercambio Activo' : 'Exchange Argument Active'}:</strong>{' '}
@@ -378,7 +378,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     y1={20}
                     x2={boundaryX}
                     y2={80}
-                    stroke="#ef4444"
+                    stroke="var(--error)"
                     strokeWidth={2}
                     strokeDasharray="2 2"
                   />
@@ -388,7 +388,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     width={84}
                     height={16}
                     rx={3}
-                    fill="#ef4444"
+                    fill="var(--error)"
                   />
                   <text
                     x={boundaryX}
@@ -440,9 +440,9 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   width={blockWidth - 2}
                   height={38}
                   rx={4}
-                  fill={isDragging ? '#38bdf8' : hasLateness ? '#f59e0b' : 'var(--accent)'}
+                  fill={isDragging ? 'var(--accent)' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
                   fillOpacity={isDragging ? 0.95 : 0.85}
-                  stroke={isDragging ? '#ffffff' : hasLateness ? '#f59e0b' : 'var(--accent)'}
+                  stroke={isDragging ? '#ffffff' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
                   strokeWidth={isDragging ? 2.5 : 1}
                 />
 
@@ -478,16 +478,16 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   y1={24}
                   x2={deadlineX}
                   y2={85}
-                  stroke="#ef4444"
+                  stroke="var(--error)"
                   strokeWidth={1.5}
                   strokeDasharray="2 2"
                 />
-                <circle cx={deadlineX} cy={24} r={3} fill="#ef4444" />
+                <circle cx={deadlineX} cy={24} r={3} fill="var(--error)" />
                 <text
                   x={deadlineX}
                   y={18}
                   textAnchor="middle"
-                  fill="#ef4444"
+                  fill="var(--error)"
                   fontSize="8px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
@@ -503,14 +503,14 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                       y={75}
                       width={Math.max(2, finishX - deadlineX)}
                       height={6}
-                      fill="#ef4444"
+                      fill="var(--error)"
                       rx={2}
                     />
                     <text
                       x={(deadlineX + finishX) / 2}
                       y={122}
                       textAnchor="middle"
-                      fill="#ef4444"
+                      fill="var(--error)"
                       fontSize="9px"
                       fontWeight="700"
                       fontFamily="var(--font-mono)"

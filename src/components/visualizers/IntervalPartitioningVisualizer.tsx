@@ -129,7 +129,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                   y={y}
                   width={chartWidth}
                   height={rowHeight - 6}
-                  fill={room ? 'var(--surface-active, rgba(56, 189, 248, 0.04))' : 'transparent'}
+                  fill={room ? 'var(--surface-active, var(--state-active-bg))' : 'transparent'}
                   stroke="var(--border)"
                   strokeWidth={1}
                   rx={4}

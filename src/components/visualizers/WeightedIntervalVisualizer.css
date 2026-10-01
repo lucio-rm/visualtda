@@ -28,7 +28,7 @@
 
 .phase-badge-label {
   font-size: 0.85rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .phase-badge-name {
@@ -50,7 +50,7 @@
 }
 
 .weight-badge {
-  color: #10b981;
+  color: var(--success);
   font-size: 1.15rem;
   font-weight: bold;
 }
@@ -85,7 +85,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .dot {
@@ -95,11 +95,11 @@
 }
 
 .dot-sel {
-  background: #10b981;
+  background: var(--success);
 }
 
 .dot-eval {
-  background: #f59e0b;
+  background: var(--warning);
 }
 
 .schedule-tracks {
@@ -128,7 +128,7 @@
 
 .task-pred-badge {
   font-size: 0.65rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
   font-family: monospace;
 }
 
@@ -158,14 +158,14 @@
 }
 
 .task-interval-bar.bar-evaluating {
-  background: #f59e0b;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  background: var(--warning);
+  box-shadow: 0 0 10px var(--state-candidate-bg);
   transform: scaleY(1.1);
 }
 
 .task-interval-bar.bar-selected {
-  background: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  background: var(--success);
+  box-shadow: 0 0 12px var(--state-solution-bg);
 }
 
 .bar-task-name {
@@ -192,7 +192,7 @@
 }
 
 .flag-dp {
-  background: rgba(16, 185, 129, 0.2);
+  background: var(--state-solution-bg);
   color: #059669;
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
@@ -200,7 +200,7 @@
 }
 
 .flag-greedy {
-  background: rgba(245, 158, 11, 0.2);
+  background: var(--state-candidate-bg);
   color: #d97706;
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
@@ -256,7 +256,7 @@
 }
 
 .td-active {
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--state-candidate-bg);
   font-weight: bold;
   color: #d97706;
 }
@@ -297,14 +297,14 @@
 }
 
 .choice-col.winner {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
   transform: scale(1.03);
 }
 
 .choice-title {
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .choice-math {
@@ -315,7 +315,7 @@
 .vs-tag {
   font-weight: bold;
   font-size: 0.85rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .comparison-cards-row {
@@ -341,13 +341,13 @@
 }
 
 .strategy-card.card-dp {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.04);
+  border-color: var(--state-solution-bg);
+  background: var(--state-solution-bg);
 }
 
 .strategy-card.card-greedy {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.04);
+  border-color: var(--state-candidate-bg);
+  background: var(--state-candidate-bg);
 }
 
 .strategy-tag {
@@ -374,12 +374,12 @@
 .strategy-items {
   font-family: monospace;
   font-size: 0.9rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .strategy-desc {
   font-size: 0.8rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .greedy-fail-alert {

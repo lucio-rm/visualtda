@@ -89,23 +89,32 @@ def modelar_juan_el_vago_ilp(ganancias: List[int]) -> Dict[str, Any]:
     }
 
 
-def modelar_mochila_ilp(valores: List[int], pesos: List[int], capacidad: int) -> Dict[str, Any]:
+def modelar_mochila_ilp(values: List[int], weights: List[int], capacity: int) -> Dict[str, Any]:
     """
     Construye la formulación formal de Programación Lineal Entera (ILP) para Mochila 0/1:
         Variables: x_0, x_1, ..., x_{n-1} en {0, 1}
         Maximizar: sum(v_i * x_i)
         Sujeto a: sum(w_i * x_i) <= W
     """
-    n = len(valores)
+    n = len(values)
     variables = [f"x_{i}" for i in range(n)]
-    funcion_objetivo = " + ".join(f"{valores[i]}*x_{i}" for i in range(n))
-    restriccion_capacidad = " + ".join(f"{pesos[i]}*x_{i}" for i in range(n)) + f" <= {capacidad}"
+    objective_func = " + ".join(f"{values[i]}*x_{i}" for i in range(n))
+    capacity_constraint = " + ".join(f"{weights[i]}*x_{i}" for i in range(n)) + f" <= {capacity}"
 
     return {
         'tipo': 'Maximizar',
+        'type': 'Maximize',
         'variables': variables,
         'dominio': 'Binario {0, 1}',
-        'funcion_objetivo': funcion_objetivo,
-        'restricciones': [restriccion_capacidad],
-        'cantidad_restricciones': 1
+        'domain': 'Binary {0, 1}',
+        'funcion_objetivo': objective_func,
+        'objective_function': objective_func,
+        'restricciones': [capacity_constraint],
+        'constraints': [capacity_constraint],
+        'cantidad_restricciones': 1,
+        'constraint_count': 1
     }
+
+
+model_knapsack_ilp = modelar_mochila_ilp
+

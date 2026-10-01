@@ -77,7 +77,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
         </div>
         <div className="road-metric-item">
           <span className="road-metric-label">{language === 'es' ? 'Antenas Construidas' : 'Antennas Built'}</span>
-          <span className="road-metric-value" style={{ color: '#6366f1' }}>
+          <span className="road-metric-value" style={{ color: 'var(--accent)' }}>
             {antennas.length}
           </span>
         </div>
@@ -105,8 +105,8 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           <defs>
             {/* Antenna range gradient */}
             <linearGradient id="antennaGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#6366f1" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.08" />
             </linearGradient>
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="3" result="blur" />
@@ -175,7 +175,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   height="55"
                   rx="10"
                   fill="url(#antennaGlow)"
-                  stroke="#6366f1"
+                  stroke="var(--accent)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                 />
@@ -186,34 +186,34 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   y1={roadY - 47}
                   x2={spanRight}
                   y2={roadY - 47}
-                  stroke="#6366f1"
+                  stroke="var(--accent)"
                   strokeWidth="2"
                 />
-                <circle cx={spanLeft} cy={roadY - 47} r="3" fill="#6366f1" />
-                <circle cx={spanRight} cy={roadY - 47} r="3" fill="#6366f1" />
+                <circle cx={spanLeft} cy={roadY - 47} r="3" fill="var(--accent)" />
+                <circle cx={spanRight} cy={roadY - 47} r="3" fill="var(--accent)" />
 
                 {/* Antenna Tower Pole */}
-                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 75} stroke="#6366f1" strokeWidth="3" />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 75} stroke="var(--accent)" strokeWidth="3" />
                 {/* Antenna Tower Base */}
                 <polygon
                   points={`${antX - 10},${roadY} ${antX + 10},${roadY} ${antX},${roadY - 75}`}
                   fill="none"
-                  stroke="#6366f1"
+                  stroke="var(--accent)"
                   strokeWidth="1.5"
                 />
                 {/* Antenna Transmitter Tip */}
-                <circle cx={antX} cy={roadY - 75} r="5" fill="#ef4444" filter="url(#glow)" />
+                <circle cx={antX} cy={roadY - 75} r="5" fill="var(--error)" filter="url(#glow)" />
                 {/* Antenna Radio Waves */}
                 <path
                   d={`M ${antX - 8} ${roadY - 82} A 10 10 0 0 1 ${antX + 8} ${roadY - 82}`}
                   fill="none"
-                  stroke="#ef4444"
+                  stroke="var(--error)"
                   strokeWidth="1.5"
                 />
                 <path
                   d={`M ${antX - 14} ${roadY - 88} A 16 16 0 0 1 ${antX + 14} ${roadY - 88}`}
                   fill="none"
-                  stroke="#ef4444"
+                  stroke="var(--error)"
                   strokeWidth="1.5"
                 />
 
@@ -222,7 +222,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   x={antX}
                   y={roadY - 96}
                   textAnchor="middle"
-                  fill="#6366f1"
+                  fill="var(--accent)"
                   fontSize="11"
                   fontWeight="bold"
                   fontFamily="sans-serif"
@@ -240,9 +240,9 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
             const isJustCovered = justCoveredSet.has(hIdx);
             const isCurrentUncovered = currentHouseIndex === hIdx;
 
-            let houseColor = '#f59e0b'; // pending / uncovered
+            let houseColor = 'var(--warning)'; // pending / uncovered
             if (isJustCovered) houseColor = '#22c55e'; // freshly covered
-            else if (isCovered) houseColor = '#10b981'; // covered
+            else if (isCovered) houseColor = 'var(--success)'; // covered
 
             return (
               <g key={`house-${hIdx}`}>
@@ -251,9 +251,9 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   <g>
                     <path
                       d={`M ${hX} ${roadY - 32} L ${hX - 5} ${roadY - 40} L ${hX + 5} ${roadY - 40} Z`}
-                      fill="#ef4444"
+                      fill="var(--error)"
                     />
-                    <circle cx={hX} cy={roadY - 12} r="14" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" strokeWidth="1.5" />
+                    <circle cx={hX} cy={roadY - 12} r="14" fill="var(--state-conflict-bg)" stroke="var(--error)" strokeWidth="1.5" />
                   </g>
                 )}
 
@@ -281,7 +281,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   x={hX}
                   y={roadY - 27}
                   textAnchor="middle"
-                  fill={isCurrentUncovered ? '#ef4444' : 'var(--color-text)'}
+                  fill={isCurrentUncovered ? 'var(--error)' : 'var(--color-text)'}
                   fontSize="10"
                   fontWeight={isCurrentUncovered ? 'bold' : 'normal'}
                   fontFamily="sans-serif"

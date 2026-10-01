@@ -58,9 +58,9 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
   if (n >= 5) reconstruct(0, n - 1);
 
   const baseColors: Record<string, string> = {
-    A: '#38bdf8', // sky
-    U: '#f59e0b', // amber
-    C: '#10b981', // emerald
+    A: 'var(--accent)', // sky
+    U: 'var(--warning)', // amber
+    C: 'var(--success)', // emerald
     G: '#ec4899'  // pink
   };
 
@@ -131,7 +131,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
           </span>
           <span>
             {language === 'es' ? 'Pares óptimos:' : 'Optimal pairs:'}{' '}
-            <strong style={{ color: '#10b981' }}>{maxPairs}</strong>
+            <strong style={{ color: 'var(--success)' }}>{maxPairs}</strong>
           </span>
         </div>
       </div>
@@ -160,7 +160,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
               type="button"
               onClick={handleRemoveLast}
               disabled={n <= 1}
-              style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: '#ef4444', cursor: 'pointer' }}
+              style={{ padding: '0.1rem 0.35rem', fontSize: '0.75rem', borderRadius: '3px', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--error)', cursor: 'pointer' }}
               title={language === 'es' ? 'Eliminar última base' : 'Remove last base'}
             >
               ×
@@ -196,7 +196,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                 <path
                   d={`M ${x1} ${baselineY - 14} Q ${(x1 + x2) / 2} ${baselineY - 14 - arcH * 1.8} ${x2} ${baselineY - 14}`}
                   fill="none"
-                  stroke="#10b981"
+                  stroke="var(--success)"
                   strokeWidth={2.5}
                   strokeLinecap="round"
                 />
@@ -222,7 +222,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                   cy={baselineY}
                   r={14}
                   fill={isPaired ? 'var(--surface)' : 'var(--bg)'}
-                  stroke={isPaired ? '#10b981' : color}
+                  stroke={isPaired ? 'var(--success)' : color}
                   strokeWidth={isPaired ? 2.5 : 1.5}
                 />
                 {/* Base letter */}
@@ -258,8 +258,8 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
       <div
         style={{
           padding: '0.75rem 1rem',
-          backgroundColor: n < 5 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-          border: `1px solid ${n < 5 ? '#f59e0b' : '#10b981'}`,
+          backgroundColor: n < 5 ? 'var(--state-candidate-bg)' : 'var(--state-solution-bg)',
+          border: `1px solid ${n < 5 ? 'var(--warning)' : 'var(--success)'}`,
           borderRadius: 'var(--radius-sm)',
           fontSize: '0.85rem'
         }}
@@ -293,8 +293,8 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                 alignItems: 'center',
                 gap: '0.35rem',
                 padding: '0.35rem 0.75rem',
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                border: '1px solid #10b981',
+                backgroundColor: 'var(--state-solution-bg)',
+                border: '1px solid var(--success)',
                 borderRadius: '9999px',
                 fontSize: '0.85rem',
                 fontFamily: 'var(--font-mono)'

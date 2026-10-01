@@ -474,7 +474,7 @@ export const KnapsackPlayground: React.FC = () => {
                     : `Greedy is trapped in a suboptimal solution ($${greedyValue} < $${optimalValue}) due to indivisible slack capacity.`}
                 </span>
               ) : (
-                <span style={{ color: 'var(--color-success, #10b981)' }}>
+                <span style={{ color: 'var(--color-success, var(--success))' }}>
                   {language === 'es'
                     ? `En esta instancia particular, la heurística Greedy coincide con el óptimo ($${greedyValue}). ¡Creá otra instancia o usá el contraejemplo para verla fallar!`
                     : `On this specific instance, Greedy matches the DP optimum ($${greedyValue}). Try another instance or the counterexample to see it fail!`}

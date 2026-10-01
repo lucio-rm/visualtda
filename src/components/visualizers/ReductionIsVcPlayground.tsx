@@ -115,6 +115,9 @@ export const ReductionIsVcPlayground: React.FC = () => {
   // 2D Dragging state
   const [draggingNode, setDraggingNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
+  const isPointerDownRef = useRef(false);
 
   const { vertices, edges, k } = currentPreset;
 
@@ -169,16 +172,30 @@ export const ReductionIsVcPlayground: React.FC = () => {
   // Pointer drag handlers
   const handlePointerDown = (nodeId: string, e: React.PointerEvent) => {
     e.stopPropagation();
-    (e.target as Element).setPointerCapture(e.pointerId);
+    try {
+      (e.target as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // Ignored
+    }
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
+    isPointerDownRef.current = true;
     setDraggingNode(nodeId);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
+      if (!isPointerDownRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
       if (!draggingNode || !svgRef.current) return;
       const rect = svgRef.current.getBoundingClientRect();
-      const rawX = ((e.clientX - rect.left) / rect.width) * 540;
-      const rawY = ((e.clientY - rect.top) / rect.height) * 310;
+      const rectWidth = rect.width || 540;
+      const rectHeight = rect.height || 310;
+      const rawX = ((e.clientX - rect.left) / rectWidth) * 540;
+      const rawY = ((e.clientY - rect.top) / rectHeight) * 310;
 
       const clampedX = Math.max(30, Math.min(510, Math.round(rawX)));
       const clampedY = Math.max(30, Math.min(280, Math.round(rawY)));
@@ -192,6 +209,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
   );
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    isPointerDownRef.current = false;
     if (draggingNode) {
       try {
         (e.target as Element).releasePointerCapture(e.pointerId);
@@ -367,7 +385,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
               let opacity = 0.5;
 
               if (isConflict) {
-                edgeStroke = '#ef4444';
+                edgeStroke = 'var(--error)';
                 strokeW = 3;
                 opacity = 1;
               } else if (isCovered) {
@@ -405,8 +423,8 @@ export const ReductionIsVcPlayground: React.FC = () => {
               let strokeColor = 'var(--border)';
 
               if (inIS) {
-                fillColor = '#10b981';
-                strokeColor = isConflict ? '#ef4444' : '#059669';
+                fillColor = 'var(--success)';
+                strokeColor = isConflict ? 'var(--error)' : '#059669';
               } else if (inVC) {
                 fillColor = '#8b5cf6';
                 strokeColor = '#7c3aed';
@@ -416,7 +434,38 @@ export const ReductionIsVcPlayground: React.FC = () => {
                 <g
                   key={v}
                   onPointerDown={(e) => handlePointerDown(v, e)}
-                  onClick={() => toggleNode(v)}
+                  onClick={() => {
+                    if (hasDraggedRef.current) {
+                      hasDraggedRef.current = false;
+                      return;
+                    }
+                    toggleNode(v);
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={
+                    language === 'es'
+                      ? `Vértice ${v}${inIS ? ' en Conjunto Independiente' : inVC ? ' en Cobertura de Vértices' : ''}`
+                      : `Vertex ${v}${inIS ? ' in Independent Set' : inVC ? ' in Vertex Cover' : ''}`
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleNode(v);
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.max(30, pos.y - 10) } }));
+                    } else if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.min(270, pos.y + 10) } }));
+                    } else if (e.key === 'ArrowLeft') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: Math.max(30, pos.x - 10), y: pos.y } }));
+                    } else if (e.key === 'ArrowRight') {
+                      e.preventDefault();
+                      setPositions((prev) => ({ ...prev, [v]: { x: Math.min(510, pos.x + 10), y: pos.y } }));
+                    }
+                  }}
                   style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
                 >
                   {/* Outer selection ring */}
@@ -426,7 +475,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                       cy={pos.y}
                       r={28}
                       fill="none"
-                      stroke={inIS ? '#10b981' : '#8b5cf6'}
+                      stroke={inIS ? 'var(--success)' : '#8b5cf6'}
                       strokeWidth={2.5}
                       opacity={0.5}
                     />
@@ -459,7 +508,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                     x={pos.x}
                     y={pos.y - 25}
                     textAnchor="middle"
-                    fill={inIS ? '#10b981' : '#8b5cf6'}
+                    fill={inIS ? 'var(--success)' : '#8b5cf6'}
                     fontSize="11px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"

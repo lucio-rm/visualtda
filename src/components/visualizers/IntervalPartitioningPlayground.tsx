@@ -23,9 +23,9 @@ const PRESET_INSTANCES: InstancePreset[] = [
     id: 'bottleneck-4',
     name: { es: 'Cuello de Botella Matutino (d = 4)', en: 'Morning Bottleneck (d = 4)' },
     lectures: [
-      { id: 'm1', name: 'Algoritmos I', start: 9, end: 11, color: '#38bdf8' },
-      { id: 'm2', name: 'Sistemas Operativos', start: 9, end: 12, color: '#f59e0b' },
-      { id: 'm3', name: 'Redes de Datos', start: 10, end: 13, color: '#10b981' },
+      { id: 'm1', name: 'Algoritmos I', start: 9, end: 11, color: 'var(--accent)' },
+      { id: 'm2', name: 'Sistemas Operativos', start: 9, end: 12, color: 'var(--warning)' },
+      { id: 'm3', name: 'Redes de Datos', start: 10, end: 13, color: 'var(--success)' },
       { id: 'm4', name: 'Bases de Datos', start: 10, end: 11.5, color: '#ec4899' },
       { id: 'm5', name: 'Probabilidad y Estadística', start: 12, end: 14, color: '#a855f7' },
       { id: 'm6', name: 'Taller de Programación', start: 14, end: 17, color: '#06b6d4' }
@@ -35,9 +35,9 @@ const PRESET_INSTANCES: InstancePreset[] = [
     id: 'sequential-1',
     name: { es: 'Secuencial Sin Solapamiento (d = 1)', en: 'Sequential No Overlap (d = 1)' },
     lectures: [
-      { id: 's1', name: 'Clase Teórica A', start: 8, end: 10, color: '#38bdf8' },
-      { id: 's2', name: 'Clase Práctica B', start: 10, end: 12, color: '#10b981' },
-      { id: 's3', name: 'Laboratorio C', start: 13, end: 15, color: '#f59e0b' },
+      { id: 's1', name: 'Clase Teórica A', start: 8, end: 10, color: 'var(--accent)' },
+      { id: 's2', name: 'Clase Práctica B', start: 10, end: 12, color: 'var(--success)' },
+      { id: 's3', name: 'Laboratorio C', start: 13, end: 15, color: 'var(--warning)' },
       { id: 's4', name: 'Seminario D', start: 15, end: 17.5, color: '#ec4899' }
     ]
   }
@@ -60,6 +60,8 @@ export const IntervalPartitioningPlayground: React.FC = () => {
   const [draggingLectureId, setDraggingLectureId] = useState<string | null>(null);
   const [dragOffsetTime, setDragOffsetTime] = useState<number>(0);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
 
   const depth = useMemo(() => calculateIntervalDepth(lectures), [lectures]);
 
@@ -144,7 +146,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
       name: newName || 'Clase',
       start: newStart,
       end: newEnd,
-      color: '#38bdf8'
+      color: 'var(--accent)'
     };
     setLectures([...lectures, newLec]);
     setActivePresetId('custom');
@@ -185,6 +187,8 @@ export const IntervalPartitioningPlayground: React.FC = () => {
   const handlePointerDown = (lectureId: string, e: React.PointerEvent) => {
     e.stopPropagation();
     (e.target as Element).setPointerCapture(e.pointerId);
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasDraggedRef.current = false;
     setDraggingLectureId(lectureId);
 
     const lec = lectures.find((l) => l.id === lectureId);
@@ -199,6 +203,10 @@ export const IntervalPartitioningPlayground: React.FC = () => {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingLectureId || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
       const rect = svgRef.current.getBoundingClientRect();
       const rawX = ((e.clientX - rect.left) / rect.width) * svgWidth;
       const rawY = ((e.clientY - rect.top) / rect.height) * svgHeight;
@@ -308,7 +316,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             </span>
             <span>
               {language === 'es' ? 'Aulas Asignadas:' : 'Classrooms Used:'}{' '}
-              <strong style={{ color: assignedRoomsCount <= depth ? '#10b981' : '#f59e0b' }}>
+              <strong style={{ color: assignedRoomsCount <= depth ? 'var(--success)' : 'var(--warning)' }}>
                 {assignedRoomsCount} / 5
               </strong>
             </span>
@@ -329,10 +337,10 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           role="alert"
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid #ef4444',
+            backgroundColor: 'var(--state-conflict-bg)',
+            border: '1px solid var(--error)',
             borderRadius: 'var(--radius-sm)',
-            color: '#ef4444'
+            color: 'var(--error)'
           }}
         >
           <strong>{language === 'es' ? 'Conflicto de Horario Detectado' : 'Schedule Conflict'}:</strong>{' '}
@@ -344,10 +352,10 @@ export const IntervalPartitioningPlayground: React.FC = () => {
         <div
           style={{
             padding: '0.75rem 1rem',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid #10b981',
+            backgroundColor: 'var(--state-solution-bg)',
+            border: '1px solid var(--success)',
             borderRadius: 'var(--radius-sm)',
-            color: '#10b981',
+            color: 'var(--success)',
             fontSize: '0.9rem'
           }}
           role="status"
@@ -461,8 +469,8 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   width={chartWidth}
                   height={rowHeight - 4}
                   rx={4}
-                  fill={isBoundExceeded ? 'rgba(239, 68, 68, 0.03)' : 'var(--surface)'}
-                  stroke={isBoundExceeded ? 'rgba(239, 68, 68, 0.2)' : 'var(--border)'}
+                  fill={isBoundExceeded ? 'var(--state-conflict-bg)' : 'var(--surface)'}
+                  stroke={isBoundExceeded ? 'var(--state-conflict-bg)' : 'var(--border)'}
                   strokeWidth={1}
                 />
                 {/* Room label */}
@@ -470,7 +478,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   x={marginLeft - 10}
                   y={rowY + rowHeight / 2 + 1}
                   textAnchor="end"
-                  fill={isBoundExceeded ? '#ef4444' : 'var(--text)'}
+                  fill={isBoundExceeded ? 'var(--error)' : 'var(--text)'}
                   fontSize="11px"
                   fontFamily="var(--font-mono)"
                   fontWeight="700"
@@ -487,7 +495,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             y1={marginTop - 8}
             x2={timeToX(bottleneckInfo.time)}
             y2={marginTop + numRooms * rowHeight}
-            stroke="#f59e0b"
+            stroke="var(--warning)"
             strokeWidth={1.5}
             strokeDasharray="3 3"
             opacity={0.8}
@@ -496,7 +504,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             x={timeToX(bottleneckInfo.time)}
             y={marginTop + numRooms * rowHeight + 12}
             textAnchor="middle"
-            fill="#f59e0b"
+            fill="var(--warning)"
             fontSize="8.5px"
             fontWeight="700"
             fontFamily="var(--font-mono)"
@@ -517,7 +525,32 @@ export const IntervalPartitioningPlayground: React.FC = () => {
               <g
                 key={`lec-rect-${lec.id}`}
                 onPointerDown={(e) => handlePointerDown(lec.id, e)}
-                onClick={() => handleCycleRoom(lec.id)}
+                onClick={() => {
+                  if (hasDraggedRef.current) {
+                    hasDraggedRef.current = false;
+                    return;
+                  }
+                  handleCycleRoom(lec.id);
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={
+                  language === 'es'
+                    ? `Clase ${lec.name} (${lec.start}:00 a ${lec.end}:00), en Aula A${assignedRoom}${isConflicted ? ' (en conflicto)' : ''}`
+                    : `Lecture ${lec.name} (${lec.start}:00 to ${lec.end}:00), in Classroom A${assignedRoom}${isConflicted ? ' (conflicted)' : ''}`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCycleRoom(lec.id);
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setUserAssignments((prev) => ({ ...prev, [lec.id]: Math.max(1, assignedRoom - 1) }));
+                  } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setUserAssignments((prev) => ({ ...prev, [lec.id]: Math.min(5, assignedRoom + 1) }));
+                  }
+                }}
                 style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
               >
                 {/* Drag shadow */}
@@ -538,9 +571,9 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                   width={w - 2}
                   height={rowHeight - 8}
                   rx={4}
-                  fill={isConflicted ? '#ef4444' : isDragging ? '#38bdf8' : lec.color || 'var(--accent)'}
+                  fill={isConflicted ? 'var(--error)' : isDragging ? 'var(--accent)' : lec.color || 'var(--accent)'}
                   fillOpacity={isConflicted ? 0.4 : isDragging ? 0.95 : 0.85}
-                  stroke={isConflicted ? '#ef4444' : isDragging ? '#ffffff' : lec.color || 'var(--accent)'}
+                  stroke={isConflicted ? 'var(--error)' : isDragging ? '#ffffff' : lec.color || 'var(--accent)'}
                   strokeWidth={isDragging ? 2.5 : isConflicted ? 2 : 1}
                 />
                 <text
@@ -668,7 +701,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#ef4444',
+                  color: 'var(--error)',
                   cursor: 'pointer',
                   padding: '0 2px',
                   fontWeight: '700'

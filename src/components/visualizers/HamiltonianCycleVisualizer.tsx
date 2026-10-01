@@ -67,13 +67,13 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
         </div>
         <div className="ham-metric-badge">
           <span>{language === 'es' ? 'Retrocesos (Backtracks):' : 'Backtracks:'}</span>
-          <strong style={{ color: backtrackCount > 0 ? '#f59e0b' : 'var(--text)' }}>
+          <strong style={{ color: backtrackCount > 0 ? 'var(--warning)' : 'var(--text)' }}>
             {backtrackCount}
           </strong>
         </div>
         <div className="ham-metric-badge">
           <span>{language === 'es' ? 'Estado del Ciclo:' : 'Cycle Status:'}</span>
-          <strong style={{ color: isCycleFound ? '#10b981' : '#38bdf8' }}>
+          <strong style={{ color: isCycleFound ? 'var(--success)' : 'var(--accent)' }}>
             {isCycleFound
               ? (language === 'es' ? 'Ciclo Verificado' : 'Cycle Verified')
               : (language === 'es' ? 'En Búsqueda' : 'Searching')}
@@ -94,7 +94,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
       <div className="ham-canvas-container">
         <svg
           viewBox="0 0 500 320"
-          style={{ width: '100%', maxWidth: '500px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '680px', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Grafo y camino explorado para ciclo hamiltoniano' : 'Graph and explored path for Hamiltonian cycle'}
         >
@@ -112,7 +112,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                 y1={u.y}
                 x2={v.x}
                 y2={v.y}
-                stroke={inPath ? (isCycleFound ? '#10b981' : 'var(--accent)') : 'var(--border-strong)'}
+                stroke={inPath ? (isCycleFound ? 'var(--success)' : 'var(--accent)') : 'var(--border-strong)'}
                 strokeWidth={inPath ? 3.5 : 1.5}
                 strokeDasharray={inPath ? undefined : '2,2'}
                 opacity={inPath ? 1 : 0.85}
@@ -134,9 +134,9 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                   r={18}
                   fill={
                     isCurrent
-                      ? '#f59e0b'
+                      ? 'var(--warning)'
                       : isVisited
-                      ? (isCycleFound ? '#10b981' : 'var(--surface-active, #38bdf8)')
+                      ? (isCycleFound ? 'var(--success)' : 'var(--surface-active, var(--accent))')
                       : 'var(--surface)'
                   }
                   stroke={isCurrent ? '#ffffff' : isVisited ? 'var(--accent)' : 'var(--border)'}
@@ -175,7 +175,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
       {/* Path sequence readout */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
         <span>{language === 'es' ? 'Camino actual:' : 'Current path:'}</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: isCycleFound ? '#10b981' : 'var(--accent)' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: isCycleFound ? 'var(--success)' : 'var(--accent)' }}>
           [{path.join(' → ')}]
         </span>
       </div>

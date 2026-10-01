@@ -63,7 +63,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
         </div>
         <div className="ml-metric-badge">
           <span>{language === 'es' ? 'Retraso Máximo (L_max):' : 'Max Lateness (L_max):'}</span>
-          <strong style={{ color: maxLateness > 0 ? '#ef4444' : '#10b981' }}>{maxLateness}</strong>
+          <strong style={{ color: maxLateness > 0 ? 'var(--error)' : 'var(--success)' }}>{maxLateness}</strong>
         </div>
         <div className={`ml-metric-badge ml-action-badge action-${action.toLowerCase()}`}>
           <span>{language === 'es' ? 'Fase:' : 'Phase:'}</span>
@@ -165,7 +165,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   y1={marginTop - 20}
                   x2={timeToX(job.deadline)}
                   y2={marginTop + 42}
-                  stroke={isLate ? '#ef4444' : '#10b981'}
+                  stroke={isLate ? 'var(--error)' : 'var(--success)'}
                   strokeWidth={2}
                   strokeDasharray="3,2"
                 />
@@ -173,13 +173,13 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   cx={timeToX(job.deadline)}
                   cy={marginTop - 20}
                   r={5}
-                  fill={isLate ? '#ef4444' : '#10b981'}
+                  fill={isLate ? 'var(--error)' : 'var(--success)'}
                 />
                 <text
                   x={timeToX(job.deadline)}
                   y={marginTop - 28}
                   textAnchor="middle"
-                  fill={isLate ? '#ef4444' : '#10b981'}
+                  fill={isLate ? 'var(--error)' : 'var(--success)'}
                   fontSize="9px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
@@ -194,7 +194,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                     y={marginTop + 38}
                     width={x2 - timeToX(job.deadline)}
                     height={4}
-                    fill="#ef4444"
+                    fill="var(--error)"
                     rx={2}
                   />
                 )}
@@ -229,7 +229,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontWeight: '700',
-                    color: (j.lateness ?? 0) > 0 ? '#ef4444' : '#10b981'
+                    color: (j.lateness ?? 0) > 0 ? 'var(--error)' : 'var(--success)'
                   }}
                 >
                   {j.lateness ?? 0}

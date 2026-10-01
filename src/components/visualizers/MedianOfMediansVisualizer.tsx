@@ -65,13 +65,13 @@ export const MedianOfMediansVisualizer: React.FC = () => {
         </div>
         <div className="mom-metric-badge">
           <span>{language === 'es' ? 'Pivote (p):' : 'Pivot (p):'}</span>
-          <strong style={{ color: pivot !== null ? '#f59e0b' : 'var(--text-muted)' }}>
+          <strong style={{ color: pivot !== null ? 'var(--warning)' : 'var(--text-muted)' }}>
             {pivot !== null ? pivot : '—'}
           </strong>
         </div>
         <div className="mom-metric-badge">
           <span>{language === 'es' ? 'Poda garantizada:' : 'Guaranteed Pruning:'}</span>
-          <strong style={{ color: '#10b981' }}>≥ 30% ({guaranteedElim} elem.)</strong>
+          <strong style={{ color: 'var(--success)' }}>≥ 30% ({guaranteedElim} elem.)</strong>
         </div>
         <div className="mom-metric-badge mom-action-badge">
           <span>{language === 'es' ? 'Fase:' : 'Phase:'}</span>
@@ -115,7 +115,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
               width={numCols * colWidth + 20}
               height={cellHeight + 8}
               rx={6}
-              fill="rgba(56, 189, 248, 0.08)"
+              fill="var(--state-active-bg)"
               stroke="var(--accent)"
               strokeWidth={1}
               strokeDasharray="4,2"
@@ -141,12 +141,12 @@ export const MedianOfMediansVisualizer: React.FC = () => {
                     rx={4}
                     fill={
                       isPivot
-                        ? '#f59e0b'
+                        ? 'var(--warning)'
                         : isMedian
-                        ? 'rgba(56, 189, 248, 0.25)'
+                        ? 'var(--state-active-bg)'
                         : 'var(--surface)'
                     }
-                    stroke={isPivot ? '#f59e0b' : isMedian ? 'var(--accent)' : 'var(--border-strong)'}
+                    stroke={isPivot ? 'var(--warning)' : isMedian ? 'var(--accent)' : 'var(--border-strong)'}
                     strokeWidth={isPivot ? 2.5 : isMedian ? 2 : 1.5}
                   />
                   <text
@@ -180,10 +180,10 @@ export const MedianOfMediansVisualizer: React.FC = () => {
             </div>
           </div>
 
-          <div className="mom-partition-box" style={{ borderColor: '#f59e0b' }}>
+          <div className="mom-partition-box" style={{ borderColor: 'var(--warning)' }}>
             <h4>
               <span>{language === 'es' ? 'Pivote (= p)' : 'Pivot (= p)'}</span>
-              <span style={{ color: '#f59e0b' }}>{equal.length}</span>
+              <span style={{ color: 'var(--warning)' }}>{equal.length}</span>
             </h4>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: '700' }}>
               {equal.join(', ')}

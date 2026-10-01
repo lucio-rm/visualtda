@@ -265,8 +265,8 @@ export const DijkstraPlayground: React.FC = () => {
       </div>
 
       {hasNegativeEdge && (
-        <div className="sdk-conflict-banner" role="alert" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444' }}>
-          <strong style={{ color: '#ef4444' }}>{language === 'es' ? 'Falla del Invariante Greedy (Greedy Stays Ahead)' : 'Greedy Invariant Failure'}:</strong>{' '}
+        <div className="sdk-conflict-banner" role="alert" style={{ background: 'var(--state-conflict-bg)', border: '1px solid var(--error)' }}>
+          <strong style={{ color: 'var(--error)' }}>{language === 'es' ? 'Falla del Invariante Greedy (Greedy Stays Ahead)' : 'Greedy Invariant Failure'}:</strong>{' '}
           {language === 'es'
             ? 'Dijkstra asume que una vez que un nodo entra al conjunto explorado S, su distancia es mínima e irrevocable. Pero al existir pesos negativos, el camino S → B → A tiene costo 3 + (-2) = 1, superando la elección greedy de d[A] = 2. Para grafos con aristas negativas, se debe usar Bellman-Ford.'
             : 'Dijkstra permanently fixes distances when entering S. With negative weights, S → B → A costs 1, breaking d[A]=2. Use Bellman-Ford DP for negative weights.'}
@@ -280,7 +280,7 @@ export const DijkstraPlayground: React.FC = () => {
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem', display: 'flex', justifyContent: 'space-between' }}>
             <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos):' : 'Directed Graph (Drag nodes):'}</span>
             <span>
-              <span style={{ color: '#10b981' }}>● En S (Fijado)</span> · <span style={{ color: '#38bdf8' }}>● En Cola Q</span>
+              <span style={{ color: 'var(--success)' }}>● En S (Fijado)</span> · <span style={{ color: 'var(--accent)' }}>● En Cola Q</span>
             </span>
           </div>
 
@@ -298,7 +298,7 @@ export const DijkstraPlayground: React.FC = () => {
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
               </marker>
               <marker id="djk-arr-active" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--success)" />
               </marker>
             </defs>
 
@@ -321,7 +321,7 @@ export const DijkstraPlayground: React.FC = () => {
                     y1={u.y}
                     x2={v.x}
                     y2={v.y}
-                    stroke={isTreeEdge ? '#10b981' : isRelaxingNow ? '#38bdf8' : isNeg ? '#ef4444' : 'var(--border, #475569)'}
+                    stroke={isTreeEdge ? 'var(--success)' : isRelaxingNow ? 'var(--accent)' : isNeg ? 'var(--error)' : 'var(--border, #475569)'}
                     strokeWidth={isTreeEdge ? 3.5 : isRelaxingNow ? 2.5 : 1.5}
                     markerEnd={isTreeEdge ? 'url(#djk-arr-active)' : 'url(#djk-arr)'}
                   />
@@ -330,14 +330,14 @@ export const DijkstraPlayground: React.FC = () => {
                     cy={midY}
                     r={11}
                     fill="var(--surface-hover, #0f172a)"
-                    stroke={isTreeEdge ? '#10b981' : isNeg ? '#ef4444' : 'var(--border, #64748b)'}
+                    stroke={isTreeEdge ? 'var(--success)' : isNeg ? 'var(--error)' : 'var(--border, #64748b)'}
                     strokeWidth={1.5}
                   />
                   <text
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={isTreeEdge ? '#10b981' : isNeg ? '#ef4444' : 'var(--text)'}
+                    fill={isTreeEdge ? 'var(--success)' : isNeg ? 'var(--error)' : 'var(--text)'}
                     fontFamily="var(--font-mono)"
                     fontSize="11px"
                     fontWeight="700"
@@ -356,9 +356,9 @@ export const DijkstraPlayground: React.FC = () => {
               const distStr = dist === Infinity ? '∞' : String(dist);
               const isDragging = draggingNodeId === n.id;
 
-              let strokeColor = 'var(--accent, #6366f1)';
-              if (isSettled) strokeColor = '#10b981';
-              if (isCurrent) strokeColor = '#38bdf8';
+              let strokeColor = 'var(--accent)';
+              if (isSettled) strokeColor = 'var(--success)';
+              if (isCurrent) strokeColor = 'var(--accent)';
 
               return (
                 <g
@@ -395,14 +395,14 @@ export const DijkstraPlayground: React.FC = () => {
                     height={16}
                     rx={3}
                     fill="var(--bg, #1e293b)"
-                    stroke={isSettled ? '#10b981' : '#38bdf8'}
+                    stroke={isSettled ? 'var(--success)' : 'var(--accent)'}
                     strokeWidth={1}
                   />
                   <text
                     x={n.x}
                     y={n.y - 26}
                     textAnchor="middle"
-                    fill={isSettled ? '#10b981' : '#38bdf8'}
+                    fill={isSettled ? 'var(--success)' : 'var(--accent)'}
                     fontFamily="var(--font-mono)"
                     fontSize="10px"
                     fontWeight="800"
@@ -438,11 +438,11 @@ export const DijkstraPlayground: React.FC = () => {
                     alignItems: 'center',
                     padding: '0.3rem 0.5rem',
                     background: isCurrent
-                      ? 'rgba(56, 189, 248, 0.18)'
+                      ? 'var(--state-active-bg)'
                       : isSettled
-                      ? 'rgba(16, 185, 129, 0.12)'
+                      ? 'var(--state-solution-bg)'
                       : 'var(--bg)',
-                    border: `1px solid ${isCurrent ? '#38bdf8' : isSettled ? '#10b981' : 'var(--border)'}`,
+                    border: `1px solid ${isCurrent ? 'var(--accent)' : isSettled ? 'var(--success)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.75rem'
                   }}
@@ -455,7 +455,7 @@ export const DijkstraPlayground: React.FC = () => {
                     style={{
                       fontSize: '0.7rem',
                       fontWeight: 700,
-                      color: isSettled ? '#10b981' : isCurrent ? '#38bdf8' : 'var(--text-muted)'
+                      color: isSettled ? 'var(--success)' : isCurrent ? 'var(--accent)' : 'var(--text-muted)'
                     }}
                   >
                     {isCurrent

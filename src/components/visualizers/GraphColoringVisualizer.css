@@ -30,11 +30,11 @@
 
 .gc-action-badge.action-init { border-color: var(--border); }
 .gc-action-badge.action-try_color { border-color: #3b82f6; color: #3b82f6; }
-.gc-action-badge.action-conflict { border-color: #ef4444; color: #ef4444; }
-.gc-action-badge.action-assign_color { border-color: #10b981; color: #10b981; }
-.gc-action-badge.action-backtrack { border-color: #f59e0b; color: #f59e0b; }
+.gc-action-badge.action-conflict { border-color: var(--error); color: var(--error); }
+.gc-action-badge.action-assign_color { border-color: var(--success); color: var(--success); }
+.gc-action-badge.action-backtrack { border-color: var(--warning); color: var(--warning); }
 .gc-action-badge.action-prune { border-color: #dc2626; color: #dc2626; }
-.gc-action-badge.action-success { border-color: #10b981; color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.gc-action-badge.action-success { border-color: var(--success); color: var(--success); background: var(--state-solution-bg); }
 
 .gc-canvas-container {
   background: var(--surface);
@@ -49,7 +49,7 @@
 
 .gc-svg-canvas {
   width: 100%;
-  max-width: 500px;
+  max-width: 680px;
   height: auto;
 }
 
@@ -65,13 +65,13 @@
 }
 
 .gc-edge-conflict {
-  stroke: #ef4444;
+  stroke: var(--error);
   stroke-width: 4;
   stroke-dasharray: 4 2;
 }
 
 .gc-conflict-pin {
-  fill: #ef4444;
+  fill: var(--error);
 }
 
 .gc-node-circle {
@@ -93,7 +93,7 @@
 
 .gc-node-pulse {
   fill: none;
-  stroke: #f59e0b;
+  stroke: var(--warning);
   stroke-width: 2;
   opacity: 0.8;
   animation: gc-pulse 1.2s infinite ease-out;

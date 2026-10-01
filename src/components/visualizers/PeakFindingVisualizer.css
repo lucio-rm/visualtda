@@ -28,7 +28,7 @@
 
 .phase-badge-label {
   font-size: 0.85rem;
-  color: var(--text-muted, #888);
+  color: var(--text-muted);
 }
 
 .phase-badge-name {
@@ -46,7 +46,7 @@
 }
 
 .size-highlight {
-  color: #10b981;
+  color: var(--success);
   font-weight: bold;
 }
 
@@ -81,7 +81,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .pill-dot {
@@ -95,11 +95,11 @@
 }
 
 .dot-mid {
-  background: #f59e0b;
+  background: var(--warning);
 }
 
 .dot-peak {
-  background: #10b981;
+  background: var(--success);
 }
 
 .mountain-bars-container {
@@ -175,8 +175,8 @@
 }
 
 .mountain-bar-col.bar-mid .bar-column {
-  background: #f59e0b;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+  background: var(--warning);
+  box-shadow: 0 0 12px var(--state-candidate-bg);
 }
 
 .mountain-bar-col.bar-neighbor .bar-column {
@@ -184,13 +184,13 @@
 }
 
 .mountain-bar-col.bar-peak .bar-column {
-  background: #10b981;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+  background: var(--success);
+  box-shadow: 0 0 16px var(--state-solution-bg);
 }
 
 .bar-index-tag {
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
   margin-top: 0.4rem;
   display: flex;
   align-items: center;
@@ -207,7 +207,7 @@
 }
 
 .m-marker {
-  background: #f59e0b;
+  background: var(--warning);
   color: white;
   border-color: #d97706;
 }
@@ -225,7 +225,7 @@
 .eval-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .eval-row {
@@ -254,19 +254,19 @@
 }
 
 .eval-cell.cell-center-mid {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--warning);
+  background: var(--state-candidate-bg);
 }
 
 .eval-cell.uphill-target {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--success);
+  background: var(--state-solution-bg);
   transform: scale(1.04);
 }
 
 .eval-label {
   font-size: 0.75rem;
-  color: var(--text-muted, #777);
+  color: var(--text-muted);
 }
 
 .eval-value {
@@ -276,7 +276,7 @@
 }
 
 .mid-val-highlight {
-  color: #f59e0b;
+  color: var(--warning);
 }
 
 .arrow-badge {
@@ -288,7 +288,7 @@
 .peak-badge {
   font-size: 0.75rem;
   font-weight: bold;
-  background: #10b981;
+  background: var(--success);
   color: white;
   padding: 0.1rem 0.4rem;
   border-radius: 4px;

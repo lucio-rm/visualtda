@@ -93,11 +93,11 @@ export const SudokuVisualizer: React.FC = () => {
 
               if (isConflict) {
                 fillColor = 'var(--board-conflict)';
-                strokeColor = 'var(--danger, #ef4444)';
+                strokeColor = 'var(--danger, var(--error))';
                 strokeWidth = 2;
               } else if (isCurrent) {
                 fillColor = 'rgba(6, 182, 212, 0.25)';
-                strokeColor = 'var(--accent, #6366f1)';
+                strokeColor = 'var(--accent)';
                 strokeWidth = 2.5;
               }
 

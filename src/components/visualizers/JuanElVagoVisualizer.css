@@ -43,7 +43,7 @@
 
 .profit-highlight {
   font-weight: 800;
-  color: #10b981;
+  color: var(--success);
 }
 
 .section-title {
@@ -94,7 +94,7 @@
 }
 
 .badge-work {
-  background-color: #10b981;
+  background-color: var(--success);
   color: white;
   font-size: 0.6rem;
   font-weight: 800;
@@ -117,10 +117,10 @@
 }
 
 .day-card.worked-day {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 12px var(--state-solution-bg);
 }
 
 .day-card.current-day {
@@ -129,8 +129,8 @@
 }
 
 .day-card.recon-focus {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 2px #f59e0b;
+  border-color: var(--warning);
+  box-shadow: 0 0 0 2px var(--warning);
 }
 
 .dp-cell {
@@ -202,8 +202,8 @@
 }
 
 .dp-cell.recon-cell {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 2px #f59e0b;
+  border-color: var(--warning);
+  box-shadow: 0 0 0 2px var(--warning);
 }
 
 .decision-box {
@@ -266,8 +266,8 @@
 }
 
 .choice-badge.work {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  background-color: var(--state-solution-bg);
+  color: var(--success);
 }
 
 .choice-badge.skip {
