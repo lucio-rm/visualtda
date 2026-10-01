@@ -1,4 +1,4 @@
-def resolver_sudoku(board: list[list[int]]) -> bool:
+def solve_sudoku(board: list[list[int]]) -> bool:
     """
     Solves Sudoku in-place using MRV (Minimum Remaining Values) backtracking.
     Returns True if a valid solution exists, False otherwise.
@@ -34,11 +34,12 @@ def resolver_sudoku(board: list[list[int]]) -> bool:
     for num in range(1, 10):
         if is_valid(row, col, num):
             board[row][col] = num
-            if resolver_sudoku(board):
+            if solve_sudoku(board):
                 return True
             board[row][col] = 0
 
     return False
 
-# English alias
-solve_sudoku = resolver_sudoku
+
+# Backward-compatible entry-point alias
+resolver_sudoku = solve_sudoku

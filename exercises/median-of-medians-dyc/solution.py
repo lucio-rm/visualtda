@@ -1,6 +1,7 @@
-def k_esimo_elemento(arr: list[int], k: int) -> int:
+def find_kth_element(arr: list[int], k: int) -> int:
     """
-    Encuentra el k-esimo menor elemento (0-indexed) en tiempo lineal deterministico O(n).
+    Finds the k-th smallest element (0-indexed) in deterministic O(n) worst-case time
+    using the Median of Medians (BFPRT) algorithm.
     """
     if len(arr) <= 5:
         return sorted(arr)[k]
@@ -8,19 +9,20 @@ def k_esimo_elemento(arr: list[int], k: int) -> int:
     sublists = [arr[i:i + 5] for i in range(0, len(arr), 5)]
     medians = [sorted(sub)[len(sub) // 2] for sub in sublists]
 
-    pivot = k_esimo_elemento(medians, len(medians) // 2)
+    pivot = find_kth_element(medians, len(medians) // 2)
 
     smaller = [x for x in arr if x < pivot]
     equal = [x for x in arr if x == pivot]
     greater = [x for x in arr if x > pivot]
 
     if k < len(smaller):
-        return k_esimo_elemento(smaller, k)
+        return find_kth_element(smaller, k)
     elif k < len(smaller) + len(equal):
         return pivot
     else:
-        return k_esimo_elemento(greater, k - len(smaller) - len(equal))
+        return find_kth_element(greater, k - len(smaller) - len(equal))
 
 
-kth_smallest_element = k_esimo_elemento
-
+# Backward-compatible entry-point aliases
+kth_smallest_element = find_kth_element
+k_esimo_elemento = find_kth_element

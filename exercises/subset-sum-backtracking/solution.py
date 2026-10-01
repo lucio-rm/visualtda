@@ -5,64 +5,62 @@ Referencia de Cátedra: Algoritmos RW / FIUBA (Guía Backtracking, Ejercicio 11 
 
 from typing import List
 
-def subconjuntos_que_suman(numeros: List[int], objetivo: int) -> List[List[int]]:
+def subset_sum(numbers: List[int], target: int) -> List[List[int]]:
     """
-    Dado un arreglo de enteros positivos y un entero objetivo S,
-    encuentra todos los subconjuntos disjuntos de índices cuya suma sea exactamente S.
+    Given an array of positive integers and a target sum S,
+    finds all disjoint subsets of numbers that sum up to exactly S.
 
-    Estrategia de Backtracking con Podas:
-      1. Ordenar los números (por ejemplo de mayor a menor) para que los números
-         más grandes se evalúen primero, provocando podas por exceso en niveles
-         más altos del árbol de recursión.
-      2. En cada paso de decisión sobre el elemento numeros[idx]:
-         - Rama 1 (Incluir): agregamos numeros[idx] a la solución parcial.
-           * Poda por Exceso: si suma_parcial + numeros[idx] > objetivo, no exploramos.
-         - Rama 2 (Excluir): omitimos numeros[idx].
-           * Poda por Déficit / Cota Superior: si suma_parcial + suma_remanente < objetivo,
-             incluso tomando todos los elementos restantes jamás llegaremos a S. Podamos.
-      3. Caso Base de Éxito: si suma_parcial == objetivo, guardamos una copia del subconjunto.
+    Backtracking with Pruning:
+      1. Sort numbers in descending order to test larger elements first,
+         triggering surplus prunings higher up in the recursion tree.
+      2. For each element at idx:
+         - Branch 1 (Include): add numbers[idx] to partial solution.
+           * Surplus Pruning: if current_sum + numbers[idx] > target, prune.
+         - Branch 2 (Exclude): skip numbers[idx].
+           * Deficit Pruning: if current_sum + remaining < target, prune.
+      3. Base case: if current_sum == target, record copy of current subset.
 
-    Complejidad:
-      - Peor caso teórico: O(2^n).
-      - Caso promedio con podas: drásticamente menor a 2^n.
-      - Espacio auxiliar: O(n) por la profundidad de la pila de recursión.
+    Complexity:
+      - Worst-case: O(2^n).
+      - Average case with pruning: drastically lower than 2^n.
+      - Auxiliary space: O(n) for recursion stack.
     """
-    if objetivo <= 0 or not numeros:
+    if target <= 0 or not numbers:
         return []
 
-    # Filtrar no positivos o números mayores que el objetivo si los hubiera
-    elementos = [x for x in numeros if 0 < x <= objetivo]
-    # Ordenar decreciente para podar más rápido
-    elementos.sort(reverse=True)
+    # Filter out non-positives or numbers larger than target
+    elements = [x for x in numbers if 0 < x <= target]
+    elements.sort(reverse=True)
 
-    soluciones: List[List[int]] = []
-    subconjunto_actual: List[int] = []
-    suma_total_remanente = sum(elementos)
+    solutions: List[List[int]] = []
+    current_subset: List[int] = []
 
-    def backtrack(idx: int, suma_actual: int, remanente: int) -> None:
-        # Caso base de éxito: alcanzamos el objetivo exacto
-        if suma_actual == objetivo:
-            soluciones.append(list(subconjunto_actual))
+    def backtrack(idx: int, current_sum: int, remaining: int) -> None:
+        if current_sum == target:
+            solutions.append(list(current_subset))
             return
 
-        # Si llegamos al final del arreglo
-        if idx >= len(elementos):
+        if idx >= len(elements):
             return
 
-        elem = elementos[idx]
-        nuevo_remanente = remanente - elem
+        # Surplus pruning
+        val = elements[idx]
+        new_remaining = remaining - val
 
-        # --- OPCIÓN 1: Incluir elem en el subconjunto ---
-        # Poda por exceso: solo incluir si no superamos el objetivo
-        if suma_actual + elem <= objetivo:
-            subconjunto_actual.append(elem)
-            backtrack(idx + 1, suma_actual + elem, nuevo_remanente)
-            subconjunto_actual.pop()  # Deshacer cambio (Backtracking)
+        # Branch 1: Include element
+        if current_sum + val <= target:
+            current_subset.append(val)
+            backtrack(idx + 1, current_sum + val, new_remaining)
+            current_subset.pop()
 
-        # --- OPCIÓN 2: Excluir elem del subconjunto ---
-        # Poda por déficit: solo continuar si la suma actual más lo que queda alcanza para S
-        if suma_actual + nuevo_remanente >= objetivo:
-            backtrack(idx + 1, suma_actual, nuevo_remanente)
+        # Branch 2: Exclude element (check deficit pruning)
+        if current_sum + new_remaining >= target:
+            backtrack(idx + 1, current_sum, new_remaining)
 
-    backtrack(0, 0, suma_total_remanente)
-    return soluciones
+    total_remaining = sum(elements)
+    backtrack(0, 0, total_remaining)
+    return solutions
+
+
+# Backward-compatible entry-point alias
+subconjuntos_que_suman = subset_sum

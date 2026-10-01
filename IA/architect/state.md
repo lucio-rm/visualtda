@@ -1,7 +1,7 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: MISSION_V6_PRIORITY_CORRECTION_COMPLETED
-- **CURRENT_TASK**: Executed Master Engineering Mission V6 Priority Correction Sprint across all core objectives:
+- **CURRENT_PHASE**: MISSION_V6_POST_AUDIT_POLISH_COMPLETED
+- **CURRENT_TASK**: Completed Master Engineering Mission V6 Priority Correction Sprint and addressed all identified audit gaps:
   1. **1.1 — Browser Autocomplete Elimination**: Disabled native browser form autofill heuristics in `SolveView.tsx` (`autoComplete="off"`, `autoCorrect="off"`, `autoCapitalize="off"`, `spellCheck={false}`, `data-lpignore="true"`, `data-form-type="other"`), dynamically isolated unique element `id` and `name` attributes per exercise (`vtda_code_${exercise.id}`), and codified permanent manual QA verification in `docs/known-issues.md`.
   2. **1.2 — Full Number Accuracy Sweep (37/37 Exercises)**: Audited all numerical metrics, preset buttons, and comparison displays against algorithm traces and independent oracles. Resolved 5 real discrepancies:
      - `inversion-counting-dyc`: Corrected preset label from `(4 inv)` to `(5 inv)`.
@@ -19,10 +19,10 @@
   4. **1.4 — Light Mode Contrast & State Differentiation**:
      - Calibrated `variables.css` under `[data-theme='light']`: `--border: #64748b` (4.76:1), `--border-strong: #334155` (10.35:1), `--board-cell-dark: #64748b` (4.76:1).
      - Automated replacement across 106 visualizer and playground files, eliminating ad-hoc low-contrast hex values and tokenizing states (`--state-candidate`, `--state-visited`, `--state-active`, `--state-solution`).
-     - Added automated WCAG AA contrast verification in `tests/contrastAndDesignSystem.test.ts` (5/5 tests PASS).
-  5. **1.5 — Spanish Identifiers in Code Refactored**:
-     - Refactored 23 `exercises/*/solution.py` files to standard English identifiers (`board`, `graph`, `vertices`, `edges`, `knapsack`, `solve`, `capacity`), maintaining backwards-compatible entry-point aliases for existing test harnesses.
-     - Verified `src/**/*.ts(x)` contains zero unlocalized Spanish code variables.
+     - Added automated WCAG AA contrast verification in `tests/contrastAndDesignSystem.test.ts`.
+  5. **1.5 — English Identifiers in Code Refactored**:
+     - Completed end-to-end refactoring across all 37 `exercises/*/solution.py` files to establish English functions and variables as primary definitions (`solve_n_queens`, `knapsack_dp`, `fractional_knapsack_greedy`, `solve_sudoku`, `interval_scheduling`, `lazy_juan`, `weighted_interval_scheduling`, `place_antennas`, `subset_sum`, `huffman_encoding`, `coin_change_min`, `color_graph`, `hamiltonian_cycle`, `knights_tour`, `count_inversions`, `karatsuba_multiply`, `find_kth_element`, `majority_element`, `longest_common_subsequence`, `rna_secondary_structure`, `partition_intervals`, `minimize_lateness`, `closest_pair`, `find_peak`, `max_subarray`, `fair_coin`, `vertex_cover_2approx`, `reduce_is_to_vc`, etc.).
+     - Preserved explicit backwards-compatible aliases (`resolver_... = solve_...`) ensuring 100% interoperability with student starter code and test runners.
   6. **1.6 — Title & Heading Spacing Inconsistency**:
      - Built `src/utils/textFormatting.ts` with centralized `formatTitle` and `formatComplexity` sanitizers, standardizing en-dashes (` – `) and spacing around colons and parens.
      - Added regression test `tests/titleSpacing.test.ts` (6/6 tests PASS).
@@ -46,9 +46,12 @@
       - Added dedicated test suite `tests/independentOraclesNewExercises.test.ts` (16/16 tests PASS).
       - Added keyboard accessibility (Arrow keys for 2D positioning/resizing, Enter/Space for selection, Delete/Backspace for removal, explicit numeric fallback inputs) across all 9 pointer-drag playgrounds.
       - Verified 100% strict kebab-case naming for all 37 exercise directory names and 46 registry IDs.
+  11. **Architecture Decision Records (ADRs) Established (V4 §91)**:
+      - Created `docs/adr/` with formal records: ADR-0001 (Client-Side Static Architecture), ADR-0002 (Algorithm → Trace → Visualizer Decoupling), ADR-0003 (2D-First SVG Standards), ADR-0004 (AES-256-GCM Solution Encryption), and ADR-0005 (Pedagogical Three-Phase Learning Flow).
+      - Added automated regression tests in `tests/contrastAndDesignSystem.test.ts`.
 - **BASELINE_COMMIT**: `agent/antigravity`
 - **QUALITY_GATES_STATUS**:
   - `npm run lint`: 0 errors, 0 warnings
   - `npm run typecheck`: 0 errors
-  - `npm test`: 45 test files, 339 passed (100% PASS)
-  - `npm run build`: static production build succeeds cleanly in `dist/` in ~1.7s
+  - `npm test`: 45 test files, 341 passed (100% PASS)
+  - `npm run build`: static production build succeeds cleanly in `dist/` in ~1.57s

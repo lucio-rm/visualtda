@@ -48,7 +48,8 @@ describe('Canonical Solution Encryption (Mission V6 Section 2)', () => {
     });
 
     expect(decrypted).not.toBeNull();
-    expect(decrypted).toContain('def resolver_n_reinas');
+    expect(decrypted).toContain('def solve_n_queens');
+    expect(decrypted).toContain('resolver_n_reinas = solve_n_queens');
     expect(decrypted).toContain('return');
   });
 
@@ -78,7 +79,8 @@ describe('Canonical Solution Encryption (Mission V6 Section 2)', () => {
     });
 
     expect(decrypted).not.toBeNull();
-    expect(decrypted).toContain('def resolver_sudoku');
+    expect(decrypted).toContain('def solve_sudoku');
+    expect(decrypted).toContain('resolver_sudoku = solve_sudoku');
   });
 
   it('blocks decryption if neither instructor nor student pass is authorized', async () => {

@@ -1,8 +1,8 @@
-def colorear_grafo(graph: dict[str, list[str]], k: int) -> dict[str, int] | None:
+def color_graph(graph: dict[str, list[str]], k: int) -> dict[str, int] | None:
     """
-    Determina si existe un k-coloreo válido para el grafo no dirigido.
-    Retorna un diccionario {vértice: color} con colores entre 1 y k,
-    o None si no es posible colorear el grafo con k colores.
+    Determines whether a valid k-coloring exists for the undirected graph.
+    Returns a dictionary {vertex: color} with colors between 1 and k,
+    or None if the graph cannot be colored with k colors.
     """
     vertices = list(graph.keys())
     colors: dict[str, int] = {}
@@ -30,5 +30,5 @@ def colorear_grafo(graph: dict[str, list[str]], k: int) -> dict[str, int] | None
     return colors if backtrack(0) else None
 
 
-color_graph = colorear_grafo
-
+# Backward-compatible entry-point alias
+colorear_grafo = color_graph

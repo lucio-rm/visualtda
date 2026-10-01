@@ -1,13 +1,13 @@
 """
-Problema de la Mochila Fraccionaria y Heurística Greedy (Greedy)
-Técnica: Algoritmos Greedy (Greedy)
+Mochila Fraccionaria (Fractional Knapsack) — Implementación Canónica Educativa
+Técnica: Algoritmo Greedy (Selección greedy por densidad de valor v_i / w_i)
+Complejidad Temporal: O(N log N) por el ordenamiento inicial de ítems
+Complejidad Espacial: O(N) para la lista de asignaciones fraccionarias resultantes
 
-Para la Mochila Fraccionaria:
-  El algoritmo greedy ordenando por densidad de valor (valor / peso) es ESTRICTAMENTE ÓPTIMO.
-  Complejidad: O(n log n) por el ordenamiento.
-
-Para la Mochila 0/1:
-  La heurística greedy NO garantiza la solución óptima (contraejemplo clásico).
+Nota Pedagógica Fundamental (Diferencia con Mochila 0/1):
+- En Mochila Fraccionaria: la estrategia Greedy por densidad es ÓPTIMA (demostrable por exchange argument).
+- En Mochila 0/1: La heurística greedy NO garantiza la solución óptima (contraejemplo clásico).
+  Requiere Programación Dinámica O(N * W).
 """
 
 from typing import NamedTuple
@@ -20,9 +20,10 @@ class Item(NamedTuple):
 
     @property
     def density(self) -> float:
-        return self.value / self.weight if self.weight > 0 else 0.0
+        if self.weight <= 0:
+            return 0.0
+        return self.value / self.weight
 
-    # Compatibility aliases
     @property
     def nombre(self) -> str:
         return self.name
@@ -50,10 +51,10 @@ class ItemAssignment(NamedTuple):
 AsignacionItem = ItemAssignment
 
 
-def mochila_fraccionaria_greedy(items: list[Item], capacity: float) -> tuple[float, list[ItemAssignment]]:
+def fractional_knapsack_greedy(items: list[Item], capacity: float) -> tuple[float, list[ItemAssignment]]:
     """
-    Resuelve la mochila fraccionaria seleccionando mediante Greedy por mayor densidad (valor / peso).
-    Demostrablemente óptimo mediante argumento de intercambio (Exchange Argument).
+    Solves Fractional Knapsack using Greedy density ordering (value / weight).
+    Provably optimal via the exchange argument.
     """
     # 1. Sort by descending density
     sorted_items = sorted(items, key=lambda it: it.density, reverse=True)
@@ -82,9 +83,9 @@ def mochila_fraccionaria_greedy(items: list[Item], capacity: float) -> tuple[flo
     return total_value, result
 
 
-def contraejemplo_mochila_01() -> dict:
+def counterexample_knapsack_01() -> dict:
     """
-    Demuestra cómo la heurística greedy falla en la mochila 0/1 (donde no se pueden partir ítems).
+    Demonstrates how the greedy density heuristic fails in 0/1 knapsack where items are indivisible.
     """
     # Instance: Capacity W = 50
     items = [
@@ -106,6 +107,6 @@ def contraejemplo_mochila_01() -> dict:
     }
 
 
-fractional_knapsack_greedy = mochila_fraccionaria_greedy
-counterexample_knapsack_01 = contraejemplo_mochila_01
-
+# Backward-compatible entry-point aliases
+mochila_fraccionaria_greedy = fractional_knapsack_greedy
+contraejemplo_mochila_01 = counterexample_knapsack_01

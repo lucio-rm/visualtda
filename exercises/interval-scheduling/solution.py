@@ -8,40 +8,41 @@ Complejidad Espacial: O(N) para la lista de intervalos seleccionados
 from typing import List, Tuple, NamedTuple
 
 
-class Intervalo(NamedTuple):
+class Interval(NamedTuple):
     id: str
-    inicio: int
-    fin: int
+    start: int
+    end: int
 
 
-def seleccion_intervalos(intervalos: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+Intervalo = Interval
+
+
+def interval_scheduling(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
-    Selecciona el subconjunto máximo de intervalos compatibles (mutuamente disjuntos).
+    Selects the maximum subset of mutually compatible (non-overlapping) intervals.
     
-    Estrategia Greedy:
-        Ordenar los intervalos por su tiempo de fin en forma creciente.
-        En cada paso, seleccionar el primer intervalo cuyo tiempo de inicio
-        sea mayor o igual al tiempo de fin del último intervalo seleccionado.
-        
-    Parámetros:
-        intervalos: Lista de tuplas (inicio, fin) con inicio < fin.
-        
-    Retorna:
-        Lista de tuplas (inicio, fin) correspondientes a la solución óptima.
+    Greedy Strategy:
+        Sort intervals by earliest finish time (EFT).
+        In each step, select the first interval whose start time
+        is greater than or equal to the finish time of the last selected interval.
     """
-    if not intervalos:
+    if not intervals:
         return []
 
-    # 1. Ordenar por tiempo de finalización (earliest finish time)
-    ordenados = sorted(intervalos, key=lambda x: x[1])
+    # 1. Sort by finish time in ascending order (EFT)
+    sorted_intervals = sorted(intervals, key=lambda x: x[1])
 
-    seleccionados: List[Tuple[int, int]] = []
-    ultimo_fin = -float("inf")
+    selected: List[Tuple[int, int]] = []
+    last_finish_time = -float('inf')
 
-    # 2. Selección greedy (Greedy choice)
-    for inicio, fin in ordenados:
-        if inicio >= ultimo_fin:
-            seleccionados.append((inicio, fin))
-            ultimo_fin = fin
+    # 2. Linear greedy pass
+    for start, end in sorted_intervals:
+        if start >= last_finish_time:
+            selected.append((start, end))
+            last_finish_time = end
 
-    return seleccionados
+    return selected
+
+
+# Backward-compatible entry-point alias
+seleccion_intervalos = interval_scheduling

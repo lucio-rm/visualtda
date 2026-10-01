@@ -5,96 +5,113 @@ Referencia de Cátedra: Algoritmos RW / FIUBA & Kleinberg-Tardos Chapter 11.
 
 from typing import List, Tuple, Dict, Any
 
-def resolver_lp_2d(c: Tuple[float, float], restricciones: List[Tuple[float, float, float]]) -> Dict[str, Any]:
+def solve_lp_2d(c: Tuple[float, float], constraints: List[Tuple[float, float, float]]) -> Dict[str, Any]:
     """
-    Resuelve un problema de programación lineal en 2 variables por el método geométrico
-    (Teorema Fundamental de la Programación Lineal):
-        Maximizar: c[0] * x + c[1] * y
-        Sujeto a: a * x + b * y <= d  para cada (a, b, d) en restricciones
+    Solves a 2-variable linear programming problem using the geometric vertex enumeration method:
+        Maximize: c[0] * x + c[1] * y
+        Subject to: a * x + b * y <= d  for each (a, b, d) in constraints
                   x >= 0, y >= 0
                   
-    Retorna {'optimo': (x, y), 'valor_maximo': float, 'vertices_factibles': list}
+    Returns {'factible': bool, 'feasible': bool, 'optimo': (x, y), 'optimal': (x, y), 'valor_maximo': float, 'max_value': float, 'vertices_factibles': list, 'feasible_vertices': list}
     """
-    # Incluir las restricciones de no negatividad: -x <= 0, -y <= 0
-    todas_restricciones = list(restricciones)
-    todas_restricciones.append((-1.0, 0.0, 0.0))  # x >= 0
-    todas_restricciones.append((0.0, -1.0, 0.0))  # y >= 0
+    # Include non-negativity constraints: -x <= 0, -y <= 0
+    all_constraints = list(constraints)
+    all_constraints.append((-1.0, 0.0, 0.0))  # x >= 0
+    all_constraints.append((0.0, -1.0, 0.0))  # y >= 0
 
-    vertices_candidatos = []
-    m = len(todas_restricciones)
+    candidate_vertices = []
+    m = len(all_constraints)
 
-    # Intersección de pares de rectas frontera
+    # Intersection of all constraint line pairs
     for i in range(m):
-        a1, b1, d1 = todas_restricciones[i]
+        a1, b1, d1 = all_constraints[i]
         for j in range(i + 1, m):
-            a2, b2, d2 = todas_restricciones[j]
+            a2, b2, d2 = all_constraints[j]
             det = a1 * b2 - a2 * b1
-            if abs(det) > 1e-9:  # No son paralelas
+            if abs(det) > 1e-9:  # Lines are not parallel
                 x = (d1 * b2 - d2 * b1) / det
                 y = (a1 * d2 - a2 * d1) / det
 
-                # Verificar factibilidad respecto a todas las restricciones
-                factible = True
-                for a_k, b_k, d_k in todas_restricciones:
+                # Verify feasibility against all constraints
+                feasible = True
+                for a_k, b_k, d_k in all_constraints:
                     if a_k * x + b_k * y > d_k + 1e-7:
-                        factible = False
+                        feasible = False
                         break
 
-                if factible:
-                    # Evitar duplicados numéricos
+                if feasible:
                     pt = (round(x, 6), round(y, 6))
-                    if pt not in vertices_candidatos:
-                        vertices_candidatos.append(pt)
+                    if pt not in candidate_vertices:
+                        candidate_vertices.append(pt)
 
-    if not vertices_candidatos:
-        return {'factible': False, 'optimo': None, 'valor_maximo': -float('inf'), 'vertices_factibles': []}
+    if not candidate_vertices:
+        return {
+            'factible': False,
+            'feasible': False,
+            'optimo': None,
+            'optimal': None,
+            'valor_maximo': -float('inf'),
+            'max_value': -float('inf'),
+            'vertices_factibles': [],
+            'feasible_vertices': []
+        }
 
-    # Evaluar la función objetivo en cada vértice factible
-    mejor_vertice = None
-    mejor_valor = -float('inf')
+    # Evaluate objective function at each feasible vertex
+    best_vertex = None
+    best_value = -float('inf')
 
-    for x, y in vertices_candidatos:
+    for x, y in candidate_vertices:
         val = c[0] * x + c[1] * y
-        if val > mejor_valor:
-            mejor_valor = val
-            mejor_vertice = (x, y)
+        if val > best_value:
+            best_value = val
+            best_vertex = (x, y)
 
+    sorted_vertices = sorted(candidate_vertices)
     return {
         'factible': True,
-        'optimo': mejor_vertice,
-        'valor_maximo': mejor_valor,
-        'vertices_factibles': sorted(vertices_candidatos)
+        'feasible': True,
+        'optimo': best_vertex,
+        'optimal': best_vertex,
+        'valor_maximo': best_value,
+        'max_value': best_value,
+        'vertices_factibles': sorted_vertices,
+        'feasible_vertices': sorted_vertices
     }
 
 
-def modelar_juan_el_vago_ilp(ganancias: List[int]) -> Dict[str, Any]:
+def model_juan_el_vago_ilp(profits: List[int]) -> Dict[str, Any]:
     """
-    Construye la formulación formal de Programación Lineal Entera (ILP) para Juan el Vago:
-        Variables: x_0, x_1, ..., x_{n-1} en {0, 1}
-        Maximizar: sum(g_i * x_i)
-        Sujeto a: x_i + x_{i+1} <= 1  para todo i in {0, ..., n-2}
+    Constructs formal Integer Linear Programming (ILP) formulation for Lazy Juan:
+        Variables: x_0, x_1, ..., x_{n-1} in {0, 1}
+        Maximize: sum(p_i * x_i)
+        Subject to: x_i + x_{i+1} <= 1  for all i in {0, ..., n-2}
     """
-    n = len(ganancias)
+    n = len(profits)
     variables = [f"x_{i}" for i in range(n)]
-    funcion_objetivo = " + ".join(f"{ganancias[i]}*x_{i}" for i in range(n))
-    restricciones = [f"x_{i} + x_{i+1} <= 1" for i in range(n - 1)]
+    objective_func = " + ".join(f"{profits[i]}*x_{i}" for i in range(n))
+    constraints_list = [f"x_{i} + x_{i+1} <= 1" for i in range(n - 1)]
 
     return {
         'tipo': 'Maximizar',
+        'type': 'Maximize',
         'variables': variables,
         'dominio': 'Binario {0, 1}',
-        'funcion_objetivo': funcion_objetivo,
-        'restricciones': restricciones,
-        'cantidad_restricciones': len(restricciones)
+        'domain': 'Binary {0, 1}',
+        'funcion_objetivo': objective_func,
+        'objective_function': objective_func,
+        'restricciones': constraints_list,
+        'constraints': constraints_list,
+        'cantidad_restricciones': len(constraints_list),
+        'constraint_count': len(constraints_list)
     }
 
 
-def modelar_mochila_ilp(values: List[int], weights: List[int], capacity: int) -> Dict[str, Any]:
+def model_knapsack_ilp(values: List[int], weights: List[int], capacity: int) -> Dict[str, Any]:
     """
-    Construye la formulación formal de Programación Lineal Entera (ILP) para Mochila 0/1:
-        Variables: x_0, x_1, ..., x_{n-1} en {0, 1}
-        Maximizar: sum(v_i * x_i)
-        Sujeto a: sum(w_i * x_i) <= W
+    Constructs formal Integer Linear Programming (ILP) formulation for 0/1 Knapsack:
+        Variables: x_0, x_1, ..., x_{n-1} in {0, 1}
+        Maximize: sum(v_i * x_i)
+        Subject to: sum(w_i * x_i) <= W
     """
     n = len(values)
     variables = [f"x_{i}" for i in range(n)]
@@ -116,5 +133,7 @@ def modelar_mochila_ilp(values: List[int], weights: List[int], capacity: int) ->
     }
 
 
-model_knapsack_ilp = modelar_mochila_ilp
-
+# Backward-compatible entry-point aliases
+resolver_lp_2d = solve_lp_2d
+modelar_juan_el_vago_ilp = model_juan_el_vago_ilp
+modelar_mochila_ilp = model_knapsack_ilp

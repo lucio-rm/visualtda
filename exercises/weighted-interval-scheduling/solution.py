@@ -1,53 +1,56 @@
-def planificar_intervalos_ponderados(intervalos: list[list[int]]) -> list[list[int]]:
+def weighted_interval_scheduling(intervals: list[list[int]]) -> list[list[int]]:
     """
-    Dado un conjunto de intervalos donde cada uno es [inicio, fin, peso],
-    encuentra un subconjunto mutuamente compatible de intervalos que maximice
-    la suma total de sus pesos.
+    Given a set of intervals where each is [start, end, weight],
+    finds a mutually compatible subset of intervals maximizing the total weight.
 
-    Complejidad Temporal: O(n log n) mediante ordenamiento + búsqueda binaria para p(j).
-    Complejidad Espacial: O(n) para tabla de memoización y arreglo de punteros p(j).
+    Time Complexity: O(n log n) via sorting + binary search for p(j).
+    Space Complexity: O(n) for DP memoization table and pointer array p(j).
 
-    Retorna la lista de intervalos [inicio, fin, peso] seleccionados.
+    Returns the list of selected [start, end, weight] intervals.
     """
-    if not intervalos:
+    if not intervals:
         return []
 
-    # 1. Ordenar intervalos por tiempo de fin no decreciente
-    ordenados = sorted(intervalos, key=lambda x: x[1])
-    n = len(ordenados)
+    # 1. Sort intervals by non-decreasing finish time
+    sorted_intervals = sorted(intervals, key=lambda x: x[1])
+    n = len(sorted_intervals)
 
-    # 2. Calcular p(j) para cada intervalo j (1-indexado):
-    # p[j] es el mayor índice i < j tal que fin_i <= inicio_j (0 si no existe)
+    # 2. Compute p(j) for each interval j (1-indexed):
+    # p[j] is the largest index i < j such that finish_i <= start_j (0 if none)
     p = [0] * (n + 1)
     for j in range(1, n + 1):
-        inicio_j = ordenados[j - 1][0]
-        bajo, alto = 1, j - 1
-        mejor = 0
-        while bajo <= alto:
-            medio = (bajo + alto) // 2
-            if ordenados[medio - 1][1] <= inicio_j:
-                mejor = medio
-                bajo = medio + 1
+        start_j = sorted_intervals[j - 1][0]
+        low, high = 1, j - 1
+        best = 0
+        while low <= high:
+            mid = (low + high) // 2
+            if sorted_intervals[mid - 1][1] <= start_j:
+                best = mid
+                low = mid + 1
             else:
-                alto = medio - 1
-        p[j] = mejor
+                high = mid - 1
+        p[j] = best
 
-    # 3. Llenar tabla de Programación Dinámica
+    # 3. Fill Dynamic Programming table
     opt = [0] * (n + 1)
     for j in range(1, n + 1):
-        peso_j = ordenados[j - 1][2]
-        opt[j] = max(opt[j - 1], peso_j + opt[p[j]])
+        weight_j = sorted_intervals[j - 1][2]
+        opt[j] = max(opt[j - 1], weight_j + opt[p[j]])
 
-    # 4. Reconstrucción de la solución óptima
-    seleccionados = []
+    # 4. Reconstruction of the optimal solution
+    selected = []
     curr = n
     while curr > 0:
-        peso_curr = ordenados[curr - 1][2]
-        if peso_curr + opt[p[curr]] >= opt[curr - 1]:
-            seleccionados.append(ordenados[curr - 1])
+        weight_curr = sorted_intervals[curr - 1][2]
+        if weight_curr + opt[p[curr]] >= opt[curr - 1]:
+            selected.append(sorted_intervals[curr - 1])
             curr = p[curr]
         else:
             curr -= 1
 
-    seleccionados.reverse()
-    return seleccionados
+    selected.reverse()
+    return selected
+
+
+# Backward-compatible entry-point alias
+planificar_intervalos_ponderados = weighted_interval_scheduling

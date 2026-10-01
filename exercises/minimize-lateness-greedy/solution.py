@@ -1,7 +1,7 @@
-def minimizar_retraso_maximo(tasks: list[tuple[int, int]]) -> int:
+def minimize_lateness(tasks: list[tuple[int, int]]) -> int:
     """
     tasks: list of tuples (duration t_i, deadline d_i).
-    Returns the maximum lateness achieved.
+    Returns the maximum lateness achieved by earliest deadline first (EDF).
     """
     sorted_tasks = sorted(tasks, key=lambda item: item[1])
     current_time = 0
@@ -13,5 +13,6 @@ def minimizar_retraso_maximo(tasks: list[tuple[int, int]]) -> int:
     return max_lateness
 
 
-minimize_maximum_lateness = minimizar_retraso_maximo
-
+# Backward-compatible entry-point aliases
+minimizar_retraso_maximo = minimize_lateness
+minimize_maximum_lateness = minimize_lateness

@@ -1,6 +1,6 @@
-def elemento_mayoritario(arr: list[int]) -> int | None:
+def majority_element(arr: list[int]) -> int | None:
     """
-    Encuentra el elemento mayoritario (> n/2 apariciones) en O(n log n).
+    Finds the majority element (> n/2 occurrences) in O(n log n) time using Divide and Conquer.
     """
     def solve_rec(left: int, right: int) -> int | None:
         if left == right:
@@ -26,5 +26,5 @@ def elemento_mayoritario(arr: list[int]) -> int | None:
     return solve_rec(0, len(arr) - 1)
 
 
-majority_element = elemento_mayoritario
-
+# Backward-compatible entry-point alias
+elemento_mayoritario = majority_element

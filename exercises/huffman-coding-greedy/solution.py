@@ -1,15 +1,14 @@
 import heapq
 
 
-def codificar_huffman(frequencies: dict[str, int]) -> dict[str, str]:
+def huffman_encoding(frequencies: dict[str, int]) -> dict[str, str]:
     """
-    Construye los códigos binarios de Huffman libres de prefijo
-    para un alfabeto de caracteres dado con sus frecuencias enteras.
+    Constructs prefix-free binary Huffman codes for given character frequencies.
 
-    Complejidad Temporal: O(k log k) donde k es la cantidad de caracteres distintos.
-    Complejidad Espacial: O(k) para el árbol binario y la tabla de códigos.
+    Time Complexity: O(k log k) where k is the alphabet size.
+    Space Complexity: O(k) for the binary tree and code table.
 
-    Retorna un diccionario {caracter: codigo_binario}, por ejemplo {'A': '0', 'B': '10'}.
+    Returns a dictionary {char: binary_code}, e.g. {'A': '0', 'B': '10'}.
     """
     if not frequencies:
         return {}
@@ -56,5 +55,5 @@ def codificar_huffman(frequencies: dict[str, int]) -> dict[str, str]:
     return codes
 
 
-huffman_encoding = codificar_huffman
-
+# Backward-compatible entry-point alias
+codificar_huffman = huffman_encoding

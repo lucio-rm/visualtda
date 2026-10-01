@@ -1,23 +1,23 @@
 """
-N-Reinas (N-Queens) — Implementación Canónica Educativa
-Técnica: Backtracking (Búsqueda sistemática con poda)
-Complejidad Temporal: O(N!) en el peor caso
-Complejidad Espacial: O(N) para la pila de recursión y estados de columnas/diagonales
+N-Reinas (N-Queens) — Educational Canonical Implementation
+Technique: Backtracking (Systematic search with branch pruning)
+Time Complexity: O(N!) in worst-case
+Space Complexity: O(N) for recursion stack and diagonal/column bitsets
 """
 
 from typing import List, Optional
 
 
-def resolver_n_reinas(n: int) -> List[List[int]]:
+def solve_n_queens(n: int) -> List[List[int]]:
     """
-    Encuentra todas las soluciones válidas para el problema de las N-Reinas.
+    Finds all valid non-attacking queen configurations on an N x N chessboard.
 
-    Parámetros:
-        n (int): Tamaño del tablero (N x N) y número de reinas a colocar.
+    Parameters:
+        n (int): Board dimension (N x N) and number of queens to place.
 
-    Retorna:
-        List[List[int]]: Lista de tableros válidos. Cada tablero se representa como
-                         una lista de enteros donde board[row] = col.
+    Returns:
+        List[List[int]]: List of valid solutions, where each board is represented
+                         as a list of integers with board[row] = col.
     """
     if n <= 0:
         return []
@@ -66,14 +66,14 @@ def resolver_n_reinas(n: int) -> List[List[int]]:
     return solutions
 
 
-def primera_solucion_n_reinas(n: int) -> Optional[List[int]]:
+def first_n_queens_solution(n: int) -> Optional[List[int]]:
     """
-    Retorna la primera solución válida encontrada, o None si no existe solución (ej. N=2 o N=3).
+    Returns the first valid solution found, or None if no solution exists (e.g. N=2 or N=3).
     """
-    solutions = resolver_n_reinas(n)
+    solutions = solve_n_queens(n)
     return solutions[0] if solutions else None
 
 
-solve_n_queens = resolver_n_reinas
-first_n_queens_solution = primera_solucion_n_reinas
-
+# Backward-compatible entry-point aliases
+resolver_n_reinas = solve_n_queens
+primera_solucion_n_reinas = first_n_queens_solution

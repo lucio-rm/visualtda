@@ -104,4 +104,29 @@ describe('Visual Design System & WCAG Contrast Quality Gate', () => {
       expect(variablesContent).toContain(state);
     }
   });
+
+  it('enforces universal prefers-reduced-motion reduction in base.css', () => {
+    const baseCssPath = path.resolve('src/styles/base.css');
+    const baseCss = fs.readFileSync(baseCssPath, 'utf-8');
+
+    expect(baseCss).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(baseCss).toContain('animation-duration: 0.01ms !important');
+    expect(baseCss).toContain('transition-duration: 0.01ms !important');
+  });
+
+  it('maintains active Architecture Decision Records (ADRs) with index in docs/adr/', () => {
+    const adrDir = path.resolve('docs/adr');
+    expect(fs.existsSync(adrDir)).toBe(true);
+
+    const readmePath = path.join(adrDir, 'README.md');
+    expect(fs.existsSync(readmePath)).toBe(true);
+
+    const adrFiles = fs.readdirSync(adrDir).filter(f => f.endsWith('.md') && f !== 'README.md');
+    expect(adrFiles.length).toBeGreaterThanOrEqual(5);
+
+    const readmeContent = fs.readFileSync(readmePath, 'utf-8');
+    for (const file of adrFiles) {
+      expect(readmeContent).toContain(file);
+    }
+  });
 });

@@ -1,6 +1,7 @@
-def recorrido_caballo(n: int) -> list[list[int]] | None:
+def knights_tour(n: int) -> list[list[int]] | None:
     """
-    Retorna tablero n x n con orden de visita [0 .. n^2 - 1] o None.
+    Returns an n x n board with visit sequence [0 .. n^2 - 1] or None.
+    Uses Warnsdorff's heuristic for fast degree-based candidate ordering.
     """
     board = [[-1] * n for _ in range(n)]
     moves = [(2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1), (-1, -2), (1, -2), (2, -1)]
@@ -35,5 +36,5 @@ def recorrido_caballo(n: int) -> list[list[int]] | None:
     return None
 
 
-knights_tour = recorrido_caballo
-
+# Backward-compatible entry-point alias
+recorrido_caballo = knights_tour

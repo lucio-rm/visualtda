@@ -10,52 +10,66 @@ from typing import NamedTuple
 
 
 class Item(NamedTuple):
-    nombre: str
-    peso: int
-    valor: int
+    name: str
+    weight: int
+    value: int
+
+    @property
+    def nombre(self) -> str:
+        return self.name
+
+    @property
+    def peso(self) -> int:
+        return self.weight
+
+    @property
+    def valor(self) -> int:
+        return self.value
 
 
-def mochila_dp(items: list[Item], capacidad: int) -> tuple[int, list[Item]]:
+def knapsack_dp(items: list[Item], capacity: int) -> tuple[int, list[Item]]:
     """
-    Resuelve el problema de la mochila 0/1 utilizando programación dinámica bottom-up.
+    Solves the 0/1 Knapsack problem using bottom-up Dynamic Programming.
 
-    Retorna:
-        tuple[int, list[Item]]: (valor_maximo, items_seleccionados)
+    Returns:
+        tuple[int, list[Item]]: (optimal_value, selected_items)
     """
     n = len(items)
-    if n == 0 or capacidad <= 0:
+    if n == 0 or capacity <= 0:
         return 0, []
 
-    # dp[i][w] almacena el valor maximo considerando los primeros i items y capacidad w
-    dp = [[0] * (capacidad + 1) for _ in range(n + 1)]
+    # dp[i][w] stores maximum value considering first i items and capacity w
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
 
-    # Construccion de la tabla bottom-up
+    # Bottom-up table construction
     for i in range(1, n + 1):
         item = items[i - 1]
-        for w in range(capacidad + 1):
-            # Opcion 1: Excluir el item actual
-            valor_sin_item = dp[i - 1][w]
+        item_weight = getattr(item, 'weight', getattr(item, 'peso', 0))
+        item_value = getattr(item, 'value', getattr(item, 'valor', 0))
 
-            # Opcion 2: Incluir el item actual (si entra en la capacidad w)
-            if item.peso <= w:
-                valor_con_item = dp[i - 1][w - item.peso] + item.valor
-                dp[i][w] = max(valor_sin_item, valor_con_item)
+        for w in range(capacity + 1):
+            val_without = dp[i - 1][w]
+            if item_weight <= w:
+                val_with = dp[i - 1][w - item_weight] + item_value
+                dp[i][w] = max(val_without, val_with)
             else:
-                dp[i][w] = valor_sin_item
+                dp[i][w] = val_without
 
-    # Reconstruccion de la solucion optima desde dp[n][capacidad]
-    valor_optimo = dp[n][capacidad]
-    seleccionados: list[Item] = []
-    w_restante = capacidad
+    # Optimal solution reconstruction
+    optimal_value = dp[n][capacity]
+    selected_items: list[Item] = []
+    remaining_capacity = capacity
 
     for i in range(n, 0, -1):
-        # Si el valor difiere del de la fila anterior, el item i fue incluido
-        if dp[i][w_restante] != dp[i - 1][w_restante]:
-            item_incluido = items[i - 1]
-            seleccionados.append(item_incluido)
-            w_restante -= item_incluido.peso
+        if dp[i][remaining_capacity] != dp[i - 1][remaining_capacity]:
+            included = items[i - 1]
+            selected_items.append(included)
+            inc_weight = getattr(included, 'weight', getattr(included, 'peso', 0))
+            remaining_capacity -= inc_weight
 
-    # Los items fueron recuperados de atras hacia adelante
-    seleccionados.reverse()
+    selected_items.reverse()
+    return optimal_value, selected_items
 
-    return valor_optimo, seleccionados
+
+# Backward-compatible entry-point alias
+mochila_dp = knapsack_dp

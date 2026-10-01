@@ -1,48 +1,51 @@
-def contar_inversiones(arreglo: list[int]) -> int:
+def count_inversions(arr: list[int]) -> int:
     """
-    Cuenta el número total de inversiones en el arreglo dado:
-    pares de índices (i, j) tales que i < j y arreglo[i] > arreglo[j].
+    Counts total number of inversions in the given array:
+    pairs of indices (i, j) such that i < j and arr[i] > arr[j].
 
-    Complejidad Temporal: O(n log n) mediante División y Conquista (Merge Sort).
-    Complejidad Espacial: O(n) para arreglos auxiliares de mezcla.
+    Time Complexity: O(n log n) via Divide and Conquer (Merge Sort variant).
+    Space Complexity: O(n) for auxiliary merge buffers.
 
-    Retorna la cantidad total de inversiones (entero >= 0).
+    Returns total inversion count (integer >= 0).
     """
-    def merge_and_count(izq: list[int], der: list[int]) -> tuple[int, list[int]]:
+    def merge_and_count(left: list[int], right: list[int]) -> tuple[int, list[int]]:
         i = 0
         j = 0
-        inversiones_cruzadas = 0
-        mezclado = []
+        split_inversions = 0
+        merged = []
 
-        len_izq = len(izq)
-        len_der = len(der)
+        len_left = len(left)
+        len_right = len(right)
 
-        while i < len_izq and j < len_der:
-            if izq[i] <= der[j]:
-                mezclado.append(izq[i])
+        while i < len_left and j < len_right:
+            if left[i] <= right[j]:
+                merged.append(left[i])
                 i += 1
             else:
-                # Si der[j] < izq[i], entonces der[j] es menor que TODOS los
-                # elementos restantes en izq[i, ..., len_izq - 1]
-                mezclado.append(der[j])
-                inversiones_cruzadas += (len_izq - i)
+                # If right[j] < left[i], then right[j] is smaller than all remaining elements in left[i:]
+                merged.append(right[j])
+                split_inversions += (len_left - i)
                 j += 1
 
-        mezclado.extend(izq[i:])
-        mezclado.extend(der[j:])
-        return inversiones_cruzadas, mezclado
+        merged.extend(left[i:])
+        merged.extend(right[j:])
+        return split_inversions, merged
 
-    def sort_and_count(arr: list[int]) -> tuple[int, list[int]]:
-        if len(arr) <= 1:
-            return 0, list(arr)
+    def sort_and_count(items: list[int]) -> tuple[int, list[int]]:
+        if len(items) <= 1:
+            return 0, list(items)
 
-        medio = len(arr) // 2
-        inv_izq, arr_izq = sort_and_count(arr[:medio])
-        inv_der, arr_der = sort_and_count(arr[medio:])
-        inv_cruzadas, arr_mezclado = merge_and_count(arr_izq, arr_der)
+        mid = len(items) // 2
+        inv_left, left_sorted = sort_and_count(items[:mid])
+        inv_right, right_sorted = sort_and_count(items[mid:])
+        inv_split, merged_items = merge_and_count(left_sorted, right_sorted)
 
-        total = inv_izq + inv_der + inv_cruzadas
-        return total, arr_mezclado
+        total = inv_left + inv_right + inv_split
+        return total, merged_items
 
-    total_inversiones, _ = sort_and_count(arreglo)
-    return total_inversiones
+    total_inversions, _ = sort_and_count(arr)
+    return total_inversions
+
+
+# Backward-compatible entry-point alias
+contar_inversiones = count_inversions

@@ -1,9 +1,9 @@
 import math
 
 
-def par_mas_cercano(points: list[tuple[float, float]]) -> float:
+def closest_pair(points: list[tuple[float, float]]) -> float:
     """
-    Calcula la distancia minima entre n puntos en R^2 en O(n log n).
+    Computes minimum Euclidean distance between n points in R^2 in O(n log n).
     """
     points_x = sorted(points, key=lambda p: p[0])
     points_y = sorted(points, key=lambda p: p[1])
@@ -42,5 +42,5 @@ def par_mas_cercano(points: list[tuple[float, float]]) -> float:
     return solve_rec(points_x, points_y)
 
 
-closest_pair = par_mas_cercano
-
+# Backward-compatible entry-point alias
+par_mas_cercano = closest_pair

@@ -1,6 +1,6 @@
-def ciclo_hamiltoniano(num_v: int, graph: dict[int, list[int]]) -> list[int] | None:
+def hamiltonian_cycle(num_v: int, graph: dict[int, list[int]]) -> list[int] | None:
     """
-    Retorna el camino del ciclo hamiltoniano [v0, v1, ..., vn-1, v0] o None si no existe.
+    Returns the vertex sequence of a Hamiltonian cycle [v0, v1, ..., vn-1, v0] or None if none exists.
     """
     path = [0]
     visited = {0}
@@ -24,5 +24,5 @@ def ciclo_hamiltoniano(num_v: int, graph: dict[int, list[int]]) -> list[int] | N
     return None
 
 
-hamiltonian_cycle = ciclo_hamiltoniano
-
+# Backward-compatible entry-point alias
+ciclo_hamiltoniano = hamiltonian_cycle

@@ -1,26 +1,22 @@
 """
-Algoritmo de 2-Aproximación para Cobertura de Vértices Mínima (Vertex Cover)
-Referencia: Kleinberg & Tardos, "Algorithm Design", Capítulo 11, Sección 11.1.
+2-Approximation Algorithm for Minimum Vertex Cover
+Reference: Kleinberg & Tardos, "Algorithm Design", Chapter 11, Section 11.1.
 
-Garantía Formal:
-El algoritmo encuentra una cobertura C en tiempo O(|V| + |E|) tal que:
+Formal Guarantee:
+The algorithm finds a vertex cover C in O(|V| + |E|) time such that:
 |C| <= 2 * |C*|
-donde C* es la cobertura mínima óptima.
+where C* is the optimal minimum vertex cover.
 """
 
-def cobertura_vertices_2aprox(vertices: list[str], edges: list[tuple[str, str]]) -> tuple[list[str], list[tuple[str, str]]]:
+def vertex_cover_2approx(vertices: list[str], edges: list[tuple[str, str]]) -> tuple[list[str], list[tuple[str, str]]]:
     """
-    Calcula una 2-aproximación de la cobertura de vértices mínima
-    seleccionando iterativamente aristas disjuntas (matching maximal).
+    Computes a 2-approximation of minimum vertex cover
+    by iteratively selecting disjoint edges (maximal matching).
 
-    Parámetros:
-      vertices: Lista de nombres de vértices V
-      edges: Lista de pares (u, v) representando las aristas E
-
-    Retorna:
+    Returns:
       (cover, matching_edges):
-        - cover: Conjunto C de vértices que cubren todas las aristas
-        - matching_edges: Conjunto M de aristas disjuntas seleccionadas
+        - cover: Set C of vertices covering all edges
+        - matching_edges: Set M of disjoint edges selected
     """
     cover: set[str] = set()
     matching: list[tuple[str, str]] = []
@@ -36,9 +32,9 @@ def cobertura_vertices_2aprox(vertices: list[str], edges: list[tuple[str, str]])
     return sorted(list(cover)), matching
 
 
-def verificar_cobertura(edges: list[tuple[str, str]], cover: list[str]) -> bool:
+def check_vertex_cover(edges: list[tuple[str, str]], cover: list[str]) -> bool:
     """
-    Verifica en O(|E|) si cada arista tiene al menos un extremo en la cobertura.
+    Verifies in O(|E|) time whether every edge has at least one endpoint in the cover.
     """
     set_c = set(cover)
     for u, v in edges:
@@ -47,6 +43,6 @@ def verificar_cobertura(edges: list[tuple[str, str]], cover: list[str]) -> bool:
     return True
 
 
-vertex_cover_2approx = cobertura_vertices_2aprox
-check_vertex_cover = verificar_cobertura
-
+# Backward-compatible entry-point aliases
+cobertura_vertices_2aprox = vertex_cover_2approx
+verificar_cobertura = check_vertex_cover

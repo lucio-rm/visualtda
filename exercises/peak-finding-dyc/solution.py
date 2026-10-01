@@ -1,33 +1,33 @@
-def buscar_pico(arreglo: list[int]) -> int:
+def find_peak(arr: list[int]) -> int:
     """
-    Dado un arreglo de n enteros no ordenados, encuentra el índice de un pico.
-    Un elemento arreglo[i] es un pico si es mayor o igual a sus vecinos adyacentes:
-      - Si i > 0: arreglo[i] >= arreglo[i - 1]
-      - Si i < len(arreglo) - 1: arreglo[i] >= arreglo[i + 1]
+    Given an array of n unsorted integers, finds the index of a local peak.
+    An element arr[i] is a peak if it is greater than or equal to its neighbors:
+      - If i > 0: arr[i] >= arr[i - 1]
+      - If i < len(arr) - 1: arr[i] >= arr[i + 1]
 
-    Complejidad Temporal: O(log n) mediante División y Conquista.
-    Complejidad Espacial: O(1) iterativo (o O(log n) recursivo por stack de llamadas).
+    Time Complexity: O(log n) via Divide and Conquer.
+    Space Complexity: O(1) iterative.
 
-    Retorna el índice i donde se encuentra el pico.
-    Si el arreglo está vacío, retorna -1.
+    Returns the index i of the peak element. If array is empty, returns -1.
     """
-    if not arreglo:
+    if not arr:
         return -1
 
-    inicio = 0
-    fin = len(arreglo) - 1
+    low = 0
+    high = len(arr) - 1
 
-    while inicio <= fin:
-        medio = (inicio + fin) // 2
+    while low <= high:
+        mid = (low + high) // 2
 
-        # Si el vecino izquierdo es estrictamente mayor, hay garantía de pico a la izquierda
-        if medio > 0 and arreglo[medio] < arreglo[medio - 1]:
-            fin = medio - 1
-        # Si el vecino derecho es estrictamente mayor, hay garantía de pico a la derecha
-        elif medio < len(arreglo) - 1 and arreglo[medio] < arreglo[medio + 1]:
-            inicio = medio + 1
+        if mid > 0 and arr[mid] < arr[mid - 1]:
+            high = mid - 1
+        elif mid < len(arr) - 1 and arr[mid] < arr[mid + 1]:
+            low = mid + 1
         else:
-            # arreglo[medio] >= arreglo[medio-1] y arreglo[medio] >= arreglo[medio+1]
-            return medio
+            return mid
 
-    return inicio
+    return low
+
+
+# Backward-compatible entry-point alias
+buscar_pico = find_peak

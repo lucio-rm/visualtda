@@ -5,59 +5,64 @@ Referencia de Cátedra: Algoritmos RW / FIUBA (Guía Programación Dinámica, Ej
 
 from typing import List
 
-def cambio_minimo_monedas(monedas: List[int], objetivo: int) -> List[int]:
+def coin_change_min(coins: List[int], target: int) -> List[int]:
     """
-    Calcula la lista de monedas que suman exactamente 'objetivo' minimizando la cantidad total.
-    Cada denominación en 'monedas' puede utilizarse una cantidad ilimitada de veces.
+    Calculates the list of coins that sum to exactly 'target' minimizing total coin count.
+    Each denomination in 'coins' can be used an unlimited number of times.
 
-    Recurrencia de Bellman (Programación Dinámica 1D):
-      OPT(v) = 0                                       si v = 0
-      OPT(v) = 1 + min { OPT(v - c) : c in monedas, c <= v }  si v > 0
+    Bellman Recurrence (1D Dynamic Programming):
+      OPT(v) = 0                                       if v = 0
+      OPT(v) = 1 + min { OPT(v - c) : c in coins, c <= v }  if v > 0
 
-    Reconstrucción:
-      Guardamos 'eleccion[v] = c', la moneda que minimizó OPT(v - c).
-      Luego reconstruimos retrocediendo desde 'objetivo' hasta 0.
+    Reconstruction:
+      Store choice[v] = c, the coin denomination achieving minimum at subproblem v.
+      Then reconstruct optimal combination backwards from target to 0.
 
-    Complejidad:
-      - Tiempo: O(objetivo * |monedas|).
-      - Espacio: O(objetivo) para la tabla DP y el arreglo de elecciones.
+    Complexity:
+      - Time: O(target * |coins|).
+      - Space: O(target) for DP table and choice array.
     """
-    if objetivo <= 0 or not monedas:
+    if target <= 0 or not coins:
         return []
 
-    # Filtrar denominaciones válidas positivas
-    denominaciones = sorted([c for c in monedas if c > 0])
-    if not denominaciones:
+    # Filter valid positive denominations
+    denominations = sorted([c for c in coins if c > 0])
+    if not denominations:
         return []
 
     INF = float('inf')
-    dp = [INF] * (objetivo + 1)
-    eleccion = [-1] * (objetivo + 1)
+    dp = [INF] * (target + 1)
+    choice = [-1] * (target + 1)
 
-    # Caso base
+    # Base case
     dp[0] = 0
 
-    # Llenado iterativo de la tabla DP (bottom-up)
-    for v in range(1, objetivo + 1):
-        for c in denominaciones:
+    # Iterative bottom-up DP table filling
+    for v in range(1, target + 1):
+        for c in denominations:
             if c <= v:
-                costo_candidato = dp[v - c] + 1
-                if costo_candidato < dp[v]:
-                    dp[v] = costo_candidato
-                    eleccion[v] = c
+                cand = dp[v - c] + 1
+                if cand < dp[v]:
+                    dp[v] = cand
+                    choice[v] = c
 
-    # Si no es posible formar el monto
-    if dp[objetivo] == INF:
+    # Target not reachable
+    if dp[target] == INF:
         return []
 
-    # Reconstrucción de la solución óptima
-    cambio = []
-    curr = objetivo
+    # Backward reconstruction
+    change = []
+    curr = target
     while curr > 0:
-        c = eleccion[curr]
+        c = choice[curr]
         if c <= 0:
             break
-        cambio.append(c)
+        change.append(c)
         curr -= c
 
-    return cambio
+    return change
+
+
+# Backward-compatible entry-point aliases
+cambio_minimo_monedas = coin_change_min
+cambio_monedas_minimo = coin_change_min

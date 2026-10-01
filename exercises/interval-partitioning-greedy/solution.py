@@ -1,9 +1,9 @@
 import heapq
 
 
-def particionar_intervalos(intervals: list[tuple[int, int]]) -> int:
+def partition_intervals(intervals: list[tuple[int, int]]) -> int:
     """
-    Retorna la minima cantidad de aulas necesarias para programar todos los intervalos.
+    Returns the minimum number of classrooms/resources required to schedule all intervals without conflict.
     """
     if not intervals:
         return 0
@@ -16,5 +16,5 @@ def particionar_intervalos(intervals: list[tuple[int, int]]) -> int:
     return len(rooms)
 
 
-partition_intervals = particionar_intervalos
-
+# Backward-compatible entry-point alias
+particionar_intervalos = partition_intervals

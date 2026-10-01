@@ -1,4 +1,4 @@
-def estructura_secundaria_arn(sequence: str) -> int:
+def rna_secondary_structure(sequence: str) -> int:
     """
     sequence: string of RNA bases {A, U, C, G}.
     Returns the maximum number of non-crossing base pairs.
@@ -23,5 +23,5 @@ def estructura_secundaria_arn(sequence: str) -> int:
     return dp[0][n - 1]
 
 
-rna_secondary_structure = estructura_secundaria_arn
-
+# Backward-compatible entry-point alias
+estructura_secundaria_arn = rna_secondary_structure

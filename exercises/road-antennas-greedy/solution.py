@@ -6,47 +6,51 @@ Kleinberg & Tardos, Capítulo 4.2.
 
 from typing import List
 
-def construir_antenas(casas: List[float], radio: float) -> List[float]:
+def place_antennas(houses: List[float], radius: float) -> List[float]:
     """
-    Calcula la posición de las antenas sobre una ruta recta de forma que todas
-    las casas queden cubiertas con la mínima cantidad posible de antenas.
+    Computes optimal antenna positions along a straight road to cover all houses
+    with the minimum possible number of antennas.
 
-    Estrategia Greedy (Greedy Stays Ahead):
-      1. Ordenar las casas por kilómetro ascendente.
-      2. Tomar la primera casa aún no cubierta en x_i.
-      3. Colocar la antena lo más adelante posible sin dejar desprotegida a x_i:
-         posicion = x_i + radio.
-      4. Saltear todas las casas cubiertas por esta antena (casas <= posicion + radio).
-      5. Repetir hasta cubrir todas las casas.
+    Greedy Strategy (Greedy Stays Ahead):
+      1. Sort houses by coordinate in ascending order.
+      2. Take the first uncovered house at x_i.
+      3. Place antenna as far right as possible while still covering x_i:
+         position = x_i + radius.
+      4. Skip all houses covered by this antenna (houses <= position + radius).
+      5. Repeat until all houses are covered.
 
-    Complejidad:
-      - Tiempo: O(n log n) por el ordenamiento inicial + O(n) de escaneo lineal = O(n log n).
-      - Espacio: O(k) para almacenar la lista de k antenas devueltas.
+    Complexity:
+      - Time: O(n log n) due to initial sort + O(n) scan = O(n log n).
+      - Space: O(k) for output antenna positions.
     """
-    if not casas:
+    if not houses:
         return []
-    if radio <= 0:
-        raise ValueError("El radio de cobertura debe ser estrictamente positivo.")
+    if radius <= 0:
+        raise ValueError("Coverage radius must be strictly positive.")
 
-    # 1. Ordenar casas de izquierda a derecha
-    casas_ordenadas = sorted(casas)
-    antenas = []
+    # 1. Sort houses left to right
+    sorted_houses = sorted(houses)
+    antennas = []
     i = 0
-    n = len(casas_ordenadas)
+    n = len(sorted_houses)
 
     while i < n:
-        # Primera casa sin cobertura
-        casa_sin_cobertura = casas_ordenadas[i]
+        # First uncovered house
+        uncovered_house = sorted_houses[i]
 
-        # Elección Greedy: colocar la antena lo más a la derecha posible
-        posicion_antena = casa_sin_cobertura + radio
-        antenas.append(posicion_antena)
+        # Greedy choice: place antenna as far right as permitted
+        antenna_pos = uncovered_house + radius
+        antennas.append(antenna_pos)
 
-        # Límite superior de cobertura de esta antena
-        cobertura_max = posicion_antena + radio
+        # Upper bound of this antenna's coverage
+        coverage_limit = antenna_pos + radius
 
-        # Avanzar el puntero saltando todas las casas que quedaron dentro del radio
-        while i < n and casas_ordenadas[i] <= cobertura_max:
+        # Advance pointer past all houses covered by this antenna
+        while i < n and sorted_houses[i] <= coverage_limit:
             i += 1
 
-    return antenas
+    return antennas
+
+
+# Backward-compatible entry-point alias
+construir_antenas = place_antennas
