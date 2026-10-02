@@ -549,7 +549,7 @@ export const BellmanFordPlayground: React.FC = () => {
         </div>
 
         {/* Edge Form Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--canvas-bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
             <span>{language === 'es' ? 'De (u):' : 'From (u):'}</span>
             <select
@@ -615,7 +615,7 @@ export const BellmanFordPlayground: React.FC = () => {
                 alignItems: 'center',
                 gap: '0.35rem',
                 padding: '0.2rem 0.55rem',
-                background: 'var(--bg)',
+                background: 'var(--canvas-bg)',
                 border: `1px solid ${e.weight < 0 ? 'var(--error)' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-sm)',
                 fontSize: '0.8125rem',

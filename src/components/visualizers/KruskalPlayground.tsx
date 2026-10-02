@@ -350,7 +350,7 @@ export const KruskalPlayground: React.FC = () => {
       {/* Main Dual Area: SVG Graph + Sorted Edge Queue */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 240px', gap: '1rem', alignItems: 'start' }}>
         {/* Interactive SVG Graph */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem' }}>
+        <div style={{ background: 'var(--canvas-bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem' }}>
           <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.35rem', display: 'flex', justifyContent: 'space-between' }}>
             <span>{language === 'es' ? 'Grafo (Hacé clic en aristas para sumar/quitar):' : 'Graph (Click edges to add/remove):'}</span>
             <span>{language === 'es' ? 'Colores = Componentes Conexas (Union-Find)' : 'Colors = Connected Components'}</span>
@@ -499,7 +499,7 @@ export const KruskalPlayground: React.FC = () => {
                       ? 'var(--state-solution-bg)'
                       : wouldFormCycle
                       ? 'var(--state-conflict-bg)'
-                      : 'var(--bg)',
+                      : 'var(--canvas-bg)',
                     border: `1px solid ${isSelected ? 'var(--success)' : wouldFormCycle ? 'var(--state-conflict-bg)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.8125rem',
@@ -565,7 +565,7 @@ export const KruskalPlayground: React.FC = () => {
         </div>
 
         {/* Edge Form Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'var(--canvas-bg)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text)' }}>
             <span>{language === 'es' ? 'Extremo 1 (u):' : 'Endpoint 1 (u):'}</span>
             <select
@@ -631,7 +631,7 @@ export const KruskalPlayground: React.FC = () => {
                 alignItems: 'center',
                 gap: '0.35rem',
                 padding: '0.2rem 0.55rem',
-                background: 'var(--bg)',
+                background: 'var(--canvas-bg)',
                 border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-sm)',
                 fontSize: '0.8125rem',

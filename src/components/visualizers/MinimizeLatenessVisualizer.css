@@ -65,7 +65,7 @@
 }
 
 .ml-job-table th {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border-bottom: 1px solid var(--border);
   font-weight: 600;
 }

@@ -239,7 +239,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
             onChange={(e) => setCapacity(Math.max(1, Number(e.target.value)))}
             style={{
               width: '65px',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               color: 'var(--text)',
               border: '1px solid var(--border)',
               borderRadius: 'var(--radius-sm)',
@@ -300,7 +300,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
       </div>
 
       {/* SVG Interactive Branch and Bound Tree */}
-      <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem', overflowX: 'auto' }}>
+      <div style={{ background: 'var(--canvas-bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.5rem', overflowX: 'auto' }}>
         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.4rem', display: 'flex', justifyContent: 'space-between' }}>
           <span>
             {language === 'es' ? 'Árbol de Decisiones (Hacé clic en cualquier nodo para inspeccionar su cota):' : 'Decision Tree (Click any node to inspect bound):'}

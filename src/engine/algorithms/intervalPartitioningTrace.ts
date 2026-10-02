@@ -40,13 +40,13 @@ const PALETTE = [
 ];
 
 export const DEFAULT_LECTURES: LectureInterval[] = [
-  { id: 'c1', name: 'Algoritmos I', start: 9, end: 11, color: PALETTE[0] },
-  { id: 'c2', name: 'Álgebra Lineal', start: 9, end: 12, color: PALETTE[1] },
-  { id: 'c3', name: 'Física I', start: 9, end: 10, color: PALETTE[2] },
-  { id: 'c4', name: 'Estructuras', start: 11, end: 13, color: PALETTE[3] },
-  { id: 'c5', name: 'Bases de Datos', start: 11, end: 14, color: PALETTE[4] },
-  { id: 'c6', name: 'Sistemas Op.', start: 13, end: 15, color: PALETTE[5] },
-  { id: 'c7', name: 'Redes', start: 14, end: 16, color: PALETTE[6] }
+  { id: 'c1', name: 'Algoritmos I', start: 9, end: 11.5, color: PALETTE[0] },
+  { id: 'c2', name: 'Álgebra Lineal', start: 10, end: 12.5, color: PALETTE[1] },
+  { id: 'c3', name: 'Física I', start: 11, end: 13, color: PALETTE[2] },
+  { id: 'c4', name: 'Estructuras', start: 12, end: 14.5, color: PALETTE[3] },
+  { id: 'c5', name: 'Bases de Datos', start: 13, end: 16, color: PALETTE[4] },
+  { id: 'c6', name: 'Sistemas Op.', start: 14.5, end: 17, color: PALETTE[5] },
+  { id: 'c7', name: 'Redes', start: 15.5, end: 18, color: PALETTE[6] }
 ];
 
 export function calculateIntervalDepth(intervals: LectureInterval[]): number {

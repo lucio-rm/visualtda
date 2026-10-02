@@ -60,6 +60,6 @@
 }
 
 .rna-dp-matrix th {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   font-weight: 600;
 }

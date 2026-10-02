@@ -735,6 +735,26 @@
   width: 100%;
 }
 
+.interactive-playground-card.expanded-fullwidth .algorithm-playground,
+.interactive-playground-card.expanded-fullwidth .playground-timeline-svg,
+.interactive-playground-card.expanded-fullwidth .cp-svg-canvas,
+.interactive-playground-card.expanded-fullwidth .kt-canvas-container,
+.interactive-playground-card.expanded-fullwidth .kt-canvas-container svg,
+.interactive-playground-card.expanded-fullwidth .me-canvas-container,
+.interactive-playground-card.expanded-fullwidth .me-canvas-container svg,
+.interactive-playground-card.expanded-fullwidth .closest-pair-playground svg,
+.interactive-playground-card.expanded-fullwidth .interval-partitioning-playground svg,
+.interactive-playground-card.expanded-fullwidth .interval-playground-box,
+.interactive-playground-card.expanded-fullwidth .inversion-playground,
+.interactive-playground-card.expanded-fullwidth .graph-canvas,
+.interactive-playground-card.expanded-fullwidth .matrix-table,
+.interactive-playground-card.expanded-fullwidth .dp-table-container,
+.interactive-playground-card.expanded-fullwidth .visualizer-container,
+.interactive-playground-card.expanded-fullwidth .visualizer-container svg {
+  max-width: 100% !important;
+  width: 100%;
+}
+
 /* Prevent accidental text selection / highlighting on interactive playgrounds and SVGs */
 .algorithm-playground,
 .interactive-playground-card,
@@ -750,7 +770,14 @@
 .kt-canvas-container svg,
 .me-canvas-container svg,
 .me-canvas-container text,
-.cp-svg-canvas text {
+.cp-svg-canvas text,
+.graph-canvas,
+.visualizer-container svg,
+.btn-control,
+.node,
+.vertex,
+.edge,
+.matrix-table {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -784,7 +811,7 @@
 }
 
 .btn-preset {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -898,6 +925,7 @@
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
+  min-height: 420px;
 }
 
 .editor-gutter {
@@ -913,7 +941,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-width: 2.75rem;
+  min-width: 3.25rem;
   box-sizing: border-box;
 }
 
@@ -923,23 +951,150 @@
   display: block;
 }
 
-.code-editor-input {
+.code-editor-stage {
+  position: relative;
   flex: 1;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.code-highlight-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  white-space: pre;
+  tab-size: 4;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--text);
+  z-index: 1;
+}
+
+.code-editor-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
+  height: 100%;
   padding: 1rem;
   background-color: transparent;
-  color: var(--text);
+  color: transparent;
+  caret-color: var(--accent);
   border: none;
   font-family: var(--font-mono);
   font-size: 0.9375rem;
   line-height: 1.5rem;
-  resize: vertical;
-  box-sizing: border-box;
+  white-space: pre;
   tab-size: 4;
+  overflow: auto;
+  resize: none;
+  box-sizing: border-box;
+  z-index: 2;
 }
 
 .code-editor-input:focus {
   outline: none;
+}
+
+.code-editor-input::selection {
+  background: rgba(59, 130, 246, 0.35);
+  color: transparent;
+}
+
+/* Python Syntax Highlighting Tokens (VS Code Dark+ & Light+ calibrated) */
+.tok-kw {
+  color: #c586c0;
+  font-weight: 600;
+}
+.tok-fn-decl {
+  color: #dcdcaa;
+  font-weight: 700;
+}
+.tok-fn-call {
+  color: #dcdcaa;
+}
+.tok-builtin {
+  color: #4ec9b0;
+}
+.tok-const {
+  color: #569cd6;
+  font-weight: 600;
+}
+.tok-self {
+  color: #9cdcfe;
+  font-style: italic;
+}
+.tok-str {
+  color: #ce9178;
+}
+.tok-num {
+  color: #b5cea8;
+}
+.tok-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.tok-op {
+  color: #d4d4d4;
+}
+.tok-bracket {
+  color: #ffd700;
+}
+.tok-punct {
+  color: #94a3b8;
+}
+.tok-var {
+  color: #9cdcfe;
+}
+
+[data-theme='light'] .tok-kw {
+  color: #af00db;
+}
+[data-theme='light'] .tok-fn-decl {
+  color: #795e26;
+}
+[data-theme='light'] .tok-fn-call {
+  color: #795e26;
+}
+[data-theme='light'] .tok-builtin {
+  color: #267f99;
+}
+[data-theme='light'] .tok-const {
+  color: #0000ff;
+}
+[data-theme='light'] .tok-self {
+  color: #001080;
+}
+[data-theme='light'] .tok-str {
+  color: #a31515;
+}
+[data-theme='light'] .tok-num {
+  color: #098658;
+}
+[data-theme='light'] .tok-comment {
+  color: #008000;
+}
+[data-theme='light'] .tok-op {
+  color: #334155;
+}
+[data-theme='light'] .tok-bracket {
+  color: #0000ff;
+}
+[data-theme='light'] .tok-punct {
+  color: #475569;
+}
+[data-theme='light'] .tok-var {
+  color: #001080;
 }
 
 .editor-card:focus-within {

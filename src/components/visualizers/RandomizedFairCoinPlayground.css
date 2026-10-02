@@ -21,7 +21,7 @@
 }
 
 .bias-controls-card {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -87,7 +87,7 @@
 }
 
 .btn-action.single {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   color: var(--text);
 }
 
@@ -162,7 +162,7 @@
 }
 
 .dist-box {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;

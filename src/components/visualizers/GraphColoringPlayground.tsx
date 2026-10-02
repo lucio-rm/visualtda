@@ -484,7 +484,7 @@ export const GraphColoringPlayground: React.FC = () => {
               }}
               style={{
                 padding: '0.2rem 0.5rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg)',
                 color: 'var(--text)',
                 border: '1px solid var(--border)',
                 borderRadius: '4px',
@@ -536,7 +536,7 @@ export const GraphColoringPlayground: React.FC = () => {
                 <select
                   value={edgeU}
                   onChange={(e) => setEdgeU(e.target.value)}
-                  style={{ padding: '0.25rem 0.5rem', background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+                  style={{ padding: '0.25rem 0.5rem', background: 'var(--canvas-bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
                 >
                   {vertices.map((v) => (
                     <option key={`opt-u-${v}`} value={v}>{v}</option>
@@ -548,7 +548,7 @@ export const GraphColoringPlayground: React.FC = () => {
                 <select
                   value={edgeV}
                   onChange={(e) => setEdgeV(e.target.value)}
-                  style={{ padding: '0.25rem 0.5rem', background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
+                  style={{ padding: '0.25rem 0.5rem', background: 'var(--canvas-bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)' }}
                 >
                   {vertices.map((v) => (
                     <option key={`opt-v-${v}`} value={v}>{v}</option>
@@ -578,7 +578,7 @@ export const GraphColoringPlayground: React.FC = () => {
                     alignItems: 'center',
                     gap: '0.35rem',
                     padding: '0.2rem 0.5rem',
-                    background: 'var(--bg)',
+                    background: 'var(--canvas-bg)',
                     border: '1px solid var(--border)',
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.8125rem',
@@ -605,7 +605,7 @@ export const GraphColoringPlayground: React.FC = () => {
       <div
         style={{
           position: 'relative',
-          backgroundColor: 'var(--bg)',
+          backgroundColor: 'var(--canvas-bg)',
           borderRadius: '8px',
           border: '1px solid var(--border)',
           overflow: 'hidden',

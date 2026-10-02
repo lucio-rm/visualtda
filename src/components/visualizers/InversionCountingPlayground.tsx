@@ -30,11 +30,11 @@ export const InversionCountingPlayground: React.FC = () => {
   const handleApplyCustomInput = () => {
     try {
       const parts = customInputStr
-        .split(',')
+        .split(/[\s,]+/)
         .map((s) => s.trim())
         .filter((s) => s.length > 0);
       if (parts.length === 0) {
-        throw new Error(language === 'es' ? 'Ingresá al menos 2 números separados por coma.' : 'Enter at least 2 comma-separated numbers.');
+        throw new Error(language === 'es' ? 'Ingresá al menos 2 números.' : 'Enter at least 2 numbers.');
       }
       const nums = parts.map((p) => {
         const v = Number(p);
@@ -44,8 +44,8 @@ export const InversionCountingPlayground: React.FC = () => {
       if (nums.length < 2) {
         throw new Error(language === 'es' ? 'El arreglo debe tener al menos 2 elementos.' : 'Array must have at least 2 elements.');
       }
-      if (nums.length > 10) {
-        throw new Error(language === 'es' ? 'Máximo 10 elementos para mantener legibilidad visual.' : 'Maximum 10 elements to maintain visual legibility.');
+      if (nums.length > 12) {
+        throw new Error(language === 'es' ? 'Máximo 12 elementos para mantener legibilidad visual.' : 'Maximum 12 elements to maintain visual legibility.');
       }
       setCustomInputError(null);
       setArray(nums);
@@ -56,7 +56,7 @@ export const InversionCountingPlayground: React.FC = () => {
 
   const handleAdjustValue = (index: number, delta: number) => {
     const next = [...array];
-    next[index] = Math.max(0, next[index] + delta);
+    next[index] = next[index] + delta;
     setArray(next);
     setCustomInputStr(next.join(', '));
   };
@@ -278,9 +278,9 @@ export const InversionCountingPlayground: React.FC = () => {
               style={{
                 padding: '0.35rem 0.65rem',
                 fontSize: '0.85rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg, var(--surface-light))',
                 color: 'var(--text)',
-                border: '1px solid var(--border)',
+                border: '1.5px solid var(--border)',
                 borderRadius: 'var(--radius-sm)',
                 width: '180px'
               }}
@@ -313,11 +313,11 @@ export const InversionCountingPlayground: React.FC = () => {
               value={newElemVal}
               onChange={(e) => setNewElemVal(Number(e.target.value))}
               style={{
-                width: '45px',
+                width: '48px',
                 padding: '0.2rem 0.35rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg, var(--surface-light))',
                 color: 'var(--text)',
-                border: '1px solid var(--border)',
+                border: '1.5px solid var(--border)',
                 borderRadius: '4px',
                 fontSize: '0.85rem'
               }}
@@ -346,36 +346,38 @@ export const InversionCountingPlayground: React.FC = () => {
             const isSelected = firstSelectedIdx === idx;
 
             return (
-              <div key={idx} className="inv-pg-item">
+              <div key={idx} className="inv-pg-item" style={{ minWidth: '74px', width: '74px' }}>
                 <button
                   type="button"
                   className={`inv-pg-bar ${isSelected ? 'selected-left' : ''}`}
                   onClick={() => handleBarClick(idx)}
                   aria-label={`Elemento en posición ${idx}, valor ${val}`}
+                  style={{ width: '64px', height: '52px' }}
                 >
                   {val}
                 </button>
                 <span className="inv-pg-bar-idx">pos={idx}</span>
-                <div style={{ display: 'flex', gap: '3px', marginTop: '2px' }}>
+                <div style={{ display: 'flex', gap: '3px', marginTop: '2px', width: '100%', justifyContent: 'center' }}>
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, 1)}
                     style={{
-                      width: '20px',
-                      height: '20px',
+                      width: '22px',
+                      height: '22px',
                       padding: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.85rem',
+                      fontSize: '0.95rem',
                       fontWeight: 800,
                       borderRadius: '3px',
-                      border: '1px solid var(--border)',
-                      backgroundColor: 'var(--surface-hover)',
+                      border: '1.5px solid var(--success)',
+                      backgroundColor: 'rgba(16, 185, 129, 0.15)',
                       color: 'var(--success)',
                       cursor: 'pointer'
                     }}
                     aria-label={`Incrementar valor en posición ${idx}`}
+                    title={language === 'es' ? 'Incrementar' : 'Increment'}
                   >
                     +
                   </button>
@@ -383,21 +385,22 @@ export const InversionCountingPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleAdjustValue(idx, -1)}
                     style={{
-                      width: '20px',
-                      height: '20px',
+                      width: '22px',
+                      height: '22px',
                       padding: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.85rem',
+                      fontSize: '0.95rem',
                       fontWeight: 800,
                       borderRadius: '3px',
-                      border: '1px solid var(--border)',
-                      backgroundColor: 'var(--surface-hover)',
+                      border: '1.5px solid var(--warning)',
+                      backgroundColor: 'rgba(245, 158, 11, 0.15)',
                       color: 'var(--warning)',
                       cursor: 'pointer'
                     }}
                     aria-label={`Decrementar valor en posición ${idx}`}
+                    title={language === 'es' ? 'Decrementar' : 'Decrement'}
                   >
                     -
                   </button>
@@ -406,22 +409,23 @@ export const InversionCountingPlayground: React.FC = () => {
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 2}
                     style={{
-                      width: '20px',
-                      height: '20px',
+                      width: '22px',
+                      height: '22px',
                       padding: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.85rem',
+                      fontSize: '0.95rem',
                       fontWeight: 800,
                       borderRadius: '3px',
-                      border: '1px solid transparent',
-                      backgroundColor: 'transparent',
+                      border: '1px solid var(--error)',
+                      backgroundColor: 'rgba(239, 68, 68, 0.12)',
                       color: 'var(--error)',
                       cursor: array.length <= 2 ? 'not-allowed' : 'pointer',
                       opacity: array.length <= 2 ? 0.3 : 1
                     }}
                     aria-label={`Eliminar elemento en posición ${idx}`}
+                    title={language === 'es' ? 'Eliminar' : 'Delete'}
                   >
                     ×
                   </button>
@@ -431,18 +435,57 @@ export const InversionCountingPlayground: React.FC = () => {
           })}
         </div>
 
-        {/* Permanent Stable Feedback Slot (No layout shift, no flickering) */}
-        <div style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}>
-          {feedbackMsg ? (
-            <div className={`inv-feedback-banner ${feedbackMsg.type}`} role="status" style={{ width: '100%' }}>
-              {feedbackMsg.text}
-            </div>
-          ) : (
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              {language === 'es'
-                ? 'Hacé clic en dos casillas para verificar si forman una inversión (A[i] > A[j] con i < j).'
-                : 'Click two cards to test if they form an inversion (A[i] > A[j] with i < j).'}
-            </div>
+        {/* Permanent Stable Guidance & Comparison Status Card */}
+        <div
+          className="inv-status-card"
+          style={{
+            minHeight: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0.65rem 1rem',
+            borderRadius: '6px',
+            background: 'var(--canvas-bg, var(--surface-light))',
+            border: '1px solid var(--border)',
+            gap: '0.75rem'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+            <span style={{ fontWeight: 700, color: 'var(--accent)' }}>
+              {language === 'es' ? 'Estado:' : 'Status:'}
+            </span>
+            <span>
+              {firstSelectedIdx !== null ? (
+                <span>
+                  {language === 'es' ? '1er elemento seleccionado:' : '1st item selected:'}{' '}
+                  <strong style={{ color: 'var(--accent)' }}>A[{firstSelectedIdx}] = {array[firstSelectedIdx]}</strong>.{' '}
+                  {language === 'es' ? 'Hacé clic en otro elemento para comparar.' : 'Click another card to compare.'}
+                </span>
+              ) : feedbackMsg ? (
+                <span style={{ color: feedbackMsg.type === 'success' ? 'var(--success)' : feedbackMsg.type === 'error' ? 'var(--error)' : 'var(--text)' }}>
+                  {feedbackMsg.text}
+                </span>
+              ) : (
+                <span style={{ color: 'var(--text-muted)' }}>
+                  {language === 'es'
+                    ? 'Hacé clic en dos casillas para verificar si forman una inversión (A[i] > A[j] con i < j).'
+                    : 'Click two cards to test if they form an inversion (A[i] > A[j] with i < j).'}
+                </span>
+              )}
+            </span>
+          </div>
+          {firstSelectedIdx !== null && (
+            <button
+              type="button"
+              className="inv-pg-btn"
+              onClick={() => {
+                setFirstSelectedIdx(null);
+                setFeedbackMsg(null);
+              }}
+              style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}
+            >
+              {language === 'es' ? 'Cancelar' : 'Cancel'}
+            </button>
           )}
         </div>
 
@@ -517,7 +560,7 @@ export const InversionCountingPlayground: React.FC = () => {
                   width: '180px',
                   borderRadius: 'var(--radius-sm)',
                   border: '1.5px solid var(--border)',
-                  background: 'var(--bg)',
+                  background: 'var(--canvas-bg, var(--surface-light))',
                   color: 'var(--text)'
                 }}
               />

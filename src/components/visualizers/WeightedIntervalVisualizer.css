@@ -57,7 +57,7 @@
 }
 
 .timeline-schedule-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -235,7 +235,7 @@
   border-collapse: collapse;
   font-family: monospace;
   font-size: 0.85rem;
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
 }
@@ -344,7 +344,7 @@
   flex-direction: column;
   gap: 0.4rem;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--canvas-bg);
 }
 
 .strategy-card.card-dp {
@@ -395,7 +395,7 @@
 }
 
 .narrative-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.85rem 1.1rem;
@@ -417,7 +417,7 @@
 }
 
 .btn-control {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;
@@ -469,7 +469,7 @@
 }
 
 .speed-selector select {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;

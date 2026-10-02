@@ -137,7 +137,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
       </div>
 
       {/* SVG Interactive Secondary Structure Arc Diagram */}
-      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
+      <div style={{ backgroundColor: 'var(--canvas-bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 0.35rem 0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           <span>
             {language === 'es'
@@ -170,7 +170,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
 
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
           role="img"
           aria-label={language === 'es' ? 'Diagrama de arcos de estructura secundaria de ARN' : 'RNA secondary structure arc diagram'}
         >
@@ -221,7 +221,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
                   cx={x}
                   cy={baselineY}
                   r={14}
-                  fill={isPaired ? 'var(--surface)' : 'var(--bg)'}
+                  fill={isPaired ? 'var(--surface)' : 'var(--canvas-bg)'}
                   stroke={isPaired ? 'var(--success)' : color}
                   strokeWidth={isPaired ? 2.5 : 1.5}
                 />

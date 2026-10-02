@@ -469,7 +469,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
       <div
         style={{
           position: 'relative',
-          backgroundColor: 'var(--bg)',
+          backgroundColor: 'var(--canvas-bg)',
           borderRadius: '8px',
           border: '1px solid var(--border)',
           overflow: 'hidden',

@@ -43,7 +43,7 @@
 }
 
 .chip-button {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.35rem 0.75rem;
@@ -76,7 +76,7 @@
 }
 
 .array-input {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.5rem 0.75rem;
@@ -91,7 +91,7 @@
 }
 
 .interactive-mountain-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -200,7 +200,7 @@
 }
 
 .result-card {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.1rem;

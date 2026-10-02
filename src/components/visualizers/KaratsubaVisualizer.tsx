@@ -79,10 +79,10 @@ export const KaratsubaVisualizer: React.FC = () => {
       </div>
 
       {/* SVG Algebraic Structure Canvas */}
-      <div className="kt-canvas-container" style={{ background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
+      <div className="kt-canvas-container" style={{ background: 'var(--canvas-bg, var(--surface-light))', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
         <svg
           viewBox="0 0 720 290"
-          style={{ width: '100%', maxWidth: '720px', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{ width: '100%', maxWidth: '880px', height: 'auto', display: 'block', margin: '0 auto' }}
           role="img"
           aria-label={language === 'es' ? 'Diagrama de recursión de Karatsuba' : 'Karatsuba recursion diagram'}
         >
@@ -108,7 +108,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'Z2' ? 'rgba(37, 99, 235, 0.15)' : 'var(--surface)'}
+              fill={subcalc === 'Z2' ? 'rgba(37, 99, 235, 0.2)' : 'var(--surface)'}
               stroke="var(--accent)"
               strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
@@ -128,7 +128,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(139, 92, 246, 0.15)' : 'var(--surface)'}
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(139, 92, 246, 0.2)' : 'var(--surface)'}
               stroke="#8b5cf6"
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
@@ -148,7 +148,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={210}
               height={70}
               rx={8}
-              fill={subcalc === 'Z0' ? 'rgba(16, 185, 129, 0.15)' : 'var(--surface)'}
+              fill={subcalc === 'Z0' ? 'rgba(16, 185, 129, 0.2)' : 'var(--surface)'}
               stroke="var(--success)"
               strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />
@@ -168,7 +168,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={660}
               height={75}
               rx={10}
-              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(37, 99, 235, 0.08)' : 'var(--surface)'}
+              fill={subcalc === 'COMBINE' || result !== null ? 'rgba(37, 99, 235, 0.12)' : 'var(--surface)'}
               stroke={subcalc === 'COMBINE' || result !== null ? 'var(--accent)' : 'var(--border)'}
               strokeWidth={subcalc === 'COMBINE' || result !== null ? 2 : 1.5}
             />
@@ -193,7 +193,7 @@ export const KaratsubaVisualizer: React.FC = () => {
         <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
           {language === 'es' ? 'Alineación de Columnas y Recombinación en Base 10^m:' : 'Column Alignment & Base 10^m Recombination:'}
         </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '420px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '420px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--canvas-bg, var(--surface-light))', borderRadius: '6px', border: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <span style={{ color: 'var(--accent)', fontWeight: 600 }}>z₂ · 10⁴ ({z2 ?? 'z₂'} × 10000):</span>
             <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{z2 !== null && z2 !== undefined ? `${z2 * 10000}` : '—'}</span>

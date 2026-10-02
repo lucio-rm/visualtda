@@ -43,7 +43,7 @@
 }
 
 .chip-button {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.35rem 0.75rem;
@@ -59,7 +59,7 @@
 }
 
 .interactive-tracks-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -217,7 +217,7 @@
   flex-direction: column;
   gap: 0.5rem;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--canvas-bg);
 }
 
 .score-card.card-opt {
@@ -331,7 +331,7 @@
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem;
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px dashed var(--border);
   border-radius: 6px;
 }

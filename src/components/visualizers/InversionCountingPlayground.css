@@ -67,7 +67,7 @@
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  background: var(--surface-hover, #f8fafc);
+  background: var(--canvas-bg, var(--surface-light));
   border: 1px solid var(--border, #cbd5e1);
   border-radius: var(--radius-md, 8px);
 }
@@ -77,10 +77,12 @@
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
+  min-width: 74px;
+  width: 74px;
 }
 
 .inv-pg-bar {
-  width: 52px;
+  width: 64px;
   height: 52px;
   display: flex;
   align-items: center;

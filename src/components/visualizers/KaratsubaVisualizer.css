@@ -36,7 +36,7 @@
 .kt-canvas-container {
   display: flex;
   justify-content: center;
-  background-color: var(--surface);
+  background-color: var(--canvas-bg, var(--surface-light));
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.25rem;

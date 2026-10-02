@@ -24,7 +24,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   border: 1px solid var(--border);
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
 }
 
 .reduction-metric-badge.is-badge {
@@ -44,10 +44,10 @@
 
 .reduction-graph-canvas {
   width: 100%;
-  max-width: 720px;
+  max-width: 100%;
   height: auto;
   aspect-ratio: 540 / 300;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   margin: 0 auto;
@@ -146,7 +146,7 @@
 
 .reduction-explanation-box {
   padding: 0.85rem 1rem;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border-left: 4px solid var(--accent);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;

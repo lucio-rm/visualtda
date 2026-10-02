@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.75rem;
@@ -63,13 +63,13 @@
   width: 100%;
   height: auto;
   border-radius: 4px;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
 }
 
 .bf-matrix-container {
   overflow-x: auto;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.5rem;

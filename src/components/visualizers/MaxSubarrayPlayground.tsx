@@ -245,7 +245,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 className="chip-btn"
                 onClick={() => setShowDcPartition(!showDcPartition)}
                 style={{
-                  backgroundColor: showDcPartition ? 'var(--accent)' : 'var(--bg)',
+                  backgroundColor: showDcPartition ? 'var(--accent)' : 'var(--canvas-bg)',
                   color: showDcPartition ? '#fff' : 'var(--text)',
                   borderColor: 'var(--accent)'
                 }}
@@ -283,7 +283,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 style={{
                   padding: '0.6rem',
                   borderRadius: '4px',
-                  backgroundColor: 'var(--bg)',
+                  backgroundColor: 'var(--canvas-bg)',
                   border: dcPartition.leftOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}
@@ -306,7 +306,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 style={{
                   padding: '0.6rem',
                   borderRadius: '4px',
-                  backgroundColor: 'var(--bg)',
+                  backgroundColor: 'var(--canvas-bg)',
                   border: dcPartition.crossingOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}
@@ -329,7 +329,7 @@ export const MaxSubarrayPlayground: React.FC = () => {
                 style={{
                   padding: '0.6rem',
                   borderRadius: '4px',
-                  backgroundColor: 'var(--bg)',
+                  backgroundColor: 'var(--canvas-bg)',
                   border: dcPartition.rightOpt.maxSum === dcPartition.overallBest ? '2px solid var(--success)' : '1px solid var(--border)',
                   cursor: 'pointer'
                 }}

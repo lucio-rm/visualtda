@@ -200,20 +200,20 @@ export const MajorityElementPlayground: React.FC = () => {
               type="number"
               value={newElemVal}
               onChange={(e) => setNewElemVal(Number(e.target.value))}
-              style={{ width: '45px', padding: '0.15rem 0.35rem', backgroundColor: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: '3px' }}
+              style={{ width: '48px', padding: '0.2rem 0.4rem', backgroundColor: 'var(--canvas-bg, var(--surface-light))', color: 'var(--text)', border: '1.5px solid var(--border)', borderRadius: '4px', fontWeight: 700 }}
             />
             <button
               type="button"
               onClick={handleAddElement}
               disabled={array.length >= 16}
-              style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border)', backgroundColor: 'var(--accent)', color: 'var(--accent-contrast)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+              style={{ padding: '0.25rem 0.6rem', borderRadius: '4px', border: '1px solid var(--accent)', backgroundColor: 'var(--accent)', color: 'var(--accent-contrast)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
             >
               + {language === 'es' ? 'Agregar' : 'Add'}
             </button>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', paddingBottom: '0.35rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.35rem' }}>
           {array.map((val, idx) => {
             const isMaj = val === majorityElement;
             return (
@@ -223,37 +223,38 @@ export const MajorityElementPlayground: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  padding: '0.5rem 0.6rem',
+                  padding: '0.5rem 0.65rem',
                   borderRadius: '8px',
                   border: isMaj ? '2px solid var(--success)' : '1.5px solid var(--border)',
-                  backgroundColor: isMaj ? 'var(--state-solution-bg)' : 'var(--surface)',
+                  backgroundColor: isMaj ? 'rgba(16, 185, 129, 0.15)' : 'var(--canvas-bg, var(--surface-light))',
                   boxShadow: 'var(--shadow-sm)',
-                  minWidth: '56px'
+                  minWidth: '60px'
                 }}
               >
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   [{idx}]
                 </span>
-                <span style={{ fontSize: '1.35rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.2rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
+                <span style={{ fontSize: '1.4rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.2rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
                   {val}
                 </span>
-                <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.2rem' }}>
+                <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.25rem' }}>
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, 1)}
                     style={{
-                      width: '24px',
-                      height: '24px',
+                      width: '26px',
+                      height: '26px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.95rem',
+                      fontSize: '1.1rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1px solid var(--border)',
-                      backgroundColor: 'var(--surface-hover)',
+                      border: '1.5px solid var(--success)',
+                      backgroundColor: 'rgba(16, 185, 129, 0.22)',
                       color: 'var(--success)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      lineHeight: 1
                     }}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
                     aria-label={`Incrementar valor en posición ${idx}`}
@@ -264,18 +265,19 @@ export const MajorityElementPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleAdjustValue(idx, -1)}
                     style={{
-                      width: '24px',
-                      height: '24px',
+                      width: '26px',
+                      height: '26px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.95rem',
+                      fontSize: '1.15rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1px solid var(--border)',
-                      backgroundColor: 'var(--surface-hover)',
+                      border: '1.5px solid var(--warning)',
+                      backgroundColor: 'rgba(245, 158, 11, 0.22)',
                       color: 'var(--warning)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      lineHeight: 1
                     }}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
                     aria-label={`Decrementar valor en posición ${idx}`}
@@ -287,19 +289,20 @@ export const MajorityElementPlayground: React.FC = () => {
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 1}
                     style={{
-                      width: '24px',
-                      height: '24px',
+                      width: '26px',
+                      height: '26px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.95rem',
+                      fontSize: '1rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1px solid transparent',
-                      backgroundColor: 'transparent',
+                      border: '1px solid var(--error)',
+                      backgroundColor: 'rgba(239, 68, 68, 0.18)',
                       color: 'var(--error)',
                       cursor: array.length <= 1 ? 'not-allowed' : 'pointer',
-                      opacity: array.length <= 1 ? 0.4 : 1
+                      opacity: array.length <= 1 ? 0.3 : 1,
+                      lineHeight: 1
                     }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
                     aria-label={`Eliminar elemento en posición ${idx}`}
@@ -412,7 +415,7 @@ export const MajorityElementPlayground: React.FC = () => {
           <div style={{ overflowX: 'auto', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg)' }}>
+                <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg, var(--surface-hover))' }}>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left' }}>{language === 'es' ? 'Candidato Evaluado' : 'Tested Candidate'}</th>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Frecuencia Global' : 'Global Count'}</th>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Condición (> n/2)' : 'Condition (> n/2)'}</th>
@@ -486,7 +489,7 @@ export const MajorityElementPlayground: React.FC = () => {
           <div style={{ overflowX: 'auto', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg)' }}>
+                <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg, var(--surface-hover))' }}>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>i</th>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Elemento A[i]</th>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Candidato Provisional</th>

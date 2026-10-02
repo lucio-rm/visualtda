@@ -51,7 +51,7 @@
 }
 
 .mountain-chart-wrapper {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -213,7 +213,7 @@
 }
 
 .gradient-evaluation-card {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem 1.25rem;
@@ -295,7 +295,7 @@
 }
 
 .narrative-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.85rem 1.1rem;
@@ -317,7 +317,7 @@
 }
 
 .btn-control {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;
@@ -369,7 +369,7 @@
 }
 
 .speed-selector select {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;

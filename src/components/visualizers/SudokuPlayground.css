@@ -23,7 +23,7 @@
 }
 
 .btn-preset {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);

@@ -214,7 +214,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
       </div>
 
       {/* Interactive 2D Coordinate Plane */}
-      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
+      <div style={{ backgroundColor: 'var(--canvas-bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 0.5rem 0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           <span>
             {language === 'es'
@@ -229,7 +229,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
         <svg
           ref={svgRef}
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block', margin: '0 auto', userSelect: 'none' }}
+          style={{ width: '100%', height: 'auto', display: 'block', margin: '0 auto', userSelect: 'none' }}
           role="img"
           aria-label={language === 'es' ? 'Gráfico interactivo de Mínimos Cuadrados Segmentados' : 'Interactive Segmented Least Squares chart'}
           onMouseMove={handleSvgMouseMove}
@@ -448,7 +448,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
       <div style={{ overflowX: 'auto', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg)' }}>
+            <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg)' }}>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Segmento' : 'Segment'}</th>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Puntos Abarcados' : 'Points Covered'}</th>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Ecuación Recta' : 'Line Equation'}</th>

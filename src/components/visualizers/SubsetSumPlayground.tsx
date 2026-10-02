@@ -328,7 +328,7 @@ export const SubsetSumPlayground: React.FC = () => {
             style={{
               width: '100%',
               height: '14px',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               borderRadius: '7px',
               overflow: 'hidden',
               marginBottom: '0.75rem',
@@ -422,7 +422,7 @@ export const SubsetSumPlayground: React.FC = () => {
               style={{
                 marginTop: '0.5rem',
                 padding: '0.5rem 0.75rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg)',
                 borderRadius: '4px',
                 fontSize: '0.85rem',
                 color: 'var(--text-muted)'

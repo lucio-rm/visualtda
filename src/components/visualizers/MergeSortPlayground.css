@@ -46,7 +46,7 @@
 }
 
 .chip-btn {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
@@ -82,7 +82,7 @@
 }
 
 .array-input {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.6rem 0.8rem;
@@ -156,7 +156,7 @@
 }
 
 .half-card {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1rem;
@@ -257,7 +257,7 @@
 }
 
 .merged-output-card {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border-strong, #94a3b8);
   border-radius: 6px;
   padding: 1rem;
@@ -281,7 +281,7 @@
 }
 
 .feedback-banner.info {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
 }
@@ -310,7 +310,7 @@
   align-items: center;
   gap: 1rem;
   padding: 0.75rem;
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
 }
@@ -357,7 +357,7 @@
 }
 
 .stat-item {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.75rem;

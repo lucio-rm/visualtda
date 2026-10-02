@@ -43,7 +43,7 @@
 }
 
 .chip-button {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.35rem 0.75rem;
@@ -83,7 +83,7 @@
 }
 
 .input-field {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.5rem 0.75rem;
@@ -94,7 +94,7 @@
 }
 
 .user-guess-section {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -154,7 +154,7 @@
   flex-direction: column;
   gap: 0.6rem;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--canvas-bg);
 }
 
 .score-card.user-card {

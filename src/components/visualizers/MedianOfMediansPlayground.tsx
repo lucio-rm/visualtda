@@ -125,7 +125,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
           style={{
             flex: 1,
             padding: '0.35rem 0.5rem',
-            backgroundColor: 'var(--bg)',
+            backgroundColor: 'var(--canvas-bg)',
             color: 'var(--text)',
             border: '1px solid var(--border)',
             borderRadius: '4px',
@@ -164,7 +164,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
       </div>
 
       {/* SVG BFPRT Column Matrix */}
-      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
+      <div style={{ backgroundColor: 'var(--canvas-bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 0.35rem 0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           <span>
             {language === 'es'
@@ -275,7 +275,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
       <div style={{ overflowX: 'auto', backgroundColor: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg)' }}>
+            <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg)' }}>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Grupo (5)</th>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Elementos</th>
               <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Mediana del Grupo</th>

@@ -85,7 +85,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 4px;
   font-weight: bold;
@@ -135,14 +135,14 @@
 }
 
 .th-corner {
-  background: var(--bg);
+  background: var(--canvas-bg);
   font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
 .th-char,
 .th-row-char {
-  background: var(--bg);
+  background: var(--canvas-bg);
   font-weight: bold;
   position: relative;
 }
@@ -193,7 +193,7 @@
 }
 
 .narrative-box {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.85rem 1.1rem;
@@ -215,7 +215,7 @@
 }
 
 .btn-control {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;
@@ -267,7 +267,7 @@
 }
 
 .speed-selector select {
-  background: var(--bg);
+  background: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 4px;

@@ -12,6 +12,7 @@ import { analyzeStudentCodeEffort } from '../utils/codeEffortAnalyzer';
 import { getHintUnlockStatus } from '../utils/hintGating';
 import { HintRequirementWidget } from './HintRequirementWidget';
 import { StudentAttemptsViewer } from './StudentAttemptsViewer';
+import { highlightPythonCode } from '../utils/pythonSyntaxHighlighter';
 
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
@@ -118,7 +119,20 @@ export const SolveView: React.FC<SolveViewProps> = ({
   });
 
   const gutterRef = useRef<HTMLDivElement>(null);
+  const highlightRef = useRef<HTMLPreElement>(null);
   const lineCount = useMemo(() => Math.max(code.split('\n').length, 1), [code]);
+  const highlightedHtml = useMemo(() => highlightPythonCode(code), [code]);
+
+  const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
+    const { scrollTop, scrollLeft } = e.currentTarget;
+    if (highlightRef.current) {
+      highlightRef.current.scrollTop = scrollTop;
+      highlightRef.current.scrollLeft = scrollLeft;
+    }
+    if (gutterRef.current) {
+      gutterRef.current.scrollTop = scrollTop;
+    }
+  };
 
   const setCode = (newCode: string) => {
     setCodeState(newCode);
@@ -495,27 +509,28 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   </span>
                 ))}
               </div>
-              <textarea
-                id={`vtda_code_${exercise.id}`}
-                name={`vtda_code_${exercise.id}`}
-                className="code-editor-input"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onScroll={(e) => {
-                  if (gutterRef.current) {
-                    gutterRef.current.scrollTop = e.currentTarget.scrollTop;
-                  }
-                }}
-                rows={14}
-                aria-label={t(dict.codeEditorAriaLabel)}
-                spellCheck={false}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                data-lpignore="true"
-                data-form-type="other"
-              />
+              <div className="code-editor-stage">
+                <pre ref={highlightRef} className="code-highlight-layer" aria-hidden="true">
+                  <code dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
+                </pre>
+                <textarea
+                  id={`vtda_code_${exercise.id}`}
+                  name={`vtda_code_${exercise.id}`}
+                  className="code-editor-input"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onScroll={handleScroll}
+                  rows={18}
+                  aria-label={t(dict.codeEditorAriaLabel)}
+                  spellCheck={false}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  data-lpignore="true"
+                  data-form-type="other"
+                />
+              </div>
             </div>
             <div className="editor-actions">
               <button

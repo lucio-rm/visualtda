@@ -159,7 +159,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
       {/* Interactive Physical Coin Toss Arena */}
       <div
         style={{
-          background: 'var(--bg)',
+          background: 'var(--canvas-bg)',
           border: '1px solid var(--border)',
           borderRadius: 'var(--radius-sm)',
           padding: '1.25rem',

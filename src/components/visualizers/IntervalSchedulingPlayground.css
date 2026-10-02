@@ -45,8 +45,9 @@
 }
 
 .task-bar-interactive.selected rect {
-  stroke: var(--accent);
-  stroke-width: 2px;
+  stroke: var(--success);
+  stroke-width: 1.5px;
+  fill: var(--state-solution-bg);
 }
 
 .task-bar-interactive.conflict rect {

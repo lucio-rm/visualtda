@@ -55,7 +55,7 @@ export const KaratsubaPlayground: React.FC = () => {
               style={{
                 width: '120px',
                 padding: '0.3rem 0.5rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg)',
                 color: 'var(--text)',
                 border: '1px solid var(--border)',
                 borderRadius: '4px',
@@ -78,7 +78,7 @@ export const KaratsubaPlayground: React.FC = () => {
               style={{
                 width: '120px',
                 padding: '0.3rem 0.5rem',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg)',
                 color: 'var(--text)',
                 border: '1px solid var(--border)',
                 borderRadius: '4px',
@@ -138,12 +138,12 @@ export const KaratsubaPlayground: React.FC = () => {
       </div>
 
       {/* 2x2 Geometric Area Model SVG */}
-      <div style={{ backgroundColor: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)', padding: '0.75rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          <span>
+      <div style={{ backgroundColor: 'var(--canvas-bg, var(--surface-light))', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border)', padding: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontWeight: 600 }}>
             {language === 'es'
-              ? 'Modelo geométrico de áreas: 3 multiplicaciones computan los 4 cuadrantes'
-              : 'Geometric area model: 3 multiplications resolve all 4 quadrants'}
+              ? 'Modelo Geométrico de Áreas (4 Cuadrantes):'
+              : 'Geometric Area Model (4 Quadrants):'}
           </span>
           <span style={{ color: 'var(--success)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
             T(n) = 3T(n/2) + O(n) ⇒ O(n^1.585)
@@ -152,7 +152,7 @@ export const KaratsubaPlayground: React.FC = () => {
 
         <svg
           viewBox="0 0 540 180"
-          style={{ width: '100%', maxWidth: '540px', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
           role="img"
           aria-label={language === 'es' ? 'Modelo de áreas de Karatsuba' : 'Karatsuba area model'}
         >
@@ -164,62 +164,88 @@ export const KaratsubaPlayground: React.FC = () => {
           <line x1={70} y1={90} x2={470} y2={90} stroke="var(--border)" strokeWidth={1.5} strokeDasharray="3 3" />
 
           {/* Labels for Top & Left factors */}
-          <text x={170} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
+          <text x={170} y={16} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             x₁·10^m ({x1}·{pot})
           </text>
-          <text x={370} y={16} textAnchor="middle" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
+          <text x={370} y={16} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             x₀ ({x0})
           </text>
 
-          <text x={60} y={62} textAnchor="end" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
+          <text x={60} y={62} textAnchor="end" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             y₁ ({y1})
           </text>
-          <text x={60} y={127} textAnchor="end" fill="var(--text-muted)" fontSize="13px" fontFamily="var(--font-mono)">
+          <text x={60} y={127} textAnchor="end" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
             y₀ ({y0})
           </text>
 
           {/* Quadrant 1: z2 = x1 * y1 */}
           <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
-          <text x={170} y={52} textAnchor="middle" fill="var(--accent)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
-            z₂ = x₁ · y₁
+          <text x={170} y={50} textAnchor="middle" fill="var(--accent)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+            Cuadrante Alto: z₂ = x₁ · y₁
           </text>
           <text x={170} y={72} textAnchor="middle" fill="var(--accent)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {x1} × {y1} = {z2}
           </text>
 
-          {/* Quadrants 2 & 3: Cross Terms combined as z1 */}
-          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={62} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
-            x₀ · y₁ = {x0 * y1}
+          {/* Quadrants 2: x0 * y1 (Cross Term 1) */}
+          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={370} y={50} textAnchor="middle" fill="var(--text-muted)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
+            Cruzado 1: x₀ · y₁
+          </text>
+          <text x={370} y={72} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
+            {x0} × {y1} = {x0 * y1}
           </text>
 
-          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={127} textAnchor="middle" fill="var(--warning)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
-            x₁ · y₀ = {x1 * y0}
+          {/* Quadrants 3: x1 * y0 (Cross Term 2) */}
+          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={170} y={115} textAnchor="middle" fill="var(--text-muted)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
+            Cruzado 2: x₁ · y₀
           </text>
-
-          {/* Cross terms bridge tag */}
-          <rect x={180} y={74} width={180} height={32} rx={6} fill="var(--surface)" stroke="var(--warning)" strokeWidth={1.5} />
-          <text x={270} y={94} textAnchor="middle" fill="var(--warning)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-            z₁ = {zSum} - {z2} - {z0} = {z1}
+          <text x={170} y={137} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
+            {x1} × {y0} = {x1 * y0}
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
           <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="var(--success)" strokeWidth={1.5} />
-          <text x={370} y={117} textAnchor="middle" fill="var(--success)" fontSize="13px" fontWeight="700" fontFamily="var(--font-mono)">
-            z₀ = x₀ · y₀
+          <text x={370} y={115} textAnchor="middle" fill="var(--success)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+            Cuadrante Bajo: z₀ = x₀ · y₀
           </text>
           <text x={370} y={137} textAnchor="middle" fill="var(--success)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {x0} × {y0} = {z0}
           </text>
         </svg>
 
+        {/* Gauss-Karatsuba Algebraic Optimization Card */}
+        <div style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.85rem 1rem', marginTop: '0.85rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', textTransform: 'uppercase' }}>
+              {language === 'es' ? 'Atajo Algebraico de Karatsuba (Término Medio z₁):' : 'Karatsuba Algebraic Shortcut (Middle Term z₁):'}
+            </span>
+            <span style={{ fontSize: '0.8rem', background: 'rgba(59, 130, 246, 0.12)', color: 'var(--accent)', padding: '0.2rem 0.55rem', borderRadius: '4px', fontWeight: 700 }}>
+              {language === 'es' ? 'Solo 3 llamadas en vez de 4' : 'Only 3 calls instead of 4'}
+            </span>
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--text)', background: 'var(--canvas-bg, var(--surface-light))', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', lineHeight: 1.6 }}>
+            <div>
+              <span style={{ color: '#8b5cf6', fontWeight: 700 }}>Producto Cruzado P:</span> ({x1} + {x0}) × ({y1} + {y0}) = {x1 + x0} × {y1 + y0} = <strong style={{ color: '#8b5cf6' }}>{zSum}</strong>
+            </div>
+            <div style={{ marginTop: '0.35rem' }}>
+              <span style={{ color: 'var(--warning)', fontWeight: 700 }}>Término Medio z₁:</span> P - z₂ - z₀ = {zSum} - {z2} - {z0} = <strong style={{ color: 'var(--warning)', fontSize: '1.05rem' }}>{z1}</strong>
+            </div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+              {language === 'es'
+                ? `Observación: x₁·y₀ + x₀·y₁ = ${x1 * y0} + ${x0 * y1} = ${z1}. Karatsuba obtiene exactamente esa misma suma con 1 sola multiplicación en vez de 2.`
+                : `Note: x₁·y₀ + x₀·y₁ = ${x1 * y0} + ${x0 * y1} = ${z1}. Karatsuba computes the exact same sum with 1 multiplication instead of 2.`}
+            </div>
+          </div>
+        </div>
+
         {/* Tabular Shifted Recombination Block (Aligned Column Addition) */}
         <div style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.85rem 1rem', marginTop: '0.75rem' }}>
           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
             {language === 'es' ? 'Alineación de Columnas y Recombinación en Base 10^m:' : 'Column Alignment & Base 10^m Recombination:'}
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '420px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--bg)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', maxWidth: '440px', margin: '0 auto', padding: '0.75rem 1.25rem', background: 'var(--canvas-bg, var(--surface-light))', borderRadius: '6px', border: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <span style={{ color: 'var(--accent)', fontWeight: 600 }}>z₂ · 10^{2 * m} ({z2} × 10^{2 * m}):</span>
               <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{z2 * Math.pow(10, 2 * m)}</span>

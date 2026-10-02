@@ -347,15 +347,12 @@ export const IntervalSchedulingPlayground: React.FC = () => {
 
           let barFill = 'var(--surface)';
           let barStroke = 'var(--border-strong)';
-          let textFill = 'var(--text)';
           if (isConflict) {
             barFill = 'var(--state-conflict-bg)';
             barStroke = 'var(--error)';
-            textFill = 'var(--error)';
           } else if (isSelected) {
             barFill = 'var(--state-solution-bg)';
             barStroke = 'var(--success)';
-            textFill = 'var(--success)';
           }
 
           const statusDesc = isConflict
@@ -389,15 +386,15 @@ export const IntervalSchedulingPlayground: React.FC = () => {
                 rx={6}
                 fill={barFill}
                 stroke={barStroke}
-                strokeWidth={isSelected || isConflict ? 2 : 1.5}
+                strokeWidth={isConflict ? 2 : 1.5}
               />
               <text
                 x={x1 + 10}
                 y={y + 19}
-                fill={textFill}
+                fill={isConflict ? 'var(--error)' : 'var(--text)'}
                 stroke="none"
-                fontSize="13"
-                fontWeight="600"
+                fontSize="12.5px"
+                fontWeight="500"
                 fontFamily="var(--font-mono)"
                 pointerEvents="none"
               >

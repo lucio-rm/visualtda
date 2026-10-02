@@ -70,7 +70,7 @@
   justify-content: space-between;
   width: 80px;
   height: 95px;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 2px solid var(--border);
   border-radius: 8px;
   padding: 0.4rem;
@@ -140,7 +140,7 @@
   justify-content: space-between;
   width: 80px;
   height: 80px;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 2px solid var(--border);
   border-radius: 8px;
   padding: 0.4rem;
@@ -211,7 +211,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
@@ -278,7 +278,7 @@
 .narrative-box {
   min-height: 48px;
   padding: 0.75rem 1rem;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border-left: 4px solid var(--accent);
   border-radius: 4px;
 }
@@ -299,7 +299,7 @@
 }
 
 .btn-control {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.4rem 0.75rem;
@@ -353,7 +353,7 @@
 }
 
 .speed-selector select {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   color: var(--text);
   border: 1px solid var(--border);
   padding: 0.25rem 0.5rem;

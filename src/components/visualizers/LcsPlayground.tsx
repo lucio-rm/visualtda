@@ -256,7 +256,7 @@ export const LcsPlayground: React.FC = () => {
       {/* Interactive Ribbon Matching Canvas */}
       <div
         style={{
-          background: 'var(--bg)',
+          background: 'var(--canvas-bg)',
           border: '1px solid var(--border)',
           borderRadius: '8px',
           padding: '1rem',

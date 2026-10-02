@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 import { Point2D, DEFAULT_CLOSEST_PAIR_POINTS } from '../../engine/algorithms/closestPairTrace';
@@ -53,9 +53,10 @@ export const ClosestPairPlayground: React.FC = () => {
 
   const [inspectedStripPointId, setInspectedStripPointId] = useState<string | null>(null);
   const [showGridBoxes, setShowGridBoxes] = useState<boolean>(true);
+  const dragOffsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
 
   // Exact SVG coordinate translation accounting for responsive viewBox scaling
-  const getSvgCoords = (e: React.MouseEvent<SVGSVGElement> | MouseEvent) => {
+  const getSvgCoords = useCallback((e: { clientX: number; clientY: number }) => {
     const svg = svgRef.current;
     if (!svg) return { x: 250, y: 140 };
     if (typeof svg.createSVGPoint === 'function') {
@@ -80,7 +81,37 @@ export const ClosestPairPlayground: React.FC = () => {
       x: Math.round((e.clientX - rect.left) * (500 / Math.max(1, rect.width))),
       y: Math.round((e.clientY - rect.top) * (280 / Math.max(1, rect.height)))
     };
-  };
+  }, []);
+
+  // Global window listener while dragging so points follow mouse smoothly even if moved rapidly
+  useEffect(() => {
+    if (!draggedPointId) return;
+
+    const onWindowMouseMove = (e: MouseEvent) => {
+      const mouseSvg = getSvgCoords(e);
+      const clampedX = Math.max(15, Math.min(485, mouseSvg.x + dragOffsetRef.current.dx));
+      const clampedY = Math.max(15, Math.min(265, mouseSvg.y + dragOffsetRef.current.dy));
+      hasDraggedRef.current = true;
+      setPoints((prev) =>
+        prev.map((p) => (p.id === draggedPointId ? { ...p, x: clampedX, y: clampedY } : p))
+      );
+    };
+
+    const onWindowMouseUp = () => {
+      setDraggedPointId(null);
+      markAttempted('closest-pair-dyc');
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+      }, 100);
+    };
+
+    window.addEventListener('mousemove', onWindowMouseMove);
+    window.addEventListener('mouseup', onWindowMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onWindowMouseMove);
+      window.removeEventListener('mouseup', onWindowMouseUp);
+    };
+  }, [draggedPointId, getSvgCoords, markAttempted]);
 
   const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement>) => {
     // If we just finished dragging, do not create a new point
@@ -90,6 +121,10 @@ export const ClosestPairPlayground: React.FC = () => {
     }
 
     const { x, y } = getSvgCoords(e);
+
+    // Ensure we don't spawn a point right on top of an existing point
+    const nearExisting = points.some((p) => Math.hypot(p.x - x, p.y - y) < 18);
+    if (nearExisting) return;
 
     if (x >= 15 && x <= 485 && y >= 15 && y <= 265) {
       const newPt: Point2D = {
@@ -107,6 +142,12 @@ export const ClosestPairPlayground: React.FC = () => {
 
   const handlePointMouseDown = (pId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
+    const targetPt = points.find((p) => p.id === pId);
+    const mouseSvg = getSvgCoords(e);
+    if (targetPt) {
+      dragOffsetRef.current = { dx: targetPt.x - mouseSvg.x, dy: targetPt.y - mouseSvg.y };
+    }
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     hasDraggedRef.current = false;
     isMouseDownRef.current = true;
@@ -114,15 +155,14 @@ export const ClosestPairPlayground: React.FC = () => {
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!isMouseDownRef.current) return;
+    if (!isMouseDownRef.current || !draggedPointId) return;
     const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
     if (dist > 3) {
       hasDraggedRef.current = true;
     }
-    if (!draggedPointId || !svgRef.current) return;
-    const { x, y } = getSvgCoords(e);
-    const clampedX = Math.max(15, Math.min(485, x));
-    const clampedY = Math.max(15, Math.min(265, y));
+    const mouseSvg = getSvgCoords(e);
+    const clampedX = Math.max(15, Math.min(485, mouseSvg.x + dragOffsetRef.current.dx));
+    const clampedY = Math.max(15, Math.min(265, mouseSvg.y + dragOffsetRef.current.dy));
 
     setPoints((prev) =>
       prev.map((p) => (p.id === draggedPointId ? { ...p, x: clampedX, y: clampedY } : p))
@@ -136,7 +176,7 @@ export const ClosestPairPlayground: React.FC = () => {
       markAttempted('closest-pair-dyc');
       setTimeout(() => {
         hasDraggedRef.current = false;
-      }, 50);
+      }, 100);
     }
   };
 
@@ -292,9 +332,10 @@ export const ClosestPairPlayground: React.FC = () => {
             maxWidth: '720px',
             width: '100%',
             height: 'auto',
-            borderRadius: '6px',
-            backgroundColor: 'var(--bg)',
-            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            backgroundColor: 'var(--canvas-bg, var(--surface-light))',
+            border: '1.5px solid var(--border)',
+            boxShadow: 'var(--shadow-sm)',
             cursor: draggedPointId ? 'grabbing' : 'crosshair',
             userSelect: 'none'
           }}
@@ -402,20 +443,32 @@ export const ClosestPairPlayground: React.FC = () => {
                     })
                   )}
 
-                  {/* Window explanation label */}
-                  <text
-                    x={dividerX}
-                    y={Math.max(16, activeInspectedPoint.y - minDistance - 6)}
-                    textAnchor="middle"
-                    fill="var(--success)"
-                    fontSize="11px"
-                    fontWeight="700"
-                    fontFamily="var(--font-mono)"
-                  >
-                    {language === 'es'
-                      ? `Caja 2δ×2δ (16 celdas de δ/2): ≤15 candidatos`
-                      : `2δ×2δ Box (16 δ/2 cells): ≤15 candidates`}
-                  </text>
+                  {/* Window explanation label pill */}
+                  <g>
+                    <rect
+                      x={dividerX - 145}
+                      y={Math.max(4, activeInspectedPoint.y - minDistance - 18)}
+                      width={290}
+                      height={20}
+                      rx={4}
+                      fill="var(--surface)"
+                      stroke="rgba(16, 185, 129, 0.4)"
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={dividerX}
+                      y={Math.max(18, activeInspectedPoint.y - minDistance - 4)}
+                      textAnchor="middle"
+                      fill="var(--success)"
+                      fontSize="11px"
+                      fontWeight="700"
+                      fontFamily="var(--font-mono)"
+                    >
+                      {language === 'es'
+                        ? `Caja 2δ×2δ (16 celdas de δ/2): ≤15 candidatos`
+                        : `2δ×2δ Box (16 δ/2 cells): ≤15 candidates`}
+                    </text>
+                  </g>
                 </g>
               )}
 
@@ -523,6 +576,10 @@ export const ClosestPairPlayground: React.FC = () => {
             return (
               <g
                 key={`pg-pt-${p.id}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (inStrip) setInspectedStripPointId(p.id);
+                }}
                 onMouseDown={(e) => {
                   handlePointMouseDown(p.id, e);
                   if (inStrip) setInspectedStripPointId(p.id);

@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--bg);
+  background-color: var(--canvas-bg, var(--surface-light));
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.75rem;
@@ -55,10 +55,11 @@
 }
 
 .cp-svg-canvas {
-  max-width: 680px;
+  max-width: 780px;
   width: 100%;
   height: auto;
-  border-radius: 4px;
-  background-color: var(--bg);
-  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--canvas-bg, var(--surface-light));
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }

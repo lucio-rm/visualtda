@@ -214,7 +214,7 @@ export const CoinChangePlayground: React.FC = () => {
                 padding: '0.35rem 0.75rem',
                 borderRadius: '16px',
                 border: '1px solid var(--border)',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'var(--canvas-bg)',
                 color: 'var(--text)',
                 fontSize: '0.8rem'
               }}
@@ -245,7 +245,7 @@ export const CoinChangePlayground: React.FC = () => {
             className="input-field"
             style={{
               padding: '0.45rem 0.75rem',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               color: 'var(--text)',
               border: '1px solid var(--border)',
               borderRadius: '6px',
@@ -271,7 +271,7 @@ export const CoinChangePlayground: React.FC = () => {
             className="input-field input-number"
             style={{
               padding: '0.45rem 0.75rem',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               color: 'var(--text)',
               border: '1px solid var(--border)',
               borderRadius: '6px',
@@ -408,7 +408,7 @@ export const CoinChangePlayground: React.FC = () => {
         </div>
 
         {/* Progress bar towards target */}
-        <div style={{ height: '8px', backgroundColor: 'var(--bg)', borderRadius: '4px', overflow: 'hidden' }}>
+        <div style={{ height: '8px', backgroundColor: 'var(--canvas-bg)', borderRadius: '4px', overflow: 'hidden' }}>
           <div
             style={{
               height: '100%',

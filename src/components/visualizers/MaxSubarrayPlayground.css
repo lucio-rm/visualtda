@@ -39,7 +39,7 @@
 }
 
 .chip-btn {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.35rem 0.75rem;
@@ -62,7 +62,7 @@
 }
 
 .array-text-input {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -83,7 +83,7 @@
 }
 
 .array-visualization-box {
-  background-color: var(--bg);
+  background-color: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;

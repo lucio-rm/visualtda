@@ -40,26 +40,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
       <div className={`discover-grid ${isNarrativeCollapsed ? 'fullwidth-playground' : ''}`}>
         {!isNarrativeCollapsed && (
           <div className="problem-narrative-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <h4 style={{ margin: 0 }}>{language === 'es' ? 'Especificación del Problema' : 'Problem Specification'}</h4>
-              <button
-                type="button"
-                className="btn-toggle-narrative"
-                onClick={() => setIsNarrativeCollapsed(true)}
-                title={language === 'es' ? 'Ocultar enunciado y maximizar visualizador a ancho completo' : 'Hide problem narrative and expand visualizer to full width'}
-                style={{
-                  background: 'var(--surface-hover)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '4px',
-                  padding: '0.25rem 0.6rem',
-                  fontSize: '0.8rem',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer'
-                }}
-              >
-                ⇥ {language === 'es' ? 'Ocultar Problema' : 'Hide Problem'}
-              </button>
-            </div>
+            <h4 style={{ margin: '0 0 0.75rem 0' }}>{language === 'es' ? 'Especificación del Problema' : 'Problem Specification'}</h4>
             <p className="problem-statement">{t(exercise.subtitle)}</p>
 
             <div className="formal-spec-box" style={{ margin: '1rem 0', padding: '0.85rem 1rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>

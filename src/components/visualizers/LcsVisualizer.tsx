@@ -168,7 +168,7 @@ export const LcsVisualizer: React.FC = () => {
         <div
           className="lcs-formula-callout"
           style={{
-            background: 'var(--bg)',
+            background: 'var(--canvas-bg)',
             border: '1px solid var(--border)',
             borderRadius: '6px',
             padding: '0.65rem 1rem',

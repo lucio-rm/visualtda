@@ -402,11 +402,12 @@ export const IntervalPartitioningPlayground: React.FC = () => {
       <div
         style={{
           position: 'relative',
-          backgroundColor: 'var(--bg)',
+          backgroundColor: 'var(--canvas-bg, var(--surface-light))',
           borderRadius: '8px',
-          border: '1px solid var(--border)',
+          border: '1.5px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
           overflow: 'hidden',
-          padding: '0.5rem'
+          padding: '0.75rem'
         }}
       >
         <div
@@ -433,7 +434,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{
             width: '100%',
-            maxWidth: '580px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',
@@ -539,11 +540,20 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             const isDragging = draggingLectureId === lec.id;
 
             // Formatted label strictly bounded to available block width
-            let displayLabel = `${lec.name} (${lec.start}h - ${lec.end}h)`;
-            if (w < 70) {
-              displayLabel = lec.id.toUpperCase();
-            } else if (w < 135) {
-              displayLabel = lec.name;
+            const fullLabel = `${lec.name} (${lec.start}h - ${lec.end}h)`;
+            const charW = 7.2;
+            let displayLabel = fullLabel;
+            if (fullLabel.length * charW > w - 12) {
+              if (lec.name.length * charW <= w - 12) {
+                displayLabel = lec.name;
+              } else {
+                const maxChars = Math.floor((w - 18) / charW);
+                if (maxChars >= 5) {
+                  displayLabel = `${lec.name.slice(0, maxChars - 1)}…`;
+                } else {
+                  displayLabel = lec.id.toUpperCase();
+                }
+              }
             }
 
             return (
@@ -578,6 +588,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 }}
                 style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
               >
+                <title>{`${lec.name} (${lec.start}:00 - ${lec.end}:00) — Aula A${assignedRoom}`}</title>
                 {/* SVG ClipPath guaranteeing text never spills outside block boundaries */}
                 <clipPath id={`lec-pg-clip-${lec.id}`}>
                   <rect
@@ -657,7 +668,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
           placeholder="Nombre"
           style={{
             padding: '0.3rem 0.5rem',
-            backgroundColor: 'var(--bg)',
+            backgroundColor: 'var(--canvas-bg)',
             color: 'var(--text)',
             border: '1px solid var(--border)',
             borderRadius: '4px',
@@ -676,7 +687,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             onChange={(e) => setNewStart(Number(e.target.value))}
             style={{
               padding: '0.3rem 0.4rem',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               color: 'var(--text)',
               border: '1px solid var(--border)',
               borderRadius: '4px',
@@ -697,7 +708,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             onChange={(e) => setNewEnd(Number(e.target.value))}
             style={{
               padding: '0.3rem 0.4rem',
-              backgroundColor: 'var(--bg)',
+              backgroundColor: 'var(--canvas-bg)',
               color: 'var(--text)',
               border: '1px solid var(--border)',
               borderRadius: '4px',
