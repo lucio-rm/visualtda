@@ -29,13 +29,13 @@
   8. **Merge Sort Upward Recombination**:
      - Upgraded `MergeSortPlayground` with dual-phase visualization: Recursive Division (top-down ↓) and Conquer & Merge (bottom-up ↑) with comparison calculation and subarray recombination.
   9. **Majority Element ("Fideo" fix)**:
-     - Upgraded layout from squished column to `minmax(360px, 1fr) minmax(0, 1.25fr)` with `min-width: 0;`, contrasting + / - buttons, and localized Boyer-Moore counter table.
-  10. **Highway Antennas Drag Sensibility**:
-     - Calibrated drag interaction using SVG inverse CTM matrix transformation (`getScreenCTM().inverse()`) with pointer offset tracking and 24px transparent hit area on antenna poles.
+     - Upgraded layout from squished column to `minmax(460px, 1.15fr) minmax(0, 1.35fr)` with responsive single-column breakpoint at 1200px and user-toggleable Split/Stacked view (`[↕ Vista Apilada | ↔ Vista Dividida]`).
+  10. **Highway Antennas Drag Sensibility & Smoothness**:
+     - Calibrated drag interaction with frozen coordinate scaling (`activeMaxKmRef`) and pointer collision prevention (`lastInteractionTime`), ensuring perfectly responsive dragging without erratic coordinate jumps or accidental antenna deletions.
   11. **Instructor Mode Code Highlighting & Pseudocode**:
-     - Zero-dependency syntax highlighting for canonical Python and Pseudocode in Phase 3 Understand view, highlighting keywords, control flow, functions, types, and comments.
+     - Zero-dependency syntax highlighting for canonical Python and Pseudocode in Phase 3 Understand view, with language badge, filename, copy status feedback, and gutter line numbers.
   12. **Anti-Gaming Hint Gating**:
-      - Upgraded `codeEffortAnalyzer.ts` to reject trivial assignments (e.g. `cualquier = 0`), single-token lines, and duplicate consecutive test attempts.
+      - Upgraded `codeEffortAnalyzer.ts` to reject trivial literal arithmetic assignments (e.g. `cualquier = 0 + 1`), single-token lines, and empty stub test runs (`getGenuineStudentAttemptCount`).
   13. **Graph Coloring**:
      - Removed white outline artifact on vertex `<g>` elements and increased color badge vertical offset to prevent overlapping vertex circles.
   14. **Traveling Salesperson (TSP)**:
@@ -51,5 +51,5 @@
   18. **Tests & Quality Gates**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
-      - `npm test`: 47 test files, 363 passed (100% PASS).
-      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.70s.
+      - `npm test`: 47 test files, 365 passed (100% PASS).
+      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.75s.

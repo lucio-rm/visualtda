@@ -133,6 +133,77 @@ export const MergeSortVisualizer: React.FC = () => {
         </div>
       )}
 
+      {/* Live Merge Comparison Card (shows active element comparison and placement) */}
+      {data?.comparison && (
+        <div
+          className="merge-comparison-live-card"
+          style={{
+            padding: '0.75rem 1rem',
+            backgroundColor: 'var(--surface)',
+            border: '1.5px solid var(--accent)',
+            borderRadius: 'var(--radius-md)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {language === 'es' ? 'Comparación en Fusión (Merge):' : 'Merge Comparison:'}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: 700 }}>
+              <span
+                style={{
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: '4px',
+                  backgroundColor: data.comparison.winner === 'left' ? 'var(--state-solution-bg)' : 'var(--surface-hover)',
+                  border: `2px solid ${data.comparison.winner === 'left' ? 'var(--success)' : 'var(--border)'}`,
+                  color: data.comparison.winner === 'left' ? 'var(--success)' : 'var(--text)'
+                }}
+              >
+                {language === 'es' ? 'izq' : 'left'}[{leftPointer}]: {data.comparison.leftVal}
+              </span>
+              <span style={{ color: 'var(--text-muted)' }}>
+                {data.comparison.leftVal <= data.comparison.rightVal ? '≤' : '>'}
+              </span>
+              <span
+                style={{
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: '4px',
+                  backgroundColor: data.comparison.winner === 'right' ? 'var(--state-solution-bg)' : 'var(--surface-hover)',
+                  border: `2px solid ${data.comparison.winner === 'right' ? 'var(--success)' : 'var(--border)'}`,
+                  color: data.comparison.winner === 'right' ? 'var(--success)' : 'var(--text)'
+                }}
+              >
+                {language === 'es' ? 'der' : 'right'}[{rightPointer}]: {data.comparison.rightVal}
+              </span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Elemento menor (gana):' : 'Winner (smaller):'}
+            </span>
+            <span
+              style={{
+                padding: '0.25rem 0.65rem',
+                borderRadius: '4px',
+                backgroundColor: 'var(--state-solution-bg)',
+                border: '1.5px solid var(--success)',
+                color: 'var(--success)',
+                fontWeight: 800,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.95rem'
+              }}
+            >
+              {data.comparison.winner === 'left' ? data.comparison.leftVal : data.comparison.rightVal} → dest[{destPointer}]
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Array Bars Visualization */}
       <div className="bars-chart-container" role="img" aria-label="Gráfico de barras del arreglo en ordenamiento">
         {array.map((val, idx) => {
@@ -150,6 +221,48 @@ export const MergeSortVisualizer: React.FC = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Subproblem Recursion & Merge Status (Ascending Tree) */}
+      <div className="mergesort-tree-live-panel" style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.85rem 1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            {language === 'es' ? 'Árbol de Recursión (División y Fusión Ascendente):' : 'Recursion Tree (Division & Bottom-Up Merge):'}
+          </span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+            {data?.phase === 'divide' ? (language === 'es' ? '↓ Dividiendo' : '↓ Splitting') : data?.phase === 'base_case' ? (language === 'es' ? '• Caso Base (n=1)' : '• Base Case (n=1)') : data?.phase === 'complete' ? (language === 'es' ? '✓ Ordenamiento Completo' : '✓ Fully Sorted') : (language === 'es' ? '↑ Fusionando hacia arriba' : '↑ Merging Upward')}
+          </span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ minWidth: '70px', color: 'var(--text-muted)', fontSize: '0.75rem' }}>{language === 'es' ? 'Nivel 0:' : 'Level 0:'}</span>
+            <div style={{ display: 'flex', gap: '0.5rem', flex: 1 }}>
+              <div style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', border: activeRange && activeRange[0] === 0 && activeRange[1] === array.length - 1 ? '1.5px solid var(--accent)' : '1px solid var(--border)', backgroundColor: activeRange && activeRange[0] === 0 && activeRange[1] === array.length - 1 ? 'var(--state-active-bg)' : 'var(--surface-hover)', fontWeight: 700, color: 'var(--text)' }}>
+                [{array.join(', ')}]
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ minWidth: '70px', color: 'var(--text-muted)', fontSize: '0.75rem' }}>{language === 'es' ? 'Nivel 1:' : 'Level 1:'}</span>
+            <div style={{ display: 'flex', gap: '0.5rem', flex: 1, flexWrap: 'wrap' }}>
+              <div style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', border: activeRange && activeRange[0] === 0 && activeRange[1] === Math.floor(array.length / 2) - 1 ? '1.5px solid var(--accent)' : '1px solid var(--border)', backgroundColor: 'var(--surface-hover)', color: 'var(--text)' }}>
+                [{array.slice(0, Math.floor(array.length / 2)).join(', ')}]
+              </div>
+              <div style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', border: activeRange && activeRange[0] === Math.floor(array.length / 2) && activeRange[1] === array.length - 1 ? '1.5px solid var(--accent)' : '1px solid var(--border)', backgroundColor: 'var(--surface-hover)', color: 'var(--text)' }}>
+                [{array.slice(Math.floor(array.length / 2)).join(', ')}]
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            {language === 'es' ? 'Subarreglo en tratamiento actual: ' : 'Current subsegment: '}
+            <strong style={{ color: 'var(--accent)' }}>A[{activeRange ? `${activeRange[0]}..${activeRange[1]}` : '0..7'}]</strong>
+            {data?.phase === 'segment_merged' && (
+              <span style={{ color: 'var(--success)', marginLeft: '0.5rem', fontWeight: 600 }}>
+                {language === 'es' ? '✓ Mitades ordenadas combinadas con éxito' : '✓ Sorted halves successfully merged'}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Master Theorem & Recursion Tree Rationale Card */}

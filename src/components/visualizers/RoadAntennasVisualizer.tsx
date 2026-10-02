@@ -130,7 +130,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   textAnchor="middle"
                   fill="var(--color-text-muted)"
                   fontSize="13"
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {km}k
                 </text>
@@ -225,7 +225,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   fill="var(--accent)"
                   fontSize="13"
                   fontWeight="bold"
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {antKm} km
                 </text>
@@ -284,7 +284,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   fill={isCurrentUncovered ? 'var(--error)' : 'var(--color-text)'}
                   fontSize="13"
                   fontWeight={isCurrentUncovered ? 'bold' : 'normal'}
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {houseKm}k
                 </text>

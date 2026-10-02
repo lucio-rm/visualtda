@@ -471,8 +471,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     x2={c2.x}
                     y2={c2.y}
                     stroke={inTour ? 'var(--success)' : 'var(--graph-edge)'}
-                    strokeWidth={inTour ? 3.5 : 2}
-                    strokeDasharray={inTour ? undefined : '5 3'}
+                    strokeWidth={inTour ? 4 : 2}
                     opacity={1}
                   />
                   <rect
@@ -481,8 +480,8 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     width={26}
                     height={18}
                     rx={4}
-                    fill={inTour ? 'var(--success)' : 'var(--surface)'}
-                    stroke={inTour ? 'var(--success)' : 'var(--graph-edge)'}
+                    fill="var(--surface)"
+                    stroke={inTour ? 'var(--success)' : 'var(--border-strong)'}
                     strokeWidth={1.5}
                     opacity={1}
                   />
@@ -490,7 +489,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill={inTour ? '#ffffff' : 'var(--text)'}
+                    fill={inTour ? 'var(--success)' : 'var(--text)'}
                     fontSize="11px"
                     fontWeight="700"
                     fontFamily="var(--font-mono)"

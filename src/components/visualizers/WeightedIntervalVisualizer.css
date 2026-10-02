@@ -47,7 +47,7 @@
 }
 
 .tasks-highlight {
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .weight-badge {
@@ -130,7 +130,7 @@
 .task-pred-badge {
   font-size: 0.8125rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .task-track-timeline {
@@ -175,7 +175,7 @@
 }
 
 .bar-task-name {
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .bar-task-weight {
@@ -233,7 +233,7 @@
 .dp-opt-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
   background: var(--canvas-bg);
   border: 1px solid var(--border);
@@ -315,7 +315,7 @@
 }
 
 .choice-math {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
 }
 
@@ -371,7 +371,7 @@
 .strategy-stat {
   font-size: 1.4rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .greedy-stat {
@@ -379,7 +379,7 @@
 }
 
 .strategy-items {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   color: var(--text-muted);
 }
@@ -457,7 +457,7 @@
 
 .step-counter {
   font-size: 0.85rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
   white-space: nowrap;
 }
 

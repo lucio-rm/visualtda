@@ -109,7 +109,7 @@
 }
 
 .v-coord {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: 600;
 }
 
@@ -192,7 +192,7 @@
 .step-counter {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .speed-selector {

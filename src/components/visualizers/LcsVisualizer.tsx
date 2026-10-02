@@ -173,7 +173,7 @@ export const LcsVisualizer: React.FC = () => {
             borderRadius: '6px',
             padding: '0.65rem 1rem',
             fontSize: '0.88rem',
-            fontFamily: 'monospace',
+            fontFamily: 'var(--font-mono)',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.3rem'

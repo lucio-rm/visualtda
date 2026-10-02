@@ -113,12 +113,17 @@ function isMeaningfulLine(line: string): boolean {
     return false;
   }
 
-  // 5. Must have at least some minimal substance (> 2 characters)
+  // 5. Reject trivial arithmetic on literal constants (e.g. cualquier = 0 + 1, x = 1 * 2)
+  if (/^[a-zA-Z_]\w*\s*=\s*[\d\s+\-*/%]+$/.test(trimmed)) {
+    return false;
+  }
+
+  // 6. Must have at least some minimal substance (> 2 characters)
   if (trimmed.length <= 2) {
     return false;
   }
 
-  // 5. Check for valid Python syntax tokens or constructs
+  // 6. Check for valid Python syntax tokens or constructs
   const hasAlgorithmicKeyword = /^(def\s+|for\s+|while\s+|if\s+|elif\s+|else:|with\s+|try:|except(\s+.*)?:|return\s+|yield\s+)/.test(
     trimmed
   );

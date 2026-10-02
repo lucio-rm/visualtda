@@ -111,6 +111,17 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
 
   const [decryptedPython, setDecryptedPython] = useState<string | null>(() => getDecryptedSolutionSync(exercise.id));
   const [isDecrypting, setIsDecrypting] = useState<boolean>(false);
+  const [copiedCodeMode, setCopiedCodeMode] = useState<string | null>(null);
+
+  const handleCopyCodeText = (text: string, mode: string) => {
+    try {
+      navigator.clipboard?.writeText(text);
+      setCopiedCodeMode(mode);
+      setTimeout(() => setCopiedCodeMode(null), 2000);
+    } catch {
+      // ignore clipboard error
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -268,9 +279,45 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                           {approvedSolution.passedTestsCount} {language === 'es' ? 'tests superados' : 'tests passed'} · {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
-                      <pre className="canonical-code-display code-highlight-container">
-                        <code dangerouslySetInnerHTML={{ __html: highlightPythonCode(approvedSolution.code) }} />
-                      </pre>
+                      <div className="code-editor-card canonical-ide-card" style={{ width: '100%', margin: '0 0 1rem 0' }}>
+                        <div className="code-editor-header">
+                          <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span className="editor-lang-badge">Python 3</span>
+                            <span className="editor-filename">{language === 'es' ? 'mi_solucion_aprobada.py' : 'my_approved_solution.py'}</span>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-copy-code"
+                            onClick={() => handleCopyCodeText(approvedSolution.code, 'student')}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: 'var(--text-muted)',
+                              fontSize: '0.8rem',
+                              cursor: 'pointer',
+                              padding: '0.25rem 0.5rem'
+                            }}
+                          >
+                            {copiedCodeMode === 'student'
+                              ? (language === 'es' ? '✓ Copiado' : '✓ Copied')
+                              : (language === 'es' ? 'Copiar Código' : 'Copy Code')}
+                          </button>
+                        </div>
+                        <div className="editor-input-wrapper">
+                          <div className="editor-gutter" aria-hidden="true">
+                            {Array.from({ length: approvedSolution.code.split('\n').length }, (_, i) => (
+                              <span key={i + 1} className="editor-line-number">
+                                {i + 1}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="code-editor-stage" style={{ overflowX: 'auto', padding: '0.75rem 1rem' }}>
+                            <pre className="canonical-code-display code-highlight-container" style={{ margin: 0, padding: 0, background: 'transparent' }}>
+                              <code dangerouslySetInnerHTML={{ __html: highlightPythonCode(approvedSolution.code) }} />
+                            </pre>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="solution-locked-card" style={{ padding: '2rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
@@ -339,22 +386,77 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                       </div>
                     </div>
                   ) : (
-                    <pre className="canonical-code-display code-highlight-container">
-                      <code
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            codeMode === 'python'
-                              ? highlightPythonCode(
-                                  isDecrypting
-                                    ? language === 'es'
-                                      ? '# Desencriptando solución oficial...'
-                                      : '# Decrypting canonical solution...'
-                                    : effectivePython || '# Solución protegida'
-                                )
-                              : highlightPseudocode(pseudocode)
-                        }}
-                      />
-                    </pre>
+                    (() => {
+                      const activeCodeText =
+                        codeMode === 'python'
+                          ? isDecrypting
+                            ? language === 'es'
+                              ? '# Desencriptando solución oficial...'
+                              : '# Decrypting canonical solution...'
+                            : effectivePython || '# Solución protegida'
+                          : pseudocode;
+                      const activeCodeHighlighted =
+                        codeMode === 'python'
+                          ? highlightPythonCode(activeCodeText)
+                          : highlightPseudocode(activeCodeText);
+                      const activeCodeLines = activeCodeText.split('\n').length;
+                      const activeFilename =
+                        codeMode === 'python'
+                          ? language === 'es'
+                            ? 'solucion_oficial.py'
+                            : 'canonical_solution.py'
+                          : language === 'es'
+                            ? 'pseudocodigo_formal.algo'
+                            : 'formal_pseudocode.algo';
+                      const activeLangBadge =
+                        codeMode === 'python'
+                          ? 'Python 3'
+                          : language === 'es'
+                            ? 'Pseudocódigo'
+                            : 'Pseudocode';
+
+                      return (
+                        <div className="code-editor-card canonical-ide-card" style={{ width: '100%', margin: '0 0 1rem 0' }}>
+                          <div className="code-editor-header">
+                            <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span className="editor-lang-badge">{activeLangBadge}</span>
+                              <span className="editor-filename">{activeFilename}</span>
+                            </div>
+                            <button
+                              type="button"
+                              className="btn-copy-code"
+                              onClick={() => handleCopyCodeText(activeCodeText, codeMode)}
+                              style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--text-muted)',
+                                fontSize: '0.8rem',
+                                cursor: 'pointer',
+                                padding: '0.25rem 0.5rem'
+                              }}
+                            >
+                              {copiedCodeMode === codeMode
+                                ? (language === 'es' ? '✓ Copiado' : '✓ Copied')
+                                : (language === 'es' ? 'Copiar Código' : 'Copy Code')}
+                            </button>
+                          </div>
+                          <div className="editor-input-wrapper">
+                            <div className="editor-gutter" aria-hidden="true">
+                              {Array.from({ length: activeCodeLines }, (_, i) => (
+                                <span key={i + 1} className="editor-line-number">
+                                  {i + 1}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="code-editor-stage" style={{ overflowX: 'auto', padding: '0.75rem 1rem' }}>
+                              <pre className="canonical-code-display code-highlight-container" style={{ margin: 0, padding: 0, background: 'transparent' }}>
+                                <code dangerouslySetInnerHTML={{ __html: activeCodeHighlighted }} />
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()
                   )
                 )}
               </>

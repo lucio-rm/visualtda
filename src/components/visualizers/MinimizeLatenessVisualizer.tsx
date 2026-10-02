@@ -154,7 +154,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   fill="#0f172a"
                   fontSize="13px"
                   fontWeight="700"
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {job.name} (t={job.duration})
                 </text>

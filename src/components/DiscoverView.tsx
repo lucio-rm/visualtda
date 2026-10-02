@@ -16,6 +16,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
   children
 }) => {
   const { language, t } = useLanguage();
+  const [layoutMode, setLayoutMode] = React.useState<'split' | 'stacked'>('split');
   const [isNarrativeCollapsed, setIsNarrativeCollapsed] = React.useState<boolean>(false);
   const insight = getExerciseInsight(exercise.id, exercise.categoryId);
 
@@ -37,7 +38,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
         </div>
       </div>
 
-      <div className={`discover-grid ${isNarrativeCollapsed ? 'fullwidth-playground' : ''}`}>
+      <div className={`discover-grid ${isNarrativeCollapsed ? 'fullwidth-playground' : ''} ${layoutMode === 'stacked' ? 'stacked-layout' : ''}`}>
         {!isNarrativeCollapsed && (
           <div className="problem-narrative-card">
             <h4 style={{ margin: '0 0 0.75rem 0' }}>{language === 'es' ? 'Especificación del Problema' : 'Problem Specification'}</h4>
@@ -84,33 +85,66 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
         <div className={`interactive-playground-card ${isNarrativeCollapsed ? 'expanded-fullwidth' : ''}`}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
             <h4 style={{ margin: 0 }}>{language === 'es' ? 'Espacio de Experimentación Interactiva' : 'Interactive Experimentation Playground'}</h4>
-            <button
-              type="button"
-              className="btn-toggle-narrative"
-              onClick={() => setIsNarrativeCollapsed(!isNarrativeCollapsed)}
-              title={isNarrativeCollapsed
-                ? (language === 'es' ? 'Mostrar enunciado del problema' : 'Show problem statement')
-                : (language === 'es' ? 'Ocultar enunciado y expandir visualizador a ancho completo' : 'Hide problem and expand playground')}
-              style={{
-                background: isNarrativeCollapsed ? 'var(--accent)' : 'var(--surface-hover)',
-                color: isNarrativeCollapsed ? 'var(--accent-contrast)' : 'var(--text)',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                padding: '0.25rem 0.65rem',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem'
-              }}
-            >
-              {isNarrativeCollapsed ? (
-                <>⇤ {language === 'es' ? 'Mostrar Problema' : 'Show Problem'}</>
-              ) : (
-                <>⇥ {language === 'es' ? 'Ocultar Problema' : 'Hide Problem'}</>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              {!isNarrativeCollapsed && (
+                <button
+                  type="button"
+                  className="btn-toggle-layout"
+                  onClick={() => setLayoutMode((prev) => (prev === 'split' ? 'stacked' : 'split'))}
+                  title={
+                    layoutMode === 'split'
+                      ? (language === 'es' ? 'Cambiar a vista apilada vertical (ancho completo)' : 'Switch to stacked view (full width)')
+                      : (language === 'es' ? 'Cambiar a vista dividida en 2 columnas' : 'Switch to split side-by-side view')
+                  }
+                  style={{
+                    background: 'var(--surface-hover)',
+                    color: 'var(--text)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '4px',
+                    padding: '0.25rem 0.65rem',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem'
+                  }}
+                >
+                  {layoutMode === 'split' ? (
+                    <>{language === 'es' ? '↕ Vista Apilada' : '↕ Stacked View'}</>
+                  ) : (
+                    <>{language === 'es' ? '↔ Vista Dividida' : '↔ Split View'}</>
+                  )}
+                </button>
               )}
-            </button>
+              <button
+                type="button"
+                className="btn-toggle-narrative"
+                onClick={() => setIsNarrativeCollapsed(!isNarrativeCollapsed)}
+                title={isNarrativeCollapsed
+                  ? (language === 'es' ? 'Mostrar enunciado del problema' : 'Show problem statement')
+                  : (language === 'es' ? 'Ocultar enunciado y expandir visualizador a ancho completo' : 'Hide problem and expand playground')}
+                style={{
+                  background: isNarrativeCollapsed ? 'var(--accent)' : 'var(--surface-hover)',
+                  color: isNarrativeCollapsed ? 'var(--accent-contrast)' : 'var(--text)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '4px',
+                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem'
+                }}
+              >
+                {isNarrativeCollapsed ? (
+                  <>{language === 'es' ? 'Mostrar Problema' : 'Show Problem'}</>
+                ) : (
+                  <>{language === 'es' ? 'Ocultar Problema' : 'Hide Problem'}</>
+                )}
+              </button>
+            </div>
           </div>
           {children || (
             <div className="playground-placeholder">

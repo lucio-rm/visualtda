@@ -76,15 +76,21 @@
   height: auto;
 }
 
-.gc-interactive-node {
+.gc-interactive-node,
+.gc-interactive-node:focus,
+.gc-interactive-node:focus-visible,
+.gc-interactive-node:active {
   cursor: pointer;
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .gc-interactive-node:focus-visible circle {
   stroke: var(--accent);
-  stroke-width: 4px;
-  stroke-dasharray: 3 3;
+  stroke-width: 3.5px;
 }
 
 .gc-interactive-node:hover circle {

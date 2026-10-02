@@ -9,7 +9,7 @@
  */
 
 import { analyzeStudentCodeEffort } from './codeEffortAnalyzer';
-import { getStudentAttemptCount } from './studentAttempts';
+import { getGenuineStudentAttemptCount } from './studentAttempts';
 import { registry } from '../engine/registry';
 
 export interface HintRequirementTier {
@@ -110,7 +110,7 @@ export function getHintUnlockStatus(
     };
   }
 
-  const currentAttempts = getStudentAttemptCount(exerciseId);
+  const currentAttempts = getGenuineStudentAttemptCount(exerciseId, currentCode, starterCode);
   const effort = analyzeStudentCodeEffort(currentCode, starterCode);
   const currentLines = effort.meaningfulLinesAdded;
 

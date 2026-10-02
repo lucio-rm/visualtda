@@ -47,7 +47,7 @@
 
 .lcs-highlight {
   color: var(--success);
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 1.1rem;
 }
 
@@ -89,7 +89,7 @@
   border: 1px solid var(--border);
   border-radius: 4px;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
   transition: all 0.2s;
 }
@@ -256,7 +256,7 @@
 
 .step-counter {
   font-size: 0.85rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
   white-space: nowrap;
 }
 

@@ -18,10 +18,13 @@
   --accent-subtle: #eff6ff;
   --success: #047857;
   --success-bg: #ecfdf5;
+  --success-contrast: #ffffff;
   --error: #b91c1c;
   --error-bg: #fef2f2;
+  --error-contrast: #ffffff;
   --warning: #92400e;
   --warning-bg: #fffbeb;
+  --warning-contrast: #ffffff;
   --code-bg: #f8fafc;
   --code-border: #cbd5e1;
   --canvas-bg: #f8fafc;
@@ -152,10 +155,13 @@
   --accent-subtle: rgba(56, 189, 248, 0.15);
   --success: #34d399;
   --success-bg: rgba(52, 211, 153, 0.18);
+  --success-contrast: #0b0f17;
   --error: #f87171;
   --error-bg: rgba(248, 113, 113, 0.18);
+  --error-contrast: #0b0f17;
   --warning: #fbbf24;
   --warning-bg: rgba(251, 191, 36, 0.18);
+  --warning-contrast: #0b0f17;
   --code-bg: #090d16;
   --code-border: #334155;
   --canvas-bg: #090d16;
@@ -191,8 +197,8 @@
   --color-danger: var(--error);
 
   /* Graph Visualization Tokens Dark */
-  --graph-edge: #94a3b8;
-  --graph-edge-subtle: #64748b;
+  --graph-edge: #cbd5e1;
+  --graph-edge-subtle: #94a3b8;
   --graph-node-bg: #1e293b;
   --graph-node-border: #cbd5e1;
 
@@ -250,10 +256,13 @@
     --accent-subtle: rgba(56, 189, 248, 0.15);
     --success: #34d399;
     --success-bg: rgba(52, 211, 153, 0.18);
+    --success-contrast: #0b0f17;
     --error: #f87171;
     --error-bg: rgba(248, 113, 113, 0.18);
+    --error-contrast: #0b0f17;
     --warning: #fbbf24;
     --warning-bg: rgba(251, 191, 36, 0.18);
+    --warning-contrast: #0b0f17;
     --code-bg: #090d16;
     --code-border: #334155;
     --canvas-bg: #090d16;
@@ -289,8 +298,8 @@
     --color-danger: var(--error);
 
     /* Graph Visualization Tokens Dark */
-    --graph-edge: #94a3b8;
-    --graph-edge-subtle: #64748b;
+    --graph-edge: #cbd5e1;
+    --graph-edge-subtle: #94a3b8;
     --graph-node-bg: #1e293b;
     --graph-node-border: #cbd5e1;
 

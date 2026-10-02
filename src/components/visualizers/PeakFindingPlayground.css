@@ -81,7 +81,7 @@
   color: var(--text);
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
 }
 
@@ -156,7 +156,7 @@
 .clickable-bar-val {
   font-size: 0.85rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
   margin-bottom: 0.35rem;
   color: var(--text);
 }
@@ -228,7 +228,7 @@
 .card-stat {
   font-size: 1.15rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .card-prompt {

@@ -99,7 +99,7 @@
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--accent-light, #60a5fa);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .inv-metric-badge .value.highlight {
@@ -124,7 +124,7 @@
 }
 
 .inv-split-math {
-  font-family: monospace;
+  font-family: var(--font-mono);
   background: rgba(0, 0, 0, 0.3);
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
@@ -194,7 +194,7 @@
   background: var(--surface, #0f172a);
   border: 1px solid var(--border, #475569);
   border-radius: 6px;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: 1rem;
   position: relative;

@@ -163,7 +163,7 @@ export const GraphColoringVisualizer: React.FC = () => {
                   {assignedColor && (
                     <text
                       x={pos.x}
-                      y={pos.y + 36}
+                      y={pos.y + 40}
                       textAnchor="middle"
                       className="gc-node-colortag"
                       fill="var(--text-muted)"

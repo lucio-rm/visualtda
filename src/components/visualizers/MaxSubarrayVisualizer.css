@@ -108,12 +108,12 @@
 
 .mid-tag {
   background-color: var(--warning);
-  color: #000;
+  color: var(--warning-contrast);
 }
 
 .scan-tag {
   background-color: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
 }
 
 .subarray-cell.dimmed {
@@ -192,7 +192,7 @@
 .cand-range {
   font-size: 0.8rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .cross-live-sums {
@@ -277,7 +277,7 @@
 .step-counter {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .speed-selector {

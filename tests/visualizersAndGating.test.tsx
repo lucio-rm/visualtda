@@ -126,6 +126,21 @@ def solve():
       expect(result.meaningfulLinesAdded).toBeLessThanOrEqual(3);
     });
 
+    it('discards dummy literal and arithmetic assignments (e.g. cualquier = 0, a = 1 + 2)', () => {
+      const dummyCode = `
+def solve():
+    cualquier = 0
+    cualquier = 0 + 1
+    a = 1 + 2
+    dummy_text = "test"
+    empty_list = []
+    return
+`;
+      const result = analyzeStudentCodeEffort(dummyCode, 'def solve():\n    pass');
+      expect(result.meaningfulLinesAdded).toBe(0);
+      expect(result.hasRealLogic).toBe(false);
+    });
+
     it('accurately counts genuine algorithmic code lines', () => {
       const algorithmCode = `
 def resolver_scheduling(intervalos):
@@ -176,6 +191,18 @@ def resolver_scheduling(intervalos):
       expect(status.linesFulfilled).toBe(false);
       expect(status.attemptsProgress).toBe(0);
       expect(status.linesProgress).toBe(0);
+    });
+
+    it('keeps Hint 1 locked when student spams test runs on unmodified starter stub', () => {
+      clearStudentAttempts('test-spam-stub');
+      recordStudentAttempt('test-spam-stub', 'def solve(): pass', 'def solve(): pass', false, 0, 3);
+      recordStudentAttempt('test-spam-stub', 'def solve(): pass', 'def solve(): pass', false, 0, 3);
+      recordStudentAttempt('test-spam-stub', 'def solve(): pass', 'def solve(): pass', false, 0, 3);
+
+      const status = getHintUnlockStatus('test-spam-stub', 0, 'def solve(): pass', 'def solve(): pass', false);
+      expect(status.currentAttempts).toBe(0);
+      expect(status.attemptsFulfilled).toBe(false);
+      expect(status.isUnlocked).toBe(false);
     });
 
     it('keeps Hint 1 locked when student has 3 attempts but only 5 lines of code', () => {

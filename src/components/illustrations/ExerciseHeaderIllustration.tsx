@@ -27,7 +27,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
   switch (key) {
     case 'n-queens':
       return (
-        <svg {...commonProps} aria-label="Tablero de ajedrez N-Reinas con reinas no atacantes">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Tablero de ajedrez N-Reinas con reinas no atacantes' : 'N-Queens chessboard with non-attacking queens'}>
           {/* Mini 5x5 board */}
           <rect x="55" y="10" width="100" height="100" rx="6" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #334155)" strokeWidth="1.5" />
           {[0, 1, 2, 3, 4].map((r) =>
@@ -62,7 +62,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <path d="M141 102 L149 102 L147 97 L145 99 L143 97 Z" fill="#ffffff" />
           {/* Safe status indicator badge */}
           <rect x="170" y="42" width="60" height="24" rx="4" fill="var(--success-bg, rgba(16,185,129,0.15))" stroke="var(--success, #10b981)" strokeWidth="1" />
-          <text x="200" y="58" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="600">N=5 Válido</text>
+          <text x="200" y="58" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="600">{language === 'es' ? 'N=5 Válido' : 'N=5 Valid'}</text>
         </svg>
       );
 
@@ -72,7 +72,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
     case 'knapsack-dp':
     case 'knapsack-greedy':
       return (
-        <svg {...commonProps} aria-label="Mochila con capacidad máxima e ítems con peso y valor">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Mochila con capacidad máxima e ítems con peso y valor' : 'Knapsack with capacity and weighted items'}>
           {/* Backpack body */}
           <rect x="30" y="25" width="80" height="75" rx="10" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #334155)" strokeWidth="2" />
           <path d="M50 25 C50 15, 90 15, 90 25" stroke="var(--accent, #6366f1)" strokeWidth="3" fill="none" />
@@ -81,7 +81,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           {/* Capacity gauge */}
           <rect x="48" y="76" width="44" height="6" rx="3" fill="var(--border, #334155)" />
           <rect x="48" y="76" width="32" height="6" rx="3" fill="var(--accent, #6366f1)" />
-          <text x="70" y="42" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Capacidad W</text>
+          <text x="70" y="42" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Capacidad W' : 'Capacity W'}</text>
           {/* Items flying in */}
           <g transform="translate(130, 20)">
             <rect x="0" y="0" width="45" height="24" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--success, #10b981)" strokeWidth="1.5" />
@@ -99,7 +99,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'subset-sum':
       return (
-        <svg {...commonProps} aria-label="Balanza de pesos con subconjunto y objetivo de suma">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Balanza de pesos con subconjunto y objetivo de suma' : 'Balance scale with subset and target sum'}>
           {/* Balance fulcrum */}
           <polygon points="120,75 110,105 130,105" fill="var(--border, #334155)" />
           <line x1="120" y1="105" x2="120" y2="75" stroke="var(--text-muted, #94a3b8)" strokeWidth="2" />
@@ -119,16 +119,16 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <path d="M165 85 Q185 92 205 85" stroke="var(--text-muted, #94a3b8)" strokeWidth="2" fill="none" />
           <polygon points="185,68 174,84 196,84" fill="var(--warning, #f59e0b)" />
           <text x="185" y="80" textAnchor="middle" fill="#000" fontSize="13" fontWeight="bold">T</text>
-          <text x="185" y="103" textAnchor="middle" fill="var(--warning, #f59e0b)" fontSize="13">Objetivo T</text>
+          <text x="185" y="103" textAnchor="middle" fill="var(--warning, #f59e0b)" fontSize="13">{language === 'es' ? 'Objetivo T' : 'Target T'}</text>
         </svg>
       );
 
     case 'coin-change':
       return (
-        <svg {...commonProps} aria-label="Monedas de diversas denominaciones sumando al monto objetivo">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Monedas de diversas denominaciones sumando al monto objetivo' : 'Coins of various denominations summing to target amount'}>
           {/* Target display badge */}
           <rect x="25" y="20" width="70" height="32" rx="6" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
-          <text x="60" y="34" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Monto Objetivo</text>
+          <text x="60" y="34" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Monto Objetivo' : 'Target Amount'}</text>
           <text x="60" y="47" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">$ 11</text>
           {/* Arrow */}
           <path d="M102 36 L120 36" stroke="var(--text-muted, #94a3b8)" strokeWidth="1.5" strokeDasharray="2 2" />
@@ -145,7 +145,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
             <ellipse cx="70" cy="46" rx="13" ry="6" fill="var(--surface-active, #334155)" stroke="var(--success, #10b981)" strokeWidth="1.5" />
             <text x="70" y="49" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="bold">$1</text>
           </g>
-          <text x="175" y="90" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">3 Monedas (Óptimo)</text>
+          <text x="175" y="90" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? '3 Monedas (Óptimo)' : '3 Coins (Optimal)'}</text>
         </svg>
       );
 
@@ -153,7 +153,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
     case 'weighted-interval':
     case 'weighted-interval-scheduling':
       return (
-        <svg {...commonProps} aria-label="Línea de tiempo con intervalos compatibles y solapados">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Línea de tiempo con intervalos compatibles y solapados' : 'Timeline with compatible and overlapping intervals'}>
           {/* Time axis */}
           <line x1="20" y1="95" x2="220" y2="95" stroke="var(--border, #334155)" strokeWidth="2" />
           {[20, 60, 100, 140, 180, 220].map((x, i) => (
@@ -167,7 +167,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="50" y="32" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="bold">I1: [1, 4]</text>
           {/* Interval 2 (Rejected Overlapping - Red dashed) */}
           <rect x="55" y="42" width="60" height="16" rx="4" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" />
-          <text x="85" y="54" textAnchor="middle" fill="#ef4444" fontSize="13">Solapado</text>
+          <text x="85" y="54" textAnchor="middle" fill="#ef4444" fontSize="13">{language === 'es' ? 'Solapado' : 'Overlap'}</text>
           {/* Interval 3 (Selected - Green) */}
           <rect x="85" y="20" width="65" height="16" rx="4" fill="var(--success, #10b981)" fillOpacity="0.25" stroke="var(--success, #10b981)" strokeWidth="1.5" />
           <text x="117" y="32" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="bold">I2: [4, 7]</text>
@@ -181,7 +181,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'inversion-counting':
       return (
-        <svg {...commonProps} aria-label="Permutación de elementos con cruces de inversión fuera de orden">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Permutación de elementos con cruces de inversión fuera de orden' : 'Permutation of elements with out-of-order inversion crossings'}>
           {/* Input array row */}
           {[
             { val: 3, x: 40 },
@@ -256,7 +256,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'vertex-cover-approx':
       return (
-        <svg {...commonProps} aria-label="Grafo con nodos seleccionados en la cobertura de vértices">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Grafo con nodos seleccionados en la cobertura de vértices' : 'Graph with nodes selected in vertex cover'}>
           {/* Edges */}
           <line x1="50" y1="40" x2="110" y2="25" stroke="var(--success, #10b981)" strokeWidth="2.5" />
           <line x1="110" y1="25" x2="180" y2="35" stroke="var(--success, #10b981)" strokeWidth="2.5" />
@@ -278,14 +278,14 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <circle cx="80" cy="90" r="10" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #475569)" strokeWidth="2" />
           <circle cx="180" cy="35" r="10" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #475569)" strokeWidth="2" />
           {/* Legend */}
-          <text x="205" y="70" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">Vértice en VC</text>
-          <text x="205" y="85" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">Arista Cubierta</text>
+          <text x="205" y="70" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">{language === 'es' ? 'Vértice en VC' : 'Vertex in VC'}</text>
+          <text x="205" y="85" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? 'Arista Cubierta' : 'Covered Edge'}</text>
         </svg>
       );
 
     case 'max-subarray':
       return (
-        <svg {...commonProps} aria-label="Histograma de números positivos y negativos con subarreglo contiguo óptimo">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Histograma de números positivos y negativos con subarreglo contiguo óptimo' : 'Histogram of positive and negative numbers with optimal contiguous subarray'}>
           {/* Zero baseline */}
           <line x1="20" y1="65" x2="220" y2="65" stroke="var(--border, #475569)" strokeWidth="1.5" />
           {/* Bars */}
@@ -311,22 +311,22 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           ))}
           {/* Optimal Subarray Window Bracket (Indices 1 to 6) */}
           <path d="M48 18 L48 10 L166 10 L166 18" stroke="var(--accent, #6366f1)" strokeWidth="2" fill="none" />
-          <text x="107" y="7" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">Suma Máxima Contigua</text>
-          <text x="107" y="105" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Algoritmo de Kadane: O(N)</text>
+          <text x="107" y="7" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">{language === 'es' ? 'Suma Máxima Contigua' : 'Max Contiguous Sum'}</text>
+          <text x="107" y="105" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Algoritmo de Kadane: O(N)' : "Kadane's Algorithm: O(N)"}</text>
         </svg>
       );
 
     case 'juan-el-vago':
       return (
-        <svg {...commonProps} aria-label="Días de la semana con restricción de no trabajar dos días consecutivos">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Días de la semana con restricción de no trabajar dos días consecutivos' : 'Days of week with non-consecutive working days constraint'}>
           {/* Day cards */}
           {[
-            { day: 'Lun', val: 50, work: true },
-            { day: 'Mar', val: 10, work: false },
-            { day: 'Mié', val: 80, work: true },
-            { day: 'Jue', val: 70, work: false },
-            { day: 'Vie', val: 40, work: false },
-            { day: 'Sáb', val: 90, work: true }
+            { day: language === 'es' ? 'Lun' : 'Mon', val: 50, work: true },
+            { day: language === 'es' ? 'Mar' : 'Tue', val: 10, work: false },
+            { day: language === 'es' ? 'Mié' : 'Wed', val: 80, work: true },
+            { day: language === 'es' ? 'Jue' : 'Thu', val: 70, work: false },
+            { day: language === 'es' ? 'Vie' : 'Fri', val: 40, work: false },
+            { day: language === 'es' ? 'Sáb' : 'Sat', val: 90, work: true }
           ].map((d, i) => {
             const x = 25 + i * 33;
             return (
@@ -351,13 +351,13 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
               </g>
             );
           })}
-          <text x="120" y="100" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Sin días consecutivos: dp[i] = max(dp[i-1], dp[i-2] + p[i])</text>
+          <text x="120" y="100" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Sin días consecutivos: dp[i] = max(dp[i-1], dp[i-2] + p[i])' : 'No consecutive days: dp[i] = max(dp[i-1], dp[i-2] + p[i])'}</text>
         </svg>
       );
 
     case 'road-antennas':
       return (
-        <svg {...commonProps} aria-label="Ruta con casas y antenas con radio de cobertura R">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Ruta con casas y antenas con radio de cobertura R' : 'Road with houses and antennas with coverage radius R'}>
           {/* Road */}
           <line x1="15" y1="75" x2="225" y2="75" stroke="var(--border, #475569)" strokeWidth="6" strokeLinecap="round" />
           <line x1="15" y1="75" x2="225" y2="75" stroke="var(--text-muted, #94a3b8)" strokeWidth="1" strokeDasharray="6 6" />
@@ -381,14 +381,14 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
               <rect x={hx - 5} y="72" width="10" height="7" fill="var(--surface-raised, #1e293b)" stroke="var(--warning, #f59e0b)" strokeWidth="1" />
             </g>
           ))}
-          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">100% Cobertura de Casas con Antenas Mínimas</text>
+          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? '100% Cobertura con Antenas Mínimas' : '100% Coverage with Minimal Antennas'}</text>
         </svg>
       );
 
     case 'lcs':
     case 'longest-common-subsequence':
       return (
-        <svg {...commonProps} aria-label="Alineamiento de caracteres de subsecuencia común más larga">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Alineamiento de caracteres de subsecuencia común más larga' : 'Longest common subsequence character alignment'}>
           {/* Sequence A */}
           <text x="25" y="32" fill="var(--text-muted, #94a3b8)" fontSize="13" fontWeight="bold">S1:</text>
           {['A', 'B', 'C', 'B', 'D', 'A', 'B'].map((ch, i) => {
@@ -416,13 +416,13 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
               </g>
             );
           })}
-          <text x="120" y="108" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">LCS = "BCBA" (Longitud 4)</text>
+          <text x="120" y="108" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? 'LCS = "BCBA" (Longitud 4)' : 'LCS = "BCBA" (Length 4)'}</text>
         </svg>
       );
 
     case 'peak-finding':
       return (
-        <svg {...commonProps} aria-label="Perfil montañoso 1D con pico local señalado">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Perfil montañoso 1D con pico local señalado' : '1D mountain profile with highlighted local peak'}>
           {/* Mountain Profile */}
           <path
             d="M20 90 L60 75 L100 82 L130 25 L160 65 L190 55 L220 90 Z"
@@ -438,15 +438,15 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <polygon points="130,10 145,15 130,20" fill="#ef4444" />
           {/* Neighbor inequality indicators */}
           <text x="95" y="55" fill="var(--text-muted, #94a3b8)" fontSize="13">A[p-1] ≤</text>
-          <text x="130" y="42" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="bold">Pico A[p]</text>
+          <text x="130" y="42" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="bold">{language === 'es' ? 'Pico A[p]' : 'Peak A[p]'}</text>
           <text x="155" y="55" fill="var(--text-muted, #94a3b8)" fontSize="13">≥ A[p+1]</text>
-          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{'Búsqueda D&C: O(log N)'}</text>
+          <text x="120" y="105" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? 'Búsqueda D&C: O(log N)' : 'D&C Search: O(log N)'}</text>
         </svg>
       );
 
     case 'graph-coloring':
       return (
-        <svg {...commonProps} aria-label="Grafo coloreado con k colores sin aristas monocromáticas">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Grafo coloreado con k colores sin aristas monocromáticas' : 'Colored graph with k colors without monochromatic edges'}>
           {/* Edges */}
           <line x1="70" y1="35" x2="150" y2="35" stroke="var(--border, #475569)" strokeWidth="2" />
           <line x1="150" y1="35" x2="180" y2="85" stroke="var(--border, #475569)" strokeWidth="2" />
@@ -470,13 +470,13 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           {/* Color 3: Amber */}
           <circle cx="40" cy="85" r="13" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
           <text x="40" y="89" textAnchor="middle" fill="#000000" fontSize="13" fontWeight="bold">C3</text>
-          <text x="195" y="45" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">k = 3 Válido</text>
+          <text x="195" y="45" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">{language === 'es' ? 'k = 3 Válido' : 'k = 3 Valid'}</text>
         </svg>
       );
 
     case 'max-flow':
       return (
-        <svg {...commonProps} aria-label="Red de flujo con fuente, sumidero y capacidades">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Red de flujo con fuente, sumidero y capacidades' : 'Flow network with source, sink and capacities'}>
           {/* Edges with capacities and flows */}
           <line x1="50" y1="60" x2="105" y2="30" stroke="var(--accent, #6366f1)" strokeWidth="3" />
           <line x1="50" y1="60" x2="105" y2="90" stroke="var(--accent, #6366f1)" strokeWidth="3" />
@@ -496,17 +496,17 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="160" y="64" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="bold">t</text>
           {/* Min Cut Line */}
           <line x1="130" y1="10" x2="130" y2="110" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="3 3" />
-          <text x="195" y="55" textAnchor="middle" fill="#f59e0b" fontSize="13" fontWeight="bold">Corte Mín</text>
+          <text x="195" y="55" textAnchor="middle" fill="#f59e0b" fontSize="13" fontWeight="bold">{language === 'es' ? 'Corte Mín' : 'Min Cut'}</text>
           <text x="195" y="70" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13">MaxFlow=15</text>
         </svg>
       );
 
     case 'reduction-is-vc':
       return (
-        <svg {...commonProps} aria-label="Reducción polinomial entre Conjunto Independiente y Cobertura de Vértices">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Reducción polinomial entre Conjunto Independiente y Cobertura de Vértices' : 'Polynomial reduction between Independent Set and Vertex Cover'}>
           {/* Vertex set V boundary */}
           <rect x="25" y="15" width="190" height="90" rx="10" fill="var(--surface, #0f172a)" stroke="var(--border, #334155)" strokeWidth="1.5" />
-          <text x="35" y="30" fill="var(--text-muted, #94a3b8)" fontSize="13">Grafo G = (V, E)</text>
+          <text x="35" y="30" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Grafo G = (V, E)' : 'Graph G = (V, E)'}</text>
           {/* Partition split line */}
           <line x1="120" y1="15" x2="120" y2="105" stroke="var(--border, #475569)" strokeWidth="1.5" strokeDasharray="4 4" />
           {/* Left partition: Independent Set S */}
@@ -521,23 +521,23 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <circle cx="165" cy="80" r="7" fill="var(--success, #10b981)" />
           <text x="167" y="47" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13" fontWeight="bold">V \ S (Vertex Cover)</text>
           {/* Duality theorem */}
-          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Dualidad: |S| + |VC| = |V|</text>
+          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Dualidad: |S| + |VC| = |V|' : 'Duality: |S| + |VC| = |V|'}</text>
         </svg>
       );
 
     case 'randomized-fair-coin':
       return (
-        <svg {...commonProps} aria-label="Conversión de moneda sesgada a moneda justa según algoritmo de von Neumann">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Conversión de moneda sesgada a moneda justa según algoritmo de von Neumann' : 'Biased coin to fair coin simulation via von Neumann algorithm'}>
           {/* Biased coin pairs */}
           <g transform="translate(30, 20)">
             <rect x="0" y="0" width="70" height="32" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #334155)" />
-            <text x="35" y="14" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Par (H, T)</text>
-            <text x="35" y="26" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">Retorna 1</text>
+            <text x="35" y="14" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Par (H, T)' : 'Pair (H, T)'}</text>
+            <text x="35" y="26" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">{language === 'es' ? 'Retorna 1' : 'Returns 1'}</text>
           </g>
           <g transform="translate(30, 60)">
             <rect x="0" y="0" width="70" height="32" rx="4" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #334155)" />
-            <text x="35" y="14" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Par (T, H)</text>
-            <text x="35" y="26" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">Retorna 0</text>
+            <text x="35" y="14" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">{language === 'es' ? 'Par (T, H)' : 'Pair (T, H)'}</text>
+            <text x="35" y="26" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">{language === 'es' ? 'Retorna 0' : 'Returns 0'}</text>
           </g>
           {/* Transform Arrow */}
           <path d="M110 56 L135 56" stroke="var(--accent, #6366f1)" strokeWidth="2" />
@@ -582,7 +582,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'linear-programming':
       return (
-        <svg {...commonProps} aria-label="Región factible convexa y punto óptimo en programación lineal 2D">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Región factible convexa y punto óptimo en programación lineal 2D' : 'Convex feasible region and optimal point in 2D linear programming'}>
           {/* Axes */}
           <line x1="30" y1="95" x2="190" y2="95" stroke="var(--border, #475569)" strokeWidth="1.5" />
           <line x1="30" y1="95" x2="30" y2="15" stroke="var(--border, #475569)" strokeWidth="1.5" />
@@ -598,22 +598,28 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           />
           {/* Optimal Vertex */}
           <circle cx="80" cy="35" r="5" fill="#ef4444" stroke="#ffffff" strokeWidth="1.5" />
-          <text x="80" y="24" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">Punto Óptimo (x*)</text>
+          <text x="80" y="24" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Punto Óptimo (x*)' : 'Optimal Point (x*)'}
+          </text>
           {/* Objective Gradient vector ∇c */}
           <line x1="80" y1="35" x2="115" y2="18" stroke="var(--warning, #f59e0b)" strokeWidth="2" />
           <polygon points="115,14 122,17 117,23" fill="var(--warning, #f59e0b)" />
           <text x="135" y="18" fill="var(--warning, #f59e0b)" fontSize="13">∇c</text>
-          <text x="120" y="112" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">Polítopo convexo y Teorema Fundamental</text>
+          <text x="120" y="112" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">
+            {language === 'es' ? 'Polítopo convexo y Teorema Fundamental' : 'Convex Polytope & Fundamental Theorem'}
+          </text>
         </svg>
       );
 
     case 'closest-pair':
       return (
-        <svg {...commonProps} aria-label="Plano 2D con franja de corte delta y par de puntos más cercano">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Plano 2D con franja de corte delta y par de puntos más cercano' : '2D plane with delta strip and closest pair of points'}>
           <line x1="120" y1="15" x2="120" y2="105" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="3 3" />
           <text x="120" y="12" textAnchor="middle" fill="var(--accent)" fontSize="13">x_mid</text>
           <rect x="95" y="15" width="50" height="90" fill="var(--accent)" fillOpacity="0.08" stroke="var(--border)" strokeWidth="1" />
-          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Franja [x_mid - δ, x_mid + δ]</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Franja [x_mid - δ, x_mid + δ]' : 'Strip [x_mid - δ, x_mid + δ]'}
+          </text>
           <circle cx="50" cy="35" r="4" fill="var(--text-muted)" />
           <circle cx="75" cy="70" r="4" fill="var(--text-muted)" />
           <circle cx="40" cy="85" r="4" fill="var(--text-muted)" />
@@ -629,9 +635,9 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'karatsuba':
       return (
-        <svg {...commonProps} aria-label="Descomposición algebraica de Karatsuba en 3 multiplicaciones">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Descomposición algebraica de Karatsuba en 3 multiplicaciones' : 'Karatsuba algebraic decomposition into 3 multiplications'}>
           <rect x="30" y="15" width="180" height="30" rx="4" fill="var(--surface-raised)" stroke="var(--border)" />
-          <text x="120" y="34" textAnchor="middle" fill="var(--text)" fontSize="13" fontFamily="monospace">X · Y = (x₁·10ᵐ + x₀)(y₁·10ᵐ + y₀)</text>
+          <text x="120" y="34" textAnchor="middle" fill="var(--text)" fontSize="13" fontFamily="var(--font-mono)">X · Y = (x₁·10ᵐ + x₀)(y₁·10ᵐ + y₀)</text>
           <g transform="translate(30, 55)">
             <rect x="0" y="0" width="54" height="28" rx="4" fill="var(--surface-hover)" stroke="var(--accent)" strokeWidth="1" />
             <text x="27" y="14" textAnchor="middle" fill="var(--accent)" fontSize="13" fontWeight="bold">z₂ = x₁y₁</text>

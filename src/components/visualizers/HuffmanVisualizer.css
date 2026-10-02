@@ -93,7 +93,7 @@
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--accent-light, #60a5fa);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .huff-metric-badge .value.highlight {
@@ -164,7 +164,7 @@
   position: absolute;
   top: -8px;
   background: var(--warning);
-  color: #000;
+  color: var(--warning-contrast);
   font-size: 0.8125rem;
   font-weight: 800;
   padding: 0.1rem 0.35rem;
@@ -376,19 +376,19 @@
   font-size: 13px;
   font-weight: 800;
   fill: var(--text);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .huff-badge-text {
   font-size: 13px;
   font-weight: 800;
   fill: var(--warning);
-  font-family: sans-serif;
+  font-family: var(--font-sans);
 }
 
 .huff-badge-merge-text {
   font-size: 13px;
   font-weight: 800;
   fill: var(--accent);
-  font-family: sans-serif;
+  font-family: var(--font-sans);
 }

@@ -150,7 +150,7 @@
 
 .dp-cell-label {
   font-size: 0.8125rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
   color: var(--text-muted);
 }
 
@@ -341,7 +341,7 @@
 .step-counter {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .speed-selector {

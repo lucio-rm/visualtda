@@ -58,6 +58,9 @@ export const RoadAntennasPlayground: React.FC = () => {
   const dragOffsetKm = useRef(0);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  const activeMaxKmRef = useRef<number | null>(null);
+  const lastInteractionTime = useRef<number>(0);
+
   // Compute canonical greedy solution
   const greedyAntennas = useMemo(() => {
     return solveRoadAntennas(houses, radius);
@@ -96,13 +99,15 @@ export const RoadAntennasPlayground: React.FC = () => {
   }, [houses, userAntennas, greedyAntennas, radius]);
 
   const kmToX = (km: number) => {
-    return padX + (km / maxKm) * (svgWidth - 2 * padX);
+    const effMax = activeMaxKmRef.current || maxKm;
+    return padX + (km / effMax) * (svgWidth - 2 * padX);
   };
 
-  const xToKm = (xPx: number) => {
+  const xToKm = (xPx: number, customMaxKm?: number) => {
+    const effMax = customMaxKm || activeMaxKmRef.current || maxKm;
     const clamped = Math.max(padX, Math.min(svgWidth - padX, xPx));
     const ratio = (clamped - padX) / (svgWidth - 2 * padX);
-    return Math.round(ratio * maxKm);
+    return Math.round(ratio * effMax);
   };
 
   const getSvgX = (clientX: number): number => {
@@ -148,23 +153,33 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   const handlePointerDownAntenna = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
+    activeMaxKmRef.current = maxKm;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
     const initialSvgX = getSvgX(e.clientX);
-    const mouseKm = xToKm(initialSvgX);
+    const mouseKm = xToKm(initialSvgX, activeMaxKmRef.current);
     dragOffsetKm.current = userAntennas[idx] - mouseKm;
-    (e.target as Element).setPointerCapture(e.pointerId);
+    try {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // fallback
+    }
     setDraggingAntennaIdx(idx);
   };
 
   const handlePointerDownHouse = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
+    activeMaxKmRef.current = maxKm;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
     const initialSvgX = getSvgX(e.clientX);
-    const mouseKm = xToKm(initialSvgX);
+    const mouseKm = xToKm(initialSvgX, activeMaxKmRef.current);
     dragOffsetKm.current = houses[idx] - mouseKm;
-    (e.target as Element).setPointerCapture(e.pointerId);
+    try {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // fallback
+    }
     setDraggingHouseIdx(idx);
   };
 
@@ -174,11 +189,12 @@ export const RoadAntennasPlayground: React.FC = () => {
     if (dist > 5) {
       isDraggingRef.current = true;
     }
+    const effMaxKm = activeMaxKmRef.current || maxKm;
     const currentSvgX = getSvgX(e.clientX);
-    const currentMouseKm = xToKm(currentSvgX);
+    const currentMouseKm = xToKm(currentSvgX, effMaxKm);
 
     if (draggingAntennaIdx !== null) {
-      const targetKm = Math.max(0, Math.min(maxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
+      const targetKm = Math.max(0, Math.min(effMaxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
       setUserAntennas((prev) => {
         const copy = [...prev];
         copy[draggingAntennaIdx] = targetKm;
@@ -187,7 +203,7 @@ export const RoadAntennasPlayground: React.FC = () => {
       setCursorKm(targetKm);
       setInputKm(String(targetKm));
     } else if (draggingHouseIdx !== null) {
-      const targetKm = Math.max(0, Math.min(maxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
+      const targetKm = Math.max(0, Math.min(effMaxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
       setHouses((prev) => {
         const copy = [...prev];
         copy[draggingHouseIdx] = targetKm;
@@ -201,7 +217,7 @@ export const RoadAntennasPlayground: React.FC = () => {
   const handlePointerUp = (e: React.PointerEvent) => {
     if (draggingAntennaIdx !== null || draggingHouseIdx !== null) {
       try {
-        (e.target as Element).releasePointerCapture(e.pointerId);
+        (e.currentTarget as Element || e.target as Element).releasePointerCapture(e.pointerId);
       } catch {
         // ignore
       }
@@ -213,14 +229,16 @@ export const RoadAntennasPlayground: React.FC = () => {
         setHouses((prev) => [...prev].sort((a, b) => a - b));
         setDraggingHouseIdx(null);
       }
+      activeMaxKmRef.current = null;
+      lastInteractionTime.current = Date.now();
       setTimeout(() => {
         isDraggingRef.current = false;
-      }, 50);
+      }, 80);
     }
   };
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (isDraggingRef.current) return;
+    if (isDraggingRef.current || (Date.now() - lastInteractionTime.current) < 250) return;
     const clickX = getSvgX(e.clientX);
     const clickedKm = xToKm(clickX);
     setCursorKm(clickedKm);
@@ -480,7 +498,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill="var(--color-text-muted)"
                   fontSize="13"
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {km}k
                 </text>
@@ -548,7 +566,11 @@ export const RoadAntennasPlayground: React.FC = () => {
                     setUserAntennas((prev) => prev.filter((_, i) => i !== aIdx));
                   }
                 }}
-                style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }}
+                style={{
+                  cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab',
+                  outline: 'none',
+                  touchAction: 'none'
+                }}
               >
                 <rect
                   x={spanLeft}
@@ -562,9 +584,10 @@ export const RoadAntennasPlayground: React.FC = () => {
                   strokeDasharray="4 2"
                   pointerEvents="none"
                 />
-                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 70} stroke="transparent" strokeWidth="24" style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }} />
-                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="var(--accent)" strokeWidth="2.5" pointerEvents="none" />
-                <circle cx={antX} cy={roadY - 65} r="5" fill="var(--accent)" pointerEvents="none" />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 70} stroke="transparent" strokeWidth="28" style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }} />
+                <circle cx={antX} cy={roadY - 65} r="16" fill="transparent" style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }} />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="var(--accent)" strokeWidth="3" pointerEvents="none" />
+                <circle cx={antX} cy={roadY - 65} r="6" fill="var(--accent)" stroke="var(--surface)" strokeWidth="2" pointerEvents="none" />
                 <text
                   x={antX}
                   y={roadY - 72}
@@ -656,7 +679,11 @@ export const RoadAntennasPlayground: React.FC = () => {
                     setHouses((prev) => prev.filter((_, i) => i !== hIdx));
                   }
                 }}
-                style={{ cursor: draggingHouseIdx === hIdx ? 'grabbing' : 'grab' }}
+                style={{
+                  cursor: draggingHouseIdx === hIdx ? 'grabbing' : 'grab',
+                  outline: 'none',
+                  touchAction: 'none'
+                }}
               >
                 <polygon
                   points={`${hX - 8},${roadY - 14} ${hX + 8},${roadY - 14} ${hX},${roadY - 23}`}
@@ -677,7 +704,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   textAnchor="middle"
                   fill="var(--color-text)"
                   fontSize="13"
-                  fontFamily="sans-serif"
+                  fontFamily="var(--font-sans)"
                 >
                   {hKm}k
                 </text>

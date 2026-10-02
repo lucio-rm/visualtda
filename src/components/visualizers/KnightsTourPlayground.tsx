@@ -7,13 +7,13 @@ import { KNIGHT_MOVES } from '../../engine/algorithms/knightsTourValidator';
 export const ChessKnightIcon: React.FC<{ size?: number; fill?: string; stroke?: string }> = ({
   size = 28,
   fill = 'var(--accent)',
-  stroke = '#ffffff'
+  stroke = 'var(--board-border-strong)'
 }) => (
   <svg
     width={size}
     height={size}
     viewBox="0 0 45 45"
-    style={{ display: 'block', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
+    style={{ display: 'block', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.35))' }}
     aria-hidden="true"
   >
     <g
@@ -23,7 +23,7 @@ export const ChessKnightIcon: React.FC<{ size?: number; fill?: string; stroke?: 
         fillRule: 'evenodd',
         fillOpacity: 1,
         stroke: stroke,
-        strokeWidth: 1.5,
+        strokeWidth: 2,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
       }}
@@ -369,15 +369,15 @@ export const KnightsTourPlayground: React.FC = () => {
               let strokeWidth = 1.5;
 
               if (isCur) {
-                fill = 'var(--state-active-bg)';
+                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (isBest) {
-                fill = 'var(--board-candidate)';
+                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
                 stroke = 'var(--success)';
                 strokeWidth = 2.5;
               } else if (legal) {
-                fill = 'var(--state-active-bg)';
+                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
                 stroke = 'var(--accent)';
                 strokeWidth = 2.5;
               }
@@ -501,29 +501,6 @@ export const KnightsTourPlayground: React.FC = () => {
             })
           )}
 
-          {/* Candidate move paths radiating from current knight */}
-          {currentPos && legalMoves.map((m, mIdx) => {
-            const startX = currentPos[1] * cellSize + cellSize / 2;
-            const startY = currentPos[0] * cellSize + cellSize / 2;
-            const targetX = m.c * cellSize + cellSize / 2;
-            const targetY = m.r * cellSize + cellSize / 2;
-            const isBest = canSeeHeuristic && bestWarnsdorffMove && bestWarnsdorffMove.r === m.r && bestWarnsdorffMove.c === m.c;
-
-            return (
-              <g key={`knight-cand-path-${m.r}-${m.c}-${mIdx}`} pointerEvents="none">
-                <line
-                  x1={startX}
-                  y1={startY}
-                  x2={targetX}
-                  y2={targetY}
-                  stroke={isBest ? 'var(--success)' : 'var(--accent)'}
-                  strokeWidth={2.5}
-                  strokeDasharray="5 3"
-                  opacity={isBest ? 0.95 : 0.75}
-                />
-              </g>
-            );
-          })}
 
           {/* Polyline trajectory of moves with glow */}
           {history.length > 1 && (

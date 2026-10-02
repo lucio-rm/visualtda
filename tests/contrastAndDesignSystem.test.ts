@@ -77,6 +77,12 @@ describe('Visual Design System & WCAG Contrast Quality Gate', () => {
     expect(contrastRatio(lightTokens['--success'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(lightTokens['--error'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(lightTokens['--warning'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+
+    // Text on status badge fills must satisfy WCAG AA
+    expect(contrastRatio(lightTokens['--accent-contrast'], lightTokens['--accent'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--success-contrast'], lightTokens['--success'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--error-contrast'], lightTokens['--error'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--warning-contrast'], lightTokens['--warning'])).toBeGreaterThanOrEqual(4.5);
   });
 
   it('provides graphical/UI contrast (>= 3.0:1) for interactive UI borders and WCAG AA contrast for board glyphs', () => {

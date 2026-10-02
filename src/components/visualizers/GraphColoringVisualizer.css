@@ -102,11 +102,11 @@
 
 @keyframes gc-pulse {
   0% {
-    r: 24;
-    opacity: 0.9;
+    r: 22;
+    opacity: 0.85;
   }
   100% {
-    r: 34;
+    r: 27;
     opacity: 0;
   }
 }

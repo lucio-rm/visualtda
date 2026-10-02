@@ -68,7 +68,7 @@
   border-radius: 6px;
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .array-text-input:focus {

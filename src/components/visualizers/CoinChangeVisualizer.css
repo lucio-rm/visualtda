@@ -54,7 +54,7 @@
 }
 
 .coins-list {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
 }
 
@@ -169,7 +169,7 @@
 .cell-main-val {
   font-size: 1.25rem;
   font-weight: 700;
-  font-family: monospace;
+  font-family: var(--font-mono);
   color: var(--text);
 }
 
@@ -218,7 +218,7 @@
 }
 
 .callout-equation code {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
 }
 
@@ -272,7 +272,7 @@
 .coin-count-highlight {
   font-size: 1.35rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
   color: var(--text);
 }
 
@@ -281,7 +281,7 @@
 }
 
 .coins-bag {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: 600;
   color: var(--text-muted);
 }
@@ -361,7 +361,7 @@
 
 .step-counter {
   font-size: 0.85rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
   white-space: nowrap;
 }
 

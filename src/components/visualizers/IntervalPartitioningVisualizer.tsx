@@ -185,7 +185,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                     fill="#0f172a"
                     fontSize="13px"
                     fontWeight="700"
-                    fontFamily="sans-serif"
+                    fontFamily="var(--font-sans)"
                     clipPath={`url(#clip-${lecture.id})`}
                   >
                     {lecture.name} [{lecture.start}-{lecture.end}]

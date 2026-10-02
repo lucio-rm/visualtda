@@ -10,8 +10,9 @@ import './KnightsTourVisualizer.css';
 
 export const KnightsTourVisualizer: React.FC = () => {
   const { language } = useLanguage();
+  const [boardN, setBoardN] = React.useState<number>(5);
 
-  const timeline = useMemo(() => generateKnightsTourTrace(5), []);
+  const timeline = useMemo(() => generateKnightsTourTrace(boardN), [boardN]);
 
   const {
     currentStepIndex,
@@ -51,6 +52,32 @@ export const KnightsTourVisualizer: React.FC = () => {
 
   return (
     <div className="knights-tour-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Recorrido del Caballo' : "Knight's Tour Visualizer"}>
+      {/* Board Size Selector */}
+      <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          {language === 'es' ? 'Dimensiones del Tablero:' : 'Board Dimensions:'}
+        </span>
+        {[4, 5, 6, 8].map((size) => (
+          <button
+            key={size}
+            type="button"
+            className={`btn-ctrl ${boardN === size ? 'active' : ''}`}
+            style={{
+              padding: '0.25rem 0.65rem',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              backgroundColor: boardN === size ? 'var(--accent)' : 'var(--surface)',
+              color: boardN === size ? 'var(--accent-contrast)' : 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)'
+            }}
+            onClick={() => setBoardN(size)}
+          >
+            {size}×{size}
+          </button>
+        ))}
+      </div>
+
       {/* Metrics Row */}
       <div className="kt-metrics-row">
         <div className="kt-metric-badge">
@@ -134,11 +161,11 @@ export const KnightsTourVisualizer: React.FC = () => {
               let strokeWidth = 1.5;
 
               if (isCurrent) {
-                fill = 'var(--state-active-bg)';
+                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (cand) {
-                fill = 'var(--state-active-bg)';
+                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
                 stroke = 'var(--accent)';
                 strokeWidth = 2.5;
               }
@@ -219,27 +246,6 @@ export const KnightsTourVisualizer: React.FC = () => {
             })
           )}
 
-          {/* Candidate move paths radiating from current knight */}
-          {currentPos && candidates.map((cand, candIdx) => {
-            const startX = currentPos[1] * cellSize + cellSize / 2;
-            const startY = currentPos[0] * cellSize + cellSize / 2;
-            const targetX = cand.c * cellSize + cellSize / 2;
-            const targetY = cand.r * cellSize + cellSize / 2;
-            return (
-              <g key={`cand-path-${cand.r}-${cand.c}-${candIdx}`} pointerEvents="none">
-                <line
-                  x1={startX}
-                  y1={startY}
-                  x2={targetX}
-                  y2={targetY}
-                  stroke="var(--accent)"
-                  strokeWidth={2.5}
-                  strokeDasharray="5 3"
-                  opacity={0.8}
-                />
-              </g>
-            );
-          })}
 
           {/* Polyline trajectory of visited path */}
           {path.length > 1 && (

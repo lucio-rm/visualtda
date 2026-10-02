@@ -743,7 +743,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       setPositions((prev) => ({ ...prev, [v]: { x: Math.min(475, pos.x + 10), y: pos.y } }));
                     }
                   }}
-                  style={{ cursor: isDragging ? 'grabbing' : 'pointer', outline: 'none' }}
+                  style={{ cursor: isDragging ? 'grabbing' : 'pointer', outline: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
                 >
                   <circle
                     cx={pos.x}
@@ -768,7 +768,7 @@ export const GraphColoringPlayground: React.FC = () => {
                   {assignedColor && (
                     <text
                       x={pos.x}
-                      y={pos.y + 42}
+                      y={pos.y + 44}
                       textAnchor="middle"
                       fill="var(--text-muted)"
                       fontSize="11px"

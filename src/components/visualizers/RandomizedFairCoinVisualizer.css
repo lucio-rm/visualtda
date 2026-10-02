@@ -118,7 +118,7 @@
 .coin-sub {
   font-size: 0.8125rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .pair-connector {
@@ -147,7 +147,7 @@
 }
 
 .rule-pair {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: 700;
   min-width: 65px;
 }
@@ -180,7 +180,7 @@
 .rule-prob {
   font-size: 0.8125rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .rounds-history {
@@ -327,7 +327,7 @@
 .step-counter {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .speed-selector {

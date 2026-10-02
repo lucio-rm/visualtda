@@ -5,6 +5,8 @@
  * per exercise, persisted in localStorage with in-memory fallback.
  */
 
+import { analyzeStudentCodeEffort } from './codeEffortAnalyzer';
+
 export interface StudentAttemptRecord {
   id: string;
   exerciseId: string;
@@ -42,6 +44,17 @@ export function getStudentAttemptCount(exerciseId: string): number {
   return getStudentAttempts(exerciseId).length;
 }
 
+export function getGenuineStudentAttemptCount(exerciseId: string, currentCode?: string, starterCode?: string): number {
+  const attempts = getStudentAttempts(exerciseId);
+  const currentEffort = currentCode ? analyzeStudentCodeEffort(currentCode, starterCode).meaningfulLinesAdded : 0;
+  return attempts.filter((a) => {
+    if (a.passed || a.passedTestsCount > 0) return true;
+    if (a.meaningfulLinesCount && a.meaningfulLinesCount > 0) return true;
+    if (currentEffort >= 3) return true;
+    return false;
+  }).length;
+}
+
 export function recordStudentAttempt(
   exerciseId: string,
   attemptDataOrCode: string | Omit<StudentAttemptRecord, 'id' | 'timestamp'>,
@@ -55,13 +68,14 @@ export function recordStudentAttempt(
   let attemptData: Omit<StudentAttemptRecord, 'id' | 'timestamp'>;
 
   if (typeof attemptDataOrCode === 'string') {
+    const linesCount = analyzeStudentCodeEffort(attemptDataOrCode, _starterCode).meaningfulLinesAdded;
     attemptData = {
       exerciseId,
       code: attemptDataOrCode,
       passed,
       passedTestsCount,
       totalTestsCount,
-      meaningfulLinesCount: 0,
+      meaningfulLinesCount: linesCount,
       engine,
       executionTimeMs
     };

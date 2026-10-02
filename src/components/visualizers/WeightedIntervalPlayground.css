@@ -196,7 +196,7 @@
 }
 
 .lane-text {
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .lane-range {
@@ -264,7 +264,7 @@
 .main-stat {
   font-size: 1.4rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .greedy-stat {
@@ -275,7 +275,7 @@
 .main-items {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .card-feedback {

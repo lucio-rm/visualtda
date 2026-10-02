@@ -89,7 +89,7 @@
   color: var(--text);
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
 }
 
@@ -247,7 +247,7 @@
   min-width: 20px;
   text-align: center;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .comparison-board {
@@ -308,7 +308,7 @@
 .benchmark-coins {
   font-size: 1.35rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .count-val {
@@ -317,7 +317,7 @@
 }
 
 .card-bag code {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
 }
 

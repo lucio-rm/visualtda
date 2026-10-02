@@ -124,7 +124,12 @@ const PSEUDO_KEYWORDS = new Set([
   'algorithm', 'procedure', 'function', 'return', 'if', 'then', 'else', 'elif',
   'endif', 'for', 'each', 'to', 'downto', 'do', 'endfor', 'while', 'endwhile', 'repeat',
   'until', 'let', 'input', 'output', 'invariant', 'and', 'or', 'not', 'true',
-  'false', 'nil', 'null', 'in', 'is'
+  'false', 'nil', 'null', 'in', 'is',
+  // Spanish academic pseudocode keywords:
+  'algoritmo', 'procedimiento', 'funcion', 'función', 'retornar', 'devolver',
+  'si', 'entonces', 'sino', 'finsi', 'fin_si', 'para', 'cada', 'hasta', 'hacer',
+  'finpara', 'fin_para', 'mientras', 'finmientras', 'fin_mientras', 'repetir',
+  'entrada', 'salida', 'invariante', 'sea', 'verdadero', 'falso', 'nulo', 'en'
 ]);
 
 /**
@@ -133,7 +138,7 @@ const PSEUDO_KEYWORDS = new Set([
 export function highlightPseudocode(code: string): string {
   if (!code) return '';
 
-  const tokenRegex = /(#[^\n]*|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b[a-zA-Z_]\w*\b)|(\b\d+(?:\.\d+)?\b)|(==|!=|<=|>=|<-|:=|->|\+=|-=|\*=|\/=|[+\-*/%<>=&|^~])|([()[\]{}])|([:,;.])|([^\s\w#"'()[\]{}:,;./]+)/g;
+  const tokenRegex = /(#[^\n]*|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b[a-zA-Z_áéíóúÁÉÍÓÚñÑ]\w*\b)|(\b\d+(?:\.\d+)?\b)|(==|!=|<=|>=|<-|:=|->|\+=|-=|\*=|\/=|←|≤|≥|≠|∈|∉|[+\-*/%<>=&|^~])|([()[\]{}])|([:,;.])|([^\s\w#"'()[\]{}:,;./←≤≥≠∈∉]+)/g;
 
   let lastIndex = 0;
   let html = '';

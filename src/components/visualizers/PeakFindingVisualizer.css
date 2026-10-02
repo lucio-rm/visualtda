@@ -159,7 +159,7 @@
 .bar-value-bubble {
   font-size: 0.85rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
   margin-bottom: 0.35rem;
 }
 
@@ -272,7 +272,7 @@
 .eval-value {
   font-size: 1.2rem;
   font-weight: bold;
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 
 .mid-val-highlight {
@@ -357,7 +357,7 @@
 
 .step-counter {
   font-size: 0.85rem;
-  font-family: monospace;
+  font-family: var(--font-mono);
   white-space: nowrap;
 }
 
