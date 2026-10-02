@@ -109,9 +109,9 @@
 /* DP Table Grid */
 .dp-table-wrapper {
   overflow-x: auto;
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--border-strong);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--surface);
   box-shadow: var(--shadow-sm);
 }
 
@@ -125,21 +125,23 @@
 .dp-table th,
 .dp-table td {
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--border);
   min-width: 44px;
 }
 
 .dp-table th {
-  background: var(--color-surface-hover);
-  font-weight: 600;
-  color: var(--color-text);
+  background: var(--surface-hover);
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 2px solid var(--border-strong);
 }
 
 .dp-table .row-header-th {
   text-align: left;
   min-width: 140px;
-  background: var(--color-surface);
+  background: var(--surface-light);
   white-space: nowrap;
+  border-right: 2px solid var(--border-strong);
 }
 
 .item-row-info {

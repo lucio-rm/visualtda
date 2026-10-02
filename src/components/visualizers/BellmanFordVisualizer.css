@@ -80,19 +80,21 @@
   border-collapse: collapse;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
+  border: 2px solid var(--border-strong);
 }
 
 .bf-dp-table th,
 .bf-dp-table td {
   padding: 0.4rem 0.6rem;
   text-align: center;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
 }
 
 .bf-dp-table th {
-  background-color: var(--surface);
+  background-color: var(--surface-hover);
   color: var(--text);
   font-weight: 700;
+  border-bottom: 2px solid var(--border-strong);
 }
 
 .bf-dp-table td.cell-active {

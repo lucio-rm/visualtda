@@ -1,10 +1,10 @@
 :root,
 [data-theme='light'] {
-  /* Color palette - Light mode (Pristine Slate-White workspace inspired by Linear, Stripe & Vercel) */
-  --bg: #f8fafc;
+  /* Color palette - Light mode (Pristine High-Clarity Studio inspired by Linear, Stripe & GitHub Primer) */
+  --bg: #f1f5f9;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --surface-light: #f1f5f9;
+  --surface-light: #f8fafc;
   --surface-hover: #f1f5f9;
   --surface-active: #e2e8f0;
   --border: #cbd5e1;
@@ -22,10 +22,10 @@
   --error-bg: #fef2f2;
   --warning: #92400e;
   --warning-bg: #fffbeb;
-  --code-bg: #f1f5f9;
+  --code-bg: #f8fafc;
   --code-border: #cbd5e1;
-  --canvas-bg: #ffffff;
-  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --canvas-bg: #f8fafc;
+  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
 
   /* Spacing Scale (8px rhythm) */
   --space-1: 4px;
@@ -80,24 +80,24 @@
   --state-pruned: var(--error);
   --state-pruned-bg: var(--error-bg);
 
-  /* Visualizer Board & Chessboard Tokens (High-definition geometry) */
+  /* Visualizer Board & Chessboard Tokens (High-definition tournament geometry) */
   --board-bg: #f8fafc;
-  --board-cell-light: #ffffff;
-  --board-cell-dark: #e2e8f0;
-  --board-border: #cbd5e1;
-  --board-border-strong: #475569;
+  --board-cell-light: #e2e8f0;
+  --board-cell-dark: #829ab1;
+  --board-border: #475569;
+  --board-border-strong: #1e293b;
   --board-text: #0f172a;
-  --board-text-muted: #475569;
-  --board-hover: #dbeafe;
-  --board-active: #bfdbfe;
+  --board-text-muted: #334155;
+  --board-hover: #bfdbfe;
+  --board-active: #2563eb;
   --board-accent: #1d4ed8;
   --board-candidate: #fef3c7;
   --board-conflict: #fee2e2;
   --board-solution: #d1fae5;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
   /* Typography Scale Tokens */
   --text-xs: 0.8125rem;
@@ -158,7 +158,7 @@
   --warning-bg: rgba(251, 191, 36, 0.18);
   --code-bg: #090d16;
   --code-border: #334155;
-  --canvas-bg: #0f172a;
+  --canvas-bg: #090d16;
   --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
@@ -216,9 +216,9 @@
 
   /* Visualizer Board & Chessboard Tokens Dark */
   --board-bg: #090d16;
-  --board-cell-light: #293548;
-  --board-cell-dark: #111827;
-  --board-border: #334155;
+  --board-cell-light: #334155;
+  --board-cell-dark: #0f172a;
+  --board-border: #475569;
   --board-border-strong: #64748b;
   --board-text: #f8fafc;
   --board-text-muted: #94a3b8;
@@ -256,7 +256,7 @@
     --warning-bg: rgba(251, 191, 36, 0.18);
     --code-bg: #090d16;
     --code-border: #334155;
-    --canvas-bg: #0f172a;
+    --canvas-bg: #090d16;
     --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
@@ -312,9 +312,9 @@
     --state-pruned-bg: var(--error-bg);
 
     --board-bg: #090d16;
-    --board-cell-light: #293548;
-    --board-cell-dark: #111827;
-    --board-border: #334155;
+    --board-cell-light: #334155;
+    --board-cell-dark: #0f172a;
+    --board-border: #475569;
     --board-border-strong: #64748b;
     --board-text: #f8fafc;
     --board-text-muted: #94a3b8;

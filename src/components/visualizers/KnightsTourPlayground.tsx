@@ -366,7 +366,7 @@ export const KnightsTourPlayground: React.FC = () => {
 
               let fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
               let stroke = 'var(--board-border)';
-              let strokeWidth = 1;
+              let strokeWidth = 1.5;
 
               if (isCur) {
                 fill = 'var(--state-active-bg)';
@@ -377,9 +377,9 @@ export const KnightsTourPlayground: React.FC = () => {
                 stroke = 'var(--success)';
                 strokeWidth = 2.5;
               } else if (legal) {
-                fill = isDark ? '#1a273a' : '#eff6ff';
+                fill = 'var(--state-active-bg)';
                 stroke = 'var(--accent)';
-                strokeWidth = 2;
+                strokeWidth = 2.5;
               }
 
               return (
@@ -450,7 +450,7 @@ export const KnightsTourPlayground: React.FC = () => {
                       x={x + cellSize / 2}
                       y={y + cellSize / 2 + (n === 8 ? 4 : 6)}
                       textAnchor="middle"
-                      fill={isCur ? 'var(--accent)' : 'var(--text)'}
+                      fill={isCur ? 'var(--accent)' : isDark ? '#f8fafc' : '#0f172a'}
                       fontFamily="var(--font-mono)"
                       fontSize={n === 8 ? '12px' : n === 6 ? '14px' : '17px'}
                       fontWeight="700"

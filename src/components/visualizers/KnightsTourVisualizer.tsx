@@ -70,11 +70,55 @@ export const KnightsTourVisualizer: React.FC = () => {
       {/* SVG Board */}
       <div className="kt-board-container">
         <svg
-          viewBox={`-8 -8 ${boardSize + 16} ${boardSize + 16}`}
+          viewBox={`-20 -20 ${boardSize + 40} ${boardSize + 40}`}
           className="kt-svg-board"
           role="img"
           aria-label={language === 'es' ? 'Tablero del recorrido del caballo' : "Knight's tour board"}
         >
+          {/* Outer Framing Bezel */}
+          <rect
+            x={-1}
+            y={-1}
+            width={boardSize + 2}
+            height={boardSize + 2}
+            fill="none"
+            stroke="var(--board-border-strong)"
+            strokeWidth={2.5}
+            rx={4}
+          />
+
+          {/* Coordinate labels: Column Letters (A, B, C...) */}
+          {Array.from({ length: n }).map((_, c) => (
+            <text
+              key={`kt-col-${c}`}
+              x={c * cellSize + cellSize / 2}
+              y={-6}
+              textAnchor="middle"
+              fill="var(--text-muted)"
+              fontSize="12px"
+              fontFamily="var(--font-mono)"
+              fontWeight="600"
+            >
+              {String.fromCharCode(65 + c)}
+            </text>
+          ))}
+
+          {/* Coordinate labels: Row Numbers (1, 2, 3...) */}
+          {Array.from({ length: n }).map((_, r) => (
+            <text
+              key={`kt-row-${r}`}
+              x={-8}
+              y={r * cellSize + cellSize / 2 + 4}
+              textAnchor="middle"
+              fill="var(--text-muted)"
+              fontSize="12px"
+              fontFamily="var(--font-mono)"
+              fontWeight="600"
+            >
+              {n - r}
+            </text>
+          ))}
+
           {/* Squares */}
           {board.map((row, r) =>
             row.map((val, c) => {
@@ -87,16 +131,16 @@ export const KnightsTourVisualizer: React.FC = () => {
 
               let fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
               let stroke = 'var(--board-border)';
-              let strokeWidth = 1;
+              let strokeWidth = 1.5;
 
               if (isCurrent) {
                 fill = 'var(--state-active-bg)';
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (cand) {
-                fill = isDark ? '#1a273a' : '#eff6ff';
+                fill = 'var(--state-active-bg)';
                 stroke = 'var(--accent)';
-                strokeWidth = 2;
+                strokeWidth = 2.5;
               }
 
               return (
@@ -148,7 +192,7 @@ export const KnightsTourVisualizer: React.FC = () => {
                       x={x + cellSize / 2}
                       y={y + cellSize / 2 + 5}
                       textAnchor="middle"
-                      fill="var(--text)"
+                      fill={isDark ? '#f8fafc' : '#0f172a'}
                       fontFamily="var(--font-mono)"
                       fontSize="14px"
                       fontWeight="700"

@@ -90,7 +90,11 @@ describe('Visual Design System & WCAG Contrast Quality Gate', () => {
     expect(pieceOnDarkCell).toBeGreaterThanOrEqual(4.5);
 
     const boardCellRatio = contrastRatio(lightTokens['--board-cell-dark'], lightTokens['--board-cell-light']);
-    expect(boardCellRatio).toBeGreaterThanOrEqual(1.15);
+    expect(boardCellRatio).toBeGreaterThanOrEqual(2.0);
+
+    // Board cells and global page background must never blend with pure white surfaces
+    expect(lightTokens['--board-cell-light']).not.toBe(lightTokens['--surface']);
+    expect(lightTokens['--bg']).not.toBe(lightTokens['--surface']);
   });
 
   it('defines all canonical semantic state tokens in variables.css', () => {

@@ -118,8 +118,8 @@
   justify-content: center;
   align-items: center;
   padding: 1.75rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
+  background-color: var(--canvas-bg);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   min-height: 440px;
 }
@@ -138,13 +138,14 @@
   aspect-ratio: 1 / 1;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-radius: var(--radius-sm);
-  border: 2px solid var(--board-border-strong);
+  border: 2.5px solid var(--board-border-strong);
+  background-color: var(--board-bg);
 }
 
 /* Cells */
 .board-cell {
   stroke: var(--board-border);
-  stroke-width: 1px;
+  stroke-width: 1.5px;
   transition: fill 0.15s ease, stroke 0.15s ease;
 }
 

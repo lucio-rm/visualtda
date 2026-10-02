@@ -89,7 +89,7 @@ export const SudokuVisualizer: React.FC = () => {
 
               let fillColor = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
               let strokeColor = 'var(--board-border)';
-              let strokeWidth = 1;
+              let strokeWidth = 1.5;
 
               if (isConflict) {
                 fillColor = 'var(--board-conflict)';
@@ -151,7 +151,7 @@ export const SudokuVisualizer: React.FC = () => {
                 x2={boardWidth}
                 y2={b * cellSize * 3}
                 stroke="var(--board-border-strong)"
-                strokeWidth={b === 0 || b === 3 ? 3 : 2}
+                strokeWidth={b === 0 || b === 3 ? 3.5 : 2.5}
               />
               {/* Vertical line */}
               <line
@@ -160,10 +160,22 @@ export const SudokuVisualizer: React.FC = () => {
                 x2={b * cellSize * 3}
                 y2={boardWidth}
                 stroke="var(--board-border-strong)"
-                strokeWidth={b === 0 || b === 3 ? 3 : 2}
+                strokeWidth={b === 0 || b === 3 ? 3.5 : 2.5}
               />
             </React.Fragment>
           ))}
+
+          {/* Outer Framing Bezel */}
+          <rect
+            x={0}
+            y={0}
+            width={boardWidth}
+            height={boardWidth}
+            fill="none"
+            stroke="var(--board-border-strong)"
+            strokeWidth={3.5}
+            pointerEvents="none"
+          />
         </svg>
       </div>
 

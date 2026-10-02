@@ -218,6 +218,18 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
             style={{ pointerEvents: 'none' }}
           />
         )}
+
+        {/* Outer framing border */}
+        <rect
+          x={0}
+          y={0}
+          width={boardPixelSize}
+          height={boardPixelSize}
+          fill="none"
+          stroke="var(--board-border-strong)"
+          strokeWidth={3}
+          pointerEvents="none"
+        />
       </svg>
     </div>
   );

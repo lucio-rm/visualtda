@@ -120,9 +120,10 @@
 
 .lcs-matrix {
   border-collapse: collapse;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   margin: 0 auto;
+  border: 2px solid var(--border-strong);
 }
 
 .lcs-matrix th,
@@ -131,7 +132,7 @@
   height: 38px;
   text-align: center;
   vertical-align: middle;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
 }
 
 .th-corner {

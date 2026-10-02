@@ -358,7 +358,7 @@ export const SudokuPlayground: React.FC = () => {
 
               let fill = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
               let stroke = 'var(--board-border)';
-              let strokeWidth = 1;
+              let strokeWidth = 1.5;
 
               if (isCrosshair) {
                 fill = isAltBlock ? 'var(--board-hover)' : 'var(--accent-subtle)';
@@ -475,21 +475,31 @@ export const SudokuPlayground: React.FC = () => {
                 y1={b * cellSize * 3}
                 x2={boardWidth}
                 y2={b * cellSize * 3}
-                stroke="var(--text)"
-                strokeWidth={b === 0 || b === 3 ? 3 : 2}
-                opacity={0.65}
+                stroke="var(--board-border-strong)"
+                strokeWidth={b === 0 || b === 3 ? 3.5 : 2.5}
               />
               <line
                 x1={b * cellSize * 3}
                 y1={0}
                 x2={b * cellSize * 3}
                 y2={boardWidth}
-                stroke="var(--text)"
-                strokeWidth={b === 0 || b === 3 ? 3 : 2}
-                opacity={0.65}
+                stroke="var(--board-border-strong)"
+                strokeWidth={b === 0 || b === 3 ? 3.5 : 2.5}
               />
             </React.Fragment>
           ))}
+
+          {/* Outer Framing Bezel */}
+          <rect
+            x={0}
+            y={0}
+            width={boardWidth}
+            height={boardWidth}
+            fill="none"
+            stroke="var(--board-border-strong)"
+            strokeWidth={3.5}
+            pointerEvents="none"
+          />
         </svg>
       </div>
 
