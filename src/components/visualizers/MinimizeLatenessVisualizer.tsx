@@ -80,7 +80,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
       <div className="ml-canvas-container">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Cronograma de tareas y deadlines' : 'Jobs schedule and deadlines chart'}
         >

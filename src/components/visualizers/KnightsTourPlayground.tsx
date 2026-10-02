@@ -245,7 +245,7 @@ export const KnightsTourPlayground: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
         <svg
           viewBox={`-24 -24 ${boardSize + 48} ${boardSize + 48}`}
-          style={{ maxWidth: '580px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
+          style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
           role="img"
           aria-label="Tablero de ajedrez interactivo para el Recorrido del Caballo"
         >

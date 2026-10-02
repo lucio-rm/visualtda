@@ -461,7 +461,7 @@ export const MaxFlowPlayground: React.FC = () => {
           viewBox="0 0 500 280"
           style={{
             width: '100%',
-            maxWidth: '540px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

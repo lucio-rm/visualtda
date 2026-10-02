@@ -82,7 +82,7 @@ export const KaratsubaVisualizer: React.FC = () => {
       <div className="kt-canvas-container" style={{ background: 'var(--canvas-bg, var(--surface-light))', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
         <svg
           viewBox="0 0 720 290"
-          style={{ width: '100%', maxWidth: '880px', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
           role="img"
           aria-label={language === 'es' ? 'Diagrama de recursión de Karatsuba' : 'Karatsuba recursion diagram'}
         >

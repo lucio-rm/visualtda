@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 580px;
+  max-width: 100%;
   margin: 0 auto;
   font-family: var(--font-sans);
 }

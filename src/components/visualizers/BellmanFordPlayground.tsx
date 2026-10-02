@@ -287,8 +287,8 @@ export const BellmanFordPlayground: React.FC = () => {
       )}
 
       {/* Interactive SVG Graph */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ width: '100%', maxWidth: '480px', display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <div style={{ width: '100%', maxWidth: '100%', display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
           <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos para moverlos):' : 'Directed Graph (Drag nodes to rearrange):'}</span>
           <span>{language === 'es' ? 'Iteración actual i =' : 'Current iter i ='} <strong>{iteration}</strong></span>
         </div>
@@ -297,7 +297,7 @@ export const BellmanFordPlayground: React.FC = () => {
           ref={svgRef}
           viewBox="0 0 460 260"
           style={{
-            maxWidth: '680px',
+            maxWidth: '100%',
             width: '100%',
             height: 'auto',
             borderRadius: 'var(--radius-md)',

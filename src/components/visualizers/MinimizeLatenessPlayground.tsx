@@ -328,7 +328,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{
             width: '100%',
-            maxWidth: '580px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

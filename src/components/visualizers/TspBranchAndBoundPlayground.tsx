@@ -444,7 +444,7 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
           viewBox="0 0 480 280"
           style={{
             width: '100%',
-            maxWidth: '680px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

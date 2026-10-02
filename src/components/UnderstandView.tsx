@@ -200,7 +200,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                   onClick={() => setCodeMode('pseudocode')}
                   aria-pressed={codeMode === 'pseudocode'}
                 >
-                  {language === 'es' ? 'Pseudocódigo' : 'Pseudocode'}
+                  {language === 'es' ? 'Pseudocódigo (Docentes)' : 'Pseudocode (Faculty)'}
                 </button>
               </div>
             </div>
@@ -310,7 +310,9 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                         {language === 'es' ? 'Acceso Exclusivo Docente' : 'Faculty Access Only'}
                       </div>
                       <h4 style={{ marginBottom: '0.5rem', color: 'var(--text)' }}>
-                        {language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked'}
+                        {codeMode === 'python'
+                          ? (language === 'es' ? 'Solución en Python Bloqueada' : 'Python Solution Locked')
+                          : (language === 'es' ? 'Pseudocódigo Formal Bloqueado' : 'Formal Pseudocode Locked')}
                       </h4>
                       <p style={{ maxWidth: '520px', margin: '0 auto 1.25rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
                         {language === 'es'

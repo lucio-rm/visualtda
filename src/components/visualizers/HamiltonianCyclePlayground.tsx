@@ -502,7 +502,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           viewBox="0 0 500 350"
           style={{
             width: '100%',
-            maxWidth: '680px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

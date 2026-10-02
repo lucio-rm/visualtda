@@ -329,7 +329,7 @@ export const ClosestPairPlayground: React.FC = () => {
           onClick={handleCanvasClick}
           onMouseMove={handleMouseMove}
           style={{
-            maxWidth: '720px',
+            maxWidth: '100%',
             width: '100%',
             height: 'auto',
             borderRadius: '8px',

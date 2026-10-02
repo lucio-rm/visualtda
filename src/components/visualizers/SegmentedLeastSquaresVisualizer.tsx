@@ -93,7 +93,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
       <div className="sls-canvas-container">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Gráfico de puntos y líneas ajustadas' : 'Points and fitted lines chart'}
         >

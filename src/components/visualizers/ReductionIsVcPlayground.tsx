@@ -361,7 +361,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
           viewBox="0 0 540 310"
           style={{
             width: '100%',
-            maxWidth: '560px',
+            maxWidth: '100%',
             height: 'auto',
             display: 'block',
             margin: '0 auto',

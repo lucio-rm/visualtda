@@ -84,7 +84,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
       <div className="ip-canvas-container">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Diagrama temporal de asignación de aulas' : 'Classroom assignment timeline chart'}
         >

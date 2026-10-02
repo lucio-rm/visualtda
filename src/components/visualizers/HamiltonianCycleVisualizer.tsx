@@ -94,7 +94,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
       <div className="ham-canvas-container">
         <svg
           viewBox="0 0 500 320"
-          style={{ width: '100%', maxWidth: '680px', height: 'auto', display: 'block' }}
+          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
           role="img"
           aria-label={language === 'es' ? 'Grafo y camino explorado para ciclo hamiltoniano' : 'Graph and explored path for Hamiltonian cycle'}
         >

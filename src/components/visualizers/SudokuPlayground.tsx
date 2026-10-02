@@ -323,7 +323,7 @@ export const SudokuPlayground: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <svg
           viewBox={`-8 -8 ${boardWidth + 16} ${boardWidth + 16}`}
-          style={{ maxWidth: '520px', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
+          style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
           role="img"
           aria-label="Tablero de Sudoku interactivo con heurística MRV"
         >
