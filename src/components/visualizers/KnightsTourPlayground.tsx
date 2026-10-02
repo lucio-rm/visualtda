@@ -373,13 +373,13 @@ export const KnightsTourPlayground: React.FC = () => {
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (isBest) {
-                fill = 'var(--state-solution-bg)';
+                fill = 'var(--board-candidate)';
                 stroke = 'var(--success)';
                 strokeWidth = 2.5;
               } else if (legal) {
-                fill = 'var(--state-solution-bg)';
-                stroke = 'var(--state-solution-bg)';
-                strokeWidth = 1.5;
+                fill = isDark ? '#1a273a' : '#eff6ff';
+                stroke = 'var(--accent)';
+                strokeWidth = 2;
               }
 
               return (
@@ -421,6 +421,28 @@ export const KnightsTourPlayground: React.FC = () => {
                     strokeWidth={strokeWidth}
                     rx={2}
                   />
+
+                  {/* Legal move target indicator: concentric target ring and dot */}
+                  {legal && !isVis && (
+                    <g pointerEvents="none">
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.22}
+                        fill="none"
+                        stroke={isBest ? 'var(--success)' : 'var(--accent)'}
+                        strokeWidth={2}
+                        strokeDasharray={isBest ? undefined : '3 2'}
+                        opacity={0.9}
+                      />
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.09}
+                        fill={isBest ? 'var(--success)' : 'var(--accent)'}
+                      />
+                    </g>
+                  )}
 
                   {/* Visit sequence number */}
                   {isVis && (
@@ -478,6 +500,30 @@ export const KnightsTourPlayground: React.FC = () => {
               );
             })
           )}
+
+          {/* Candidate move paths radiating from current knight */}
+          {currentPos && legalMoves.map((m, mIdx) => {
+            const startX = currentPos[1] * cellSize + cellSize / 2;
+            const startY = currentPos[0] * cellSize + cellSize / 2;
+            const targetX = m.c * cellSize + cellSize / 2;
+            const targetY = m.r * cellSize + cellSize / 2;
+            const isBest = canSeeHeuristic && bestWarnsdorffMove && bestWarnsdorffMove.r === m.r && bestWarnsdorffMove.c === m.c;
+
+            return (
+              <g key={`knight-cand-path-${m.r}-${m.c}-${mIdx}`} pointerEvents="none">
+                <line
+                  x1={startX}
+                  y1={startY}
+                  x2={targetX}
+                  y2={targetY}
+                  stroke={isBest ? 'var(--success)' : 'var(--accent)'}
+                  strokeWidth={2.5}
+                  strokeDasharray="5 3"
+                  opacity={isBest ? 0.95 : 0.75}
+                />
+              </g>
+            );
+          })}
 
           {/* Polyline trajectory of moves with glow */}
           {history.length > 1 && (

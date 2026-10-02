@@ -141,7 +141,7 @@ export const MaxFlowVisualizer: React.FC = () => {
               markerHeight="6"
               orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--color-border-strong)" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--graph-edge)" />
             </marker>
             <marker
               id="arrow-sat"

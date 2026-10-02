@@ -56,7 +56,7 @@
 
 /* Edges */
 .graph-edge {
-  stroke: var(--border);
+  stroke: var(--graph-edge);
   stroke-width: 2.5;
   transition: all 0.25s ease;
 }

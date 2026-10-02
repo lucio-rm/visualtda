@@ -117,7 +117,7 @@ export const KruskalVisualizer: React.FC = () => {
             const currentEdge = sortedEdges[currentEdgeIndex];
             const isCurrent = currentEdge && currentEdge.id === edge.id;
 
-            let strokeColor = 'var(--border-strong, #64748b)';
+            let strokeColor = 'var(--graph-edge)';
             let strokeWidth = 2.5;
             let strokeDash: string | undefined = undefined;
 
@@ -128,8 +128,8 @@ export const KruskalVisualizer: React.FC = () => {
               strokeColor = 'var(--accent)';
               strokeWidth = 3;
             } else if (isRejected) {
-              strokeColor = 'var(--state-conflict-bg)';
-              strokeWidth = 1.5;
+              strokeColor = 'var(--error)';
+              strokeWidth = 2;
               strokeDash = '4 4';
             }
 

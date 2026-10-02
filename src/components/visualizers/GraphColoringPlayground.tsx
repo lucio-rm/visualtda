@@ -666,7 +666,7 @@ export const GraphColoringPlayground: React.FC = () => {
                     y1={posU.y}
                     x2={posV.x}
                     y2={posV.y}
-                    stroke={inConflict ? 'var(--error)' : bothColored ? 'var(--accent)' : 'var(--border-strong)'}
+                    stroke={inConflict ? 'var(--error)' : bothColored ? 'var(--accent)' : 'var(--graph-edge)'}
                     strokeWidth={inConflict ? 3.5 : 2.5}
                     opacity={1}
                   />

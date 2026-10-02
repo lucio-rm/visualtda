@@ -286,8 +286,8 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                   x2={p2.x}
                   y2={p2.y}
                   className={edgeClass}
-                  stroke={isMatched ? 'var(--warning)' : isCovered ? 'var(--accent)' : 'var(--border, #475569)'}
-                  strokeWidth={isMatched ? 4.5 : isCovered ? 2.5 : 1.5}
+                  stroke={isMatched ? 'var(--warning)' : isCovered ? 'var(--accent)' : 'var(--graph-edge)'}
+                  strokeWidth={isMatched ? 4.5 : isCovered ? 2.5 : 2}
                 />
               </g>
             );

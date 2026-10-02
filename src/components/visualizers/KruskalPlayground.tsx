@@ -389,7 +389,7 @@ export const KruskalPlayground: React.FC = () => {
                     y1={u.y}
                     x2={v.x}
                     y2={v.y}
-                    stroke={isSelected ? 'var(--success)' : 'var(--border-strong, #64748b)'}
+                    stroke={isSelected ? 'var(--success)' : 'var(--graph-edge)'}
                     strokeWidth={isSelected ? 4 : 2.5}
                   />
                   <circle
@@ -397,7 +397,7 @@ export const KruskalPlayground: React.FC = () => {
                     cy={midY}
                     r={12}
                     fill={isSelected ? 'var(--success)' : 'var(--surface)'}
-                    stroke={isSelected ? '#059669' : 'var(--border-strong, #64748b)'}
+                    stroke={isSelected ? '#059669' : 'var(--graph-edge)'}
                     strokeWidth={1.5}
                   />
                   <text

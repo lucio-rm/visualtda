@@ -374,7 +374,7 @@ export const DijkstraPlayground: React.FC = () => {
           >
             <defs>
               <marker id="djk-arr" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge)" />
               </marker>
               <marker id="djk-arr-active" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--success)" />
@@ -400,16 +400,16 @@ export const DijkstraPlayground: React.FC = () => {
                     y1={u.y}
                     x2={v.x}
                     y2={v.y}
-                    stroke={isTreeEdge ? 'var(--success)' : isRelaxingNow ? 'var(--accent)' : isNeg ? 'var(--error)' : 'var(--border, #475569)'}
-                    strokeWidth={isTreeEdge ? 3.5 : isRelaxingNow ? 2.5 : 1.5}
+                    stroke={isTreeEdge ? 'var(--success)' : isRelaxingNow ? 'var(--accent)' : isNeg ? 'var(--error)' : 'var(--graph-edge)'}
+                    strokeWidth={isTreeEdge ? 3.5 : isRelaxingNow ? 2.5 : 2}
                     markerEnd={isTreeEdge ? 'url(#djk-arr-active)' : 'url(#djk-arr)'}
                   />
                   <circle
                     cx={midX}
                     cy={midY}
                     r={11}
-                    fill="var(--surface-hover, #0f172a)"
-                    stroke={isTreeEdge ? 'var(--success)' : isNeg ? 'var(--error)' : 'var(--border, #64748b)'}
+                    fill="var(--surface)"
+                    stroke={isTreeEdge ? 'var(--success)' : isNeg ? 'var(--error)' : 'var(--graph-edge)'}
                     strokeWidth={1.5}
                   />
                   <text

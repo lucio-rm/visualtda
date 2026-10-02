@@ -380,18 +380,18 @@ export const ReductionIsVcPlayground: React.FC = () => {
               const isConflict = sSet.has(u) && sSet.has(v);
               const isCovered = !isConflict;
 
-              let edgeStroke = 'var(--border)';
-              let strokeW = 1.5;
-              let opacity = 0.5;
+              let edgeStroke = 'var(--graph-edge)';
+              let strokeW = 2;
+              let opacity = 0.9;
 
               if (isConflict) {
                 edgeStroke = 'var(--error)';
                 strokeW = 3;
                 opacity = 1;
               } else if (isCovered) {
-                edgeStroke = '#8b5cf6';
-                strokeW = 2;
-                opacity = 0.85;
+                edgeStroke = 'var(--accent)';
+                strokeW = 2.5;
+                opacity = 1;
               }
 
               return (

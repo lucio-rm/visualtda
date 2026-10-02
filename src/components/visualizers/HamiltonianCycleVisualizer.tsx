@@ -112,10 +112,10 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                 y1={u.y}
                 x2={v.x}
                 y2={v.y}
-                stroke={inPath ? (isCycleFound ? 'var(--success)' : 'var(--accent)') : 'var(--border-strong)'}
-                strokeWidth={inPath ? 3.5 : 1.5}
-                strokeDasharray={inPath ? undefined : '2,2'}
-                opacity={inPath ? 1 : 0.85}
+                stroke={inPath ? (isCycleFound ? 'var(--success)' : 'var(--accent)') : 'var(--graph-edge)'}
+                strokeWidth={inPath ? 3.5 : 2}
+                strokeDasharray={inPath ? undefined : '3 3'}
+                opacity={1}
               />
             );
           })}

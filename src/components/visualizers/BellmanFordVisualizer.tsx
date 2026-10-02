@@ -75,7 +75,7 @@ export const BellmanFordVisualizer: React.FC = () => {
           >
             <defs>
               <marker id="bf-arr" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge)" />
               </marker>
               <marker id="bf-arr-active" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
@@ -94,7 +94,7 @@ export const BellmanFordVisualizer: React.FC = () => {
               const isCurrent = currentEdge && currentEdge.u === e.u && currentEdge.v === e.v;
               const isNeg = e.weight < 0;
 
-              let stroke = isNeg ? 'var(--danger, var(--error))' : 'var(--border-strong, #64748b)';
+              let stroke = isNeg ? 'var(--danger, var(--error))' : 'var(--graph-edge)';
               let strokeWidth = isNeg ? 3 : 2.5;
               let marker = isNeg ? 'url(#bf-arr-neg)' : 'url(#bf-arr)';
 

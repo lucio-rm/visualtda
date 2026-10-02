@@ -312,7 +312,7 @@ export const BellmanFordPlayground: React.FC = () => {
         >
           <defs>
             <marker id="bf-pg-arr" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge)" />
             </marker>
             <marker id="bf-pg-arr-neg" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--error)" />
@@ -333,7 +333,7 @@ export const BellmanFordPlayground: React.FC = () => {
             const midX = (u.x + v.x) / 2;
             const midY = (u.y + v.y) / 2;
 
-            let strokeColor = isNeg ? 'var(--error)' : 'var(--border, #475569)';
+            let strokeColor = isNeg ? 'var(--error)' : 'var(--graph-edge)';
             let markerId = isNeg ? 'url(#bf-pg-arr-neg)' : 'url(#bf-pg-arr)';
 
             if (hasNegativeCycleDetected && isCycleEdge) {
@@ -349,14 +349,14 @@ export const BellmanFordPlayground: React.FC = () => {
                   x2={v.x}
                   y2={v.y}
                   stroke={strokeColor}
-                  strokeWidth={isNeg || (hasNegativeCycleDetected && isCycleEdge) ? 2.5 : 1.75}
+                  strokeWidth={isNeg || (hasNegativeCycleDetected && isCycleEdge) ? 3 : 2.5}
                   markerEnd={markerId}
                 />
                 <circle
                   cx={midX}
                   cy={midY}
                   r={12}
-                  fill="var(--surface-hover, #0f172a)"
+                  fill="var(--surface)"
                   stroke={strokeColor}
                   strokeWidth={1.5}
                 />

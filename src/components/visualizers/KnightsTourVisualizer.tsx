@@ -94,8 +94,8 @@ export const KnightsTourVisualizer: React.FC = () => {
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (cand) {
-                fill = 'var(--state-solution-bg)';
-                stroke = 'var(--success)';
+                fill = isDark ? '#1a273a' : '#eff6ff';
+                stroke = 'var(--accent)';
                 strokeWidth = 2;
               }
 
@@ -110,6 +110,29 @@ export const KnightsTourVisualizer: React.FC = () => {
                     stroke={stroke}
                     strokeWidth={strokeWidth}
                   />
+
+                  {/* Candidate target marker */}
+                  {cand && !isVisited && (
+                    <g pointerEvents="none">
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.22}
+                        fill="none"
+                        stroke="var(--accent)"
+                        strokeWidth={2}
+                        strokeDasharray="3 2"
+                        opacity={0.9}
+                      />
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.09}
+                        fill="var(--accent)"
+                      />
+                    </g>
+                  )}
+
                   {isVisited && (
                     <circle
                       cx={x + cellSize / 2}
@@ -151,6 +174,28 @@ export const KnightsTourVisualizer: React.FC = () => {
               );
             })
           )}
+
+          {/* Candidate move paths radiating from current knight */}
+          {currentPos && candidates.map((cand, candIdx) => {
+            const startX = currentPos[1] * cellSize + cellSize / 2;
+            const startY = currentPos[0] * cellSize + cellSize / 2;
+            const targetX = cand.c * cellSize + cellSize / 2;
+            const targetY = cand.r * cellSize + cellSize / 2;
+            return (
+              <g key={`cand-path-${cand.r}-${cand.c}-${candIdx}`} pointerEvents="none">
+                <line
+                  x1={startX}
+                  y1={startY}
+                  x2={targetX}
+                  y2={targetY}
+                  stroke="var(--accent)"
+                  strokeWidth={2.5}
+                  strokeDasharray="5 3"
+                  opacity={0.8}
+                />
+              </g>
+            );
+          })}
 
           {/* Polyline trajectory of visited path */}
           {path.length > 1 && (

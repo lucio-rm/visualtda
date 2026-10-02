@@ -123,7 +123,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
             const x = kmToX(km);
             return (
               <g key={`tick-${km}`}>
-                <line x1={x} y1={roadY - 6} x2={x} y2={roadY + 20} stroke="var(--color-border)" strokeWidth="1" />
+                <line x1={x} y1={roadY - 6} x2={x} y2={roadY + 20} stroke="var(--graph-edge-subtle)" strokeWidth="1.5" />
                 <text
                   x={x}
                   y={roadY + 34}

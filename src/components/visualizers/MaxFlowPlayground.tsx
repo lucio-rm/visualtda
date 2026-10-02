@@ -482,7 +482,7 @@ export const MaxFlowPlayground: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge)" />
             </marker>
             <marker
               id="arrow-saturated"
@@ -538,12 +538,12 @@ export const MaxFlowPlayground: React.FC = () => {
                   y1={uPos.y}
                   x2={vPos.x}
                   y2={vPos.y}
-                  stroke={inAugmentingPath ? 'var(--accent)' : isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--border)'}
-                  strokeWidth={inAugmentingPath ? 3.5 : hasFlow ? 2.5 : 1.5}
+                  stroke={inAugmentingPath ? 'var(--accent)' : isSaturated ? 'var(--error)' : hasFlow ? 'var(--success)' : 'var(--graph-edge)'}
+                  strokeWidth={inAugmentingPath ? 3.5 : hasFlow ? 2.5 : 2}
                   markerEnd={marker}
                   opacity={isSaturated ? 0.7 : 1}
                 />
-                <circle cx={midX} cy={midY} r={15} fill="var(--surface)" stroke="var(--border)" strokeWidth={1} />
+                <circle cx={midX} cy={midY} r={15} fill="var(--surface)" stroke="var(--graph-edge)" strokeWidth={1.5} />
                 <text
                   x={midX}
                   y={midY + 4}

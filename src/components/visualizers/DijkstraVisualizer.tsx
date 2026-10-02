@@ -81,7 +81,7 @@ export const DijkstraVisualizer: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted, #94a3b8)" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge)" />
             </marker>
             <marker
               id="djk-arrow-active"
@@ -116,7 +116,7 @@ export const DijkstraVisualizer: React.FC = () => {
             const isRelaxing = relaxedEdge && relaxedEdge.u === edge.u && relaxedEdge.v === edge.v;
             const isTreeEdge = predecessors[edge.v] === edge.u;
 
-            let strokeColor = 'var(--border-strong, #64748b)';
+            let strokeColor = 'var(--graph-edge)';
             let strokeWidth = 2.5;
             let marker = 'url(#djk-arrow)';
 

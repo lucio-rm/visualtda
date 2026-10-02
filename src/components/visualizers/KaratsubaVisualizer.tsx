@@ -96,9 +96,9 @@ export const KaratsubaVisualizer: React.FC = () => {
           </text>
 
           {/* Connectors to 3 Karatsuba branches */}
-          <path d="M 300 62 L 125 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
-          <path d="M 360 62 L 360 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
-          <path d="M 420 62 L 595 105" stroke="var(--border-strong)" strokeWidth={2} fill="none" />
+          <path d="M 300 62 L 125 105" stroke="var(--graph-edge)" strokeWidth={2.5} fill="none" />
+          <path d="M 360 62 L 360 105" stroke="var(--graph-edge)" strokeWidth={2.5} fill="none" />
+          <path d="M 420 62 L 595 105" stroke="var(--graph-edge)" strokeWidth={2.5} fill="none" />
 
           {/* Branch 1: z2 = x1 * y1 */}
           <g>
