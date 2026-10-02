@@ -287,7 +287,7 @@ export const KruskalPlayground: React.FC = () => {
     <div
       className="algorithm-playground kruskal-playground"
       role="region"
-      aria-label="Laboratorio de Kruskal y AGM"
+      aria-label={language === 'es' ? 'Laboratorio de Kruskal y AGM' : 'Kruskal and MST Playground'}
     >
       {/* Controls Bar */}
       <div className="sdk-pg-controls">

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
+import { useInstructorMode } from '../../context/InstructorModeContext';
 import {
   solveCoinChange,
   solveCoinChangeGreedy
@@ -51,11 +52,14 @@ const PRESETS: Preset[] = [
 export const CoinChangePlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
+  const { isInstructorMode } = useInstructorMode();
+
   const [coinsStr, setCoinsStr] = useState<string>('1, 3, 4');
   const [target, setTarget] = useState<number>(6);
   const [userCoinsCount, setUserCoinsCount] = useState<Record<number, number>>({});
   const [error, setError] = useState<string | null>(null);
   const [isDragOverTray, setIsDragOverTray] = useState<boolean>(false);
+  const [isDpRevealed, setIsDpRevealed] = useState<boolean>(false);
 
   const parsedCoins = useMemo(() => {
     try {
@@ -174,6 +178,12 @@ export const CoinChangePlayground: React.FC = () => {
     isExactSum &&
     optimalSolution.length > 0 &&
     userCoinsList.length > optimalSolution.length;
+
+  const canSeeDpOptimal = isOptimal || isInstructorMode || isDpRevealed;
+
+  useEffect(() => {
+    setIsDpRevealed(false);
+  }, [coinsStr, target]);
 
   useEffect(() => {
     if (isOptimal) {
@@ -506,9 +516,13 @@ export const CoinChangePlayground: React.FC = () => {
             )}
             {isSuboptimal && (
               <span style={{ color: 'var(--warning)', fontWeight: '700' }}>
-                ! {language === 'es'
-                  ? `Suma exacta alcanzada con ${userCoinsList.length} monedas. La cota óptima por PD requiere ${optimalSolution.length} monedas.`
-                  : `Exact sum reached with ${userCoinsList.length} coins. Optimal DP bound requires ${optimalSolution.length} coins.`}
+                ! {canSeeDpOptimal
+                  ? (language === 'es'
+                    ? `Suma exacta alcanzada con ${userCoinsList.length} monedas. La cota óptima por PD requiere ${optimalSolution.length} monedas.`
+                    : `Exact sum reached with ${userCoinsList.length} coins. Optimal DP bound requires ${optimalSolution.length} coins.`)
+                  : (language === 'es'
+                    ? `Suma exacta alcanzada con ${userCoinsList.length} monedas. ¡Existe una combinación con menos monedas!`
+                    : `Exact sum reached with ${userCoinsList.length} coins. A solution with fewer coins exists!`)}
               </span>
             )}
             {userTotal < target && (
@@ -528,38 +542,79 @@ export const CoinChangePlayground: React.FC = () => {
           </div>
         </div>
 
-        {/* DP Card */}
-        <div
-          className="score-card card-benchmark dp-benchmark"
-          style={{
-            padding: '1rem',
-            borderRadius: '8px',
-            border: '1px solid var(--success)',
-            backgroundColor: 'var(--state-solution-bg)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem'
-          }}
-        >
-          <div className="card-header-label" style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--success)' }}>
-            {language === 'es' ? 'Programación Dinámica (Óptimo)' : 'Dynamic Programming (Optimal)'}
+        {/* DP Card - Gated until optimal, instructor mode, or user reveals */}
+        {canSeeDpOptimal ? (
+          <div
+            className="score-card card-benchmark dp-benchmark"
+            style={{
+              padding: '1rem',
+              borderRadius: '8px',
+              border: '1px solid var(--success)',
+              backgroundColor: 'var(--state-solution-bg)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}
+          >
+            <div className="card-header-label" style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--success)' }}>
+              {language === 'es' ? 'Programación Dinámica (Óptimo)' : 'Dynamic Programming (Optimal)'}
+            </div>
+            <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--success)' }}>
+              {optimalSolution.length > 0
+                ? `${optimalSolution.length} ${language === 'es' ? 'monedas' : 'coins'}`
+                : language === 'es'
+                ? 'Imposible'
+                : 'Impossible'}
+            </div>
+            <div className="card-bag" style={{ fontSize: '0.85rem' }}>
+              <code>[{optimalSolution.join(', ')}]</code>
+            </div>
+            <div className="card-desc" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 'auto' }}>
+              {language === 'es'
+                ? 'Garantizado por el principio de optimalidad de Bellman en O(V · |C|).'
+                : 'Guaranteed by Bellman optimality principle in O(V · |C|).'}
+            </div>
           </div>
-          <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--success)' }}>
-            {optimalSolution.length > 0
-              ? `${optimalSolution.length} ${language === 'es' ? 'monedas' : 'coins'}`
-              : language === 'es'
-              ? 'Imposible'
-              : 'Impossible'}
+        ) : (
+          <div
+            className="score-card card-benchmark dp-benchmark"
+            style={{
+              padding: '1rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+              opacity: 0.95
+            }}
+          >
+            <div className="card-header-label" style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Programación Dinámica (Óptimo)' : 'Dynamic Programming (Optimal)'}
+            </div>
+            <div className="card-main-stat" style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-muted)' }}>
+              ? {language === 'es' ? 'monedas' : 'coins'}
+            </div>
+            <div className="card-bag" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <code>[ ? ]</code>
+            </div>
+            <div className="card-desc" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <span>
+                {language === 'es'
+                  ? 'El óptimo de Programación Dinámica se revelará cuando encuentres la solución con la menor cantidad de monedas.'
+                  : 'The Dynamic Programming optimal will be revealed when you find the minimal coin combination.'}
+              </span>
+              <button
+                type="button"
+                className="btn-preset"
+                onClick={() => setIsDpRevealed(true)}
+                style={{ alignSelf: 'flex-start', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+              >
+                {language === 'es' ? 'Revelar Solución Óptima' : 'Reveal Optimal Solution'}
+              </button>
+            </div>
           </div>
-          <div className="card-bag" style={{ fontSize: '0.85rem' }}>
-            <code>[{optimalSolution.join(', ')}]</code>
-          </div>
-          <div className="card-desc" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 'auto' }}>
-            {language === 'es'
-              ? 'Garantizado por el principio de optimalidad de Bellman en O(V · |C|).'
-              : 'Guaranteed by Bellman optimality principle in O(V · |C|).'}
-          </div>
-        </div>
+        )}
 
         {/* Greedy Card */}
         <div

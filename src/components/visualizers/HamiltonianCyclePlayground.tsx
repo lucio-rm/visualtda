@@ -287,7 +287,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
     <div
       className="algorithm-playground hamiltonian-cycle-playground"
       role="region"
-      aria-label="Laboratorio de Ciclo Hamiltoniano"
+      aria-label={language === 'es' ? 'Laboratorio de Ciclo Hamiltoniano' : 'Hamiltonian Cycle Playground'}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
     >
       {/* Controls & Instance Presets */}

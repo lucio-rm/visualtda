@@ -274,7 +274,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
               type="button"
               className={`btn-speed ${playbackSpeed === spd ? 'active' : ''}`}
               onClick={() => setSpeed(spd)}
-              aria-label={`Velocidad ${spd}x`}
+              aria-label={language === 'es' ? `Velocidad ${spd}x` : `Speed ${spd}x`}
             >
               {spd}x
             </button>

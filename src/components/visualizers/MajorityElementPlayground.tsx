@@ -247,17 +247,17 @@ export const MajorityElementPlayground: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1.1rem',
+                      fontSize: '1.15rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1.5px solid var(--success)',
-                      backgroundColor: 'rgba(16, 185, 129, 0.22)',
-                      color: 'var(--success)',
+                      border: '1.5px solid var(--accent)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--accent)',
                       cursor: 'pointer',
                       lineHeight: 1
                     }}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
-                    aria-label={`Incrementar valor en posición ${idx}`}
+                    aria-label={language === 'es' ? `Incrementar valor en posición ${idx}` : `Increment value at index ${idx}`}
                   >
                     +
                   </button>
@@ -270,17 +270,17 @@ export const MajorityElementPlayground: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1.15rem',
+                      fontSize: '1.2rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1.5px solid var(--warning)',
-                      backgroundColor: 'rgba(245, 158, 11, 0.22)',
-                      color: 'var(--warning)',
+                      border: '1.5px solid var(--border-strong)',
+                      backgroundColor: 'var(--surface-hover)',
+                      color: 'var(--text)',
                       cursor: 'pointer',
                       lineHeight: 1
                     }}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
-                    aria-label={`Decrementar valor en posición ${idx}`}
+                    aria-label={language === 'es' ? `Decrementar valor en posición ${idx}` : `Decrement value at index ${idx}`}
                   >
                     -
                   </button>
@@ -294,18 +294,18 @@ export const MajorityElementPlayground: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1rem',
+                      fontSize: '1.1rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1px solid var(--error)',
-                      backgroundColor: 'rgba(239, 68, 68, 0.18)',
+                      border: '1.5px solid var(--error)',
+                      backgroundColor: 'var(--error-bg)',
                       color: 'var(--error)',
                       cursor: array.length <= 1 ? 'not-allowed' : 'pointer',
                       opacity: array.length <= 1 ? 0.3 : 1,
                       lineHeight: 1
                     }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
-                    aria-label={`Eliminar elemento en posición ${idx}`}
+                    aria-label={language === 'es' ? `Eliminar elemento en posición ${idx}` : `Remove element at index ${idx}`}
                   >
                     ×
                   </button>
@@ -491,10 +491,10 @@ export const MajorityElementPlayground: React.FC = () => {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg, var(--surface-hover))' }}>
                   <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>i</th>
-                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Elemento A[i]</th>
-                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Candidato Provisional</th>
-                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Contador</th>
-                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left' }}>Acción de Cancelación / Coincidencia</th>
+                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Elemento A[i]' : 'Element A[i]'}</th>
+                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Candidato Provisional' : 'Provisional Candidate'}</th>
+                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Contador' : 'Counter'}</th>
+                  <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left' }}>{language === 'es' ? 'Acción de Cancelación / Coincidencia' : 'Cancellation / Match Action'}</th>
                 </tr>
               </thead>
               <tbody>

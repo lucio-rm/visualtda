@@ -351,7 +351,7 @@ export const GraphColoringPlayground: React.FC = () => {
     <div
       className="algorithm-playground gc-playground"
       role="region"
-      aria-label="Laboratorio de Coloreo de Grafos"
+      aria-label={language === 'es' ? 'Laboratorio de Coloreo de Grafos' : 'Graph Coloring Playground'}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
     >
       {/* Controls & Instance Presets */}
@@ -711,6 +711,7 @@ export const GraphColoringPlayground: React.FC = () => {
               return (
                 <g
                   key={`pg-vertex-${v}`}
+                  className="gc-interactive-node"
                   onPointerDown={(e) => handlePointerDown(v, e)}
                   onClick={() => handleVertexClick(v)}
                   onContextMenu={(e) => handleVertexRightClick(e, v)}
@@ -733,7 +734,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.max(25, pos.y - 10) } }));
                     } else if (e.key === 'ArrowDown') {
                       e.preventDefault();
-                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.min(325, pos.y + 10) } }));
+                      setPositions((prev) => ({ ...prev, [v]: { x: pos.x, y: Math.min(300, pos.y + 10) } }));
                     } else if (e.key === 'ArrowLeft') {
                       e.preventDefault();
                       setPositions((prev) => ({ ...prev, [v]: { x: Math.max(25, pos.x - 10), y: pos.y } }));
@@ -742,7 +743,7 @@ export const GraphColoringPlayground: React.FC = () => {
                       setPositions((prev) => ({ ...prev, [v]: { x: Math.min(475, pos.x + 10), y: pos.y } }));
                     }
                   }}
-                  style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
+                  style={{ cursor: isDragging ? 'grabbing' : 'pointer', outline: 'none' }}
                 >
                   <circle
                     cx={pos.x}
@@ -767,10 +768,11 @@ export const GraphColoringPlayground: React.FC = () => {
                   {assignedColor && (
                     <text
                       x={pos.x}
-                      y={pos.y + 32}
+                      y={pos.y + 42}
                       textAnchor="middle"
                       fill="var(--text-muted)"
-                      fontSize="13px"
+                      fontSize="11px"
+                      fontWeight="600"
                       fontFamily="var(--font-mono)"
                       pointerEvents="none"
                     >

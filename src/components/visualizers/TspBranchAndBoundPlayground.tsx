@@ -470,25 +470,34 @@ export const TspBranchAndBoundPlayground: React.FC = () => {
                     y1={c1.y}
                     x2={c2.x}
                     y2={c2.y}
-                    stroke={inTour ? 'var(--success)' : 'var(--border)'}
-                    strokeWidth={inTour ? 3.5 : 1}
-                    strokeDasharray={inTour ? undefined : '2,3'}
-                    opacity={inTour ? 1 : 0.4}
+                    stroke={inTour ? 'var(--success)' : 'var(--border-strong)'}
+                    strokeWidth={inTour ? 3.5 : 2}
+                    strokeDasharray={inTour ? undefined : '5 3'}
+                    opacity={inTour ? 1 : 0.85}
                   />
-                  {!inTour && (
-                    <text
-                      x={midX}
-                      y={midY - 2}
-                      textAnchor="middle"
-                      fill="var(--text-muted)"
-                      fontSize="13px"
-                      fontWeight="600"
-                      fontFamily="var(--font-mono)"
-                      pointerEvents="none"
-                    >
-                      {weight}
-                    </text>
-                  )}
+                  <rect
+                    x={midX - 13}
+                    y={midY - 9}
+                    width={26}
+                    height={18}
+                    rx={4}
+                    fill={inTour ? 'var(--success)' : 'var(--surface)'}
+                    stroke={inTour ? 'var(--success)' : 'var(--border-strong)'}
+                    strokeWidth={1}
+                    opacity={0.95}
+                  />
+                  <text
+                    x={midX}
+                    y={midY + 4}
+                    textAnchor="middle"
+                    fill={inTour ? '#ffffff' : 'var(--text)'}
+                    fontSize="11px"
+                    fontWeight="700"
+                    fontFamily="var(--font-mono)"
+                    pointerEvents="none"
+                  >
+                    {weight}
+                  </text>
                 </g>
               );
             })

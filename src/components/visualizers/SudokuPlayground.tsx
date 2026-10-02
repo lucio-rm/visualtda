@@ -230,7 +230,7 @@ export const SudokuPlayground: React.FC = () => {
   const boardWidth = cellSize * 9;
 
   return (
-    <div className="sudoku-playground" role="region" aria-label="Laboratorio Interactivo de Sudoku">
+    <div className="sudoku-playground" role="region" aria-label={language === 'es' ? 'Laboratorio Interactivo de Sudoku' : 'Interactive Sudoku Playground'}>
       {/* Top Presets and Controls */}
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
@@ -303,7 +303,9 @@ export const SudokuPlayground: React.FC = () => {
           <span style={{ color: 'var(--text-muted)' }}>
             {language === 'es' ? 'Variable más restringida (MRV):' : 'Most constrained variable (MRV):'}{' '}
             <strong style={{ color: 'var(--success)' }}>
-              Fila {domainInfo.bestCell[0] + 1}, Col {domainInfo.bestCell[1] + 1} ({domainInfo.minSize} opciones)
+              {language === 'es'
+                ? `Fila ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} opciones)`
+                : `Row ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} options)`}
             </strong>
           </span>
         )}
@@ -325,7 +327,7 @@ export const SudokuPlayground: React.FC = () => {
           viewBox={`-8 -8 ${boardWidth + 16} ${boardWidth + 16}`}
           style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
           role="img"
-          aria-label="Tablero de Sudoku interactivo con heurística MRV"
+          aria-label={language === 'es' ? 'Tablero de Sudoku interactivo con heurística MRV' : 'Interactive Sudoku board with MRV heuristic'}
         >
           {board.map((row, r) =>
             row.map((val, c) => {
@@ -394,9 +396,15 @@ export const SudokuPlayground: React.FC = () => {
                   style={{ cursor: 'pointer' }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Fila ${r + 1}, Columna ${c + 1}, Valor ${val || 'vacío'}${
-                    val === 0 ? `, ${domainSize} candidatos válidos` : ''
-                  }`}
+                  aria-label={
+                    language === 'es'
+                      ? `Fila ${r + 1}, Columna ${c + 1}, Valor ${val || 'vacío'}${
+                          val === 0 ? `, ${domainSize} candidatos válidos` : ''
+                        }`
+                      : `Row ${r + 1}, Column ${c + 1}, Value ${val || 'empty'}${
+                          val === 0 ? `, ${domainSize} valid candidates` : ''
+                        }`
+                  }
                   onKeyDown={(e) => {
                     if (e.key >= '1' && e.key <= '9') handleSetNumber(Number(e.key));
                     if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') handleSetNumber(0);

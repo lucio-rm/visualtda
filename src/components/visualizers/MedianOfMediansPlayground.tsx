@@ -66,7 +66,11 @@ export const MedianOfMediansPlayground: React.FC = () => {
   };
 
   return (
-    <div className="algorithm-playground median-medians-playground" role="region" aria-label="Laboratorio de Mediana de Medianas">
+    <div
+      className="algorithm-playground median-medians-playground"
+      role="region"
+      aria-label={language === 'es' ? 'Laboratorio de Mediana de Medianas' : 'Median of Medians Playground'}
+    >
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

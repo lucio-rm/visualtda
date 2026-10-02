@@ -38,7 +38,11 @@ export const KaratsubaPlayground: React.FC = () => {
   };
 
   return (
-    <div className="algorithm-playground karatsuba-playground" role="region" aria-label="Laboratorio de Multiplicación de Karatsuba">
+    <div
+      className="algorithm-playground karatsuba-playground"
+      role="region"
+      aria-label={language === 'es' ? 'Laboratorio de Multiplicación de Karatsuba' : 'Karatsuba Multiplication Playground'}
+    >
       <div className="sdk-pg-controls">
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <label style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -180,37 +184,37 @@ export const KaratsubaPlayground: React.FC = () => {
 
           {/* Quadrant 1: z2 = x1 * y1 */}
           <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
-          <text x={170} y={50} textAnchor="middle" fill="var(--accent)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-            Cuadrante Alto: z₂ = x₁ · y₁
+          <text x={170} y={48} textAnchor="middle" fill="var(--accent)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₂ = x₁ · y₁ ({language === 'es' ? 'Alto' : 'High'})
           </text>
-          <text x={170} y={72} textAnchor="middle" fill="var(--accent)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+          <text x={170} y={70} textAnchor="middle" fill="var(--accent)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {x1} × {y1} = {z2}
           </text>
 
           {/* Quadrants 2: x0 * y1 (Cross Term 1) */}
           <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={50} textAnchor="middle" fill="var(--text-muted)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
-            Cruzado 1: x₀ · y₁
+          <text x={370} y={48} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
+            x₀ · y₁ ({language === 'es' ? 'Cruzado 1' : 'Cross 1'})
           </text>
-          <text x={370} y={72} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
+          <text x={370} y={70} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
             {x0} × {y1} = {x0 * y1}
           </text>
 
           {/* Quadrants 3: x1 * y0 (Cross Term 2) */}
           <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={115} textAnchor="middle" fill="var(--text-muted)" fontSize="12px" fontWeight="600" fontFamily="var(--font-mono)">
-            Cruzado 2: x₁ · y₀
+          <text x={170} y={113} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
+            x₁ · y₀ ({language === 'es' ? 'Cruzado 2' : 'Cross 2'})
           </text>
-          <text x={170} y={137} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
+          <text x={170} y={135} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
             {x1} × {y0} = {x1 * y0}
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
           <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="var(--success)" strokeWidth={1.5} />
-          <text x={370} y={115} textAnchor="middle" fill="var(--success)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
-            Cuadrante Bajo: z₀ = x₀ · y₀
+          <text x={370} y={113} textAnchor="middle" fill="var(--success)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
+            z₀ = x₀ · y₀ ({language === 'es' ? 'Bajo' : 'Low'})
           </text>
-          <text x={370} y={137} textAnchor="middle" fill="var(--success)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+          <text x={370} y={135} textAnchor="middle" fill="var(--success)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
             {x0} × {y0} = {z0}
           </text>
         </svg>
@@ -227,10 +231,10 @@ export const KaratsubaPlayground: React.FC = () => {
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--text)', background: 'var(--canvas-bg, var(--surface-light))', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', lineHeight: 1.6 }}>
             <div>
-              <span style={{ color: '#8b5cf6', fontWeight: 700 }}>Producto Cruzado P:</span> ({x1} + {x0}) × ({y1} + {y0}) = {x1 + x0} × {y1 + y0} = <strong style={{ color: '#8b5cf6' }}>{zSum}</strong>
+              <span style={{ color: '#8b5cf6', fontWeight: 700 }}>{language === 'es' ? 'Producto Cruzado P:' : 'Cross Product P:'}</span> ({x1} + {x0}) × ({y1} + {y0}) = {x1 + x0} × {y1 + y0} = <strong style={{ color: '#8b5cf6' }}>{zSum}</strong>
             </div>
             <div style={{ marginTop: '0.35rem' }}>
-              <span style={{ color: 'var(--warning)', fontWeight: 700 }}>Término Medio z₁:</span> P - z₂ - z₀ = {zSum} - {z2} - {z0} = <strong style={{ color: 'var(--warning)', fontSize: '1.05rem' }}>{z1}</strong>
+              <span style={{ color: 'var(--warning)', fontWeight: 700 }}>{language === 'es' ? 'Término Medio z₁:' : 'Middle Term z₁:'}</span> P - z₂ - z₀ = {zSum} - {z2} - {z0} = <strong style={{ color: 'var(--warning)', fontSize: '1.05rem' }}>{z1}</strong>
             </div>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
               {language === 'es'

@@ -326,17 +326,23 @@ export const SolveView: React.FC<SolveViewProps> = ({
       }
 
       const effort = analyzeStudentCodeEffort(code, rawStarter);
-      recordStudentAttempt(exercise.id, {
-        exerciseId: exercise.id,
-        code,
-        passed: evaluation.passed,
-        passedTestsCount: evaluation.totalPassed,
-        totalTestsCount: evaluation.totalTests,
-        meaningfulLinesCount: effort.meaningfulLinesAdded,
-        engine: 'ts',
-        executionTimeMs: null
-      });
-      setAttempts(getStudentAttempts(exercise.id));
+      const lastAttempt = attempts[0];
+      const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
+      const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
+
+      if (!isDuplicateCode || evaluation.passed) {
+        recordStudentAttempt(exercise.id, {
+          exerciseId: exercise.id,
+          code,
+          passed: evaluation.passed,
+          passedTestsCount: evaluation.totalPassed,
+          totalTestsCount: evaluation.totalTests,
+          meaningfulLinesCount: effort.meaningfulLinesAdded,
+          engine: 'ts',
+          executionTimeMs: null
+        });
+        setAttempts(getStudentAttempts(exercise.id));
+      }
     } else {
       // Evaluate against Python test runner with real test cases
       const evalResult = await runPythonTests(exercise.id, code);
@@ -362,17 +368,23 @@ export const SolveView: React.FC<SolveViewProps> = ({
       }
 
       const effort = analyzeStudentCodeEffort(code, rawStarter);
-      recordStudentAttempt(exercise.id, {
-        exerciseId: exercise.id,
-        code,
-        passed: evalResult.passed,
-        passedTestsCount: evalResult.totalPassed,
-        totalTestsCount: evalResult.totalTests,
-        meaningfulLinesCount: effort.meaningfulLinesAdded,
-        engine: 'ts',
-        executionTimeMs: null
-      });
-      setAttempts(getStudentAttempts(exercise.id));
+      const lastAttempt = attempts[0];
+      const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
+      const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
+
+      if (!isDuplicateCode || evalResult.passed) {
+        recordStudentAttempt(exercise.id, {
+          exerciseId: exercise.id,
+          code,
+          passed: evalResult.passed,
+          passedTestsCount: evalResult.totalPassed,
+          totalTestsCount: evalResult.totalTests,
+          meaningfulLinesCount: effort.meaningfulLinesAdded,
+          engine: 'ts',
+          executionTimeMs: null
+        });
+        setAttempts(getStudentAttempts(exercise.id));
+      }
     }
   };
 
@@ -451,17 +463,23 @@ export const SolveView: React.FC<SolveViewProps> = ({
     }
 
     const effort = analyzeStudentCodeEffort(code, rawStarter);
-    recordStudentAttempt(exercise.id, {
-      exerciseId: exercise.id,
-      code,
-      passed: evalResult.passed,
-      passedTestsCount: evalResult.totalPassed,
-      totalTestsCount: evalResult.totalTests,
-      meaningfulLinesCount: effort.meaningfulLinesAdded,
-      engine: 'pyodide',
-      executionTimeMs: evalResult.executionTimeMs
-    });
-    setAttempts(getStudentAttempts(exercise.id));
+    const lastAttempt = attempts[0];
+    const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
+    const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
+
+    if (!isDuplicateCode || evalResult.passed) {
+      recordStudentAttempt(exercise.id, {
+        exerciseId: exercise.id,
+        code,
+        passed: evalResult.passed,
+        passedTestsCount: evalResult.totalPassed,
+        totalTestsCount: evalResult.totalTests,
+        meaningfulLinesCount: effort.meaningfulLinesAdded,
+        engine: 'pyodide',
+        executionTimeMs: evalResult.executionTimeMs
+      });
+      setAttempts(getStudentAttempts(exercise.id));
+    }
   };
 
   return (

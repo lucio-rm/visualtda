@@ -267,7 +267,7 @@ export const DijkstraPlayground: React.FC = () => {
     <div
       className="algorithm-playground dijkstra-playground"
       role="region"
-      aria-label="Laboratorio de Dijkstra y Exploración Greedy"
+      aria-label={language === 'es' ? 'Laboratorio de Dijkstra y Exploración Greedy' : 'Dijkstra and Greedy Exploration Playground'}
     >
       {/* Controls Bar */}
       <div className="sdk-pg-controls">

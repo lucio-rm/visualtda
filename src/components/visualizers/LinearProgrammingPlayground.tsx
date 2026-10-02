@@ -516,16 +516,24 @@ export const LinearProgrammingPlayground: React.FC = () => {
               </h4>
               <div className="math-block">
                 <div className="math-row">
-                  <span className="math-label">Variables:</span>
-                  <code>{'x_i ∈ {0, 1} para cada día i ∈ {0, ..., n-1} (1 si Juan trabaja el día i)'}</code>
+                  <span className="math-label">{language === 'es' ? 'Variables:' : 'Variables:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? 'x_i ∈ {0, 1} para cada día i ∈ {0, ..., n-1} (1 si Juan trabaja el día i)'
+                      : 'x_i ∈ {0, 1} for each day i ∈ {0, ..., n-1} (1 if Juan works on day i)'}
+                  </code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Función Objetivo:</span>
+                  <span className="math-label">{language === 'es' ? 'Función Objetivo:' : 'Objective Function:'}</span>
                   <code>max z = ∑ (g_i · x_i)</code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Restricciones:</span>
-                  <code>{'x_i + x_{i+1} ≤ 1  para todo i ∈ {0, ..., n-2} (nunca dos días seguidos)'}</code>
+                  <span className="math-label">{language === 'es' ? 'Restricciones:' : 'Constraints:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? 'x_i + x_{i+1} ≤ 1  para todo i ∈ {0, ..., n-2} (nunca dos días seguidos)'
+                      : 'x_i + x_{i+1} ≤ 1  for all i ∈ {0, ..., n-2} (never two consecutive days)'}
+                  </code>
                 </div>
               </div>
               <p className="model-desc">
@@ -545,16 +553,24 @@ export const LinearProgrammingPlayground: React.FC = () => {
               </h4>
               <div className="math-block">
                 <div className="math-row">
-                  <span className="math-label">Variables:</span>
-                  <code>{'x_i ∈ {0, 1} para cada ítem i ∈ {0, ..., n-1} (1 si se incluye el ítem i)'}</code>
+                  <span className="math-label">{language === 'es' ? 'Variables:' : 'Variables:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? 'x_i ∈ {0, 1} para cada ítem i ∈ {0, ..., n-1} (1 si se incluye el ítem i)'
+                      : 'x_i ∈ {0, 1} for each item i ∈ {0, ..., n-1} (1 if item i is included)'}
+                  </code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Función Objetivo:</span>
+                  <span className="math-label">{language === 'es' ? 'Función Objetivo:' : 'Objective Function:'}</span>
                   <code>max z = ∑ (v_i · x_i)</code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Restricciones:</span>
-                  <code>∑ (w_i · x_i) ≤ W (capacidad de la mochila)</code>
+                  <span className="math-label">{language === 'es' ? 'Restricciones:' : 'Constraints:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? '∑ (w_i · x_i) ≤ W (capacidad de la mochila)'
+                      : '∑ (w_i · x_i) ≤ W (knapsack capacity)'}
+                  </code>
                 </div>
               </div>
               <p className="model-desc">
@@ -574,16 +590,24 @@ export const LinearProgrammingPlayground: React.FC = () => {
               </h4>
               <div className="math-block">
                 <div className="math-row">
-                  <span className="math-label">Variables:</span>
-                  <code>{'x_v ∈ {0, 1} para cada vértice v ∈ V (1 si v pertenece a la cobertura)'}</code>
+                  <span className="math-label">{language === 'es' ? 'Variables:' : 'Variables:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? 'x_v ∈ {0, 1} para cada vértice v ∈ V (1 si v pertenece a la cobertura)'
+                      : 'x_v ∈ {0, 1} for each vertex v ∈ V (1 if v belongs to the vertex cover)'}
+                  </code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Función Objetivo:</span>
+                  <span className="math-label">{language === 'es' ? 'Función Objetivo:' : 'Objective Function:'}</span>
                   <code>min z = ∑ x_v</code>
                 </div>
                 <div className="math-row">
-                  <span className="math-label">Restricciones:</span>
-                  <code>x_u + x_v ≥ 1  para cada arista (u, v) ∈ E</code>
+                  <span className="math-label">{language === 'es' ? 'Restricciones:' : 'Constraints:'}</span>
+                  <code>
+                    {language === 'es'
+                      ? 'x_u + x_v ≥ 1  para cada arista (u, v) ∈ E'
+                      : 'x_u + x_v ≥ 1  for each edge (u, v) ∈ E'}
+                  </code>
                 </div>
               </div>
               <p className="model-desc">

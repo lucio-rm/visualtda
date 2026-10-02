@@ -223,7 +223,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
     <div
       className="algorithm-playground knapsack-bb-playground"
       role="region"
-      aria-label="Laboratorio de Branch & Bound y Árbol de Búsqueda"
+      aria-label={language === 'es' ? 'Laboratorio de Branch & Bound y Árbol de Búsqueda' : 'Branch & Bound Search Tree Playground'}
     >
       {/* Top Controls Bar */}
       <div className="sdk-pg-controls">
@@ -314,7 +314,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
           viewBox="0 0 720 340"
           style={{ width: '100%', minWidth: '600px', height: 'auto', display: 'block' }}
           role="img"
-          aria-label="Árbol de búsqueda de Branch and Bound"
+          aria-label={language === 'es' ? 'Árbol de búsqueda de Branch and Bound' : 'Branch and Bound search tree'}
         >
           {/* Edges */}
           {edges.map((e, idx) => {

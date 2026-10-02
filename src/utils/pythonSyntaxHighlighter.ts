@@ -119,3 +119,81 @@ export function highlightPythonCode(code: string): string {
 
   return html;
 }
+
+const PSEUDO_KEYWORDS = new Set([
+  'algorithm', 'procedure', 'function', 'return', 'if', 'then', 'else', 'elif',
+  'endif', 'for', 'each', 'to', 'downto', 'do', 'endfor', 'while', 'endwhile', 'repeat',
+  'until', 'let', 'input', 'output', 'invariant', 'and', 'or', 'not', 'true',
+  'false', 'nil', 'null', 'in', 'is'
+]);
+
+/**
+ * Tokenizes and highlights formal academic pseudocode to sanitized HTML.
+ */
+export function highlightPseudocode(code: string): string {
+  if (!code) return '';
+
+  const tokenRegex = /(#[^\n]*|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b[a-zA-Z_]\w*\b)|(\b\d+(?:\.\d+)?\b)|(==|!=|<=|>=|<-|:=|->|\+=|-=|\*=|\/=|[+\-*/%<>=&|^~])|([()[\]{}])|([:,;.])|([^\s\w#"'()[\]{}:,;./]+)/g;
+
+  let lastIndex = 0;
+  let html = '';
+  let match: RegExpExecArray | null;
+
+  while ((match = tokenRegex.exec(code)) !== null) {
+    const textBetween = code.substring(lastIndex, match.index);
+    if (textBetween) {
+      html += escapeHtml(textBetween);
+    }
+    lastIndex = tokenRegex.lastIndex;
+
+    const [
+      fullMatch,
+      commentMatch,
+      strMatch,
+      wordMatch,
+      numMatch,
+      opMatch,
+      bracketMatch,
+      punctMatch
+    ] = match;
+
+    if (commentMatch) {
+      html += `<span class="tok-comment">${escapeHtml(commentMatch)}</span>`;
+    } else if (strMatch) {
+      html += `<span class="tok-str">${escapeHtml(strMatch)}</span>`;
+    } else if (wordMatch) {
+      const lower = wordMatch.toLowerCase();
+      if (PSEUDO_KEYWORDS.has(lower)) {
+        html += `<span class="tok-kw">${escapeHtml(wordMatch)}</span>`;
+      } else {
+        const restOfCode = code.substring(lastIndex);
+        const isFollowedByParen = /^\s*\(/.test(restOfCode);
+        if (isFollowedByParen) {
+          html += `<span class="tok-fn-call">${escapeHtml(wordMatch)}</span>`;
+        } else {
+          html += `<span class="tok-var">${escapeHtml(wordMatch)}</span>`;
+        }
+      }
+    } else if (numMatch) {
+      html += `<span class="tok-num">${escapeHtml(numMatch)}</span>`;
+    } else if (opMatch) {
+      html += `<span class="tok-op">${escapeHtml(opMatch)}</span>`;
+    } else if (bracketMatch) {
+      html += `<span class="tok-bracket">${escapeHtml(bracketMatch)}</span>`;
+    } else if (punctMatch) {
+      html += `<span class="tok-punct">${escapeHtml(punctMatch)}</span>`;
+    } else {
+      html += escapeHtml(fullMatch);
+    }
+  }
+
+  if (lastIndex < code.length) {
+    html += escapeHtml(code.substring(lastIndex));
+  }
+
+  if (code.endsWith('\n')) {
+    html += '\n';
+  }
+
+  return html;
+}

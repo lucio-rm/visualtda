@@ -176,7 +176,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
     <div
       className="algorithm-playground lateness-playground"
       role="region"
-      aria-label="Laboratorio de Minimización de Retraso"
+      aria-label={language === 'es' ? 'Laboratorio de Minimización de Retraso' : 'Minimize Lateness Playground'}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
     >
       {/* Playground Controls & Presets */}

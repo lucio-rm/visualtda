@@ -713,9 +713,15 @@
 
 .discover-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(360px, 1fr) minmax(0, 1.25fr);
   gap: 2rem;
   transition: grid-template-columns 0.25s ease;
+}
+
+@media (max-width: 1024px) {
+  .discover-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .discover-grid.fullwidth-playground {
@@ -724,6 +730,7 @@
 
 .problem-narrative-card,
 .interactive-playground-card {
+  min-width: 0;
   background-color: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);

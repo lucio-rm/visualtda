@@ -223,7 +223,7 @@ export const BellmanFordPlayground: React.FC = () => {
     <div
       className="algorithm-playground bellman-ford-playground"
       role="region"
-      aria-label="Laboratorio de Bellman-Ford y Ciclos Negativos"
+      aria-label={language === 'es' ? 'Laboratorio de Bellman-Ford y Ciclos Negativos' : 'Bellman-Ford and Negative Cycles Playground'}
     >
       {/* Top Presets & Controls Bar */}
       <div className="sdk-pg-controls">

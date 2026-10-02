@@ -5,6 +5,7 @@ import {
 } from '../../engine/algorithms/knightsTourTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { ChessKnightIcon } from './KnightsTourPlayground';
 import './KnightsTourVisualizer.css';
 
 export const KnightsTourVisualizer: React.FC = () => {
@@ -166,10 +167,11 @@ export const KnightsTourVisualizer: React.FC = () => {
 
           {/* Knight Icon at Current Pos */}
           {currentPos && (
-            <g transform={`translate(${currentPos[1] * cellSize + cellSize / 2 - 12}, ${currentPos[0] * cellSize + cellSize / 2 - 12})`}>
-              <text fontSize="24" textAnchor="middle" x="12" y="20">
-                ♞
-              </text>
+            <g
+              transform={`translate(${currentPos[1] * cellSize + (cellSize - 30) / 2}, ${currentPos[0] * cellSize + (cellSize - 30) / 2})`}
+              pointerEvents="none"
+            >
+              <ChessKnightIcon size={30} fill="var(--accent)" stroke="#ffffff" />
             </g>
           )}
         </svg>
@@ -191,7 +193,7 @@ export const KnightsTourVisualizer: React.FC = () => {
       </div>
 
       {/* Timeline Controls */}
-      <div className="timeline-toolbar" role="toolbar" aria-label="Controles de línea de tiempo">
+      <div className="timeline-toolbar" role="toolbar" aria-label={language === 'es' ? 'Controles de línea de tiempo' : 'Timeline controls'}>
         <div className="timeline-nav-group">
           <button
             type="button"

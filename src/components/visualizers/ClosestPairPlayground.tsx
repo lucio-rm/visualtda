@@ -203,7 +203,7 @@ export const ClosestPairPlayground: React.FC = () => {
     <div
       className="algorithm-playground closest-pair-playground"
       role="region"
-      aria-label="Laboratorio de Par Más Cercano 2D"
+      aria-label={language === 'es' ? 'Laboratorio de Par Más Cercano 2D' : '2D Closest Pair Playground'}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem', userSelect: 'none' }}

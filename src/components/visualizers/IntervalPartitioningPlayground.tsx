@@ -281,7 +281,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
     <div
       className="algorithm-playground interval-partitioning-playground"
       role="region"
-      aria-label="Laboratorio de Partición de Intervalos"
+      aria-label={language === 'es' ? 'Laboratorio de Partición de Intervalos' : 'Interval Partitioning Playground'}
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
     >
       {/* Controls & Instance Presets */}

@@ -18,6 +18,10 @@ import { UnderstandView } from '../src/components/UnderstandView';
 import { LanguageProvider } from '../src/i18n/LanguageContext';
 import { InstructorModeProvider } from '../src/context/InstructorModeContext';
 import { INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN } from '../src/utils/cryptoAuth';
+import { StudentProgressProvider } from '../src/context/StudentProgressContext';
+import { TspBranchAndBoundPlayground } from '../src/components/visualizers/TspBranchAndBoundPlayground';
+import { KnightsTourPlayground } from '../src/components/visualizers/KnightsTourPlayground';
+import { CoinChangePlayground } from '../src/components/visualizers/CoinChangePlayground';
 
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -187,29 +191,27 @@ def resolver_scheduling(intervalos):
 
     it('unlocks Hint 1 when student has >= 3 attempts and >= 20 meaningful lines', () => {
       const complexCode = `
-def solve():
-    a = 1
-    b = 2
-    c = 3
-    d = 4
-    e = 5
-    f = 6
-    g = 7
-    h = 8
-    i = 9
-    j = 10
-    k = 11
-    l = 12
-    m = 13
-    n = 14
-    o = 15
-    p = 16
-    q = 17
-    r = 18
-    s = 19
-    t = 20
-    u = 21
-    return a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q + r + s + t + u
+def solve(items):
+    n = len(items)
+    dp = [0] * (n + 1)
+    res = []
+    for i in range(n):
+        val = items[i]
+        if val > 0:
+            dp[i + 1] = dp[i] + val
+            res.append(val)
+        else:
+            dp[i + 1] = dp[i]
+    total = sum(res)
+    for x in res:
+        if x % 2 == 0:
+            total += x * 2
+        else:
+            total += x
+    ans = max(total, dp[n])
+    if ans > 100:
+        return ans
+    return dp[n]
 `;
       recordStudentAttempt('test-ex-full', complexCode, 'def solve(): pass', false, 0, 3);
       recordStudentAttempt('test-ex-full', complexCode, 'def solve(): pass', false, 0, 3);
@@ -337,6 +339,86 @@ def solve():
       });
 
       expect(container.textContent).toContain('Algoritmo de la Cátedra');
+    });
+  });
+
+  describe('6. Refined Visualizers UX, High-Contrast Badges & Pedagogical Gating', () => {
+    it('renders high-contrast edge weight badge pills in TSP Branch & Bound', async () => {
+      await act(async () => {
+        root.render(
+          <LanguageProvider>
+            <StudentProgressProvider>
+              <TspBranchAndBoundPlayground />
+            </StudentProgressProvider>
+          </LanguageProvider>
+        );
+      });
+
+      // SVG edges contain rect badge pills for weights
+      const badges = container.querySelectorAll('rect[width="26"][height="18"]');
+      expect(badges.length).toBeGreaterThan(0);
+    });
+
+    it('supports 4x4, 5x5, 6x6, 8x8 boards, gates Warnsdorff star, and renders vector knight', async () => {
+      await act(async () => {
+        root.render(
+          <LanguageProvider>
+            <StudentProgressProvider>
+              <InstructorModeProvider>
+                <KnightsTourPlayground />
+              </InstructorModeProvider>
+            </StudentProgressProvider>
+          </LanguageProvider>
+        );
+      });
+
+      // Check board size preset buttons
+      expect(container.textContent).toContain('4×4');
+      expect(container.textContent).toContain('5×5');
+      expect(container.textContent).toContain('6×6');
+      expect(container.textContent).toContain('8×8');
+
+      // Regular student should NOT see Warnsdorff gold star '★'
+      expect(container.textContent).not.toContain('★');
+      // Should render SVG vector knight without unicode emoji
+      expect(container.textContent).not.toContain('♞');
+      const vectorKnight = container.querySelector('svg[viewBox="0 0 45 45"]');
+      expect(vectorKnight).not.toBeNull();
+    });
+
+    it('gates DP optimal solution in Coin Change while keeping Greedy heuristic visible', async () => {
+      await act(async () => {
+        root.render(
+          <LanguageProvider>
+            <StudentProgressProvider>
+              <InstructorModeProvider>
+                <CoinChangePlayground />
+              </InstructorModeProvider>
+            </StudentProgressProvider>
+          </LanguageProvider>
+        );
+      });
+
+      // Greedy card is visible
+      expect(container.textContent).toContain('Heurística Greedy');
+
+      // DP card is gated by default (shows ? monedas and [ ? ])
+      expect(container.textContent).toContain('? monedas');
+      expect(container.textContent).toContain('[ ? ]');
+
+      // Click "Revelar Solución Óptima"
+      const revealBtn = Array.from(container.querySelectorAll('button')).find(
+        (b) => b.textContent?.includes('Revelar Solución Óptima')
+      );
+      expect(revealBtn).toBeDefined();
+
+      await act(async () => {
+        revealBtn?.click();
+      });
+
+      // Now reveals optimal DP
+      expect(container.textContent).toContain('2 monedas');
+      expect(container.textContent).toContain('[3, 3]');
     });
   });
 });

@@ -103,7 +103,11 @@ export const VertexCoverApproxPlayground: React.FC = () => {
   };
 
   return (
-    <div className="approx-playground-box" role="region" aria-label="Laboratorio de 2-Aproximación para Vertex Cover">
+    <div
+      className="approx-playground-box"
+      role="region"
+      aria-label={language === 'es' ? 'Laboratorio de 2-Aproximación para Vertex Cover' : '2-Approximation for Vertex Cover Playground'}
+    >
       <div className="approx-playground-header">
         <div>
           <h4 style={{ margin: 0 }}>

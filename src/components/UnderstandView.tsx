@@ -9,6 +9,7 @@ import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 import { TheoryMarkdown } from './common/TheoryMarkdown';
 import { getRelatedExercisesFor } from '../engine/crossExerciseConnections';
 import { getExerciseInsight } from '../engine/exerciseContextInsights';
+import { highlightPythonCode, highlightPseudocode } from '../utils/pythonSyntaxHighlighter';
 
 interface UnderstandViewProps {
   exercise: ExerciseMetadata;
@@ -267,8 +268,8 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                           {approvedSolution.passedTestsCount} {language === 'es' ? 'tests superados' : 'tests passed'} · {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
-                      <pre className="canonical-code-display">
-                        <code>{approvedSolution.code}</code>
+                      <pre className="canonical-code-display code-highlight-container">
+                        <code dangerouslySetInnerHTML={{ __html: highlightPythonCode(approvedSolution.code) }} />
                       </pre>
                     </div>
                   ) : (
@@ -338,14 +339,21 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                       </div>
                     </div>
                   ) : (
-                    <pre className="canonical-code-display">
-                      <code>
-                        {codeMode === 'python'
-                          ? isDecrypting
-                            ? (language === 'es' ? '# Desencriptando solución oficial...' : '# Decrypting canonical solution...')
-                            : effectivePython || '# Solución protegida'
-                          : pseudocode}
-                      </code>
+                    <pre className="canonical-code-display code-highlight-container">
+                      <code
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            codeMode === 'python'
+                              ? highlightPythonCode(
+                                  isDecrypting
+                                    ? language === 'es'
+                                      ? '# Desencriptando solución oficial...'
+                                      : '# Decrypting canonical solution...'
+                                    : effectivePython || '# Solución protegida'
+                                )
+                              : highlightPseudocode(pseudocode)
+                        }}
+                      />
                     </pre>
                   )
                 )}

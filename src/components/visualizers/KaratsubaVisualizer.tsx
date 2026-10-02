@@ -132,11 +132,14 @@ export const KaratsubaVisualizer: React.FC = () => {
               stroke="#8b5cf6"
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={360} y={127} textAnchor="middle" fill="#8b5cf6" fontSize="13px" fontWeight="700">
+            <text x={360} y={124} textAnchor="middle" fill="#8b5cf6" fontSize="12px" fontWeight="700">
               {language === 'es' ? '2. Producto Cruzado (P)' : '2. Cross Product (P)'}
             </text>
-            <text x={360} y={154} textAnchor="middle" fill="#8b5cf6" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
-              ({x1}+{x0}) × ({y1}+{y0}) = {zSum !== null && zSum !== undefined ? zSum : '—'}
+            <text x={360} y={143} textAnchor="middle" fill="#8b5cf6" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+              ({x1}+{x0}) × ({y1}+{y0})
+            </text>
+            <text x={360} y={163} textAnchor="middle" fill="#8b5cf6" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+              = {zSum !== null && zSum !== undefined ? zSum : '—'}
             </text>
           </g>
 
@@ -173,13 +176,22 @@ export const KaratsubaVisualizer: React.FC = () => {
               strokeWidth={subcalc === 'COMBINE' || result !== null ? 2 : 1.5}
             />
             <text x={360} y={222} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
-              {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ = P - z₂ - z₀ = ({zSum ?? 'P'} - {z2 ?? 'z₂'} - {z0 ?? 'z₀'}) ={' '}
+              {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ ={' '}
+              <tspan fill="#8b5cf6" fontWeight="700">P</tspan> -{' '}
+              <tspan fill="var(--accent)" fontWeight="700">z₂</tspan> -{' '}
+              <tspan fill="var(--success)" fontWeight="700">z₀</tspan> = ({' '}
+              <tspan fill="#8b5cf6" fontWeight="700">{zSum ?? 'P'}</tspan> -{' '}
+              <tspan fill="var(--accent)" fontWeight="700">{z2 ?? 'z₂'}</tspan> -{' '}
+              <tspan fill="var(--success)" fontWeight="700">{z0 ?? 'z₀'}</tspan> ) ={' '}
               <tspan fill="var(--warning)" fontWeight="800">
                 {z1 !== null && z1 !== undefined ? z1 : '—'}
               </tspan>
             </text>
             <text x={360} y={250} textAnchor="middle" fill="var(--text)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
-              {language === 'es' ? 'Resultado Final:' : 'Final Result:'} z₂ · 10⁴ + z₁ · 10² + z₀ ={' '}
+              {language === 'es' ? 'Resultado Final:' : 'Final Result:'}{' '}
+              <tspan fill="var(--accent)">z₂ · 10⁴</tspan> +{' '}
+              <tspan fill="var(--warning)">z₁ · 10²</tspan> +{' '}
+              <tspan fill="var(--success)">z₀</tspan> ={' '}
               <tspan fill="var(--success)" fontWeight="800">
                 {result !== null && result !== undefined ? result : '...'}
               </tspan>
@@ -242,7 +254,7 @@ export const KaratsubaVisualizer: React.FC = () => {
       </div>
 
       {/* Playback Controls */}
-      <div className="trace-controls" role="toolbar" aria-label="Controles de reproducción">
+      <div className="trace-controls" role="toolbar" aria-label={language === 'es' ? 'Controles de reproducción' : 'Playback controls'}>
         <div className="trace-buttons">
           <button
             type="button"

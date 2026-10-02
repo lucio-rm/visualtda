@@ -99,7 +99,11 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
   const baselineY = 135;
 
   return (
-    <div className="algorithm-playground rna-playground" role="region" aria-label="Laboratorio de Estructura Secundaria de ARN">
+    <div
+      className="algorithm-playground rna-playground"
+      role="region"
+      aria-label={language === 'es' ? 'Laboratorio de Estructura Secundaria de ARN' : 'RNA Secondary Structure Playground'}
+    >
       <div className="sdk-pg-controls">
         <div className="sdk-pg-presets">
           <button

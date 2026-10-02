@@ -1,11 +1,52 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
+import { useInstructorMode } from '../../context/InstructorModeContext';
 import { KNIGHT_MOVES } from '../../engine/algorithms/knightsTourValidator';
+
+export const ChessKnightIcon: React.FC<{ size?: number; fill?: string; stroke?: string }> = ({
+  size = 28,
+  fill = 'var(--accent)',
+  stroke = '#ffffff'
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 45 45"
+    style={{ display: 'block', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
+    aria-hidden="true"
+  >
+    <g
+      style={{
+        opacity: 1,
+        fill: fill,
+        fillRule: 'evenodd',
+        fillOpacity: 1,
+        stroke: stroke,
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+      }}
+    >
+      <path
+        d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"
+      />
+      <path
+        d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,7.4 17.07,8.07 18,8.5 C 18.72,8.87 21.05,8.8 21,10 C 20.95,10.6 20.3,11.2 20,11.5 C 19.7,11.8 18.7,12 18,12 C 16.6,12 15.6,11.4 15.6,11.4 C 15.6,11.4 17.3,12.6 18,13 C 18.7,13.4 20.3,13.4 21,13.5 C 22,13.5 23,13.8 23.5,14.5 C 24,15.2 24.4,16.5 24,18 z"
+      />
+      <circle cx="9.5" cy="25.5" r="0.75" fill={stroke} />
+      <circle cx="15" cy="15.5" r="1.2" fill={stroke} />
+    </g>
+  </svg>
+);
 
 export const KnightsTourPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markAttempted } = useStudentProgress();
+  const { markAttempted, isCompleted: isExerciseCompleted } = useStudentProgress();
+  const { isInstructorMode } = useInstructorMode();
+
+  const hasMastered = isExerciseCompleted('knights-tour-backtracking');
+  const canSeeHeuristic = isInstructorMode || hasMastered;
 
   const [n, setN] = useState<number>(5);
   const [board, setBoard] = useState<number[][]>(() => {
@@ -125,17 +166,29 @@ export const KnightsTourPlayground: React.FC = () => {
     setIsPickingStart(false);
   };
 
-  const cellSize = n === 5 ? 78 : 66;
+  const cellSize = n === 4 ? 80 : n === 5 ? 72 : n === 6 ? 60 : 46;
   const boardSize = cellSize * n;
+  const knightSize = n === 8 ? 24 : n === 6 ? 30 : 34;
 
   return (
-    <div className="knights-tour-playground" role="region" aria-label="Laboratorio del Recorrido del Caballo">
+    <div
+      className="knights-tour-playground"
+      role="region"
+      aria-label={language === 'es' ? 'Laboratorio del Recorrido del Caballo' : "Knight's Tour Playground"}
+    >
       {/* Top Presets and Controls */}
       <div
         className="sdk-pg-controls"
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}
       >
         <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className={`btn-preset ${n === 4 && !isPickingStart ? 'active' : ''}`}
+            onClick={() => resetBoard(4, 0, 0)}
+          >
+            {language === 'es' ? 'Tablero 4×4 (16)' : 'Board 4×4 (16)'}
+          </button>
           <button
             type="button"
             className={`btn-preset ${n === 5 && !isPickingStart ? 'active' : ''}`}
@@ -149,6 +202,13 @@ export const KnightsTourPlayground: React.FC = () => {
             onClick={() => resetBoard(6, 0, 0)}
           >
             {language === 'es' ? 'Tablero 6×6 (36)' : 'Board 6×6 (36)'}
+          </button>
+          <button
+            type="button"
+            className={`btn-preset ${n === 8 && !isPickingStart ? 'active' : ''}`}
+            onClick={() => resetBoard(8, 0, 0)}
+          >
+            {language === 'es' ? 'Tablero 8×8 (64)' : 'Board 8×8 (64)'}
           </button>
           <button
             type="button"
@@ -213,9 +273,9 @@ export const KnightsTourPlayground: React.FC = () => {
           </span>
         )}
 
-        {bestWarnsdorffMove && !isComplete && (
+        {canSeeHeuristic && bestWarnsdorffMove && !isComplete && (
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            {language === 'es' ? 'Elección heurística óptima:' : 'Best heuristic move:'}{' '}
+            {language === 'es' ? 'Elección heurística óptima (Warnsdorff):' : 'Best heuristic move (Warnsdorff):'}{' '}
             <strong style={{ color: 'var(--success)' }}>
               ({String.fromCharCode(65 + bestWarnsdorffMove.c)}{n - bestWarnsdorffMove.r}) con {bestWarnsdorffMove.degree} salidas
             </strong>
@@ -247,7 +307,7 @@ export const KnightsTourPlayground: React.FC = () => {
           viewBox={`-24 -24 ${boardSize + 48} ${boardSize + 48}`}
           style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
           role="img"
-          aria-label="Tablero de ajedrez interactivo para el Recorrido del Caballo"
+          aria-label={language === 'es' ? 'Tablero de ajedrez interactivo para el Recorrido del Caballo' : "Interactive chessboard for Knight's Tour"}
         >
           {/* Outer Border */}
           <rect
@@ -302,7 +362,7 @@ export const KnightsTourPlayground: React.FC = () => {
               const isCur = currentPos && currentPos[0] === r && currentPos[1] === c;
               const isVis = val !== -1;
               const legal = legalMoves.find((m) => m.r === r && m.c === c);
-              const isBest = bestWarnsdorffMove && bestWarnsdorffMove.r === r && bestWarnsdorffMove.c === c;
+              const isBest = canSeeHeuristic && bestWarnsdorffMove && bestWarnsdorffMove.r === r && bestWarnsdorffMove.c === c;
 
               let fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
               let stroke = 'var(--board-border)';
@@ -329,13 +389,27 @@ export const KnightsTourPlayground: React.FC = () => {
                   style={{ cursor: legal || isPickingStart ? 'pointer' : 'default' }}
                   role="button"
                   tabIndex={legal || isPickingStart ? 0 : -1}
-                  aria-label={`Casilla (${String.fromCharCode(65 + c)}${n - r}) ${
-                    isVis
-                      ? `Visitada en paso ${val + 1}`
-                      : legal
-                      ? `Movimiento legal con grado ${legal.degree}`
-                      : 'No visitada'
-                  }`}
+                  aria-label={
+                    language === 'es'
+                      ? `Casilla (${String.fromCharCode(65 + c)}${n - r}) ${
+                          isVis
+                            ? `Visitada en paso ${val + 1}`
+                            : legal
+                            ? canSeeHeuristic
+                              ? `Movimiento legal con grado ${legal.degree}`
+                              : 'Movimiento legal'
+                            : 'No visitada'
+                        }`
+                      : `Square (${String.fromCharCode(65 + c)}${n - r}) ${
+                          isVis
+                            ? `Visited on step ${val + 1}`
+                            : legal
+                            ? canSeeHeuristic
+                              ? `Legal move with degree ${legal.degree}`
+                              : 'Legal move'
+                            : 'Unvisited'
+                        }`
+                  }
                 >
                   <rect
                     x={x}
@@ -352,35 +426,35 @@ export const KnightsTourPlayground: React.FC = () => {
                   {isVis && (
                     <text
                       x={x + cellSize / 2}
-                      y={y + cellSize / 2 + 6}
+                      y={y + cellSize / 2 + (n === 8 ? 4 : 6)}
                       textAnchor="middle"
                       fill={isCur ? 'var(--accent)' : 'var(--text)'}
                       fontFamily="var(--font-mono)"
-                      fontSize={n === 5 ? '18px' : '15px'}
+                      fontSize={n === 8 ? '12px' : n === 6 ? '14px' : '17px'}
                       fontWeight="700"
                     >
                       {val + 1}
                     </text>
                   )}
 
-                  {/* Warnsdorff Degree Tag */}
-                  {legal && (
-                    <g transform={`translate(${x + cellSize - 22}, ${y + 5})`}>
+                  {/* Warnsdorff Degree Tag - visible only for instructors or mastered */}
+                  {legal && canSeeHeuristic && (
+                    <g transform={`translate(${x + cellSize - (n === 8 ? 18 : 22)}, ${y + 4})`}>
                       <rect
-                        width={22}
-                        height={18}
-                        rx={4}
+                        width={n === 8 ? 16 : 20}
+                        height={n === 8 ? 14 : 16}
+                        rx={3}
                         fill={isBest ? 'var(--success)' : 'var(--surface)'}
                         stroke={isBest ? 'var(--success)' : 'var(--border)'}
                         strokeWidth={1}
                       />
                       <text
-                        x={11}
-                        y={13}
+                        x={n === 8 ? 8 : 10}
+                        y={n === 8 ? 11 : 12}
                         textAnchor="middle"
                         fill={isBest ? '#ffffff' : 'var(--text-muted)'}
                         fontFamily="var(--font-mono)"
-                        fontSize="13px"
+                        fontSize={n === 8 ? '10px' : '11px'}
                         fontWeight="800"
                       >
                         {legal.degree}
@@ -388,10 +462,10 @@ export const KnightsTourPlayground: React.FC = () => {
                     </g>
                   )}
 
-                  {/* Best move gold indicator badge */}
-                  {isBest && (
+                  {/* Best move gold indicator badge - visible only for instructors or mastered */}
+                  {isBest && canSeeHeuristic && (
                     <text
-                      x={x + 7}
+                      x={x + 6}
                       y={y + 14}
                       fill="var(--warning)"
                       fontSize="14px"
@@ -420,16 +494,15 @@ export const KnightsTourPlayground: React.FC = () => {
             />
           )}
 
-          {/* Knight glyph at current position */}
+          {/* Vector Knight piece at current position */}
           {currentPos && (
             <g
-              transform={`translate(${currentPos[1] * cellSize + cellSize / 2 - 14}, ${
-                currentPos[0] * cellSize + cellSize / 2 - 14
+              transform={`translate(${currentPos[1] * cellSize + (cellSize - knightSize) / 2}, ${
+                currentPos[0] * cellSize + (cellSize - knightSize) / 2
               })`}
+              pointerEvents="none"
             >
-              <text fontSize="28" textAnchor="middle" x="14" y="24">
-                ♞
-              </text>
+              <ChessKnightIcon size={knightSize} fill="var(--accent)" stroke="#ffffff" />
             </g>
           )}
         </svg>
@@ -447,12 +520,16 @@ export const KnightsTourPlayground: React.FC = () => {
         }}
       >
         <strong>
-          {language === 'es' ? 'Fundamento: Regla de Warnsdorff' : "Rationale: Warnsdorff's Rule"}
+          {language === 'es' ? 'Fundamento: Recorrido del Caballo y Regla de Warnsdorff' : "Rationale: Knight's Tour and Warnsdorff's Rule"}
         </strong>
         <p style={{ margin: '0.35rem 0 0', color: 'var(--text-muted)' }}>
-          {language === 'es'
-            ? 'En cada paso, el caballo se mueve hacia la casilla que tiene el menor número de salidas posibles hacia casillas no visitadas (grado mínimo, marcado con ★). Esta heurística Greedy evita dejar casillas aisladas en las esquinas o bordes que luego se convertirían en callejones sin salida imposibles de visitar.'
-            : 'At each step, the knight moves to the square with the minimum number of onward unvisited exits (minimum degree, marked with ★). This greedy heuristic prevents isolating corner and edge squares that would later become dead-ends.'}
+          {canSeeHeuristic
+            ? (language === 'es'
+                ? 'En cada paso, el caballo se mueve hacia la casilla que tiene el menor número de salidas posibles hacia casillas no visitadas (grado mínimo, marcado con ★). Esta heurística Greedy evita dejar casillas aisladas en las esquinas o bordes que luego se convertirían en callejones sin salida imposibles de visitar.'
+                : 'At each step, the knight moves to the square with the minimum number of onward unvisited exits (minimum degree, marked with ★). This greedy heuristic prevents isolating corner and edge squares that would later become dead-ends.')
+            : (language === 'es'
+                ? 'Intenta recorrer todas las casillas sin quedar atrapado en un callejón sin salida. ¿A qué casillas conviene saltar primero para no aislar los rincones? (La guía heurística de Warnsdorff se revelará al completar el ejercicio o en Modo Docente).'
+                : 'Try to visit all squares without getting trapped in a dead end. Which squares should you prioritize to avoid isolating corners? (Warnsdorff heuristic hints will unlock upon completion or in Instructor Mode).')}
         </p>
       </div>
     </div>

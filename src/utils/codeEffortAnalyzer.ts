@@ -107,7 +107,13 @@ function isMeaningfulLine(line: string): boolean {
     return false;
   }
 
-  // 4. Must have at least some minimal substance (> 2 characters)
+  // 4. Trivial literal / dummy variable assignments (e.g. cualquier = 0, a = 1, foo = "bar", dummy = [])
+  // Non-algorithmic declarations that do not perform computation, loops, indexing or calls
+  if (/^[a-zA-Z_]\w*\s*=\s*(None|True|False|-?\d+(?:\.\d+)?|['"][^'"]*['"]|\[\s*\]|\{\s*\}|tuple\(\)|list\(\)|dict\(\)|set\(\))\s*$/.test(trimmed)) {
+    return false;
+  }
+
+  // 5. Must have at least some minimal substance (> 2 characters)
   if (trimmed.length <= 2) {
     return false;
   }

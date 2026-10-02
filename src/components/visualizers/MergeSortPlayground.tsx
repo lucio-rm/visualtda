@@ -217,8 +217,27 @@ export const MergeSortPlayground: React.FC = () => {
     leftPointer === leftHalf.length &&
     rightPointer === rightHalf.length;
 
-  // Tree computation
-  const treeLevels = useMemo(() => {
+  // Helper to count two-pointer merge comparisons
+  const countMergeComparisons = (left: number[], right: number[]): { merged: number[]; comparisons: number } => {
+    let i = 0;
+    let j = 0;
+    let comps = 0;
+    const merged: number[] = [];
+    while (i < left.length && j < right.length) {
+      comps++;
+      if (left[i] <= right[j]) {
+        merged.push(left[i++]);
+      } else {
+        merged.push(right[j++]);
+      }
+    }
+    while (i < left.length) merged.push(left[i++]);
+    while (j < right.length) merged.push(right[j++]);
+    return { merged, comparisons: comps };
+  };
+
+  // Top-down split tree levels
+  const splitLevels = useMemo(() => {
     if (parsedArray.length === 0) return [];
     const levels: { level: number; nodes: number[][]; totalWork: number }[] = [];
     let currentLevelNodes: number[][] = [parsedArray];
@@ -251,6 +270,70 @@ export const MergeSortPlayground: React.FC = () => {
     }
     return levels;
   }, [parsedArray]);
+
+  // Bottom-up conquer & merge tree levels
+  const recombineLevels = useMemo(() => {
+    if (parsedArray.length === 0) return [];
+    
+    // Base leaves from the end of the split tree
+    const lastSplit = splitLevels[splitLevels.length - 1];
+    let current: number[][] = lastSplit ? lastSplit.nodes : parsedArray.map((x) => [x]);
+    
+    const levels: Array<{
+      level: number;
+      nodes: Array<{ sorted: number[]; comparisons: number; left?: number[]; right?: number[] }>;
+      totalComparisons: number;
+    }> = [];
+
+    levels.push({
+      level: 0,
+      nodes: current.map((arr) => ({ sorted: arr, comparisons: 0 })),
+      totalComparisons: 0
+    });
+
+    let lvl = 0;
+    while (current.length > 1 && lvl < 8) {
+      lvl++;
+      const nextNodes: Array<{ sorted: number[]; comparisons: number; left: number[]; right: number[] }> = [];
+      const nextArrays: number[][] = [];
+      let lvlComps = 0;
+
+      for (let i = 0; i < current.length; i += 2) {
+        if (i + 1 < current.length) {
+          const { merged, comparisons } = countMergeComparisons(current[i], current[i + 1]);
+          nextNodes.push({
+            sorted: merged,
+            comparisons,
+            left: current[i],
+            right: current[i + 1]
+          });
+          nextArrays.push(merged);
+          lvlComps += comparisons;
+        } else {
+          nextNodes.push({
+            sorted: current[i],
+            comparisons: 0,
+            left: current[i],
+            right: []
+          });
+          nextArrays.push(current[i]);
+        }
+      }
+
+      levels.push({
+        level: lvl,
+        nodes: nextNodes,
+        totalComparisons: lvlComps
+      });
+      current = nextArrays;
+    }
+
+    return levels;
+  }, [parsedArray, splitLevels]);
+
+  const totalTreeComparisons = useMemo(() => {
+    return recombineLevels.reduce((sum, lvl) => sum + lvl.totalComparisons, 0);
+  }, [recombineLevels]);
 
   return (
     <div className="mergesort-playground">
@@ -473,14 +556,19 @@ export const MergeSortPlayground: React.FC = () => {
           <div className="playground-intro">
             <p>
               {language === 'es'
-                ? 'En cada nivel k, el problema se subdivide en 2^k subproblemas de tamaño N/(2^k). La suma de trabajo en cualquier nivel es siempre exactamente N.'
-                : 'At each level k, the problem splits into 2^k subproblems of size N/(2^k). The sum of work at any level is always exactly N.'}
+                ? 'Merge Sort opera en dos fases formales: división recursiva descendente (top-down) hasta casos base unitarios y conquista con fusión ascendente (bottom-up), donde cada par se recombina en tiempo lineal mediante comparaciones.'
+                : 'Merge Sort operates in two formal phases: top-down recursive division down to singleton base cases, followed by bottom-up conquer and merge, where pairs recombine in linear time via comparisons.'}
             </p>
           </div>
 
+          {/* Phase 1: Downward Division */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {treeLevels.map((lvl) => (
-              <div key={lvl.level} className="tree-level-row">
+            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span>↓</span>
+              <span>{language === 'es' ? '1. Fase de División Recursiva (Top-Down Split)' : '1. Top-Down Recursive Division'}</span>
+            </div>
+            {splitLevels.map((lvl) => (
+              <div key={`split-${lvl.level}`} className="tree-level-row">
                 <span className="tree-level-label">
                   {language === 'es' ? `Nivel ${lvl.level}` : `Level ${lvl.level}`}
                 </span>
@@ -491,17 +579,65 @@ export const MergeSortPlayground: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <span className="tree-level-work">Trabajo: {lvl.totalWork}</span>
+                <span className="tree-level-work">{language === 'es' ? 'Trabajo:' : 'Work:'} {lvl.totalWork}</span>
               </div>
             ))}
           </div>
 
-          <div className="stats-grid" style={{ marginTop: '0.5rem' }}>
+          {/* Phase 2: Upward Recombination & Merge */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--success)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span>↑</span>
+              <span>{language === 'es' ? '2. Fase de Fusión y Ordenamiento Ascendente (Bottom-Up Conquer & Merge)' : '2. Bottom-Up Conquer & Merge (Sorting)'}</span>
+            </div>
+            {recombineLevels.map((lvl) => (
+              <div key={`rec-${lvl.level}`} className="tree-level-row" style={{ borderColor: lvl.level === recombineLevels.length - 1 ? 'var(--success)' : 'var(--border)' }}>
+                <span className="tree-level-label">
+                  {lvl.level === 0
+                    ? (language === 'es' ? 'Casos Base' : 'Base Cases')
+                    : (language === 'es' ? `Fusión L${lvl.level}` : `Merge L${lvl.level}`)}
+                </span>
+                <div className="tree-nodes-container">
+                  {lvl.nodes.map((node, nIdx) => (
+                    <div
+                      key={nIdx}
+                      className="tree-node-block"
+                      style={{
+                        backgroundColor: lvl.level === recombineLevels.length - 1 ? 'var(--state-solution-bg)' : 'var(--surface)',
+                        border: lvl.level === recombineLevels.length - 1 ? '1.5px solid var(--success)' : '1px solid var(--border)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem'
+                      }}
+                    >
+                      <span>[{node.sorted.join(', ')}]</span>
+                      {node.comparisons > 0 && (
+                        <span style={{ fontSize: '0.72rem', color: 'var(--success)', fontWeight: 700 }}>
+                          ({node.comparisons} {language === 'es' ? 'comp.' : 'comps'})
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <span className="tree-level-work" style={{ color: 'var(--success)' }}>
+                  {language === 'es' ? 'Comparaciones:' : 'Comparisons:'} {lvl.totalComparisons}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="stats-grid" style={{ marginTop: '0.75rem' }}>
             <div className="stat-item">
               <span className="stat-item-label">
                 {language === 'es' ? 'Niveles de Profundidad (⌈log₂ N⌉ + 1):' : 'Depth Levels (⌈log₂ N⌉ + 1):'}
               </span>
-              <span className="stat-item-value">{treeLevels.length}</span>
+              <span className="stat-item-value">{splitLevels.length}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-item-label">
+                {language === 'es' ? 'Comparaciones Totales en Árbol:' : 'Total Tree Comparisons:'}
+              </span>
+              <span className="stat-item-value" style={{ color: 'var(--success)' }}>{totalTreeComparisons}</span>
             </div>
             <div className="stat-item">
               <span className="stat-item-label">

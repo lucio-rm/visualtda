@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { NQueensConflictType } from '../../engine/algorithms/nQueensTrace';
 import './NQueensVisualizer.css';
 
@@ -41,6 +42,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
   onCellClick,
   interactive = false
 }) => {
+  const { language } = useLanguage();
   const cellSize = n <= 4 ? 76 : n <= 5 ? 68 : n <= 6 ? 62 : 54;
   const boardPixelSize = n * cellSize;
 
@@ -49,7 +51,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
       <svg
         viewBox={`0 0 ${boardPixelSize} ${boardPixelSize}`}
         className="nqueens-board-svg"
-        aria-label={`Tablero de ajedrez ${n} por ${n}`}
+        aria-label={language === 'es' ? `Tablero de ajedrez ${n} por ${n}` : `Chessboard ${n} by ${n}`}
         role="img"
       >
         <defs>
@@ -90,7 +92,13 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                 key={`${r}-${c}`}
                 role={interactive ? 'button' : undefined}
                 tabIndex={interactive ? 0 : undefined}
-                aria-label={interactive ? `Fila ${r}, Columna ${c}${isPlaced ? ', con reina' : ', vacía'}` : undefined}
+                aria-label={
+                  interactive
+                    ? language === 'es'
+                      ? `Fila ${r}, Columna ${c}${isPlaced ? ', con reina' : ', vacía'}`
+                      : `Row ${r}, Column ${c}${isPlaced ? ', with queen' : ', empty'}`
+                    : undefined
+                }
                 onClick={() => interactive && onCellClick?.(r, c)}
                 onKeyDown={(e) => {
                   if (interactive && (e.key === 'Enter' || e.key === ' ')) {

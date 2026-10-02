@@ -55,6 +55,8 @@ export const RoadAntennasPlayground: React.FC = () => {
   const [draggingHouseIdx, setDraggingHouseIdx] = useState<number | null>(null);
   const isDraggingRef = useRef(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
+  const dragOffsetKm = useRef(0);
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Compute canonical greedy solution
   const greedyAntennas = useMemo(() => {
@@ -103,6 +105,28 @@ export const RoadAntennasPlayground: React.FC = () => {
     return Math.round(ratio * maxKm);
   };
 
+  const getSvgX = (clientX: number): number => {
+    const svg = svgRef.current;
+    if (svg) {
+      try {
+        const ctm = svg.getScreenCTM();
+        if (ctm) {
+          const pt = svg.createSVGPoint();
+          pt.x = clientX;
+          pt.y = 0;
+          return pt.matrixTransform(ctm.inverse()).x;
+        }
+      } catch {
+        // fallback
+      }
+      const rect = svg.getBoundingClientRect();
+      if (rect.width > 0) {
+        return ((clientX - rect.left) / rect.width) * svgWidth;
+      }
+    }
+    return 0;
+  };
+
   const handleApplyActionAtKm = (targetKm: number) => {
     const clampedKm = Math.max(0, Math.min(maxKm, Math.round(targetKm)));
     if (activeTool === 'place_antenna') {
@@ -126,6 +150,9 @@ export const RoadAntennasPlayground: React.FC = () => {
     e.stopPropagation();
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
+    const initialSvgX = getSvgX(e.clientX);
+    const mouseKm = xToKm(initialSvgX);
+    dragOffsetKm.current = userAntennas[idx] - mouseKm;
     (e.target as Element).setPointerCapture(e.pointerId);
     setDraggingAntennaIdx(idx);
   };
@@ -134,6 +161,9 @@ export const RoadAntennasPlayground: React.FC = () => {
     e.stopPropagation();
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
+    const initialSvgX = getSvgX(e.clientX);
+    const mouseKm = xToKm(initialSvgX);
+    dragOffsetKm.current = houses[idx] - mouseKm;
     (e.target as Element).setPointerCapture(e.pointerId);
     setDraggingHouseIdx(idx);
   };
@@ -144,26 +174,27 @@ export const RoadAntennasPlayground: React.FC = () => {
     if (dist > 5) {
       isDraggingRef.current = true;
     }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
-    const currentKm = xToKm(clickX);
+    const currentSvgX = getSvgX(e.clientX);
+    const currentMouseKm = xToKm(currentSvgX);
 
     if (draggingAntennaIdx !== null) {
+      const targetKm = Math.max(0, Math.min(maxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
       setUserAntennas((prev) => {
         const copy = [...prev];
-        copy[draggingAntennaIdx] = currentKm;
+        copy[draggingAntennaIdx] = targetKm;
         return copy;
       });
-      setCursorKm(currentKm);
-      setInputKm(String(currentKm));
+      setCursorKm(targetKm);
+      setInputKm(String(targetKm));
     } else if (draggingHouseIdx !== null) {
+      const targetKm = Math.max(0, Math.min(maxKm, Math.round(currentMouseKm + dragOffsetKm.current)));
       setHouses((prev) => {
         const copy = [...prev];
-        copy[draggingHouseIdx] = currentKm;
+        copy[draggingHouseIdx] = targetKm;
         return copy;
       });
-      setCursorKm(currentKm);
-      setInputKm(String(currentKm));
+      setCursorKm(targetKm);
+      setInputKm(String(targetKm));
     }
   };
 
@@ -190,8 +221,7 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (isDraggingRef.current) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = ((e.clientX - rect.left) / rect.width) * svgWidth;
+    const clickX = getSvgX(e.clientX);
     const clickedKm = xToKm(clickX);
     setCursorKm(clickedKm);
     setInputKm(String(clickedKm));
@@ -372,6 +402,7 @@ export const RoadAntennasPlayground: React.FC = () => {
       {/* Interactive Road SVG */}
       <div className="interactive-road-canvas-wrap">
         <svg
+          ref={svgRef}
           className="interactive-road-svg"
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           width="100%"
@@ -529,9 +560,11 @@ export const RoadAntennasPlayground: React.FC = () => {
                   stroke="var(--accent)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
+                  pointerEvents="none"
                 />
-                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="var(--accent)" strokeWidth="2.5" />
-                <circle cx={antX} cy={roadY - 65} r="4.5" fill="var(--accent)" />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 70} stroke="transparent" strokeWidth="24" style={{ cursor: draggingAntennaIdx === aIdx ? 'grabbing' : 'grab' }} />
+                <line x1={antX} y1={roadY} x2={antX} y2={roadY - 65} stroke="var(--accent)" strokeWidth="2.5" pointerEvents="none" />
+                <circle cx={antX} cy={roadY - 65} r="5" fill="var(--accent)" pointerEvents="none" />
                 <text
                   x={antX}
                   y={roadY - 72}
@@ -539,6 +572,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   fill="var(--accent)"
                   fontSize="13"
                   fontWeight="bold"
+                  pointerEvents="none"
                 >
                   {antKm}k
                 </text>

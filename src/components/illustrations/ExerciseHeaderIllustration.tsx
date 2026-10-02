@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface ExerciseHeaderIllustrationProps {
   exerciseId: string;
@@ -11,6 +12,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
   problemId,
   className = ''
 }) => {
+  const { language } = useLanguage();
   const commonProps = {
     viewBox: '0 0 240 120',
     fill: 'none',
@@ -213,13 +215,15 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <path d="M145 44 C145 60, 190 60, 190 75" stroke="var(--warning, #f59e0b)" strokeWidth="2" fill="none" />
           {/* 2 -> pos 1 (Crosses 4 and 3) */}
           <path d="M190 44 C190 60, 100 60, 100 75" stroke="var(--warning, #f59e0b)" strokeWidth="2" fill="none" />
-          <text x="215" y="60" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">3 Inversiones</text>
+          <text x="215" y="60" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">
+            {language === 'es' ? '3 Inversiones' : '3 Inversions'}
+          </text>
         </svg>
       );
 
     case 'huffman-coding':
       return (
-        <svg {...commonProps} aria-label="Árbol binario de Huffman con frecuencias y ramas 0 y 1">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Árbol binario de Huffman con frecuencias y ramas 0 y 1' : 'Huffman binary tree with frequencies and 0/1 branches'}>
           {/* Tree Root */}
           <circle cx="120" cy="22" r="13" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="2" />
           <text x="120" y="26" textAnchor="middle" fill="var(--accent, #6366f1)" fontSize="13" fontWeight="bold">100</text>
@@ -232,7 +236,9 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           {/* Left Child (Leaf: 'A', freq 45) */}
           <circle cx="65" cy="72" r="12" fill="var(--surface-active, #334155)" stroke="var(--success, #10b981)" strokeWidth="2" />
           <text x="65" y="75" textAnchor="middle" fill="var(--text)" fontSize="13" fontWeight="bold">'A'</text>
-          <text x="65" y="94" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">cód: "0"</text>
+          <text x="65" y="94" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">
+            {language === 'es' ? 'cód: "0"' : 'code: "0"'}
+          </text>
           {/* Right Subtree Node */}
           <circle cx="170" cy="62" r="11" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
           <text x="170" y="65" textAnchor="middle" fill="var(--text-muted, #94a3b8)" fontSize="13">55</text>
@@ -540,15 +546,19 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <g transform="translate(155, 30)">
             <circle cx="26" cy="26" r="24" fill="var(--warning, #f59e0b)" stroke="#ffffff" strokeWidth="2" />
             <text x="26" y="24" textAnchor="middle" fill="#000000" fontSize="13" fontWeight="bold">P=0.5</text>
-            <text x="26" y="36" textAnchor="middle" fill="#000000" fontSize="13">Justo</text>
+            <text x="26" y="36" textAnchor="middle" fill="#000000" fontSize="13">
+              {language === 'es' ? 'Justo' : 'Fair'}
+            </text>
           </g>
-          <text x="120" y="108" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">p(1-p) = (1-p)p  ⇒ Simetría Imparcial</text>
+          <text x="120" y="108" textAnchor="middle" fill="var(--success, #10b981)" fontSize="13">
+            {language === 'es' ? 'p(1-p) = (1-p)p  ⇒ Simetría Imparcial' : 'p(1-p) = (1-p)p  ⇒ Impartial Symmetry'}
+          </text>
         </svg>
       );
 
     case 'merge-sort':
       return (
-        <svg {...commonProps} aria-label="Árbol divide y conquista de ordenamiento por mezcla">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Árbol divide y conquista de ordenamiento por mezcla' : 'Merge sort divide and conquer tree'}>
           {/* Root array */}
           <rect x="80" y="10" width="80" height="18" rx="3" fill="var(--surface-raised, #1e293b)" stroke="var(--accent, #6366f1)" strokeWidth="1.5" />
           <text x="120" y="22" textAnchor="middle" fill="var(--text)" fontSize="13">[38, 27, 43, 3]</text>
@@ -636,7 +646,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'median-of-medians':
       return (
-        <svg {...commonProps} aria-label="Grupos de 5 elementos y selección de la mediana de medianas">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Grupos de 5 elementos y selección de la mediana de medianas' : 'Groups of 5 elements and median of medians selection'}>
           {[0, 1, 2, 3, 4].map((col) => (
             <g key={col} transform={`translate(${45 + col * 32}, 15)`}>
               {[0, 1, 2, 3, 4].map((row) => (
@@ -652,36 +662,48 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
             </g>
           ))}
           <line x1="40" y1="53" x2="200" y2="53" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="2 2" />
-          <text x="215" y="56" fill="var(--accent)" fontSize="13">Medianas</text>
-          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Pivote M garantiza ≥ 30% y ≤ 70% en partición lineal O(n)</text>
+          <text x="215" y="56" fill="var(--accent)" fontSize="13">
+            {language === 'es' ? 'Medianas' : 'Medians'}
+          </text>
+          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Pivote M garantiza ≥ 30% y ≤ 70% en partición lineal O(n)' : 'Pivot M guarantees ≥ 30% and ≤ 70% in linear O(n) partition'}
+          </text>
         </svg>
       );
 
     case 'majority-element':
       return (
-        <svg {...commonProps} aria-label="Cancelación de pares de candidatos para elemento mayoritario">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Cancelación de pares de candidatos para elemento mayoritario' : 'Candidate pair cancellation for majority element'}>
           <g transform="translate(35, 20)">
             <rect x="0" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
             <text x="18" y="16" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="bold">A</text>
             <rect x="42" y="0" width="36" height="24" rx="4" fill="var(--border-strong)" />
             <text x="60" y="16" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="bold">B</text>
-            <text x="39" y="38" textAnchor="middle" fill="var(--text-muted)" fontSize="13">A ≠ B (Cancela)</text>
+            <text x="39" y="38" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+              {language === 'es' ? 'A ≠ B (Cancela)' : 'A ≠ B (Cancels)'}
+            </text>
           </g>
           <g transform="translate(130, 20)">
             <rect x="0" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
             <text x="18" y="16" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="bold">A</text>
             <rect x="42" y="0" width="36" height="24" rx="4" fill="var(--accent)" />
             <text x="60" y="16" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="bold">A</text>
-            <text x="39" y="38" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">A = A (Sobrevive)</text>
+            <text x="39" y="38" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">
+              {language === 'es' ? 'A = A (Sobrevive)' : 'A = A (Survives)'}
+            </text>
           </g>
-          <text x="120" y="90" textAnchor="middle" fill="var(--accent)" fontSize="13" fontWeight="bold">{'Candidato dominante > n/2'}</text>
-          <text x="120" y="108" textAnchor="middle" fill="var(--text-muted)" fontSize="13">{'Boyer-Moore O(n) / Divide & Conquer T(n) = 2T(n/2) + O(n)'}</text>
+          <text x="120" y="90" textAnchor="middle" fill="var(--accent)" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Candidato dominante > n/2' : 'Dominant candidate > n/2'}
+          </text>
+          <text x="120" y="108" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {'Boyer-Moore O(n) / Divide & Conquer T(n) = 2T(n/2) + O(n)'}
+          </text>
         </svg>
       );
 
     case 'dijkstra':
       return (
-        <svg {...commonProps} aria-label="Grafo ponderado con caminos mínimos desde origen S">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Grafo ponderado con caminos mínimos desde origen S' : 'Weighted graph with shortest paths from source S'}>
           <line x1="50" y1="60" x2="110" y2="25" stroke="#10b981" strokeWidth="2" />
           <line x1="50" y1="60" x2="110" y2="95" stroke="var(--border-strong)" strokeWidth="1.5" />
           <line x1="110" y1="25" x2="180" y2="60" stroke="#10b981" strokeWidth="2" />
@@ -703,7 +725,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'kruskal-mst':
       return (
-        <svg {...commonProps} aria-label="Árbol recubridor mínimo con aristas ordenadas y componentes disjuntos">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Árbol recubridor mínimo con aristas ordenadas y componentes disjuntos' : 'Minimum spanning tree with sorted edges and disjoint sets'}>
           <line x1="50" y1="40" x2="120" y2="25" stroke="#10b981" strokeWidth="2.5" />
           <line x1="120" y1="25" x2="190" y2="40" stroke="#10b981" strokeWidth="2.5" />
           <line x1="50" y1="40" x2="80" y2="85" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
@@ -719,31 +741,35 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="80" y="88" textAnchor="middle" fill="var(--text)" fontSize="13">4</text>
           <circle cx="150" cy="85" r="10" fill="var(--surface-raised)" stroke="#10b981" strokeWidth="2" />
           <text x="150" y="88" textAnchor="middle" fill="var(--text)" fontSize="13">5</text>
-          <text x="120" y="112" textAnchor="middle" fill="var(--success)" fontSize="13" fontWeight="bold">Propiedad del Corte (Cut Property) + Union-Find</text>
+          <text x="120" y="112" textAnchor="middle" fill="var(--success)" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Propiedad del Corte (Cut Property) + Union-Find' : 'Cut Property + Union-Find'}
+          </text>
         </svg>
       );
 
     case 'interval-partitioning':
       return (
-        <svg {...commonProps} aria-label="Partición de intervalos en aulas paralelas">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Partición de intervalos en aulas paralelas' : 'Interval partitioning into parallel classrooms'}>
           <rect x="25" y="15" width="40" height="20" rx="3" fill="var(--surface-hover)" />
-          <text x="45" y="28" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Aula 1</text>
+          <text x="45" y="28" textAnchor="middle" fill="var(--text-muted)" fontSize="13">{language === 'es' ? 'Aula 1' : 'Room 1'}</text>
           <rect x="25" y="45" width="40" height="20" rx="3" fill="var(--surface-hover)" />
-          <text x="45" y="58" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Aula 2</text>
+          <text x="45" y="58" textAnchor="middle" fill="var(--text-muted)" fontSize="13">{language === 'es' ? 'Aula 2' : 'Room 2'}</text>
           <rect x="25" y="75" width="40" height="20" rx="3" fill="var(--surface-hover)" />
-          <text x="45" y="88" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Aula 3</text>
+          <text x="45" y="88" textAnchor="middle" fill="var(--text-muted)" fontSize="13">{language === 'es' ? 'Aula 3' : 'Room 3'}</text>
           <rect x="75" y="17" width="55" height="16" rx="3" fill="var(--accent)" />
           <rect x="140" y="17" width="65" height="16" rx="3" fill="var(--accent)" />
           <rect x="90" y="47" width="80" height="16" rx="3" fill="#10b981" />
           <rect x="110" y="77" width="45" height="16" rx="3" fill="#f59e0b" />
           <line x1="125" y1="10" x2="125" y2="100" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 3" />
-          <text x="125" y="112" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">Profundidad d = 3 aulas óptimas</text>
+          <text x="125" y="112" textAnchor="middle" fill="#ef4444" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Profundidad d = 3 aulas óptimas' : 'Depth d = 3 optimal classrooms'}
+          </text>
         </svg>
       );
 
     case 'minimize-lateness':
       return (
-        <svg {...commonProps} aria-label="Planificación de tareas con minimización de retraso máximo">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Planificación de tareas con minimización de retraso máximo' : 'Task scheduling with maximum lateness minimization'}>
           <line x1="30" y1="65" x2="210" y2="65" stroke="var(--border)" strokeWidth="2" />
           <rect x="30" y="45" width="45" height="18" rx="3" fill="var(--accent)" />
           <text x="52" y="57" textAnchor="middle" fill="#fff" fontSize="13">J₁ (t:3)</text>
@@ -757,14 +783,18 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <text x="130" y="30" textAnchor="middle" fill="#ef4444" fontSize="13">d₂</text>
           <line x1="175" y1="35" x2="175" y2="70" stroke="#ef4444" strokeWidth="1.5" />
           <text x="175" y="30" textAnchor="middle" fill="#ef4444" fontSize="13">d₃</text>
-          <text x="120" y="95" textAnchor="middle" fill="var(--success)" fontSize="13" fontWeight="bold">Earliest Deadline First (EDF) elimina inversiones</text>
-          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="13">L_max = max(0, C_i - d_i) óptimo</text>
+          <text x="120" y="95" textAnchor="middle" fill="var(--success)" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Earliest Deadline First (EDF) elimina inversiones' : 'Earliest Deadline First (EDF) eliminates inversions'}
+          </text>
+          <text x="120" y="110" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'L_max = max(0, C_i - d_i) óptimo' : 'L_max = max(0, C_i - d_i) optimal'}
+          </text>
         </svg>
       );
 
     case 'segmented-least-squares':
       return (
-        <svg {...commonProps} aria-label="Mínimos cuadrados segmentados con dos rectas ajustadas">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Mínimos cuadrados segmentados con dos rectas ajustadas' : 'Segmented least squares with fitted lines'}>
           <line x1="30" y1="95" x2="200" y2="95" stroke="var(--border)" strokeWidth="1.5" />
           <line x1="30" y1="95" x2="30" y2="15" stroke="var(--border)" strokeWidth="1.5" />
           <circle cx="45" cy="75" r="3" fill="var(--text-muted)" />
@@ -776,14 +806,16 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <circle cx="175" cy="20" r="3" fill="var(--text-muted)" />
           <line x1="115" y1="48" x2="185" y2="16" stroke="#10b981" strokeWidth="2" />
           <line x1="105" y1="20" x2="105" y2="95" stroke="var(--warning)" strokeWidth="1" strokeDasharray="3 3" />
-          <text x="105" y="14" textAnchor="middle" fill="var(--warning)" fontSize="13">Partición óptima i</text>
+          <text x="105" y="14" textAnchor="middle" fill="var(--warning)" fontSize="13">
+            {language === 'es' ? 'Partición óptima i' : 'Optimal partition i'}
+          </text>
           <text x="120" y="112" textAnchor="middle" fill="var(--text-muted)" fontSize="13">OPT(j) = min_{'{1≤i≤j}'} (e_{'{i,j}'} + C + OPT(i-1))</text>
         </svg>
       );
 
     case 'rna-secondary-structure':
       return (
-        <svg {...commonProps} aria-label="Estructura secundaria de ARN con apareamientos Watson-Crick">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Estructura secundaria de ARN con apareamientos Watson-Crick' : 'RNA secondary structure with Watson-Crick pairings'}>
           <line x1="30" y1="85" x2="210" y2="85" stroke="var(--border-strong)" strokeWidth="2" />
           {['A', 'U', 'C', 'G', 'A', 'U', 'G', 'C'].map((b, i) => (
             <g key={i} transform={`translate(${38 + i * 22}, 85)`}>
@@ -793,14 +825,18 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           ))}
           <path d="M 38 82 Q 71 35 104 82" stroke="#10b981" strokeWidth="2" fill="none" />
           <path d="M 126 82 Q 159 30 192 82" stroke="#10b981" strokeWidth="2" fill="none" />
-          <text x="120" y="25" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">Apareamientos sin cruce (Non-crossing)</text>
-          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted)" fontSize="13">{'Restricción de horquilla t < j - 4'}</text>
+          <text x="120" y="25" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Apareamientos sin cruce (Non-crossing)' : 'Non-crossing base pairings'}
+          </text>
+          <text x="120" y="116" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Restricción de horquilla t < j - 4' : 'Hairpin constraint t < j - 4'}
+          </text>
         </svg>
       );
 
     case 'bellman-ford':
       return (
-        <svg {...commonProps} aria-label="Bellman-Ford con aristas negativas y detección de ciclos">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Bellman-Ford con aristas negativas y detección de ciclos' : 'Bellman-Ford with negative edges and cycle detection'}>
           <line x1="50" y1="60" x2="110" y2="25" stroke="var(--border-strong)" strokeWidth="1.5" />
           <line x1="110" y1="25" x2="170" y2="60" stroke="#ef4444" strokeWidth="2" />
           <line x1="170" y1="60" x2="110" y2="95" stroke="var(--border-strong)" strokeWidth="1.5" />
@@ -820,7 +856,7 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
 
     case 'sudoku':
       return (
-        <svg {...commonProps} aria-label="Cuadrícula 3x3 de Sudoku con dominios de restricción">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Cuadrícula 3x3 de Sudoku con dominios de restricción' : '3x3 Sudoku grid with constraint domains'}>
           <rect x="75" y="15" width="90" height="90" rx="4" fill="var(--surface-raised)" stroke="var(--accent)" strokeWidth="2" />
           {[1, 2].map((i) => (
             <React.Fragment key={i}>
@@ -835,27 +871,33 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <rect x="106" y="46" width="28" height="28" fill="rgba(99, 102, 241, 0.2)" stroke="var(--accent)" strokeWidth="1.5" />
           <text x="120" y="58" textAnchor="middle" fill="var(--accent)" fontSize="13" fontWeight="bold">{'{1, 4}'}</text>
           <text x="120" y="68" textAnchor="middle" fill="var(--text-muted)" fontSize="13">MRV: 2</text>
-          <text x="120" y="115" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Restricción de filas, columnas y cajas 3×3</text>
+          <text x="120" y="115" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Restricción de filas, columnas y cajas 3×3' : 'Row, column and 3x3 box constraints'}
+          </text>
         </svg>
       );
 
     case 'hamiltonian-cycle':
       return (
-        <svg {...commonProps} aria-label="Grafo con ciclo hamiltoniano activo pasando por todos los vértices">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Grafo con ciclo hamiltoniano activo pasando por todos los vértices' : 'Graph with active Hamiltonian cycle visiting all vertices'}>
           <polygon points="120,20 180,50 160,100 80,100 60,50" fill="none" stroke="#10b981" strokeWidth="2.5" />
           <line x1="120" y1="20" x2="160" y2="100" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
           <line x1="120" y1="20" x2="80" y2="100" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
           {[{x: 120, y: 20}, {x: 180, y: 50}, {x: 160, y: 100}, {x: 80, y: 100}, {x: 60, y: 50}].map((n, i) => (
             <circle key={i} cx={n.x} cy={n.y} r="8" fill="#10b981" stroke="var(--surface)" strokeWidth="2" />
           ))}
-          <text x="120" y="65" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">Ciclo Simple Válido</text>
-          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Visita cada vértice exactamente una vez (NP-completo)</text>
+          <text x="120" y="65" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">
+            {language === 'es' ? 'Ciclo Simple Válido' : 'Valid Simple Cycle'}
+          </text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Visita cada vértice exactamente una vez (NP-completo)' : 'Visits each vertex exactly once (NP-complete)'}
+          </text>
         </svg>
       );
 
     case 'tsp':
       return (
-        <svg {...commonProps} aria-label="Viajante de comercio con tour óptimo y poda Branch and Bound">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Viajante de comercio con tour óptimo y poda Branch and Bound' : 'Traveling salesperson with optimal tour and Branch & Bound pruning'}>
           <polygon points="50,30 130,20 190,60 140,95 70,85" fill="none" stroke="var(--accent)" strokeWidth="2" />
           {[{x: 50, y: 30}, {x: 130, y: 20}, {x: 190, y: 60}, {x: 140, y: 95}, {x: 70, y: 85}].map((c, i) => (
             <circle key={i} cx={c.x} cy={c.y} r="6" fill="var(--accent)" stroke="#fff" strokeWidth="1.5" />
@@ -863,29 +905,44 @@ export const ExerciseHeaderIllustration: React.FC<ExerciseHeaderIllustrationProp
           <rect x="85" y="45" width="70" height="24" rx="4" fill="var(--surface-raised)" stroke="var(--border)" />
           <text x="120" y="56" textAnchor="middle" fill="var(--text)" fontSize="13">Cost: 247 km</text>
           <text x="120" y="65" textAnchor="middle" fill="#10b981" fontSize="13" fontWeight="bold">LB ≤ Incumbent</text>
-          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Branch & Bound con cotas Held-Karp 1-Tree</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Branch & Bound con cotas Held-Karp 1-Tree' : 'Branch & Bound with Held-Karp 1-Tree bounds'}
+          </text>
         </svg>
       );
 
     case 'knights-tour':
       return (
-        <svg {...commonProps} aria-label="Tablero de ajedrez con salto en L de caballo y heurística de Warnsdorff">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Tablero de ajedrez con salto en L de caballo y heurística de Warnsdorff' : "Chessboard with knight's L-move and Warnsdorff's heuristic"}>
           <rect x="70" y="15" width="100" height="90" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
           <rect x="110" y="55" width="20" height="20" fill="var(--accent)" rx="2" />
-          <text x="120" y="70" textAnchor="middle" fill="#fff" fontSize="13">♞</text>
+          <g transform="translate(112, 57)">
+            <svg width="16" height="16" viewBox="0 0 45 45">
+              <path
+                d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"
+                fill="#ffffff"
+              />
+              <path
+                d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,7.4 17.07,8.07 18,8.5 C 18.72,8.87 21.05,8.8 21,10 C 20.95,10.6 20.3,11.2 20,11.5 C 19.7,11.8 18.7,12 18,12 C 16.6,12 15.6,11.4 15.6,11.4 C 15.6,11.4 17.3,12.6 18,13 C 18.7,13.4 20.3,13.4 21,13.5 C 22,13.5 23,13.8 23.5,14.5 C 24,15.2 24.4,16.5 24,18 z"
+                fill="#ffffff"
+              />
+            </svg>
+          </g>
           <line x1="120" y1="65" x2="100" y2="25" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
           <circle cx="100" cy="25" r="5" fill="#10b981" />
           <line x1="120" y1="65" x2="140" y2="25" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
           <circle cx="140" cy="25" r="5" fill="#10b981" />
           <line x1="120" y1="65" x2="80" y2="55" stroke="#10b981" strokeWidth="1.5" strokeDasharray="2 2" />
           <circle cx="80" cy="55" r="5" fill="#10b981" />
-          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">Heurística de Warnsdorff: grado mínimo de salida</text>
+          <text x="120" y="114" textAnchor="middle" fill="var(--text-muted)" fontSize="13">
+            {language === 'es' ? 'Heurística de Warnsdorff: grado mínimo de salida' : "Warnsdorff's heuristic: minimum outgoing degree"}
+          </text>
         </svg>
       );
 
     default:
       return (
-        <svg {...commonProps} aria-label="Ilustración esquemática del algoritmo">
+        <svg {...commonProps} aria-label={language === 'es' ? 'Ilustración esquemática del algoritmo' : 'Schematic algorithm illustration'}>
           <rect x="40" y="20" width="160" height="80" rx="8" fill="var(--surface-raised, #1e293b)" stroke="var(--border, #334155)" strokeWidth="1.5" />
           <circle cx="75" cy="50" r="14" fill="var(--accent, #6366f1)" />
           <circle cx="120" cy="70" r="14" fill="var(--success, #10b981)" />

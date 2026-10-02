@@ -1,17 +1,17 @@
 :root,
 [data-theme='light'] {
-  /* Color palette - Light mode default (Calibrated for high contrast, warmth & zero eye-strain) */
-  --bg: #edf2f7;
+  /* Color palette - Light mode (Calibrated for warm salmon-stone paper canvas, deep espresso text & zero eye-strain) */
+  --bg: #f8f2ec;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --surface-light: #f8fafc;
-  --surface-hover: #f1f5f9;
-  --surface-active: #e2e8f0;
-  --border: #cbd5e1;
-  --border-strong: #475569;
-  --border-muted: #e2e8f0;
-  --text: #0f172a;
-  --text-muted: #334155;
+  --surface-light: #fdfaf7;
+  --surface-hover: #f3eae1;
+  --surface-active: #e8ded4;
+  --border: #ded2c6;
+  --border-strong: #594c42;
+  --border-muted: #eaddd2;
+  --text: #1c140e;
+  --text-muted: #574a40;
   --accent: #1d4ed8;
   --accent-hover: #1e40af;
   --accent-contrast: #ffffff;
@@ -22,10 +22,10 @@
   --error-bg: #fef2f2;
   --warning: #b45309;
   --warning-bg: #fffbeb;
-  --code-bg: #f8fafc;
-  --code-border: #cbd5e1;
-  --canvas-bg: #f8fafc;
-  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --code-bg: #f7f1eb;
+  --code-border: #ded2c6;
+  --canvas-bg: #fdfaf7;
+  --shadow-card: 0 1px 3px 0 rgba(28, 20, 14, 0.08), 0 1px 2px -1px rgba(28, 20, 14, 0.05);
 
   /* Spacing Scale (8px rhythm) */
   --space-1: 4px;
@@ -75,15 +75,15 @@
   --state-pruned-bg: var(--error-bg);
 
   /* Visualizer Board & Chessboard Tokens (Balanced Educational Geometry) */
-  --board-bg: #f8fafc;
+  --board-bg: #fdfaf7;
   --board-cell-light: #ffffff;
-  --board-cell-dark: #e2e8f0;
-  --board-border: #cbd5e1;
-  --board-border-strong: #64748b;
-  --board-text: #0f172a;
-  --board-text-muted: #475569;
-  --board-hover: #dbeafe;
-  --board-active: #bfdbfe;
+  --board-cell-dark: #ede1d5;
+  --board-border: #ded2c6;
+  --board-border-strong: #594c42;
+  --board-text: #1c140e;
+  --board-text-muted: #574a40;
+  --board-hover: #e0e7ff;
+  --board-active: #c7d2fe;
   --board-accent: #1d4ed8;
   --board-candidate: #fef3c7;
   --board-conflict: #fee2e2;
