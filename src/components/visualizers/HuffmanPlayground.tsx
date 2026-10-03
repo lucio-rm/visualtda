@@ -308,7 +308,7 @@ export const HuffmanPlayground: React.FC = () => {
               if (!node) return null;
               const isSelected = selectedNodeIds.includes(id);
               const isMinCandidate = currentLowestIds.includes(id);
-              const label = node.char !== null ? `'${node.char === ' ' ? '␣' : node.char}'` : `[Subárbol]`;
+              const label = node.char !== null ? `'${node.char === ' ' ? '␣' : node.char}'` : (language === 'es' ? '[Subárbol]' : '[Subtree]');
 
               return (
                 <button
@@ -316,7 +316,7 @@ export const HuffmanPlayground: React.FC = () => {
                   type="button"
                   className={`huff-node-pill ${isSelected ? 'selected' : ''} ${isMinCandidate ? 'is-min' : ''}`}
                   onClick={() => handleToggleSelect(id)}
-                  title={`Frecuencia: ${node.freq}`}
+                  title={language === 'es' ? `Frecuencia: ${node.freq}` : `Frequency: ${node.freq}`}
                 >
                   <span className="pill-label">{label}</span>
                   <span className="pill-freq">f={node.freq}</span>

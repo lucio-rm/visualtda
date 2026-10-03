@@ -372,7 +372,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                 style={{ cursor: 'pointer' }}
                 role="button"
                 tabIndex={0}
-                aria-label={`Nodo ${n.id}, peso ${n.weight}, valor ${n.value}, cota ${n.upperBound}`}
+                aria-label={language === 'es' ? `Nodo ${n.id}, peso ${n.weight}, valor ${n.value}, cota ${n.upperBound}` : `Node ${n.id}, weight ${n.weight}, value ${n.value}, bound ${n.upperBound}`}
               >
                 <circle
                   cx={n.x}

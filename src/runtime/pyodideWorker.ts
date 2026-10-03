@@ -128,6 +128,7 @@ try:
             'mochila_fraccionaria': ['fractional_knapsack'],
             'construir_antenas': ['build_antennas', 'road_antennas'],
             'particionar_intervalos': ['interval_partitioning', 'partition_intervals'],
+            'codificar_huffman': ['huffman_encoding', 'huffman_coding', 'build_huffman'],
             'minimizar_retraso_maximo': ['minimize_lateness', 'min_lateness'],
             'dijkstra': ['dijkstra'],
             'kruskal_mst': ['kruskal_mst', 'kruskal'],

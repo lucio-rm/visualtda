@@ -8,6 +8,25 @@ import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './IntervalPartitioningVisualizer.css';
 
+function localizeCourseName(name: string, lang: 'es' | 'en'): string {
+  if (lang === 'es') return name;
+  return name
+    .replace(/Algoritmos I/g, 'Algorithms I')
+    .replace(/Álgebra Lineal/g, 'Linear Algebra')
+    .replace(/Física I/g, 'Physics I')
+    .replace(/Estructuras/g, 'Data Structures')
+    .replace(/Bases de Datos/g, 'Databases')
+    .replace(/Sistemas Op\./g, 'Operating Systems')
+    .replace(/Sistemas Operativos/g, 'Operating Systems')
+    .replace(/Redes/g, 'Networks')
+    .replace(/Probabilidad y Estadística/g, 'Probability & Stats')
+    .replace(/Taller de Programación/g, 'Programming Workshop')
+    .replace(/Clase Teórica A/g, 'Theory Class A')
+    .replace(/Clase Práctica B/g, 'Lab Class B')
+    .replace(/Laboratorio C/g, 'Computer Lab C')
+    .replace(/Seminario D/g, 'Seminar D');
+}
+
 export const IntervalPartitioningVisualizer: React.FC = () => {
   const { language } = useLanguage();
 
@@ -188,7 +207,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                     fontFamily="var(--font-sans)"
                     clipPath={`url(#clip-${lecture.id})`}
                   >
-                    {lecture.name} [{lecture.start}-{lecture.end}]
+                    {localizeCourseName(lecture.name, language)} [{lecture.start}-{lecture.end}]
                   </text>
                 </g>
               );

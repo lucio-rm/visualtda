@@ -382,7 +382,7 @@ export const KruskalPlayground: React.FC = () => {
                   style={{ cursor: 'pointer' }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Arista ${edge.u}-${edge.v}, peso ${edge.weight}`}
+                  aria-label={language === 'es' ? `Arista ${edge.u}-${edge.v}, peso ${edge.weight}` : `Edge ${edge.u}-${edge.v}, weight ${edge.weight}`}
                 >
                   <line
                     x1={u.x}

@@ -374,7 +374,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               tabIndex={0}
               role="button"
               aria-pressed={isSelected}
-              aria-label={`Tarea ${task.id}, ${task.start} a ${task.end} horas, ${statusDesc}`}
+              aria-label={language === 'es' ? `Tarea ${task.id}, ${task.start} a ${task.end} horas, ${statusDesc}` : `Task ${task.id}, ${task.start} to ${task.end} hours, ${statusDesc}`}
               className={`task-bar-interactive ${isSelected ? 'selected' : ''} ${isConflict ? 'conflict' : ''}`}
               style={{ cursor: 'pointer', outline: 'none' }}
             >

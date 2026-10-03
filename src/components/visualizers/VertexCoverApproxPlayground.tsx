@@ -213,7 +213,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                 className={`approx-edge-btn ${isMatched ? 'matched' : isCovered ? 'covered' : ''}`}
                 onClick={() => toggleEdge(u, v)}
                 aria-pressed={isMatched}
-                aria-label={`Arista ${u}-${v}: ${edgeStatus}`}
+                aria-label={language === 'es' ? `Arista ${u}-${v}: ${edgeStatus}` : `Edge ${u}-${v}: ${edgeStatus}`}
               >
                 {u}—{v} {isMatched ? '★' : isCovered ? '✓' : ''}
               </button>
@@ -260,7 +260,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
                 role="button"
                 tabIndex={0}
                 aria-pressed={isMatched}
-                aria-label={`Arista entre ${u} y ${v}, ${edgeStatus}`}
+                aria-label={language === 'es' ? `Arista entre ${u} y ${v}, ${edgeStatus}` : `Edge between ${u} and ${v}, ${edgeStatus}`}
                 onClick={() => toggleEdge(u, v)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {

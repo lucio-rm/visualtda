@@ -13,6 +13,26 @@ interface InstancePreset {
   lectures: LectureInterval[];
 }
 
+function localizeCourseName(name: string, lang: 'es' | 'en'): string {
+  if (lang === 'es') return name;
+  return name
+    .replace(/Algoritmos I/g, 'Algorithms I')
+    .replace(/Álgebra Lineal/g, 'Linear Algebra')
+    .replace(/Física I/g, 'Physics I')
+    .replace(/Estructuras/g, 'Data Structures')
+    .replace(/Bases de Datos/g, 'Databases')
+    .replace(/Sistemas Op\./g, 'Operating Systems')
+    .replace(/Sistemas Operativos/g, 'Operating Systems')
+    .replace(/Redes de Datos/g, 'Computer Networks')
+    .replace(/Redes/g, 'Networks')
+    .replace(/Probabilidad y Estadística/g, 'Probability & Stats')
+    .replace(/Taller de Programación/g, 'Programming Workshop')
+    .replace(/Clase Teórica A/g, 'Theory Class A')
+    .replace(/Clase Práctica B/g, 'Lab Class B')
+    .replace(/Laboratorio C/g, 'Computer Lab C')
+    .replace(/Seminario D/g, 'Seminar D');
+}
+
 const PRESET_INSTANCES: InstancePreset[] = [
   {
     id: 'standard',
@@ -540,16 +560,17 @@ export const IntervalPartitioningPlayground: React.FC = () => {
             const isDragging = draggingLectureId === lec.id;
 
             // Formatted label strictly bounded to available block width
-            const fullLabel = `${lec.name} (${lec.start}h - ${lec.end}h)`;
+            const localizedLecName = localizeCourseName(lec.name, language);
+            const fullLabel = `${localizedLecName} (${lec.start}h - ${lec.end}h)`;
             const charW = 7.2;
             let displayLabel = fullLabel;
             if (fullLabel.length * charW > w - 12) {
-              if (lec.name.length * charW <= w - 12) {
-                displayLabel = lec.name;
+              if (localizedLecName.length * charW <= w - 12) {
+                displayLabel = localizedLecName;
               } else {
                 const maxChars = Math.floor((w - 18) / charW);
                 if (maxChars >= 5) {
-                  displayLabel = `${lec.name.slice(0, maxChars - 1)}…`;
+                  displayLabel = `${localizedLecName.slice(0, maxChars - 1)}…`;
                 } else {
                   displayLabel = lec.id.toUpperCase();
                 }
@@ -572,7 +593,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 aria-label={
                   language === 'es'
                     ? `Clase ${lec.name} (${lec.start}:00 a ${lec.end}:00), en Aula A${assignedRoom}${isConflicted ? ' (en conflicto)' : ''}`
-                    : `Lecture ${lec.name} (${lec.start}:00 to ${lec.end}:00), in Classroom A${assignedRoom}${isConflicted ? ' (conflicted)' : ''}`
+                    : `Lecture ${localizedLecName} (${lec.start}:00 to ${lec.end}:00), in Room A${assignedRoom}${isConflicted ? ' (conflicted)' : ''}`
                 }
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -588,7 +609,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
                 }}
                 style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
               >
-                <title>{`${lec.name} (${lec.start}:00 - ${lec.end}:00) — Aula A${assignedRoom}`}</title>
+                <title>{`${localizedLecName} (${lec.start}:00 - ${lec.end}:00) — ${language === 'es' ? 'Aula A' : 'Room A'}${assignedRoom}`}</title>
                 {/* SVG ClipPath guaranteeing text never spills outside block boundaries */}
                 <clipPath id={`lec-pg-clip-${lec.id}`}>
                   <rect
@@ -742,7 +763,7 @@ export const IntervalPartitioningPlayground: React.FC = () => {
               fontSize: '0.8125rem'
             }}
           >
-            <strong>{lec.name}</strong> ({lec.start}h-{lec.end}h)
+            <strong>{localizeCourseName(lec.name, language)}</strong> ({lec.start}h-{lec.end}h)
             {lectures.length > 1 && (
               <button
                 type="button"

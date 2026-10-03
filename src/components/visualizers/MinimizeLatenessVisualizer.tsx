@@ -156,7 +156,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   fontWeight="700"
                   fontFamily="var(--font-sans)"
                 >
-                  {job.name} (t={job.duration})
+                  {language === 'es' ? job.name : job.name.replace(/Tarea/g, 'Job')} (t={job.duration})
                 </text>
 
                 {/* Deadline indicator pin */}

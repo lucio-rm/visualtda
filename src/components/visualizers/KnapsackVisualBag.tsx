@@ -28,8 +28,27 @@ const ITEM_PALETTE = [
   { bg: 'rgba(244, 63, 94, 0.12)', border: '#f43f5e', text: 'var(--text)', badge: '#f43f5e' }, // Rose
   { bg: 'rgba(6, 182, 212, 0.12)', border: '#06b6d4', text: 'var(--text)', badge: '#06b6d4' }, // Cyan
   { bg: 'rgba(234, 88, 12, 0.12)', border: '#ea580c', text: 'var(--text)', badge: '#ea580c' }, // Orange
-  { bg: 'rgba(99, 102, 241, 0.12)', border: 'var(--accent)', text: 'var(--text)', badge: 'var(--accent)' }  // Indigo
 ];
+
+function localizeItemName(name: string, lang: 'es' | 'en'): string {
+  if (lang === 'es') return name;
+  return name
+    .replace(/Oro en polvo/g, 'Gold dust')
+    .replace(/Plata en polvo/g, 'Silver dust')
+    .replace(/Cobre en polvo/g, 'Copper dust')
+    .replace(/Oro/g, 'Gold')
+    .replace(/Plata/g, 'Silver')
+    .replace(/Cobre/g, 'Copper')
+    .replace(/Guitarra/g, 'Guitar')
+    .replace(/Celular/g, 'Phone')
+    .replace(/Cámara/g, 'Camera')
+    .replace(/Libro/g, 'Book')
+    .replace(/Linterna/g, 'Flashlight')
+    .replace(/Ítem/g, 'Item')
+    .replace(/Objeto/g, 'Item')
+    .replace(/Alta Densidad/g, 'High Density')
+    .replace(/Gran Rendimiento/g, 'High Yield');
+}
 
 export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
   capacity,
@@ -127,13 +146,13 @@ export const KnapsackVisualBag: React.FC<KnapsackVisualBagProps> = ({
                       minHeight: `${Math.max(48, effectiveWeight * 20)}px`
                     }}
                     role="group"
-                    aria-label={`${item.name}, ${effectiveWeight.toFixed(1)} kg, $${effectiveValue.toFixed(1)}`}
+                    aria-label={`${localizeItemName(item.name, language)}, ${effectiveWeight.toFixed(1)} kg, $${effectiveValue.toFixed(1)}`}
                   >
                     <div className="item-block-main">
                       <div className="item-block-title-row">
                         <span className="item-block-color-dot" style={{ backgroundColor: colorDef.badge }} />
                         <span className="item-block-name" style={{ color: 'var(--text)', fontWeight: 600 }}>
-                          {item.name}
+                          {localizeItemName(item.name, language)}
                         </span>
                         {isFractional && (
                           <span style={{ fontSize: '0.8125rem', padding: '0.1rem 0.45rem', borderRadius: '4px', background: 'var(--accent)', color: '#fff', fontWeight: 600 }}>

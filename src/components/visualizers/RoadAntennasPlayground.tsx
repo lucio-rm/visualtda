@@ -115,7 +115,7 @@ export const RoadAntennasPlayground: React.FC = () => {
       const usedLevels = new Set<number>();
       for (let j = 0; j < i; j++) {
         const prev = items[j];
-        if (curr.x - prev.x < 38) {
+        if (curr.x - prev.x < 48) {
           usedLevels.add(levels[prev.idx]);
         }
       }
@@ -646,7 +646,7 @@ export const RoadAntennasPlayground: React.FC = () => {
             const isCovered = userCoveredIndices.has(hIdx);
             const houseColor = isCovered ? 'var(--success)' : 'var(--warning)';
             const lvl = houseLabelLevels[hIdx] || 0;
-            const labelY = roadY - 26 - lvl * 16;
+            const labelY = roadY - 26 - lvl * 22;
             const isBeingDragged = draggingHouseIdx === hIdx;
 
             return (
@@ -750,6 +750,12 @@ export const RoadAntennasPlayground: React.FC = () => {
                   fontSize="13"
                   fontFamily="var(--font-sans)"
                   fontWeight={lvl > 0 || isBeingDragged ? '600' : 'normal'}
+                  style={{
+                    paintOrder: 'stroke fill',
+                    stroke: 'var(--surface)',
+                    strokeWidth: '3.5px',
+                    strokeLinejoin: 'round'
+                  }}
                   pointerEvents="none"
                 >
                   {hKm}k

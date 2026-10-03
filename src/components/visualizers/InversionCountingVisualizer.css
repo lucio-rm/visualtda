@@ -119,16 +119,17 @@
 
 .inv-split-title {
   font-weight: 700;
-  color: #fbbf24;
+  color: var(--warning);
   font-size: 0.9rem;
 }
 
 .inv-split-math {
   font-family: var(--font-mono);
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
-  color: #fef08a;
+  color: var(--warning);
   font-size: 0.85rem;
 }
 

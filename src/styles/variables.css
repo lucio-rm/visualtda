@@ -80,19 +80,19 @@
   /* =========================================================================
    * SEMANTIC WORKSPACE & CARD TOKENS (LIGHT THEME)
    * ========================================================================= */
-  --bg: #d8dce6;                        /* Deep cool slate desk canvas - unmistakable visual separation from white cards */
+  --bg: #ccd3de;                        /* Deep cool slate desk canvas - unmistakable visual separation from white cards */
   --surface: #ffffff;                   /* #ffffff Pure white elevated card surface (crisp card pop) */
   --surface-raised: #ffffff;
   --surface-light: #ffffff;
-  --surface-hover: #f0f3f8;             /* Distinct hover tint */
-  --surface-active: #e2e6ef;            /* Distinct pressed tint */
-  --canvas-bg: #eaedf4;                 /* Recessed interactive workbench inside white card */
+  --surface-hover: #f0f4fa;             /* Distinct hover tint */
+  --surface-active: #e2e8f2;            /* Distinct pressed tint */
+  --canvas-bg: #eaeff6;                 /* Recessed interactive workbench inside white card */
 
-  --border: #b8bcc8;                    /* Clear, visible component border (1.5px) */
-  --border-strong: #9ca1b0;             /* Interactive border */
-  --border-subtle: #cdced6;             /* Card divider */
-  --border-muted: #d9d9e0;              /* Soft divider */
-  --border-hover: #80838d;
+  --border: #a8b4c6;                    /* Clear, visible component border (1.5px) */
+  --border-strong: #8a96a8;             /* Interactive border */
+  --border-subtle: #c4ccda;             /* Card divider */
+  --border-muted: #d4dae5;              /* Soft divider */
+  --border-hover: #707a8a;
 
   --text: var(--slate-12);              /* #1c2024 High-contrast primary text (16.4:1 on card, 11.9:1 on bg) */
   --text-muted: var(--slate-11);        /* #555962 Secondary text (7.0:1 on card, 5.1:1 on bg) */

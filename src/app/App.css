@@ -367,8 +367,9 @@ select option,
 [data-theme='light'] .exercise-card,
 :root:not([data-theme='dark']) .exercise-card {
   background: #ffffff;
-  border: 1.5px solid #bcc5d3;
-  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.09), 0 2px 5px -1px rgba(15, 23, 42, 0.05);
+  border: 1.5px solid #a8b4c6;
+  border-top: 4px solid var(--accent);
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.10), 0 2px 5px -1px rgba(15, 23, 42, 0.06);
 }
 
 .exercise-card:hover {
@@ -447,17 +448,19 @@ select option,
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.75rem;
-  padding: 0.4rem 0.65rem;
+  padding: 0.35rem 0.55rem;
   border-radius: var(--radius-sm);
   background: var(--surface-hover);
   border: 1px solid var(--border-subtle);
-  gap: 0.5rem;
+  gap: 0.4rem;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .card-difficulty-group {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
   flex-shrink: 0;
 }
 
@@ -469,17 +472,17 @@ select option,
 }
 
 .difficulty-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
 }
 
 .card-stars {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 2.5px;
 }
 
 .star-icon {
@@ -2685,6 +2688,10 @@ select option,
   color: var(--grass-11);
   font-weight: 700;
   border: 1px solid var(--grass-7);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .badge-testing,
@@ -2693,6 +2700,10 @@ select option,
   color: var(--amber-11);
   font-weight: 700;
   border: 1px solid var(--amber-7);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .badge-exploring {
@@ -2700,6 +2711,10 @@ select option,
   color: var(--indigo-11);
   font-weight: 700;
   border: 1px solid var(--indigo-7);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 

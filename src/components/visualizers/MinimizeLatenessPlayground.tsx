@@ -116,9 +116,14 @@ export const MinimizeLatenessPlayground: React.FC = () => {
   const [dragStartX, setDragStartX] = useState<number>(0);
   const [dragCurrentX, setDragCurrentX] = useState<number>(0);
   const [previewTargetIdx, setPreviewTargetIdx] = useState<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const grabOffsetXPx = useRef(0);
 
   const handlePointerDown = (jobId: string, e: React.PointerEvent) => {
     e.stopPropagation();
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    isDraggingRef.current = false;
     try {
       (e.currentTarget as Element).setPointerCapture(e.pointerId);
     } catch {
@@ -131,36 +136,49 @@ export const MinimizeLatenessPlayground: React.FC = () => {
     setDragCurrentX(currentX);
     const currIdx = jobs.findIndex((j) => j.id === jobId);
     setPreviewTargetIdx(currIdx !== -1 ? currIdx : null);
+
+    const jobItem = evaluated.list.find((j) => j.id === jobId);
+    if (jobItem) {
+      const jobCenterX = (timeToX(jobItem.startTime) + timeToX(jobItem.finishTime)) / 2;
+      grabOffsetXPx.current = currentX - jobCenterX;
+    } else {
+      grabOffsetXPx.current = 0;
+    }
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingJobId || !svgRef.current) return;
+      const dist = Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y);
+      if (dist > 4) {
+        isDraggingRef.current = true;
+      }
+      if (!isDraggingRef.current) return;
+
       const rect = svgRef.current.getBoundingClientRect();
       const currentX = ((e.clientX - rect.left) / rect.width) * svgWidth;
       setDragCurrentX(currentX);
 
       // Stable target slot determination using evaluated baseline centers
-      const hoverTime = xToTime(currentX);
+      const currentCenterTime = xToTime(currentX - grabOffsetXPx.current);
       const draggedIdx = jobs.findIndex((j) => j.id === draggingJobId);
       if (draggedIdx === -1) return;
 
       let targetIdx = draggedIdx;
       for (let i = 0; i < evaluated.list.length; i++) {
         const item = evaluated.list[i];
-        // Require moving past 40% into the target interval to trigger swap (hysteresis)
         const midTime = (item.startTime + item.finishTime) / 2;
-        if (i < draggedIdx && hoverTime < midTime + 0.5) {
+        if (i < draggedIdx && currentCenterTime < midTime + 0.3) {
           targetIdx = i;
           break;
-        } else if (i > draggedIdx && hoverTime > midTime - 0.5) {
+        } else if (i > draggedIdx && currentCenterTime > midTime - 0.3) {
           targetIdx = i;
         }
       }
 
       setPreviewTargetIdx(targetIdx);
     },
-    [draggingJobId, jobs, evaluated.list]
+    [draggingJobId, jobs, evaluated.list, svgWidth, maxAxisTime, marginLeft, chartWidth]
   );
 
   const handlePointerUp = (e: React.PointerEvent) => {
@@ -171,27 +189,30 @@ export const MinimizeLatenessPlayground: React.FC = () => {
         // Ignored
       }
 
-      const draggedIdx = jobs.findIndex((j) => j.id === draggingJobId);
-      if (draggedIdx !== -1 && previewTargetIdx !== null && previewTargetIdx !== draggedIdx) {
-        const next = [...jobs];
-        const [moved] = next.splice(draggedIdx, 1);
-        next.splice(previewTargetIdx, 0, moved);
-        setJobs(next);
+      if (isDraggingRef.current) {
+        const draggedIdx = jobs.findIndex((j) => j.id === draggingJobId);
+        if (draggedIdx !== -1 && previewTargetIdx !== null && previewTargetIdx !== draggedIdx) {
+          const next = [...jobs];
+          const [moved] = next.splice(draggedIdx, 1);
+          next.splice(previewTargetIdx, 0, moved);
+          setJobs(next);
 
-        // Check if resulting sequence is optimal
-        let count = 0;
-        for (let i = 0; i < next.length; i++) {
-          for (let j = i + 1; j < next.length; j++) {
-            if (next[i].deadline > next[j].deadline) count++;
+          // Check if resulting sequence is optimal
+          let count = 0;
+          for (let i = 0; i < next.length; i++) {
+            for (let j = i + 1; j < next.length; j++) {
+              if (next[i].deadline > next[j].deadline) count++;
+            }
           }
-        }
-        if (count === 0) {
-          markAttempted('minimize-lateness-greedy');
+          if (count === 0) {
+            markAttempted('minimize-lateness-greedy');
+          }
         }
       }
 
       setDraggingJobId(null);
       setPreviewTargetIdx(null);
+      isDraggingRef.current = false;
     }
   };
 
@@ -220,7 +241,13 @@ export const MinimizeLatenessPlayground: React.FC = () => {
       className="algorithm-playground lateness-playground"
       role="region"
       aria-label={language === 'es' ? 'Laboratorio de Minimización de Retraso' : 'Minimize Lateness Playground'}
-      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        userSelect: draggingJobId ? 'none' : 'auto',
+        WebkitUserSelect: draggingJobId ? 'none' : 'auto'
+      }}
     >
       {/* Playground Controls & Presets */}
       <div className="sdk-pg-controls" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -407,8 +434,8 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             );
           })}
 
-          {/* Inversion indicator between adjacent pair if present */}
-          {firstAdjacentInversion && (
+          {/* Inversion indicator between adjacent pair if present (hidden during drag to prevent jitter) */}
+          {firstAdjacentInversion && !draggingJobId && (
             (() => {
               const [idxA, idxB] = firstAdjacentInversion;
               const itemA = evaluated.list[idxA];
@@ -475,11 +502,71 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             })()
           )}
 
-          {/* Job Blocks with Dragging & Lateness Regions */}
+          {/* Fixed Deadline Flags (always stay anchored to true timeline time) */}
+          {evaluated.list.map((job) => {
+            const deadlineX = timeToX(job.deadline);
+            return (
+              <g key={`deadline-flag-${job.id}`} pointerEvents="none">
+                <line
+                  x1={deadlineX}
+                  y1={24}
+                  x2={deadlineX}
+                  y2={85}
+                  stroke="var(--error)"
+                  strokeWidth={1.5}
+                  strokeDasharray="2 2"
+                />
+                <circle cx={deadlineX} cy={24} r={3} fill="var(--error)" />
+                <text
+                  x={deadlineX}
+                  y={18}
+                  textAnchor="middle"
+                  fill="var(--error)"
+                  fontSize="13px"
+                  fontWeight="700"
+                  fontFamily="var(--font-mono)"
+                >
+                  d_{job.id}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Lateness overdue bar if finish > deadline (hidden during drag) */}
+          {!draggingJobId &&
+            evaluated.list.map((job) => {
+              if (job.lateness <= 0) return null;
+              const finishX = timeToX(job.finishTime);
+              const deadlineX = timeToX(job.deadline);
+              return (
+                <g key={`lateness-bar-${job.id}`} pointerEvents="none">
+                  <rect
+                    x={deadlineX}
+                    y={75}
+                    width={Math.max(2, finishX - deadlineX)}
+                    height={6}
+                    fill="var(--error)"
+                    rx={2}
+                  />
+                  <text
+                    x={(deadlineX + finishX) / 2}
+                    y={122}
+                    textAnchor="middle"
+                    fill="var(--error)"
+                    fontSize="13px"
+                    fontWeight="700"
+                    fontFamily="var(--font-mono)"
+                  >
+                    +L={job.lateness}
+                  </text>
+                </g>
+              );
+            })}
+
+          {/* Draggable Job Blocks */}
           {evaluated.list.map((job) => {
             const startX = timeToX(job.startTime);
             const finishX = timeToX(job.finishTime);
-            const deadlineX = timeToX(job.deadline);
             const blockWidth = finishX - startX;
             const isDragging = draggingJobId === job.id;
             const hasLateness = job.lateness > 0;
@@ -542,54 +629,6 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                 >
                   d={job.deadline}
                 </text>
-
-                {/* Deadline marker flag */}
-                <line
-                  x1={deadlineX}
-                  y1={24}
-                  x2={deadlineX}
-                  y2={85}
-                  stroke="var(--error)"
-                  strokeWidth={1.5}
-                  strokeDasharray="2 2"
-                />
-                <circle cx={deadlineX} cy={24} r={3} fill="var(--error)" />
-                <text
-                  x={deadlineX}
-                  y={18}
-                  textAnchor="middle"
-                  fill="var(--error)"
-                  fontSize="13px"
-                  fontWeight="700"
-                  fontFamily="var(--font-mono)"
-                >
-                  d_{job.id}
-                </text>
-
-                {/* Lateness overdue bar if finish > deadline */}
-                {hasLateness && (
-                  <g pointerEvents="none">
-                    <rect
-                      x={deadlineX}
-                      y={75}
-                      width={Math.max(2, finishX - deadlineX)}
-                      height={6}
-                      fill="var(--error)"
-                      rx={2}
-                    />
-                    <text
-                      x={(deadlineX + finishX) / 2}
-                      y={122}
-                      textAnchor="middle"
-                      fill="var(--error)"
-                      fontSize="13px"
-                      fontWeight="700"
-                      fontFamily="var(--font-mono)"
-                    >
-                      +L={job.lateness}
-                    </text>
-                  </g>
-                )}
               </g>
             );
           })}

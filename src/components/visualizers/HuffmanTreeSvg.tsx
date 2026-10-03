@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { HuffmanTraceItem } from '../../engine/algorithms/huffmanTrace';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export interface HuffmanTreeSvgProps {
   forestRoots: string[];
@@ -35,8 +36,10 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
   selectedIds = null,
   mergedParentId = null,
   codes = {},
-  language = 'es'
+  language
 }) => {
+  const { language: contextLang } = useLanguage();
+  const activeLang = language || contextLang || 'es';
   const { nodes, edges, width, height } = useMemo(() => {
     if (!forestRoots || forestRoots.length === 0 || !allNodes) {
       return { nodes: [], edges: [], width: 600, height: 260 };
@@ -305,7 +308,7 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
                 />
                 {isMerged && (
                   <text x={0} y={-22} className="huff-badge-merge-text" textAnchor="middle">
-                    {language === 'es' ? '+ Nuevo Padre' : '+ New Parent'}
+                    {activeLang === 'es' ? '+ Nuevo Padre' : '+ New Parent'}
                   </text>
                 )}
                 {isSelected && (

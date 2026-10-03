@@ -157,12 +157,12 @@ export const Header: React.FC<HeaderProps> = ({
         </label>
 
         <label className="theme-toggle-label sr-only">
-          <span>Tema visual</span>
+          <span>{language === 'es' ? 'Tema visual' : 'Visual theme'}</span>
           <select
             className="theme-select"
             value={theme}
             onChange={(e) => onThemeChange(e.target.value as ThemeMode)}
-            aria-label="Seleccionar tema visual"
+            aria-label={language === 'es' ? 'Seleccionar tema visual' : 'Select visual theme'}
             tabIndex={-1}
           >
             <option value="system">{language === 'es' ? 'Sistema' : 'System'}</option>

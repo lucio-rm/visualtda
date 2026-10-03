@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { ExerciseMetadata } from '../types';
 import { useLanguage } from '../i18n/LanguageContext';
 import { EXERCISE_SOLVE_CONTENT, TestCaseResult } from '../engine/exerciseContent';
+import { ENGLISH_STARTER_CODES } from '../engine/content/englishStarterCodes';
 import { runPythonTests } from '../runtime/pythonTestRunner';
 import { pythonService } from '../runtime/pythonExecutionService';
 import { useStudentProgress } from '../context/StudentProgressContext';
@@ -189,8 +190,15 @@ export const SolveView: React.FC<SolveViewProps> = ({
   }, [exercise.id]);
 
   const storageKey = `visual_tda_code_${exercise.id}`;
-  const rawStarter = starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n';
-  const defaultCode = useMemo(() => localizeStarterCode(rawStarter, language), [rawStarter, language]);
+  const rawStarter = (language === 'en' && ENGLISH_STARTER_CODES[exercise.id])
+    ? ENGLISH_STARTER_CODES[exercise.id]
+    : (starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n');
+  const defaultCode = useMemo(() => {
+    if (language === 'en' && ENGLISH_STARTER_CODES[exercise.id]) {
+      return ENGLISH_STARTER_CODES[exercise.id];
+    }
+    return localizeStarterCode(rawStarter, language);
+  }, [rawStarter, language, exercise.id]);
 
   const [code, setCodeState] = useState<string>(() => {
     try {
@@ -200,6 +208,17 @@ export const SolveView: React.FC<SolveViewProps> = ({
       return defaultCode;
     }
   });
+
+  useEffect(() => {
+    setCodeState((prev) => {
+      const esCode = content?.starterCode || '';
+      const enCode = ENGLISH_STARTER_CODES[exercise.id] || '';
+      if (prev === esCode || prev === enCode || prev.trim() === esCode.trim() || prev.trim() === enCode.trim()) {
+        return defaultCode;
+      }
+      return prev;
+    });
+  }, [language, defaultCode, content?.starterCode, exercise.id]);
 
   const gutterRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLPreElement>(null);

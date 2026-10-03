@@ -118,8 +118,8 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
                   key={star}
                   className={`star-icon ${star <= exercise.difficulty ? 'star-filled' : 'star-empty'}`}
                   viewBox="0 0 20 20"
-                  width="13"
-                  height="13"
+                  width="11"
+                  height="11"
                 >
                   <path
                     fill={star <= exercise.difficulty ? 'currentColor' : 'none'}
