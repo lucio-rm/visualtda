@@ -26,8 +26,18 @@
      - Automated test suite `tests/contrastAndDesignSystem.test.ts`: 9/9 passing tests validating WCAG compliance and Radix scale integrity.
      - Test baseline: 47 test files, 367 passed (100% PASS).
      - Full Real-Chromium screenshot sweep across all 38 exercises in both Light and Dark themes (`dist-qa-screenshots/v11/`).
-  4. **Quality Baseline**:
+  4. **Part 4 Curriculum Pedagogical Completeness & Theoretical Rigor**:
+     - Audited and standardized all 37 exercise `theory.md` files (covering 38 registered exercises).
+     - Standardized all exercises to canonical numbered sections `## 1.`, `## 2.`, etc., triggering `TheoryMarkdown.tsx` badges (`01`, `02`) and callout boxes.
+     - 100% of exercises now contain:
+       1. Formal Problem Definition & Mathematical Modeling ($G=(V, E)$, constraints, objective functions).
+       2. Formal Correctness Proofs (Strong induction, loop invariants, greedy exchange arguments, duality).
+       3. Step-by-step Asymptotic Complexity Analysis (Time and Space, Master Theorem where applicable).
+       4. Naive Heuristic Traps & Concrete Counterexamples (explaining why myopic greedy, depth-first search, or naive rounding fail).
+     - Added automated regression tests in `tests/exerciseContent.test.ts` verifying that all 37 exercises contain all 4 files (`pseudocode.md`, `solution.py`, `exercise.json`, `theory.md`) and meet all 4 academic criteria.
+  5. **Quality Baseline**:
      - `npm run lint`: 0 errors, 0 warnings.
      - `npm run typecheck`: 0 errors.
-     - `npm test`: 47 test files, 367 passed (100% PASS).
-     - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.71s.
+     - `npm test`: 47 test files, 368 passed (100% PASS).
+     - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.65s.
+

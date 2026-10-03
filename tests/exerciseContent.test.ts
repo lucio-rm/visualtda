@@ -2,30 +2,61 @@ import { describe, it, expect } from 'vitest';
 import { EXERCISE_SOLVE_CONTENT } from '../src/engine/exerciseContent';
 
 describe('ExerciseSolveContent Repository', () => {
-  const registeredIds = [
-    'n-queens',
-    'interval-scheduling',
-    'knapsack-dp',
-    'knapsack-greedy',
-    'merge-sort',
-    'max-flow',
-    'vertex-cover-reduction',
-    'vertex-cover-approx',
-    'graph-coloring-backtracking'
-  ];
-
-  it('provides dedicated solve content for all core registered exercises', () => {
-    for (const id of registeredIds) {
+  it('provides dedicated solve content for all 37 registered exercises', () => {
+    const allExercises = Object.keys(EXERCISE_SOLVE_CONTENT);
+    expect(allExercises.length).toBeGreaterThanOrEqual(37);
+    for (const id of allExercises) {
       const content = EXERCISE_SOLVE_CONTENT[id];
-      expect(content).toBeDefined();
-      expect(content.starterCode).toContain('def ');
-      expect(content.hints).toHaveLength(3);
+      expect(content, `Missing content for ${id}`).toBeDefined();
+      expect(content.starterCode, `Starter code missing in ${id}`).toContain('def ');
+      expect(content.hints.length, `Hints should be at least 3 for ${id}`).toBeGreaterThanOrEqual(3);
       for (const hint of content.hints) {
-        expect(hint.es.length).toBeGreaterThan(10);
-        expect(hint.en.length).toBeGreaterThan(10);
+        expect(hint.es.length, `Spanish hint too short for ${id}`).toBeGreaterThan(10);
+        expect(hint.en.length, `English hint too short for ${id}`).toBeGreaterThan(10);
       }
     }
   });
+
+  it('guarantees all 37 exercises contain theory.md, pseudocode.md, solution.py, exercise.json with rigorous academic structure', async () => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const exercisesDir = path.resolve('exercises');
+    const dirs = fs.readdirSync(exercisesDir).filter((d) => fs.statSync(path.join(exercisesDir, d)).isDirectory());
+
+    expect(dirs.length).toBe(37);
+
+    for (const dir of dirs) {
+      const dirPath = path.join(exercisesDir, dir);
+      expect(fs.existsSync(path.join(dirPath, 'pseudocode.md')), `Missing pseudocode in ${dir}`).toBe(true);
+      expect(fs.existsSync(path.join(dirPath, 'solution.py')), `Missing solution.py in ${dir}`).toBe(true);
+      expect(fs.existsSync(path.join(dirPath, 'exercise.json')), `Missing exercise.json in ${dir}`).toBe(true);
+
+      const theoryPath = path.join(dirPath, 'theory.md');
+      expect(fs.existsSync(theoryPath), `Missing theory.md in ${dir}`).toBe(true);
+      const theory = fs.readFileSync(theoryPath, 'utf-8');
+
+      // 1. Numbered headers ## 1., ## 2.
+      const hasNumberedH2 = /^##\s+\d+\.\s+/m.test(theory);
+      expect(hasNumberedH2, `${dir}/theory.md missing numbered ## N. headers`).toBe(true);
+
+      // 2. Formal Problem Definition
+      const hasFormalDef = /definici[oó]n|planteo|problema|formal|modelo|instancia/i.test(theory);
+      expect(hasFormalDef, `${dir}/theory.md missing formal problem definition`).toBe(true);
+
+      // 3. Mathematical Correctness / Invariants / Induction
+      const hasProof = /demostraci[oó]n|invariante|inducci[oó]n|correctitud|optimalidad|teorema|intercambio|propiedad/i.test(theory);
+      expect(hasProof, `${dir}/theory.md missing mathematical proof or invariant`).toBe(true);
+
+      // 4. Asymptotic Complexity
+      const hasComplexity = /complejidad|tiempo|espacio|asint[oó]tica|cota/i.test(theory);
+      expect(hasComplexity, `${dir}/theory.md missing asymptotic complexity analysis`).toBe(true);
+
+      // 5. Naive Intuition Trap / Counterexample
+      const hasNaiveTrap = /trampa|contraejemplo|intuici[oó]n|error|fallo|ingenua/i.test(theory);
+      expect(hasNaiveTrap, `${dir}/theory.md missing naive intuition trap or counterexample`).toBe(true);
+    }
+  });
+
 
   it('evaluates passing vs incomplete code on n-queens', async () => {
     const content = EXERCISE_SOLVE_CONTENT['n-queens'];

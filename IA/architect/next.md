@@ -33,6 +33,11 @@ This document defines the operational roadmap for **Mission V11: Systematic Desi
    - Real-Chromium screenshot verification across all 38 exercises in both Light and Dark themes (`dist-qa-screenshots/v11/`).
    - Updated `docs/visual-design-system.md` with enforceable step mappings and empirical contrast metrics.
    - Recorded before/after contrast measurements in `docs/visual-design-system.md` and `docs/known-issues.md`.
+4. ✅ **Part 4 — Full Curriculum Pedagogical Completeness & Theory Foundations**:
+   - Audited and standardized all 37 exercise `theory.md` files (38 registered exercises).
+   - Upgraded 16 exercises from legacy markdown to canonical numbered sections `## 1.`, `## 2.`, etc., activating `TheoryMarkdown.tsx` badges (`01`, `02`) and callout boxes.
+   - Verified that 100% of exercises feature formal problem definitions, mathematical proofs/invariants, asymptotic complexity analysis, and naive intuition traps with concrete counterexamples.
+   - Added automated regression suite in `tests/exerciseContent.test.ts` enforcing these academic standards continuously.
 
 ---
 
@@ -40,5 +45,6 @@ This document defines the operational roadmap for **Mission V11: Systematic Desi
 
 - `npm run lint`: 0 errors, 0 warnings.
 - `npm run typecheck`: 0 errors.
-- `npm test`: 47 test files, 367 tests (100% PASS).
-- `npm run build`: static production build in `dist/`.
+- `npm test`: 47 test files, 368 tests (100% PASS).
+- `npm run build`: static production build in `dist/` cleanly generated in ~1.65s.
+
