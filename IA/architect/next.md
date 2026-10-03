@@ -44,6 +44,15 @@ This document defines the operational roadmap for **Mission V11: Systematic Desi
    - Knight's Tour unsolvable 4x4 options removed.
    - Weighted Interval hover thrashing bug fixed via locked 56px predecessor container and styled inline code.
    - Universal bilingual coverage: all aria-labels, buttons, chart labels, and playground legends verified in both Spanish and English.
+6. ✅ **Part 6 — Road Antennas Label Staggering & Universal Selection Controls Polish**:
+   - Road Antennas yellow cursor number superposition eliminated during pointer drag with active halo ring.
+   - 1D greedy interval coloring for nearby house km labels within 38px, eliminating all text collisions with dashed leader lines.
+   - Header language/theme selectors and board size selectors migrated to high-definition `.segmented-control` pills.
+   - Typography inheritance and custom SVG chevrons for all native `<select>` fallbacks.
+7. ✅ **Part 7 — Universal Speed Controls Migration to Segmented Pills & Header Stars Harmonization**:
+   - Replaced legacy `<select>` playback speed dropdowns across 13 visualizers (`road-antennas`, `coin-change`, `juan-el-vago`, `lcs`, `linear-programming`, `max-subarray`, `peak-finding`, `randomized-fair-coin`, `reduction-is-vc`, `subset-sum`, `vertex-cover-approx`, `weighted-interval-scheduling`, and `graph-coloring`) with modern, accessible `.segmented-control` button pills.
+   - Polished `.speed-btn` and `.btn-speed` in `App.css` with solid `var(--surface)` resting background and smooth hover/active states, eliminating native browser white rectangles.
+   - Harmonized difficulty display in `ExerciseView.tsx` by replacing raw text tags with the exact unified SVG 5-star rating system from `ExerciseCard.tsx`.
 
 
 
