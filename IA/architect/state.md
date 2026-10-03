@@ -57,11 +57,17 @@
       - Bilingual Copy Purity: Localized Huffman merged parent text (`+ New Parent` / `+ Nuevo Padre`) and upgraded `SolveView.tsx` with full English starter code function signatures and parameter names across all 38 exercises, backed by backward-compatible aliases and `pyodideWorker` runtime alias resolution.
       - Light Mode Elevation & Text Contrast: Elevated light mode canvas contrast (`--bg: #dbe0ea`) with crisp `#ffffff` cards, distinct borders, embedded difficulty pills, and replaced dark text with high-contrast white text on colored blocks in `IntervalPartitioningVisualizer` and `MinimizeLatenessVisualizer`.
       - Platform Author Footer & Feedback Channel: Replaced legacy license text in footer with `Author — Lucio Romero Mascaró`, link to GitHub profile (`https://github.com/lucio-rm`), and interactive `FeedbackModal` enabling students to submit bug reports and suggestions directly to `lromerom@fi.uba.ar`.
-   9. **Quality Baseline**:
+   9. **Part 9 English Starter Codes, Drag Stabilization, Light Mode Card Contrast & Badge Overflow Resolution**:
+      - Complete English Starter Codes (`src/engine/content/englishStarterCodes.ts`): Implemented 100% pristine English starter templates across all 37 exercise definitions with academic English docstrings, English parameter names, English comments, and backward-compatible Python aliases. Wired into `SolveView.tsx` with dynamic `useEffect` language switching.
+      - Minimize Lateness Drag Stabilization: Decoupled fixed deadline flags ($d_i$) and lateness overdue bars ($+L=...$) from the dragged block group in `MinimizeLatenessPlayground.tsx`. Added `grabOffsetXPx` tracking, `hasDraggedRef` 4px hysteresis, and suppressed the adjacent inversion indicator during dragging, completely eliminating jitter, banner flashing, and subpixel shifts.
+      - Road Antennas Label Staggering & Text Knockout: Increased horizontal proximity check to 48px and vertical level offset to 22px (`labelY = roadY - 26 - lvl * 22`). Added SVG knockout halo (`paintOrder: stroke fill, stroke: var(--surface), strokeWidth: 3.5px`) so house labels never collide or blend into leader lines.
+      - Card Difficulty Bar & Badge Overflow Resolution: Scaled stars to 11×11px and streamlined `difficulty-label` font size to 0.72rem, providing >50px of breathing room inside `.card-difficulty-bar`. Guaranteed that status badges (`[Explorando]`, `[Completado]`, `[En Pruebas]`, etc.) never overflow or clip against the card boundary.
+      - Light Mode Desktop Canvas & Card Distinction: Set desk canvas `--bg: #ccd3de` (78% lightness) vs `#ffffff` cards with 1.5px `#a8b4c6` borders, elevated shadows, and an authoritative top accent band (`border-top: 4px solid var(--accent)`), creating unmistakable visual hierarchy and physical depth.
+      - Eliminated Invisible Text: Replaced hardcoded pale yellow (`#fbbf24`, `#fef08a`) in `InversionCountingVisualizer.css` with `var(--warning)`, and fixed pale text tokens in `HuffmanVisualizer.css`.
+   10. **Quality Baseline**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
       - `npm test`: 47 test files, 368 passed (100% PASS).
-      - `npm run test:browser`: 22/22 real Chromium headless scenarios passing with 0 console errors.
-      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.69s.
+      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings.
 
 
