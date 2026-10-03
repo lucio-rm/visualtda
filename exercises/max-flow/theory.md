@@ -101,3 +101,14 @@ El algoritmo de **Edmonds-Karp** (1972) resuelve esto eligiendo siempre el camin
 - Con $|E|$ aristas posibles, el número total de aumentos está acotado por $O(|V| \cdot |E|)$.
 - Cada BFS toma $O(|E|)$ tiempo.
 - **Complejidad Total**: $O(|V| \cdot |E|^2)$, independientemente de las magnitudes de las capacidades.
+
+---
+
+## 6. Trampa de la Búsqueda Ingenua en Ford-Fulkerson y el Contraejemplo de Kleinberg & Tardos
+
+### El Contraejemplo de la Arista Puente
+Si Ford-Fulkerson utiliza DFS en lugar de BFS para buscar caminos de aumento, la elección puede ser catastrófica:
+- **Red de 4 vértices**: $s \to u$ (capacidad $M$), $s \to v$ (capacidad $M$), $u \to v$ (capacidad $1$), $u \to t$ (capacidad $M$), $v \to t$ (capacidad $M$).
+- Si DFS elige alternadamente el camino en zigzag $s \to u \to v \to t$ y luego $s \to v \to u \to t$, cada iteración envía un único flujo de valor $1$ a través de la arista puente residual.
+- Para $M = 10^9$, Ford-Fulkerson con DFS requerirá $2 \times 10^9$ iteraciones ($O(E \cdot C)$).
+- En cambio, Edmonds-Karp (usando BFS) o el escalado de capacidades encuentran los dos caminos directos $s \to u \to t$ y $s \to v \to t$ en exactamente 2 iteraciones, saturando la red instantáneamente.

@@ -54,3 +54,10 @@ Cuando las variables de decisión deben tomar valores discretos o binarios ($\ma
 - **Variables**: $x_v \in \{0, 1\}$ para cada vértice $v \in V$ ($x_v = 1$ si $v \in C$).
 - **Función Objetivo**: $\min \sum_{v \in V} x_v$.
 - **Restricciones**: $x_u + x_v \ge 1$ para cada arista $(u, v) \in E$ (toda arista debe estar cubierta por al menos un extremo).
+
+---
+
+## 5. Trampa del Redondeo Ingenuo y Dualidad
+
+### Por Qué el Redondeo Simple Falla
+Resolver la relajación lineal continua produce coordenadas fraccionarias óptimas en tiempo polinomial. Una tentación ingenua es simplemente redondear cada variable al entero más cercano ($x_i \ge 0.5 \to 1$). Sin embargo, esto puede violar restricciones críticas volviendo la solución infactible, o producir una solución extremadamente subóptima. En el peor caso, la brecha de integralidad (*Integrality Gap*) puede ser arbitrariamente grande, lo que justifica la necesidad de algoritmos de Branch & Bound, planos de corte de Gomory o algoritmos de aproximación fundamentados en dualidad lineal.

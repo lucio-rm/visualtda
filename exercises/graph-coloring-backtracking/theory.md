@@ -21,3 +21,20 @@ El menor entero $k$ para el cual existe tal función se denomina **número crom�
 ## 4. Complejidad Asintótica
 - **Tiempo**: $O(k^{|V|})$ en el peor caso de grafos densos o instancias sin solución. En grafos esparcidos o instancias con alta simetría, las podas tempranas podan la gran mayoría de las ramas inviables.
 - **Espacio**: $O(|V|)$ espacio auxiliar, determinado por la profundidad máxima de la pila de llamadas de recursión y el mapa de asignación de colores.
+
+---
+
+## 5. Trampa de la Intuición Ingenua: Heurísticas Voraces y Ordenamientos Fijos
+
+### El Fracaso del Coloreo Voraz (Greedy Coloring)
+Una heurística muy popular consiste en ordenar los vértices (por ejemplo, por grado decreciente como en el algoritmo de Welsh-Powell) y asignar a cada vértice vorazmente el primer color disponible $\{1, 2, \dots\}$ que no genere conflicto con sus vecinos ya coloreados.
+
+### Contraejemplo de Desempeño Pobre: El Grafo Corona ($K_{n/2, n/2} - M$)
+- Consideremos un grafo bipartito con dos particiones $A = \{a_1, \dots, a_m\}$ y $B = \{b_1, \dots, b_m\}$, donde cada $a_i$ está conectado a todos los vértices de $B$ **excepto** a $b_i$ (es decir, el grafo bipartito completo menos un matching perfecto).
+- Dado que el grafo es bipartito, su número cromático es estrictamente $\chi(G) = 2$ (todos los de $A$ de un color, todos los de $B$ de otro).
+- Sin embargo, si la heurística voraz procesa los vértices en el orden intercalado $a_1, b_1, a_2, b_2, \dots, a_m, b_m$:
+  - $a_1$ recibe color 1. Como $b_1$ no está conectado a $a_1$, también recibe color 1.
+  - Para $a_2$, sus vecinos incluyen a $b_1$ (color 1), por lo que debe recibir color 2. De igual modo $b_2$ no es adyacente a $a_2$, recibiendo color 2.
+  - Siguiendo esta secuencia, ¡la heurística voraz utiliza $m = |V|/2$ colores distintos para un grafo que se colorea con solo 2!
+- Debido a que $k$-Coloring es NP-completo para $k \ge 3$, ninguna estrategia miope puede evitar callejones sin salida sin retroceso sistemático (Backtracking) y poda de invariantes.
+

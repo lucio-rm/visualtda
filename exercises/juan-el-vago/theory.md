@@ -36,6 +36,24 @@ $$\text{OPT}(i) = \max\Big(\text{OPT}(i-1),\; \text{OPT}(i-2) + g_i\Big) \quad \
 - $n = 2$: Juan solo puede elegir uno de los dos días (no puede trabajar ambos). Elige el de mayor ganancia:
   $$\text{OPT}(1) = \max(g_0, g_1)$$
 
+### Demostración Formal de Correctitud por Inducción Fuerte
+
+Demostraremos por inducción fuerte sobre el índice $i$ que $\text{OPT}(i)$ coincide exactamente con la ganancia máxima factible de un subconjunto $S \subseteq \{0, \dots, i\}$ que no contiene días consecutivos:
+
+1. **Casos Base**:
+   - Para $i = 0$: Las únicas opciones válidas son trabajar o no el día $0$. Como $g_0 \ge 0$, el máximo es trabajar: $\text{OPT}(0) = g_0$.
+   - Para $i = 1$: Como los días $0$ y $1$ son consecutivos, no pueden seleccionarse ambos. Las soluciones factibles son $\emptyset, \{0\}, \{1\}$. El óptimo es $\max(g_0, g_1) = \text{OPT}(1)$.
+
+2. **Paso Inductivo**:
+   - Hipótesis de inducción: Supongamos que $\text{OPT}(k)$ computa la ganancia máxima para todo $k < i$ con $i \ge 2$.
+   - Consideremos cualquier subconjunto óptimo $S^* \subseteq \{0, \dots, i\}$. Existen exactamente dos casos exhaustivos y mutuamente excluyentes:
+     - **Caso 1 ($i \notin S^*$)**: Si el día $i$ no está en la solución óptima, entonces $S^* \subseteq \{0, \dots, i-1\}$. Por subestructura óptima, $S^*$ debe ser una solución óptima para los primeros $i-1$ días (si existiera otra solución con mayor ganancia en $\{0, \dots, i-1\}$, dicha solución también sería factible en $\{0, \dots, i\}$ y superaría a $S^*$, contradicción). Por hipótesis inductiva, su valor es $\text{OPT}(i-1)$.
+     - **Caso 2 ($i \in S^*$)**: Si el día $i$ está en la solución óptima, entonces por la restricción de incompatibilidad $i-1 \notin S^*$. Por ende, $S^* \setminus \{i\} \subseteq \{0, \dots, i-2\}$. Nuevamente por optimalidad de subproblemas, $S^* \setminus \{i\}$ debe ser una solución óptima en $\{0, \dots, i-2\}$, cuyo valor por hipótesis inductiva es $\text{OPT}(i-2)$. La ganancia total es $\text{OPT}(i-2) + g_i$.
+   - Dado que $S^*$ debe pertenecer a uno de estos dos casos, el óptimo absoluto es necesariamente el máximo entre ambos:
+     $$\text{OPT}(i) = \max(\text{OPT}(i-1), \text{OPT}(i-2) + g_i)$$
+   Q.E.D. $\blacksquare$
+
+
 ---
 
 ## 3. Algoritmo de Reconstrucción
@@ -73,3 +91,14 @@ Donde $x_i = 1$ si Juan trabaja el día $i$ y $0$ en caso contrario.
 - **Espacio**:
   - Con reconstrucción: Arreglo de tamaño $n \implies \Theta(n)$.
   - Sin reconstrucción: Solo se necesitan las dos casillas previas ($\text{ant}_1$ y $\text{ant}_2$), reduciendo el espacio auxiliar a **$O(1)$**.
+
+---
+
+## 6. Trampa de la Intuición Ingenua: Por Qué Falla la Estrategia Voraz (Greedy)
+
+### Contraejemplo de la Elección Miope
+Una heurística ingenua intentaría ordenar los días por ganancia y elegir vorazmente el día más lucrativo, bloqueando sus vecinos inmediatos:
+- **Instancia**: $G = [10, 11, 10]$.
+- **Elección Greedy**: Elige el máximo global $11$ en el día 1. Esto bloquea forzosamente los días 0 y 2. Ganancia obtenida: $11$.
+- **Solución Óptima**: Trabajar los días 0 y 2, obteniendo $10 + 10 = 20$.
+El enfoque miope ignora que tomar un valor ligeramente superior puede sacrificar múltiples oportunidades adyacentes de mayor valor combinado. La Programación Dinámica evalúa exhaustivamente el trade-off exacto entre incluir o excluir cada día en tiempo lineal $\Theta(n)$.

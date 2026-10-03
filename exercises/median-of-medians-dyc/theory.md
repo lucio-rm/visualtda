@@ -1,13 +1,15 @@
-## Selección Lineal Determinística (Mediana de Medianas)
+# Selección en Tiempo Lineal Determinístico (Mediana de Medianas / BFPRT)
 
-### 1. Definición Formal del Problema
+## 1. Definición Formal del Problema (Order Statistics)
+
 Dado un arreglo desordenado $A$ de $n$ elementos distintos y un entero $k \in \{1, 2, \dots, n\}$, el problema de selección (o estadístico de orden $k$) consiste en encontrar el $k$-ésimo elemento más pequeño de $A$.
 
 Mientras que QuickSelect alcanza tiempo promedio $O(n)$ pero degrada a $\Theta(n^2)$ en el peor caso con pivotes desafortunados, el algoritmo de Blum, Floyd, Pratt, Rivest y Tarjan (BFPRT, 1973) garantiza tiempo lineal $O(n)$ en el peor caso absoluto seleccionando determinísticamente un pivote balanceado.
 
 ---
 
-### 2. Algoritmo y Garantía de Balanceo
+## 2. Algoritmo y Garantía de Balanceo de Pivote
+
 1. **Agrupamiento en Bloques de 5**: Dividir los $n$ elementos en $\lceil n/5 \rceil$ grupos de a lo sumo 5 elementos cada uno.
 2. **Medianas Locales**: Hallar la mediana de cada grupo de 5 elementos (empleando a lo sumo 7 comparaciones por grupo, tiempo $O(1)$ por bloque). Reunir estas $\lceil n/5 \rceil$ medianas en un conjunto $M$.
 3. **Pivote Recursivo**: Invocar recursivamente al algoritmo para hallar la mediana de $M$. Denotemos a este elemento como el pivote $p$.
@@ -19,8 +21,10 @@ Mientras que QuickSelect alcanza tiempo promedio $O(n)$ pero degrada a $\Theta(n
 
 ---
 
-### 3. Cota de Eliminación (Por qué bloques de 5)
-**Lema de Poda Cuantitativa**: Al menos el 30% de los elementos de $A$ son menores o iguales a $p$, y al menos el 30% son mayores o iguales a $p$.
+## 3. Demostración de la Cota de Eliminación: ¿Por qué Bloques de 5?
+
+### Lema de Poda Cuantitativa
+Al menos el 30% de los elementos de $A$ son menores o iguales a $p$, y al menos el 30% son mayores o iguales a $p$.
 
 *Demostración*:
 - Al menos la mitad de los $\lceil n/5 \rceil$ grupos tienen su mediana local $\le p$, es decir, al menos $\frac{1}{2} \lceil n/5 \rceil \ge \frac{n}{10}$ grupos.
@@ -33,7 +37,8 @@ $$n - \frac{3n}{10} = \frac{7n}{10} = 0.7n$$
 
 ---
 
-### 4. Relación de Recurrencia y Complejidad Lineal
+## 4. Relación de Recurrencia y Demostración de Tiempo Lineal $O(n)$
+
 La complejidad temporal en el peor caso satisface la siguiente recurrencia:
 $$T(n) \le T\left(\left\lceil \frac{n}{5} \right\rceil\right) + T\left(\frac{7n}{10}\right) + O(n)$$
 donde $T(n/5)$ es el costo de encontrar el pivote $p$, $O(n)$ es el agrupamiento y partición, y $T(7n/10)$ es la búsqueda en el subconjunto restante.
@@ -44,4 +49,11 @@ Para que esto sea $\le cn$, requerimos:
 $$\frac{9}{10}cn + an \le cn \iff an \le \frac{1}{10}cn \iff c \ge 10a$$
 Como $2/10 + 7/10 = 9/10 < 1$, la suma de las fracciones es estrictamente menor que 1. Por lo tanto:
 $$T(n) = O(n)$$
-La memoria auxiliar en la pila de recursión es $O(n)$ o $O(\log n)$ si se reutiliza el almacenamiento in-place.
+- **Complejidad Espacial**: $O(n)$ en memoria auxiliar o $O(\log n)$ si se realiza particionamiento in-place.
+
+---
+
+## 5. Trampa de Quickselect en el Peor Caso ($O(n^2)$) y Aplicaciones
+
+### Quickselect vs Mediana de Medianas
+Quickselect con pivote aleatorio o fijo tiene un tiempo esperado de $O(n)$, pero en el peor caso adverso (arreglo ordenado con pivote extremo) degrada a $\Theta(n^2)$. Mediana de medianas provee la única garantía determinística estricta de que ningún caso adverso puede superar $O(n)$ tiempo, siendo la base del algoritmo híbrido **Introselect** empleado en las bibliotecas estándar de C++ (`std::nth_element`).

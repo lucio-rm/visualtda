@@ -1,6 +1,7 @@
-## Minimizar Retraso Máximo (Scheduling to Minimize Lateness)
+# Minimizar Retraso Máximo (Scheduling to Minimize Lateness): Regla EDF
 
-### 1. Definición Formal del Problema
+## 1. Definición Formal del Problema
+
 Se dispone de un único recurso (un procesador o máquina) y un conjunto de $n$ tareas $\{1, 2, \dots, n\}$. Cada tarea $i$ requiere un tiempo continuo de procesamiento $t_i > 0$ y posee una fecha de entrega límite $d_i$.
 El procesador comienza en el instante $t = 0$ y solo puede ejecutar una tarea a la vez sin interrupciones (sin preempción).
 
@@ -11,7 +12,8 @@ $$L_{\max} = \max_{1 \le i \le n} L_i$$
 
 ---
 
-### 2. Regla Greedy: Earliest Deadline First (EDF)
+## 2. Regla Greedy: Earliest Deadline First (EDF)
+
 El algoritmo ordena todas las tareas según su fecha de entrega límite en orden no decreciente:
 $$d_1 \le d_2 \le \dots \le d_n$$
 y las programa de manera contigua y secuencial sin tiempos muertos innecesarios:
@@ -19,12 +21,14 @@ $$s_1 = 0, \quad s_i = f_{i-1} \text{ para todo } i \ge 2$$
 
 ---
 
-### 3. Demostración de Correctitud por Argumento de Intercambio
+## 3. Demostración Formal de Optimalidad por Argumento de Intercambio
+
 **Definición**: Un cronograma contiene una **inversión** si existe un par de tareas $i$ y $j$ tales que $i$ se programa antes que $j$, pero la fecha límite de $i$ es estrictamente posterior a la de $j$ ($d_i > d_j$). El cronograma EDF no contiene ninguna inversión.
 
 **Lema de Inversiones Adyacentes**: Si un cronograma contiene alguna inversión, contiene al menos una inversión entre dos tareas consecutivas y contiguas.
 
-**Teorema**: El cronograma producido por la regla EDF minimiza el retraso máximo.
+### Teorema de Optimalidad
+El cronograma producido por la regla EDF minimiza el retraso máximo.
 
 *Demostración (Argumento de Intercambio)*:
 Sea $S^*$ un cronograma óptimo con el menor número de inversiones posibles. Si $S^*$ no tiene inversiones, coincide con la solución EDF y el teorema se cumple.
@@ -41,8 +45,19 @@ Repitiendo este argumento de intercambio inductivamente, podemos transformar $S^
 
 ---
 
-### 4. Complejidad Asintótica
+## 4. Análisis Detallado de Complejidad Asintótica ($O(n \log n)$)
+
 - **Ordenamiento inicial por fechas límite**: $O(n \log n)$ comparaciones.
 - **Asignación temporal secuencial**: $O(n)$ acumulando duraciones.
 - **Complejidad Temporal Total**: $O(n \log n)$.
 - **Complejidad Espacial**: $O(n)$ para almacenar las tareas ordenadas y los tiempos resultantes.
+
+---
+
+## 5. Trampa de la Intuición: Por Qué Ordenar por Menor Duración Falla Rotundamente
+
+### Contraejemplo de Duración Más Corta (Shortest Processing Time)
+Consideremos dos tareas: Tarea 1 con $t_1 = 1, d_1 = 100$ y Tarea 2 con $t_2 = 10, d_2 = 10$.
+- Si ordenamos por menor duración: Tarea 1 corre de 0 a 1 ($L_1 = 0$), luego Tarea 2 corre de 1 a 11 ($L_2 = 11 - 10 = 1$). El retraso máximo es 1.
+- Con EDF: Tarea 2 corre de 0 a 10 ($L_2 = 0$), luego Tarea 1 corre de 10 a 11 ($L_1 = 0$). El retraso máximo es 0.
+Ordenar por duración ignora la urgencia de los vencimientos, produciendo retrasos innecesarios.

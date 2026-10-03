@@ -69,3 +69,10 @@ Cualquier solución óptima para $C'$ se extiende directamente a una solución �
   - Recorrido en profundidad (DFS) para extraer códigos: $O(k)$.
   - **Total**: $\Theta(k \log k)$.
 - **Espacio**: $O(k)$ nodos en el árbol y tabla de códigos hash.
+
+---
+
+## 6. Trampa de la Intuición Ingenua: Top-Down vs Bottom-Up (Shannon-Fano)
+
+### Por Qué la Partición Top-Down Falla
+La intuición más común para construir un código libre de prefijo es descender dividiendo el conjunto de símbolos en dos mitades de frecuencias acumuladas lo más equilibradas posibles (heurística de Shannon-Fano). Sin embargo, este enfoque miope puede tomar decisiones irreversibles en los niveles superiores que fuerzan asignaciones subóptimas más abajo. Huffman evita este fallo construyendo el árbol **Bottom-Up**: al unir siempre los dos símbolos más infrecuentes primero, garantiza que los elementos más raros queden en el nivel más profundo posible, asegurando matemáticamente la mínima longitud de código esperada.

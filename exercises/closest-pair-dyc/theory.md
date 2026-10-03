@@ -1,14 +1,16 @@
-## Par de Puntos Más Cercano (Closest Pair of Points)
+# Par de Puntos Más Cercano (Closest Pair of Points en $O(n \log n)$)
 
-### 1. Definición Formal y Modelado
+## 1. Definición Formal y Modelado Geométrico
+
 Dado un conjunto $P = \{p_1, p_2, \dots, p_n\}$ de $n \ge 2$ puntos en el plano euclidiano $\mathbb{R}^2$, el objetivo consiste en determinar el par $(p_i, p_j)$ con $i \ne j$ que minimiza la distancia euclidiana:
 $$d(p_i, p_j) = \sqrt{(x_i - x_j)^2 + (y_i - y_j)^2}$$
 
-La búsqueda exhaustiva por fuerza bruta compara los $\binom{n}{2} = \frac{n(n-1)}{2}$ pares, requiriendo tiempo $\Theta(n^2)$. Mediante División y Conquista es posible resolver el problema en $O(n \log n)$.
+La búsqueda exhaustiva por fuerza bruta compara los $\binom{n}{2} = \frac{n(n-1)}{2}$ pares, requiriendo tiempo $\Theta(n^2)$. Mediante el paradigma de División y Conquista desarrollado por Michael Shamos y Dan Hoey (1975), es posible resolver el problema en tiempo cuasilineal $O(n \log n)$.
 
 ---
 
-### 2. Estrategia de División y Conquista
+## 2. Estrategia de División y Conquista
+
 1. **Preprocesamiento**: Ordenar los puntos según su coordenada $X$ ($P_x$) y según su coordenada $Y$ ($P_y$).
 2. **División**: Trazar una recta vertical $L: x = x^*$ que divida a $P$ en dos subconjuntos $Q$ (izquierda) y $R$ (derecha) de tamaño $\lceil n/2 \rceil$ y $\lfloor n/2 \rfloor$.
 3. **Conquista**: Resolver recursivamente el problema para $Q$ y $R$, obteniendo las distancias mínimas $\delta_Q$ y $\delta_R$. Sea $\delta = \min(\delta_Q, \delta_R)$.
@@ -17,8 +19,10 @@ La búsqueda exhaustiva por fuerza bruta compara los $\binom{n}{2} = \frac{n(n-1
 
 ---
 
-### 3. Lema de Esparcimiento (Sparsity Lemma) y Correctitud
-**Lema**: Si dos puntos en la banda $S$ se encuentran a distancia menor que $\delta$, sus coordenadas $y$ difieren en menos de $\delta$. Además, en cualquier rectángulo de dimensiones $2\delta \times \delta$ centrado en $L$, pueden residir a lo sumo 8 puntos de $S$ tales que ningún par en la misma mitad esté a distancia $<\delta$.
+## 3. Demostración de Correctitud y Lema de Esparcimiento (Sparsity Lemma)
+
+### Teorema del Lema de Esparcimiento
+Si dos puntos en la banda $S$ se encuentran a distancia menor que $\delta$, sus coordenadas $y$ difieren en menos de $\delta$. Además, en cualquier rectángulo de dimensiones $2\delta \times \delta$ centrado en $L$, pueden residir a lo sumo 8 puntos de $S$ tales que ningún par en la misma mitad esté a distancia $<\delta$.
 
 *Demostración*:
 Dividimos el rectángulo $[x^* - \delta, x^* + \delta] \times [y, y + \delta]$ en 8 cuadrados de lado $\delta / 2$ (4 a cada lado de $L$). En cada cuadrado de lado $\delta/2$, la distancia máxima entre dos puntos es la diagonal:
@@ -29,10 +33,19 @@ Al ordenar los puntos de la banda $S$ por su coordenada $Y$, cada punto $p \in S
 
 ---
 
-### 4. Relación de Recurrencia y Complejidad
-Preservando el ordenamiento en $Y$ durante la división mediante un paso de partición análogo a Merge Sort, la recurrencia es:
+## 4. Relación de Recurrencia y Complejidad Asintótica (Teorema Maestro)
+
+Preservando el ordenamiento en $Y$ durante la división mediante un paso de partición análogo a Merge Sort (sin volver a ordenar en cada nivel):
 $$T(n) = 2T(n/2) + O(n)$$
 
-Por el Teorema Maestro (Caso 2, con $a = 2, b = 2, d = 1$ ya que $2 = 2^1$):
+Por el Teorema Maestro (Caso 2, con $a = 2, b = 2, f(n) = O(n)$ donde $\log_2 2 = 1$):
 $$T(n) = O(n \log n)$$
-La memoria auxiliar es $O(n)$ para mantener los arreglos ordenados durante la combinación.
+- **Complejidad Espacial**: $O(n)$ para mantener los arreglos ordenados durante la combinación.
+
+---
+
+## 5. Trampa de la Fuerza Bruta Cuadrática y Aplicaciones
+
+### La Trampa del Algoritmo Ingenuo
+Intentar buscar el par cruzado comparando todos los puntos dentro de la franja vertical sin acotar por el ordenamiento en $Y$ puede conducir a comparar $O(n^2)$ pares en el peor caso si todos los puntos caen cerca de la recta divisoria $L$. El lema geométrico de empaquetamiento demuestra que ordenar por $Y$ reduce las comparaciones por punto a exactamente 7 vecinos, transformando una búsqueda cuadrática en una fase de combinación estrictamente lineal $O(n)$.
+- **Aplicaciones Reales**: Detección de colisiones en simulación física y aviónica (TCAS), diseño de circuitos integrados (VLSI) y sistemas de información geográfica (GIS).

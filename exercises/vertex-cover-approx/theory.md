@@ -67,3 +67,12 @@ Q.E.D. $\blacksquare$
 
 - **Tiempo**: $O(|V| + |E|)$. En una sola pasada sobre la lista de adyacencia o conjunto de aristas, cada arista es inspeccionada en tiempo $O(1)$ utilizando conjuntos hash para consultar membresía.
 - **Espacio**: $O(|V| + |E|)$ para almacenar la estructura del grafo, el conjunto de cobertura $C$ y el matching $M$.
+
+---
+
+## 5. Trampa de la Intuición Ingenua: La Heurística Voraz de Máximo Grado
+
+### Por Qué la Heurística de Máximo Grado Falla en Producir una Cota Constante
+La intuición más extendida para Vertex Cover consiste en elegir vorazmente en cada paso el vértice que tenga el mayor grado residual en el grafo, con la esperanza de cubrir la mayor cantidad posible de aristas no cubiertas.
+Sin embargo, esta heurística voraz **no** logra un factor de aproximación constante: sobre familias de grafos bipartitos especialmente construidos, la relación entre el tamaño de la cobertura voraz y el óptimo crece como $\Theta(\log |V|)$.
+Por el contrario, el algoritmo de Matching Maximal, aunque parece contraintuitivo al incorporar ambos extremos de la arista en lugar de solo uno, garantiza estrictamente una cota constante $\le 2 \cdot |C^*|$ para cualquier grafo.

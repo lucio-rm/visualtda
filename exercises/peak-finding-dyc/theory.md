@@ -51,3 +51,21 @@ Aplicando el **Teorema Maestro**:
 $$T(n) = \Theta(n^d \log n) = \Theta(n^0 \log n) = \Theta(\log n)$$
 
 - **Espacio Auxiliar**: $O(1)$ en la versión iterativa, u $O(\log n)$ en la versión recursiva por la pila de llamadas.
+
+---
+
+## 5. Trampa de la Intuición Ingenua: Tres Errores Frecuentes
+
+### Creer que la Búsqueda Binaria Requiere un Arreglo Ordenado
+El error conceptual más difundido es pensar que la búsqueda binaria solo funciona en arreglos ordenados:
+- En *Peak Finding*, el arreglo de entrada está completamente **desordenado**.
+- Lo que habilita la reducción binaria a la mitad no es el orden global, sino la existencia de un **invariante topológico**: si nos movemos en la dirección del vecino más alto ($A[m] < A[m+1]$), estamos garantizados de encontrar al menos un pico local antes de llegar al borde del arreglo.
+
+### Confundir Pico Local con Máximo Global
+- Encontrar el **máximo global** de un arreglo desordenado de $n$ elementos requiere necesariamente **$\Omega(n)$** comparaciones (un adversario siempre puede colocar el valor máximo en la última posición no inspeccionada).
+- *Peak Finding* en $O(\log n)$ **no** encuentra el máximo global; encuentra un **máximo local** (un pico). Pretender que este algoritmo identifique el elemento más grande de un arreglo general es matemáticamente imposible.
+
+### La Trampa de Seguir la Pendiente Descendente
+
+Si $A[m] < A[m+1]$ y un algoritmo decidiera explorar la mitad izquierda buscando un contra-pico, podría caer en una pendiente monótonamente decreciente que termine en un valle o mínimo local, fallando en encontrar un pico. El invariante de correctitud exige estrictamente seguir la dirección ascendente (*uphill walk*).
+

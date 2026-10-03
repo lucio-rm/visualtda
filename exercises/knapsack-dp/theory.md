@@ -80,3 +80,17 @@ Para i desde n bajando hasta 1:
 
 ### ¿Por qué es Pseudo-polinomial?
 El tamaño de la entrada en bits para representar el número $W$ es $\approx \log_2(W)$. Un algoritmo verdaderamente polinomial debería tener cota proporcional a $(\log W)^k$. La cota $O(n \cdot W) = O(n \cdot 2^{\log W})$ es en realidad exponencial respecto a la longitud en bits de $W$. Por esta razón, el problema de la mochila 0/1 es NP-completo débil y admite algoritmos pseudo-polinomiales cuando $W$ está acotado por un polinomio en $n$.
+
+---
+
+## 7. Trampa de la Intuición Ingenua: Por Qué Falla la Estrategia Voraz (Greedy)
+
+### Contraejemplo de la Densidad de Valor ($v_i / w_i$)
+En la versión fraccionaria de la mochila, ordenar por densidad de valor es óptimo. Sin embargo, en la versión 0/1 entera, la indivisibilidad de los elementos arruina cualquier heurística greedy:
+- **Instancia**: Capacidad $W = 50$.
+  - Ítem 1: $w_1 = 10, v_1 = 60$ (densidad $6.0$)
+  - Ítem 2: $w_2 = 20, v_2 = 100$ (densidad $5.0$)
+  - Ítem 3: $w_3 = 30, v_3 = 120$ (densidad $4.0$)
+- **Elección Greedy (por densidad)**: Toma el Ítem 1 ($w=10, v=60$) y luego el Ítem 2 ($w=20, v=100$). Capacidad residual: $20$. El Ítem 3 ($w=30$) ya no cabe. Beneficio obtenido: $160$ con peso $30$.
+- **Solución Óptima**: Seleccionar los Ítems 2 y 3. Peso total $20 + 30 = 50 \le W$. Beneficio óptimo: $100 + 120 = 220$.
+El greedy deja un hueco de capacidad ociosa inservible que supera la ganancia de densidad local. Solo la Programación Dinámica garantiza la combinación óptima.

@@ -76,3 +76,10 @@ Contradicción. Por lo tanto, $k = m$. $\blacksquare$
   - Escaneo lineal de dos punteros: cada casa se visita una sola vez: $O(n)$.
   - **Total**: $O(n \log n)$. (Si las casas ya están ordenadas, el algoritmo es estrictamente $O(n)$).
 - **Espacio Auxiliar**: $O(k) \le O(n)$ para la lista de salida.
+
+---
+
+## 5. Trampa de la Intuición Ingenua: Centrar la Antena en la Casa
+
+### Por Qué Colocar la Antena Sobre la Casa es Subóptimo
+Una estrategia ingenua habitual es colocar la primera antena exactamente encima de la primera casa descubierta ($a = x_1$). Al hacer esto, el radio de cobertura hacia la izquierda $[x_1 - R, x_1]$ se desperdicia por completo porque no hay ninguna casa a la izquierda de $x_1$. Al adelantar la antena lo máximo posible hacia la derecha ($a = x_1 + R$), la casa $x_1$ sigue estando cubierta en el límite izquierdo del intervalo, pero se maximiza el alcance hacia la derecha hasta $x_1 + 2R$, reduciendo la cantidad total de antenas necesarias.

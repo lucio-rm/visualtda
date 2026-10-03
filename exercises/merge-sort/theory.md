@@ -61,3 +61,19 @@ En el modelo de árbol de decisiones para algoritmos de ordenamiento basados en 
 $$h \ge \log_2(n!) = \sum_{i=1}^n \log_2 i \ge \int_1^n \log_2 x \, dx = \Omega(n \log n)$$
 
 Por ende, Merge Sort alcanza la **cota inferior teórica absoluta** para cualquier ordenamiento por comparación, siendo asymptotically optimal.
+
+---
+
+## 5. Trampa de la Intuición Ingenua y Errores Habituales
+
+### La Falsa Promesa de la Fusión "In-Place" Trivial
+Una idea común al aprender Merge Sort es intentar eliminar el arreglo auxiliar de tamaño $O(n)$ para lograr un algoritmo estrictamente *in-place* ($O(1)$ espacio auxiliar).
+- Si al fusionar dos mitades contiguas se desplazan los elementos en el arreglo original para hacer lugar a un elemento menor de la mitad derecha, cada inserción requiere desplazar hasta $O(n)$ elementos en el peor caso.
+- Esta modificación ingenua convierte el tiempo del procedimiento de fusión de $O(n)$ en $O(n^2)$, provocando que la complejidad temporal total de Merge Sort degenere a $T(n) = 2T(n/2) + O(n^2) = O(n^2)$, perdiendo por completo la ventaja del paradigma de división y conquista.
+
+### La Trampa de la Pérdida de Estabilidad ($<$ vs. $\le$)
+
+Merge Sort es un algoritmo **estable**: preserva el orden relativo de registros con claves iguales.
+- Si en el bucle principal de intercalación se utiliza la condición estricta `A[i] < A[j]` en lugar de `A[i] <= A[j]`, ante dos elementos idénticos se tomará primero el de la mitad derecha.
+- Esto destruye la estabilidad del ordenamiento, un requisito crítico en bases de datos y pipelines de procesamiento secuencial.
+

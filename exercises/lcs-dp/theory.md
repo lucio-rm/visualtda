@@ -60,3 +60,14 @@ La matriz $c[0 \dots m, 0 \dots n]$ computa la longitud óptima en la celda $c[m
 - **Sistemas de Control de Versiones (`diff`, `git diff`)**: Identifica líneas añadidas, eliminadas o conservadas comparando archivos fuente.
 - **Bioinformática**: Alineamiento global de secuencias de nucleótidos de ADN/ARN y cadenas de aminoácidos en proteínas (Algoritmo de Needleman-Wunsch).
 - **Procesamiento de Lenguaje Natural (NLP)**: Métrica ROUGE-L para evaluación automática de resúmenes de texto y detección de similitud / plagio.
+
+---
+
+## 6. Trampa de la Intuición Ingenua: Por Qué Falla la Búsqueda Voraz (Greedy)
+
+### Contraejemplo de la Coincidencia Temprana
+Una heurística voraz intuitiva intentaría emparejar cada carácter con su primera aparición idéntica en la otra cadena:
+- **Instancia**: $X = \text{"AB"}$, $Y = \text{"B A"}$.
+- **Greedy Temprano**: Empareja la `'A'` de $X$ con la `'A'` final de $Y$. Como no quedan caracteres posteriores en $Y$, la longitud obtenida es $1$.
+- **Solución Óptima**: Omitir la primera `'A'` o emparejar `'B'` permite obtener la misma longitud, pero en cadenas más largas como $X = \text{"A B C"}$ e $Y = \text{"C A B C"}$, emparejar vorazmente `'C'` al inicio bloquea el prefijo $\text{"A B"}$, dejando una subsecuencia subóptima.
+La Programación Dinámica contempla simultáneamente las dos alternativas disjuntas ($c[i-1, j]$ y $c[i, j-1]$) preservando la optimalidad global.

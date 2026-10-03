@@ -46,6 +46,16 @@ Podemos calcular ambas sumas máximas con dos simples recorridos lineales:
 
 El tiempo total del cálculo cruzado es $O(m) + O(n - m) = O(n)$.
 
+### Demostración Formal de Correctitud por Inducción
+Por inducción sobre la longitud $n$ del arreglo:
+- **Base ($n = 1$)**: El único subarreglo posible es el elemento individual $A[0]$, que es trivialmente óptimo.
+- **Paso Inductivo**: Supóngase que las llamadas recursivas sobre subarreglos de tamaño menor que $n$ retornan el subarreglo de máxima suma estrictamente contenido en ellos.
+  Cualquier subarreglo contiguo óptimo global $A[i^* \dots j^*]$ cumple exactamente una de tres condiciones disjuntas:
+  1. $j^* < m$: está completamente en $A_{\text{izq}}$, hallado por la llamada recursiva izquierda.
+  2. $i^* \ge m$: está completamente en $A_{\text{der}}$, hallado por la llamada recursiva derecha.
+  3. $i^* < m \le j^*$: cruza el punto medio $m$. Dado que cualquier suma cruzada se descompone en un sufijo de $A_{\text{izq}}$ más un prefijo de $A_{\text{der}}$, maximizar ambos términos de forma independiente garantiza encontrar el óptimo cruzado global.
+  Al tomar el máximo de estas tres alternativas exhaustivas, el algoritmo garantiza hallar el óptimo global sin omitir ninguna configuración posible.
+
 ---
 
 ## 4. Análisis de Complejidad Asintótica (Teorema Maestro)

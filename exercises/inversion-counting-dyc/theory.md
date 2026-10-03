@@ -34,7 +34,7 @@ Las dos primeras se resuelven mediante llamadas recursivas en mitades de tamaño
 
 ---
 
-## 4. El Gran Insight: Intercalación Ordenada (Piggybacking en Merge)
+## 4. El Gran Insight: Intercalación Ordenada y Demostración de Correctitud
 
 Si las dos mitades ya están ordenadas de menor a mayor:
 $$\text{izq} = [l_0, l_1, \dots, l_{p-1}], \quad \text{der} = [r_0, r_1, \dots, r_{q-1}]$$
@@ -47,9 +47,13 @@ $$\text{Nuevas inversiones generadas por } r_j = p - i = \text{len}(\text{izq}) 
 
 ¡Este cálculo se efectúa en **tiempo $O(1)$** en lugar de verificar elemento por elemento!
 
+### Demostración Formal de Correctitud por Inducción
+Por inducción sobre la longitud del segmento, supongamos que las llamadas recursivas sobre las mitades izquierda y derecha retornan arreglos ordenados y el conteo exacto de inversiones internas.
+Durante la mezcla (merge), cada elemento $r_j$ de la mitad derecha se compara contra el elemento actual $l_i$ de la mitad izquierda. Dado que la mitad izquierda está en orden monótono no decreciente, si $r_j < l_i$, entonces $r_j < l_k$ para todo $k \in \{i, i+1, \dots, p-1\}$. Al sumar exactamente $p - i$, contamos cada par cruzado $(l_k, r_j)$ una sola vez y no omitimos ninguno. Como las tres clases de inversiones son disjuntas y exhaustivas, el conteo total es matemáticamente exacto.
+
 ---
 
-## 5. Análisis de Complejidad Asintótica
+## 5. Análisis de Complejidad Asintótica (Teorema Maestro)
 
 Por el Teorema Maestro:
 $$T(n) = 2T\left(\frac{n}{2}\right) + O(n)$$
@@ -60,4 +64,12 @@ $$T(n) = 2T\left(\frac{n}{2}\right) + O(n)$$
 Corresponde al Caso 2 del Teorema Maestro:
 $$T(n) = \Theta(n \log n)$$
 
-- **Espacio**: $O(n)$ para almacenar los arreglos temporales de mezcla durante la recursión.
+- **Complejidad Espacial**: $O(n)$ para almacenar los arreglos temporales de mezcla durante la recursión.
+
+---
+
+## 6. Trampa de la Fuerza Bruta Cuadrática y Aplicaciones Reales
+
+### Relevancia en Sistemas de Información
+- **Colaborative Filtering**: Comparar similitud de gustos entre usuarios calculando la distancia Kendall Tau entre sus rankings de preferencias.
+- **Detección de Anomalías**: Medir discordancias en rankings ordenados de búsqueda (Google PageRank vs ránkings locales).

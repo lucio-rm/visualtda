@@ -60,3 +60,10 @@ En promedio se requieren apenas $\approx 4$ tiros para producir un bit perfectam
 
 - **Las Vegas**: Siempre produce el resultado correcto; el tiempo de ejecución es probabilístico pero con tiempo esperado finito (e.g. Von Neumann Fair Coin, Randomized Quicksort).
 - **Monte Carlo**: Tiempo de ejecución estrictamente acotado; existe una probabilidad de error $\epsilon$ que puede reducirse exponencialmente mediante repeticiones independientes (e.g. Test de primalidad Miller-Rabin).
+
+---
+
+## 5. Trampa de la Intuición Ingenua: Estimación Empírica del Sesgo
+
+### Por Qué la Estimación por Frecuencias Falla
+Una propuesta habitual e intuitiva consiste en lanzar la moneda un gran número de veces $N$ para estimar $\hat{p} = \text{conteo}/N$ y luego intentar corregir la salida usando un umbral. Sin embargo, cualquier estimación empírica finita tiene varianza estadística y error de muestreo, por lo que la moneda resultante conservará un sesgo residual no nulo. El truco de Von Neumann es conceptualmente superior: utiliza la **simetría estocástica** de los pares ordenados $(0, 1)$ y $(1, 0)$ para cancelar el sesgo algebraicamente sin necesidad de conocer, estimar o aproximar $p$.

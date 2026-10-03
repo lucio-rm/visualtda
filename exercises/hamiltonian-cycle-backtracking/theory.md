@@ -1,13 +1,15 @@
-## Ciclo Hamiltoniano y Búsqueda Exhaustiva
+# Ciclo Hamiltoniano: Backtracking con Poda y NP-Completitud
 
-### 1. Definición Formal y NP-Completitud
+## 1. Definición Formal y NP-Completitud (Karp 1972)
+
 Dado un grafo no dirigido o dirigido $G = (V, E)$ con $n = |V|$ vértices, un **Ciclo Hamiltoniano** es un ciclo simple cerrado que visita cada vértice de $V$ exactamente una vez y regresa al vértice de partida.
 
 El problema de decisión ("¿posee $G$ un ciclo hamiltoniano?") es uno de los 21 problemas NP-completos fundacionales de Richard Karp (1972). A diferencia del Ciclo Euleriano (que recorre cada arista una vez y puede resolverse en tiempo lineal $O(|E|)$ mediante el teorema de Euler), no se conoce ningún algoritmo polinomial para el Ciclo Hamiltoniano en grafos generales.
 
 ---
 
-### 2. Espacio de Soluciones y Árbol de Permutaciones
+## 2. Espacio de Soluciones y Árbol de Permutaciones
+
 Una aproximación por fuerza bruta pura generaría las $(n-1)!$ posibles permutaciones de los vértices (fijando un vértice inicial arbitrario por simetría circular) y verificaría para cada una si todas las aristas consecutivas existen en $E$. Para $n = 20$, $(20-1)! \approx 1.2 \times 10^{17}$ permutaciones, lo que resulta computacionalmente intratable.
 
 El algoritmo de **Backtracking** construye el ciclo paso a paso como un vector $P = [v_0, v_1, \dots, v_k]$:
@@ -20,14 +22,26 @@ El algoritmo de **Backtracking** construye el ciclo paso a paso como un vector $
 
 ---
 
-### 3. Técnicas de Poda y Optimización
-Para acelerar la búsqueda y evitar explorar subárboles condenados al fracaso:
+## 3. Demostración de Correctitud y Técnicas de Poda
+
+### Invariante de Búsqueda
+En cualquier instante de la recursión, el prefijo acumulado $[v_0, \dots, v_k]$ es un camino simple válido en $G$. Dado que el espacio de permutaciones de longitud $n$ es finito y el algoritmo explora o poda sistemáticamente cada una sin omitir ninguna rama potencialmente hamiltoniana, el algoritmo concluye en tiempo finito garantizando encontrar un ciclo hamiltoniano si existe, o certificando su inexistencia retornando `None`.
+
+### Técnicas de Poda Fundamental
 1. **Poda por Grado de Vértice**: Si en cualquier instante del recorrido existe algún vértice no visitado $w$ tal que todos sus vecinos excepto a lo sumo uno ya han sido consumidos en el camino, $w$ jamás podrá formar parte de un ciclo simple (que requiere dos aristas incidentes distintas). La rama se poda inmediatamente.
 2. **Conectividad Residual**: Si el subgrafo inducido por los vértices aún no visitados junto con los extremos del camino actual deja de ser conexo, no es posible cerrar un ciclo simple.
 3. **Simetría y Dirección**: En grafos no dirigidos, para cualquier ciclo $v_0 - v_1 - \dots - v_{n-1} - v_0$ existe su reflejo idéntico invertido. Forzar que el índice del segundo vértice sea menor que el del último ($v_1 < v_{n-1}$) reduce el espacio de búsqueda a la mitad exacta.
 
 ---
 
-### 4. Complejidad Asintótica
+## 4. Análisis Detallado de Complejidad Asintótica
+
 - **Complejidad Temporal**: En el peor caso (grafo completo $K_n$), el algoritmo explora $\Theta(n!)$ estados. En grafos esparcidos con grado máximo $\Delta$, la complejidad temporal está acotada por $O(\Delta^n)$.
 - **Complejidad Espacial**: $O(n)$ en memoria auxiliar, correspondiente al vector del camino actual y a la pila de llamadas de recursión, con un vector booleano de pertenencia para pruebas en $O(1)$.
+
+---
+
+## 5. Trampa de la Búsqueda Ciega y Grafos Hipohamiltonianos
+
+### La Trampa de las Heurísticas Codiciosas
+Elegir codiciosamente en cada paso el vecino con menor o mayor grado suele quedar atrapado en grafos tramposos como los grafos **hipohamiltonianos** (donde remover cualquier vértice genera un grafo hamiltoniano, pero el grafo original completo carece de ciclo hamiltoniano). El backtracking con retroceso sistemático es indispensable para no quedar bloqueado en óptimos locales.

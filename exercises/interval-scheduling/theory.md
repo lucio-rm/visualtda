@@ -50,3 +50,31 @@ Si fuera $k < m$, el óptimo tendría un elemento $o_{k+1}$. Por el lema, $f(a_k
 
 - **Complejidad Temporal**: $O(N \log N)$ dominada por el ordenamiento de los $N$ intervalos por tiempo de fin. El pase de selección greedy posterior toma $O(N)$ lineal.
 - **Complejidad Espacial**: $O(N)$ para almacenar el arreglo ordenado y la lista de salida.
+
+---
+
+## 5. Trampa de la Intuición Ingenua y Contraejemplos
+
+El problema de selección de intervalos es el ejemplo paradigmático donde heurísticas aparentemente "naturales" fracasan rotundamente frente a casos de prueba simples:
+
+### Heurística Ingenua 1: Menor Tiempo de Inicio ($s_i$ mínimo)
+- **Intuición**: Empezar lo antes posible para no perder tiempo libre.
+- **Contraejemplo**: $I = \{ [0, 100], [1, 2], [3, 4], [5, 6] \}$.
+- **Resultado Greedy**: Elige $[0, 100]$ por empezar en $t=0$, lo que bloquea a todos los demás. Total = $1$.
+- **Óptimo**: $\{ [1, 2], [3, 4], [5, 6] \}$ con Total = $3$.
+
+### Heurística Ingenua 2: Menor Duración ($f_i - s_i$ mínimo)
+- **Intuición**: Tareas más cortas ocupan menos tiempo, liberando espacio para más tareas.
+- **Contraejemplo**: $I = \{ [0, 5], [4, 7], [6, 11] \}$.
+  - Duración de $[4, 7]$ es $3$.
+  - Duraciones de $[0, 5]$ y $[6, 11]$ son $5$ cada una.
+- **Resultado Greedy**: Elige vorazmente $[4, 7]$ por ser la más corta. Esto bloquea simultáneamente a $[0, 5]$ y $[6, 11]$. Total devuelto = $1$.
+- **Óptimo**: Seleccionar $\{ [0, 5], [6, 11] \}$ obteniendo Total = $2$.
+
+### Heurística Ingenua 3: Menor Número de Conflictos
+
+- **Intuición**: Elegir en cada paso la tarea que colisione con la menor cantidad de tareas restantes.
+- **Contraejemplo**: Aunque parece robusta, existen configuraciones específicas donde esta elección voraz conduce a soluciones subóptimas al elegir prematuramente un intervalo central en lugar de secuencias simétricas coordinadas.
+
+Solo el criterio de **Earliest Finish Time** ($f_i$ mínimo) garantiza matemáticamente la propiedad "Greedy Stays Ahead", dejando siempre el tiempo residual libre más amplio posible.
+

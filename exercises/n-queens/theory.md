@@ -51,3 +51,21 @@ Gracias a la verificación de conflictos en $O(1)$ utilizando conjuntos hash par
 - La profundidad máxima del árbol de recursión es $N$, ocupando $O(N)$ marcos en la pila de llamadas.
 - El vector `tablero_actual` requiere $O(N)$ enteros.
 - Los conjuntos `columnas_ocupadas`, `diagonales_principales` y `diagonales_secundarias` almacenan a lo sumo $N$ elementos cada uno, resultando en $O(N)$ memoria auxiliar total.
+
+---
+
+## 5. Trampa de la Intuición Ingenua: El Fracaso de la Estrategia Voraz (Greedy)
+
+### Contraejemplo de la Elección Miope en $N = 4$
+Una heurística ingenua común consiste en ubicar cada reina en la primera columna legal disponible de la fila actual:
+- **Fila 0**: Se coloca la reina en la columna 0 $\implies (0, 0)$.
+- **Fila 1**: La columna 0 está amenazada (misma columna). La columna 1 está amenazada (diagonal con $(0,0)$). La primera columna legal es la 2 $\implies (1, 2)$.
+- **Fila 2**:
+  - Columna 0: Bloqueada por $(0, 0)$ (columna).
+  - Columna 1: Bloqueada por $(1, 2)$ (diagonal).
+  - Columna 2: Bloqueada por $(1, 2)$ (columna).
+  - Columna 3: Bloqueada por $(1, 2)$ (diagonal $r-c = 2-3 = -1 = 1-2$).
+- **Bloqueo Total**: ¡No queda ninguna casilla válida en la Fila 2!
+
+Una estrategia voraz pura sin retroceso se declara derrotada de inmediato. El **Backtracking** es imprescindible porque las decisiones tempranas localmente válidas pueden comprometer de manera invisible la viabilidad de niveles posteriores. Al retroceder, el algoritmo desasigna $(1, 2)$, prueba $(1, 3)$ y descubre la solución completa $[1, 3, 0, 2]$.
+
