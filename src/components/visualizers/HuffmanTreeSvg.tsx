@@ -305,7 +305,7 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
                 />
                 {isMerged && (
                   <text x={0} y={-22} className="huff-badge-merge-text" textAnchor="middle">
-                    + Nuevo Padre
+                    {language === 'es' ? '+ Nuevo Padre' : '+ New Parent'}
                   </text>
                 )}
                 {isSelected && (

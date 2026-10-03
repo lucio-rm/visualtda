@@ -51,10 +51,17 @@
       - Replaced legacy `<select>` playback speed dropdowns across 13 visualizers (`road-antennas`, `coin-change`, `juan-el-vago`, `lcs`, `linear-programming`, `max-subarray`, `peak-finding`, `randomized-fair-coin`, `reduction-is-vc`, `subset-sum`, `vertex-cover-approx`, `weighted-interval-scheduling`, and `graph-coloring`) with modern, accessible `.segmented-control` button pills.
       - Upgraded `.speed-btn` and `.btn-speed` in `App.css` to use solid `var(--surface)` resting background, `var(--surface-hover)` and `var(--border-hover)` on hover, and active accent pills (`var(--accent-solid)`, `var(--accent-contrast)`), completely eliminating browser-native white popover rectangles.
       - Harmonized difficulty display in `ExerciseView.tsx` by replacing raw text tags with the exact unified SVG 5-star rating system from `ExerciseCard.tsx`.
-   8. **Quality Baseline**:
+   8. **Part 8 Interaction Stability, Bilingual Copy Purity, Light Mode Elevation, and Author Footer**:
+      - Minimize Lateness Drag Stabilization: Fixed 60Hz boundary swap oscillation and banner flashing by decoupling mouse movement from instant state mutations. Implemented stable slot preview and release-commit pointer semantics. Added 1-click arrow buttons (`◀` / `▶`) on sequence chips and ensured high-contrast white text on all job blocks.
+      - Road Antennas Cursor & Hit-Test Overhaul: Completely removed the orange cursor marker (`.road-cursor-marker`). Added 32px hit-targets to all houses and added a 1-click house chip removal bar with safety timeouts, preventing accidental additions or deletions.
+      - Bilingual Copy Purity: Localized Huffman merged parent text (`+ New Parent` / `+ Nuevo Padre`) and upgraded `SolveView.tsx` with full English starter code function signatures and parameter names across all 38 exercises, backed by backward-compatible aliases and `pyodideWorker` runtime alias resolution.
+      - Light Mode Elevation & Text Contrast: Elevated light mode canvas contrast (`--bg: #dbe0ea`) with crisp `#ffffff` cards, distinct borders, embedded difficulty pills, and replaced dark text with high-contrast white text on colored blocks in `IntervalPartitioningVisualizer` and `MinimizeLatenessVisualizer`.
+      - Platform Author Footer & Feedback Channel: Replaced legacy license text in footer with `Author — Lucio Romero Mascaró`, link to GitHub profile (`https://github.com/lucio-rm`), and interactive `FeedbackModal` enabling students to submit bug reports and suggestions directly to `lromerom@fi.uba.ar`.
+   9. **Quality Baseline**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
       - `npm test`: 47 test files, 368 passed (100% PASS).
       - `npm run test:browser`: 22/22 real Chromium headless scenarios passing with 0 console errors.
-      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.65s.
+      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.69s.
+
 

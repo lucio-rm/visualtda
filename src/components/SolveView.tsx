@@ -17,7 +17,7 @@ import { highlightPythonCode } from '../utils/pythonSyntaxHighlighter';
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
 
-  return rawCode
+  let localized = rawCode
     .replace(/# Escribí tu solución aquí en Python 3/g, '# Write your solution here in Python 3')
     .replace(/# Escribe tu algoritmo de backtracking con podas aquí/g, '# Write your backtracking algorithm with pruning here')
     .replace(/# Escribe tu algoritmo de programación dinámica aquí/g, '# Write your dynamic programming algorithm here')
@@ -52,20 +52,100 @@ function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
     .replace(/Encuentra la subsecuencia común más larga entre dos cadenas\./g, 'Find longest common subsequence between two strings.')
     .replace(/Maximiza el peso total de intervalos compatibles ponderados\./g, 'Maximize total weight of compatible weighted intervals.')
     .replace(/Calcula la partición óptima balanceando error y penalización\./g, 'Compute optimal partition balancing error and penalty.')
-    .replace(/Calcula el flujo máximo desde la fuente hasta el sumidero\./g, 'Compute maximum flow from source to sink.');
+    .replace(/Calcula el flujo máximo desde la fuente hasta el sumidero\./g, 'Compute maximum flow from source to sink.')
+    // English Function Signatures & Parameters
+    .replace(/def resolver_n_reinas\(n: int\)/g, 'def solve_n_queens(n: int)')
+    .replace(/def subconjuntos_que_suman\(numeros: list\[int\], objetivo: int\)/g, 'def subsets_summing_to(numbers: list[int], target: int)')
+    .replace(/def colorear_grafo\(grafo: dict\[str, list\[str\]\], k: int\)/g, 'def color_graph(graph: dict[str, list[str]], k: int)')
+    .replace(/def resolver_sudoku\(tablero: list\[list\[int\]\]\)/g, 'def solve_sudoku(board: list[list[int]])')
+    .replace(/def ciclo_hamiltoniano\(num_v: int, grafo: dict\[int, list\[int\]\]\)/g, 'def hamiltonian_cycle(num_v: int, graph: dict[int, list[int]])')
+    .replace(/def tsp_branch_and_bound\(distancias: list\[list\[int\]\]\)/g, 'def tsp_branch_and_bound(distances: list[list[int]])')
+    .replace(/def mochila_branch_and_bound\(capacidad: int, pesos: list\[int\], valores: list\[int\]\)/g, 'def knapsack_branch_and_bound(capacity: int, weights: list[int], values: list[int])')
+    .replace(/def recorrido_caballo\(n: int\)/g, 'def knights_tour(n: int)')
+    .replace(/def subarreglo_cruzado\(arr: list\[int\]\)/g, 'def max_crossing_subarray(arr: list[int])')
+    .replace(/def buscar_pico\(arreglo: list\[int\]\)/g, 'def find_peak(arr: list[int])')
+    .replace(/def contar_inversiones\(arreglo: list\[int\]\)/g, 'def count_inversions(arr: list[int])')
+    .replace(/def par_mas_cercano\(puntos: list\[tuple\[float, float\]\]\)/g, 'def closest_pair(points: list[tuple[float, float]])')
+    .replace(/def multiplicar_karatsuba\(x: int, y: int\)/g, 'def karatsuba_multiply(x: int, y: int)')
+    .replace(/def k_esimo_elemento\(arr: list\[int\], k: int\)/g, 'def kth_element(arr: list[int], k: int)')
+    .replace(/def elemento_mayoritario\(arr: list\[int\]\)/g, 'def majority_element(arr: list[int])')
+    .replace(/def seleccion_intervalos\(intervalos: list\[tuple\[int, int\]\]\)/g, 'def interval_scheduling(intervals: list[tuple[int, int]])')
+    .replace(/def mochila_fraccionaria\(items: list\[dict\], capacidad: float\)/g, 'def fractional_knapsack(items: list[dict], capacity: float)')
+    .replace(/def construir_antenas\(casas: list\[float\], radio: float\)/g, 'def build_antennas(houses: list[float], radius: float)')
+    .replace(/def particionar_intervalos\(intervalos: list\[tuple\[int, int\]\]\)/g, 'def interval_partitioning(intervals: list[tuple[int, int]])')
+    .replace(/def minimizar_retraso_maximo\(tareas: list\[tuple\[int, int\]\]\)/g, 'def minimize_lateness(jobs: list[tuple[int, int]])')
+    .replace(/def dijkstra\(grafo: dict\[str, list\[tuple\[str, int\]\]\], origen: str\)/g, 'def dijkstra(graph: dict[str, list[tuple[str, int]]], source: str)')
+    .replace(/def kruskal_mst\(num_vertices: int, aristas: list\[tuple\[int, int, int\]\]\)/g, 'def kruskal_mst(num_vertices: int, edges: list[tuple[int, int, int]])')
+    .replace(/def mochila_dp\(items: list\[dict\], capacidad: int\)/g, 'def knapsack_dp(items: list[dict], capacity: int)')
+    .replace(/def juan_el_vago\(ganancias: list\[int\]\)/g, 'def lazy_juan(earnings: list[int])')
+    .replace(/def cambio_monedas_minimo\(monedas: list\[int\], objetivo: int\)/g, 'def min_coin_change(coins: list[int], target: int)')
+    .replace(/def subsecuencia_comun_mas_larga\(s1: str, s2: str\)/g, 'def longest_common_subsequence(s1: str, s2: str)')
+    .replace(/def planificar_intervalos_ponderados\(intervalos: list\[list\[int\]\]\)/g, 'def weighted_interval_scheduling(intervals: list[list[int]])')
+    .replace(/def minimos_cuadrados_segmentados\(puntos: list\[tuple\[float, float\]\], costo_c: float\)/g, 'def segmented_least_squares(points: list[tuple[float, float]], cost_c: float)')
+    .replace(/def estructura_secundaria_arn\(secuencia: str\)/g, 'def rna_secondary_structure(sequence: str)')
+    .replace(/def bellman_ford\(num_vertices: int, aristas: list\[tuple\[int, int, int\]\], origen: int\)/g, 'def bellman_ford(num_vertices: int, edges: list[tuple[int, int, int]], source: int)')
+    .replace(/def edmonds_karp\(vertices: list\[str\], aristas: list\[dict\], fuente: str, sumidero: str\)/g, 'def edmonds_karp(vertices: list[str], edges: list[dict], source: str, sink: str)')
+    .replace(/def resolver_lp_2d\(c: tuple\[float, float\], restricciones: list\[tuple\[float, float, float\]\]\)/g, 'def solve_lp_2d(c: tuple[float, float], constraints: list[tuple[float, float, float]])')
+    .replace(/def reducir_instancia_is_a_vc\(vertices: list\[str\], aristas: list\[tuple\[str, str\]\], k: int\)/g, 'def reduce_is_to_vc(vertices: list[str], edges: list[tuple[str, str]], k: int)')
+    .replace(/def cobertura_vertices_2aprox\(vertices: list\[str\], aristas: list\[tuple\[str, str\]\]\)/g, 'def vertex_cover_2approx(vertices: list[str], edges: list[tuple[str, str]])')
+    .replace(/def moneda_equilibrada\(fuente_cargada\)/g, 'def fair_coin(biased_coin)');
+
+  // Compatibility alias mapping
+  const aliasMap: Record<string, string> = {
+    solve_n_queens: 'resolver_n_reinas = solve_n_queens',
+    subsets_summing_to: 'subconjuntos_que_suman = subsets_summing_to',
+    color_graph: 'colorear_grafo = color_graph',
+    solve_sudoku: 'resolver_sudoku = solve_sudoku',
+    hamiltonian_cycle: 'ciclo_hamiltoniano = hamiltonian_cycle',
+    knapsack_branch_and_bound: 'mochila_branch_and_bound = knapsack_branch_and_bound',
+    knights_tour: 'recorrido_caballo = knights_tour',
+    max_crossing_subarray: 'subarreglo_cruzado = max_crossing_subarray',
+    find_peak: 'buscar_pico = find_peak',
+    count_inversions: 'contar_inversiones = count_inversions',
+    closest_pair: 'par_mas_cercano = closest_pair',
+    karatsuba_multiply: 'multiplicar_karatsuba = karatsuba_multiply',
+    kth_element: 'k_esimo_elemento = kth_element',
+    majority_element: 'elemento_mayoritario = majority_element',
+    interval_scheduling: 'seleccion_intervalos = interval_scheduling',
+    fractional_knapsack: 'mochila_fraccionaria = fractional_knapsack',
+    build_antennas: 'construir_antenas = build_antennas',
+    interval_partitioning: 'particionar_intervalos = interval_partitioning',
+    minimize_lateness: 'minimizar_retraso_maximo = minimize_lateness',
+    knapsack_dp: 'mochila_dp = knapsack_dp',
+    lazy_juan: 'juan_el_vago = lazy_juan',
+    min_coin_change: 'cambio_monedas_minimo = min_coin_change',
+    longest_common_subsequence: 'subsecuencia_comun_mas_larga = longest_common_subsequence',
+    weighted_interval_scheduling: 'planificar_intervalos_ponderados = weighted_interval_scheduling',
+    segmented_least_squares: 'minimos_cuadrados_segmentados = segmented_least_squares',
+    rna_secondary_structure: 'estructura_secundaria_arn = rna_secondary_structure',
+    solve_lp_2d: 'resolver_lp_2d = solve_lp_2d',
+    reduce_is_to_vc: 'reducir_instancia_is_a_vc = reduce_is_to_vc',
+    vertex_cover_2approx: 'cobertura_vertices_2aprox = vertex_cover_2approx',
+    fair_coin: 'moneda_equilibrada = fair_coin'
+  };
+
+  for (const [enName, aliasLine] of Object.entries(aliasMap)) {
+    if (localized.includes(`def ${enName}`)) {
+      localized += `\n\n# Compatibility alias\n${aliasLine}\n`;
+      break;
+    }
+  }
+
+  return localized;
 }
 
 function formatTestOutput(text: string | undefined, lang: 'es' | 'en'): string {
   if (!text) return '';
   if (lang === 'es') return text;
   return text
-    .replace(/Código incompleto o sin implementar \(plantilla inicial\)/g, 'Incomplete code or unimplement stub (starter template)')
+    .replace(/Código incompleto o sin implementar \(plantilla inicial\)/g, 'Incomplete code or unimplemented stub (starter template)')
     .replace(/Exploración sistemática con podas de columnas y diagonales/g, 'Systematic exploration with pruning of columns and diagonals')
     .replace(/Exploración exhaustiva de ramas con backtracking y podas/g, 'Exhaustive exploration with backtracking and pruning')
     .replace(/Búsqueda exhaustiva sistemática con poda de filas, columnas y subcuadrículas 3x3/g, 'Exhaustive search with pruning of rows, columns, and 3x3 boxes')
     .replace(/Sin colisiones en columnas ni diagonales/g, 'No collisions in columns or diagonals')
     .replace(/Sin días adyacentes/g, 'No adjacent days')
     .replace(/soluciones válidas/g, 'valid solutions')
+    .replace(/soluciones obtenidas/g, 'solutions obtained')
     .replace(/subconjuntos/g, 'subsets')
     .replace(/monedas/g, 'coins')
     .replace(/aulas/g, 'classrooms')
@@ -76,7 +156,10 @@ function formatTestOutput(text: string | undefined, lang: 'es' | 'en'): string {
     .replace(/Retraso máximo/g, 'Maximum lateness')
     .replace(/Valor óptimo/g, 'Optimal value')
     .replace(/Costo óptimo/g, 'Optimal cost')
-    .replace(/Vértice óptimo/g, 'Optimal vertex');
+    .replace(/Vértice óptimo/g, 'Optimal vertex')
+    .replace(/válidas/g, 'valid')
+    .replace(/Caso /g, 'Case ')
+    .replace(/Paso /g, 'Step ');
 }
 
 interface SolveViewProps {

@@ -151,7 +151,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   x={x1 + w / 2}
                   y={marginTop + 24}
                   textAnchor="middle"
-                  fill="#0f172a"
+                  fill="#ffffff"
                   fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-sans)"

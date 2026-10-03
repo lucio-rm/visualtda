@@ -113,39 +113,52 @@ export const MinimizeLatenessPlayground: React.FC = () => {
   };
 
   // Pointer Dragging Handlers for Reordering
+  const [dragStartX, setDragStartX] = useState<number>(0);
+  const [dragCurrentX, setDragCurrentX] = useState<number>(0);
+  const [previewTargetIdx, setPreviewTargetIdx] = useState<number | null>(null);
+
   const handlePointerDown = (jobId: string, e: React.PointerEvent) => {
     e.stopPropagation();
-    (e.target as Element).setPointerCapture(e.pointerId);
+    try {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    } catch {
+      // Ignored
+    }
+    const rect = svgRef.current?.getBoundingClientRect();
+    const currentX = rect ? ((e.clientX - rect.left) / rect.width) * svgWidth : 0;
     setDraggingJobId(jobId);
+    setDragStartX(currentX);
+    setDragCurrentX(currentX);
+    const currIdx = jobs.findIndex((j) => j.id === jobId);
+    setPreviewTargetIdx(currIdx !== -1 ? currIdx : null);
   };
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       if (!draggingJobId || !svgRef.current) return;
       const rect = svgRef.current.getBoundingClientRect();
-      const rawX = ((e.clientX - rect.left) / rect.width) * svgWidth;
+      const currentX = ((e.clientX - rect.left) / rect.width) * svgWidth;
+      setDragCurrentX(currentX);
 
-      // Determine which job slot the dragged block is currently hovering over
-      const hoverTime = xToTime(rawX);
+      // Stable target slot determination using evaluated baseline centers
+      const hoverTime = xToTime(currentX);
       const draggedIdx = jobs.findIndex((j) => j.id === draggingJobId);
       if (draggedIdx === -1) return;
 
-      // Find target index based on evaluated center times
       let targetIdx = draggedIdx;
       for (let i = 0; i < evaluated.list.length; i++) {
         const item = evaluated.list[i];
-        if (hoverTime >= item.startTime && hoverTime <= item.finishTime) {
+        // Require moving past 40% into the target interval to trigger swap (hysteresis)
+        const midTime = (item.startTime + item.finishTime) / 2;
+        if (i < draggedIdx && hoverTime < midTime + 0.5) {
           targetIdx = i;
           break;
+        } else if (i > draggedIdx && hoverTime > midTime - 0.5) {
+          targetIdx = i;
         }
       }
 
-      if (targetIdx !== draggedIdx) {
-        const next = [...jobs];
-        const [moved] = next.splice(draggedIdx, 1);
-        next.splice(targetIdx, 0, moved);
-        setJobs(next);
-      }
+      setPreviewTargetIdx(targetIdx);
     },
     [draggingJobId, jobs, evaluated.list]
   );
@@ -157,18 +170,48 @@ export const MinimizeLatenessPlayground: React.FC = () => {
       } catch {
         // Ignored
       }
-      setDraggingJobId(null);
 
-      // Check if resulting sequence is optimal
-      let count = 0;
-      for (let i = 0; i < jobs.length; i++) {
-        for (let j = i + 1; j < jobs.length; j++) {
-          if (jobs[i].deadline > jobs[j].deadline) count++;
+      const draggedIdx = jobs.findIndex((j) => j.id === draggingJobId);
+      if (draggedIdx !== -1 && previewTargetIdx !== null && previewTargetIdx !== draggedIdx) {
+        const next = [...jobs];
+        const [moved] = next.splice(draggedIdx, 1);
+        next.splice(previewTargetIdx, 0, moved);
+        setJobs(next);
+
+        // Check if resulting sequence is optimal
+        let count = 0;
+        for (let i = 0; i < next.length; i++) {
+          for (let j = i + 1; j < next.length; j++) {
+            if (next[i].deadline > next[j].deadline) count++;
+          }
+        }
+        if (count === 0) {
+          markAttempted('minimize-lateness-greedy');
         }
       }
-      if (count === 0) {
-        markAttempted('minimize-lateness-greedy');
+
+      setDraggingJobId(null);
+      setPreviewTargetIdx(null);
+    }
+  };
+
+  const handleMoveJob = (index: number, direction: 'left' | 'right') => {
+    const targetIndex = direction === 'left' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= jobs.length) return;
+    const next = [...jobs];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    setJobs(next);
+
+    let count = 0;
+    for (let i = 0; i < next.length; i++) {
+      for (let j = i + 1; j < next.length; j++) {
+        if (next[i].deadline > next[j].deadline) count++;
       }
+    }
+    if (count === 0) {
+      markAttempted('minimize-lateness-greedy');
     }
   };
 
@@ -406,6 +449,32 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             })()
           )}
 
+          {/* Drop Target Indicator */}
+          {draggingJobId && previewTargetIdx !== null && (
+            (() => {
+              const targetItem = evaluated.list[previewTargetIdx];
+              if (!targetItem) return null;
+              const targetX = timeToX(targetItem.startTime);
+              return (
+                <g key="drop-target-indicator" pointerEvents="none">
+                  <line
+                    x1={targetX}
+                    y1={30}
+                    x2={targetX}
+                    y2={78}
+                    stroke="var(--accent)"
+                    strokeWidth={3}
+                    strokeDasharray="4 2"
+                  />
+                  <polygon
+                    points={`${targetX},${30} ${targetX - 5},${22} ${targetX + 5},${22}`}
+                    fill="var(--accent)"
+                  />
+                </g>
+              );
+            })()
+          )}
+
           {/* Job Blocks with Dragging & Lateness Regions */}
           {evaluated.list.map((job) => {
             const startX = timeToX(job.startTime);
@@ -414,12 +483,14 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             const blockWidth = finishX - startX;
             const isDragging = draggingJobId === job.id;
             const hasLateness = job.lateness > 0;
+            const dragOffset = isDragging ? dragCurrentX - dragStartX : 0;
 
             return (
               <g
                 key={`job-block-${job.id}`}
                 onPointerDown={(e) => handlePointerDown(job.id, e)}
                 style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+                transform={isDragging ? `translate(${dragOffset}, 0)` : undefined}
               >
                 {/* Drag shadow */}
                 {isDragging && (
@@ -429,7 +500,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                     width={blockWidth - 2}
                     height={38}
                     rx={4}
-                    fill="rgba(0, 0, 0, 0.25)"
+                    fill="rgba(0, 0, 0, 0.35)"
                   />
                 )}
 
@@ -441,17 +512,17 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   height={38}
                   rx={4}
                   fill={isDragging ? 'var(--accent)' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
-                  fillOpacity={isDragging ? 0.95 : 0.85}
+                  fillOpacity={isDragging ? 0.98 : 0.88}
                   stroke={isDragging ? '#ffffff' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
                   strokeWidth={isDragging ? 2.5 : 1}
                 />
 
-                {/* Job text label */}
+                {/* Job text label - Always crisp white for WCAG AA on indigo/amber */}
                 <text
                   x={startX + blockWidth / 2}
                   y={52}
                   textAnchor="middle"
-                  fill={isDragging ? '#0f172a' : '#ffffff'}
+                  fill="#ffffff"
                   fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
@@ -464,7 +535,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   x={startX + blockWidth / 2}
                   y={66}
                   textAnchor="middle"
-                  fill={isDragging ? '#0f172a' : 'rgba(255, 255, 255, 0.85)'}
+                  fill="rgba(255, 255, 255, 0.95)"
                   fontSize="13px"
                   fontFamily="var(--font-mono)"
                   pointerEvents="none"
@@ -525,7 +596,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
         </svg>
       </div>
 
-      {/* Sequence Chips & Reordering order */}
+      {/* Sequence Chips & Reordering Controls */}
       <div
         style={{
           display: 'flex',
@@ -537,16 +608,67 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           border: '1px solid var(--border)',
           fontSize: '0.85rem',
           flexWrap: 'wrap',
-          gap: '0.5rem'
+          gap: '0.75rem'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <span style={{ fontWeight: '600' }}>
             {language === 'es' ? 'Orden Actual:' : 'Current Order:'}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--accent)' }}>
-            [{jobs.map((j) => j.id).join(' → ')}]
-          </span>
+          <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+            {jobs.map((job, idx) => (
+              <span
+                key={`chip-seq-${job.id}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.2rem 0.45rem',
+                  borderRadius: 'var(--radius-sm)',
+                  backgroundColor: 'var(--canvas-bg)',
+                  border: '1px solid var(--border)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.8125rem'
+                }}
+              >
+                <button
+                  type="button"
+                  disabled={idx === 0}
+                  onClick={() => handleMoveJob(idx, 'left')}
+                  style={{
+                    padding: '0.05rem 0.25rem',
+                    background: 'none',
+                    border: 'none',
+                    cursor: idx === 0 ? 'default' : 'pointer',
+                    color: idx === 0 ? 'var(--border)' : 'var(--text)',
+                    fontSize: '0.75rem',
+                    lineHeight: 1
+                  }}
+                  title={language === 'es' ? 'Mover a la izquierda' : 'Move left'}
+                >
+                  ◀
+                </button>
+                <strong>{job.id}</strong>
+                <button
+                  type="button"
+                  disabled={idx === jobs.length - 1}
+                  onClick={() => handleMoveJob(idx, 'right')}
+                  style={{
+                    padding: '0.05rem 0.25rem',
+                    background: 'none',
+                    border: 'none',
+                    cursor: idx === jobs.length - 1 ? 'default' : 'pointer',
+                    color: idx === jobs.length - 1 ? 'var(--border)' : 'var(--text)',
+                    fontSize: '0.75rem',
+                    lineHeight: 1
+                  }}
+                  title={language === 'es' ? 'Mover a la derecha' : 'Move right'}
+                >
+                  ▶
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
 
         <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>

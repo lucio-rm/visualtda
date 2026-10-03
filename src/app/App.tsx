@@ -10,6 +10,7 @@ import { LanguageProvider, useLanguage } from '../i18n/LanguageContext';
 import { InstructorModeProvider } from '../context/InstructorModeContext';
 import { StudentProgressProvider, useStudentProgress } from '../context/StudentProgressContext';
 import { formatTitleSpacing } from '../utils/textFormatting';
+import { Footer } from '../components/Footer';
 import './App.css';
 
 
@@ -206,9 +207,7 @@ const AppContent: React.FC = () => {
         )}
       </main>
 
-      <footer className="app-footer">
-        <p>{t(dict.footerText)}</p>
-      </footer>
+      <Footer currentExerciseId={selectedExerciseId} />
     </div>
   );
 };

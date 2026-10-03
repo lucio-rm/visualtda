@@ -487,6 +487,23 @@ This document tracks ground-truth defect reports, architectural audits, and visu
   3. **Harmonized Difficulty Stars in Exercise Header**: Replaced raw text in `ExerciseView.tsx` with unified SVG star groups, achieving 100% visual consistency between catalog cards and in-exercise workbench headers.
   4. **Verification**: 47 test files passing (368/368 tests), 22/22 browser QA scenarios verified, zero console errors, clean static production build.
 
+### Issue 3.26 — Minimize Lateness Drag Stabilization, Road Antennas UX Clean-up, Bilingual Starter Code Purity, Light Mode Palette Elevation, and Platform Author Footer
+- **Reported Behavior**:
+  1. In Minimize Lateness (`MinimizeLatenessPlayground.tsx`), dragging jobs caused rapid 60Hz boundary swap oscillations and banner flashing.
+  2. In Road Antennas (`RoadAntennasPlayground.tsx`), the orange cursor marker collided with house kilometer labels, and clicking near a house accidentally deleted or spawned houses.
+  3. Huffman tree had hardcoded Spanish string `+ Nuevo Padre` in English mode, and Phase 2 starter code presented Spanish function/variable names.
+  4. Light mode suffered from low contrast between background canvas and exercise cards, with card boundaries blending into the page.
+  5. Footer displayed legacy academic principle text instead of author attribution and feedback channel.
+- **Severity**: High (Interaction stability, visual polish, and author channel).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  1. **Minimize Lateness Drag Stabilization**: Replaced live boundary mutation with stable slot preview, drag offset rendering, and release-commit pointer semantics. Added 1-click arrow buttons (`◀` / `▶`) on sequence chips and ensured high-contrast white text on all job blocks.
+  2. **Road Antennas Cursor & Hit-Test Overhaul**: Completely removed the orange cursor marker (`.road-cursor-marker`). Added 32px hit-targets to all houses and added a 1-click house chip removal bar with safety timeouts, preventing accidental additions or deletions.
+  3. **Bilingual Copy Purity**: Localized Huffman merged parent text (`+ New Parent` / `+ Nuevo Padre`) and upgraded `SolveView.tsx` with full English starter code function signatures and parameter names across all 38 exercises, backed by backward-compatible aliases and `pyodideWorker` runtime alias resolution.
+  4. **Light Mode Elevation & Text Contrast**: Elevated light mode canvas contrast (`--bg: #dbe0ea`) with crisp `#ffffff` cards, distinct borders, embedded difficulty pills, and replaced dark text with high-contrast white text on colored blocks in `IntervalPartitioningVisualizer` and `MinimizeLatenessVisualizer`.
+  5. **Platform Author Footer & Feedback Modal**: Replaced footer with `Author — Lucio Romero Mascaró`, GitHub profile button (`lucio-rm`), and `FeedbackModal` enabling students to submit bug reports and suggestions directly to `lromerom@fi.uba.ar`.
+  6. **Verification**: 47 test files passing (368/368 tests), 22/22 real Chromium browser scenarios passing, zero lint errors, clean static production build.
+
 ---
 
 ## 3. Maintenance Guidelines

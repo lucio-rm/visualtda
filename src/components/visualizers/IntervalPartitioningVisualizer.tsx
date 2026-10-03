@@ -182,7 +182,7 @@ export const IntervalPartitioningVisualizer: React.FC = () => {
                   <text
                     x={x1 + 6}
                     y={y + h / 2 + 4}
-                    fill="#0f172a"
+                    fill="#ffffff"
                     fontSize="13px"
                     fontWeight="700"
                     fontFamily="var(--font-sans)"

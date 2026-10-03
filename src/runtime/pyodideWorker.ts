@@ -105,8 +105,52 @@ try:
     exec(__user_code, __ns)
 
     # 2. Invoke the target function with provided arguments
-    if __user_fn_name in __ns:
-        __target_fn = __ns[__user_fn_name]
+    __target_fn = __ns.get(__user_fn_name)
+    if __target_fn is None:
+        __ALIASES = {
+            'resolver_n_reinas': ['solve_n_queens', 'n_queens'],
+            'subconjuntos_que_suman': ['subsets_summing_to', 'subset_sum'],
+            'colorear_grafo': ['color_graph', 'graph_coloring'],
+            'resolver_sudoku': ['solve_sudoku'],
+            'ciclo_hamiltoniano': ['hamiltonian_cycle'],
+            'tsp_branch_and_bound': ['tsp_branch_and_bound', 'tsp_bb'],
+            'mochila_branch_and_bound': ['knapsack_branch_and_bound', 'knapsack_bb'],
+            'recorrido_caballo': ['knights_tour', 'knight_tour'],
+            'merge_sort': ['merge_sort'],
+            'subarreglo_cruzado': ['max_crossing_subarray', 'cross_subarray'],
+            'buscar_pico': ['find_peak', 'peak_finding'],
+            'contar_inversiones': ['count_inversions', 'inversion_counting'],
+            'par_mas_cercano': ['closest_pair'],
+            'multiplicar_karatsuba': ['karatsuba_multiply', 'karatsuba'],
+            'k_esimo_elemento': ['kth_element', 'select_kth'],
+            'elemento_mayoritario': ['majority_element'],
+            'seleccion_intervalos': ['interval_scheduling', 'select_intervals'],
+            'mochila_fraccionaria': ['fractional_knapsack'],
+            'construir_antenas': ['build_antennas', 'road_antennas'],
+            'particionar_intervalos': ['interval_partitioning', 'partition_intervals'],
+            'minimizar_retraso_maximo': ['minimize_lateness', 'min_lateness'],
+            'dijkstra': ['dijkstra'],
+            'kruskal_mst': ['kruskal_mst', 'kruskal'],
+            'mochila_dp': ['knapsack_dp', 'knapsack'],
+            'juan_el_vago': ['lazy_juan', 'juan_lazy', 'house_robber'],
+            'cambio_monedas_minimo': ['min_coin_change', 'coin_change'],
+            'subsecuencia_comun_mas_larga': ['longest_common_subsequence', 'lcs'],
+            'planificar_intervalos_ponderados': ['weighted_interval_scheduling', 'wis'],
+            'minimos_cuadrados_segmentados': ['segmented_least_squares'],
+            'estructura_secundaria_arn': ['rna_secondary_structure'],
+            'bellman_ford': ['bellman_ford'],
+            'edmonds_karp': ['edmonds_karp', 'max_flow'],
+            'resolver_lp_2d': ['solve_lp_2d'],
+            'reducir_instancia_is_a_vc': ['reduce_is_to_vc'],
+            'cobertura_vertices_2aprox': ['vertex_cover_2approx'],
+            'moneda_equilibrada': ['fair_coin', 'randomized_fair_coin']
+        }
+        for __alias in __ALIASES.get(__user_fn_name, []):
+            if __alias in __ns:
+                __target_fn = __ns[__alias]
+                break
+
+    if __target_fn is not None:
         __args_parsed = json.loads(__user_args_json)
         __raw_result = __target_fn(*__args_parsed)
     else:

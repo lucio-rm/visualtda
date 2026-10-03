@@ -167,10 +167,10 @@ export const RoadAntennasPlayground: React.FC = () => {
         setUserAntennas((prev) => [...prev, clampedKm].sort((a, b) => a - b));
       }
     } else {
-      const existingHouseIdx = houses.findIndex((h) => Math.abs(h - clampedKm) < Math.max(2, maxKm * 0.02));
-      if (existingHouseIdx !== -1) {
-        setHouses((prev) => prev.filter((_, idx) => idx !== existingHouseIdx));
-      } else {
+      // Adding house: Only add if no house exists nearby (minimum 3km separation)
+      // Never delete an existing house on highway click to prevent accidental deletion!
+      const existingHouseIdx = houses.findIndex((h) => Math.abs(h - clampedKm) < 3);
+      if (existingHouseIdx === -1) {
         setHouses((prev) => [...prev, clampedKm].sort((a, b) => a - b));
       }
     }
@@ -178,6 +178,7 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   const handlePointerDownAntenna = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
+    lastInteractionTime.current = Date.now() + 300;
     activeMaxKmRef.current = maxKm;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
@@ -194,6 +195,7 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   const handlePointerDownHouse = (idx: number, e: React.PointerEvent) => {
     e.stopPropagation();
+    lastInteractionTime.current = Date.now() + 300;
     activeMaxKmRef.current = maxKm;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = false;
@@ -255,15 +257,15 @@ export const RoadAntennasPlayground: React.FC = () => {
         setDraggingHouseIdx(null);
       }
       activeMaxKmRef.current = null;
-      lastInteractionTime.current = Date.now();
+      lastInteractionTime.current = Date.now() + 350;
       setTimeout(() => {
         isDraggingRef.current = false;
-      }, 80);
+      }, 100);
     }
   };
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (isDraggingRef.current || (Date.now() - lastInteractionTime.current) < 250) return;
+    if (isDraggingRef.current || Date.now() < lastInteractionTime.current) return;
     const clickX = getSvgX(e.clientX);
     const clickedKm = xToKm(clickX);
     setCursorKm(clickedKm);
@@ -483,34 +485,6 @@ export const RoadAntennasPlayground: React.FC = () => {
           {/* Background */}
           <rect x="0" y="0" width={svgWidth} height={svgHeight} fill="transparent" />
 
-          {/* Accessible Keyboard & Mouse Cursor Marker (hidden during drag to prevent number collision) */}
-          {draggingHouseIdx === null && draggingAntennaIdx === null && (
-            <g className="road-cursor-marker" aria-hidden="true">
-              <line
-                x1={kmToX(cursorKm)}
-                y1={roadY - 20}
-                x2={kmToX(cursorKm)}
-                y2={roadY + 24}
-                stroke="var(--warning)"
-                strokeWidth="2"
-                strokeDasharray="3 3"
-              />
-              <polygon
-                points={`${kmToX(cursorKm)},${roadY - 2} ${kmToX(cursorKm) - 5},${roadY - 12} ${kmToX(cursorKm) + 5},${roadY - 12}`}
-                fill="var(--warning)"
-              />
-              <text
-                x={kmToX(cursorKm)}
-                y={roadY - 18}
-                textAnchor="middle"
-                fill="var(--warning)"
-                fontSize="13"
-                fontWeight="700"
-              >
-                {cursorKm}k
-              </text>
-            </g>
-          )}
 
           {/* Kilometer tick marks along road */}
           {Array.from({ length: Math.floor(maxKm / 10) + 1 }).map((_, idx) => {
@@ -743,9 +717,20 @@ export const RoadAntennasPlayground: React.FC = () => {
                   />
                 )}
 
+                {/* Generous invisible hit-target area (32x60px) to prevent accidental misses */}
+                <rect
+                  x={hX - 16}
+                  y={labelY - 14}
+                  width="32"
+                  height={Math.max(45, roadY - labelY + 20)}
+                  fill="transparent"
+                  style={{ cursor: isBeingDragged ? 'grabbing' : 'grab' }}
+                />
+
                 <polygon
                   points={`${hX - 8},${roadY - 14} ${hX + 8},${roadY - 14} ${hX},${roadY - 23}`}
                   fill={houseColor}
+                  pointerEvents="none"
                 />
                 <rect
                   x={hX - 6}
@@ -755,6 +740,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   fill={houseColor}
                   stroke="var(--border-strong)"
                   strokeWidth="1"
+                  pointerEvents="none"
                 />
                 <text
                   x={hX}
@@ -764,6 +750,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   fontSize="13"
                   fontFamily="var(--font-sans)"
                   fontWeight={lvl > 0 || isBeingDragged ? '600' : 'normal'}
+                  pointerEvents="none"
                 >
                   {hKm}k
                 </text>
@@ -788,6 +775,39 @@ export const RoadAntennasPlayground: React.FC = () => {
                   className="antenna-chip-remove"
                   aria-label={language === 'es' ? `Eliminar antena en km ${antKm}` : `Remove antenna at km ${antKm}`}
                   onClick={() => setUserAntennas((prev) => prev.filter((_, i) => i !== idx))}
+                  title={language === 'es' ? 'Eliminar antena' : 'Remove antenna'}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Accessible List of Houses with 1-Click Removal */}
+      {houses.length > 0 && (
+        <div className="placed-antennas-bar" style={{ marginTop: '0.25rem' }}>
+          <span className="placed-antennas-label">
+            {language === 'es' ? 'Casas en la ruta:' : 'Houses on highway:'}
+          </span>
+          <div className="placed-antennas-chips">
+            {houses.map((hKm, idx) => (
+              <span
+                key={`house-chip-${hKm}-${idx}`}
+                className="antenna-chip"
+                style={{
+                  borderColor: userCoveredIndices.has(idx) ? 'var(--success)' : 'var(--warning)',
+                  backgroundColor: 'var(--surface)'
+                }}
+              >
+                {hKm}k {userCoveredIndices.has(idx) ? '✓' : '!'}
+                <button
+                  type="button"
+                  className="antenna-chip-remove"
+                  aria-label={language === 'es' ? `Eliminar casa en km ${hKm}` : `Remove house at km ${hKm}`}
+                  onClick={() => setHouses((prev) => prev.filter((_, i) => i !== idx))}
+                  title={language === 'es' ? 'Eliminar casa' : 'Remove house'}
                 >
                   ×
                 </button>
