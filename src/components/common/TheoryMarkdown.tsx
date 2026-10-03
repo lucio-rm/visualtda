@@ -1,64 +1,39 @@
 import React, { useContext } from 'react';
 import { LanguageContext } from '../../i18n/LanguageContext';
 import { formatTitleSpacing } from '../../utils/textFormatting';
+import {
+  ENGLISH_THEORY_OVERRIDES,
+  translateSpanishTheoryToEnglish
+} from '../../engine/content/englishTheoryContent';
 
 interface TheoryMarkdownProps {
   content: string;
   language?: 'es' | 'en';
+  exerciseId?: string;
 }
 
-function translateTheoryLine(text: string, lang: 'es' | 'en'): string {
-  if (lang === 'es') return text;
-  return text
-    .replace(/# (.+): Análisis Teórico, Correctness y Complejidad/g, '# $1: Theoretical Analysis, Correctness, and Complexity')
-    .replace(/# (.+) [—–] Teoría y Fundamentos/g, '# $1 — Theory and Foundations')
-    .replace(/# (.+): Fundamento Teórico y Demostración/g, '# $1: Theoretical Foundations and Proof')
-    .replace(/## 1\. Planteo del Problema/g, '## 1. Problem Statement')
-    .replace(/## 2\. Estrategia Algorítmica/g, '## 2. Algorithmic Strategy')
-    .replace(/## 3\. Demostración de Corrección \(Correctness\)/g, '## 3. Correctness Proof')
-    .replace(/## 3\. Demostración de Corrección/g, '## 3. Correctness Proof')
-    .replace(/## 4\. Análisis de Complejidad/g, '## 4. Complexity Analysis')
-    .replace(/### ¿Por qué no Fuerza Bruta\?/g, '### Why Not Brute Force?')
-    .replace(/### Invariante de Bucle \/ Recursión/g, '### Loop / Recursion Invariant')
-    .replace(/### Invariante de Bucle/g, '### Loop Invariant')
-    .replace(/### Pasos de Inducción:/g, '### Induction Steps:')
-    .replace(/### Pasos de Inducción/g, '### Induction Steps')
-    .replace(/### Complejidad Temporal:/g, '### Time Complexity:')
-    .replace(/### Complejidad Espacial:/g, '### Space Complexity:')
-    .replace(/### Complejidad Temporal/g, '### Time Complexity')
-    .replace(/### Complejidad Espacial/g, '### Space Complexity')
-    .replace(/### Argumento de Intercambio/g, '### Exchange Argument')
-    .replace(/### Propiedad de Elección Voraz/g, '### Greedy-Choice Property')
-    .replace(/### Subestructura Óptima/g, '### Optimal Substructure')
-    .replace(/### Recurrencia y Casos Base/g, '### Recurrence and Base Cases')
-    .replace(/### Garantía de 2-Aproximación/g, '### 2-Approximation Guarantee')
-    .replace(/### Teorema de Reducción Polinomial/g, '### Polynomial Reduction Theorem')
-    .replace(/\*\*Invariante\*\*:/g, '**Invariant**:')
-    .replace(/\*\*Base\*\*:/g, '**Base Case**:')
-    .replace(/\*\*Paso Inductivo\*\*:/g, '**Inductive Step**:')
-    .replace(/\*\*Terminación\*\*:/g, '**Termination**:')
-    .replace(/\*\*Teorema\*\*:/g, '**Theorem**:')
-    .replace(/\*\*Demostración\*\*:/g, '**Proof**:')
-    .replace(/\*\*Lema\*\*:/g, '**Lemma**:')
-    .replace(/\*\*Corolario\*\*:/g, '**Corollary**:')
-    .replace(/Teorema:/g, 'Theorem:')
-    .replace(/Demostración:/g, 'Proof:')
-    .replace(/En el peor caso,/g, 'In the worst case,')
-    .replace(/En el mejor caso,/g, 'In the best case,')
-    .replace(/por inducción sobre/g, 'by induction on')
-    .replace(/Hipótesis inductiva/g, 'Inductive hypothesis')
-    .replace(/Caso base/g, 'Base case')
-    .replace(/Caso inductivo/g, 'Inductive case')
-    .replace(/Paso inductivo/g, 'Inductive step')
-    .replace(/Cota superior/g, 'Upper bound')
-    .replace(/Cota inferior/g, 'Lower bound')
-    .replace(/Teorema Maestro/g, 'Master Theorem')
-    .replace(/Árbol de recursión/g, 'Recursion tree')
-    .replace(/Entrada:/g, 'Input:')
-    .replace(/Salida:/g, 'Output:')
-    .replace(/Definición:/g, 'Definition:')
-    .replace(/Propiedad:/g, 'Property:')
-    .replace(/Observación:/g, 'Remark:');
+const SUPERSCRIPT_MAP: Record<string, string> = {
+  '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+  '+': '⁺', '-': '⁻', '=': '⁼', '(': '⁽', ')': '⁾',
+  'a': 'ᵃ', 'b': 'ᵇ', 'c': 'ᶜ', 'd': 'ᵈ', 'e': 'ᵉ', 'f': 'ᶠ', 'g': 'ᵍ', 'h': 'ʰ', 'i': 'ⁱ', 'j': 'ʲ',
+  'k': 'ᵏ', 'l': 'ˡ', 'm': 'ᵐ', 'n': 'ⁿ', 'o': 'ᵒ', 'p': 'ᵖ', 'r': 'ʳ', 's': 'ˢ', 't': 'ᵗ', 'u': 'ᵘ',
+  'v': 'ᵛ', 'w': 'ʷ', 'x': 'ˣ', 'y': 'ʸ', 'z': 'ᶻ',
+  'T': 'ᵀ', 'N': 'ᴺ', 'K': 'ᴷ', 'M': 'ᴹ', 'P': 'ᴾ'
+};
+
+const SUBSCRIPT_MAP: Record<string, string> = {
+  '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉',
+  '+': '₊', '-': '₋', '=': '₌', '(': '₍', ')': '₎',
+  'a': 'ₐ', 'e': 'ₑ', 'h': 'ₕ', 'i': 'ᵢ', 'j': 'ⱼ', 'k': 'ₖ', 'l': 'ₗ', 'm': 'ₘ', 'n': 'ₙ',
+  'o': 'ₒ', 'p': 'ₚ', 'r': 'ᵣ', 's': 'ₛ', 't': 'ₜ', 'u': 'ᵤ', 'v': 'ᵥ', 'x': 'ₓ'
+};
+
+export function toSuperscript(str: string): string {
+  return str.split('').map((char) => SUPERSCRIPT_MAP[char] || char).join('');
+}
+
+export function toSubscript(str: string): string {
+  return str.split('').map((char) => SUBSCRIPT_MAP[char] || char).join('');
 }
 
 
@@ -71,11 +46,15 @@ export function formatMathText(text: string): string {
     formatted = formatted.replace(/\\(?:text|mathrm|mathbf|mathit|mathcal)\{([^{}]+)\}/g, '$1');
   }
 
-  // 2. Remove LaTeX environments (e.g. \begin{aligned}, \end{aligned})
+  // 2. Format cases piecewise environment with opening bracket
+  formatted = formatted.replace(/\\begin\{cases\}/g, '{\n ');
+  formatted = formatted.replace(/\\end\{cases\}/g, '\n}');
+
+  // 3. Remove other LaTeX environments (e.g. \begin{aligned}, \end{aligned})
   formatted = formatted.replace(/\\(?:begin|end)\{[a-zA-Z*]+\}/g, '');
 
-  // 3. Mathematical symbol transformations
-  const mathSymbols: [RegExp, string | ((match: string) => string)][] = [
+  // 4. Mathematical symbol transformations
+  const mathSymbols: [RegExp, string | ((...args: string[]) => string)][] = [
     // Sets & Number systems
     [/\\mathbb\{R\}\^([nm0-9])/g, 'ℝ^$1'],
     [/\\mathbb\{R\}/g, 'ℝ'],
@@ -108,6 +87,23 @@ export function formatMathText(text: string): string {
     [/\\Longrightarrow(?=[^a-zA-Z]|$)/g, ' ⟹ '],
     [/\\Longleftarrow(?=[^a-zA-Z]|$)/g, ' ⟸ '],
     [/\\longrightarrow(?=[^a-zA-Z]|$)/g, ' ⟶ '],
+    // LaTeX environments
+    [/\\begin\{aligned\}/g, ''],
+    [/\\end\{aligned\}/g, ''],
+    [/\\begin\{cases\}/g, '{\n '],
+    [/\\end\{cases\}/g, '\n}'],
+
+    // Text & Math formatting unnesting
+    [/\\text(?:bf)?\{([^{}]+)\}/g, '$1'],
+    [/\\mathbf\{([^{}]+)\}/g, '$1'],
+    [/\\mathbb\{R\}/g, 'ℝ'],
+    [/\\mathbb\{N\}/g, 'ℕ'],
+    [/\\mathbb\{Z\}/g, 'ℤ'],
+    [/\\mathcal\{([^{}]+)\}/g, '$1'],
+    [/\\Big\(/g, '('],
+    [/\\Big\)/g, ')'],
+    [/\\;/g, ' '],
+
     [/\\leftarrow(?=[^a-zA-Z]|$)/g, ' ← '],
     [/\\to(?=[^a-zA-Z]|$)/g, ' → '],
     [/\\lor(?=[^a-zA-Z]|$)/g, ' ∨ '],
@@ -138,7 +134,15 @@ export function formatMathText(text: string): string {
     [/\\times(?=[^a-zA-Z]|$)/g, ' × '],
     [/\\cdot(?=[^a-zA-Z]|$)/g, ' · '],
     [/\\(?:dots|cdots|ldots)(?=[^a-zA-Z]|$)/g, ' … '],
+
+    // Summations with lower and upper bounds
+    [/\\sum_\{([^{}]+)\}\^\{([^{}]+)\}/g, (_: string, l: string, u: string) => `∑${toSubscript(l)}${toSuperscript(u)}`],
+    [/\\sum_\{([^{}]+)\}\^([0-9a-zA-Z+-])/g, (_: string, l: string, u: string) => `∑${toSubscript(l)}${toSuperscript(u)}`],
+    [/\\sum_\{([^{}]+)\}/g, (_: string, l: string) => (toSubscript(l).includes('\\') ? `∑ (${l})` : `∑${toSubscript(l)}`)],
+    [/\\sum\^\{([^{}]+)\}/g, (_: string, u: string) => `∑${toSuperscript(u)}`],
+    [/\\sum\^([0-9a-zA-Z+-])/g, (_: string, u: string) => `∑${toSuperscript(u)}`],
     [/\\sum(?=[^a-zA-Z]|$)/g, '∑'],
+
     [/\\int(?=[^a-zA-Z]|$)/g, '∫'],
     [/\\infty(?=[^a-zA-Z]|$)/g, '∞'],
 
@@ -160,14 +164,15 @@ export function formatMathText(text: string): string {
     [/\\binom\{([^{}]+)\}\{([^{}]+)\}/g, 'C($1, $2)'],
     [/\\sqrt\{([^{}]+)\}/g, '√($1)'],
 
-    // Superscripts
+    // Superscripts (supports 2^j, 2^{j+1}, 2^n, 2^k, etc.)
     [/\^T\b/g, 'ᵀ'],
-    [/\^2\b/g, '²'],
-    [/\^3\b/g, '³'],
-    [/\^k\b/g, 'ᵏ'],
-    [/\^n\b/g, 'ⁿ'],
-    [/\^m\b/g, 'ᵐ'],
-    [/_\{([^{}]+)\}/g, '_$1']
+    [/\^\{([0-9a-zA-Z+-]+)\}/g, (_: string, p: string) => toSuperscript(p)],
+    [/\^([0-9a-zA-Z+-])/g, (_: string, p: string) => toSuperscript(p)],
+
+    // Subscripts: convert single letters, digits, and mathematical index expressions (e.g. j=1, i=0, n-1, i+1)
+    [/_\{([0-9]|j=1|i=0|n-1|i\+1|j\+1)\}/g, (_: string, p: string) => toSubscript(p)],
+    [/_\{([^{}]+)\}/g, (_: string, p: string) => (p.length === 1 && SUBSCRIPT_MAP[p] ? SUBSCRIPT_MAP[p] : `_${p}`)],
+    [/_([0-9a-zA-Z])(?=[^a-zA-Z0-9]|$)/g, (_: string, p: string) => (SUBSCRIPT_MAP[p] ? SUBSCRIPT_MAP[p] : `_${p}`)]
   ];
 
   for (const [pattern, replacement] of mathSymbols) {
@@ -180,7 +185,7 @@ export function formatMathText(text: string): string {
 
   // Handle alignment tokens and line breaks
   formatted = formatted.replace(/\\\\/g, '\n');
-  formatted = formatted.replace(/&/g, '');
+  formatted = formatted.replace(/&/g, '   ');
 
   const cleanedLines = formatted
     .split('\n')
@@ -238,18 +243,24 @@ export function renderInlineFormatting(line: string): React.ReactNode[] {
   return parts;
 }
 
-export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, language: propLanguage }) => {
+export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, language: propLanguage, exerciseId }) => {
   const langContext = useContext(LanguageContext);
   const language = propLanguage || langContext?.language || 'es';
   if (!content) return null;
 
-  const lines = content.split('\n');
+  const rawContent = (language === 'en' && exerciseId && ENGLISH_THEORY_OVERRIDES[exerciseId])
+    ? ENGLISH_THEORY_OVERRIDES[exerciseId]
+    : content;
+
+  const lines = rawContent.split('\n');
   const elements: React.ReactNode[] = [];
   let i = 0;
 
   while (i < lines.length) {
     const rawLine = lines[i];
-    const translatedLine = translateTheoryLine(rawLine, language);
+    const translatedLine = (language === 'en' && (!exerciseId || !ENGLISH_THEORY_OVERRIDES[exerciseId]))
+      ? translateSpanishTheoryToEnglish(rawLine)
+      : rawLine;
     const line = translatedLine.trim();
 
     // 1. Skip empty lines

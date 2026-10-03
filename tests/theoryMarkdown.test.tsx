@@ -33,7 +33,7 @@ describe('TheoryMarkdown & Mathematical Typography Engine (Mission V4 Section 23
       expect(output).not.toContain('\\begin');
       expect(output).not.toContain('\\end');
       expect(output).not.toContain('\\mathbf');
-      expect(output).toContain('z = cᵀ x = ∑_j=1ⁿ c_j x_j');
+      expect(output).toContain('z = cᵀ x = ∑ⱼ₌₁ⁿ cⱼ xⱼ');
       expect(output).toContain('A x ≤ b');
       expect(output).toContain('x ≥ 0');
     });
@@ -66,6 +66,30 @@ describe('TheoryMarkdown & Mathematical Typography Engine (Mission V4 Section 23
       expect(output).toContain('∘');
       expect(output).toContain('π');
       expect(output).toContain('σ');
+    });
+
+    it('formats piecewise cases and cleans LaTeX brackets and text commands', () => {
+      const input = `T(n) = \\begin{cases}
+c_1 & \\text{si } n = 1 \\\\
+2 T(n/2) + c_2 n & \\text{si } n > 1
+\\end{cases}`;
+      const output = formatMathText(input);
+      expect(output).toContain('T(n) = {');
+      expect(output).toContain('c₁ si n = 1');
+      expect(output).toContain('2 T(n/2) + c₂ n si n > 1');
+      expect(output).toContain('}');
+      expect(output).not.toContain('\\begin');
+      expect(output).not.toContain('\\text');
+    });
+
+    it('formats superscripts, subscripts and bounded summations cleanly', () => {
+      const input = '2^j + 2^n + 2^{j+1} + \\sum_{i=0}^{n-1} g_i \\cdot x_i + c_1';
+      const output = formatMathText(input);
+      expect(output).toContain('2ʲ');
+      expect(output).toContain('2ⁿ');
+      expect(output).toContain('2ʲ⁺¹');
+      expect(output).toContain('∑ᵢ₌₀ⁿ⁻¹ gᵢ · xᵢ');
+      expect(output).toContain('c₁');
     });
   });
 
@@ -133,7 +157,7 @@ $$
 
       const blockEquation = container.querySelector('.theory-block-equation');
       expect(blockEquation).not.toBeNull();
-      expect(blockEquation?.textContent).toContain('OPT(j) = max(OPT(j-1), v_j + OPT(p(j)))');
+      expect(blockEquation?.textContent).toContain('OPT(j) = max(OPT(j-1), vⱼ + OPT(p(j)))');
       expect(blockEquation?.textContent).not.toContain('\\text');
     });
   });

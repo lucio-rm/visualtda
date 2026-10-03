@@ -88,7 +88,7 @@ export const RoadAntennasPlayground: React.FC = () => {
 
   // SVG scaling
   const svgWidth = 840;
-  const svgHeight = 220;
+  const svgHeight = 230;
   const padX = 50;
   const roadY = 135;
 
@@ -604,41 +604,89 @@ export const RoadAntennasPlayground: React.FC = () => {
             );
           })}
 
-          {/* Optional Overlay: Canonical Greedy Antennas */}
-          {isMinimal &&
-            greedyAntennas.map((gKm, gIdx) => {
-              const gX = kmToX(gKm);
-              const spanLeft = kmToX(Math.max(0, gKm - radius));
-              const spanRight = kmToX(gKm + radius);
-              const spanWidth = Math.max(0, spanRight - spanLeft);
+          {/* Subtle Canonical Greedy Solution Baseline (non-intrusive) */}
+          {isMinimal && (
+            <g className="canonical-optimal-baseline" aria-label="Línea de referencia de solución óptima canónica">
+              <text
+                x={padX - 8}
+                y={roadY + 54}
+                textAnchor="end"
+                fill="var(--success)"
+                fontSize="11"
+                fontWeight="700"
+              >
+                {language === 'es' ? 'Óptimo' : 'Optimal'}
+              </text>
+              {greedyAntennas.map((gKm, gIdx) => {
+                const gX = kmToX(gKm);
+                const spanLeft = kmToX(Math.max(0, gKm - radius));
+                const spanRight = kmToX(gKm + radius);
+                const yBaseline = roadY + 51;
 
-              return (
-                <g key={`greedy-overlay-${gIdx}`}>
-                  <rect
-                    x={spanLeft}
-                    y={roadY - 50}
-                    width={spanWidth}
-                    height="60"
-                    rx="10"
-                    fill="var(--state-solution-bg)"
-                    stroke="var(--success)"
-                    strokeWidth="2"
-                  />
-                  <line x1={gX} y1={roadY} x2={gX} y2={roadY - 80} stroke="var(--success)" strokeWidth="2" strokeDasharray="3 3" />
-                  <circle cx={gX} cy={roadY - 80} r="5" fill="var(--success)" />
-                  <text
-                    x={gX}
-                    y={roadY - 87}
-                    textAnchor="middle"
-                    fill="var(--success)"
-                    fontSize="13"
-                    fontWeight="bold"
-                  >
-                    Opt: {gKm}k
-                  </text>
-                </g>
-              );
-            })}
+                return (
+                  <g key={`greedy-subtle-${gIdx}`}>
+                    {/* Vertical guideline from road to baseline indicating exact alignment */}
+                    <line
+                      x1={gX}
+                      y1={roadY + 14}
+                      x2={gX}
+                      y2={yBaseline - 4}
+                      stroke="var(--success)"
+                      strokeWidth="1.2"
+                      strokeDasharray="2 3"
+                      opacity="0.65"
+                    />
+                    {/* Span coverage bar */}
+                    <line
+                      x1={spanLeft}
+                      y1={yBaseline}
+                      x2={spanRight}
+                      y2={yBaseline}
+                      stroke="var(--success)"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
+                    {/* Left bracket cap */}
+                    <line
+                      x1={spanLeft}
+                      y1={yBaseline - 5}
+                      x2={spanLeft}
+                      y2={yBaseline + 5}
+                      stroke="var(--success)"
+                      strokeWidth="2"
+                    />
+                    {/* Right bracket cap */}
+                    <line
+                      x1={spanRight}
+                      y1={yBaseline - 5}
+                      x2={spanRight}
+                      y2={yBaseline + 5}
+                      stroke="var(--success)"
+                      strokeWidth="2"
+                    />
+                    {/* Optimal Pin Marker */}
+                    <circle
+                      cx={gX}
+                      cy={yBaseline}
+                      r="3.5"
+                      fill="var(--success)"
+                    />
+                    {/* Optimal position tag */}
+                    <text
+                      x={gX}
+                      y={yBaseline + 14}
+                      textAnchor="middle"
+                      fill="var(--success)"
+                      fontSize="11"
+                      fontWeight="600"
+                    >
+                      {gKm}k
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          )}
 
           {/* Houses */}
           {houses.map((hKm, hIdx) => {

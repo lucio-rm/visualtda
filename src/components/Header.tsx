@@ -33,19 +33,20 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <svg
             className="brand-logo"
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
             fill="none"
             aria-hidden="true"
             style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
           >
-            <line x1="12" y1="6" x2="6" y2="18" stroke="var(--accent)" strokeWidth="1.75" />
-            <line x1="12" y1="6" x2="18" y2="18" stroke="var(--accent)" strokeWidth="1.75" />
-            <line x1="6" y1="18" x2="18" y2="18" stroke="var(--accent)" strokeWidth="1.75" />
-            <circle cx="12" cy="6" r="3" fill="var(--accent)" />
-            <circle cx="6" cy="18" r="3" fill="var(--text)" />
-            <circle cx="18" cy="18" r="3" fill="var(--text)" />
+            <rect x="2" y="2" width="26" height="26" rx="7" fill="var(--surface-hover)" stroke="var(--accent)" strokeWidth="1.75" />
+            <ellipse cx="15" cy="15" rx="10.5" ry="9" stroke="var(--border-strong)" strokeWidth="1" strokeDasharray="3 2" />
+            <text x="5.5" y="18.5" fill="var(--accent)" fontSize="10.5" fontFamily="var(--font-mono)" fontWeight="900">P</text>
+            <text x="14" y="13.5" textAnchor="middle" fill="var(--warning)" fontSize="8.5" fontFamily="var(--font-mono)" fontWeight="800">?</text>
+            <line x1="12" y1="16" x2="16" y2="16" stroke="var(--text-muted)" strokeWidth="1.3" strokeLinecap="round" />
+            <line x1="12" y1="18.5" x2="16" y2="18.5" stroke="var(--text-muted)" strokeWidth="1.3" strokeLinecap="round" />
+            <text x="24.5" y="18.5" textAnchor="end" fill="var(--text)" fontSize="8.5" fontFamily="var(--font-mono)" fontWeight="800">NP</text>
           </svg>
           <div className="brand-text">
             <span className="brand-title">Visual TDA</span>

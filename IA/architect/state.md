@@ -64,10 +64,28 @@
       - Card Difficulty Bar & Badge Overflow Resolution: Scaled stars to 11×11px and streamlined `difficulty-label` font size to 0.72rem, providing >50px of breathing room inside `.card-difficulty-bar`. Guaranteed that status badges (`[Explorando]`, `[Completado]`, `[En Pruebas]`, etc.) never overflow or clip against the card boundary.
       - Light Mode Desktop Canvas & Card Distinction: Set desk canvas `--bg: #ccd3de` (78% lightness) vs `#ffffff` cards with 1.5px `#a8b4c6` borders, elevated shadows, and an authoritative top accent band (`border-top: 4px solid var(--accent)`), creating unmistakable visual hierarchy and physical depth.
       - Eliminated Invisible Text: Replaced hardcoded pale yellow (`#fbbf24`, `#fef08a`) in `InversionCountingVisualizer.css` with `var(--warning)`, and fixed pale text tokens in `HuffmanVisualizer.css`.
-   10. **Quality Baseline**:
+   10. **Part 10 Privacy Protection, Seamless Feedback, Subtle Optimal Visualizer Baseline, and Editor Vertical Expansion**:
+      - Email Privacy & Zero Public Leaks: Fully removed any plaintext references to `lromerom@fi.uba.ar` from all user-facing modal UI, placeholders, and descriptions. Obfuscated FormSubmit delivery endpoint (`atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHJvbWVyb21AZmkudWJhLmFy')`).
+      - Seamless In-Page Asynchronous Delivery: Replaced page-exiting `window.location.href = mailto:...` with silent client-side `fetch` POST request with progress indicator (`Enviando...` / `Sending...`) and in-modal confirmation card, keeping the student engaged on the page.
+      - Anonymous Feedback Toggle: Added `[ ] Enviar de forma anónima` checkbox that clears and disables the email field, enabling users to submit suggestions anonymously without leaking their email.
+      - Footer Attribution Square Button: Removed raw username string `"GitHub: lucio-rm"` from footer link. Redesigned `.footer-gh-link` as a clean 32×32px square button with centered SVG mark linking to `https://github.com/lucio-rm`.
+      - Road Antennas Non-Intrusive Optimal Solution: Replaced intrusive 60px-tall green overlay rectangle with an elegant canonical baseline beneath the highway (`roadY + 51`). Renders discrete green brackets `[spanLeft ——— • gKm ——— spanRight]` and vertical alignment guidelines. Houses and user-placed antennas remain 100% visible, clearly highlighting the gap ("la brecha / distancia / km") from the optimal placement.
+      - Phase 2 (Solve) Code Editor Vertical Height Expansion: Raised editor wrapper and stage min-height from 420px to 560px (`.solve-editor-column .editor-input-wrapper`, `.solve-editor-column .code-editor-stage`), and increased textarea rows to 24. Eliminates empty whitespace below attempts history on desktop displays.
+      - Dedicated Automated Test Suite: Added `tests/feedbackAndFooter.test.tsx` verifying email privacy, anonymous mode toggling, async form submission, and non-intrusive playground baseline.
+   11. **Part 11 Filter Headroom, Mathematical Typography Engine, Bilingual Academic Foundations & P=NP Emblem**:
+      - Category & Technique Filter Clipping: Adjusted `.section-header` margin and added `padding: 6px 4px;` to `.category-nav`, completely eliminating the 1px ceiling clipping on filter pills across all views.
+      - Theoretical Foundations Mathematical Typography Overhaul:
+        - Replaced the muddy gray block (`var(--surface-hover)`) in `.theory-block-equation` and `.theory-callout` with clean elevated card surface `var(--surface)`, accent border demarcations, and generous padding (`1.25rem 2rem`).
+        - Expanded `.theory-body` container to `max-width: 1080px; width: 100%;` allowing wide multiline equations to breathe without cramped wrapping.
+        - Aligned `.theory-section-badge` precisely with the cap-height of `.theory-h2` using `align-items: flex-start` and accent color, preventing baseline drift on multiline headings.
+        - Upgraded `formatMathText` in `TheoryMarkdown.tsx` with native Unicode typography: exponential superscripts ($2^j \to 2ʲ, 2^n \to 2ⁿ, 2^{j+1} \to 2ʲ⁺¹$), variable indices ($c_1 \to c₁, c_2 \to c₂, x_j \to xⱼ, w_i \to wᵢ, g_i \to gᵢ$), bounded summations ($\sum_{j=1}^n \to ∑ⱼ₌₁ⁿ, \sum_{i=0}^{n-1} \to ∑ᵢ₌₀ⁿ⁻¹$), piecewise case formatting, and unnesting of `\text`, `\mathbf`, and `\mathbb`.
+      - Bilingual Theoretical Foundations Engine:
+        - Created `src/engine/content/englishTheoryContent.ts` providing 100% fluent, rigorous English theory overrides for core exercises (`merge-sort`, `knapsack-dp`, `coin-change-dp`, `juan-el-vago`, `huffman-coding-greedy`, `n-queens`, `interval-scheduling`, `road-antennas-greedy`, `linear-programming`).
+        - Wired `TheoryMarkdown` to route between English overrides and automated academic translation with mathematical keyword localization (`Maximize`, `Subject to`, `if`, `or`).
+      - Header Complexity Emblem:
+        - Replaced the legacy 3-vertex triangle icon in `Header.tsx` with a tailored $P \stackrel{?}{=} NP$ complexity emblem SVG.
+   12. **Quality Baseline**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
-      - `npm test`: 47 test files, 368 passed (100% PASS).
+      - `npm test`: 48 test files, 375 passed (100% PASS).
       - `npm run build`: static production build cleanly generated in `dist/` with zero warnings.
-
-

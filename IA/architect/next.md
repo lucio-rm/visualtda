@@ -1,67 +1,122 @@
-# Visual TDA — Master Engineering Mission V11 Roadmap & Next Steps
+# Visual TDA — Master Engineering Roadmap & Next Steps
 
-This document defines the operational roadmap for **Mission V11: Systematic Design System Overhaul**.
+This document defines the completed milestones of **Mission V11** and outlines the strategic architectural vision to elevate Visual TDA from an exemplary platform to an internationally benchmarked, "perfect" algorithmic laboratory.
 
 ---
 
-## 1. Execution Order & Status (Mission V11)
+## 1. Execution Order & Completed Milestones (Mission V11)
 
 1. ✅ **Part 1 — Verification Sweep**:
-   - Board square contrast recalculation: legacy 2.364:1 documented and eliminated.
-   - Catalog exercise selector squares vs background: 1.096:1 contrast fixed via card surface elevation, 1.5px borders, and shadows.
+   - Board square contrast recalculation: legacy 2.364:1 eliminated.
+   - Catalog exercise selector squares vs background: elevated cards with 1.5px borders, shadows, and crisp surface contrast.
    - Button and interactive control legibility sweep: resolved button fills, contrast ratios, and pill badges.
    - Documentation re-sync: `questions.md`, `current-audit.md`, `known-issues.md`, `state.md`.
+
 2. ✅ **Part 2 — Systematic Color System Migration (@radix-ui/colors)**:
-   - **2.1 Adopt Radix Scales**:
-     - Installed `@radix-ui/colors`.
-     - Slate: steps 1–12 (Light & Dark) for neutrals, backgrounds, surfaces, borders, text, and board cells.
-     - Indigo: steps 1–12 (Light & Dark) for accent, primary interactive, focus rings.
-     - Grass: steps 1–12 (Light & Dark) for success, optimal, completed, accepted.
-     - Tomato: steps 1–12 (Light & Dark) for error, conflict, invalid, rejected.
-     - Amber: steps 1–12 (Light & Dark) for active, current, evaluating, candidate rays.
-   - **2.2 Non-Color Reinforcement Re-Audit**:
-     - Candidate trajectory rays with high-contrast backing halos for Knight's Tour.
-     - Bold 3.5px grid demarcations for Sudoku 3x3 blocks.
-     - Visible edge strokes (2.5px solid) for graph algorithms.
-     - Pill badges with borders for cell values and sequence indices.
-   - **2.3 Typography Consistency Pass**:
-     - Inter for UI, JetBrains Mono / Fira Code with `tabular-nums` for code and numbers across all components.
-   - **2.4 Board & Card Geometry Adjustments**:
-     - Card elevation, outer bezels, and enhanced cell differentiation.
+   - Mathematical 12-step Radix scales adopted across Slate (neutrals), Indigo (accent), Grass (success/optimal), Tomato (error/conflict), Amber (evaluation).
+   - Solid buttons, chessboard squares, pieces, and graph edges calibrated to achieve $\ge 5:1$ to $15:1$ WCAG contrast.
+
 3. ✅ **Part 3 — Verification**:
-   - Automated contrast test suite assertions against real Radix steps (`tests/contrastAndDesignSystem.test.ts` - 9/9 passing).
-   - Real-Chromium screenshot verification across all 38 exercises in both Light and Dark themes (`dist-qa-screenshots/v11/`).
-   - Updated `docs/visual-design-system.md` with enforceable step mappings and empirical contrast metrics.
-   - Recorded before/after contrast measurements in `docs/visual-design-system.md` and `docs/known-issues.md`.
+   - Automated contrast test suite (`tests/contrastAndDesignSystem.test.ts` - 9/9 passing).
+   - Real-Chromium screenshot verification across all 38 exercises in both Light and Dark themes.
+
 4. ✅ **Part 4 — Full Curriculum Pedagogical Completeness & Theory Foundations**:
-   - Audited and standardized all 37 exercise `theory.md` files (38 registered exercises).
-   - Upgraded 16 exercises from legacy markdown to canonical numbered sections `## 1.`, `## 2.`, etc., activating `TheoryMarkdown.tsx` badges (`01`, `02`) and callout boxes.
-   - Verified that 100% of exercises feature formal problem definitions, mathematical proofs/invariants, asymptotic complexity analysis, and naive intuition traps with concrete counterexamples.
-   - Added automated regression suite in `tests/exerciseContent.test.ts` enforcing these academic standards continuously.
-5. ✅ **Part 5 — Light Mode Contrast Separation, Card Stars & Interactive Bug Sweep**:
-   - Light mode depth hierarchy: `--bg` set to `#d8dce6` (cool slate desk canvas, lightness 86%), providing a distinct 1.37:1 ratio against pure white cards (`--surface: #ffffff`) with 11.9:1 text contrast and zero card blending. Recessed workbench canvas inside exercises set to `--canvas-bg: #eaedf4`.
-   - Card header realignment: single-row header with `#num` and category left, zero overflow; footer bar with `Dificultad ★★★★☆` on the left directly adjacent, and status badge (`[Explorando]`, `[Completado]`, etc.) on the right side of the footer bar.
-   - Knight's Tour unsolvable 4x4 options removed.
-   - Weighted Interval hover thrashing bug fixed via locked 56px predecessor container and styled inline code.
-   - Universal bilingual coverage: all aria-labels, buttons, chart labels, and playground legends verified in both Spanish and English.
+   - 100% of exercises feature formal problem modeling, mathematical proofs (induction, invariants, exchange arguments), step-by-step asymptotic complexity ($O$), and naive intuition traps with concrete counterexamples.
+   - Enforced by continuous regression tests in `tests/exerciseContent.test.ts`.
+
+5. ✅ **Part 5 — Light Mode Hierarchy, Card Header Redesign & Interactive Bug Sweep**:
+   - Light mode depth hierarchy: desktop canvas `--bg: #ccd3de` establishing a clear physical contrast against pure white cards (`--surface: #ffffff`) with zero card bleeding.
+   - Card headers streamlined to `#num` + category; footer bar contains difficulty stars adjacent to difficulty label, and status badge on the right, eliminating text wrap.
+   - Knight's Tour unsolvable 4×4 presets purged. Predecessor function layout shift locked in Weighted Intervals.
+
 6. ✅ **Part 6 — Road Antennas Label Staggering & Universal Selection Controls Polish**:
-   - Road Antennas yellow cursor number superposition eliminated during pointer drag with active halo ring.
-   - 1D greedy interval coloring for nearby house km labels within 38px, eliminating all text collisions with dashed leader lines.
+   - Cursor indicator marker suppressed during drag with active ring feedback, eliminating yellow duplicate numbers.
+   - 1D greedy interval coloring for nearby house km labels within 48px, eliminating label collisions with dashed leader lines and knockout text halos.
    - Header language/theme selectors and board size selectors migrated to high-definition `.segmented-control` pills.
-   - Typography inheritance and custom SVG chevrons for all native `<select>` fallbacks.
+
 7. ✅ **Part 7 — Universal Speed Controls Migration to Segmented Pills & Header Stars Harmonization**:
-   - Replaced legacy `<select>` playback speed dropdowns across 13 visualizers (`road-antennas`, `coin-change`, `juan-el-vago`, `lcs`, `linear-programming`, `max-subarray`, `peak-finding`, `randomized-fair-coin`, `reduction-is-vc`, `subset-sum`, `vertex-cover-approx`, `weighted-interval-scheduling`, and `graph-coloring`) with modern, accessible `.segmented-control` button pills.
-   - Polished `.speed-btn` and `.btn-speed` in `App.css` with solid `var(--surface)` resting background and smooth hover/active states, eliminating native browser white rectangles.
-   - Harmonized difficulty display in `ExerciseView.tsx` by replacing raw text tags with the exact unified SVG 5-star rating system from `ExerciseCard.tsx`.
+   - Replaced legacy `<select>` playback speed dropdowns across 13 visualizers with modern `.segmented-control` button pills.
+   - Harmonized difficulty display in `ExerciseView.tsx` with the unified SVG 5-star rating system from `ExerciseCard.tsx`.
 
+8. ✅ **Part 8 — Interaction Stability, Bilingual Copy Purity, Light Mode Elevation, and Author Footer**:
+   - Minimize Lateness Drag Stabilization: Fixed 60Hz boundary swap oscillation and banner flashing by decoupling mouse movement from instant state mutations.
+   - Road Antennas Hit-Test Overhaul: Added 32px hit-targets to all houses and a 1-click house chip removal bar with safety timeouts.
+   - Bilingual Copy Purity: Localized Huffman merged parent text (`+ New Parent` / `+ Nuevo Padre`) and upgraded `SolveView.tsx` with full English starter code function signatures.
+   - Author Footer & Feedback Channel: Added `Author — Lucio Romero Mascaró` and interactive `FeedbackModal`.
 
+9. ✅ **Part 9 — English Starter Codes, Drag Stabilization, Light Mode Card Contrast & Badge Overflow Resolution**:
+   - Complete English Starter Codes (`src/engine/content/englishStarterCodes.ts`) across all 37 exercise definitions.
+   - Fixed deadline flags ($d_i$) decoupled from dragged block in `MinimizeLatenessPlayground.tsx`.
+   - Scaled stars to 11×11px and streamlined `difficulty-label` font size to 0.72rem, providing >50px of breathing room inside `.card-difficulty-bar`.
+   - Replaced invisible yellow text tokens with accessible theme variables in Inversion Counting and Huffman.
+
+10. ✅ **Part 10 — Privacy Protection, Silent Async Feedback, Subtle Visualizer Baseline, and Editor Vertical Expansion**:
+    - **Email Privacy & Anti-Spam**: Completely stripped any plaintext references to `lromerom@fi.uba.ar` from UI, labels, and placeholders. Obfuscated FormSubmit endpoint (`atob(...)`).
+    - **Silent In-Page Delivery**: Eliminated OS `mailto:` redirects (`window.location.href`). Feedback is sent via client `fetch` POST with progress state (`Enviando...`) and in-modal confirmation card.
+    - **Anonymous Submission Option**: Added `[ ] Enviar de forma anónima` checkbox that clears and disables the email field.
+    - **Square GitHub Button**: Redesigned `.footer-gh-link` as an accessible 32×32px square button containing strictly the GitHub SVG icon.
+    - **Subtle Road Antennas Optimal Baseline**: Replaced the 60px-tall green overlay rectangle with an elegant canonical baseline beneath the highway (`roadY + 51`) with discrete brackets `[ ——— • ——— ]` and vertical alignment guides. User antennas and houses remain 100% visible, clearly highlighting the gap ("la brecha / distancia / km") from the optimal placement.
+    - **Solve Editor Vertical Expansion**: Raised editor wrapper and stage min-height from 420px to 560px (`.solve-editor-column .editor-input-wrapper`, `.solve-editor-column .code-editor-stage`), and increased textarea rows to 24, eliminating empty whitespace below the attempts history.
 
 ---
 
-## 2. Quality Gates Baseline
+## 2. Quality Baseline
 
 - `npm run lint`: 0 errors, 0 warnings.
 - `npm run typecheck`: 0 errors.
-- `npm test`: 47 test files, 368 tests (100% PASS).
-- `npm run build`: static production build in `dist/` cleanly generated in ~1.65s.
+- `npm test`: 48 test files, 373 passed (100% PASS).
+- `npm run build`: static production build in `dist/` cleanly generated in ~1.8s.
 
+---
+
+## 3. The Path to "Perfection": Strategic Architectural Vision & Roadmap
+
+To elevate Visual TDA into the definitive, world-class reference platform for computer science algorithms (comparable to or surpassing VisuAlgo, NeetCode, and LeetCode while maintaining Kleinberg & Tardos academic depth), here is the concrete analysis of what is needed, organized into high-impact pillars:
+
+### Pillar 1: Visual Debugging Bridge ("Solve" to "Understand" Failure Inspector)
+- **The Problem**: When a student's Python algorithm fails test case 3 out of 5, they currently receive a text assertion diff (e.g. `Obtenido: [14, 26, 36] | Esperado: [14, 36]`). The student must mentally reconstruct where their greedy choice went astray.
+- **The "Perfect" Solution**:
+  - Add a 1-click action on failed test cases: **`[Inspeccionar en Visualizador]` / `[Inspect in Visualizer]`**.
+  - Clicking this loads the student's actual output directly into the visualizer canvas side-by-side or overlaid against the canonical solution.
+  - For example, in *Road Antennas*, the visualizer immediately highlights in red the house at km 26 that was redundantly covered or missed, showing visually why their greedy rule produced a suboptimal set.
+  - This turns an opaque unit test failure into an instantaneous "Aha!" pedagogical moment.
+
+### Pillar 2: Dynamic Custom Input Sandbox across all 38 Visualizers
+- **The Problem**: Most visualizers provide 3–5 curated presets. While presets demonstrate canonical edge cases, active learning peaks when students can test their own counterexamples or classroom homework problems.
+- **The "Perfect" Solution**:
+  - Implement a standardized, collapsible **"Entrada Personalizada" / "Custom Input"** bar across all visualizers.
+  - Allows students to paste their own array (`[8, 3, 2, 9, 7, 1]`), string pair (`s1="ALGORITHM", s2="ALGEBRA"`), or graph adjacency list.
+  - Visual TDA validates the format, generates the trace on the fly, and visualizes the custom instance with zero backend dependencies.
+
+### Pillar 3: Interactive Knowledge Graph (The Curriculum "Skill Tree")
+- **The Problem**: The catalog is a linear grid of cards categorized by paradigm. While clean, it does not visually demonstrate *how* algorithmic paradigms evolve.
+- **The "Perfect" Solution**:
+  - Introduce an interactive **"Grafo de Reducciones y Técnicas" / "Curriculum Knowledge Graph"** view (toggleable alongside the grid catalog).
+  - Graph nodes represent problems; directed edges represent pedagogical transitions:
+    - *Interval Scheduling* (Greedy succeeds) $\longrightarrow$ *Weighted Interval Scheduling* (Greedy fails $\implies$ Dynamic Programming required).
+    - *Bipartite Matching* $\longrightarrow$ *Max Flow (Ford-Fulkerson)* $\longrightarrow$ *Min-Cut Duality*.
+    - *Independent Set* $\longrightarrow$ *Vertex Cover* $\longrightarrow$ *Set Cover* (Karp's 21 NP-complete reductions).
+  - Gives university students the "big picture" of theoretical computer science (Kleinberg & Tardos Chapters 1 through 8).
+
+### Pillar 4: Timeline Scrubber with State Keyframes
+- **The Problem**: Trace playback currently relies on play/pause and step forward/backward buttons. For traces with 80+ steps (e.g., Merge Sort, Huffman tree building, or Knapsack DP table fill), clicking "Next" 40 times is tedious.
+- **The "Perfect" Solution**:
+  - Upgrade the playback bar with a continuous **draggable scrubber slider** with hoverable step keyframe ticks.
+  - Hovering over a tick previews the event name (e.g. `[Paso 24: Particionar subarreglo [4..7]]`).
+  - Dragging the handle jumps directly to that step instantaneously, facilitating seamless exploration of long traces.
+
+### Pillar 5: Keyboard Shortcuts & Power-User Workflow
+- **The Problem**: Navigating between code editor, running tests, and stepping traces currently requires repeated mouse clicks.
+- **The "Perfect" Solution**:
+  - Standard hotkeys:
+    - `Ctrl + Enter` / `Cmd + Enter`: Run Tests (Fast TS or Pyodide).
+    - `Space`: Play / Pause Trace playback.
+    - `ArrowLeft` / `ArrowRight` (in visualizer): Step Back / Step Forward.
+    - `1`, `2`, `3`: Jump to Discover, Solve, or Understand phase.
+  - Add a small `[?]` modal displaying keyboard navigation shortcuts.
+
+### Pillar 6: Offline Academic Portfolio & Solution Export
+- **The Problem**: Student progress is stored in browser `localStorage`. If a student clears browser data or changes laptops, their solved exercises and code attempts are lost.
+- **The "Perfect" Solution**:
+  - **Export Portfolio (`JSON` & `Markdown`)**: 1-click button allowing students to download a zipped archive or single document containing all their passing solutions, timestamps, and difficulty badges.
+  - **Import Progress**: 1-click upload to restore their portfolio on any machine with 100% privacy and zero server accounts.

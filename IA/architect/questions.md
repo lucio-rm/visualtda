@@ -89,3 +89,39 @@ This document tracks formal architectural decisions and questions escalated betw
 - **Rationale**:
   1. Hand-picked colors repeatedly led to subtle WCAG failures (e.g. 2.36:1 on board squares or washed-out catalog selectors).
   2. Radix Colors guarantees mathematical contrast between steps (e.g. step 11/12 on step 1/2/3, white on step 9) across both light and dark themes by design.
+
+---
+
+## ADR-007 (Q-007): Client-Side Feedback Privacy, In-Page Delivery & Non-Intrusive Educational Overlays
+
+- **Status**: **RESOLVED / ADOPTED**
+- **Decision**:
+  1. Feedback collection in a static web architecture must operate via asynchronous, in-page client POST requests (FormSubmit AJAX) without redirecting the user or executing OS `mailto:` protocols.
+  2. The author's personal/institutional email address (`lromerom@fi.uba.ar`) must never be rendered in plaintext in the DOM or source, and the remote endpoint must be obfuscated in client code to prevent automated scraper harvesting and spam.
+  3. Anonymous submission must always be available as a 1-click option for students wishing not to share their contact information.
+  4. Pedagogical visualizers must never overlay opaque full-screen or full-component blocks over student-constructed solutions upon reaching the optimal state. Instead, subtle, parallel reference baselines (showing coordinates, brackets, and metrics below the workspace) must be used to allow direct visual comparison ("la brecha / distancia") between student decisions and canonical algorithms.
+- **Rationale**:
+  1. Privacy & Anti-Spam: Exposing raw institutional addresses in client-side static apps invites bots and spam. Obfuscation plus serverless AJAX ingestion protects privacy.
+  2. Seamless UX: Invoking `mailto:` breaks immersion, kicks users out to external email clients, and fails on systems without configured default mail apps.
+  3. Pedagogical Agency (Principle P11): Visualizers exist to show *why* an algorithm behaves as it does. Obscuring the student's solution with a giant green banner hides their work at the moment of triumph, destroying the visual feedback loop. Parallel baselines preserve student agency while offering exact educational comparison.
+
+---
+
+## ADR-008 (Q-008): Mathematical Typography Engine, Academic English Parity & Native Unicode Typesetting
+
+- **Status**: **RESOLVED / ADOPTED**
+- **Decision**:
+  1. Mathematical typesetting in Phase 3 (Understand) should use a lightweight, zero-dependency native Unicode regex parser (`TheoryMarkdown.tsx` + `formatMathText`) rather than heavy 500kB render-blocking LaTeX libraries (e.g. KaTeX / MathJax), honoring Principles P1 (KISS) and P10 (Portable Static Deployment).
+  2. The parser systematically transforms LaTeX math constructs into pristine Unicode:
+     - Powers and exponents: $2^j \to 2ʲ, 2^n \to 2ⁿ, 2^{j+1} \to 2ʲ⁺¹$.
+     - Variable subscripts: $c_1 \to c₁, c_2 \to c₂, x_j \to xⱼ, w_i \to wᵢ, g_i \to gᵢ$.
+     - Summations with bounds: $\sum_{j=1}^n \to ∑ⱼ₌₁ⁿ, \sum_{i=0}^{n-1} \to ∑ᵢ₌₀ⁿ⁻¹$.
+     - Piecewise function cases (`\begin{cases}`) are formatted with clean bracket demarcations and column alignment.
+     - Formula containers (`.theory-block-equation` and `.theory-callout`) are styled with elevated `--surface` cards rather than dull gray boxes, with 1080px container max-width.
+  3. Academic English Parity: Provide 100% fluent, rigorous English overrides for core theoretical proofs (`merge-sort`, `knapsack-dp`, `coin-change-dp`, `juan-el-vago`, `huffman-coding-greedy`, `n-queens`, etc.) and automated translation for math conditions (`Maximize`, `Subject to`, `if`, `or`).
+- **Rationale**:
+  1. Raw unparsed LaTeX (underscores, curly braces, `\text`, `\mathbf`, broken brackets) degrades pedagogical authority and looks like unrendered source code.
+  2. Heavy external LaTeX engines add network payload, CSS font bundle overhead, and layout shifts during initial render.
+  3. Native Unicode math renders synchronously at 0ms latency with native system fonts and full accessibility screen-reader compatibility.
+
+

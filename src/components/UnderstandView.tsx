@@ -583,7 +583,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
             </span>
           </div>
           <div className="theory-body">
-            <TheoryMarkdown content={correctnessExplanation} />
+            <TheoryMarkdown content={correctnessExplanation} language={language} exerciseId={exercise.id} />
           </div>
         </div>
 

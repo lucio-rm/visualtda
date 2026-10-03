@@ -641,7 +641,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   onChange={(e) => setCode(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onScroll={handleScroll}
-                  rows={18}
+                  rows={24}
                   aria-label={t(dict.codeEditorAriaLabel)}
                   spellCheck={false}
                   autoComplete="off"

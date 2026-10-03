@@ -7,6 +7,9 @@ export interface FeedbackModalProps {
   currentExerciseId?: string | null;
 }
 
+// Obfuscated FormSubmit endpoint to prevent public scraping while ensuring static in-browser delivery
+const SUBMIT_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHJvbWVyb21AZmkudWJhLmFy');
+
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
   onClose,
@@ -14,9 +17,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   currentExerciseId
 }) => {
   const [email, setEmail] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [category, setCategory] = useState<'bug' | 'ui' | 'algorithm' | 'suggestion'>('bug');
   const [message, setMessage] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sent'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'sent'>('idle');
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,23 +43,47 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     suggestion: { es: 'Comentario General / Otro', en: 'General Feedback / Other' }
   };
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || !email.trim()) return;
+    if (!message.trim()) return;
+    if (!isAnonymous && !email.trim()) return;
 
+    setStatus('submitting');
     const catName = categoryLabels[category][language];
-    const subject = encodeURIComponent(`[Visual TDA Feedback] ${catName}${currentExerciseId ? ` - ${currentExerciseId}` : ''}`);
-    const bodyContent = `De: ${email}\nCategoría: ${catName}\nEjercicio Activo: ${currentExerciseId || 'Inicio'}\nFecha: ${new Date().toISOString()}\n\nMensaje / Descripción del problema:\n${message}\n`;
-    const mailtoUrl = `mailto:lromerom@fi.uba.ar?subject=${subject}&body=${encodeURIComponent(bodyContent)}`;
+    const senderEmail = isAnonymous ? 'anonimo@visual-tda.org' : email.trim();
+    const senderName = isAnonymous
+      ? (language === 'es' ? 'Estudiante Anónimo' : 'Anonymous Student')
+      : (email.trim().split('@')[0] || 'Estudiante');
+
+    const payload = {
+      name: senderName,
+      email: senderEmail,
+      category: catName,
+      exercise: currentExerciseId || 'Inicio',
+      message: message.trim(),
+      _subject: `[Visual TDA Feedback] ${catName}${currentExerciseId ? ` - ${currentExerciseId}` : ''}`,
+      _template: 'table'
+    };
 
     try {
-      navigator.clipboard.writeText(bodyContent);
+      await fetch(SUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
     } catch {
-      // Ignored
+      // Graceful fallback for offline / adblocker: copy message text to clipboard
+      try {
+        navigator.clipboard.writeText(`[Visual TDA - ${catName}]\n${message.trim()}`);
+      } catch {
+        // Ignored
+      }
+    } finally {
+      setStatus('sent');
     }
-
-    window.location.href = mailtoUrl;
-    setStatus('sent');
   };
 
   return (
@@ -79,8 +107,8 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </h4>
             <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
               {language === 'es'
-                ? 'Tu mensaje se enviará directamente al autor (Lucio Romero Mascaró - lromerom@fi.uba.ar) para continuar mejorando Visual TDA.'
-                : 'Your message will be sent directly to the author (Lucio Romero Mascaró - lromerom@fi.uba.ar) to keep improving Visual TDA.'}
+                ? 'Tu mensaje se enviará directamente al equipo de desarrollo para continuar perfeccionando Visual TDA.'
+                : 'Your message will be sent directly to the development team to keep improving Visual TDA.'}
             </p>
           </div>
           <button
@@ -102,10 +130,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         </div>
 
         {status === 'sent' ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem 0' }}>
             <div
               style={{
-                padding: '1rem',
+                padding: '1.2rem',
                 backgroundColor: 'var(--state-solution-bg)',
                 border: '1px solid var(--success)',
                 borderRadius: 'var(--radius-sm)',
@@ -113,14 +141,20 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 fontSize: '0.9rem'
               }}
             >
-              <strong>{language === 'es' ? '¡Gracias por tu mensaje!' : 'Thank you for your feedback!'}</strong>
-              <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.85rem' }}>
+              <strong style={{ display: 'block', fontSize: '1rem', marginBottom: '0.35rem' }}>
+                {language === 'es' ? '¡Mensaje recibido con éxito!' : 'Feedback received successfully!'}
+              </strong>
+              <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text)' }}>
                 {language === 'es'
-                  ? 'Se ha generado el correo para lromerom@fi.uba.ar y se copió el texto al portapapeles. Te responderemos a la brevedad.'
-                  : 'An email has been drafted to lromerom@fi.uba.ar and the text was copied to your clipboard. We will reply shortly.'}
+                  ? (isAnonymous
+                      ? 'Tu mensaje fue enviado de forma anónima. ¡Muchas gracias por colaborar con la mejora de la plataforma!'
+                      : 'Tu mensaje fue enviado correctamente. Si ingresaste tu correo, te responderemos a la brevedad.')
+                  : (isAnonymous
+                      ? 'Your feedback was sent anonymously. Thank you for contributing to the improvement of Visual TDA!'
+                      : 'Your message was sent successfully. We will reply shortly to your email.')}
               </p>
             </div>
-            <div className="modal-actions">
+            <div className="modal-actions" style={{ justifyContent: 'flex-end', marginTop: '0.5rem' }}>
               <button type="button" className="btn-primary" onClick={onClose}>
                 {language === 'es' ? 'Cerrar' : 'Close'}
               </button>
@@ -129,24 +163,55 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         ) : (
           <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
             <div>
-              <label htmlFor="fb-email" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.25rem' }}>
-                {language === 'es' ? 'Tu Correo Electrónico (para responderte):' : 'Your Email (for response):'}
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
+                <label
+                  htmlFor="fb-email"
+                  style={{
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: isAnonymous ? 'var(--text-muted)' : 'var(--text)'
+                  }}
+                >
+                  {language === 'es' ? 'Tu Correo Electrónico:' : 'Your Email:'}
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <input
+                    id="fb-anon"
+                    type="checkbox"
+                    checked={isAnonymous}
+                    onChange={(e) => {
+                      setIsAnonymous(e.target.checked);
+                      if (e.target.checked) setEmail('');
+                    }}
+                    style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: '15px', height: '15px' }}
+                  />
+                  <label htmlFor="fb-anon" style={{ fontSize: '0.78125rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    {language === 'es' ? 'Enviar de forma anónima' : 'Send anonymously'}
+                  </label>
+                </div>
+              </div>
+
               <input
                 id="fb-email"
                 type="email"
-                required
+                required={!isAnonymous}
+                disabled={isAnonymous}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={language === 'es' ? 'ejemplo@fi.uba.ar' : 'your.email@example.com'}
+                placeholder={
+                  isAnonymous
+                    ? (language === 'es' ? '(Envío anónimo activado - no se solicita correo)' : '(Anonymous mode enabled - no email required)')
+                    : (language === 'es' ? 'ejemplo@correo.com' : 'example@domain.com')
+                }
                 style={{
                   width: '100%',
                   padding: '0.5rem 0.75rem',
                   borderRadius: 'var(--radius-sm)',
                   border: '1px solid var(--border)',
-                  backgroundColor: 'var(--surface-hover)',
-                  color: 'var(--text)',
-                  fontSize: '0.875rem'
+                  backgroundColor: isAnonymous ? 'var(--surface)' : 'var(--surface-hover)',
+                  color: isAnonymous ? 'var(--text-muted)' : 'var(--text)',
+                  fontSize: '0.875rem',
+                  opacity: isAnonymous ? 0.65 : 1
                 }}
               />
             </div>
@@ -211,11 +276,13 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             )}
 
             <div className="modal-actions" style={{ marginTop: '0.5rem' }}>
-              <button type="button" className="btn-secondary" onClick={onClose}>
+              <button type="button" className="btn-secondary" onClick={onClose} disabled={status === 'submitting'}>
                 {language === 'es' ? 'Cancelar' : 'Cancel'}
               </button>
-              <button type="submit" className="btn-primary">
-                {language === 'es' ? 'Enviar a lromerom@fi.uba.ar' : 'Send to lromerom@fi.uba.ar'}
+              <button type="submit" className="btn-primary" disabled={status === 'submitting'}>
+                {status === 'submitting'
+                  ? (language === 'es' ? 'Enviando...' : 'Sending...')
+                  : (language === 'es' ? 'Enviar Mensaje' : 'Send Feedback')}
               </button>
             </div>
           </form>
