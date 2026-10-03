@@ -2368,6 +2368,12 @@ select option,
   line-height: 1.8;
 }
 
+.theory-block-equation-inner {
+  display: inline-block;
+  text-align: left;
+  max-width: 100%;
+}
+
 .theory-math-inline {
   font-family: var(--font-mono);
   font-size: 0.95em;

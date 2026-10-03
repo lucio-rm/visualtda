@@ -169,8 +169,14 @@ export function formatMathText(text: string): string {
     [/\^\{([0-9a-zA-Z+-]+)\}/g, (_: string, p: string) => toSuperscript(p)],
     [/\^([0-9a-zA-Z+-])/g, (_: string, p: string) => toSuperscript(p)],
 
-    // Subscripts: convert single letters, digits, and mathematical index expressions (e.g. j=1, i=0, n-1, i+1)
-    [/_\{([0-9]|j=1|i=0|n-1|i\+1|j\+1)\}/g, (_: string, p: string) => toSubscript(p)],
+    // Subscripts: convert single letters, digits, and mathematical index expressions (e.g. j=1, i=1, i=0, n-1, i+1, etc.)
+    [/_\{([0-9a-zA-Z+=-]+)\}/g, (_: string, p: string) => {
+      if (p.length === 1 && SUBSCRIPT_MAP[p]) return SUBSCRIPT_MAP[p];
+      const lower = p.toLowerCase();
+      if (['min', 'max', 'opt', 'izq', 'der', 'cruzadas', 'actual', 'acumulado'].includes(lower)) return `_${p}`;
+      const allSub = p.split('').every((char) => SUBSCRIPT_MAP[char] !== undefined);
+      return allSub ? toSubscript(p) : `_${p}`;
+    }],
     [/_\{([^{}]+)\}/g, (_: string, p: string) => (p.length === 1 && SUBSCRIPT_MAP[p] ? SUBSCRIPT_MAP[p] : `_${p}`)],
     [/_([0-9a-zA-Z])(?=[^a-zA-Z0-9]|$)/g, (_: string, p: string) => (SUBSCRIPT_MAP[p] ? SUBSCRIPT_MAP[p] : `_${p}`)]
   ];
@@ -283,7 +289,9 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
         mathContent = mathContent.slice(0, -2);
         elements.push(
           <div key={`mathblk-${i}`} className="theory-block-equation">
-            {formatMathText(mathContent)}
+            <div className="theory-block-equation-inner">
+              {formatMathText(mathContent)}
+            </div>
           </div>
         );
         i++;
@@ -300,7 +308,9 @@ export const TheoryMarkdown: React.FC<TheoryMarkdownProps> = ({ content, languag
       }
       elements.push(
         <div key={`mathblk-${i}`} className="theory-block-equation" style={{ whiteSpace: 'pre-line' }}>
-          {formatMathText(mathContent.trim())}
+          <div className="theory-block-equation-inner">
+            {formatMathText(mathContent.trim())}
+          </div>
         </div>
       );
       continue;

@@ -79,12 +79,14 @@
         - Expanded `.theory-body` container to `max-width: 1080px; width: 100%;` allowing wide multiline equations to breathe without cramped wrapping.
         - Aligned `.theory-section-badge` precisely with the cap-height of `.theory-h2` using `align-items: flex-start` and accent color, preventing baseline drift on multiline headings.
         - Upgraded `formatMathText` in `TheoryMarkdown.tsx` with native Unicode typography: exponential superscripts ($2^j \to 2ʲ, 2^n \to 2ⁿ, 2^{j+1} \to 2ʲ⁺¹$), variable indices ($c_1 \to c₁, c_2 \to c₂, x_j \to xⱼ, w_i \to wᵢ, g_i \to gᵢ$), bounded summations ($\sum_{j=1}^n \to ∑ⱼ₌₁ⁿ, \sum_{i=0}^{n-1} \to ∑ᵢ₌₀ⁿ⁻¹$), piecewise case formatting, and unnesting of `\text`, `\mathbf`, and `\mathbb`.
+        - Wrapped equation contents in `.theory-block-equation-inner` (`display: inline-block; text-align: left`) to guarantee that multiline equations, piecewise cases, and aligned systems remain centered on the page while their internal lines and columns align to the left.
       - Bilingual Theoretical Foundations Engine:
         - Created `src/engine/content/englishTheoryContent.ts` providing 100% fluent, rigorous English theory overrides for core exercises (`merge-sort`, `knapsack-dp`, `coin-change-dp`, `juan-el-vago`, `huffman-coding-greedy`, `n-queens`, `interval-scheduling`, `road-antennas-greedy`, `linear-programming`).
         - Wired `TheoryMarkdown` to route between English overrides and automated academic translation with mathematical keyword localization (`Maximize`, `Subject to`, `if`, `or`).
       - Header Complexity Emblem:
         - Replaced the legacy 3-vertex triangle icon in `Header.tsx` with a tailored $P \stackrel{?}{=} NP$ complexity emblem SVG.
-   12. **Quality Baseline**:
+   12. **Quality Baseline & Full Codebase Verification**:
+      - Complete systematic verification of Parts 1–12 against live implementation files, verifying contract compliance across all 38 exercises.
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
       - `npm test`: 48 test files, 375 passed (100% PASS).
