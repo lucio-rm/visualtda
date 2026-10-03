@@ -447,6 +447,32 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.24 — Road Antennas Number Superposition & Universal Selection Controls Polish
+- **Reported Behavior**:
+  1. **Road Antennas Duplicate Yellow Number on Drag**: When grabbing a house in the road antennas playground, a yellow number (the cursor indicator) rendered directly underneath the house's label.
+  2. **Road Antennas Nearby House Label Clashing**: When two houses were placed in close proximity (e.g. 29km and 32km), their km text labels collided and overlapped horizontally.
+  3. **Interactive Selector Styling & Broken Hover Artifacts**: Board size toggles (e.g. passing from 4x4 to 8x8 in N-Queens), language selector (ES/EN), and theme selector used raw browser-native `<select>` dropdowns with mismatched browser fonts and stark unstyled white box hover artifacts.
+- **Severity**: High (Visual defect, usability obstruction, and design system inconsistency).
+- **Status**: **RESOLVED** (current).
+- **Root Cause Analysis**:
+  1. During house pointer move, `setCursorKm(targetKm)` was called simultaneously with updating house coordinates. Both `<g className="road-cursor-marker">` and `<text>{hKm}k</text>` were rendered at identical coordinates, causing dual label superposition.
+  2. House labels were statically anchored at fixed $y = \text{roadY} - 26$ without proximity collision detection.
+  3. Raw HTML `<select>` elements bypass CSS `font-family` inheritance unless explicitly overridden and trigger browser-native white backgrounds on focus/hover in Linux/Chromium.
+- **Resolution**:
+  1. **Road Antennas Cursor Duplication**: Conditionally hid `<g className="road-cursor-marker">` whenever `draggingHouseIdx !== null || draggingAntennaIdx !== null`. Added a dedicated active drag halo ring around the dragged house for clear visual feedback.
+  2. **Staggered Proximity Labeling**: Implemented greedy 1D interval coloring in both `RoadAntennasPlayground.tsx` and `RoadAntennasVisualizer.tsx`. When adjacent houses are within $38\text{px}$, the left house stays at standard height ($y = \text{roadY} - 26$), while the adjacent right house is elevated ($y = \text{roadY} - 42$) with a subtle dashed leader line connecting back to its roof.
+  3. **Universal High-Definition Segmented Controls**:
+     - Migrated Header language selection to `.segmented-control` (`[ES | EN]`) with Radix accent pills.
+     - Migrated Header theme selection to `.segmented-control` (`[Auto | Claro | Oscuro]`).
+     - Migrated N-Queens Playground & Visualizer board size selection from `<select>` to segmented control buttons (`[4×4] [5×5] [6×6] [8×8]`).
+     - Standardized Knight's Tour board size selectors to unified segmented controls.
+     - Added universal form element typography inheritance (`button, select, input, textarea { font-family: inherit; }`) in `base.css` and `App.css`.
+     - Styled all native `<select>` fallbacks with custom SVG chevrons and Radix design tokens.
+     - Decoupled `.btn-preset:hover` from `.btn-preset.active`, ensuring non-active hover uses subtle `--surface-hover` and `--border-hover` without turning stark white or prematurely active.
+  4. **Verification**: 47 test files passing (368/368 tests), 22/22 browser QA scenarios verified, clean build.
+
+---
+
 ## 3. Maintenance Guidelines
 
 - When any new defect is found in manual exploration or reported by users, create a new entry with reproduction steps, root cause, and fix commit.

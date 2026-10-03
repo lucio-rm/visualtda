@@ -45,23 +45,31 @@ export const NQueensVisualizer: React.FC<NQueensVisualizerProps> = ({ initialN =
       {/* Top Configuration Bar */}
       <div className="visualizer-header-bar">
         <div className="board-size-selector">
-          <label htmlFor="n-select" className="selector-label">
+          <span className="selector-label">
             {language === 'es' ? 'Tamaño del Tablero (N):' : 'Board Size (N):'}
-          </label>
-          <select
-            id="n-select"
-            className="n-select-input"
-            value={n}
-            onChange={(e) => {
-              setN(Number(e.target.value));
-              reset();
-            }}
-          >
-            <option value={4}>N = 4 ({language === 'es' ? '2 soluciones' : '2 solutions'})</option>
-            <option value={5}>N = 5 ({language === 'es' ? '10 soluciones' : '10 solutions'})</option>
-            <option value={6}>N = 6 ({language === 'es' ? '4 soluciones' : '4 solutions'})</option>
-            <option value={8}>N = 8 ({language === 'es' ? '92 soluciones' : '92 solutions'})</option>
-          </select>
+          </span>
+          <div className="segmented-control" role="group" aria-label={language === 'es' ? 'Tamaño del Tablero' : 'Board Size'}>
+            {[4, 5, 6, 8].map((size) => (
+              <button
+                key={size}
+                type="button"
+                className={`segmented-btn ${n === size ? 'active' : ''}`}
+                onClick={() => {
+                  setN(size);
+                  reset();
+                }}
+                aria-pressed={n === size}
+                title={
+                  size === 4 ? (language === 'es' ? '4×4: 2 soluciones' : '4×4: 2 solutions') :
+                  size === 5 ? (language === 'es' ? '5×5: 10 soluciones' : '5×5: 10 solutions') :
+                  size === 6 ? (language === 'es' ? '6×6: 4 soluciones' : '6×6: 4 solutions') :
+                  (language === 'es' ? '8×8: 92 soluciones' : '8×8: 92 solutions')
+                }
+              >
+                {size} × {size}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Live Metrics Counters */}

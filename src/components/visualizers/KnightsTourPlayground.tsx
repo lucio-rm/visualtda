@@ -181,28 +181,24 @@ export const KnightsTourPlayground: React.FC = () => {
         className="sdk-pg-controls"
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}
       >
-        <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className={`btn-preset ${n === 5 && !isPickingStart ? 'active' : ''}`}
-            onClick={() => resetBoard(5, 0, 0)}
-          >
-            {language === 'es' ? 'Tablero 5×5 (25)' : 'Board 5×5 (25)'}
-          </button>
-          <button
-            type="button"
-            className={`btn-preset ${n === 6 && !isPickingStart ? 'active' : ''}`}
-            onClick={() => resetBoard(6, 0, 0)}
-          >
-            {language === 'es' ? 'Tablero 6×6 (36)' : 'Board 6×6 (36)'}
-          </button>
-          <button
-            type="button"
-            className={`btn-preset ${n === 8 && !isPickingStart ? 'active' : ''}`}
-            onClick={() => resetBoard(8, 0, 0)}
-          >
-            {language === 'es' ? 'Tablero 8×8 (64)' : 'Board 8×8 (64)'}
-          </button>
+        <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div className="segmented-control" role="group" aria-label={language === 'es' ? 'Dimensiones del Tablero' : 'Board Dimensions'}>
+            {[
+              { size: 5, label: language === 'es' ? '5×5 (25)' : '5×5 (25)' },
+              { size: 6, label: language === 'es' ? '6×6 (36)' : '6×6 (36)' },
+              { size: 8, label: language === 'es' ? '8×8 (64)' : '8×8 (64)' },
+            ].map(({ size, label }) => (
+              <button
+                key={size}
+                type="button"
+                className={`segmented-btn ${n === size && !isPickingStart ? 'active' : ''}`}
+                onClick={() => resetBoard(size, 0, 0)}
+                aria-pressed={n === size && !isPickingStart}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             className={`btn-preset ${isPickingStart ? 'active' : ''}`}

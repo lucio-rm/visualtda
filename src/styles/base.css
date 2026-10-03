@@ -31,8 +31,13 @@ a:hover {
   text-decoration: underline;
 }
 
-button {
+button, select, input, textarea {
   font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: var(--radius-md);

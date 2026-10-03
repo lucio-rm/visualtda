@@ -23,21 +23,34 @@
 }
 
 .btn-preset {
-  background-color: var(--canvas-bg);
+  background-color: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.75rem;
+  font-family: inherit;
   font-size: 0.8125rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
 }
 
-.btn-preset:hover,
+.btn-preset:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
 .btn-preset.active {
-  background-color: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
+}
+
+.btn-preset.active:hover {
+  background-color: var(--accent-hover, var(--accent));
+  border-color: var(--accent-hover, var(--accent));
+  color: var(--accent-contrast, #ffffff);
 }
 
 .btn-tool {

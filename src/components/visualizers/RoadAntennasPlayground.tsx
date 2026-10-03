@@ -103,6 +103,31 @@ export const RoadAntennasPlayground: React.FC = () => {
     return padX + (km / effMax) * (svgWidth - 2 * padX);
   };
 
+  const houseLabelLevels = useMemo(() => {
+    const effMax = activeMaxKmRef.current || maxKm;
+    const toX = (k: number) => padX + (k / effMax) * (svgWidth - 2 * padX);
+    const items = houses.map((km, idx) => ({ km, idx, x: toX(km) }));
+    items.sort((a, b) => a.x - b.x);
+
+    const levels = new Array(houses.length).fill(0);
+    for (let i = 0; i < items.length; i++) {
+      const curr = items[i];
+      const usedLevels = new Set<number>();
+      for (let j = 0; j < i; j++) {
+        const prev = items[j];
+        if (curr.x - prev.x < 38) {
+          usedLevels.add(levels[prev.idx]);
+        }
+      }
+      let lvl = 0;
+      while (usedLevels.has(lvl)) {
+        lvl++;
+      }
+      levels[curr.idx] = lvl;
+    }
+    return levels;
+  }, [houses, maxKm, padX, svgWidth]);
+
   const xToKm = (xPx: number, customMaxKm?: number) => {
     const effMax = customMaxKm || activeMaxKmRef.current || maxKm;
     const clamped = Math.max(padX, Math.min(svgWidth - padX, xPx));
@@ -458,32 +483,34 @@ export const RoadAntennasPlayground: React.FC = () => {
           {/* Background */}
           <rect x="0" y="0" width={svgWidth} height={svgHeight} fill="transparent" />
 
-          {/* Accessible Keyboard & Mouse Cursor Marker */}
-          <g className="road-cursor-marker" aria-hidden="true">
-            <line
-              x1={kmToX(cursorKm)}
-              y1={roadY - 20}
-              x2={kmToX(cursorKm)}
-              y2={roadY + 24}
-              stroke="var(--warning)"
-              strokeWidth="2"
-              strokeDasharray="3 3"
-            />
-            <polygon
-              points={`${kmToX(cursorKm)},${roadY - 2} ${kmToX(cursorKm) - 5},${roadY - 12} ${kmToX(cursorKm) + 5},${roadY - 12}`}
-              fill="var(--warning)"
-            />
-            <text
-              x={kmToX(cursorKm)}
-              y={roadY - 18}
-              textAnchor="middle"
-              fill="var(--warning)"
-              fontSize="13"
-              fontWeight="700"
-            >
-              {cursorKm}k
-            </text>
-          </g>
+          {/* Accessible Keyboard & Mouse Cursor Marker (hidden during drag to prevent number collision) */}
+          {draggingHouseIdx === null && draggingAntennaIdx === null && (
+            <g className="road-cursor-marker" aria-hidden="true">
+              <line
+                x1={kmToX(cursorKm)}
+                y1={roadY - 20}
+                x2={kmToX(cursorKm)}
+                y2={roadY + 24}
+                stroke="var(--warning)"
+                strokeWidth="2"
+                strokeDasharray="3 3"
+              />
+              <polygon
+                points={`${kmToX(cursorKm)},${roadY - 2} ${kmToX(cursorKm) - 5},${roadY - 12} ${kmToX(cursorKm) + 5},${roadY - 12}`}
+                fill="var(--warning)"
+              />
+              <text
+                x={kmToX(cursorKm)}
+                y={roadY - 18}
+                textAnchor="middle"
+                fill="var(--warning)"
+                fontSize="13"
+                fontWeight="700"
+              >
+                {cursorKm}k
+              </text>
+            </g>
+          )}
 
           {/* Kilometer tick marks along road */}
           {Array.from({ length: Math.floor(maxKm / 10) + 1 }).map((_, idx) => {
@@ -644,6 +671,9 @@ export const RoadAntennasPlayground: React.FC = () => {
             const hX = kmToX(hKm);
             const isCovered = userCoveredIndices.has(hIdx);
             const houseColor = isCovered ? 'var(--success)' : 'var(--warning)';
+            const lvl = houseLabelLevels[hIdx] || 0;
+            const labelY = roadY - 26 - lvl * 16;
+            const isBeingDragged = draggingHouseIdx === hIdx;
 
             return (
               <g
@@ -680,11 +710,39 @@ export const RoadAntennasPlayground: React.FC = () => {
                   }
                 }}
                 style={{
-                  cursor: draggingHouseIdx === hIdx ? 'grabbing' : 'grab',
+                  cursor: isBeingDragged ? 'grabbing' : 'grab',
                   outline: 'none',
                   touchAction: 'none'
                 }}
               >
+                {/* Drag feedback indicator */}
+                {isBeingDragged && (
+                  <circle
+                    cx={hX}
+                    cy={roadY - 10}
+                    r="15"
+                    fill="none"
+                    stroke="var(--accent)"
+                    strokeWidth="2"
+                    strokeDasharray="3 3"
+                    pointerEvents="none"
+                  />
+                )}
+
+                {/* Staggered Leader line if elevated */}
+                {lvl > 0 && (
+                  <line
+                    x1={hX}
+                    y1={roadY - 24}
+                    x2={hX}
+                    y2={labelY + 4}
+                    stroke="var(--border-strong)"
+                    strokeWidth="1.2"
+                    strokeDasharray="2 2"
+                    pointerEvents="none"
+                  />
+                )}
+
                 <polygon
                   points={`${hX - 8},${roadY - 14} ${hX + 8},${roadY - 14} ${hX},${roadY - 23}`}
                   fill={houseColor}
@@ -700,11 +758,12 @@ export const RoadAntennasPlayground: React.FC = () => {
                 />
                 <text
                   x={hX}
-                  y={roadY - 26}
+                  y={labelY}
                   textAnchor="middle"
                   fill="var(--color-text)"
                   fontSize="13"
                   fontFamily="var(--font-sans)"
+                  fontWeight={lvl > 0 || isBeingDragged ? '600' : 'normal'}
                 >
                   {hKm}k
                 </text>

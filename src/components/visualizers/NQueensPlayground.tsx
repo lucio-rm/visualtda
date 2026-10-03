@@ -132,20 +132,22 @@ export const NQueensPlayground: React.FC = () => {
     <div className="nqueens-playground nqueens-playground-box">
       <div className="playground-controls" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1rem' }}>
         <div className="control-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <label htmlFor="n-queens-size-select" style={{ fontWeight: 600 }}>
+          <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>
             {language === 'es' ? 'Dimensión N:' : 'Board Size N:'}
-          </label>
-          <select
-            id="n-queens-size-select"
-            value={n}
-            onChange={(e) => handleResize(Number(e.target.value))}
-            className="playground-select"
-          >
-            <option value={4}>4 × 4 (N=4)</option>
-            <option value={5}>5 × 5 (N=5)</option>
-            <option value={6}>6 × 6 (N=6)</option>
-            <option value={8}>8 × 8 (N=8)</option>
-          </select>
+          </span>
+          <div className="segmented-control" role="group" aria-label={language === 'es' ? 'Dimensión N' : 'Board Size N'}>
+            {[4, 5, 6, 8].map((size) => (
+              <button
+                key={size}
+                type="button"
+                className={`segmented-btn ${n === size ? 'active' : ''}`}
+                onClick={() => handleResize(size)}
+                aria-pressed={n === size}
+              >
+                {size} × {size}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="playground-quick-actions" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button

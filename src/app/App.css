@@ -76,18 +76,98 @@
   gap: 0.75rem;
 }
 
+/* Universal High-Definition Segmented Control */
+.segmented-control {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  gap: 2px;
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+}
+
+.segmented-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  padding: 0.35rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.segmented-btn:hover {
+  color: var(--text);
+  background-color: var(--surface-hover);
+}
+
+.segmented-btn.active {
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.segmented-btn.active:hover {
+  background-color: var(--accent-hover, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+}
+
+.segmented-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+select,
 .theme-select {
   background-color: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 1.8rem 0.4rem 0.75rem;
+  font-family: inherit;
   font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 11px;
+  transition: all 0.15s ease;
+  outline: none;
 }
 
+select:hover,
+.theme-select:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+select:focus-visible,
 .theme-select:focus-visible {
   outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+select option,
+.theme-select option {
+  background-color: var(--surface);
+  color: var(--text);
+  font-family: inherit;
 }
 
 .instructor-mode-toggle {
@@ -916,12 +996,24 @@
   transition: all 0.15s ease;
 }
 
-.btn-preset:hover,
+.btn-preset:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-hover);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
 .btn-preset.active {
   background-color: var(--accent-solid, var(--accent));
-  color: var(--accent-contrast);
+  color: var(--accent-contrast, #ffffff);
   border-color: var(--accent-solid, var(--accent));
   box-shadow: 0 2px 6px rgba(62, 99, 221, 0.3);
+}
+
+.btn-preset.active:hover {
+  background-color: var(--accent-hover, var(--accent));
+  border-color: var(--accent-hover, var(--accent));
+  color: var(--accent-contrast, #ffffff);
 }
 
 .btn-tool {
@@ -939,7 +1031,15 @@
 
 .btn-tool:hover {
   background-color: var(--surface-hover);
-  border-color: var(--border-strong);
+  border-color: var(--border-hover);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.btn-tool.active {
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
 }
 
 .problem-narrative-card h4,
@@ -1941,6 +2041,14 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.speed-selector select {
+  padding: 0.25rem 1.6rem 0.25rem 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  height: 32px;
+  background-position: right 0.45rem center;
 }
 
 .speed-label,

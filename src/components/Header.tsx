@@ -88,26 +88,82 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="instructor-text">{t(dict.instructorMode)}</span>
         </button>
 
-        <label className="lang-toggle-label">
-          <span className="sr-only">Idioma / Language</span>
+        {/* Language Segmented Toggle */}
+        <div className="segmented-control lang-segmented-control" role="group" aria-label="Idioma / Language">
+          <button
+            type="button"
+            className={`segmented-btn ${language === 'es' ? 'active' : ''}`}
+            onClick={() => setLanguage('es')}
+            aria-pressed={language === 'es'}
+            title="Español"
+          >
+            ES
+          </button>
+          <button
+            type="button"
+            className={`segmented-btn ${language === 'en' ? 'active' : ''}`}
+            onClick={() => setLanguage('en')}
+            aria-pressed={language === 'en'}
+            title="English"
+          >
+            EN
+          </button>
+        </div>
+
+        {/* Theme Segmented Toggle */}
+        <div className="segmented-control theme-segmented-control" role="group" aria-label="Tema visual / Visual theme">
+          <button
+            type="button"
+            className={`segmented-btn ${theme === 'system' ? 'active' : ''}`}
+            onClick={() => onThemeChange('system')}
+            aria-pressed={theme === 'system'}
+            title={language === 'es' ? 'Tema del Sistema' : 'System Theme'}
+          >
+            Auto
+          </button>
+          <button
+            type="button"
+            className={`segmented-btn ${theme === 'light' ? 'active' : ''}`}
+            onClick={() => onThemeChange('light')}
+            aria-pressed={theme === 'light'}
+            title={language === 'es' ? 'Modo Claro' : 'Light Mode'}
+          >
+            {language === 'es' ? 'Claro' : 'Light'}
+          </button>
+          <button
+            type="button"
+            className={`segmented-btn ${theme === 'dark' ? 'active' : ''}`}
+            onClick={() => onThemeChange('dark')}
+            aria-pressed={theme === 'dark'}
+            title={language === 'es' ? 'Modo Oscuro' : 'Dark Mode'}
+          >
+            {language === 'es' ? 'Oscuro' : 'Dark'}
+          </button>
+        </div>
+
+        {/* Accessible screen-reader & test-compatible native inputs */}
+        <label className="lang-toggle-label sr-only">
+          <span>Idioma / Language</span>
           <select
             className="theme-select lang-select"
             value={language}
             onChange={(e) => setLanguage(e.target.value as 'es' | 'en')}
             aria-label="Seleccionar idioma / Select language"
+            tabIndex={-1}
           >
             <option value="es">ES</option>
             <option value="en">EN</option>
           </select>
         </label>
 
-        <label className="theme-toggle-label">
-          <span className="sr-only">Tema visual</span>
+        <label className="theme-toggle-label sr-only">
+          <span>Tema visual</span>
           <select
             className="theme-select"
             value={theme}
             onChange={(e) => onThemeChange(e.target.value as ThemeMode)}
             aria-label="Seleccionar tema visual"
+            tabIndex={-1}
           >
             <option value="system">{language === 'es' ? 'Sistema' : 'System'}</option>
             <option value="light">{language === 'es' ? 'Claro' : 'Light'}</option>

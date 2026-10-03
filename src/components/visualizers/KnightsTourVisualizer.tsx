@@ -53,29 +53,23 @@ export const KnightsTourVisualizer: React.FC = () => {
   return (
     <div className="knights-tour-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Recorrido del Caballo' : "Knight's Tour Visualizer"}>
       {/* Board Size Selector */}
-      <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
           {language === 'es' ? 'Dimensiones del Tablero:' : 'Board Dimensions:'}
         </span>
-        {[5, 6, 8].map((size) => (
-          <button
-            key={size}
-            type="button"
-            className={`btn-ctrl ${boardN === size ? 'active' : ''}`}
-            style={{
-              padding: '0.25rem 0.65rem',
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              backgroundColor: boardN === size ? 'var(--accent)' : 'var(--surface)',
-              color: boardN === size ? 'var(--accent-contrast)' : 'var(--text)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-sm)'
-            }}
-            onClick={() => setBoardN(size)}
-          >
-            {size}×{size}
-          </button>
-        ))}
+        <div className="segmented-control" role="group" aria-label={language === 'es' ? 'Dimensiones' : 'Dimensions'}>
+          {[5, 6, 8].map((size) => (
+            <button
+              key={size}
+              type="button"
+              className={`segmented-btn ${boardN === size ? 'active' : ''}`}
+              onClick={() => setBoardN(size)}
+              aria-pressed={boardN === size}
+            >
+              {size}×{size}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Metrics Row */}

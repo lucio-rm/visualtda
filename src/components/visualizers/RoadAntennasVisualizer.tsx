@@ -58,6 +58,30 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
     return padX + (km / maxKm) * (svgWidth - 2 * padX);
   };
 
+  const houseLabelLevels = useMemo(() => {
+    const toX = (k: number) => padX + (k / maxKm) * (svgWidth - 2 * padX);
+    const items = houses.map((km, idx) => ({ km, idx, x: toX(km) }));
+    items.sort((a, b) => a.x - b.x);
+
+    const levels = new Array(houses.length).fill(0);
+    for (let i = 0; i < items.length; i++) {
+      const curr = items[i];
+      const usedLevels = new Set<number>();
+      for (let j = 0; j < i; j++) {
+        const prev = items[j];
+        if (curr.x - prev.x < 38) {
+          usedLevels.add(levels[prev.idx]);
+        }
+      }
+      let lvl = 0;
+      while (usedLevels.has(lvl)) {
+        lvl++;
+      }
+      levels[curr.idx] = lvl;
+    }
+    return levels;
+  }, [houses, maxKm, padX, svgWidth]);
+
   const coveredSet = useMemo(() => new Set(coveredHouseIndices), [coveredHouseIndices]);
   const justCoveredSet = useMemo(() => new Set(justCoveredIndices), [justCoveredIndices]);
 
@@ -239,6 +263,8 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
             const isCovered = coveredSet.has(hIdx);
             const isJustCovered = justCoveredSet.has(hIdx);
             const isCurrentUncovered = currentHouseIndex === hIdx;
+            const lvl = houseLabelLevels[hIdx] || 0;
+            const labelY = roadY - 27 - lvl * 16;
 
             let houseColor = 'var(--warning)'; // pending / uncovered
             if (isJustCovered) houseColor = '#22c55e'; // freshly covered
@@ -255,6 +281,19 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                     />
                     <circle cx={hX} cy={roadY - 12} r="14" fill="var(--state-conflict-bg)" stroke="var(--error)" strokeWidth="1.5" />
                   </g>
+                )}
+
+                {/* Staggered Leader line if elevated */}
+                {lvl > 0 && (
+                  <line
+                    x1={hX}
+                    y1={roadY - 24}
+                    x2={hX}
+                    y2={labelY + 4}
+                    stroke="var(--border-strong)"
+                    strokeWidth="1.2"
+                    strokeDasharray="2 2"
+                  />
                 )}
 
                 {/* House Base / Roof */}
@@ -279,11 +318,11 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                 {/* Coordinate label below tick */}
                 <text
                   x={hX}
-                  y={roadY - 27}
+                  y={labelY}
                   textAnchor="middle"
                   fill={isCurrentUncovered ? 'var(--error)' : 'var(--color-text)'}
                   fontSize="13"
-                  fontWeight={isCurrentUncovered ? 'bold' : 'normal'}
+                  fontWeight={isCurrentUncovered ? 'bold' : (lvl > 0 ? '600' : 'normal')}
                   fontFamily="var(--font-sans)"
                 >
                   {houseKm}k

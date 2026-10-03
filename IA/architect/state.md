@@ -41,9 +41,16 @@
       - Knight's Tour preset cleanup: removed mathematically impossible 4×4 board preset (per Schwenk 1991 theorem), preserving 5×5, 6×6, and 8×8 solvable options.
       - Weighted Interval hover fix: locked predecessor function callout to immutable `height: 56px` with `box-sizing: border-box` and inline styled Bellman recurrence `<code>`, completely eliminating the 1-2px expansion on t3, t4, t5.
       - Universal bilingual consistency: localized all remaining `aria-label` attributes, SVG chart labels, and playground legends across all 38 exercises.
-   6. **Quality Baseline**:
+   6. **Part 6 Road Antennas Label Staggering & Universal Selection Controls Polish**:
+      - Wireless Road Antennas: Conditionally suppressed cursor indicator marker (`<g className="road-cursor-marker">`) whenever dragging a house or antenna (`draggingHouseIdx !== null || draggingAntennaIdx !== null`), completely eliminating the yellow duplicate number under the house label. Added active dashed ring feedback around dragged house.
+      - Proximity Staggering: Implemented 1D greedy interval coloring in both `RoadAntennasPlayground.tsx` and `RoadAntennasVisualizer.tsx`. Nearby houses within $38\text{px}$ stagger vertically (left house stays at $y = \text{roadY} - 26$, right house elevates to $y = \text{roadY} - 42$ with a dashed connector leader line to roof), eliminating text collisions.
+      - Universal High-Definition Segmented Controls: Replaced raw `<select>` dropdowns in `Header.tsx` (Language: `[ES | EN]`, Theme: `[Auto | Claro | Oscuro]`) and `NQueensPlayground.tsx`/`NQueensVisualizer.tsx` (Board size: `[4×4] [5×5] [6×6] [8×8]`) with accessible, polished `.segmented-control` pills.
+      - Form Element Typography: Set `button, select, input, textarea { font-family: inherit; }` in `base.css` and `App.css`. Styled all `<select>` elements with custom SVG chevrons, Radix tokens, and zero white box hover artifacts.
+      - Preset Hover States: Decoupled `.btn-preset:hover` from `.btn-preset.active`, ensuring non-active hover uses subtle `--surface-hover` and `--border-hover` without turning stark white or prematurely active.
+   7. **Quality Baseline**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
       - `npm test`: 47 test files, 368 passed (100% PASS).
-      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.77s.
+      - `npm run test:browser`: 22/22 real Chromium headless scenarios passing with 0 console errors.
+      - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.65s.
 
