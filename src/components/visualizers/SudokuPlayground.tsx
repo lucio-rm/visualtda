@@ -517,7 +517,7 @@ export const SudokuPlayground: React.FC = () => {
               type="button"
               className={`btn-num ${isCurrentVal ? 'active' : ''} ${isCandidate && !isCurrentVal ? 'is-candidate' : ''}`}
               onClick={() => handleSetNumber(num)}
-              aria-label={`Ingresar ${num}`}
+              aria-label={language === 'es' ? `Ingresar ${num}` : `Enter ${num}`}
             >
               {num}
             </button>
@@ -527,7 +527,7 @@ export const SudokuPlayground: React.FC = () => {
           type="button"
           className="btn-num btn-clear"
           onClick={() => handleSetNumber(0)}
-          aria-label="Borrar número de la celda"
+          aria-label={language === 'es' ? 'Borrar número de la celda' : 'Clear number from cell'}
         >
           {language === 'es' ? 'Borrar (Del)' : 'Clear (Del)'}
         </button>

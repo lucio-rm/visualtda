@@ -227,7 +227,7 @@ export const VertexCoverApproxPlayground: React.FC = () => {
         ref={svgRef}
         className="approx-interactive-svg"
         viewBox="0 0 540 300"
-        aria-label="Grafo interactivo de aproximación"
+        aria-label={language === 'es' ? 'Grafo interactivo de aproximación' : 'Interactive approximation graph'}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         style={{ touchAction: 'none' }}

@@ -359,7 +359,7 @@ export const DijkstraPlayground: React.FC = () => {
           <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.35rem', display: 'flex', justifyContent: 'space-between' }}>
             <span>{language === 'es' ? 'Grafo Dirigido (Arrastrá los nodos):' : 'Directed Graph (Drag nodes):'}</span>
             <span>
-              <span style={{ color: 'var(--text-muted)' }}>○ No visitado</span> · <span style={{ color: 'var(--accent)' }}>● En Cola Q</span> · <span style={{ color: 'var(--success)' }}>● En S (Fijado)</span>
+              <span style={{ color: 'var(--text-muted)' }}>{language === 'es' ? '○ No visitado' : '○ Unvisited'}</span> · <span style={{ color: 'var(--accent)' }}>{language === 'es' ? '● En Cola Q' : '● In Queue Q'}</span> · <span style={{ color: 'var(--success)' }}>{language === 'es' ? '● En S (Fijado)' : '● In S (Settled)'}</span>
             </span>
           </div>
 
@@ -368,7 +368,7 @@ export const DijkstraPlayground: React.FC = () => {
             viewBox="0 0 460 260"
             style={{ width: '100%', height: 'auto', display: 'block', touchAction: 'none' }}
             role="img"
-            aria-label="Grafo interactivo de Dijkstra"
+            aria-label={language === 'es' ? 'Grafo interactivo de Dijkstra' : 'Interactive Dijkstra graph'}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
           >

@@ -205,7 +205,7 @@ export const MergeSortVisualizer: React.FC = () => {
       )}
 
       {/* Array Bars Visualization */}
-      <div className="bars-chart-container" role="img" aria-label="Gráfico de barras del arreglo en ordenamiento">
+      <div className="bars-chart-container" role="img" aria-label={language === 'es' ? 'Gráfico de barras del arreglo en ordenamiento' : 'Bar chart of array during sorting'}>
         {array.map((val, idx) => {
           const heightPx = Math.max(28, (val / maxVal) * 140);
           return (

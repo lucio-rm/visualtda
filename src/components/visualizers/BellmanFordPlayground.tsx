@@ -306,7 +306,7 @@ export const BellmanFordPlayground: React.FC = () => {
             touchAction: 'none'
           }}
           role="img"
-          aria-label="Grafo interactivo de Bellman-Ford"
+          aria-label={language === 'es' ? 'Grafo interactivo de Bellman-Ford' : 'Interactive Bellman-Ford graph'}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
         >
@@ -444,7 +444,7 @@ export const BellmanFordPlayground: React.FC = () => {
           {language === 'es' ? 'Matriz de Programación Dinámica M[i, v]:' : 'Dynamic Programming Matrix M[i, v]:'}
         </div>
         <div style={{ overflowX: 'auto' }}>
-          <table className="djk-pq-table" style={{ width: '100%', fontSize: '0.85rem' }} aria-label="Tabla M[i, v] Bellman-Ford">
+          <table className="djk-pq-table" style={{ width: '100%', fontSize: '0.85rem' }} aria-label={language === 'es' ? 'Tabla M[i, v] Bellman-Ford' : 'Bellman-Ford M[i, v] table'}>
             <thead>
               <tr>
                 <th style={{ width: '120px' }}>{language === 'es' ? 'Paso i (≤ i aristas)' : 'Step i (≤ i edges)'}</th>

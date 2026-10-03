@@ -35,9 +35,15 @@
        3. Step-by-step Asymptotic Complexity Analysis (Time and Space, Master Theorem where applicable).
        4. Naive Heuristic Traps & Concrete Counterexamples (explaining why myopic greedy, depth-first search, or naive rounding fail).
      - Added automated regression tests in `tests/exerciseContent.test.ts` verifying that all 37 exercises contain all 4 files (`pseudocode.md`, `solution.py`, `exercise.json`, `theory.md`) and meet all 4 academic criteria.
-  5. **Quality Baseline**:
+  5. **Part 5 Light Mode Hierarchy, Card Header Redesign & Interactive Bug Fixes**:
+     - Light mode depth hierarchy: changed app background `--bg` to `var(--slate-4)` (`#e8e8ec`), establishing a crisp, tactile 3-tier elevation (`--bg` #e8e8ec -> `--surface` #ffffff -> `--canvas-bg` #f9f9fb) with 13:1 text contrast and zero card blending.
+     - Card header & difficulty stars: streamlined `.card-top-row` to contain only `#num` + `category` on the left and status badge on the right (eliminating badge wrap/overflow). Moved difficulty rating to a dedicated footer bar featuring compact, elegant 13px SVG vector stars (1 to 5 stars).
+     - Knight's Tour preset cleanup: removed mathematically impossible 4×4 board preset (per Schwenk 1991 theorem), preserving 5×5, 6×6, and 8×8 solvable options.
+     - Weighted Interval hover fix: stabilized predecessor function callout with fixed-height container, eliminating mouseEnter/mouseLeave layout thrashing and infinite flickering loop.
+     - Universal bilingual consistency: localized all remaining `aria-label` attributes, SVG chart labels, and playground legends across all 38 exercises.
+  6. **Quality Baseline**:
      - `npm run lint`: 0 errors, 0 warnings.
      - `npm run typecheck`: 0 errors.
      - `npm test`: 47 test files, 368 passed (100% PASS).
-     - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.65s.
+     - `npm run build`: static production build cleanly generated in `dist/` with zero warnings in ~1.67s.
 

@@ -310,7 +310,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         className="playground-timeline-svg"
         role="img"
-        aria-label="Línea de tiempo interactiva de tareas"
+        aria-label={language === 'es' ? 'Línea de tiempo interactiva de tareas' : 'Interactive task timeline'}
       >
         {/* Time axis marks */}
         {Array.from({ length: maxTime + 1 }, (_, t) => (

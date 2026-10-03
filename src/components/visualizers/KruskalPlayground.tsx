@@ -361,7 +361,7 @@ export const KruskalPlayground: React.FC = () => {
             viewBox="0 0 460 280"
             style={{ width: '100%', height: 'auto', display: 'block', touchAction: 'none' }}
             role="img"
-            aria-label="Grafo interactivo para seleccionar aristas del AGM"
+            aria-label={language === 'es' ? 'Grafo interactivo para seleccionar aristas del AGM' : 'Interactive graph to select MST edges'}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
           >

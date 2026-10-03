@@ -369,7 +369,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
           }}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
-          aria-label="Grafo interactivo de reducción con arrastre 2D"
+          aria-label={language === 'es' ? 'Grafo interactivo de reducción con arrastre 2D' : 'Interactive reduction graph with 2D drag'}
         >
           {/* Edges */}
           <g className="edges-layer">

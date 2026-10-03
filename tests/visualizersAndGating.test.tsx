@@ -386,7 +386,7 @@ def solve(items):
       expect(badges.length).toBeGreaterThan(0);
     });
 
-    it('supports 4x4, 5x5, 6x6, 8x8 boards, gates Warnsdorff star, and renders vector knight', async () => {
+    it('supports solvable 5x5, 6x6, 8x8 boards (excluding impossible 4x4), gates Warnsdorff star, and renders vector knight', async () => {
       await act(async () => {
         root.render(
           <LanguageProvider>
@@ -399,11 +399,12 @@ def solve(items):
         );
       });
 
-      // Check board size preset buttons
-      expect(container.textContent).toContain('4×4');
+      // Check board size preset buttons (4x4 must be excluded because it is mathematically unsolvable)
+      expect(container.textContent).not.toContain('4×4');
       expect(container.textContent).toContain('5×5');
       expect(container.textContent).toContain('6×6');
       expect(container.textContent).toContain('8×8');
+
 
       // Regular student should NOT see Warnsdorff gold star '★'
       expect(container.textContent).not.toContain('★');

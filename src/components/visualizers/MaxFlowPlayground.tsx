@@ -470,7 +470,7 @@ export const MaxFlowPlayground: React.FC = () => {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           role="img"
-          aria-label="Red de flujo interactiva con arrastre 2D"
+          aria-label={language === 'es' ? 'Red de flujo interactiva con arrastre 2D' : 'Interactive flow network with 2D drag'}
         >
           <defs>
             <marker

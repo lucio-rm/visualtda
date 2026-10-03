@@ -351,7 +351,7 @@ export const InversionCountingPlayground: React.FC = () => {
                   type="button"
                   className={`inv-pg-bar ${isSelected ? 'selected-left' : ''}`}
                   onClick={() => handleBarClick(idx)}
-                  aria-label={`Elemento en posición ${idx}, valor ${val}`}
+                  aria-label={language === 'es' ? `Elemento en posición ${idx}, valor ${val}` : `Element at position ${idx}, value ${val}`}
                   style={{ width: '64px', height: '52px' }}
                 >
                   {val}
@@ -376,7 +376,7 @@ export const InversionCountingPlayground: React.FC = () => {
                       color: 'var(--success)',
                       cursor: 'pointer'
                     }}
-                    aria-label={`Incrementar valor en posición ${idx}`}
+                    aria-label={language === 'es' ? `Incrementar valor en posición ${idx}` : `Increment value at position ${idx}`}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
                   >
                     +
@@ -399,7 +399,7 @@ export const InversionCountingPlayground: React.FC = () => {
                       color: 'var(--warning)',
                       cursor: 'pointer'
                     }}
-                    aria-label={`Decrementar valor en posición ${idx}`}
+                    aria-label={language === 'es' ? `Decrementar valor en posición ${idx}` : `Decrement value at position ${idx}`}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
                   >
                     -
@@ -424,7 +424,7 @@ export const InversionCountingPlayground: React.FC = () => {
                       cursor: array.length <= 2 ? 'not-allowed' : 'pointer',
                       opacity: array.length <= 2 ? 0.3 : 1
                     }}
-                    aria-label={`Eliminar elemento en posición ${idx}`}
+                    aria-label={language === 'es' ? `Eliminar elemento en posición ${idx}` : `Delete element at position ${idx}`}
                     title={language === 'es' ? 'Eliminar' : 'Delete'}
                   >
                     ×

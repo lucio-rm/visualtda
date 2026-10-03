@@ -46,7 +46,7 @@ export const BellmanFordVisualizer: React.FC = () => {
   const latestRow = table.length > 0 ? table[table.length - 1] : {};
 
   return (
-    <div className="bellman-ford-visualizer" role="region" aria-label="Visualizador del Algoritmo de Bellman-Ford">
+    <div className="bellman-ford-visualizer" role="region" aria-label={language === 'es' ? 'Visualizador del Algoritmo de Bellman-Ford' : 'Bellman-Ford algorithm visualizer'}>
       {/* Metrics Row */}
       <div className="bf-metrics-row">
         <div className="bf-metric-badge">
@@ -286,7 +286,7 @@ export const BellmanFordVisualizer: React.FC = () => {
             value={currentStepIndex}
             onChange={(e) => goToStep(Number(e.target.value))}
             className="scrubber-slider"
-            aria-label="Progreso de pasos de Bellman-Ford"
+            aria-label={language === 'es' ? 'Progreso de pasos de Bellman-Ford' : 'Bellman-Ford step progression'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

@@ -51,7 +51,7 @@ export const KaratsubaVisualizer: React.FC = () => {
     <div
       className="karatsuba-visualizer"
       role="region"
-      aria-label="Visualizador del Algoritmo de Karatsuba"
+      aria-label={language === 'es' ? 'Visualizador del Algoritmo de Karatsuba' : 'Karatsuba algorithm visualizer'}
     >
       {/* Metrics Row */}
       <div className="kt-metrics-row">

@@ -82,24 +82,54 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
   return (
     <article className={`exercise-card state-${state} ${completed ? 'is-completed' : ''}`}>
       <div className="card-header">
-        <div className="card-badges">
-          {indexNumber !== undefined && (
-            <span className="badge badge-order" title="Secuencia pedagógica recomendada">
-              #{indexNumber}
+        <div className="card-top-row">
+          <div className="card-badges-left">
+            {indexNumber !== undefined && (
+              <span
+                className="badge badge-order"
+                title={language === 'es' ? 'Secuencia pedagógica recomendada' : 'Recommended pedagogical sequence'}
+              >
+                #{indexNumber}
+              </span>
+            )}
+            <span className="badge badge-technique">
+              {formatTechniqueLabel(exercise.techniqueId, language)}
             </span>
-          )}
-          <span className="badge badge-technique">
-            {formatTechniqueLabel(exercise.techniqueId, language)}
-          </span>
-          <span className="badge badge-difficulty" aria-label={`Dificultad nivel ${exercise.difficulty} de 5`}>
-            {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
-          </span>
+          </div>
           {renderStateBadge()}
         </div>
         <h3 className="card-title">{title}</h3>
       </div>
       <p className="card-subtitle">{subtitle}</p>
       <div className="card-footer">
+        <div
+          className="card-difficulty-bar"
+          title={language === 'es' ? `Dificultad: nivel ${exercise.difficulty} de 5` : `Difficulty: level ${exercise.difficulty} of 5`}
+          aria-label={language === 'es' ? `Dificultad nivel ${exercise.difficulty} de 5` : `Difficulty level ${exercise.difficulty} of 5`}
+        >
+          <span className="difficulty-label">
+            {language === 'es' ? 'Dificultad' : 'Difficulty'}
+          </span>
+          <div className="card-stars" aria-hidden="true">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <svg
+                key={star}
+                className={`star-icon ${star <= exercise.difficulty ? 'star-filled' : 'star-empty'}`}
+                viewBox="0 0 20 20"
+                width="13"
+                height="13"
+              >
+                <path
+                  fill={star <= exercise.difficulty ? 'currentColor' : 'none'}
+                  stroke="currentColor"
+                  strokeWidth={star <= exercise.difficulty ? '1' : '1.5'}
+                  strokeLinejoin="round"
+                  d="M10 1.5l2.47 5.01 5.53.8-4 3.9 0.94 5.51L10 14.12l-4.94 2.6 0.94-5.51-4-3.9 5.53-.8L10 1.5z"
+                />
+              </svg>
+            ))}
+          </div>
+        </div>
         <button
           type="button"
           className={`btn-open-exercise ${completed ? 'btn-completed' : ''}`}
@@ -112,3 +142,4 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
     </article>
   );
 };
+

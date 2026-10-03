@@ -166,7 +166,7 @@ export const KnightsTourPlayground: React.FC = () => {
     setIsPickingStart(false);
   };
 
-  const cellSize = n === 4 ? 80 : n === 5 ? 72 : n === 6 ? 60 : 46;
+  const cellSize = n === 5 ? 72 : n === 6 ? 60 : 46;
   const boardSize = cellSize * n;
   const knightSize = n === 8 ? 24 : n === 6 ? 30 : 34;
 
@@ -182,13 +182,6 @@ export const KnightsTourPlayground: React.FC = () => {
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}
       >
         <div className="sdk-pg-presets" style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className={`btn-preset ${n === 4 && !isPickingStart ? 'active' : ''}`}
-            onClick={() => resetBoard(4, 0, 0)}
-          >
-            {language === 'es' ? 'Tablero 4×4 (16)' : 'Board 4×4 (16)'}
-          </button>
           <button
             type="button"
             className={`btn-preset ${n === 5 && !isPickingStart ? 'active' : ''}`}

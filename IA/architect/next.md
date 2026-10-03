@@ -38,6 +38,12 @@ This document defines the operational roadmap for **Mission V11: Systematic Desi
    - Upgraded 16 exercises from legacy markdown to canonical numbered sections `## 1.`, `## 2.`, etc., activating `TheoryMarkdown.tsx` badges (`01`, `02`) and callout boxes.
    - Verified that 100% of exercises feature formal problem definitions, mathematical proofs/invariants, asymptotic complexity analysis, and naive intuition traps with concrete counterexamples.
    - Added automated regression suite in `tests/exerciseContent.test.ts` enforcing these academic standards continuously.
+5. ✅ **Part 5 — Light Mode Contrast Separation, Card Stars & Interactive Bug Sweep**:
+   - Light mode 3-tier elevation: `--bg` updated to `#e8e8ec` (Radix slate-4), giving pure white cards `#ffffff` crisp separation and 13:1 contrast.
+   - Card header realignment: single-row header with `#num` and category left, status badge right; difficulty rating rendered as compact 5-star SVG vector rating bar in the card footer.
+   - Knight's Tour unsolvable 4x4 options removed.
+   - Weighted Interval hover thrashing bug fixed via stable-height predecessor container.
+   - Universal bilingual coverage: all aria-labels, buttons, chart labels, and playground legends verified in both Spanish and English.
 
 ---
 

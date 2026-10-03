@@ -511,7 +511,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           role="img"
-          aria-label="Grafo interactivo de ciclo hamiltoniano con arrastre 2D"
+          aria-label={language === 'es' ? 'Grafo interactivo de ciclo hamiltoniano con arrastre 2D' : 'Interactive Hamiltonian cycle graph with 2D drag'}
         >
           {/* Edges */}
           {edges.map((e, idx) => {

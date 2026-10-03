@@ -135,12 +135,12 @@ export const WeightedIntervalVisualizer: React.FC = () => {
                 </div>
                 <div className="task-flags">
                   {isSelected && (
-                    <span className="flag-dp" title="Elegido por DP">
+                    <span className="flag-dp" title={language === 'es' ? 'Elegido por DP' : 'Selected by DP'}>
                       DP
                     </span>
                   )}
                   {isGreedy && (
-                    <span className="flag-greedy" title="Elegido por Greedy">
+                    <span className="flag-greedy" title={language === 'es' ? 'Elegido por Greedy' : 'Selected by Greedy'}>
                       Greedy
                     </span>
                   )}

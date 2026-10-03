@@ -153,7 +153,7 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                       y={r * cellSize + cellSize / 2 + 7}
                       className="queen-icon"
                       textAnchor="middle"
-                      aria-label={`Reina en fila ${r}, columna ${c}`}
+                      aria-label={language === 'es' ? `Reina en fila ${r}, columna ${c}` : `Queen at row ${r}, column ${c}`}
                     >
                       ♛
                     </text>

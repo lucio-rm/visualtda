@@ -80,13 +80,13 @@
   /* =========================================================================
    * SEMANTIC WORKSPACE & CARD TOKENS (LIGHT THEME)
    * ========================================================================= */
-  --bg: var(--slate-3);                 /* #f0f0f3 App page background (soft cool neutral) */
+  --bg: var(--slate-4);                 /* #e8e8ec App page background (crisp soft slate canvas, distinct from white cards) */
   --surface: #ffffff;                   /* #ffffff Pure white elevated card surface (crisp card pop) */
   --surface-raised: #ffffff;
   --surface-light: #ffffff;
   --surface-hover: var(--slate-2);      /* #f9f9fb Component hover */
-  --surface-active: var(--slate-4);     /* #e8e8ec Component pressed */
-  --canvas-bg: var(--slate-4);          /* #e8e8ec Recessed interactive workbench */
+  --surface-active: var(--slate-5);     /* #e0e1e6 Component pressed */
+  --canvas-bg: var(--slate-2);          /* #f9f9fb Recessed interactive workbench inside white card */
 
   --border: var(--slate-7);             /* #cdced6 Clear component border (1.5px) */
   --border-strong: var(--slate-8);      /* #b9bbc6 Interactive border */
@@ -128,7 +128,7 @@
 
   --code-bg: var(--slate-3);            /* #f0f0f3 */
   --code-border: var(--slate-7);        /* #cdced6 */
-  --shadow-card: 0 1px 3px 0 rgba(28, 32, 36, 0.08), 0 4px 12px 0 rgba(28, 32, 36, 0.05);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 16px -2px rgba(15, 23, 42, 0.08);
 
   /* Spacing Scale (8px rhythm) */
   --space-1: 4px;

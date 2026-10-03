@@ -144,7 +144,11 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
   if (exercises.length === 0) {
     return (
       <div className="empty-state">
-        <p>No se encontraron ejercicios para la categoría seleccionada.</p>
+        <p>
+          {language === 'es'
+            ? 'No se encontraron ejercicios para la categoría seleccionada.'
+            : 'No exercises found for the selected category.'}
+        </p>
       </div>
     );
   }

@@ -490,19 +490,19 @@ export const LinearProgrammingPlayground: React.FC = () => {
                 className={`chip-btn ${modelingProblem === 'juan' ? 'selected' : ''}`}
                 onClick={() => setModelingProblem('juan')}
               >
-                Juan el Vago
+                {language === 'es' ? 'Juan el Vago' : 'Juan the Slacker'}
               </button>
               <button
                 className={`chip-btn ${modelingProblem === 'mochila' ? 'selected' : ''}`}
                 onClick={() => setModelingProblem('mochila')}
               >
-                Mochila 0/1
+                {language === 'es' ? 'Mochila 0/1' : '0/1 Knapsack'}
               </button>
               <button
                 className={`chip-btn ${modelingProblem === 'vertex-cover' ? 'selected' : ''}`}
                 onClick={() => setModelingProblem('vertex-cover')}
               >
-                Vertex Cover Mínimo
+                {language === 'es' ? 'Vertex Cover Mínimo' : 'Minimum Vertex Cover'}
               </button>
             </div>
           </div>

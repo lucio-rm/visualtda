@@ -57,7 +57,7 @@ export const KnightsTourVisualizer: React.FC = () => {
         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
           {language === 'es' ? 'Dimensiones del Tablero:' : 'Board Dimensions:'}
         </span>
-        {[4, 5, 6, 8].map((size) => (
+        {[5, 6, 8].map((size) => (
           <button
             key={size}
             type="button"

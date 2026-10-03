@@ -353,48 +353,66 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </div>
       )}
 
-      {/* Predecessor Function Callout Banner */}
-      {hoveredTask && (
-        <div
-          style={{
-            padding: '0.65rem 0.85rem',
-            backgroundColor: 'var(--state-active-bg)',
-            borderLeft: '4px solid var(--accent)',
-            borderRadius: '4px',
-            fontSize: '0.85rem',
-            color: 'var(--text)'
-          }}
-        >
-          <strong>
-            {language === 'es'
-              ? `Función Predecesora p(${hoveredTask.id}):`
-              : `Predecessor Function p(${hoveredTask.id}):`}
-          </strong>{' '}
-          {hoveredPred ? (
-            language === 'es' ? (
+      {/* Predecessor Function Callout Banner (Permanent height so hovering never shifts layout) */}
+      <div
+        style={{
+          minHeight: '48px',
+          padding: '0.65rem 0.85rem',
+          backgroundColor: hoveredTask ? 'var(--state-active-bg)' : 'var(--surface-hover)',
+          borderLeft: hoveredTask ? '4px solid var(--accent)' : '4px solid var(--border)',
+          border: '1px solid var(--border)',
+          borderLeftWidth: '4px',
+          borderRadius: 'var(--radius-sm)',
+          fontSize: '0.85rem',
+          color: 'var(--text)',
+          display: 'flex',
+          alignItems: 'center',
+          transition: 'background-color 0.15s ease, border-color 0.15s ease'
+        }}
+      >
+        {hoveredTask ? (
+          <div>
+            <strong>
+              {language === 'es'
+                ? `Función Predecesora p(${hoveredTask.id}):`
+                : `Predecessor Function p(${hoveredTask.id}):`}
+            </strong>{' '}
+            {hoveredPred ? (
+              language === 'es' ? (
+                <span>
+                  Última tarea compatible antes de t={hoveredTask.start}:{' '}
+                  <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
+                  <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))</code>.
+                </span>
+              ) : (
+                <span>
+                  Latest compatible task before t={hoveredTask.start}:{' '}
+                  <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
+                  <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))</code>.
+                </span>
+              )
+            ) : language === 'es' ? (
               <span>
-                Última tarea compatible antes de {hoveredTask.start}:{' '}
-                <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
-                <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))</code>.
+                Ninguna tarea previa es compatible (p({hoveredTask.id}) = 0). Si se elige {hoveredTask.id}, el beneficio es su peso ${hoveredTask.weight}.
               </span>
             ) : (
               <span>
-                Latest compatible task before {hoveredTask.start}:{' '}
-                <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
-                <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))</code>.
+                No previous task is compatible (p({hoveredTask.id}) = 0). If {hoveredTask.id} is chosen, reward is its weight ${hoveredTask.weight}.
               </span>
-            )
-          ) : language === 'es' ? (
-            <span>
-              Ninguna tarea previa es compatible (p({hoveredTask.id}) = 0). Si se elige {hoveredTask.id}, el beneficio es simplemente su peso ${hoveredTask.weight}.
-            </span>
-          ) : (
-            <span>
-              No previous task is compatible (p({hoveredTask.id}) = 0). If {hoveredTask.id} is chosen, reward is its weight ${hoveredTask.weight}.
-            </span>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        ) : (
+          <div style={{ color: 'var(--text-muted)' }}>
+            <strong style={{ color: 'var(--text)' }}>
+              {language === 'es' ? 'Función Predecesora p(j): ' : 'Predecessor Function p(j): '}
+            </strong>
+            {language === 'es'
+              ? 'Pasa el cursor sobre cualquier tarea para ver su último predecesor compatible y la ecuación de Bellman.'
+              : 'Hover over any task to inspect its latest compatible predecessor and Bellman recurrence.'}
+          </div>
+        )}
+      </div>
+
 
       {/* Interactive Schedule */}
       <div className="interactive-tracks-box">

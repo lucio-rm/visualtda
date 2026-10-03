@@ -253,7 +253,7 @@ export const DijkstraVisualizer: React.FC = () => {
 
       {/* Priority Queue State Display */}
       {priorityQueue.length > 0 && (
-        <table className="djk-pq-table" aria-label="Estado de la Cola de Prioridad">
+        <table className="djk-pq-table" aria-label={language === 'es' ? 'Estado de la Cola de Prioridad' : 'Priority Queue State'}>
           <thead>
             <tr>
               <th>{language === 'es' ? 'Prioridad en Cola (Q)' : 'Queue Priority (Q)'}</th>

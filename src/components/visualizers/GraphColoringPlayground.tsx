@@ -647,7 +647,7 @@ export const GraphColoringPlayground: React.FC = () => {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           role="img"
-          aria-label="Grafo interactivo de coloreo con arrastre 2D"
+          aria-label={language === 'es' ? 'Grafo interactivo de coloreo con arrastre 2D' : 'Interactive graph coloring canvas with 2D drag'}
         >
           {/* Edges */}
           <g className="gc-edges-layer">

@@ -13,10 +13,10 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   activeCategoryId,
   onSelectCategory
 }) => {
-  const { t, dict } = useLanguage();
+  const { t, dict, language } = useLanguage();
 
   return (
-    <nav className="category-nav" aria-label="Categorías de algoritmos">
+    <nav className="category-nav" aria-label={language === 'es' ? 'Categorías de algoritmos' : 'Algorithm categories'}>
       <ul className="category-list" role="tablist">
         <li role="presentation">
           <button

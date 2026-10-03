@@ -340,7 +340,7 @@ export const ClosestPairPlayground: React.FC = () => {
             userSelect: 'none'
           }}
           role="img"
-          aria-label="Plano 2D interactivo. Arrastrá puntos existentes o hacé clic para agregar nuevos."
+          aria-label={language === 'es' ? 'Plano 2D interactivo. Arrastrá puntos existentes o hacé clic para agregar nuevos.' : 'Interactive 2D plane. Drag existing points or click to add new ones.'}
         >
           {/* Subtle Grid Lines */}
           {[50, 100, 150, 200, 250, 300, 350, 400, 450].map((gx) => (

@@ -480,7 +480,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
       )}
 
       {/* Item Config Table */}
-      <table className="djk-pq-table" aria-label="Configuración de Ítems">
+      <table className="djk-pq-table" aria-label={language === 'es' ? 'Configuración de Ítems' : 'Item Configuration'}>
         <thead>
           <tr>
             <th>{language === 'es' ? 'Ítem (Orden v/w)' : 'Item (Order v/w)'}</th>
