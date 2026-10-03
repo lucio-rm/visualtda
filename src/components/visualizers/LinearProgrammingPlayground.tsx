@@ -321,8 +321,8 @@ export const LinearProgrammingPlayground: React.FC = () => {
               {polygonPoints && (
                 <polygon
                   points={polygonPoints}
-                  fill="rgba(59, 130, 246, 0.22)"
-                  stroke="#3b82f6"
+                  fill="var(--accent-subtle)"
+                  stroke="var(--accent)"
                   strokeWidth="2.5"
                 />
               )}
@@ -352,10 +352,10 @@ export const LinearProgrammingPlayground: React.FC = () => {
                     y1={toSvgY(p1[1])}
                     x2={toSvgX(p2[0])}
                     y2={toSvgY(p2[1])}
-                    stroke="#94a3b8"
-                    strokeWidth="1.5"
+                    stroke="var(--graph-edge-subtle)"
+                    strokeWidth="2"
                     strokeDasharray="4 2"
-                    opacity={0.7}
+                    opacity={1}
                   />
                 );
               })}
@@ -397,7 +397,7 @@ export const LinearProgrammingPlayground: React.FC = () => {
                       cy={toSvgY(vy)}
                       r={isOpt ? 7 : 5}
                       fill={isOpt ? 'var(--success)' : isSel ? 'var(--accent)' : 'var(--accent)'}
-                      stroke="#ffffff"
+                      stroke="var(--surface)"
                       strokeWidth={2}
                     />
                     <text

@@ -270,11 +270,11 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   width="14"
                   height="12"
                   fill={houseColor}
-                  stroke="#1e293b"
+                  stroke="var(--border-strong)"
                   strokeWidth="1"
                 />
                 {/* Door */}
-                <rect x={hX - 2.5} y={roadY - 7} width="5" height="5" fill="#1e293b" />
+                <rect x={hX - 2.5} y={roadY - 7} width="5" height="5" fill="var(--border-strong)" />
 
                 {/* Coordinate label below tick */}
                 <text

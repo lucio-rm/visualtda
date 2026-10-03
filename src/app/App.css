@@ -259,10 +259,10 @@
 }
 
 .category-tab.active {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border-color: var(--accent);
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+  border-color: var(--accent-solid, var(--accent));
+  box-shadow: 0 2px 8px rgba(62, 99, 221, 0.35);
 }
 
 /* Exercise Grid & Cards */
@@ -274,7 +274,7 @@
 
 .exercise-card {
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   display: flex;
@@ -287,7 +287,7 @@
 .exercise-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  border-color: var(--accent);
+  border-color: var(--border-strong);
 }
 
 .card-header {
@@ -312,7 +312,7 @@
 
 .badge-technique {
   background-color: var(--surface-hover);
-  color: var(--accent);
+  color: var(--accent-text, var(--accent));
   border: 1px solid var(--border);
 }
 
@@ -341,13 +341,14 @@
 
 .btn-open-exercise {
   width: 100%;
-  background-color: var(--surface);
-  color: var(--accent);
-  border: 1.5px solid var(--border);
+  background-color: var(--accent-subtle);
+  color: var(--accent-text, var(--accent));
+  border: 1.5px solid var(--accent);
   padding: 0.65rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -357,10 +358,10 @@
 }
 
 .btn-open-exercise:hover {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border-color: var(--accent);
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+  border-color: var(--accent-solid, var(--accent));
+  box-shadow: 0 4px 10px rgba(62, 99, 221, 0.25);
   transform: translateY(-1px);
 }
 
@@ -823,35 +824,42 @@
 }
 
 .btn-preset {
-  background-color: var(--canvas-bg);
+  background-color: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.8rem;
   font-size: 0.8125rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
 }
 
 .btn-preset:hover,
 .btn-preset.active {
-  background-color: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast);
+  border-color: var(--accent-solid, var(--accent));
+  box-shadow: 0 2px 6px rgba(62, 99, 221, 0.3);
 }
 
 .btn-tool {
-  background-color: var(--surface-hover);
+  background-color: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.8rem;
   font-size: 0.8125rem;
+  font-weight: 600;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
 }
 
 .btn-tool:hover {
-  background-color: var(--surface-active);
+  background-color: var(--surface-hover);
+  border-color: var(--border-strong);
 }
 
 .problem-narrative-card h4,
@@ -1141,9 +1149,9 @@
 }
 
 .btn-pyodide {
-  background-color: #0284c7;
-  color: #ffffff;
-  border: none;
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast);
+  border: 1.5px solid var(--accent-solid, var(--accent));
   padding: 0.55rem 1.25rem;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
@@ -1152,32 +1160,38 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  box-shadow: 0 1px 3px rgba(62, 99, 221, 0.3);
   transition: all 0.15s ease;
 }
 
 .btn-pyodide:hover:not(:disabled) {
-  background-color: #0369a1;
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
 .btn-pyodide:disabled,
 .btn-fast-tests:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .btn-run-tests {
-  background-color: var(--success);
-  color: #ffffff;
-  border: none;
+  background-color: var(--success-solid, var(--success));
+  color: var(--success-contrast);
+  border: 1.5px solid var(--success-solid, var(--success));
   padding: 0.55rem 1.25rem;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(70, 167, 88, 0.3);
+  transition: all 0.15s ease;
 }
 
 .btn-run-tests:hover:not(:disabled) {
-  opacity: 0.9;
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
 .btn-run-tests:disabled {
@@ -1234,15 +1248,15 @@
 }
 
 .python-stdout-box {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--surface-hover);
   color: var(--text);
-  border-left: 3px solid #0284c7;
+  border-left: 3px solid var(--accent);
 }
 
 .python-error-box {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border-left: 3px solid #ef4444;
+  background-color: var(--error-bg);
+  color: var(--error);
+  border-left: 3px solid var(--error);
 }
 
 .test-feedback-card {
@@ -1648,13 +1662,13 @@
 }
 
 .test-case-item.pass .test-case-badge {
-  background-color: #10b981;
-  color: #ffffff;
+  background-color: var(--success-solid, var(--success));
+  color: var(--success-contrast);
 }
 
 .test-case-item.fail .test-case-badge {
-  background-color: #ef4444;
-  color: #ffffff;
+  background-color: var(--error-solid, var(--error));
+  color: var(--error-contrast);
 }
 
 .test-case-details {
@@ -1676,7 +1690,7 @@
 .test-case-actual {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: #ef4444;
+  color: var(--error);
 }
 
 /* Footer & Accessibility */
@@ -2480,15 +2494,15 @@
 }
 
 .btn-open-exercise.btn-completed {
-  background-color: var(--success-bg, #dcfce7);
-  color: var(--success, #15803d);
-  border: 1.5px solid var(--success, #15803d);
+  background-color: var(--success-bg);
+  color: var(--success);
+  border: 1.5px solid var(--success);
   font-weight: 700;
 }
 
 .btn-open-exercise.btn-completed:hover {
-  background-color: var(--success, #15803d);
-  color: #ffffff;
+  background-color: var(--success-solid, var(--success));
+  color: var(--success-contrast);
 }
 
 

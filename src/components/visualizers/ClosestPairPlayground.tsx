@@ -523,8 +523,10 @@ export const ClosestPairPlayground: React.FC = () => {
                   y1={p1.y}
                   x2={p2.x}
                   y2={p2.y}
-                  stroke="rgba(148, 163, 184, 0.2)"
+                  stroke="var(--graph-edge-subtle)"
                   strokeWidth={1}
+                  strokeOpacity={0.5}
+                  strokeDasharray="2 2"
                 />
               ))
             )}

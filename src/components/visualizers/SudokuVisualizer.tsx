@@ -87,7 +87,7 @@ export const SudokuVisualizer: React.FC = () => {
               const blockIndex = Math.floor(r / 3) * 3 + Math.floor(c / 3);
               const isAltBlock = blockIndex % 2 === 1;
 
-              let fillColor = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let fillColor = isAltBlock ? 'var(--surface-hover)' : 'var(--surface)';
               let strokeColor = 'var(--board-border)';
               let strokeWidth = 1.5;
 

@@ -108,7 +108,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={230}
               height={72}
               rx={8}
-              fill={subcalc === 'Z2' ? 'rgba(37, 99, 235, 0.2)' : 'var(--surface)'}
+              fill={subcalc === 'Z2' ? 'var(--accent-subtle)' : 'var(--surface)'}
               stroke="var(--accent)"
               strokeWidth={subcalc === 'Z2' ? 2.5 : 1.5}
             />
@@ -128,17 +128,17 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={230}
               height={72}
               rx={8}
-              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'rgba(139, 92, 246, 0.2)' : 'var(--surface)'}
-              stroke="#8b5cf6"
+              fill={subcalc === 'ZSUM' || subcalc === 'Z1' ? 'var(--warning-bg)' : 'var(--surface)'}
+              stroke="var(--warning)"
               strokeWidth={subcalc === 'ZSUM' || subcalc === 'Z1' ? 2.5 : 1.5}
             />
-            <text x={390} y={124} textAnchor="middle" fill="#8b5cf6" fontSize="12px" fontWeight="700">
+            <text x={390} y={124} textAnchor="middle" fill="var(--warning)" fontSize="12px" fontWeight="700">
               {language === 'es' ? '2. Producto Cruzado (P)' : '2. Cross Product (P)'}
             </text>
-            <text x={390} y={143} textAnchor="middle" fill="#8b5cf6" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
+            <text x={390} y={143} textAnchor="middle" fill="var(--warning)" fontSize="12px" fontWeight="700" fontFamily="var(--font-mono)">
               ({x1}+{x0}) × ({y1}+{y0})
             </text>
-            <text x={390} y={163} textAnchor="middle" fill="#8b5cf6" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
+            <text x={390} y={163} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="800" fontFamily="var(--font-mono)">
               = {zSum !== null && zSum !== undefined ? zSum : '—'}
             </text>
           </g>
@@ -151,7 +151,7 @@ export const KaratsubaVisualizer: React.FC = () => {
               width={230}
               height={72}
               rx={8}
-              fill={subcalc === 'Z0' ? 'rgba(16, 185, 129, 0.2)' : 'var(--surface)'}
+              fill={subcalc === 'Z0' ? 'var(--success-bg)' : 'var(--surface)'}
               stroke="var(--success)"
               strokeWidth={subcalc === 'Z0' ? 2.5 : 1.5}
             />

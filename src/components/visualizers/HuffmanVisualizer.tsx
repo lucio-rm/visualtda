@@ -234,7 +234,7 @@ export const HuffmanVisualizer: React.FC = () => {
                     </span>
                   )}
                   {isMergedParent && (
-                    <span className="min-badge" style={{ background: '#3b82f6', color: '#fff' }}>
+                    <span className="min-badge" style={{ background: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast)' }}>
                       +
                     </span>
                   )}
@@ -242,7 +242,7 @@ export const HuffmanVisualizer: React.FC = () => {
                   <span className="freq">
                     freq: <strong>{node.freq}</strong>
                   </span>
-                  <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>#{idx + 1}</span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>#{idx + 1}</span>
                 </div>
               );
             })

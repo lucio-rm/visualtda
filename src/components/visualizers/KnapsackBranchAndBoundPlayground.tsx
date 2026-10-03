@@ -328,10 +328,10 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                   y1={e.from.y}
                   x2={e.to.x}
                   y2={e.to.y}
-                  stroke={isSelected ? 'var(--accent)' : isPrunedEdge ? 'var(--danger, var(--error))' : 'var(--border, #475569)'}
-                  strokeWidth={isSelected ? 3 : 1.5}
+                  stroke={isSelected ? 'var(--accent)' : isPrunedEdge ? 'var(--danger, var(--error))' : 'var(--graph-edge)'}
+                  strokeWidth={isSelected ? 3.5 : 2.5}
                   strokeDasharray={isPrunedEdge ? '4 3' : undefined}
-                  opacity={isPrunedEdge ? 0.6 : 0.9}
+                  opacity={1}
                 />
                 <text
                   x={(e.from.x + e.to.x) / 2 + (e.decision === 'include' ? -12 : 12)}

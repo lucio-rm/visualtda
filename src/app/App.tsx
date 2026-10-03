@@ -29,11 +29,16 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     const root = document.documentElement;
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     if (theme === 'system') {
       root.removeAttribute('data-theme');
     } else {
       root.setAttribute('data-theme', theme);
     }
+    root.classList.toggle('dark', isDark);
+    root.classList.toggle('dark-theme', isDark);
+    root.classList.toggle('light', !isDark);
+    root.classList.toggle('light-theme', !isDark);
     localStorage.setItem('visual_tda_theme', theme);
   }, [theme]);
 

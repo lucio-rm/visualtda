@@ -312,14 +312,14 @@ export const VertexCoverApproxPlayground: React.FC = () => {
               >
                 <circle
                   r={22}
-                  fill={inCover ? '#0284c7' : 'var(--surface, #1e293b)'}
-                  stroke={inCover ? 'var(--accent)' : 'var(--border, #64748b)'}
+                  fill={inCover ? 'var(--accent-solid, var(--accent))' : 'var(--surface)'}
+                  stroke={inCover ? 'var(--accent-solid, var(--accent))' : 'var(--border-strong)'}
                   strokeWidth={inCover ? 3 : 2}
                 />
                 <text
                   textAnchor="middle"
                   dy="5"
-                  fill="#ffffff"
+                  fill={inCover ? 'var(--accent-contrast)' : 'var(--text)'}
                   fontFamily="var(--font-mono)"
                   fontSize="13px"
                   fontWeight="700"

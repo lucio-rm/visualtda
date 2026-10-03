@@ -369,16 +369,16 @@ export const KnightsTourPlayground: React.FC = () => {
               let strokeWidth = 1.5;
 
               if (isCur) {
-                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+                fill = 'var(--state-active-bg)';
                 stroke = 'var(--accent)';
                 strokeWidth = 3;
               } else if (isBest) {
-                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+                fill = 'var(--state-solution-bg)';
                 stroke = 'var(--success)';
                 strokeWidth = 2.5;
               } else if (legal) {
-                fill = isDark ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
-                stroke = 'var(--accent)';
+                fill = 'var(--state-candidate-bg)';
+                stroke = 'var(--warning)';
                 strokeWidth = 2.5;
               }
 
@@ -422,7 +422,7 @@ export const KnightsTourPlayground: React.FC = () => {
                     rx={2}
                   />
 
-                  {/* Legal move target indicator: concentric target ring and dot */}
+                  {/* Legal move target indicator: concentric target ring and dot with halo */}
                   {legal && !isVis && (
                     <g pointerEvents="none">
                       <circle
@@ -430,33 +430,50 @@ export const KnightsTourPlayground: React.FC = () => {
                         cy={y + cellSize / 2}
                         r={cellSize * 0.22}
                         fill="none"
-                        stroke={isBest ? 'var(--success)' : 'var(--accent)'}
-                        strokeWidth={2}
-                        strokeDasharray={isBest ? undefined : '3 2'}
-                        opacity={0.9}
+                        stroke="var(--board-bg)"
+                        strokeWidth={4}
                       />
                       <circle
                         cx={x + cellSize / 2}
                         cy={y + cellSize / 2}
-                        r={cellSize * 0.09}
-                        fill={isBest ? 'var(--success)' : 'var(--accent)'}
+                        r={cellSize * 0.22}
+                        fill={isBest ? 'var(--grass-3)' : 'var(--amber-3)'}
+                        stroke={isBest ? 'var(--success)' : 'var(--warning)'}
+                        strokeWidth={2}
+                        strokeDasharray={isBest ? undefined : '3 2'}
+                      />
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.08}
+                        fill={isBest ? 'var(--success)' : 'var(--warning)'}
                       />
                     </g>
                   )}
 
-                  {/* Visit sequence number */}
+                  {/* Visit sequence pill for crisp contrast */}
                   {isVis && (
-                    <text
-                      x={x + cellSize / 2}
-                      y={y + cellSize / 2 + (n === 8 ? 4 : 6)}
-                      textAnchor="middle"
-                      fill={isCur ? 'var(--accent)' : isDark ? '#f8fafc' : '#0f172a'}
-                      fontFamily="var(--font-mono)"
-                      fontSize={n === 8 ? '12px' : n === 6 ? '14px' : '17px'}
-                      fontWeight="700"
-                    >
-                      {val + 1}
-                    </text>
+                    <g pointerEvents="none">
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={n === 8 ? 13 : 16}
+                        fill="var(--surface)"
+                        stroke="var(--border-strong)"
+                        strokeWidth={1.5}
+                      />
+                      <text
+                        x={x + cellSize / 2}
+                        y={y + cellSize / 2 + (n === 8 ? 4 : 5)}
+                        textAnchor="middle"
+                        fill="var(--text)"
+                        fontFamily="var(--font-mono)"
+                        fontSize={n === 8 ? '11px' : n === 6 ? '13px' : '15px'}
+                        fontWeight="800"
+                      >
+                        {val + 1}
+                      </text>
+                    </g>
                   )}
 
                   {/* Warnsdorff Degree Tag - visible only for instructors or mastered */}
@@ -467,14 +484,14 @@ export const KnightsTourPlayground: React.FC = () => {
                         height={n === 8 ? 14 : 16}
                         rx={3}
                         fill={isBest ? 'var(--success)' : 'var(--surface)'}
-                        stroke={isBest ? 'var(--success)' : 'var(--border)'}
+                        stroke={isBest ? 'var(--success)' : 'var(--border-strong)'}
                         strokeWidth={1}
                       />
                       <text
                         x={n === 8 ? 8 : 10}
                         y={n === 8 ? 11 : 12}
                         textAnchor="middle"
-                        fill={isBest ? '#ffffff' : 'var(--text-muted)'}
+                        fill={isBest ? '#ffffff' : 'var(--text)'}
                         fontFamily="var(--font-mono)"
                         fontSize={n === 8 ? '10px' : '11px'}
                         fontWeight="800"
@@ -501,23 +518,68 @@ export const KnightsTourPlayground: React.FC = () => {
             })
           )}
 
+          {/* Candidate jump trajectory rays from current knight to each legal move */}
+          {currentPos &&
+            legalMoves.map((lm, idx) => {
+              const kX = currentPos[1] * cellSize + cellSize / 2;
+              const kY = currentPos[0] * cellSize + cellSize / 2;
+              const cX = lm.c * cellSize + cellSize / 2;
+              const cY = lm.r * cellSize + cellSize / 2;
+              const isThisBest = canSeeHeuristic && bestWarnsdorffMove && bestWarnsdorffMove.r === lm.r && bestWarnsdorffMove.c === lm.c;
+              return (
+                <g key={`pg-cand-ray-${lm.r}-${lm.c}-${idx}`} pointerEvents="none">
+                  <line
+                    x1={kX}
+                    y1={kY}
+                    x2={cX}
+                    y2={cY}
+                    stroke="var(--board-bg)"
+                    strokeWidth={5}
+                    strokeLinecap="round"
+                    opacity={0.8}
+                  />
+                  <line
+                    x1={kX}
+                    y1={kY}
+                    x2={cX}
+                    y2={cY}
+                    stroke={isThisBest ? 'var(--success)' : 'var(--warning)'}
+                    strokeWidth={2.5}
+                    strokeDasharray="5 3"
+                    strokeLinecap="round"
+                  />
+                </g>
+              );
+            })}
 
-          {/* Polyline trajectory of moves with glow */}
+          {/* Polyline trajectory of moves with halo */}
           {history.length > 1 && (
-            <polyline
-              points={history
-                .map(([r, c]) => `${c * cellSize + cellSize / 2},${r * cellSize + cellSize / 2}`)
-                .join(' ')}
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              opacity={0.85}
-            />
+            <>
+              <polyline
+                points={history
+                  .map(([r, c]) => `${c * cellSize + cellSize / 2},${r * cellSize + cellSize / 2}`)
+                  .join(' ')}
+                fill="none"
+                stroke="var(--board-bg)"
+                strokeWidth={5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity={0.8}
+              />
+              <polyline
+                points={history
+                  .map(([r, c]) => `${c * cellSize + cellSize / 2},${r * cellSize + cellSize / 2}`)
+                  .join(' ')}
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </>
           )}
 
-          {/* Vector Knight piece at current position */}
+          {/* Vector Knight piece at current position with elevated backing circle */}
           {currentPos && (
             <g
               transform={`translate(${currentPos[1] * cellSize + (cellSize - knightSize) / 2}, ${
@@ -525,7 +587,15 @@ export const KnightsTourPlayground: React.FC = () => {
               })`}
               pointerEvents="none"
             >
-              <ChessKnightIcon size={knightSize} fill="var(--accent)" stroke="#ffffff" />
+              <circle
+                cx={knightSize / 2}
+                cy={knightSize / 2}
+                r={knightSize / 2 + 2}
+                fill="var(--surface)"
+                stroke="var(--accent)"
+                strokeWidth={2}
+              />
+              <ChessKnightIcon size={knightSize} fill="var(--accent)" stroke="var(--accent)" />
             </g>
           )}
         </svg>

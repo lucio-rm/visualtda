@@ -339,7 +339,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
             <button
               type="submit"
               className="chip-button"
-              style={{ height: '32px', background: 'var(--accent)', color: '#fff', border: 'none' }}
+              style={{ height: '32px', background: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast)', border: 'none' }}
             >
               {language === 'es' ? '+ Agregar Tarea' : '+ Add Task'}
             </button>

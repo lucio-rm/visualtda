@@ -178,7 +178,7 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
             className="btn-action single"
             onClick={runAnimatedSingle}
             disabled={coinState.status === 'flipping'}
-            style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem', background: 'var(--accent)', color: '#fff', border: 'none' }}
+            style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem', background: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast)', border: 'none' }}
           >
             {language === 'es' ? 'Lanzar Par de Monedas' : 'Toss Pair of Coins'}
           </button>

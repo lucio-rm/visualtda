@@ -183,7 +183,7 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrant 1: z2 = x1 * y1 */}
-          <rect x={74} y={29} width={192} height={57} rx={4} fill="rgba(37, 99, 235, 0.12)" stroke="var(--accent)" strokeWidth={1.5} />
+          <rect x={74} y={29} width={192} height={57} rx={4} fill="var(--accent-subtle)" stroke="var(--accent)" strokeWidth={1.5} />
           <text x={170} y={48} textAnchor="middle" fill="var(--accent)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
             z₂ = x₁ · y₁ ({language === 'es' ? 'Alto' : 'High'})
           </text>
@@ -192,8 +192,8 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrants 2: x0 * y1 (Cross Term 1) */}
-          <rect x={274} y={29} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={370} y={48} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
+          <rect x={274} y={29} width={192} height={57} rx={4} fill="var(--warning-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={370} y={48} textAnchor="middle" fill="var(--warning)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
             x₀ · y₁ ({language === 'es' ? 'Cruzado 1' : 'Cross 1'})
           </text>
           <text x={370} y={70} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
@@ -201,8 +201,8 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrants 3: x1 * y0 (Cross Term 2) */}
-          <rect x={74} y={94} width={192} height={57} rx={4} fill="rgba(217, 119, 6, 0.08)" stroke="var(--border)" strokeWidth={1} strokeDasharray="4 2" />
-          <text x={170} y={113} textAnchor="middle" fill="var(--text-muted)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
+          <rect x={74} y={94} width={192} height={57} rx={4} fill="var(--warning-bg)" stroke="var(--warning)" strokeWidth={1} strokeDasharray="4 2" />
+          <text x={170} y={113} textAnchor="middle" fill="var(--warning)" fontSize="11px" fontWeight="600" fontFamily="var(--font-mono)">
             x₁ · y₀ ({language === 'es' ? 'Cruzado 2' : 'Cross 2'})
           </text>
           <text x={170} y={135} textAnchor="middle" fill="var(--warning)" fontSize="14px" fontWeight="700" fontFamily="var(--font-mono)">
@@ -210,7 +210,7 @@ export const KaratsubaPlayground: React.FC = () => {
           </text>
 
           {/* Quadrant 4: z0 = x0 * y0 */}
-          <rect x={274} y={94} width={192} height={57} rx={4} fill="rgba(16, 185, 129, 0.12)" stroke="var(--success)" strokeWidth={1.5} />
+          <rect x={274} y={94} width={192} height={57} rx={4} fill="var(--success-bg)" stroke="var(--success)" strokeWidth={1.5} />
           <text x={370} y={113} textAnchor="middle" fill="var(--success)" fontSize="11px" fontWeight="700" fontFamily="var(--font-mono)">
             z₀ = x₀ · y₀ ({language === 'es' ? 'Bajo' : 'Low'})
           </text>

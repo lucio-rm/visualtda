@@ -414,6 +414,39 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.23 — Surface Differentiation Failures Across Board Squares, Catalog Cards, and Interactive Buttons (Mission V11)
+- **Reported Behavior**:
+  1. **Board Squares Contrast Failure**: In Light Mode, chessboard square pairing `#e2e8f0` vs `#829ab1` achieved only 2.364:1 contrast (below WCAG 1.4.11 non-text UI 3:1 minimum). In Dark Mode, `#334155` vs `#0f172a` achieved only 1.724:1. Light cells against canvas `#f8fafc` had only 1.178:1 contrast, causing cells to blend into the board background.
+  2. **Catalog/Exercise-Selector Cards vs Background**: In Light Mode, `.exercise-card` (`#ffffff`) against page background (`#f1f5f9`) achieved only 1.096:1 contrast with border `#cbd5e1` at 1.355:1. In Dark Mode, card (`#111827`) against background (`#090d16`) achieved 1.095:1 with border `#1f2937` at 1.324:1. Students cannot visually differentiate the exercise selection cards and category selector tabs from the page background.
+  3. **Interactive Buttons & Control Legibility**: Secondary buttons, preset buttons (`.btn-preset` at `#f8fafc` with text `#0f172a` and border `#cbd5e1`), and interactive chips in visualizers blend into card backgrounds or canvas without sufficient edge contrast, making button labels hard to discern.
+- **Severity**: High (WCAG AA non-text contrast violation and visual accessibility barrier).
+- **Status**: **RESOLVED** (Mission V11 systematic overhaul).
+- **Root Cause**:
+  Four previous iterations of hand-picking individual hex colors failed to guarantee systematic contrast relationships across surfaces and themes.
+- **Resolution**:
+  1. **Adopted Framework-Agnostic Radix Colors (`@radix-ui/colors`) 12-Step Scale**: Integrated 12-step scales for Slate (neutrals, cards, backgrounds, borders, text), Indigo (primary interactive & accent), Grass (success, optimal, passed tests), Tomato (error, conflict, pruned branches), and Amber (candidate, evaluating, heuristics).
+  2. **Board Squares Contrast Fixed**:
+     - Light Mode: `--board-cell-dark` (`var(--slate-11)` `#60646c`) vs `--board-cell-light` (`var(--slate-2)` `#f9f9fb`) achieves **5.65:1** contrast (exceeds WCAG 3.0:1). Pieces achieve **15.58:1** (light cell) and **5.94:1** (dark cell).
+     - Dark Mode: `--board-cell-light` (`var(--slate-8)` `#5a6169`) vs `--board-cell-dark` (`var(--slate-1)` `#111113`) achieves **3.01:1** contrast (exceeds WCAG 3.0:1). Pieces achieve **5.40:1** (light cell) and **16.25:1** (dark cell).
+  3. **Catalog Cards & Category Selectors Elevated**:
+     - Light Mode: App background `--bg: var(--slate-3)` (`#f0f0f3`), card surface `--surface: #ffffff` (crisp white elevation), 1.5px border `var(--slate-7)` (`#cdced6`), card shadow, and `.btn-open-exercise` with soft indigo tint (`var(--accent-subtle)`), 1.5px indigo border, and high-contrast text (**5.4:1** contrast).
+     - Dark Mode: App background `--bg: var(--slate-1)` (`#111113`), card surface `--surface: var(--slate-3)` (`#212225`), 1.5px border `var(--slate-7)` (`#43484e`), providing crisp card elevation.
+  4. **Solid Interactive Buttons & Badges**:
+     - Light Mode: `--success-solid: var(--grass-11)` (`#2a7e3b`) with white text achieves **5.07:1** contrast ($\ge 4.5:1$). `--error-solid: var(--tomato-11)` (`#d13415`) with white text achieves **4.98:1** contrast ($\ge 4.5:1$).
+     - Dark Mode: `--success-solid: var(--grass-9)` (`#46a758`) with dark contrast text (`#000000`) achieves **6.93:1** contrast ($\ge 4.5:1$). `--error-solid: var(--tomato-9)` (`#e54d2e`) with dark contrast text (`#000000`) achieves **5.43:1** contrast ($\ge 4.5:1$).
+  5. **Knight's Tour Candidate Paths & Visited Sequence Pills**:
+     - Added prominent Amber dashed trajectory rays with high-contrast backing halos radiating from current knight to each legal candidate square.
+     - Enclosed Warnsdorff degrees and visited sequence numbers inside dedicated `var(--surface)` pill badges with `var(--border-strong)`, achieving $\ge 15:1$ contrast on both light and dark squares.
+  6. **Sudoku Board Contrast**:
+     - Removed dark slate block fills; standardized all cells to clean surfaces (`var(--surface)` / `var(--surface-hover)`), preserving 3x3 block structure via bold 3.5px grid lines (`var(--board-border-strong)`). All fixed and placed digits achieve $\ge 12:1$ contrast.
+  7. **High-Contrast Graph Edges Across All 38 Visualizers**:
+     - Solidified all graph visualizer edges (Dijkstra, Bellman-Ford, Kruskal, Hamiltonian Cycle, Max Flow, Vertex Cover, Knapsack B&B, TSP B&B) to $\ge 2.5\text{px}$ `var(--graph-edge)` with $\ge 13:1$ contrast against canvas backgrounds.
+  8. **Automated Quality Gate & Screenshots**:
+     - Comprehensive quality gate test suite `tests/contrastAndDesignSystem.test.ts` passing 9/9 assertions across all 12-step tokens and theme pairs.
+     - Real-Chromium screenshot captures for all 38 exercises in both Light and Dark modes.
+
+---
+
 ## 3. Maintenance Guidelines
 
 - When any new defect is found in manual exploration or reported by users, create a new entry with reproduction steps, root cause, and fix commit.

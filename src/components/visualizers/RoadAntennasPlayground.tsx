@@ -695,7 +695,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   width="12"
                   height="11"
                   fill={houseColor}
-                  stroke="#1e293b"
+                  stroke="var(--border-strong)"
                   strokeWidth="1"
                 />
                 <text

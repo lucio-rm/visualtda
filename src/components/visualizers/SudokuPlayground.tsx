@@ -356,7 +356,7 @@ export const SudokuPlayground: React.FC = () => {
               const blockIndex = Math.floor(r / 3) * 3 + Math.floor(c / 3);
               const isAltBlock = blockIndex % 2 === 1;
 
-              let fill = isAltBlock ? 'var(--board-cell-dark)' : 'var(--board-cell-light)';
+              let fill = isAltBlock ? 'var(--surface-hover)' : 'var(--surface)';
               let stroke = 'var(--board-border)';
               let strokeWidth = 1.5;
 

@@ -128,7 +128,7 @@ async function encryptExercise(exerciseId, pythonCode, instructorKey) {
 }
 
 async function main() {
-  console.log('🔒 Encrypting canonical Python solutions with AES-256-GCM + PBKDF2...');
+  console.log('[Crypto] Encrypting canonical Python solutions with AES-256-GCM + PBKDF2...');
   const instructorKey = await deriveInstructorKey(INSTRUCTOR_PASSWORD);
 
   const entries = fs.readdirSync(exercisesDir, { withFileTypes: true });
@@ -139,7 +139,7 @@ async function main() {
     const exerciseId = entry.name;
     const solutionPath = path.join(exercisesDir, exerciseId, 'solution.py');
     if (!fs.existsSync(solutionPath)) {
-      console.warn(`⚠️ Warning: No solution.py found in ${exerciseId}`);
+      console.warn(`[Crypto] Warning: No solution.py found in ${exerciseId}`);
       continue;
     }
 
@@ -164,7 +164,7 @@ export const ENCRYPTED_SOLUTIONS: Record<string, EncryptedSolutionPayload> = ${J
 `;
 
   fs.writeFileSync(outputFile, generatedTs, 'utf-8');
-  console.log(`✅ Successfully encrypted ${Object.keys(results).length} solutions to ${path.relative(rootDir, outputFile)}`);
+  console.log(`[Crypto] Successfully encrypted ${Object.keys(results).length} solutions to ${path.relative(rootDir, outputFile)}`);
 }
 
 main().catch((err) => {

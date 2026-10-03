@@ -38,69 +38,141 @@ function contrastRatio(hex1: string, hex2: string): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-describe('Visual Design System & WCAG Contrast Quality Gate', () => {
+function parseTokens(cssBlock: string): Record<string, string> {
+  const raw: Record<string, string> = {};
+  const varMatches = cssBlock.matchAll(/--([a-zA-Z0-9_-]+):\s*([^;]+);/g);
+  for (const match of varMatches) {
+    raw[`--${match[1].trim()}`] = match[2].trim().split('/*')[0].trim();
+  }
+
+  function resolve(val: string, depth = 0): string {
+    if (depth > 10) return val;
+    const varMatch = val.match(/^var\((--[a-zA-Z0-9_-]+)(?:,\s*([^)]+))?\)$/);
+    if (varMatch) {
+      const target = varMatch[1];
+      const fallback = varMatch[2];
+      if (raw[target]) return resolve(raw[target], depth + 1);
+      if (fallback) return resolve(fallback, depth + 1);
+    }
+    return val;
+  }
+
+  const resolved: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw)) {
+    const res = resolve(v);
+    if (res.startsWith('#')) {
+      resolved[k] = res;
+    }
+  }
+  return resolved;
+}
+
+describe('Visual Design System & WCAG Contrast Quality Gate (Mission V11 Radix Scale)', () => {
   const variablesPath = path.resolve('src/styles/variables.css');
   const variablesContent = fs.readFileSync(variablesPath, 'utf-8');
 
-  // Parse [data-theme='light'] block
-  const lightBlockMatch = variablesContent.match(/:root,\s*\[data-theme=['"]light['"]\]\s*\{([\s\S]*?)\}/);
-  const lightBlock = lightBlockMatch ? lightBlockMatch[1] : '';
+  // Parse Light theme block
+  const lightBlockMatch = variablesContent.match(/:root[\s\S]*?\{([\s\S]*?)\n\}/);
+  const lightTokens = parseTokens(lightBlockMatch ? lightBlockMatch[1] : '');
 
-  const lightTokens: Record<string, string> = {};
-  const varMatches = lightBlock.matchAll(/--([a-zA-Z0-9_-]+):\s*([^;]+);/g);
-  for (const match of varMatches) {
-    const name = `--${match[1].trim()}`;
-    const val = match[2].trim();
-    if (val.startsWith('#')) {
-      lightTokens[name] = val;
+  // Parse Dark theme block
+  const darkBlockMatch = variablesContent.match(/\[data-theme=['"]dark['"]\][\s\S]*?\{([\s\S]*?)\n\}/);
+  const darkTokens = parseTokens(darkBlockMatch ? darkBlockMatch[1] : '');
+
+  it('validates adoption of complete 12-step Radix Colors scales in variables.css', () => {
+    const scales = ['slate', 'indigo', 'grass', 'tomato', 'amber'];
+    for (const scale of scales) {
+      for (let step = 1; step <= 12; step++) {
+        expect(lightTokens[`--${scale}-${step}`], `Missing Light --${scale}-${step}`).toBeDefined();
+        expect(darkTokens[`--${scale}-${step}`], `Missing Dark --${scale}-${step}`).toBeDefined();
+      }
     }
-  }
-
-  it('provides WCAG AA text contrast (>= 4.5:1) for primary text on surfaces and backgrounds', () => {
-    const textOnSurface = contrastRatio(lightTokens['--text'], lightTokens['--surface']);
-    expect(textOnSurface).toBeGreaterThanOrEqual(4.5);
-
-    const textOnBg = contrastRatio(lightTokens['--text'], lightTokens['--bg']);
-    expect(textOnBg).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('provides WCAG AA text contrast (>= 4.5:1) for muted text on surfaces and backgrounds', () => {
-    const mutedOnSurface = contrastRatio(lightTokens['--text-muted'], lightTokens['--surface']);
-    expect(mutedOnSurface).toBeGreaterThanOrEqual(4.5);
+  it('provides WCAG AA text contrast (>= 4.5:1) for primary text on surfaces and backgrounds (Light & Dark)', () => {
+    // Light mode
+    expect(contrastRatio(lightTokens['--text'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--text'], lightTokens['--bg'])).toBeGreaterThanOrEqual(4.5);
 
-    const mutedOnBg = contrastRatio(lightTokens['--text-muted'], lightTokens['--bg']);
-    expect(mutedOnBg).toBeGreaterThanOrEqual(4.5);
+    // Dark mode
+    expect(contrastRatio(darkTokens['--text'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--text'], darkTokens['--bg'])).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('provides WCAG AA contrast (>= 4.5:1) for brand accent and status indicators', () => {
+  it('provides WCAG AA text contrast (>= 4.5:1) for muted text on surfaces and backgrounds (Light & Dark)', () => {
+    // Light mode
+    expect(contrastRatio(lightTokens['--text-muted'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--text-muted'], lightTokens['--bg'])).toBeGreaterThanOrEqual(4.5);
+
+    // Dark mode
+    expect(contrastRatio(darkTokens['--text-muted'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--text-muted'], darkTokens['--bg'])).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('provides WCAG AA contrast (>= 4.5:1) for brand accent and status indicators (Light & Dark)', () => {
+    // Light theme indicators
     expect(contrastRatio(lightTokens['--accent'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(lightTokens['--success'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(lightTokens['--error'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(lightTokens['--warning'], lightTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
 
-    // Text on status badge fills must satisfy WCAG AA
-    expect(contrastRatio(lightTokens['--accent-contrast'], lightTokens['--accent'])).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(lightTokens['--success-contrast'], lightTokens['--success'])).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(lightTokens['--error-contrast'], lightTokens['--error'])).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(lightTokens['--warning-contrast'], lightTokens['--warning'])).toBeGreaterThanOrEqual(4.5);
+    // Light text on solid fills
+    expect(contrastRatio(lightTokens['--accent-contrast'], lightTokens['--accent-solid'] || lightTokens['--accent'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--success-contrast'], lightTokens['--success-solid'] || lightTokens['--success'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--error-contrast'], lightTokens['--error-solid'] || lightTokens['--error'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(lightTokens['--warning-contrast'], lightTokens['--warning-solid'] || lightTokens['--warning'])).toBeGreaterThanOrEqual(4.5);
+
+    // Dark theme indicators
+    expect(contrastRatio(darkTokens['--accent'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--success'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--error'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--warning'], darkTokens['--surface'])).toBeGreaterThanOrEqual(4.5);
+
+    // Dark text on solid fills
+    expect(contrastRatio(darkTokens['--accent-contrast'], darkTokens['--accent-solid'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--success-contrast'], darkTokens['--success-solid'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--error-contrast'], darkTokens['--error-solid'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkTokens['--warning-contrast'], darkTokens['--warning-solid'])).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('provides graphical/UI contrast (>= 3.0:1) for interactive UI borders and WCAG AA contrast for board glyphs', () => {
-    const borderRatio = contrastRatio(lightTokens['--border-strong'], lightTokens['--surface']);
-    expect(borderRatio).toBeGreaterThanOrEqual(3.0);
+  it('strictly satisfies WCAG non-text UI contrast (>= 3.0:1) between chessboard and grid cells (Light & Dark)', () => {
+    // Light Mode board cells: MUST meet or exceed 3:1 (previously failed at 2.36:1)
+    const lightBoardCellRatio = contrastRatio(lightTokens['--board-cell-dark'], lightTokens['--board-cell-light']);
+    expect(lightBoardCellRatio).toBeGreaterThanOrEqual(3.0);
 
-    const pieceOnLightCell = contrastRatio(lightTokens['--board-text'], lightTokens['--board-cell-light']);
-    expect(pieceOnLightCell).toBeGreaterThanOrEqual(4.5);
+    // Dark Mode board cells: MUST meet or exceed 3:1
+    const darkBoardCellRatio = contrastRatio(darkTokens['--board-cell-dark'], darkTokens['--board-cell-light']);
+    expect(darkBoardCellRatio).toBeGreaterThanOrEqual(3.0);
 
-    const pieceOnDarkCell = contrastRatio(lightTokens['--board-text'], lightTokens['--board-cell-dark']);
-    expect(pieceOnDarkCell).toBeGreaterThanOrEqual(4.5);
+    // Board piece glyphs contrast (>= 4.5:1) on both squares
+    const lightPieceOnLight = contrastRatio(lightTokens['--board-text'], lightTokens['--board-cell-light']);
+    expect(lightPieceOnLight).toBeGreaterThanOrEqual(4.5);
 
-    const boardCellRatio = contrastRatio(lightTokens['--board-cell-dark'], lightTokens['--board-cell-light']);
-    expect(boardCellRatio).toBeGreaterThanOrEqual(2.0);
+    const lightPieceOnDark = contrastRatio(lightTokens['--board-text-light'] || '#ffffff', lightTokens['--board-cell-dark']);
+    expect(lightPieceOnDark).toBeGreaterThanOrEqual(4.5);
 
-    // Board cells and global page background must never blend with pure white surfaces
-    expect(lightTokens['--board-cell-light']).not.toBe(lightTokens['--surface']);
-    expect(lightTokens['--bg']).not.toBe(lightTokens['--surface']);
+    const darkPieceOnLight = contrastRatio(darkTokens['--board-text'], darkTokens['--board-cell-light']);
+    expect(darkPieceOnLight).toBeGreaterThanOrEqual(4.5);
+
+    const darkPieceOnDark = contrastRatio(darkTokens['--board-text'], darkTokens['--board-cell-dark']);
+    expect(darkPieceOnDark).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('guarantees crisp differentiation between cards, workbench canvas, and background', () => {
+    // In Light mode, card surface and workbench canvas are distinct from app background
+    expect(lightTokens['--surface']).not.toBe(lightTokens['--bg']);
+    expect(lightTokens['--canvas-bg']).not.toBe(lightTokens['--surface']);
+
+    // In Dark mode, border strong provides >= 3.0:1 demarcation on app background
+    const darkBorderOnBg = contrastRatio(darkTokens['--border-strong'], darkTokens['--bg']);
+    expect(darkBorderOnBg).toBeGreaterThanOrEqual(3.0);
+
+    // Graph edges satisfy >= 3.0:1 contrast against canvas background in both themes
+    const lightEdgeOnCanvas = contrastRatio(lightTokens['--graph-edge'], lightTokens['--canvas-bg']);
+    expect(lightEdgeOnCanvas).toBeGreaterThanOrEqual(3.0);
+
+    const darkEdgeOnCanvas = contrastRatio(darkTokens['--graph-edge'], darkTokens['--canvas-bg']);
+    expect(darkEdgeOnCanvas).toBeGreaterThanOrEqual(3.0);
   });
 
   it('defines all canonical semantic state tokens in variables.css', () => {

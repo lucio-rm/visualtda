@@ -181,7 +181,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
           {polygonPoints && activeConstraintsCount >= constraints.length && (
             <polygon
               points={polygonPoints}
-              fill="rgba(99, 102, 241, 0.2)"
+              fill="var(--accent-subtle)"
               stroke="var(--accent)"
               strokeWidth="2"
             />
@@ -202,7 +202,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                   y1={toSvgY(p1.y)}
                   x2={toSvgX(p2.x)}
                   y2={toSvgY(p2.y)}
-                  stroke="#ec4899"
+                  stroke="var(--warning)"
                   strokeWidth="2.5"
                   strokeDasharray="4 2"
                 />
@@ -211,7 +211,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                   y={toSvgY(p1.y / 2) - 8}
                   fontSize="13"
                   fontWeight="bold"
-                  fill="#ec4899"
+                  fill="var(--warning)"
                 >
                   {c.label}
                 </text>
@@ -240,7 +240,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
             let fill = 'var(--accent)';
             let r = 6;
             if (isCurrent) {
-              fill = '#ec4899';
+              fill = 'var(--warning)';
               r = 8;
             }
             if (isOpt && (phase === 'optimal_found' || phase === 'complete')) {
@@ -255,7 +255,7 @@ export const LinearProgrammingVisualizer: React.FC = () => {
                   cy={toSvgY(vy)}
                   r={r}
                   fill={fill}
-                  stroke="#ffffff"
+                  stroke="var(--surface)"
                   strokeWidth="2"
                 />
                 <text

@@ -78,18 +78,20 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
             if (!parent) return null;
 
             const isCurrentEdge = currentNodeId === node.id;
-            let stroke = 'var(--border, #475569)';
-            let strokeWidth = 1.5;
+            let stroke = 'var(--graph-edge)';
+            let strokeWidth = 2.5;
+            let strokeDash: string | undefined = undefined;
 
             if (isCurrentEdge) {
               stroke = 'var(--accent)';
-              strokeWidth = 2.5;
+              strokeWidth = 3.5;
             } else if (node.pruned) {
-              stroke = 'var(--state-conflict-bg)';
-              strokeWidth = 1;
+              stroke = 'var(--error)';
+              strokeWidth = 2;
+              strokeDash = '4 3';
             } else if (node.isBest) {
               stroke = 'var(--success)';
-              strokeWidth = 2.5;
+              strokeWidth = 3;
             }
 
             return (
@@ -101,6 +103,7 @@ export const KnapsackBranchAndBoundVisualizer: React.FC = () => {
                   y2={node.y - 18}
                   stroke={stroke}
                   strokeWidth={strokeWidth}
+                  strokeDasharray={strokeDash}
                 />
                 <text
                   x={(parent.x + node.x) / 2 + (node.decision === 'include' ? -14 : 14)}

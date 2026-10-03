@@ -540,7 +540,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   x2={vPos.x}
                   y2={vPos.y}
                   stroke={inPath ? (isCompleteCycle ? 'var(--success)' : 'var(--accent)') : 'var(--graph-edge)'}
-                  strokeWidth={inPath ? 3.5 : 2}
+                  strokeWidth={inPath ? 3.5 : 2.5}
                   opacity={1}
                 />
                 {inPath && (
