@@ -341,17 +341,19 @@ export const LinearProgrammingVisualizer: React.FC = () => {
         </div>
 
         <div className="speed-selector">
-          <label>{language === 'es' ? 'Vel:' : 'Speed:'}</label>
-          <select
-            value={playbackSpeed}
-            onChange={(e) => setSpeed(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
-          >
-            <option value={0.5}>0.5x</option>
-            <option value={1}>1.0x</option>
-            <option value={1.5}>1.5x</option>
-            <option value={2}>2.0x</option>
-          </select>
+          <span className="speed-label">{language === 'es' ? 'Vel:' : 'Speed:'}</span>
+          <div className="segmented-control speed-segmented-control" role="group" aria-label={language === 'es' ? 'Velocidad' : 'Speed'}>
+            {[0.5, 1, 1.5, 2].map((spd) => (
+              <button
+                key={spd}
+                type="button"
+                className={`segmented-btn ${playbackSpeed === spd ? 'active' : ''}`}
+                onClick={() => setSpeed(spd)}
+              >
+                {spd}x
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

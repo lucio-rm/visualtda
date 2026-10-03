@@ -473,6 +473,22 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
+### Issue 3.25 — Universal Speed Controls Migration to Segmented Pills & Exercise View Difficulty Stars Harmonization
+- **Reported Behavior**:
+  1. Across 13 visualizers (`road-antennas`, `coin-change`, `juan-el-vago`, `lcs`, `linear-programming`, `max-subarray`, `peak-finding`, `randomized-fair-coin`, `reduction-is-vc`, `subset-sum`, `vertex-cover-approx`, `weighted-interval-scheduling`, and `graph-coloring`), playback speed was still controlled by native `<select>` dropdowns. In Chromium/Linux, these triggered browser-native white popover rectangles on hover and focus, inconsistent font sizing, and required two clicks to toggle playback speed.
+  2. In `ExerciseView.tsx`, the exercise header still rendered raw textual difficulty tags (`Nivel 3/5` / `Level 3/5`), discordant with the refined SVG star rating group (`Dificultad ★★★★☆`) displayed on the catalog cards.
+- **Severity**: Medium (Visual polish, interaction ergonomics, and design system uniformity).
+- **Status**: **RESOLVED** (current).
+- **Resolution**:
+  1. **Universal Segmented Speed Controls**: Migrated all 13 visualizers from native `<select>` dropdowns to accessible, 1-click `.segmented-control` button pills (`[0.5x] [1x] [2x]` / `[0.5x] [1x] [1.5x] [2x]`).
+  2. **Refined Button & Speed Styling**:
+     - Upgraded `.speed-btn` and `.btn-speed` in `App.css` to use solid `var(--surface)` resting background, `var(--surface-hover)` and `var(--border-hover)` on hover, and active accent pills (`var(--accent-solid)`, `var(--accent-contrast)`).
+     - Standardized `.preset-btn` in `RoadAntennasPlayground.css` with Radix tokens and smooth non-active hover feedback.
+  3. **Harmonized Difficulty Stars in Exercise Header**: Replaced raw text in `ExerciseView.tsx` with unified SVG star groups, achieving 100% visual consistency between catalog cards and in-exercise workbench headers.
+  4. **Verification**: 47 test files passing (368/368 tests), 22/22 browser QA scenarios verified, zero console errors, clean static production build.
+
+---
+
 ## 3. Maintenance Guidelines
 
 - When any new defect is found in manual exploration or reported by users, create a new entry with reproduction steps, root cause, and fix commit.

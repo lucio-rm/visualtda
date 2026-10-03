@@ -422,17 +422,18 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
             aria-label={language === 'es' ? 'Control de línea de tiempo' : 'Timeline scrubber'}
             style={{ width: '130px' }}
           />
-          <select
-            value={playbackSpeed}
-            onChange={(e) => setSpeed(Number(e.target.value))}
-            className="form-control"
-            aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}
-            style={{ width: 'auto', padding: '4px 8px', fontSize: '0.85rem' }}
-          >
-            <option value={0.6}>0.6x</option>
-            <option value={1}>1x</option>
-            <option value={2}>2x</option>
-          </select>
+          <div className="segmented-control speed-segmented-control" role="group" aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}>
+            {[0.5, 1, 2].map((spd) => (
+              <button
+                key={spd}
+                type="button"
+                className={`segmented-btn ${playbackSpeed === spd ? 'active' : ''}`}
+                onClick={() => setSpeed(spd)}
+              >
+                {spd}x
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

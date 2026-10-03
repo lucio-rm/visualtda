@@ -2062,28 +2062,38 @@ select option,
 
 .speed-btn,
 .btn-speed {
-  background: none;
-  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
   color: var(--text-muted);
   padding: 0.35rem 0.65rem;
   border-radius: var(--radius-sm);
+  font-family: inherit;
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  line-height: 1.2;
 }
 
 .speed-btn:hover,
 .btn-speed:hover {
   background-color: var(--surface-hover);
   color: var(--text);
+  border-color: var(--border-hover);
 }
 
 .speed-btn.active,
 .btn-speed.active {
-  background-color: var(--accent);
-  color: var(--accent-contrast);
-  border-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
+}
+
+.speed-btn.active:hover,
+.btn-speed.active:hover {
+  background-color: var(--accent-hover, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-hover, var(--accent));
 }
 
 .step-counter,

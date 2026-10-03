@@ -250,19 +250,20 @@ export const GraphColoringVisualizer: React.FC = () => {
         </div>
 
         {/* Speed Selector */}
-        <div className="gc-speed-selector">
-          <label htmlFor="gc-speed-select">
-            {language === 'es' ? 'Velocidad:' : 'Speed:'}
-          </label>
-          <select
-            id="gc-speed-select"
-            value={playbackSpeed}
-            onChange={(e) => setSpeed(Number(e.target.value))}
-          >
-            <option value={0.5}>0.5x</option>
-            <option value={1}>1.0x</option>
-            <option value={2}>2.0x</option>
-          </select>
+        <div className="speed-selector">
+          <span className="speed-label">{language === 'es' ? 'Velocidad:' : 'Speed:'}</span>
+          <div className="segmented-control speed-segmented-control" role="group" aria-label={language === 'es' ? 'Velocidad' : 'Speed'}>
+            {[0.5, 1, 2].map((spd) => (
+              <button
+                key={spd}
+                type="button"
+                className={`segmented-btn ${playbackSpeed === spd ? 'active' : ''}`}
+                onClick={() => setSpeed(spd)}
+              >
+                {spd}x
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

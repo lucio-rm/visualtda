@@ -117,8 +117,31 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
           <span className="badge badge-technique">
             {formatTechniqueLabel(exercise.techniqueId, language)}
           </span>
-          <span className="badge badge-difficulty">
-            {language === 'es' ? `Nivel ${exercise.difficulty}/5` : `Level ${exercise.difficulty}/5`}
+          <span
+            className="badge badge-difficulty"
+            title={language === 'es' ? `Dificultad: nivel ${exercise.difficulty} de 5` : `Difficulty: level ${exercise.difficulty} of 5`}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+          >
+            <span>{language === 'es' ? 'Dificultad' : 'Difficulty'}</span>
+            <span className="card-stars" style={{ display: 'inline-flex', gap: '2px', alignItems: 'center' }} aria-hidden="true">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg
+                  key={star}
+                  className={`star-icon ${star <= exercise.difficulty ? 'star-filled' : 'star-empty'}`}
+                  viewBox="0 0 20 20"
+                  width="12"
+                  height="12"
+                >
+                  <path
+                    fill={star <= exercise.difficulty ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth={star <= exercise.difficulty ? '1' : '1.5'}
+                    strokeLinejoin="round"
+                    d="M10 1.5l2.47 5.01 5.53.8-4 3.9 0.94 5.51L10 14.12l-4.94 2.6 0.94-5.51-4-3.9 5.53-.8L10 1.5z"
+                  />
+                </svg>
+              ))}
+            </span>
           </span>
           {exerciseCompleted && (
             <span className="badge badge-completed">

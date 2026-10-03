@@ -47,7 +47,11 @@
       - Universal High-Definition Segmented Controls: Replaced raw `<select>` dropdowns in `Header.tsx` (Language: `[ES | EN]`, Theme: `[Auto | Claro | Oscuro]`) and `NQueensPlayground.tsx`/`NQueensVisualizer.tsx` (Board size: `[4×4] [5×5] [6×6] [8×8]`) with accessible, polished `.segmented-control` pills.
       - Form Element Typography: Set `button, select, input, textarea { font-family: inherit; }` in `base.css` and `App.css`. Styled all `<select>` elements with custom SVG chevrons, Radix tokens, and zero white box hover artifacts.
       - Preset Hover States: Decoupled `.btn-preset:hover` from `.btn-preset.active`, ensuring non-active hover uses subtle `--surface-hover` and `--border-hover` without turning stark white or prematurely active.
-   7. **Quality Baseline**:
+   7. **Part 7 Universal Speed Controls & Difficulty Stars Harmonization**:
+      - Replaced legacy `<select>` playback speed dropdowns across 13 visualizers (`road-antennas`, `coin-change`, `juan-el-vago`, `lcs`, `linear-programming`, `max-subarray`, `peak-finding`, `randomized-fair-coin`, `reduction-is-vc`, `subset-sum`, `vertex-cover-approx`, `weighted-interval-scheduling`, and `graph-coloring`) with modern, accessible `.segmented-control` button pills.
+      - Upgraded `.speed-btn` and `.btn-speed` in `App.css` to use solid `var(--surface)` resting background, `var(--surface-hover)` and `var(--border-hover)` on hover, and active accent pills (`var(--accent-solid)`, `var(--accent-contrast)`), completely eliminating browser-native white popover rectangles.
+      - Harmonized difficulty display in `ExerciseView.tsx` by replacing raw text tags with the exact unified SVG 5-star rating system from `ExerciseCard.tsx`.
+   8. **Quality Baseline**:
       - `npm run lint`: 0 errors, 0 warnings.
       - `npm run typecheck`: 0 errors.
       - `npm test`: 47 test files, 368 passed (100% PASS).
