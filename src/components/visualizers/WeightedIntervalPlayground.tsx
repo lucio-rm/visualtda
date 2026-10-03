@@ -353,25 +353,31 @@ export const WeightedIntervalPlayground: React.FC = () => {
         </div>
       )}
 
-      {/* Predecessor Function Callout Banner (Permanent height so hovering never shifts layout) */}
+      {/* Predecessor Function Callout Banner (Locked 56px height: never shifts layout on any task) */}
       <div
+        className="pred-callout-box"
         style={{
-          minHeight: '48px',
-          padding: '0.65rem 0.85rem',
+          height: '56px',
+          minHeight: '56px',
+          maxHeight: '56px',
+          boxSizing: 'border-box',
+          margin: '0.75rem 0 1rem 0',
+          padding: '0 0.85rem',
           backgroundColor: hoveredTask ? 'var(--state-active-bg)' : 'var(--surface-hover)',
-          borderLeft: hoveredTask ? '4px solid var(--accent)' : '4px solid var(--border)',
           border: '1px solid var(--border)',
-          borderLeftWidth: '4px',
+          borderLeft: hoveredTask ? '4px solid var(--accent)' : '4px solid var(--border)',
           borderRadius: 'var(--radius-sm)',
-          fontSize: '0.85rem',
+          fontSize: '0.84rem',
+          lineHeight: 1.35,
           color: 'var(--text)',
           display: 'flex',
           alignItems: 'center',
+          overflow: 'hidden',
           transition: 'background-color 0.15s ease, border-color 0.15s ease'
         }}
       >
         {hoveredTask ? (
-          <div>
+          <div style={{ width: '100%', lineHeight: 1.35 }}>
             <strong>
               {language === 'es'
                 ? `Función Predecesora p(${hoveredTask.id}):`
@@ -382,13 +388,17 @@ export const WeightedIntervalPlayground: React.FC = () => {
                 <span>
                   Última tarea compatible antes de t={hoveredTask.start}:{' '}
                   <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. La recurrencia evalúa:{' '}
-                  <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))</code>.
+                  <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', padding: '1px 4px', borderRadius: '3px', backgroundColor: 'var(--code-bg)', border: '1px solid var(--border-subtle)', verticalAlign: 'middle' }}>
+                    OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(ant))
+                  </code>.
                 </span>
               ) : (
                 <span>
                   Latest compatible task before t={hoveredTask.start}:{' '}
                   <strong style={{ color: 'var(--success)' }}>{hoveredPred}</strong>. Recurrence evaluates:{' '}
-                  <code>OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))</code>.
+                  <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', padding: '1px 4px', borderRadius: '3px', backgroundColor: 'var(--code-bg)', border: '1px solid var(--border-subtle)', verticalAlign: 'middle' }}>
+                    OPT({hoveredTask.id}) = max(v_{'{' + hoveredTask.id + '}'} + OPT({hoveredPred}), OPT(prev))
+                  </code>.
                 </span>
               )
             ) : language === 'es' ? (
@@ -402,7 +412,7 @@ export const WeightedIntervalPlayground: React.FC = () => {
             )}
           </div>
         ) : (
-          <div style={{ color: 'var(--text-muted)' }}>
+          <div style={{ width: '100%', color: 'var(--text-muted)', lineHeight: 1.35 }}>
             <strong style={{ color: 'var(--text)' }}>
               {language === 'es' ? 'Función Predecesora p(j): ' : 'Predecessor Function p(j): '}
             </strong>

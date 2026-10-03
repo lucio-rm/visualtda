@@ -39,11 +39,13 @@ This document defines the operational roadmap for **Mission V11: Systematic Desi
    - Verified that 100% of exercises feature formal problem definitions, mathematical proofs/invariants, asymptotic complexity analysis, and naive intuition traps with concrete counterexamples.
    - Added automated regression suite in `tests/exerciseContent.test.ts` enforcing these academic standards continuously.
 5. ✅ **Part 5 — Light Mode Contrast Separation, Card Stars & Interactive Bug Sweep**:
-   - Light mode 3-tier elevation: `--bg` updated to `#e8e8ec` (Radix slate-4), giving pure white cards `#ffffff` crisp separation and 13:1 contrast.
-   - Card header realignment: single-row header with `#num` and category left, status badge right; difficulty rating rendered as compact 5-star SVG vector rating bar in the card footer.
+   - Light mode depth hierarchy: `--bg` set to `#d8dce6` (cool slate desk canvas, lightness 86%), providing a distinct 1.37:1 ratio against pure white cards (`--surface: #ffffff`) with 11.9:1 text contrast and zero card blending. Recessed workbench canvas inside exercises set to `--canvas-bg: #eaedf4`.
+   - Card header realignment: single-row header with `#num` and category left, zero overflow; footer bar with `Dificultad ★★★★☆` on the left directly adjacent, and status badge (`[Explorando]`, `[Completado]`, etc.) on the right side of the footer bar.
    - Knight's Tour unsolvable 4x4 options removed.
-   - Weighted Interval hover thrashing bug fixed via stable-height predecessor container.
+   - Weighted Interval hover thrashing bug fixed via locked 56px predecessor container and styled inline code.
    - Universal bilingual coverage: all aria-labels, buttons, chart labels, and playground legends verified in both Spanish and English.
+
+
 
 ---
 

@@ -96,7 +96,6 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
               {formatTechniqueLabel(exercise.techniqueId, language)}
             </span>
           </div>
-          {renderStateBadge()}
         </div>
         <h3 className="card-title">{title}</h3>
       </div>
@@ -105,29 +104,36 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onSelect, 
         <div
           className="card-difficulty-bar"
           title={language === 'es' ? `Dificultad: nivel ${exercise.difficulty} de 5` : `Difficulty: level ${exercise.difficulty} of 5`}
-          aria-label={language === 'es' ? `Dificultad nivel ${exercise.difficulty} de 5` : `Difficulty level ${exercise.difficulty} of 5`}
         >
-          <span className="difficulty-label">
-            {language === 'es' ? 'Dificultad' : 'Difficulty'}
-          </span>
-          <div className="card-stars" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <svg
-                key={star}
-                className={`star-icon ${star <= exercise.difficulty ? 'star-filled' : 'star-empty'}`}
-                viewBox="0 0 20 20"
-                width="13"
-                height="13"
-              >
-                <path
-                  fill={star <= exercise.difficulty ? 'currentColor' : 'none'}
-                  stroke="currentColor"
-                  strokeWidth={star <= exercise.difficulty ? '1' : '1.5'}
-                  strokeLinejoin="round"
-                  d="M10 1.5l2.47 5.01 5.53.8-4 3.9 0.94 5.51L10 14.12l-4.94 2.6 0.94-5.51-4-3.9 5.53-.8L10 1.5z"
-                />
-              </svg>
-            ))}
+          <div
+            className="card-difficulty-group"
+            aria-label={language === 'es' ? `Dificultad nivel ${exercise.difficulty} de 5` : `Difficulty level ${exercise.difficulty} of 5`}
+          >
+            <span className="difficulty-label">
+              {language === 'es' ? 'Dificultad' : 'Difficulty'}
+            </span>
+            <div className="card-stars" aria-hidden="true">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg
+                  key={star}
+                  className={`star-icon ${star <= exercise.difficulty ? 'star-filled' : 'star-empty'}`}
+                  viewBox="0 0 20 20"
+                  width="13"
+                  height="13"
+                >
+                  <path
+                    fill={star <= exercise.difficulty ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth={star <= exercise.difficulty ? '1' : '1.5'}
+                    strokeLinejoin="round"
+                    d="M10 1.5l2.47 5.01 5.53.8-4 3.9 0.94 5.51L10 14.12l-4.94 2.6 0.94-5.51-4-3.9 5.53-.8L10 1.5z"
+                  />
+                </svg>
+              ))}
+            </div>
+          </div>
+          <div className="card-status-slot">
+            {renderStateBadge()}
           </div>
         </div>
         <button

@@ -18,7 +18,7 @@
   --slate-8: #b9bbc6;
   --slate-9: #8b8d98;
   --slate-10: #80838d;
-  --slate-11: #60646c;
+  --slate-11: #555962;
   --slate-12: #1c2024;
 
   /* Accent / Primary: Radix Indigo */
@@ -80,22 +80,22 @@
   /* =========================================================================
    * SEMANTIC WORKSPACE & CARD TOKENS (LIGHT THEME)
    * ========================================================================= */
-  --bg: var(--slate-4);                 /* #e8e8ec App page background (crisp soft slate canvas, distinct from white cards) */
+  --bg: #d8dce6;                        /* Deep cool slate desk canvas - unmistakable visual separation from white cards */
   --surface: #ffffff;                   /* #ffffff Pure white elevated card surface (crisp card pop) */
   --surface-raised: #ffffff;
   --surface-light: #ffffff;
-  --surface-hover: var(--slate-2);      /* #f9f9fb Component hover */
-  --surface-active: var(--slate-5);     /* #e0e1e6 Component pressed */
-  --canvas-bg: var(--slate-2);          /* #f9f9fb Recessed interactive workbench inside white card */
+  --surface-hover: #f0f3f8;             /* Distinct hover tint */
+  --surface-active: #e2e6ef;            /* Distinct pressed tint */
+  --canvas-bg: #eaedf4;                 /* Recessed interactive workbench inside white card */
 
-  --border: var(--slate-7);             /* #cdced6 Clear component border (1.5px) */
-  --border-strong: var(--slate-8);      /* #b9bbc6 Interactive border */
-  --border-subtle: var(--slate-6);      /* #d9d9e0 Card divider */
-  --border-muted: var(--slate-5);       /* #e0e1e6 Soft divider */
-  --border-hover: var(--slate-9);       /* #8b8d98 */
+  --border: #b8bcc8;                    /* Clear, visible component border (1.5px) */
+  --border-strong: #9ca1b0;             /* Interactive border */
+  --border-subtle: #cdced6;             /* Card divider */
+  --border-muted: #d9d9e0;              /* Soft divider */
+  --border-hover: #80838d;
 
-  --text: var(--slate-12);              /* #1c2024 High-contrast primary text (15.6:1 contrast) */
-  --text-muted: var(--slate-11);        /* #60646c Secondary text (5.6:1 contrast) */
+  --text: var(--slate-12);              /* #1c2024 High-contrast primary text (16.4:1 on card, 11.9:1 on bg) */
+  --text-muted: var(--slate-11);        /* #555962 Secondary text (7.0:1 on card, 5.1:1 on bg) */
 
   /* Primary Interactive / Accent */
   --accent: var(--indigo-9);            /* #3e63dd Main clickable solid fill */
@@ -126,9 +126,9 @@
   --warning-border: var(--amber-7);     /* #e9c162 */
   --warning-contrast: var(--amber-12);  /* #4f3422 Dark text on bright amber (7.2:1 contrast) */
 
-  --code-bg: var(--slate-3);            /* #f0f0f3 */
-  --code-border: var(--slate-7);        /* #cdced6 */
-  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+  --code-bg: #f5f6fa;                   /* Crisp light editor background */
+  --code-border: #cbd0da;               /* Clean code border */
+  --shadow-card: 0 2px 8px -2px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.08);
 
   /* Spacing Scale (8px rhythm) */
   --space-1: 4px;
