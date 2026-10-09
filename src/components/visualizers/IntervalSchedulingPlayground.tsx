@@ -74,6 +74,112 @@ const INITIAL_CUSTOM_INTERVALS: Interval[] = [
   [6, 9]
 ];
 
+export function parseCustomIntervalString(
+  input: string,
+  lang: 'es' | 'en' = 'es'
+): { intervals?: Interval[]; error?: string } {
+  const isEs = lang === 'es';
+  const trimmed = input.trim();
+  if (!trimmed) {
+    return { error: isEs ? 'La entrada está vacía.' : 'Input cannot be empty.' };
+  }
+
+  // If input starts with JSON array bracket
+  if (trimmed.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (!Array.isArray(parsed)) {
+        return {
+          error: isEs
+            ? 'El formato JSON debe ser una lista de pares [[inicio, fin], ...].'
+            : 'JSON format must be a list of pairs [[start, end], ...].'
+        };
+      }
+      const intervals: Interval[] = [];
+      for (const item of parsed) {
+        if (!Array.isArray(item) || item.length !== 2) {
+          return {
+            error: isEs
+              ? 'Cada elemento debe ser una tupla de 2 números [inicio, fin].'
+              : 'Each item must be a 2-number tuple [start, end].'
+          };
+        }
+        const [s, e] = item;
+        if (typeof s !== 'number' || typeof e !== 'number' || !Number.isInteger(s) || !Number.isInteger(e)) {
+          return {
+            error: isEs
+              ? 'Los valores de inicio y fin deben ser números enteros.'
+              : 'Start and end values must be integers.'
+          };
+        }
+        if (s < 0 || e <= s || e > 100) {
+          return {
+            error: isEs
+              ? `Intervalo inválido [${s}, ${e}]: se requiere 0 <= inicio < fin <= 100.`
+              : `Invalid interval [${s}, ${e}]: requires 0 <= start < end <= 100.`
+          };
+        }
+        intervals.push([s, e]);
+      }
+      if (intervals.length === 0) {
+        return { error: isEs ? 'No se detectaron intervalos en la lista.' : 'No intervals detected in list.' };
+      }
+      if (intervals.length > 10) {
+        return {
+          error: isEs
+            ? 'Máximo 10 intervalos permitidos para garantizar la legibilidad en pantalla.'
+            : 'Maximum 10 intervals allowed for clear screen visualization.'
+        };
+      }
+      return { intervals };
+    } catch {
+      // Continue to regex parser
+    }
+  }
+
+  // Regex parser: handles patterns like "1-4, 2-6", "(1, 4), (2, 6)", "[[1, 4], [2, 6]]"
+  const matches = trimmed.match(/\[?\s*(\d+)\s*[,-]\s*(\d+)\s*\]?/g);
+  if (!matches || matches.length === 0) {
+    return {
+      error: isEs
+        ? 'No se reconocieron intervalos válidos. Usá formato JSON [[1, 4], [2, 6]] o pares "1-4, 2-6".'
+        : 'Could not recognize valid intervals. Use JSON [[1, 4], [2, 6]] or pairs "1-4, 2-6".'
+    };
+  }
+
+  const intervals: Interval[] = [];
+  for (const m of matches) {
+    const nums = m
+      .replace(/[()[\]]/g, '')
+      .split(/[,-]/)
+      .map((n) => parseInt(n.trim(), 10));
+    if (nums.length === 2 && !isNaN(nums[0]) && !isNaN(nums[1])) {
+      const [s, e] = nums;
+      if (s < 0 || e <= s || e > 100) {
+        return {
+          error: isEs
+            ? `Intervalo inválido [${s}, ${e}]: se requiere 0 <= inicio < fin <= 100.`
+            : `Invalid interval [${s}, ${e}]: requires 0 <= start < end <= 100.`
+        };
+      }
+      intervals.push([s, e]);
+    }
+  }
+
+  if (intervals.length === 0) {
+    return { error: isEs ? 'No se detectaron intervalos.' : 'No intervals found.' };
+  }
+  if (intervals.length > 10) {
+    return {
+      error: isEs
+        ? 'Máximo 10 intervalos permitidos para garantizar la legibilidad en pantalla.'
+        : 'Maximum 10 intervals allowed for clear screen visualization.'
+    };
+  }
+
+  return { intervals };
+}
+
 export const IntervalSchedulingPlayground: React.FC = () => {
   const { language } = useLanguage();
   const { markAttempted } = useStudentProgress();
@@ -84,6 +190,8 @@ export const IntervalSchedulingPlayground: React.FC = () => {
   const [newStart, setNewStart] = useState<number>(1);
   const [newEnd, setNewEnd] = useState<number>(4);
   const [customError, setCustomError] = useState<string | null>(null);
+  const [showBulkModal, setShowBulkModal] = useState<boolean>(false);
+  const [bulkText, setBulkText] = useState<string>('[[1, 4], [3, 5], [0, 6], [5, 7], [3, 8], [5, 9]]');
 
   const activePreset = PRESETS.find((p) => p.id === activePresetId);
   const currentIntervals: Interval[] = useMemo(() => {
@@ -155,8 +263,8 @@ export const IntervalSchedulingPlayground: React.FC = () => {
       setCustomError(language === 'es' ? 'El fin debe ser mayor al inicio.' : 'End must be strictly greater than start.');
       return;
     }
-    if (customIntervals.length >= 8) {
-      setCustomError(language === 'es' ? 'Máximo 8 tareas en el laboratorio.' : 'Maximum 8 tasks in sandbox.');
+    if (customIntervals.length >= 10) {
+      setCustomError(language === 'es' ? 'Máximo 10 tareas en el laboratorio.' : 'Maximum 10 tasks in sandbox.');
       return;
     }
 
@@ -248,18 +356,112 @@ export const IntervalSchedulingPlayground: React.FC = () => {
             <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>
               {language === 'es' ? 'Definir tareas de tu instancia propia:' : 'Define tasks for your custom instance:'}
             </span>
-            <button
-              type="button"
-              className="chip-btn"
-              onClick={() => {
-                setCustomIntervals(INITIAL_CUSTOM_INTERVALS);
-                setSelectedIds([]);
-                setCustomError(null);
-              }}
-              style={{ fontSize: '0.8125rem', padding: '0.25rem 0.5rem' }}
-            >
-              {language === 'es' ? 'Restablecer' : 'Reset'}
-            </button>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() => setShowBulkModal(!showBulkModal)}
+                style={{ fontSize: '0.8125rem', padding: '0.25rem 0.5rem' }}
+              >
+                {showBulkModal
+                  ? (language === 'es' ? 'Cerrar Carga Masiva' : 'Close Bulk Input')
+                  : (language === 'es' ? '📋 Carga Masiva' : '📋 Bulk Input')}
+              </button>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() => {
+                  setCustomIntervals(INITIAL_CUSTOM_INTERVALS);
+                  setSelectedIds([]);
+                  setCustomError(null);
+                  setShowBulkModal(false);
+                }}
+                style={{ fontSize: '0.8125rem', padding: '0.25rem 0.5rem' }}
+              >
+                {language === 'es' ? 'Restablecer' : 'Reset'}
+              </button>
+            </div>
+          </div>
+
+          {showBulkModal && (
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+              <label style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+                {language === 'es'
+                  ? 'Pegá tus intervalos en formato JSON [[1, 4], [2, 6]] o lista 1-4, 2-6 (máximo 10 tareas):'
+                  : 'Paste intervals as JSON [[1, 4], [2, 6]] or pairs 1-4, 2-6 (max 10 tasks):'}
+              </label>
+              <textarea
+                value={bulkText}
+                onChange={(e) => setBulkText(e.target.value)}
+                rows={3}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', padding: '0.4rem', border: '1px solid var(--border)', borderRadius: '4px', background: 'var(--surface-hover)', color: 'var(--text)', resize: 'vertical' }}
+              />
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setShowBulkModal(false)}
+                  style={{ fontSize: '0.8rem', padding: '0.3rem 0.6rem' }}
+                >
+                  {language === 'es' ? 'Cancelar' : 'Cancel'}
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => {
+                    setCustomError(null);
+                    const res = parseCustomIntervalString(bulkText, language);
+                    if (res.error) {
+                      setCustomError(res.error);
+                    } else if (res.intervals && res.intervals.length > 0) {
+                      setCustomIntervals(res.intervals);
+                      setSelectedIds([]);
+                      setShowBulkModal(false);
+                    }
+                  }}
+                  style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
+                >
+                  {language === 'es' ? 'Cargar Tareas' : 'Load Tasks'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Active custom interval chips */}
+          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', margin: '0.5rem 0' }}>
+            {customIntervals.map(([s, e], idx) => (
+              <span
+                key={idx}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  padding: '0.2rem 0.5rem',
+                  borderRadius: '4px',
+                  fontSize: '0.8rem',
+                  fontFamily: 'var(--font-mono)'
+                }}
+              >
+                <span>T{idx + 1} [{s}h – {e}h]</span>
+                <button
+                  type="button"
+                  onClick={(ev) => handleRemoveCustomInterval(idx, ev)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--error, #ef4444)',
+                    cursor: 'pointer',
+                    padding: 0,
+                    fontSize: '0.85rem'
+                  }}
+                  title={language === 'es' ? 'Eliminar tarea' : 'Remove task'}
+                >
+                  ✕
+                </button>
+              </span>
+            ))}
           </div>
 
           <form onSubmit={handleAddCustomInterval} className="custom-editor-row">
@@ -270,7 +472,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               <input
                 type="number"
                 min="0"
-                max="25"
+                max="95"
                 value={newStart}
                 onChange={(e) => setNewStart(Math.max(0, parseInt(e.target.value, 10) || 0))}
                 style={{ padding: '0.35rem 0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)' }}
@@ -283,7 +485,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               <input
                 type="number"
                 min="1"
-                max="30"
+                max="100"
                 value={newEnd}
                 onChange={(e) => setNewEnd(Math.max(1, parseInt(e.target.value, 10) || 1))}
                 style={{ padding: '0.35rem 0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)' }}
@@ -299,7 +501,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
           </form>
 
           {customError && (
-            <div style={{ color: 'var(--color-error, #dc2626)', fontSize: '0.8rem' }}>
+            <div style={{ color: 'var(--color-error, #dc2626)', fontSize: '0.8rem', marginTop: '0.35rem', fontWeight: 500 }}>
               {customError}
             </div>
           )}

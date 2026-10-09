@@ -14,7 +14,10 @@ import { getHintUnlockStatus } from '../utils/hintGating';
 import { HintRequirementWidget } from './HintRequirementWidget';
 import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 import { highlightPythonCode } from '../utils/pythonSyntaxHighlighter';
+import { sanitizePythonUnicode, beautifyPythonCode } from '../utils/codeFormatter';
 import { DpRecurrenceSelfCheck } from './DpRecurrenceSelfCheck';
+import { VisualTestFailureInspector } from './VisualTestFailureInspector';
+import { playSuccessChime } from '../utils/audioFeedback';
 
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
@@ -223,6 +226,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
   const gutterRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLPreElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [codeBackupBeforeReset, setCodeBackupBeforeReset] = useState<string | null>(null);
+  const [sanitizationNotice, setSanitizationNotice] = useState<string | null>(null);
+
   const lineCount = useMemo(() => Math.max(code.split('\n').length, 1), [code]);
   const highlightedHtml = useMemo(() => highlightPythonCode(code), [code]);
 
@@ -247,8 +254,79 @@ export const SolveView: React.FC<SolveViewProps> = ({
     }
   };
 
+  const handleFormatCode = () => {
+    const formatted = beautifyPythonCode(code);
+    setCode(formatted);
+    setSanitizationNotice(
+      language === 'es'
+        ? '✨ Código normalizado a 4 espacios y formato estándar de Python.'
+        : '✨ Code formatted to 4 spaces and standard Python conventions.'
+    );
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const pasted = e.clipboardData.getData('text');
+    const result = sanitizePythonUnicode(pasted);
+    if (result.hasReplacements) {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const nextCode = code.substring(0, start) + result.sanitized + code.substring(end);
+      setCode(nextCode);
+      setSanitizationNotice(
+        language === 'es'
+          ? `✨ Se normalizaron ${result.replacementsCount} caracteres especiales (${result.replacementTypes.join(', ')}) a sintaxis Python válida.`
+          : `✨ Normalized ${result.replacementsCount} special characters (${result.replacementTypes.join(', ')}) to valid Python syntax.`
+      );
+      requestAnimationFrame(() => {
+        textarea.setSelectionRange(start + result.sanitized.length, start + result.sanitized.length);
+      });
+    }
+  };
+
   const handleResetCode = () => {
+    if (code !== defaultCode) {
+      setCodeBackupBeforeReset(code);
+    }
     setCode(defaultCode);
+    setSanitizationNotice(null);
+  };
+
+  const handleUndoReset = () => {
+    if (codeBackupBeforeReset !== null) {
+      setCode(codeBackupBeforeReset);
+      setCodeBackupBeforeReset(null);
+    }
+  };
+
+  const handleInsertSnippet = (snippetKey: string) => {
+    let snippetText = '';
+    if (snippetKey === 'memo') {
+      snippetText = '\n    # Cache de Memoization\n    memo = {}\n    if state in memo:\n        return memo[state]\n';
+    } else if (snippetKey === 'guard') {
+      snippetText = '\n    # Caso base / guarda de frontera\n    if not items or capacity <= 0:\n        return 0\n';
+    } else if (snippetKey === 'dp_table') {
+      snippetText = '\n    # Tabla DP 2D\n    dp = [[0] * (capacidad + 1) for _ in range(n + 1)]\n';
+    } else if (snippetKey === 'backtrack') {
+      snippetText = '\n    # Paso recursivo de backtracking con poda\n    candidatos.append(c)\n    resolver(etapa + 1)\n    candidatos.pop()  # Deshacer mutación\n';
+    }
+
+    if (snippetText) {
+      const textarea = textareaRef.current;
+      if (textarea) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const nextCode = code.substring(0, start) + snippetText + code.substring(end);
+        setCode(nextCode);
+        requestAnimationFrame(() => {
+          textarea.setSelectionRange(start + snippetText.length, start + snippetText.length);
+          textarea.focus();
+        });
+      } else {
+        setCode(code + snippetText);
+      }
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -369,6 +447,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const [executionTimeMs, setExecutionTimeMs] = useState<number | null>(null);
   const [execEngine, setExecEngine] = useState<'ts' | 'pyodide'>('ts');
+  const [inspectedTestCase, setInspectedTestCase] = useState<TestCaseResult | null>(null);
 
   const hints = content?.hints || [
     {
@@ -414,6 +493,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
         setTestStatus('passed');
         recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
+        playSuccessChime();
         setTestSummary(
           language === 'es'
             ? `${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
@@ -458,8 +538,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
     } else {
       // Evaluate against Python test runner with real test cases
       const evalResult = await runPythonTests(exercise.id, code);
+      const effort = analyzeStudentCodeEffort(code, rawStarter);
+      const isLegitEffort = effort.hasRealLogic && effort.meaningfulLinesAdded >= 2;
       setTestResults(evalResult.results);
-      if (evalResult.passed) {
+      if (evalResult.passed && isLegitEffort) {
         setTestStatus('passed');
         recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
@@ -472,23 +554,30 @@ export const SolveView: React.FC<SolveViewProps> = ({
       } else {
         setTestStatus('failed');
         markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
-        setTestSummary(
-          language === 'es'
-            ? `${evalResult.totalPassed} / ${evalResult.totalTests} casos superados. El código no satisfizo todas las restricciones o contiene errores.`
-            : `${evalResult.totalPassed} / ${evalResult.totalTests} passed. Code did not satisfy all constraints or contains errors.`
-        );
+        if (evalResult.passed && !isLegitEffort) {
+          setTestSummary(
+            language === 'es'
+              ? 'Código incompleto o trivial: debés escribir lógica algorítmica real más allá de la plantilla inicial.'
+              : 'Incomplete or trivial code: you must write real algorithmic logic beyond the starter template.'
+          );
+        } else {
+          setTestSummary(
+            language === 'es'
+              ? `${evalResult.totalPassed} / ${evalResult.totalTests} casos superados. El código no satisfizo todas las restricciones o contiene errores.`
+              : `${evalResult.totalPassed} / ${evalResult.totalTests} passed. Code did not satisfy all constraints or contains errors.`
+          );
+        }
       }
 
-      const effort = analyzeStudentCodeEffort(code, rawStarter);
       const lastAttempt = attempts[0];
       const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
       const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
 
-      if (!isDuplicateCode || evalResult.passed) {
+      if (!isDuplicateCode || (evalResult.passed && isLegitEffort)) {
         recordStudentAttempt(exercise.id, {
           exerciseId: exercise.id,
           code,
-          passed: evalResult.passed,
+          passed: evalResult.passed && isLegitEffort,
           passedTestsCount: evalResult.totalPassed,
           totalTestsCount: evalResult.totalTests,
           meaningfulLinesCount: effort.meaningfulLinesAdded,
@@ -538,6 +627,9 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
     setTestResults(effectiveResults);
 
+    const effort = analyzeStudentCodeEffort(code, rawStarter);
+    const isLegitEffort = effort.hasRealLogic && effort.meaningfulLinesAdded >= 2;
+
     if (evalResult.isEnvironmentError) {
       setTestStatus('failed');
       markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
@@ -554,10 +646,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
           ? 'Error detectado durante la ejecución en Python. Revisa la traza abajo y los casos fallidos.'
           : 'Error detected during Python execution. Check the traceback and failed test cases below.'
       );
-    } else if (evalResult.passed) {
+    } else if (evalResult.passed && isLegitEffort) {
       setTestStatus('passed');
       recordLegitimateExercisePass(exercise.id);
       markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
+      playSuccessChime();
       setTestSummary(
         language === 'es'
           ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas exitosamente en ${Math.round(evalResult.executionTimeMs)} ms.`
@@ -567,23 +660,30 @@ export const SolveView: React.FC<SolveViewProps> = ({
     } else {
       setTestStatus('failed');
       markTesting(exercise.id, evalResult.totalPassed, evalResult.totalTests);
-      setTestSummary(
-        language === 'es'
-          ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas. Revisa los casos fallidos en la tabla.`
-          : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed. Check failed test cases in table.`
-      );
+      if (evalResult.passed && !isLegitEffort) {
+        setTestSummary(
+          language === 'es'
+            ? 'Código incompleto o trivial: debés escribir lógica algorítmica real más allá de la plantilla inicial.'
+            : 'Incomplete or trivial code: you must write real algorithmic logic beyond the starter template.'
+        );
+      } else {
+        setTestSummary(
+          language === 'es'
+            ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas. Revisa los casos fallidos en la tabla.`
+            : `${evalResult.totalPassed} / ${evalResult.totalTests} tests passed. Check failed test cases in table.`
+        );
+      }
     }
 
-    const effort = analyzeStudentCodeEffort(code, rawStarter);
     const lastAttempt = attempts[0];
     const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
     const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
 
-    if (!isDuplicateCode || evalResult.passed) {
+    if (!isDuplicateCode || (evalResult.passed && isLegitEffort)) {
       recordStudentAttempt(exercise.id, {
         exerciseId: exercise.id,
         code,
-        passed: evalResult.passed,
+        passed: evalResult.passed && isLegitEffort,
         passedTestsCount: evalResult.totalPassed,
         totalTestsCount: evalResult.totalTests,
         meaningfulLinesCount: effort.meaningfulLinesAdded,
@@ -616,24 +716,140 @@ export const SolveView: React.FC<SolveViewProps> = ({
                 <span className="editor-lang-badge">Python 3</span>
                 <span className="editor-filename">{language === 'es' ? 'solucion.py' : 'solution.py'}</span>
               </div>
-              <button
-                type="button"
-                className="btn-reset-code"
-                onClick={handleResetCode}
-                title={t(dict.resetTemplateAriaLabel)}
-                aria-label={t(dict.resetTemplateAriaLabel)}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <select
+                  aria-label={language === 'es' ? 'Insertar plantilla algorítmica' : 'Insert algorithmic snippet'}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleInsertSnippet(e.target.value);
+                      e.target.value = '';
+                    }
+                  }}
+                  defaultValue=""
+                  className="editor-snippet-select"
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-sm)',
+                    color: 'var(--text-muted)',
+                    fontSize: '0.78rem',
+                    padding: '0.2rem 0.45rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="" disabled>
+                    {language === 'es' ? '+ Insertar Snippet' : '+ Insert Snippet'}
+                  </option>
+                  <option value="memo">{language === 'es' ? 'Plantilla: Memoization' : 'Template: Memoization'}</option>
+                  <option value="guard">{language === 'es' ? 'Plantilla: Guarda de borde' : 'Template: Guard Clause'}</option>
+                  <option value="dp_table">{language === 'es' ? 'Plantilla: Tabla DP 2D' : 'Template: 2D DP Table'}</option>
+                  <option value="backtrack">{language === 'es' ? 'Plantilla: Backtracking' : 'Template: Backtracking'}</option>
+                </select>
+
+                <button
+                  type="button"
+                  className="btn-format-code"
+                  onClick={handleFormatCode}
+                  title={language === 'es' ? 'Formatear código (4 espacios, limpia caracteres especiales)' : 'Format code (4 spaces, cleans special characters)'}
+                  aria-label={language === 'es' ? 'Formatear código' : 'Format code'}
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-sm)',
+                    color: 'var(--accent)',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: '0.2rem 0.5rem'
+                  }}
+                >
+                  ✨ {language === 'es' ? 'Formatear' : 'Format'}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-reset-code"
+                  onClick={handleResetCode}
+                  title={t(dict.resetTemplateAriaLabel)}
+                  aria-label={t(dict.resetTemplateAriaLabel)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-muted, #94a3b8)',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    padding: '0.25rem 0.5rem'
+                  }}
+                >
+                  {t(dict.resetTemplate)}
+                </button>
+              </div>
+            </div>
+
+            {sanitizationNotice !== null && (
+              <div
+                className="code-sanitization-banner"
                 style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--text-muted, #94a3b8)',
-                  fontSize: '0.8rem',
-                  cursor: 'pointer',
-                  padding: '0.25rem 0.5rem'
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.4rem 0.85rem',
+                  background: 'var(--accent-subtle, rgba(99, 102, 241, 0.12))',
+                  borderBottom: '1px solid var(--border)',
+                  fontSize: '0.8125rem',
+                  color: 'var(--text)'
                 }}
               >
-                {t(dict.resetTemplate)}
-              </button>
-            </div>
+                <span>{sanitizationNotice}</span>
+                <button
+                  type="button"
+                  onClick={() => setSanitizationNotice(null)}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem' }}
+                  aria-label="Cerrar aviso"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            {codeBackupBeforeReset !== null && (
+              <div
+                className="code-reset-undo-banner"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.4rem 0.85rem',
+                  background: 'var(--surface-hover)',
+                  borderBottom: '1px solid var(--border)',
+                  fontSize: '0.8125rem',
+                  color: 'var(--text)'
+                }}
+              >
+                <span>
+                  {language === 'es'
+                    ? 'Plantilla inicial restablecida.'
+                    : 'Initial template restored.'}
+                </span>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    onClick={handleUndoReset}
+                    className="btn-secondary"
+                    style={{ fontSize: '0.75rem', padding: '0.15rem 0.5rem' }}
+                  >
+                    ↩ {language === 'es' ? 'Deshacer y recuperar código' : 'Undo and recover code'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCodeBackupBeforeReset(null)}
+                    style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.8rem' }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="editor-input-wrapper">
               <div ref={gutterRef} className="editor-gutter" aria-hidden="true">
                 {Array.from({ length: lineCount }, (_, i) => (
@@ -647,11 +863,13 @@ export const SolveView: React.FC<SolveViewProps> = ({
                   <code dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
                 </pre>
                 <textarea
+                  ref={textareaRef}
                   id={`vtda_code_${exercise.id}`}
                   name={`vtda_code_${exercise.id}`}
                   className="code-editor-input"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
+                  onPaste={handlePaste}
                   onKeyDown={handleKeyDown}
                   onScroll={handleScroll}
                   rows={24}
@@ -747,7 +965,19 @@ export const SolveView: React.FC<SolveViewProps> = ({
                     <div key={tr.testId} className={`test-case-item ${tr.passed ? 'pass' : 'fail'}`}>
                       <span className="test-case-badge">{tr.passed ? 'PASS' : 'FAIL'}</span>
                       <div className="test-case-details">
-                        <span className="test-case-desc">{t(tr.description)}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <span className="test-case-desc">{t(tr.description)}</span>
+                          {!tr.passed && (
+                            <button
+                              type="button"
+                              className="btn-inspect-test"
+                              onClick={() => setInspectedTestCase(tr)}
+                              title={language === 'es' ? 'Inspeccionar diagnóstico de este fallo' : 'Inspect failure diagnostics'}
+                            >
+                              🔍 {language === 'es' ? 'Inspeccionar' : 'Inspect'}
+                            </button>
+                          )}
+                        </div>
                         {tr.message && <span className="test-case-msg">{tr.message}</span>}
                         {tr.actual && !tr.passed && (
                           <span className="test-case-actual">
@@ -917,6 +1147,16 @@ export const SolveView: React.FC<SolveViewProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {inspectedTestCase && (
+        <VisualTestFailureInspector
+          testResult={inspectedTestCase}
+          exercise={exercise}
+          language={language}
+          onClose={() => setInspectedTestCase(null)}
+          onOpenInVisualizer={onAdvanceToUnderstand || onSkipToUnderstand}
+        />
       )}
     </section>
   );

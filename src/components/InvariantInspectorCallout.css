@@ -1,0 +1,94 @@
+/* InvariantInspectorCallout.css */
+.invariant-callout-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md, 8px);
+  padding: 0.65rem 0.85rem;
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.invariant-callout-box.collapsed {
+  padding-bottom: 0.65rem;
+}
+
+.invariant-callout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invariant-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.invariant-sparkle-icon {
+  font-size: 1rem;
+}
+
+.invariant-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.invariant-step-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono, monospace);
+}
+
+.invariant-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm, 4px);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.invariant-toggle-btn:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.invariant-callout-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+
+.invariant-formula-display {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 0.4rem 0.65rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.invariant-explanation {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}

@@ -1,0 +1,260 @@
+.complexity-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 1rem;
+}
+
+.complexity-modal-card {
+  background-color: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.complexity-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface-hover);
+}
+
+.complexity-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.complexity-badge {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.85rem;
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.complexity-header-title h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.complexity-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.complexity-close-btn:hover {
+  color: var(--text);
+  background-color: var(--surface);
+}
+
+.complexity-modal-body {
+  padding: 1.25rem 1.4rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.complexity-modal-intro {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.complexity-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  background-color: var(--canvas-bg, var(--surface-hover));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+}
+
+.complexity-input-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.complexity-n-field {
+  width: 96px;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.complexity-presets-pills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.complexity-preset-pill {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.complexity-preset-pill.active {
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
+  font-weight: 700;
+}
+
+.complexity-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+}
+
+.complexity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.complexity-table th {
+  background-color: var(--surface-hover);
+  padding: 0.65rem 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+
+.complexity-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.complexity-row.instant td {
+  background-color: rgba(34, 197, 94, 0.04);
+}
+
+.complexity-row.intractable td {
+  background-color: rgba(239, 68, 68, 0.06);
+}
+
+.col-notation code {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--accent);
+  background-color: var(--surface-hover);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.complexity-name-badge {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.ops-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.ops-danger {
+  color: var(--error);
+}
+
+.time-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.time-badge.time-instant {
+  background-color: var(--success-bg, rgba(34, 197, 94, 0.15));
+  color: var(--success);
+}
+
+.time-badge.time-fast {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+}
+
+.time-badge.time-moderate {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+}
+
+.time-badge.time-slow {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--error);
+}
+
+.time-badge.time-intractable {
+  background-color: var(--error-bg, rgba(239, 68, 68, 0.2));
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.example-chips {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.example-chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.4rem;
+  background-color: var(--surface-hover);
+  border-radius: 4px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.complexity-intractable-banner {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid var(--error);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+}

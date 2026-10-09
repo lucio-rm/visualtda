@@ -1,20 +1,38 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: MISSION_V12_HUMAN_FEEDBACK_DEFECTS_AND_PARITY
-- **CURRENT_TASK**: Mission V12 Execution Completed; All 12 Human-Reported Defects & Architectural Invariants Resolved:
-  1. **Feedback Form Dual Delivery (1.1)**: Configured dual delivery targets (`lucioromeromascaro@gmail.com` primary + `lromerom@fi.uba.ar` secondary) in `FeedbackModal.tsx`. Verified activation request. Documented manual outside-the-browser delivery invariant in `docs/known-issues.md` (Issue 3.27). Unit tests pass (`tests/feedbackAndFooter.test.tsx`).
-  2. **Blank Lines & Starter Code False Passing (1.2)**: Strengthened `isUnimplementedStub` in `src/engine/content/types.ts` and `src/components/SolveView.tsx` with `analyzeStudentCodeEffort` requiring $\ge 2$ meaningful lines and real algorithmic logic. Hardened `median-of-medians-dyc` heuristic. Standing automated regression suite in `tests/exerciseContent.test.ts` across all 37 definitions.
-  3. **Kruskal / MST Direction Error & Invariant (1.3)**: Corrected backward comparison in `KruskalPlayground.tsx` (optimal is 9, checked with `<= optimalMSTWeight`). Added permanent standing invariant test `tests/minMaxDirectionInvariants.test.ts` asserting 11 minimization and maximization problem classes reject worse candidates.
-  4. **"Hide Problem" Default Layout in Majority Element (1.4)**: Overhauled `MajorityElementPlayground.tsx` layout with strict `flex: '0 0 96px'`, CSS grid for vote buttons (`repeat(3, 24px)` with 4px gap), and flex-wrapping header, eliminating all control collisions in the default view.
-  5. **Dark Mode Resting Blue Button Fix (1.5)**: Replaced resting `background-color: var(--accent)` and border on solid interactive controls (`.btn-primary`, `.btn-start-recommended`, `.footer-feedback-btn`, `.btn-code-toggle.active`, play controls, skip-to-content, `.chip-btn`, `.btn-num`) across `App.css`, `base.css`, and 7 playground stylesheets with `var(--accent-solid)` and `var(--accent-contrast, #ffffff)`.
-  6. **Minimize Lateness Overhaul (1.6)**: Extracted reusable 1D collision-staggering utility `src/utils/staggerLayout.ts` (`compute1DLabelLevels`) verified by `tests/staggerLayout.test.ts`. Applied vertical pin staggering to `MinimizeLatenessPlayground.tsx` and `MinimizeLatenessVisualizer.tsx`. Overhauled inversion indicator with high-contrast 168px pill badge and z-ordering.
-  7. **Knapsack Spacing & Drag-and-Drop Parity (1.7)**: Added HTML5 drag-and-drop item manipulation into `KnapsackVisualBag.tsx` and drop back to shelf. Visual bag dynamically fills up with proportional item blocks. Metric chips enhanced with generous padding, label badges, and density chips. Tree label offsets increased in `KnapsackBranchAndBoundPlayground.tsx` to prevent circle boundary collisions.
-  8. **Sudoku MRV Heuristic Gating (1.8)**: Gated MRV showcase preset, cell MRV badge, domain size indicators, and status bar recommendations behind `canSeeHeuristic` (`isInstructorMode || hasMastered`) in `SudokuPlayground.tsx`. Verified by `tests/visualizersAndGating.test.tsx`.
-  9. **Hamiltonian Cycle Vertex "0" Contrast (1.9)**: Replaced hardcoded `#0f172a` text color in `HamiltonianCycleVisualizer.tsx` and `HamiltonianCyclePlayground.tsx` with dynamic CSS token `var(--text)`. Also corrected `MedianOfMedians` and `RnaSecondaryStructure` visualizers.
-  10. **Road Antennas Real-City Example Rebuild (1.10)**: Replaced unwieldy Highway 2 numbers (156–270 km, R=50) with Quilmes corridor (Bernal 2, Don Bosco 6, Quilmes 11, Ezpeleta 16, Berazategui 22 — R=4 km) with town names rendered in house labels.
-  11. **Logo Redesign & Favicon (1.11)**: Enlarged brand emblem in `Header.tsx` to 38×38px with a distinctive $P \stackrel{?}{=} NP$ complexity emblem, hover scaling in `App.css`, and embedded SVG favicon in `index.html`.
-  12. **DP Exercises Self-Check Input & Spoilers Purge (1.12)**: Created `DpRecurrenceSelfCheck.tsx` with safe loose delimiter validation and mounted it above the code editor in `SolveView.tsx`. Purged recurrence spoilers from Discover phase insights and starter code comments across all DP exercises.
-  13. **Verification**: 50 test files, 392 tests passing (100% PASS), `npm run lint` clean (0 errors), `npm run typecheck` clean (0 errors), `npm run build` static production output clean.
+- **CURRENT_PHASE**: MISSION_V13_PERFECTION_PILLARS_AND_ENHANCEMENTS
+- **CURRENT_TASK**: Completed the 5 Strategic Architectural Pillars and 10 Platform Perfections with Zero Regressions, Bulletproof User Defense, and 100% Quality Gates:
+  1. **Audit & Forensics of Mission V12 (1.1–1.12)**:
+     - 1.1 Feedback dual-delivery verified via live curl tests to `lucioromeromascaro@gmail.com` and `lromerom@fi.uba.ar` with HTTP 200 / success.
+     - 1.2 Blank line / whitespace submission gating systematically verified across all 38 exercises. Fallback Python and Pyodide runner fortified with `isLegitEffort` checks.
+     - 1.3 Kruskal / MST direction invariant verified (`tests/minMaxDirectionInvariants.test.ts`).
+     - 1.4 Majority Element default view grid layout and flex-wrap verified.
+     - 1.5 Dark mode button resting state calibrated to `var(--accent-solid)`.
+     - 1.6 Minimize Lateness 1D vertical label staggering and unoccluded inversion pill badge verified.
+     - 1.7 Knapsack visual drag-and-drop packing and spacious metric cards verified.
+     - 1.8 Sudoku MRV heuristic gating locked until completion or instructor mode verified.
+     - 1.9 Hamiltonian Cycle vertex "0" contrast verified.
+     - 1.10 Road Antennas Quilmes corridor preset verified.
+     - 1.11 P=NP Complexity Emblem and SVG favicon verified.
+     - 1.12 DP Recurrence relation self-check mounted and Discover spoilers purged.
+  2. **5 Strategic Architectural Pillars**:
+     - Pillar 1: Visual Debugging Bridge (`VisualTestFailureInspector.tsx`, pedagogical diagnostics).
+     - Pillar 2: Dynamic Custom Input Sandbox (`IntervalSchedulingPlayground.tsx`, bulk JSON/regex parser).
+     - Pillar 3: Curriculum Skill Tree / Reduction Graph View (`CurriculumKnowledgeGraph.tsx`, interactive SVG).
+     - Pillar 4: Timeline Scrubber with State Keyframes (`TraceScrubber.tsx`, smooth drag seeking).
+     - Pillar 5: Offline Academic Portfolio & Solution Export/Import (`portfolioExportImport.ts`, `PortfolioModal.tsx`, global `?` modal).
+  3. **10 Platform Perfections**:
+     - Perfection 1: Web Audio Acoustic Feedback Engine (`audioFeedback.ts`, pentatonic steps & chimes).
+     - Perfection 2: Code Editor Snippet Inserter & Reset Safety with Undo (`SolveView.tsx`).
+     - Perfection 3: Mathematical Typography Engine (`mathTypography.ts`, superscripts, subscripts, Unicode math).
+     - Perfection 4: Algorithmic Invariant Callout Inspector (`InvariantInspectorCallout.tsx`).
+     - Perfection 5: Global Fuzzy Search & Quick Switcher (`QuickSwitcherModal.tsx`, `Cmd+K` / `Ctrl+K`).
+     - Perfection 6: Smart Quote & Unicode Normalizer (`codeFormatter.ts`, sanitizes PDF/Word quotes on paste/type).
+     - Perfection 7: 1-Click Python Code Beautifier & Indentation Auto-Fixer (`codeFormatter.ts`, `SolveView.tsx`).
+     - Perfection 8: Universal Trace Keyboard Playback Hook (`useTraceHotkeys.ts`, `tests/traceHotkeys.test.tsx`).
+     - Perfection 9: Invariant Callout Extensions to Knapsack DP (`KnapsackDpVisualizer.tsx`).
+     - Perfection 10: Interactive Asymptotic Complexity Sandbox & Growth Rate Comparator (`ComplexityComparatorModal.tsx`, `Header.tsx`, `tests/complexityComparator.test.tsx`).
+  4. **Verification**: 62 test files, 436 tests passing (100% PASS), `npm run lint` clean (0 errors), `npm run typecheck` clean (0 errors), `npm run build` static production output clean (1.85s).
   1. **Part 1 Audits & Contrast Verification**:
      - Recalculated chessboard contrast: legacy values yielded 2.364:1 (failing WCAG 3:1 non-text UI minimum).
      - Catalog exercise cards: legacy `#ffffff` on `#f1f5f9` yielded 1.096:1 contrast with invisible borders.

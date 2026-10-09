@@ -8,6 +8,8 @@ import {
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { KnapsackVisualBag } from './KnapsackVisualBag';
+import { TraceScrubber } from '../TraceScrubber';
+import { InvariantInspectorCallout } from '../InvariantInspectorCallout';
 import './KnapsackDpVisualizer.css';
 
 const PRESETS = [
@@ -343,17 +345,13 @@ export const KnapsackDpVisualizer: React.FC = () => {
           </button>
         </div>
 
-        <div className="timeline-slider-wrapper">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="timeline-slider"
-            aria-label={language === 'es' ? 'Línea de tiempo de estados' : 'State timeline'}
-          />
-        </div>
+        <TraceScrubber
+          currentStepIndex={currentStepIndex}
+          totalSteps={totalSteps}
+          onSeek={goToStep}
+          getStepLabel={(idx) => timeline.events[idx]?.message?.[language] || timeline.events[idx]?.message?.es}
+          language={language}
+        />
 
         <div className="timeline-speed-group">
           <span className="speed-label">{language === 'es' ? 'Velocidad:' : 'Speed:'}</span>
@@ -370,6 +368,21 @@ export const KnapsackDpVisualizer: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <InvariantInspectorCallout
+        title={{
+          es: 'Invariante de la Matriz DP de Mochila (KT Ch 6.4)',
+          en: 'Knapsack DP Matrix Invariant (KT Ch 6.4)'
+        }}
+        invariantFormula="M[i, w] = \max(M[i-1, w], v_i + M[i-1, w - w_i])"
+        explanation={{
+          es: 'Para todo prefijo de ítems 1..i y capacidad w, M[i, w] almacena exactamente el valor óptimo factible. Si w_i > w, el ítem no cabe y hereda M[i-1, w].',
+          en: 'For any prefix of items 1..i and capacity w, M[i, w] stores the exact optimal feasible value. If w_i > w, item cannot fit and inherits M[i-1, w].'
+        }}
+        currentStep={currentStepIndex}
+        totalSteps={totalSteps}
+        language={language}
+      />
     </div>
   );
 };

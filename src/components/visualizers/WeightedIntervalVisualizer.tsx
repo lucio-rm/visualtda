@@ -6,6 +6,8 @@ import {
 } from '../../engine/algorithms/weightedIntervalTrace';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { TraceScrubber } from '../TraceScrubber';
+import { InvariantInspectorCallout } from '../InvariantInspectorCallout';
 import './WeightedIntervalVisualizer.css';
 
 import { solveWeightedIntervals } from '../../engine/algorithms/weightedIntervalValidator';
@@ -321,19 +323,13 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           →
         </button>
 
-        <div className="timeline-slider-wrapper">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="timeline-slider"
-          />
-          <span className="step-counter">
-            {currentStepIndex + 1} / {totalSteps}
-          </span>
-        </div>
+        <TraceScrubber
+          currentStepIndex={currentStepIndex}
+          totalSteps={totalSteps}
+          onSeek={goToStep}
+          getStepLabel={(idx) => timeline.events[idx]?.message?.[language] || timeline.events[idx]?.message?.es}
+          language={language}
+        />
 
         <div className="speed-selector">
           <span className="speed-label">{language === 'es' ? 'Vel:' : 'Speed:'}</span>
@@ -351,6 +347,18 @@ export const WeightedIntervalVisualizer: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <InvariantInspectorCallout
+        title={{ es: 'Invariante de Subestructura Óptima (KT Ch 6.1)', en: 'Optimal Substructure Invariant (KT Ch 6.1)' }}
+        invariantFormula="OPT(j) = \max(v_j + OPT(p(j)), OPT(j-1))"
+        explanation={{
+          es: 'Para todo subconjunto de tareas 1..j ordenadas por tiempo de fin, OPT(j) contiene exactamente el peso máximo de un subconjunto mutuamente compatible.',
+          en: 'For any prefix of jobs 1..j sorted by finish time, OPT(j) computes the exact maximum weight of mutually compatible jobs.'
+        }}
+        currentStep={currentStepIndex}
+        totalSteps={totalSteps}
+        language={language}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExerciseMetadata } from '../types';
 import { ExerciseCard } from './ExerciseCard';
+import { CurriculumKnowledgeGraph } from './CurriculumKnowledgeGraph';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStudentProgress } from '../context/StudentProgressContext';
 import { formatTitleSpacing } from '../utils/textFormatting';
@@ -140,6 +141,7 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
 }) => {
   const { t, language } = useLanguage();
   const { isCompleted } = useStudentProgress();
+  const [catalogViewMode, setCatalogViewMode] = useState<'grid' | 'graph'>('grid');
 
   if (exercises.length === 0) {
     return (
@@ -153,9 +155,8 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
     );
   }
 
-  // If filtered by a specific single category, determine which track or render filtered view
-  if (activeCategoryId) {
-    const matchingTrack = PARADIGM_TRACKS.find((tr) => tr.categoryIds.includes(activeCategoryId));
+  const renderFilteredTrack = () => {
+    const matchingTrack = PARADIGM_TRACKS.find((tr) => tr.categoryIds.includes(activeCategoryId!));
     const completedCount = exercises.filter((ex) => isCompleted(ex.id)).length;
     const progressPct = exercises.length > 0 ? Math.round((completedCount / exercises.length) * 100) : 0;
 
@@ -202,10 +203,9 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
         </div>
       </div>
     );
-  }
+  };
 
-  // Render structured roadmap by pedagogical tracks
-  return (
+  const renderAllTracks = () => (
     <div className="catalog-tracks-container">
       {PARADIGM_TRACKS.map((track) => {
         const trackExercises = exercises.filter((ex) => track.categoryIds.includes(ex.categoryId));
@@ -262,6 +262,42 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
           </section>
         );
       })}
+    </div>
+  );
+
+  return (
+    <div className="catalog-view-wrapper">
+      <div className="catalog-view-mode-bar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
+        <div className="segmented-control" role="group" aria-label={language === 'es' ? 'Modo de visualización del catálogo' : 'Catalog view mode'}>
+          <button
+            type="button"
+            className={`segmented-btn ${catalogViewMode === 'grid' ? 'active' : ''}`}
+            onClick={() => setCatalogViewMode('grid')}
+            aria-pressed={catalogViewMode === 'grid'}
+          >
+            <span>⊞ {language === 'es' ? 'Rutas y Cuadrícula' : 'Tracks & Grid'}</span>
+          </button>
+          <button
+            type="button"
+            className={`segmented-btn ${catalogViewMode === 'graph' ? 'active' : ''}`}
+            onClick={() => setCatalogViewMode('graph')}
+            aria-pressed={catalogViewMode === 'graph'}
+          >
+            <span>🔀 {language === 'es' ? 'Grafo de Reducciones' : 'Reduction Graph'}</span>
+          </button>
+        </div>
+      </div>
+
+      {catalogViewMode === 'graph' ? (
+        <CurriculumKnowledgeGraph
+          exercises={exercises}
+          onSelectExercise={onSelectExercise}
+        />
+      ) : activeCategoryId ? (
+        renderFilteredTrack()
+      ) : (
+        renderAllTracks()
+      )}
     </div>
   );
 };

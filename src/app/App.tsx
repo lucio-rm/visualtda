@@ -91,6 +91,8 @@ const AppContent: React.FC = () => {
         onThemeChange={setTheme}
         onHomeClick={handleHomeClick}
         currentExerciseTitle={selectedExercise ? formatTitleSpacing(t(selectedExercise.title)) : undefined}
+        exercises={registry.getExercises()}
+        onSelectExercise={(id) => handleSelectExercise(id)}
       />
 
       <main className="app-main" id="main-content">
