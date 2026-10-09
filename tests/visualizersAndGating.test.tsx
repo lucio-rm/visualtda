@@ -22,6 +22,7 @@ import { StudentProgressProvider } from '../src/context/StudentProgressContext';
 import { TspBranchAndBoundPlayground } from '../src/components/visualizers/TspBranchAndBoundPlayground';
 import { KnightsTourPlayground } from '../src/components/visualizers/KnightsTourPlayground';
 import { CoinChangePlayground } from '../src/components/visualizers/CoinChangePlayground';
+import { SudokuPlayground } from '../src/components/visualizers/SudokuPlayground';
 
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -447,6 +448,56 @@ def solve(items):
       // Now reveals optimal DP
       expect(container.textContent).toContain('2 monedas');
       expect(container.textContent).toContain('[3, 3]');
+    });
+
+    it('gates MRV heuristic and showcase preset in SudokuPlayground until completed or instructor mode', async () => {
+      // 1. Regular student view: MRV preset and best-cell recommendations are locked
+      await act(async () => {
+        root.render(
+          <LanguageProvider>
+            <StudentProgressProvider>
+              <InstructorModeProvider>
+                <SudokuPlayground />
+              </InstructorModeProvider>
+            </StudentProgressProvider>
+          </LanguageProvider>
+        );
+      });
+
+      // Does not show MRV showcase button to uncompleted student
+      expect(container.textContent).not.toContain('Demostración MRV');
+      // Shows lock indicator instead of active MRV toggle
+      expect(container.textContent).toContain('🔒 MRV');
+      // Board SVG does not render "MRV" badge text on any cell
+      expect(container.querySelector('svg')?.textContent).not.toContain('MRV');
+      // Status bar shows locked hint notice
+      expect(container.textContent).toContain('bloqueadas');
+
+      // 2. Instructor mode view: unlocks MRV
+      act(() => {
+        root.unmount();
+      });
+      container.remove();
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      root = createRoot(container);
+
+      sessionStorage.setItem(INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN);
+      await act(async () => {
+        root.render(
+          <LanguageProvider>
+            <StudentProgressProvider>
+              <InstructorModeProvider>
+                <SudokuPlayground />
+              </InstructorModeProvider>
+            </StudentProgressProvider>
+          </LanguageProvider>
+        );
+      });
+
+      expect(container.textContent).toContain('Demostración MRV');
+      expect(container.textContent).toContain('Mostrar Opciones (MRV)');
+      expect(container.textContent).toContain('Variable más restringida (MRV)');
     });
   });
 });

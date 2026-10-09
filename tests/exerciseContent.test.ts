@@ -163,4 +163,36 @@ describe('ExerciseSolveContent Repository', () => {
     expect(workingRes.passed).toBe(true);
     expect(workingRes.totalPassed).toBe(workingRes.totalTests);
   });
+
+  it('strictly rejects blank lines, whitespace, starter templates, and trivial submissions across all 37 exercises', async () => {
+    const { ENGLISH_STARTER_CODES } = await import('../src/engine/content/englishStarterCodes');
+    const allExercises = Object.keys(EXERCISE_SOLVE_CONTENT);
+
+    for (const id of allExercises) {
+      const content = EXERCISE_SOLVE_CONTENT[id];
+
+      // 1. Empty string
+      const emptyRes = await content.runTests('');
+      expect(emptyRes.passed, `${id} must reject empty code`).toBe(false);
+
+      // 2. Pure whitespace / 300 newlines (reproducing human bug report)
+      const blanksRes = await content.runTests('\n'.repeat(300));
+      expect(blanksRes.passed, `${id} must reject 300 blank lines`).toBe(false);
+
+      // 3. Unmodified starter code
+      const starterRes = await content.runTests(content.starterCode);
+      expect(starterRes.passed, `${id} must reject unmodified starter code`).toBe(false);
+
+      // 4. Starter code + 300 blank lines
+      const starterPlusBlanksRes = await content.runTests(content.starterCode + '\n'.repeat(300));
+      expect(starterPlusBlanksRes.passed, `${id} must reject starter code + 300 blank lines`).toBe(false);
+
+      // 5. English starter code + 300 blank lines (if available)
+      const engStarter = ENGLISH_STARTER_CODES[id];
+      if (engStarter) {
+        const engRes = await content.runTests(engStarter + '\n'.repeat(300));
+        expect(engRes.passed, `${id} must reject English starter code + 300 blank lines`).toBe(false);
+      }
+    }
+  });
 });

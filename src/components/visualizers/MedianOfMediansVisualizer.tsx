@@ -153,7 +153,7 @@ export const MedianOfMediansVisualizer: React.FC = () => {
                     x={x + (colWidth - 8) / 2}
                     y={y + cellHeight / 2 + 5}
                     textAnchor="middle"
-                    fill={isPivot ? '#0f172a' : 'var(--text)'}
+                    fill="var(--text)"
                     fontSize="13px"
                     fontWeight={isPivot || isMedian ? '700' : '400'}
                     fontFamily="var(--font-mono)"

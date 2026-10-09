@@ -650,7 +650,7 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
     runTests: async (code: string) => {
       const results: TestCaseResult[] = [];
 
-      if (isUnimplementedStub(code, divideAndConquerContent['median-of-medians-dyc']?.starterCode)) {
+      if (isUnimplementedStub(code, divideAndConquerContent['median-of-medians-dyc']?.starterCode, 'median-of-medians-dyc')) {
         return {
           passed: false,
           results: [{
@@ -669,9 +669,10 @@ def subarreglo_maxima_suma(arr: list[int]) -> list[int]:
       }
 
       const stripped = stripCode(code);
-      const hasGroups = stripped.includes('5') || stripped.includes('sublistas') || stripped.includes('medianas');
-      const hasPartition = stripped.includes('<') && stripped.includes('>');
-      const passesHeuristic = hasGroups && hasPartition;
+      const hasChunking = (stripped.includes('5') && (stripped.includes('range(') || stripped.includes('chunk') || stripped.includes('sublista') || stripped.includes('sublist') || stripped.includes('[i:'))) || stripped.includes('sorted(');
+      const hasPivot = /k_esimo|kth_element/i.test(stripped) && (stripped.includes('//') || stripped.includes('len(') || stripped.includes('pivot') || stripped.includes('pivote'));
+      const hasPartition = (stripped.includes('<') && stripped.includes('>')) || stripped.includes('menores') || stripped.includes('less') || stripped.includes('iguales');
+      const passesHeuristic = hasChunking && hasPivot && hasPartition;
 
       results.push({
         testId: 'mom-min-element',

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
+import { useInstructorMode } from '../../context/InstructorModeContext';
 import { isValidSudokuCell } from '../../engine/algorithms/sudokuValidator';
 import './SudokuPlayground.css';
 
@@ -49,7 +50,11 @@ const PRESET_MRV_SHOWCASE: number[][] = [
 
 export const SudokuPlayground: React.FC = () => {
   const { language } = useLanguage();
-  const { markAttempted } = useStudentProgress();
+  const { markAttempted, isCompleted: isExerciseCompleted } = useStudentProgress();
+  const { isInstructorMode } = useInstructorMode();
+
+  const hasMastered = isExerciseCompleted('sudoku-backtracking');
+  const canSeeHeuristic = isInstructorMode || hasMastered;
 
   const [activePreset, setActivePreset] = useState<'easy' | 'mrv' | 'empty'>('easy');
   const [board, setBoard] = useState<number[][]>(() => PRESET_EASY.map((row) => [...row]));
@@ -57,7 +62,7 @@ export const SudokuPlayground: React.FC = () => {
     PRESET_EASY.map((row) => row.map((v) => v !== 0))
   );
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>([0, 2]);
-  const [showDomainSizes, setShowDomainSizes] = useState<boolean>(true);
+  const [showDomainSizes, setShowDomainSizes] = useState<boolean>(false);
   const [conflictMsg, setConflictMsg] = useState<string | null>(null);
   const [solvedMessage, setSolvedMessage] = useState<string | null>(null);
 
@@ -241,13 +246,15 @@ export const SudokuPlayground: React.FC = () => {
           >
             {language === 'es' ? 'Puzzle Estándar' : 'Standard Puzzle'}
           </button>
-          <button
-            type="button"
-            className={`btn-preset ${activePreset === 'mrv' ? 'active' : ''}`}
-            onClick={() => setPreset('mrv')}
-          >
-            {language === 'es' ? 'Demostración MRV' : 'MRV Showcase'}
-          </button>
+          {canSeeHeuristic && (
+            <button
+              type="button"
+              className={`btn-preset ${activePreset === 'mrv' ? 'active' : ''}`}
+              onClick={() => setPreset('mrv')}
+            >
+              {language === 'es' ? 'Demostración MRV' : 'MRV Showcase'}
+            </button>
+          )}
           <button
             type="button"
             className={`btn-preset ${activePreset === 'empty' ? 'active' : ''}`}
@@ -258,21 +265,43 @@ export const SudokuPlayground: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <button
-            type="button"
-            className="btn-tool"
-            onClick={setShowDomainSizes.bind(null, !showDomainSizes)}
-            style={{ color: showDomainSizes ? 'var(--accent)' : 'inherit' }}
-          >
-            {showDomainSizes
-              ? (language === 'es' ? 'Ocultar Opciones (MRV)' : 'Hide Options (MRV)')
-              : (language === 'es' ? 'Mostrar Opciones (MRV)' : 'Show Options (MRV)')}
-          </button>
+          {canSeeHeuristic ? (
+            <button
+              type="button"
+              className="btn-tool"
+              onClick={setShowDomainSizes.bind(null, !showDomainSizes)}
+              style={{ color: showDomainSizes ? 'var(--accent)' : 'inherit' }}
+            >
+              {showDomainSizes
+                ? (language === 'es' ? 'Ocultar Opciones (MRV)' : 'Hide Options (MRV)')
+                : (language === 'es' ? 'Mostrar Opciones (MRV)' : 'Show Options (MRV)')}
+            </button>
+          ) : (
+            <span
+              style={{
+                fontSize: '0.8rem',
+                color: 'var(--text-muted)',
+                padding: '0.35rem 0.6rem',
+                borderRadius: '4px',
+                border: '1px dashed var(--border)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem'
+              }}
+              title={
+                language === 'es'
+                  ? 'La asistencia heurística MRV se desbloquea al completar el ejercicio o en Modo Docente.'
+                  : 'MRV heuristic assistance unlocks upon completing the exercise or in Instructor Mode.'
+              }
+            >
+              🔒 MRV
+            </span>
+          )}
           <button
             type="button"
             className="btn-tool"
             onClick={handleVerify}
-            style={{ fontWeight: 700, backgroundColor: 'var(--accent)', color: '#ffffff' }}
+            style={{ fontWeight: 700, backgroundColor: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast, #ffffff)' }}
           >
             {language === 'es' ? '✓ Verificar Tablero' : '✓ Check Board'}
           </button>
@@ -299,14 +328,22 @@ export const SudokuPlayground: React.FC = () => {
           <strong style={{ color: 'var(--text)' }}>{domainInfo.totalEmpty} / 81</strong>
         </span>
 
-        {domainInfo.bestCell && domainInfo.totalEmpty > 0 && (
-          <span style={{ color: 'var(--text-muted)' }}>
-            {language === 'es' ? 'Variable más restringida (MRV):' : 'Most constrained variable (MRV):'}{' '}
-            <strong style={{ color: 'var(--success)' }}>
-              {language === 'es'
-                ? `Fila ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} opciones)`
-                : `Row ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} options)`}
-            </strong>
+        {canSeeHeuristic ? (
+          domainInfo.bestCell && domainInfo.totalEmpty > 0 && (
+            <span style={{ color: 'var(--text-muted)' }}>
+              {language === 'es' ? 'Variable más restringida (MRV):' : 'Most constrained variable (MRV):'}{' '}
+              <strong style={{ color: 'var(--success)' }}>
+                {language === 'es'
+                  ? `Fila ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} opciones)`
+                  : `Row ${domainInfo.bestCell[0] + 1}, Col ${domainInfo.bestCell[1] + 1} (${domainInfo.minSize} options)`}
+              </strong>
+            </span>
+          )
+        ) : (
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+            {language === 'es'
+              ? 'Pistas heurísticas (MRV) bloqueadas hasta completar el ejercicio.'
+              : 'MRV heuristic hints locked until exercise completion.'}
           </span>
         )}
 
@@ -336,6 +373,7 @@ export const SudokuPlayground: React.FC = () => {
               const isSelected = selectedCell && selectedCell[0] === r && selectedCell[1] === c;
               const isFixed = fixedCells[r][c] && activePreset !== 'empty';
               const isMRVBest =
+                canSeeHeuristic &&
                 domainInfo.bestCell &&
                 domainInfo.bestCell[0] === r &&
                 domainInfo.bestCell[1] === c &&
@@ -433,7 +471,7 @@ export const SudokuPlayground: React.FC = () => {
                       {val}
                     </text>
                   ) : (
-                    showDomainSizes && (
+                    canSeeHeuristic && showDomainSizes && (
                       <g>
                         <text
                           x={x + cellSize - 6}
@@ -548,9 +586,13 @@ export const SudokuPlayground: React.FC = () => {
           {language === 'es' ? 'Fundamento: Heurística MRV (Minimum Remaining Values)' : 'Rationale: MRV Heuristic'}
         </strong>
         <p style={{ margin: '0.35rem 0 0', color: 'var(--text-muted)' }}>
-          {language === 'es'
-            ? 'En problemas de satisfacción de restricciones (CSP), la heurística MRV selecciona siempre la variable libre que cuenta con la menor cantidad de valores válidos en su dominio (marcada con "MRV"). Esta estrategia minimiza el factor de ramificación del árbol de búsqueda y detecta contradicciones mucho antes (fallo temprano), logrando podar ramas infructuosas antes de explorarlas.'
-            : 'In Constraint Satisfaction Problems (CSP), the MRV heuristic always chooses the unassigned variable with the fewest legal values remaining in its domain (marked "MRV"). This minimizes the branching factor and catches contradictions early, pruning dead subtrees before exploration.'}
+          {canSeeHeuristic
+            ? (language === 'es'
+                ? 'En problemas de satisfacción de restricciones (CSP), la heurística MRV selecciona siempre la variable libre que cuenta con la menor cantidad de valores válidos en su dominio (marcada con "MRV"). Esta estrategia minimiza el factor de ramificación del árbol de búsqueda y detecta contradicciones mucho antes (fallo temprano), logrando podar ramas infructuosas antes de explorarlas.'
+                : 'In Constraint Satisfaction Problems (CSP), the MRV heuristic always chooses the unassigned variable with the fewest legal values remaining in its domain (marked "MRV"). This minimizes the branching factor and catches contradictions early, pruning dead subtrees before exploration.')
+            : (language === 'es'
+                ? 'Intenta resolver el Sudoku sin revelar las respuestas directas. ¿Qué celda conviene elegir primero para reducir las opciones de búsqueda? (La guía heurística de MRV se revelará al completar el ejercicio o en Modo Docente).'
+                : 'Try solving the Sudoku without revealing direct hints. Which cell should you prioritize to minimize the search space? (MRV heuristic hints will unlock upon completion or in Instructor Mode).')}
         </p>
       </div>
     </div>

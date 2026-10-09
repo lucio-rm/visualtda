@@ -205,8 +205,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Classic change-making problem. Models ATM cash reserve dispensing and currency exchange.'
     },
     algorithmicPerspective: {
-      es: 'Ecuación de Bellman dp[v] = 1 + min_{c ≤ v} dp[v - c]. Evalúa todas las transiciones posibles en tiempo O(V · k) garantizando el mínimo global.',
-      en: 'Bellman recurrence dp[v] = 1 + min_{c ≤ v} dp[v - c]. Evaluates all transitions in O(V · k) time, guaranteeing global minimality.'
+      es: 'Subestructura óptima sobre el valor objetivo: el mínimo de monedas para formar el monto v surge de evaluar la mejor decisión sobre la última moneda usada c ≤ v, explorando los subproblemas v - c con memoización en O(V · k).',
+      en: 'Optimal substructure on target amount: the minimum coin count for value v derives from optimal subproblem solutions for residual values v - c, evaluated in O(V · k) with memoization.'
     },
     naiveTrapWarning: {
       es: 'La heurística Greedy (tomar la moneda más grande) falla para sistemas no canónicos: con monedas {1, 3, 4} y valor 6, produce 4+1+1 (3 monedas) vs. 3+3 (2 monedas).',
@@ -228,8 +228,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Flagship problem of the Algorithms course (FIUBA / DP Guide, Ex. 4). Formally equivalent to MWIS on path graphs.'
     },
     algorithmicPerspective: {
-      es: 'Recurrencia lineal OPT(i) = max(OPT(i-1), g_i + OPT(i-2)). Disyuntiva binaria de descansar o trabajar con memoización en O(n).',
-      en: 'Linear recurrence OPT(i) = max(OPT(i-1), g_i + OPT(i-2)). Binary rest/work dichotomy with O(n) memoization.'
+      es: 'Disyuntiva binaria en cada día: descansar y conservar el óptimo del día previo, o trabajar sumando la ganancia del día actual sobre el óptimo de dos días atrás (respetando la restricción de no trabajar días consecutivos).',
+      en: 'Binary decision per day: rest and keep the optimal earnings from the previous day, or work adding today’s earnings to the subproblem from two days prior (respecting the non-consecutive constraint).'
     },
     naiveTrapWarning: {
       es: 'Elegir de forma greedy los días de mayor ganancia puede bloquear dos días contiguos cuya suma combinada superaría al día central (ej. [10, 100, 10] vs [80, 100, 80]).',
@@ -251,8 +251,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Studied by Sankoff and Paterson in the 1970s for bioinformatics and underlying Unix diff utility.'
     },
     algorithmicPerspective: {
-      es: 'Matriz 2D de subproblemas: si s1[i-1] == s2[j-1], dp[i][j] = 1 + dp[i-1][j-1]; sino max(arriba, izquierda). Reconstrucción en O(m+n).',
-      en: '2D DP matrix: diagonal match emission vs. max(up, left) propagation. Backtracking path in O(m+n).'
+      es: 'Matriz 2D de subproblemas sobre prefijos: si los caracteres actuales coinciden, extienden la subsecuencia óptima de los prefijos anteriores; si difieren, la solución óptima hereda el mejor resultado de acortar una de las dos cadenas.',
+      en: '2D subproblem grid over string prefixes: matching characters extend the optimal common subsequence of prior prefixes; differing characters inherit the maximum from dropping a character from either string.'
     },
     naiveTrapWarning: {
       es: 'Confundir subcadena contigua con subsecuencia, o realizar saltos greedy que omiten caracteres iniciales bloqueando subsecuencias posteriores más largas.',
@@ -274,8 +274,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Canonical DP problem with temporal compatibility. Models cloud computing slot auctions with variable pricing.'
     },
     algorithmicPerspective: {
-      es: 'Ordenar por fin y calcular p(j) con búsqueda binaria en O(log n). Recurrencia: OPT(j) = max(OPT(j-1), v_j + OPT(p(j))) en O(n log n).',
-      en: 'Sort by finish time and precalculate p(j) via binary search in O(log n). Recurrence: OPT(j) = max(OPT(j-1), v_j + OPT(p(j))) in O(n log n).'
+      es: 'Ordenar intervalos por tiempo de fin y calcular los predecesores compatibles p(j). Cada intervalo j plantea una disyuntiva: o bien se excluye preservando el óptimo de los primeros j-1 intervalos, o bien se incluye sumando su valor al óptimo compatible p(j).',
+      en: 'Sort intervals by finish time and identify compatible predecessors p(j). Each interval j presents a dichotomy: exclude it to keep the optimal value of the first j-1 intervals, or include it adding its value to compatible subproblem p(j).'
     },
     naiveTrapWarning: {
       es: 'Ninguna regla Greedy funciona: ordenar por fin, por densidad valor/duración o por valor absoluto admite contraejemplos con pérdidas arbitrarias.',
@@ -550,8 +550,8 @@ export const EXERCISE_INSIGHTS: Record<string, ExerciseInsight> = {
       en: 'Foundational in time series compression and statistical model parsimony.'
     },
     algorithmicPerspective: {
-      es: 'Recurrencia OPT(j) = min_{1 ≤ i ≤ j} (e_{i, j} + C + OPT(i-1)). Precalcula errores e_{i, j} en O(n²) y resuelve la tabla en O(n²).',
-      en: 'Recurrence OPT(j) = min_{1 ≤ i ≤ j} (e_{i, j} + C + OPT(i-1)). Precomputes e_{i, j} in O(n²) and fills DP table in O(n²).'
+      es: 'Descomposición óptima del último segmento: el particionado óptimo de los primeros j puntos se determina eligiendo el inicio i del último segmento [i, j], minimizando la suma del error de ajuste lineal, el costo de penalización C y el óptimo previo.',
+      en: 'Optimal decomposition of the last segment: the optimal partitioning of the first j points is chosen by finding the optimal start i of the final segment [i, j], minimizing the segment fit error, penalty cost C, and prior prefix solution.'
     },
     naiveTrapWarning: {
       es: 'Ajustar una sola recta subajusta los datos con alto error; unir cada par sobreajusta. El parámetro C equilibra ambos extremos.',

@@ -103,8 +103,8 @@
 }
 
 .btn-action.batch:hover {
-  background-color: var(--accent);
-  color: white;
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, white);
 }
 
 .btn-action.massive {

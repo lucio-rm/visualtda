@@ -658,7 +658,7 @@ export const HamiltonianCyclePlayground: React.FC = () => {
                   x={pos.x}
                   y={pos.y + 5}
                   textAnchor="middle"
-                  fill={isCurrent ? '#0f172a' : 'var(--text)'}
+                  fill="var(--text)"
                   fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"

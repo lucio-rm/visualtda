@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { generateRoadAntennasTrace, RoadAntennasTraceStep } from '../../engine/algorithms/roadAntennasTrace';
+import { compute1DLabelLevels } from '../../utils/staggerLayout';
 import './RoadAntennasVisualizer.css';
 
 interface RoadAntennasVisualizerProps {
@@ -60,24 +61,11 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
 
   const houseLabelLevels = useMemo(() => {
     const toX = (k: number) => padX + (k / maxKm) * (svgWidth - 2 * padX);
-    const items = houses.map((km, idx) => ({ km, idx, x: toX(km) }));
-    items.sort((a, b) => a.x - b.x);
-
+    const items = houses.map((km, idx) => ({ id: String(idx), x: toX(km) }));
+    const levelsMap = compute1DLabelLevels(items, 38);
     const levels = new Array(houses.length).fill(0);
-    for (let i = 0; i < items.length; i++) {
-      const curr = items[i];
-      const usedLevels = new Set<number>();
-      for (let j = 0; j < i; j++) {
-        const prev = items[j];
-        if (curr.x - prev.x < 38) {
-          usedLevels.add(levels[prev.idx]);
-        }
-      }
-      let lvl = 0;
-      while (usedLevels.has(lvl)) {
-        lvl++;
-      }
-      levels[curr.idx] = lvl;
+    for (let i = 0; i < houses.length; i++) {
+      levels[i] = levelsMap[String(i)] || 0;
     }
     return levels;
   }, [houses, maxKm, padX, svgWidth]);

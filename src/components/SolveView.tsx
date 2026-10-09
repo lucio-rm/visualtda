@@ -14,6 +14,7 @@ import { getHintUnlockStatus } from '../utils/hintGating';
 import { HintRequirementWidget } from './HintRequirementWidget';
 import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 import { highlightPythonCode } from '../utils/pythonSyntaxHighlighter';
+import { DpRecurrenceSelfCheck } from './DpRecurrenceSelfCheck';
 
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
@@ -405,9 +406,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
     if (content?.runTests) {
       const evaluation = await content.runTests(code);
+      const effort = analyzeStudentCodeEffort(code, rawStarter);
+      const isLegitEffort = effort.hasRealLogic && effort.meaningfulLinesAdded >= 2;
       setTestResults(evaluation.results);
 
-      if (evaluation.passed) {
+      if (evaluation.passed && isLegitEffort) {
         setTestStatus('passed');
         recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
@@ -420,14 +423,21 @@ export const SolveView: React.FC<SolveViewProps> = ({
       } else {
         setTestStatus('failed');
         markTesting(exercise.id, evaluation.totalPassed, evaluation.totalTests);
-        setTestSummary(
-          language === 'es'
-            ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisá las condiciones y salidas fallidas en la tabla de abajo.`
-            : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check failed conditions and outputs below.`
-        );
+        if (evaluation.passed && !isLegitEffort) {
+          setTestSummary(
+            language === 'es'
+              ? 'Código incompleto o trivial: debés escribir lógica algorítmica real más allá de la plantilla inicial.'
+              : 'Incomplete or trivial code: you must write real algorithmic logic beyond the starter template.'
+          );
+        } else {
+          setTestSummary(
+            language === 'es'
+              ? `${evaluation.totalPassed} / ${evaluation.totalTests} pruebas superadas. Revisá las condiciones y salidas fallidas en la tabla de abajo.`
+              : `${evaluation.totalPassed} / ${evaluation.totalTests} tests passed. Check failed conditions and outputs below.`
+          );
+        }
       }
 
-      const effort = analyzeStudentCodeEffort(code, rawStarter);
       const lastAttempt = attempts[0];
       const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
       const isDuplicateCode = lastAttempt && normalize(lastAttempt.code) === normalize(code);
@@ -597,6 +607,9 @@ export const SolveView: React.FC<SolveViewProps> = ({
 
       <div className="solve-layout">
         <div className="solve-editor-column">
+          {(exercise.categoryId === 'dynamic-programming' || exercise.techniqueId === 'dynamic-programming') && (
+            <DpRecurrenceSelfCheck exerciseId={exercise.id} />
+          )}
           <div className="editor-card">
             <div className="editor-header">
               <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

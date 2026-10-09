@@ -159,7 +159,7 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
                   x={x}
                   y={baselineY + 5}
                   textAnchor="middle"
-                  fill={isJ || isT ? '#0f172a' : 'var(--text)'}
+                  fill={isJ ? 'var(--warning-contrast)' : isT ? 'var(--accent-contrast)' : 'var(--text)'}
                   fontSize="14px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"

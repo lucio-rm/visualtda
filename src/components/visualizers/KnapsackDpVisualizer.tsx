@@ -137,7 +137,7 @@ export const KnapsackDpVisualizer: React.FC = () => {
           </span>
           <span className="stat-badge">
             <span className="stat-num">
-              {totalWeight} / {capacity}
+              {totalWeight} / {capacity} kg
             </span>
             <span className="stat-label">{language === 'es' ? 'Peso Mochila' : 'Knapsack Weight'}</span>
           </span>

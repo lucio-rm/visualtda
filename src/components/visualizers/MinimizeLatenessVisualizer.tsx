@@ -4,6 +4,7 @@ import {
   MinimizeLatenessStepData,
   DEFAULT_LATENESS_JOBS
 } from '../../engine/algorithms/minimizeLatenessTrace';
+import { compute1DLabelLevels } from '../../utils/staggerLayout';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './MinimizeLatenessVisualizer.css';
@@ -48,6 +49,14 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
   const chartWidth = svgWidth - marginLeft - marginRight;
 
   const timeToX = (t: number) => marginLeft + (t / maxAxisTime) * chartWidth;
+
+  const deadlineLabelLevels = useMemo(() => {
+    const items = scheduledJobs.map((job) => ({
+      id: job.id,
+      x: timeToX(job.deadline)
+    }));
+    return compute1DLabelLevels(items, 36);
+  }, [scheduledJobs, timeToX]);
 
   return (
     <div
@@ -159,7 +168,7 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   {language === 'es' ? job.name : job.name.replace(/Tarea/g, 'Job')} (t={job.duration})
                 </text>
 
-                {/* Deadline indicator pin */}
+                {/* Deadline indicator pin with 1D collision-staggering */}
                 <line
                   x1={timeToX(job.deadline)}
                   y1={marginTop - 20}
@@ -175,17 +184,36 @@ export const MinimizeLatenessVisualizer: React.FC = () => {
                   r={5}
                   fill={isLate ? 'var(--error)' : 'var(--success)'}
                 />
-                <text
-                  x={timeToX(job.deadline)}
-                  y={marginTop - 28}
-                  textAnchor="middle"
-                  fill={isLate ? 'var(--error)' : 'var(--success)'}
-                  fontSize="13px"
-                  fontWeight="700"
-                  fontFamily="var(--font-mono)"
-                >
-                  d={job.deadline}
-                </text>
+                {(() => {
+                  const lvl = deadlineLabelLevels[job.id] || 0;
+                  const labelY = marginTop - 28 - lvl * 18;
+                  return (
+                    <g key={`d-label-${job.id}`}>
+                      {lvl > 0 && (
+                        <line
+                          x1={timeToX(job.deadline)}
+                          y1={marginTop - 20}
+                          x2={timeToX(job.deadline)}
+                          y2={labelY + 4}
+                          stroke={isLate ? 'var(--error)' : 'var(--success)'}
+                          strokeWidth={1.5}
+                          strokeDasharray="2,2"
+                        />
+                      )}
+                      <text
+                        x={timeToX(job.deadline)}
+                        y={labelY}
+                        textAnchor="middle"
+                        fill={isLate ? 'var(--error)' : 'var(--success)'}
+                        fontSize="13px"
+                        fontWeight="700"
+                        fontFamily="var(--font-mono)"
+                      >
+                        d={job.deadline}
+                      </text>
+                    </g>
+                  );
+                })()}
 
                 {/* Lateness bracket if job is late */}
                 {isLate && (

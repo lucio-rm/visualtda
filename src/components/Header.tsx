@@ -33,20 +33,21 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <svg
             className="brand-logo"
-            width="30"
-            height="30"
-            viewBox="0 0 30 30"
+            width="38"
+            height="38"
+            viewBox="0 0 44 44"
             fill="none"
             aria-hidden="true"
             style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
           >
-            <rect x="2" y="2" width="26" height="26" rx="7" fill="var(--surface-hover)" stroke="var(--accent)" strokeWidth="1.75" />
-            <ellipse cx="15" cy="15" rx="10.5" ry="9" stroke="var(--border-strong)" strokeWidth="1" strokeDasharray="3 2" />
-            <text x="5.5" y="18.5" fill="var(--accent)" fontSize="10.5" fontFamily="var(--font-mono)" fontWeight="900">P</text>
-            <text x="14" y="13.5" textAnchor="middle" fill="var(--warning)" fontSize="8.5" fontFamily="var(--font-mono)" fontWeight="800">?</text>
-            <line x1="12" y1="16" x2="16" y2="16" stroke="var(--text-muted)" strokeWidth="1.3" strokeLinecap="round" />
-            <line x1="12" y1="18.5" x2="16" y2="18.5" stroke="var(--text-muted)" strokeWidth="1.3" strokeLinecap="round" />
-            <text x="24.5" y="18.5" textAnchor="end" fill="var(--text)" fontSize="8.5" fontFamily="var(--font-mono)" fontWeight="800">NP</text>
+            <rect x="2" y="2" width="40" height="40" rx="10" fill="var(--surface-hover)" stroke="var(--accent-solid, var(--accent))" strokeWidth="2" />
+            <ellipse cx="22" cy="22" rx="17" ry="14" stroke="var(--accent)" strokeWidth="1" strokeDasharray="3 2" opacity="0.45" />
+            <circle cx="12.5" cy="22" r="9" fill="var(--accent-surface, rgba(99, 102, 241, 0.12))" stroke="var(--accent)" strokeWidth="1" opacity="0.75" />
+            <text x="12.5" y="26.5" textAnchor="middle" fill="var(--accent-solid, var(--accent))" fontSize="13.5" fontFamily="var(--font-mono)" fontWeight="900">P</text>
+            <text x="22.5" y="17.5" textAnchor="middle" fill="var(--warning)" fontSize="10" fontFamily="var(--font-mono)" fontWeight="800">?</text>
+            <line x1="19.5" y1="21.5" x2="25.5" y2="21.5" stroke="var(--text-muted)" strokeWidth="1.6" strokeLinecap="round" />
+            <line x1="19.5" y1="24.5" x2="25.5" y2="24.5" stroke="var(--text-muted)" strokeWidth="1.6" strokeLinecap="round" />
+            <text x="33.5" y="26.5" textAnchor="middle" fill="var(--text)" fontSize="11.5" fontFamily="var(--font-mono)" fontWeight="800">NP</text>
           </svg>
           <div className="brand-text">
             <span className="brand-title">Visual TDA</span>

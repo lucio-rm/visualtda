@@ -11,15 +11,23 @@ interface Preset {
   radius: number;
 }
 
+const TOWN_NAMES: Record<number, { es: string; en: string }> = {
+  2: { es: 'Bernal', en: 'Bernal' },
+  6: { es: 'Don Bosco', en: 'Don Bosco' },
+  11: { es: 'Quilmes', en: 'Quilmes' },
+  16: { es: 'Ezpeleta', en: 'Ezpeleta' },
+  22: { es: 'Berazategui', en: 'Berazategui' }
+};
+
 const PRESETS: Preset[] = [
   {
-    id: 'ruta2',
+    id: 'quilmes',
     name: {
-      es: 'Ruta 2 (Pueblos Guía Ej. 10: Lezama 156, Castelli 185, Sevigne 194, Guido 242, Maipú 270)',
-      en: 'Highway 2 (Towns: Lezama 156, Castelli 185, Sevigne 194, Guido 242, Maipú 270)'
+      es: 'Corredor Quilmes (Bernal 2, Don Bosco 6, Quilmes 11, Ezpeleta 16, Berazategui 22 — R = 4 km)',
+      en: 'Quilmes Corridor (Bernal 2, Don Bosco 6, Quilmes 11, Ezpeleta 16, Berazategui 22 — R = 4 km)'
     },
-    houses: [156, 185, 194, 242, 270],
-    radius: 50
+    houses: [2, 6, 11, 16, 22],
+    radius: 4
   },
   {
     id: 'dispersas',
@@ -696,6 +704,7 @@ export const RoadAntennasPlayground: React.FC = () => {
             const lvl = houseLabelLevels[hIdx] || 0;
             const labelY = roadY - 26 - lvl * 22;
             const isBeingDragged = draggingHouseIdx === hIdx;
+            const town = TOWN_NAMES[hKm];
 
             return (
               <g
@@ -806,7 +815,7 @@ export const RoadAntennasPlayground: React.FC = () => {
                   }}
                   pointerEvents="none"
                 >
-                  {hKm}k
+                  {town ? `${hKm}k (${town[language]})` : `${hKm}k`}
                 </text>
               </g>
             );

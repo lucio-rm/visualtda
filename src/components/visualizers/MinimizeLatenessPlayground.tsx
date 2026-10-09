@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { LatenessJob, DEFAULT_LATENESS_JOBS } from '../../engine/algorithms/minimizeLatenessTrace';
+import { compute1DLabelLevels } from '../../utils/staggerLayout';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useStudentProgress } from '../../context/StudentProgressContext';
 
@@ -60,14 +61,25 @@ export const MinimizeLatenessPlayground: React.FC = () => {
 
   // SVG dimensions
   const svgWidth = 560;
-  const svgHeight = 160;
+  const svgHeight = 190;
   const marginLeft = 35;
   const marginRight = 35;
   const maxAxisTime = Math.max(18, totalProcessingTime + 2);
   const chartWidth = svgWidth - marginLeft - marginRight;
 
-  const timeToX = (t: number) => marginLeft + (t / maxAxisTime) * chartWidth;
+  const timeToX = useCallback(
+    (t: number) => marginLeft + (t / maxAxisTime) * chartWidth,
+    [marginLeft, maxAxisTime, chartWidth]
+  );
   const xToTime = (x: number) => ((x - marginLeft) / chartWidth) * maxAxisTime;
+
+  const deadlineLabelLevels = useMemo(() => {
+    const items = evaluated.list.map((job) => ({
+      id: job.id,
+      x: timeToX(job.deadline)
+    }));
+    return compute1DLabelLevels(items, 34);
+  }, [evaluated.list, timeToX]);
 
   const handleSwapAdjacent = () => {
     if (!firstAdjacentInversion) return;
@@ -410,18 +422,18 @@ export const MinimizeLatenessPlayground: React.FC = () => {
           aria-label={language === 'es' ? 'Línea de tiempo de tareas y retraso' : 'Job timeline with lateness flags'}
         >
           {/* Time axis */}
-          <line x1={marginLeft} y1={85} x2={svgWidth - marginRight} y2={85} stroke="var(--border)" strokeWidth={2} />
+          <line x1={marginLeft} y1={100} x2={svgWidth - marginRight} y2={100} stroke="var(--border)" strokeWidth={2} />
 
           {/* Time ticks */}
           {Array.from({ length: maxAxisTime + 1 }).map((_, t) => {
             const x = timeToX(t);
             return (
               <g key={`time-tick-${t}`}>
-                <line x1={x} y1={80} x2={x} y2={90} stroke="var(--border)" strokeWidth={1} />
+                <line x1={x} y1={95} x2={x} y2={105} stroke="var(--border)" strokeWidth={1} />
                 {t % 2 === 0 && (
                   <text
                     x={x}
-                    y={102}
+                    y={120}
                     textAnchor="middle"
                     fill="var(--text-muted)"
                     fontSize="13px"
@@ -434,48 +446,6 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             );
           })}
 
-          {/* Inversion indicator between adjacent pair if present (hidden during drag to prevent jitter) */}
-          {firstAdjacentInversion && !draggingJobId && (
-            (() => {
-              const [idxA, idxB] = firstAdjacentInversion;
-              const itemA = evaluated.list[idxA];
-              const itemB = evaluated.list[idxB];
-              const boundaryX = timeToX(itemA.finishTime);
-              return (
-                <g key="inversion-marker">
-                  <line
-                    x1={boundaryX}
-                    y1={20}
-                    x2={boundaryX}
-                    y2={80}
-                    stroke="var(--error)"
-                    strokeWidth={2}
-                    strokeDasharray="2 2"
-                  />
-                  <rect
-                    x={boundaryX - 42}
-                    y={5}
-                    width={84}
-                    height={16}
-                    rx={3}
-                    fill="var(--error)"
-                  />
-                  <text
-                    x={boundaryX}
-                    y={16}
-                    textAnchor="middle"
-                    fill="#ffffff"
-                    fontSize="13px"
-                    fontWeight="800"
-                    fontFamily="var(--font-mono)"
-                  >
-                    {language === 'es' ? 'INVERSIÓN' : 'INVERSION'} ({itemA.deadline} &gt; {itemB.deadline})
-                  </text>
-                </g>
-              );
-            })()
-          )}
-
           {/* Drop Target Indicator */}
           {draggingJobId && previewTargetIdx !== null && (
             (() => {
@@ -486,15 +456,15 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                 <g key="drop-target-indicator" pointerEvents="none">
                   <line
                     x1={targetX}
-                    y1={30}
+                    y1={42}
                     x2={targetX}
-                    y2={78}
+                    y2={94}
                     stroke="var(--accent)"
                     strokeWidth={3}
                     strokeDasharray="4 2"
                   />
                   <polygon
-                    points={`${targetX},${30} ${targetX - 5},${22} ${targetX + 5},${22}`}
+                    points={`${targetX},${42} ${targetX - 5},${34} ${targetX + 5},${34}`}
                     fill="var(--accent)"
                   />
                 </g>
@@ -502,24 +472,39 @@ export const MinimizeLatenessPlayground: React.FC = () => {
             })()
           )}
 
-          {/* Fixed Deadline Flags (always stay anchored to true timeline time) */}
+          {/* Fixed Deadline Flags with 1D collision-staggering */}
           {evaluated.list.map((job) => {
             const deadlineX = timeToX(job.deadline);
+            const lvl = deadlineLabelLevels[job.id] || 0;
+            const labelY = 36 - lvl * 16;
             return (
               <g key={`deadline-flag-${job.id}`} pointerEvents="none">
+                {/* Drop line from pin head down to timeline axis */}
                 <line
                   x1={deadlineX}
-                  y1={24}
+                  y1={44}
                   x2={deadlineX}
-                  y2={85}
+                  y2={100}
                   stroke="var(--error)"
                   strokeWidth={1.5}
                   strokeDasharray="2 2"
                 />
-                <circle cx={deadlineX} cy={24} r={3} fill="var(--error)" />
+                <circle cx={deadlineX} cy={44} r={3} fill="var(--error)" />
+                {/* Staggered Leader line if elevated */}
+                {lvl > 0 && (
+                  <line
+                    x1={deadlineX}
+                    y1={44}
+                    x2={deadlineX}
+                    y2={labelY + 3}
+                    stroke="var(--error)"
+                    strokeWidth={1.2}
+                    strokeDasharray="2 2"
+                  />
+                )}
                 <text
                   x={deadlineX}
-                  y={18}
+                  y={labelY}
                   textAnchor="middle"
                   fill="var(--error)"
                   fontSize="13px"
@@ -542,7 +527,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                 <g key={`lateness-bar-${job.id}`} pointerEvents="none">
                   <rect
                     x={deadlineX}
-                    y={75}
+                    y={92}
                     width={Math.max(2, finishX - deadlineX)}
                     height={6}
                     fill="var(--error)"
@@ -550,7 +535,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                   />
                   <text
                     x={(deadlineX + finishX) / 2}
-                    y={122}
+                    y={138}
                     textAnchor="middle"
                     fill="var(--error)"
                     fontSize="13px"
@@ -583,9 +568,9 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                 {isDragging && (
                   <rect
                     x={startX + 3}
-                    y={38}
+                    y={51}
                     width={blockWidth - 2}
-                    height={38}
+                    height={40}
                     rx={4}
                     fill="rgba(0, 0, 0, 0.35)"
                   />
@@ -594,20 +579,20 @@ export const MinimizeLatenessPlayground: React.FC = () => {
                 {/* Main Job Block */}
                 <rect
                   x={startX + 1}
-                  y={35}
+                  y={48}
                   width={blockWidth - 2}
-                  height={38}
+                  height={40}
                   rx={4}
-                  fill={isDragging ? 'var(--accent)' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
+                  fill={isDragging ? 'var(--accent-solid, var(--accent))' : hasLateness ? 'var(--warning)' : 'var(--accent-solid, var(--accent))'}
                   fillOpacity={isDragging ? 0.98 : 0.88}
-                  stroke={isDragging ? '#ffffff' : hasLateness ? 'var(--warning)' : 'var(--accent)'}
+                  stroke={isDragging ? '#ffffff' : hasLateness ? 'var(--warning)' : 'var(--accent-solid, var(--accent))'}
                   strokeWidth={isDragging ? 2.5 : 1}
                 />
 
                 {/* Job text label - Always crisp white for WCAG AA on indigo/amber */}
                 <text
                   x={startX + blockWidth / 2}
-                  y={52}
+                  y={65}
                   textAnchor="middle"
                   fill="#ffffff"
                   fontSize="13px"
@@ -620,7 +605,7 @@ export const MinimizeLatenessPlayground: React.FC = () => {
 
                 <text
                   x={startX + blockWidth / 2}
-                  y={66}
+                  y={80}
                   textAnchor="middle"
                   fill="rgba(255, 255, 255, 0.95)"
                   fontSize="13px"
@@ -632,6 +617,58 @@ export const MinimizeLatenessPlayground: React.FC = () => {
               </g>
             );
           })}
+
+          {/* Inversion indicator between adjacent pair (rendered on top of blocks for high contrast & zero occlusion) */}
+          {firstAdjacentInversion && !draggingJobId && (
+            (() => {
+              const [idxA, idxB] = firstAdjacentInversion;
+              const itemA = evaluated.list[idxA];
+              const itemB = evaluated.list[idxB];
+              const boundaryX = timeToX(itemA.finishTime);
+              const label = language === 'es'
+                ? `INVERSIÓN (${itemA.deadline} > ${itemB.deadline})`
+                : `INVERSION (${itemA.deadline} > ${itemB.deadline})`;
+              const pillW = 168;
+              const pillH = 22;
+              const pillY = 10;
+              return (
+                <g key="inversion-marker" pointerEvents="none">
+                  {/* Distinct boundary divider line */}
+                  <line
+                    x1={boundaryX}
+                    y1={pillY + pillH}
+                    x2={boundaryX}
+                    y2={98}
+                    stroke="var(--error)"
+                    strokeWidth={2.5}
+                    strokeDasharray="3 2"
+                  />
+                  {/* Pill badge with drop shadow and outline */}
+                  <rect
+                    x={boundaryX - pillW / 2}
+                    y={pillY}
+                    width={pillW}
+                    height={pillH}
+                    rx={11}
+                    fill="var(--error)"
+                    stroke="var(--canvas-bg)"
+                    strokeWidth={2}
+                  />
+                  <text
+                    x={boundaryX}
+                    y={pillY + 15}
+                    textAnchor="middle"
+                    fill="#ffffff"
+                    fontSize="13px"
+                    fontWeight="800"
+                    fontFamily="var(--font-mono)"
+                  >
+                    {label}
+                  </text>
+                </g>
+              );
+            })()
+          )}
         </svg>
       </div>
 

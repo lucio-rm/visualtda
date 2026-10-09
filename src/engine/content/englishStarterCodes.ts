@@ -591,7 +591,7 @@ place_antennas = build_antennas
         return 0.0, []
 
     # 1. Precompute squared error matrix e[i][j] for best-fit line of points[i..j]
-    # 2. Bellman recurrence: OPT[j] = min_{1 <= i <= j} (e[i][j] + C + OPT[i-1]) with OPT[0] = 0
+    # 2. Build the DP table by evaluating the best start point i for the final segment
     # 3. Trace back segment split indices
 
     return 0.0, []

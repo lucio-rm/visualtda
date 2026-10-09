@@ -34,7 +34,12 @@
 }
 
 .brand-logo {
-  font-size: 1.75rem;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast, 0.15s ease);
+}
+
+.brand-button:hover .brand-logo {
+  transform: scale(1.05);
 }
 
 .brand-text {
@@ -755,9 +760,9 @@ select option,
 
 /* Buttons */
 .btn-primary {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--accent-solid, var(--accent));
   padding: 0.65rem 1.25rem;
   border-radius: var(--radius-md);
   font-size: 0.9375rem;
@@ -1642,7 +1647,7 @@ select option,
 }
 
 .btn-code-toggle.active {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
 }
 
@@ -1950,8 +1955,8 @@ select option,
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--accent-contrast, #ffffff);
-  background-color: var(--accent);
-  border: 1px solid var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  border: 1px solid var(--accent-solid, var(--accent));
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.15s ease;
@@ -2086,9 +2091,9 @@ select option,
 .btn-ctrl.btn-play-pause,
 .timeline-btn.play-btn,
 .ctrl-play-btn {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border-color: var(--accent);
+  border-color: var(--accent-solid, var(--accent));
   min-width: 68px;
   font-size: 1.25rem;
   font-weight: 700;
@@ -2505,7 +2510,7 @@ select option,
 
 .progress-fill {
   height: 100%;
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   border-radius: 9999px;
   transition: width 0.4s ease;
 }
@@ -2550,9 +2555,9 @@ select option,
 }
 
 .btn-start-recommended {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--accent-solid, var(--accent));
   border-radius: var(--radius-md);
   padding: 0.65rem 1.25rem;
   font-weight: 600;

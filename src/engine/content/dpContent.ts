@@ -587,15 +587,15 @@ export const dpContent: Record<string, ExerciseSolveContent> = {
         return 0.0, []
 
     # 1. Precomputa matriz de errores cuadráticos e[i][j] para el mejor ajuste lineal de puntos[i..j]
-    # 2. Ecuación de Bellman: OPT[j] = min_{1 <= i <= j} (e[i][j] + C + OPT[i-1]) con OPT[0] = 0
+    # 2. Construye la tabla DP evaluando el mejor punto inicial i para el último segmento
     # 3. Reconstruye hacia atrás los índices de corte de los segmentos
 
     return 0.0, []
 `,
     hints: [
       {
-        es: 'Pista 1: El subproblema óptimo OPT[j] depende únicamente del punto inicial i del último segmento (de i a j): OPT[j] = min_{1<=i<=j} (e[i][j] + C + OPT[i-1]).',
-        en: 'Hint 1: Optimal subproblem OPT[j] depends solely on start point i of final segment: OPT[j] = min (e[i][j] + C + OPT[i-1]).'
+        es: 'Pista 1: El subproblema óptimo OPT[j] para los primeros j puntos depende de elegir el punto inicial i del último segmento (de i a j) que minimice el costo acumulado.',
+        en: 'Hint 1: Optimal subproblem OPT[j] for the first j points depends on choosing the start point i of the final segment (from i to j) minimizing overall cost.'
       },
       {
         es: 'Pista 2: Cada recta tiene un costo fijo C que penaliza el sobreajuste (overfitting).',

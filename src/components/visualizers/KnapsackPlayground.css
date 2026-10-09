@@ -45,23 +45,40 @@
   gap: var(--space-3);
 }
 
+.knapsack-shelf-column.shelf-drag-over {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 2px var(--accent);
+  background: var(--surface-hover);
+}
+
 .item-pick-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   padding: var(--space-3);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  cursor: pointer;
+  cursor: grab;
   transition: all var(--transition-fast);
   text-align: left;
   position: relative;
+  user-select: none;
 }
 
 .item-pick-card:hover {
   border-color: var(--color-primary);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.item-pick-card:active {
+  cursor: grabbing;
+}
+
+.item-pick-card.is-dragging {
+  opacity: 0.5;
+  transform: scale(0.96);
 }
 
 .item-pick-card.in-pack {
@@ -77,20 +94,43 @@
 }
 
 .item-pick-name {
-  font-weight: 600;
+  font-weight: 700;
   font-size: var(--text-sm);
   color: var(--color-text);
 }
 
 .item-status-icon {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
 }
 
 .item-pick-metrics {
   display: flex;
-  justify-content: space-between;
+  gap: var(--space-2);
   font-size: var(--text-xs);
+  color: var(--color-text);
+  margin-top: 2px;
+}
+
+.metric-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.item-pick-density {
+  font-size: 0.8125rem;
   color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  background: rgba(148, 163, 184, 0.08);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  width: fit-content;
 }
 
 .item-remove-btn {

@@ -143,7 +143,7 @@ describe('Footer, FeedbackModal Privacy & Road Antennas Baseline', () => {
         form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       });
 
-      expect(mockFetch).toHaveBeenCalledTimes(1);
+      expect(mockFetch).toHaveBeenCalledTimes(2);
       const [calledUrl, calledInit] = mockFetch.mock.calls[0];
       expect(calledUrl).toContain('formsubmit.co/ajax');
       const body = JSON.parse(calledInit.body);

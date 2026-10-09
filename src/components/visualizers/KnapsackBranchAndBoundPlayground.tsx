@@ -395,7 +395,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
                 </text>
                 <text
                   x={n.x}
-                  y={n.y + (n.depth % 2 === 0 ? -18 : 26)}
+                  y={n.y + (n.depth % 2 === 0 ? -26 : 32)}
                   textAnchor="middle"
                   fill={n.status === 'infeasible' ? 'var(--error)' : n.status === 'pruned' ? 'var(--warning)' : 'var(--text-muted)'}
                   fontFamily="var(--font-mono)"

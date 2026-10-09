@@ -145,7 +145,7 @@ export const HamiltonianCycleVisualizer: React.FC = () => {
                   x={node.x}
                   y={node.y + 5}
                   textAnchor="middle"
-                  fill={isCurrent || (isVisited && isCycleFound) ? '#0f172a' : 'var(--text)'}
+                  fill="var(--text)"
                   fontSize="13px"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"

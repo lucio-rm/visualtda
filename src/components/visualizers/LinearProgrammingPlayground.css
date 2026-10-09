@@ -92,9 +92,9 @@
 }
 
 .chip-btn.selected {
-  background-color: var(--accent);
-  color: white;
-  border-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, white);
+  border-color: var(--accent-solid, var(--accent));
   font-weight: 600;
 }
 

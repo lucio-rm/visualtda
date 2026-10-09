@@ -58,14 +58,31 @@ This document defines the completed milestones of **Mission V11** and outlines t
     - **Subtle Road Antennas Optimal Baseline**: Replaced the 60px-tall green overlay rectangle with an elegant canonical baseline beneath the highway (`roadY + 51`) with discrete brackets `[ ——— • ——— ]` and vertical alignment guides. User antennas and houses remain 100% visible, clearly highlighting the gap ("la brecha / distancia / km") from the optimal placement.
     - **Solve Editor Vertical Expansion**: Raised editor wrapper and stage min-height from 420px to 560px (`.solve-editor-column .editor-input-wrapper`, `.solve-editor-column .code-editor-stage`), and increased textarea rows to 24, eliminating empty whitespace below the attempts history.
 
+11. ✅ **Part 11 — Filter Headroom, Mathematical Typography Engine, Bilingual Academic Foundations & P=NP Emblem**:
+    - Filter headroom clipping resolved; math equations upgraded with native Unicode formatting and left-aligned centered blocks; bilingual academic theoretical overrides; P=NP header emblem.
+
+12. ✅ **Part 12 — Human Feedback Defects & Interaction Parity (Mission V12)**:
+    - **Dual Feedback Delivery (1.1)**: Dual email targets (`lucioromeromascaro@gmail.com` + `lromerom@fi.uba.ar`), FormSubmit activation requested, manual delivery invariant documented.
+    - **Whitespace & Blank Lines Gating (1.2)**: `isUnimplementedStub` checks `analyzeStudentCodeEffort` requiring $\ge 2$ meaningful lines and real algorithmic logic.
+    - **Kruskal / MST Direction Fix & Invariant (1.3)**: Corrected minimization check (`weight <= optimalWeight`) and added standing `tests/minMaxDirectionInvariants.test.ts` suite.
+    - **Majority Element Layout (1.4)**: Overhauled tile flex-basis, wrap, and vote button grid (`repeat(3, 24px)`) in default problem view.
+    - **Dark Mode Solid Buttons (1.5)**: Systematically replaced pale `var(--accent)` with `var(--accent-solid)` on solid controls across all stylesheets.
+    - **Minimize Lateness Staggering (1.6)**: 1D label vertical staggering for deadline pins and high-contrast, unoccluded inversion pill badge.
+    - **Knapsack Spacing & Drag-and-Drop (1.7)**: Drag items into/out of backpack, dynamic backpack filling stack, spacious metric chips and tree node offsets.
+    - **Sudoku MRV Heuristic Gating (1.8)**: Gated MRV hints behind instructor mode / mastery.
+    - **Hamiltonian Cycle Contrast (1.9)**: Replaced hardcoded slate color on vertex "0" with `var(--text)`.
+    - **Road Antennas Quilmes Example (1.10)**: Rebuilt Highway 2 into Quilmes corridor with compact km ($2, 6, 11, 16, 22$) and town labels.
+    - **Logo Redesign & Favicon (1.11)**: Enlarged 38×38px $P \stackrel{?}{=} NP$ emblem with complexity orbits, hover transitions, and embedded SVG favicon.
+    - **DP Recurrence Input & Spoilers Purge (1.12)**: Mounted `DpRecurrenceSelfCheck` in Solve view and purged recurrence formulas from Discover insights and code comments.
+
 ---
 
 ## 2. Quality Baseline
 
 - `npm run lint`: 0 errors, 0 warnings.
 - `npm run typecheck`: 0 errors.
-- `npm test`: 48 test files, 373 passed (100% PASS).
-- `npm run build`: static production build in `dist/` cleanly generated in ~1.8s.
+- `npm test`: 50 test files, 392 passed (100% PASS).
+- `npm run build`: static production build in `dist/` cleanly generated in ~1.7s.
 
 ---
 

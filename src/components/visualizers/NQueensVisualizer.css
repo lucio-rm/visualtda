@@ -306,9 +306,9 @@ g[role='button']:focus-visible rect {
 }
 
 .ctrl-btn.play-btn {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border-color: var(--accent);
+  border-color: var(--accent-solid, var(--accent));
   padding: 0.4rem 1.25rem;
   font-size: 1.1rem;
 }
@@ -340,9 +340,9 @@ g[role='button']:focus-visible rect {
 }
 
 .speed-btn.active {
-  background-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
   color: var(--accent-contrast);
-  border-color: var(--accent);
+  border-color: var(--accent-solid, var(--accent));
 }
 
 /* Playground Styles */

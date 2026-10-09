@@ -189,8 +189,8 @@ export const MajorityElementPlayground: React.FC = () => {
       </div>
 
       {/* Interactive Array Elements Ribbon */}
-      <div style={{ backgroundColor: 'var(--surface)', padding: '0.85rem', borderRadius: '6px', border: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
+      <div style={{ backgroundColor: 'var(--surface)', padding: '0.85rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
           <span style={{ fontWeight: '600' }}>
             {language === 'es' ? 'Arreglo Interactivo (hacé clic en + / - para modificar valores):' : 'Interactive Array (click + / - to change values):'}
           </span>
@@ -206,29 +206,31 @@ export const MajorityElementPlayground: React.FC = () => {
               type="button"
               onClick={handleAddElement}
               disabled={array.length >= 16}
-              style={{ padding: '0.25rem 0.6rem', borderRadius: '4px', border: '1px solid var(--accent)', backgroundColor: 'var(--accent)', color: 'var(--accent-contrast)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+              style={{ padding: '0.25rem 0.6rem', borderRadius: '4px', border: '1px solid var(--accent-solid, var(--accent))', backgroundColor: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
             >
               + {language === 'es' ? 'Agregar' : 'Add'}
             </button>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.35rem' }}>
+        <div style={{ display: 'flex', gap: '0.65rem', overflowX: 'auto', padding: '0.25rem 0.25rem 0.65rem', scrollbarWidth: 'thin' }}>
           {array.map((val, idx) => {
             const isMaj = val === majorityElement;
             return (
               <div
                 key={`elem-tile-${idx}`}
                 style={{
+                  flex: '0 0 96px',
+                  width: '96px',
+                  boxSizing: 'border-box',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  padding: '0.5rem 0.65rem',
+                  padding: '0.5rem 0.4rem',
                   borderRadius: '8px',
                   border: isMaj ? '2px solid var(--success)' : '1.5px solid var(--border)',
                   backgroundColor: isMaj ? 'rgba(16, 185, 129, 0.15)' : 'var(--canvas-bg, var(--surface-light))',
-                  boxShadow: 'var(--shadow-sm)',
-                  minWidth: '60px'
+                  boxShadow: 'var(--shadow-sm)'
                 }}
               >
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
@@ -237,24 +239,25 @@ export const MajorityElementPlayground: React.FC = () => {
                 <span style={{ fontSize: '1.4rem', fontWeight: '800', fontFamily: 'var(--font-mono)', margin: '0.2rem 0', color: isMaj ? 'var(--success)' : 'var(--text)' }}>
                   {val}
                 </span>
-                <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.25rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 24px)', gap: '4px', marginTop: '0.35rem', justifyContent: 'center' }}>
                   <button
                     type="button"
                     onClick={() => handleAdjustValue(idx, 1)}
                     style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '24px',
+                      height: '24px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1.15rem',
+                      fontSize: '1.1rem',
                       fontWeight: 800,
                       borderRadius: '4px',
-                      border: '1.5px solid var(--accent)',
+                      border: '1.5px solid var(--accent-solid, var(--accent))',
                       backgroundColor: 'var(--surface-hover)',
-                      color: 'var(--accent)',
+                      color: 'var(--accent-solid, var(--accent))',
                       cursor: 'pointer',
-                      lineHeight: 1
+                      lineHeight: 1,
+                      padding: 0
                     }}
                     title={language === 'es' ? 'Incrementar' : 'Increment'}
                     aria-label={language === 'es' ? `Incrementar valor en posición ${idx}` : `Increment value at index ${idx}`}
@@ -265,19 +268,20 @@ export const MajorityElementPlayground: React.FC = () => {
                     type="button"
                     onClick={() => handleAdjustValue(idx, -1)}
                     style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '24px',
+                      height: '24px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1.2rem',
+                      fontSize: '1.15rem',
                       fontWeight: 800,
                       borderRadius: '4px',
                       border: '1.5px solid var(--border-strong)',
                       backgroundColor: 'var(--surface-hover)',
                       color: 'var(--text)',
                       cursor: 'pointer',
-                      lineHeight: 1
+                      lineHeight: 1,
+                      padding: 0
                     }}
                     title={language === 'es' ? 'Decrementar' : 'Decrement'}
                     aria-label={language === 'es' ? `Decrementar valor en posición ${idx}` : `Decrement value at index ${idx}`}
@@ -289,12 +293,12 @@ export const MajorityElementPlayground: React.FC = () => {
                     onClick={() => handleRemoveElement(idx)}
                     disabled={array.length <= 1}
                     style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '24px',
+                      height: '24px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '1.1rem',
+                      fontSize: '1.05rem',
                       fontWeight: 800,
                       borderRadius: '4px',
                       border: '1.5px solid var(--error)',
@@ -302,7 +306,8 @@ export const MajorityElementPlayground: React.FC = () => {
                       color: 'var(--error)',
                       cursor: array.length <= 1 ? 'not-allowed' : 'pointer',
                       opacity: array.length <= 1 ? 0.3 : 1,
-                      lineHeight: 1
+                      lineHeight: 1,
+                      padding: 0
                     }}
                     title={language === 'es' ? 'Eliminar' : 'Remove'}
                     aria-label={language === 'es' ? `Eliminar elemento en posición ${idx}` : `Remove element at index ${idx}`}

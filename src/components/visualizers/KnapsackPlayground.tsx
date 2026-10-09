@@ -29,6 +29,8 @@ export const KnapsackPlayground: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showGreedyComparison, setShowGreedyComparison] = useState<boolean>(false);
   const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verified'>('idle');
+  const [draggingItemId, setDraggingItemId] = useState<string | null>(null);
+  const [isDragOverShelf, setIsDragOverShelf] = useState<boolean>(false);
 
   // Custom case state
   const [customCapacity, setCustomCapacity] = useState<number>(6);
@@ -284,12 +286,28 @@ export const KnapsackPlayground: React.FC = () => {
 
       {/* Interactive Dual Workspace: Items Shelf + Authentic Backpack Bag */}
       <div className="knapsack-dual-workspace">
-        <div className="knapsack-shelf-column">
+        <div
+          className={`knapsack-shelf-column ${isDragOverShelf ? 'shelf-drag-over' : ''}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            setIsDragOverShelf(true);
+          }}
+          onDragLeave={() => setIsDragOverShelf(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragOverShelf(false);
+            const droppedId = e.dataTransfer.getData('text/plain');
+            if (droppedId && selectedIds.includes(droppedId)) {
+              toggleItem(droppedId);
+            }
+          }}
+        >
           <div className="shelf-column-header">
             <h5>
               {language === 'es'
-                ? 'Objetos Disponibles (Hacé clic para empacar o quitar):'
-                : 'Available Items (Click to pack or unpack):'}
+                ? 'Objetos Disponibles (Arrastrá o hacé clic para empacar/quitar):'
+                : 'Available Items (Drag or click to pack/unpack):'}
             </h5>
           </div>
           <div className="knapsack-items-shelf">
@@ -299,8 +317,15 @@ export const KnapsackPlayground: React.FC = () => {
               return (
                 <div
                   key={it.id}
+                  draggable={true}
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData('text/plain', it.id);
+                    e.dataTransfer.setData('source', inPack ? 'bag' : 'shelf');
+                    setDraggingItemId(it.id);
+                  }}
+                  onDragEnd={() => setDraggingItemId(null)}
                   onClick={() => toggleItem(it.id)}
-                  className={`item-pick-card ${inPack ? 'in-pack' : ''}`}
+                  className={`item-pick-card ${inPack ? 'in-pack' : ''} ${draggingItemId === it.id ? 'is-dragging' : ''}`}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -314,7 +339,7 @@ export const KnapsackPlayground: React.FC = () => {
                 >
                   <div className="item-pick-header">
                     <span className="item-pick-name">{it.name}</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {activePreset === 'custom' && (
                         <button
                           type="button"
@@ -332,11 +357,15 @@ export const KnapsackPlayground: React.FC = () => {
                     </div>
                   </div>
                   <div className="item-pick-metrics">
-                    <span>{language === 'es' ? 'Peso' : 'Weight'}: {it.weight} kg</span>
-                    <span>{language === 'es' ? 'Valor' : 'Value'}: ${it.value}</span>
+                    <span className="metric-badge">
+                      <strong>{it.weight}</strong> kg
+                    </span>
+                    <span className="metric-badge">
+                      <strong>${it.value}</strong>
+                    </span>
                   </div>
-                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                    {language === 'es' ? 'Densidad:' : 'Density:'} {density} $/kg
+                  <div className="item-pick-density">
+                    {language === 'es' ? 'Densidad:' : 'Density:'} <strong>{density}</strong> $/kg
                   </div>
                 </div>
               );
@@ -353,6 +382,11 @@ export const KnapsackPlayground: React.FC = () => {
             totalValue={totalValue}
             language={language}
             onUnpackItem={toggleItem}
+            onPackItem={(id) => {
+              if (!selectedIds.includes(id)) {
+                toggleItem(id);
+              }
+            }}
             interactive={true}
           />
         </div>

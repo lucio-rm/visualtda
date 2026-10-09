@@ -7,8 +7,9 @@ export interface FeedbackModalProps {
   currentExerciseId?: string | null;
 }
 
-// Obfuscated FormSubmit endpoint to prevent public scraping while ensuring static in-browser delivery
-const SUBMIT_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHJvbWVyb21AZmkudWJhLmFy');
+// Obfuscated FormSubmit delivery endpoints (primary: lucioromeromascaro@gmail.com, secondary: lromerom@fi.uba.ar)
+const PRIMARY_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHVjaW9yb21lcm9tYXNjYXJvQGdtYWlsLmNvbQ==');
+const SECONDARY_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHJvbWVyb21AZmkudWJhLmFy');
 
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
@@ -66,14 +67,24 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     };
 
     try {
-      await fetch(SUBMIT_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+      await Promise.allSettled([
+        fetch(PRIMARY_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }),
+        fetch(SECONDARY_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+      ]);
     } catch {
       // Graceful fallback for offline / adblocker: copy message text to clipboard
       try {

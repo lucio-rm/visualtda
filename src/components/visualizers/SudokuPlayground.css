@@ -91,17 +91,17 @@
 }
 
 .btn-num:hover {
-  background-color: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
   transform: translateY(-1px);
 }
 
 .btn-num.active {
-  background-color: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent), var(--shadow-sm);
+  background-color: var(--accent-solid, var(--accent));
+  color: var(--accent-contrast, #ffffff);
+  border-color: var(--accent-solid, var(--accent));
+  box-shadow: 0 0 0 2px var(--accent-solid, var(--accent)), var(--shadow-sm);
 }
 
 .btn-num.is-candidate {

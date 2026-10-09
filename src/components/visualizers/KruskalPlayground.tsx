@@ -212,20 +212,20 @@ export const KruskalPlayground: React.FC = () => {
       return acc + (e ? e.weight : 0);
     }, 0);
 
-    if (totalWeight === 10) {
+    if (totalWeight <= optimalMSTWeight) {
       setVerificationStatus('success');
       setFeedback(
         language === 'es'
-          ? `¡Excelente! Árbol Generador Mínimo factible y óptimo verificado. Costo total: ${totalWeight} (óptimo según Kruskal).`
-          : `Excellent! Feasible and optimal Minimum Spanning Tree verified. Total cost: ${totalWeight}.`
+          ? `¡Excelente! Árbol Generador Mínimo factible y óptimo verificado. Costo total: ${totalWeight} (óptimo según Kruskal: ${optimalMSTWeight}).`
+          : `Excellent! Feasible and optimal Minimum Spanning Tree verified. Total cost: ${totalWeight} (optimal per Kruskal: ${optimalMSTWeight}).`
       );
       markAttempted('kruskal-mst-greedy');
     } else {
       setVerificationStatus('suboptimal');
       setFeedback(
         language === 'es'
-          ? `El conjunto de aristas conecta el grafo, pero el costo total (${totalWeight}) excede el óptimo (10). Según la regla Greedy de Kruskal, priorizá aristas de menor peso que conecten componentes disjuntas.`
-          : `Connected all vertices, but weight (${totalWeight}) exceeds optimal (10). Prioritize lighter edges.`
+          ? `El conjunto de aristas conecta el grafo, pero el costo total (${totalWeight}) excede el óptimo mínimo (${optimalMSTWeight}). En un Árbol Generador MÍNIMO, un menor costo es estrictamente mejor. Priorizá aristas de menor peso.`
+          : `Connected all vertices, but total weight (${totalWeight}) exceeds the minimum optimal (${optimalMSTWeight}). For a MINIMUM Spanning Tree, lower weight is strictly better. Prioritize lighter edges.`
       );
     }
   };

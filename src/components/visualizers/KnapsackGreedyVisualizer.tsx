@@ -70,7 +70,7 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
           </span>
           <span className="stat-badge">
             <span className="stat-num">
-              {totalWeight.toFixed(1)} / {capacity}
+              {totalWeight.toFixed(1)} / {capacity} kg
             </span>
             <span className="stat-label">{language === 'es' ? 'Capacidad Usada' : 'Used Capacity'}</span>
           </span>
