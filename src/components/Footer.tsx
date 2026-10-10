@@ -37,6 +37,12 @@ export const Footer: React.FC<FooterProps> = ({ currentExerciseId }) => {
           </a>
         </div>
 
+        <div className="footer-dedication" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', margin: '0 1rem' }}>
+          {language === 'es'
+            ? 'Reconocimiento y agradecimiento académico a Martín Buchwald, Emmanuel Genender, Jon Kleinberg y Éva Tardos.'
+            : 'Special academic acknowledgments to Prof. M. Buchwald, Prof. E. Genender, Prof. J. Kleinberg, and Prof. É. Tardos.'}
+        </div>
+
         <div>
           <button
             type="button"

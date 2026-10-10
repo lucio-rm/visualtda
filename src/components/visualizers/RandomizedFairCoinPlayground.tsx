@@ -383,8 +383,8 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
           <div className="dist-box fair-box">
             <div className="box-title">
               {language === 'es'
-                ? '⭐ Salida von Neumann (Aleatoriedad Pura Extraída)'
-                : '⭐ Von Neumann Output (Extracted Pure Randomness)'}
+                ? 'Salida von Neumann (Aleatoriedad Pura Extraída)'
+                : 'Von Neumann Output (Extracted Pure Randomness)'}
             </div>
             <div className="bars-wrapper">
               <div className="bar-row">

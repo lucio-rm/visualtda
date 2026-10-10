@@ -14,16 +14,16 @@ import { getHintUnlockStatus } from '../utils/hintGating';
 import { HintRequirementWidget } from './HintRequirementWidget';
 import { StudentAttemptsViewer } from './StudentAttemptsViewer';
 import { highlightPythonCode } from '../utils/pythonSyntaxHighlighter';
-import { sanitizePythonUnicode, beautifyPythonCode } from '../utils/codeFormatter';
+import { sanitizePythonUnicode } from '../utils/codeFormatter';
 import { DpRecurrenceSelfCheck } from './DpRecurrenceSelfCheck';
 import { VisualTestFailureInspector } from './VisualTestFailureInspector';
-import { playSuccessChime } from '../utils/audioFeedback';
 
 function localizeStarterCode(rawCode: string, lang: 'es' | 'en'): string {
   if (lang === 'es') return rawCode;
 
   let localized = rawCode
-    .replace(/# Escribí tu solución aquí en Python 3/g, '# Write your solution here in Python 3')
+    .replace(/# Escribí tu solución aquí en Python 3/g, '# Write your solution here in Python')
+    .replace(/# Escribí tu solución aquí en Python/g, '# Write your solution here in Python')
     .replace(/# Escribe tu algoritmo de backtracking con podas aquí/g, '# Write your backtracking algorithm with pruning here')
     .replace(/# Escribe tu algoritmo de programación dinámica aquí/g, '# Write your dynamic programming algorithm here')
     .replace(/# Escribe tu algoritmo divide y vencerás aquí/g, '# Write your divide-and-conquer algorithm here')
@@ -196,7 +196,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
   const storageKey = `visual_tda_code_${exercise.id}`;
   const rawStarter = (language === 'en' && ENGLISH_STARTER_CODES[exercise.id])
     ? ENGLISH_STARTER_CODES[exercise.id]
-    : (starterCode || content?.starterCode || '# Escribí tu solución aquí en Python 3\ndef resolver():\n    pass\n');
+    : (starterCode || content?.starterCode || '# Escribí tu solución aquí en Python\ndef resolver():\n    pass\n');
   const defaultCode = useMemo(() => {
     if (language === 'en' && ENGLISH_STARTER_CODES[exercise.id]) {
       return ENGLISH_STARTER_CODES[exercise.id];
@@ -244,7 +244,18 @@ export const SolveView: React.FC<SolveViewProps> = ({
     }
   };
 
-  const setCode = (newCode: string) => {
+  const undoStackRef = useRef<string[]>([code]);
+  const redoStackRef = useRef<string[]>([]);
+  const isUndoRedoRef = useRef<boolean>(false);
+
+  const setCode = (newCode: string, pushHistory = true) => {
+    if (pushHistory && !isUndoRedoRef.current && newCode !== code) {
+      undoStackRef.current.push(newCode);
+      if (undoStackRef.current.length > 100) {
+        undoStackRef.current.shift();
+      }
+      redoStackRef.current = [];
+    }
     setCodeState(newCode);
     markAttempted(exercise.id);
     try {
@@ -252,16 +263,6 @@ export const SolveView: React.FC<SolveViewProps> = ({
     } catch {
       // Ignore quota error
     }
-  };
-
-  const handleFormatCode = () => {
-    const formatted = beautifyPythonCode(code);
-    setCode(formatted);
-    setSanitizationNotice(
-      language === 'es'
-        ? '✨ Código normalizado a 4 espacios y formato estándar de Python.'
-        : '✨ Code formatted to 4 spaces and standard Python conventions.'
-    );
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
@@ -276,8 +277,8 @@ export const SolveView: React.FC<SolveViewProps> = ({
       setCode(nextCode);
       setSanitizationNotice(
         language === 'es'
-          ? `✨ Se normalizaron ${result.replacementsCount} caracteres especiales (${result.replacementTypes.join(', ')}) a sintaxis Python válida.`
-          : `✨ Normalized ${result.replacementsCount} special characters (${result.replacementTypes.join(', ')}) to valid Python syntax.`
+          ? `Se normalizaron ${result.replacementsCount} caracteres especiales (${result.replacementTypes.join(', ')}) a sintaxis Python válida.`
+          : `Normalized ${result.replacementsCount} special characters (${result.replacementTypes.join(', ')}) to valid Python syntax.`
       );
       requestAnimationFrame(() => {
         textarea.setSelectionRange(start + result.sanitized.length, start + result.sanitized.length);
@@ -300,39 +301,37 @@ export const SolveView: React.FC<SolveViewProps> = ({
     }
   };
 
-  const handleInsertSnippet = (snippetKey: string) => {
-    let snippetText = '';
-    if (snippetKey === 'memo') {
-      snippetText = '\n    # Cache de Memoization\n    memo = {}\n    if state in memo:\n        return memo[state]\n';
-    } else if (snippetKey === 'guard') {
-      snippetText = '\n    # Caso base / guarda de frontera\n    if not items or capacity <= 0:\n        return 0\n';
-    } else if (snippetKey === 'dp_table') {
-      snippetText = '\n    # Tabla DP 2D\n    dp = [[0] * (capacidad + 1) for _ in range(n + 1)]\n';
-    } else if (snippetKey === 'backtrack') {
-      snippetText = '\n    # Paso recursivo de backtracking con poda\n    candidatos.append(c)\n    resolver(etapa + 1)\n    candidatos.pop()  # Deshacer mutación\n';
-    }
-
-    if (snippetText) {
-      const textarea = textareaRef.current;
-      if (textarea) {
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const nextCode = code.substring(0, start) + snippetText + code.substring(end);
-        setCode(nextCode);
-        requestAnimationFrame(() => {
-          textarea.setSelectionRange(start + snippetText.length, start + snippetText.length);
-          textarea.focus();
-        });
-      } else {
-        setCode(code + snippetText);
-      }
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const target = e.currentTarget;
     const start = target.selectionStart;
     const end = target.selectionEnd;
+
+    // Undo: Ctrl+Z or Cmd+Z
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !e.shiftKey) {
+      e.preventDefault();
+      if (undoStackRef.current.length > 1) {
+        const current = undoStackRef.current.pop()!;
+        redoStackRef.current.push(current);
+        const prevCode = undoStackRef.current[undoStackRef.current.length - 1];
+        isUndoRedoRef.current = true;
+        setCode(prevCode, false);
+        isUndoRedoRef.current = false;
+      }
+      return;
+    }
+
+    // Redo: Ctrl+Y, Cmd+Y, or Ctrl+Shift+Z / Cmd+Shift+Z
+    if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) {
+      e.preventDefault();
+      if (redoStackRef.current.length > 0) {
+        const nextCode = redoStackRef.current.pop()!;
+        undoStackRef.current.push(nextCode);
+        isUndoRedoRef.current = true;
+        setCode(nextCode, false);
+        isUndoRedoRef.current = false;
+      }
+      return;
+    }
 
     if (e.key === 'Tab') {
       e.preventDefault();
@@ -493,7 +492,6 @@ export const SolveView: React.FC<SolveViewProps> = ({
         setTestStatus('passed');
         recordLegitimateExercisePass(exercise.id);
         markPassed(exercise.id, evaluation.totalPassed, evaluation.totalTests);
-        playSuccessChime();
         setTestSummary(
           language === 'es'
             ? `${evaluation.totalPassed} / ${evaluation.totalTests} casos de prueba superados con éxito.`
@@ -650,7 +648,6 @@ export const SolveView: React.FC<SolveViewProps> = ({
       setTestStatus('passed');
       recordLegitimateExercisePass(exercise.id);
       markPassed(exercise.id, evalResult.totalPassed, evalResult.totalTests);
-      playSuccessChime();
       setTestSummary(
         language === 'es'
           ? `${evalResult.totalPassed} / ${evalResult.totalTests} pruebas superadas exitosamente en ${Math.round(evalResult.executionTimeMs)} ms.`
@@ -713,58 +710,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
           <div className="editor-card">
             <div className="editor-header">
               <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span className="editor-lang-badge">Python 3</span>
+                <span className="editor-lang-badge">Python</span>
                 <span className="editor-filename">{language === 'es' ? 'solucion.py' : 'solution.py'}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <select
-                  aria-label={language === 'es' ? 'Insertar plantilla algorítmica' : 'Insert algorithmic snippet'}
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      handleInsertSnippet(e.target.value);
-                      e.target.value = '';
-                    }
-                  }}
-                  defaultValue=""
-                  className="editor-snippet-select"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius-sm)',
-                    color: 'var(--text-muted)',
-                    fontSize: '0.78rem',
-                    padding: '0.2rem 0.45rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="" disabled>
-                    {language === 'es' ? '+ Insertar Snippet' : '+ Insert Snippet'}
-                  </option>
-                  <option value="memo">{language === 'es' ? 'Plantilla: Memoization' : 'Template: Memoization'}</option>
-                  <option value="guard">{language === 'es' ? 'Plantilla: Guarda de borde' : 'Template: Guard Clause'}</option>
-                  <option value="dp_table">{language === 'es' ? 'Plantilla: Tabla DP 2D' : 'Template: 2D DP Table'}</option>
-                  <option value="backtrack">{language === 'es' ? 'Plantilla: Backtracking' : 'Template: Backtracking'}</option>
-                </select>
-
-                <button
-                  type="button"
-                  className="btn-format-code"
-                  onClick={handleFormatCode}
-                  title={language === 'es' ? 'Formatear código (4 espacios, limpia caracteres especiales)' : 'Format code (4 spaces, cleans special characters)'}
-                  aria-label={language === 'es' ? 'Formatear código' : 'Format code'}
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius-sm)',
-                    color: 'var(--accent)',
-                    fontSize: '0.78rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    padding: '0.2rem 0.5rem'
-                  }}
-                >
-                  ✨ {language === 'es' ? 'Formatear' : 'Format'}
-                </button>
 
                 <button
                   type="button"
@@ -974,7 +923,11 @@ export const SolveView: React.FC<SolveViewProps> = ({
                               onClick={() => setInspectedTestCase(tr)}
                               title={language === 'es' ? 'Inspeccionar diagnóstico de este fallo' : 'Inspect failure diagnostics'}
                             >
-                              🔍 {language === 'es' ? 'Inspeccionar' : 'Inspect'}
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginRight: '4px', verticalAlign: '-1px' }}>
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                              </svg>
+                              {language === 'es' ? 'Inspeccionar' : 'Inspect'}
                             </button>
                           )}
                         </div>

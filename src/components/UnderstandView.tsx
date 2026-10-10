@@ -124,24 +124,37 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
   };
 
   useEffect(() => {
+    if (isFacultyAuthenticated && (codeMode === 'student' || codeMode === 'attempts') && !approvedSolution) {
+      setCodeMode('python');
+    } else if (!isFacultyAuthenticated && (codeMode === 'python' || codeMode === 'pseudocode')) {
+      setCodeMode(approvedSolution ? 'student' : studentAttempts.length > 0 ? 'attempts' : 'student');
+    }
+  }, [isFacultyAuthenticated, approvedSolution, studentAttempts.length, codeMode]);
+
+  useEffect(() => {
     let isMounted = true;
-    if (canViewCanonicalPython && !decryptedPython) {
-      setIsDecrypting(true);
-      getOrDecryptSolution(exercise.id)
-        .then((code) => {
-          if (isMounted) {
-            setDecryptedPython(code);
-            setIsDecrypting(false);
-          }
-        })
-        .catch(() => {
-          if (isMounted) setIsDecrypting(false);
-        });
+    if (canViewCanonicalPython) {
+      const cached = getDecryptedSolutionSync(exercise.id);
+      if (cached) {
+        setDecryptedPython(cached);
+      } else {
+        setIsDecrypting(true);
+        getOrDecryptSolution(exercise.id)
+          .then((code) => {
+            if (isMounted) {
+              setDecryptedPython(code);
+              setIsDecrypting(false);
+            }
+          })
+          .catch(() => {
+            if (isMounted) setIsDecrypting(false);
+          });
+      }
     }
     return () => {
       isMounted = false;
     };
-  }, [exercise.id, canViewCanonicalPython, decryptedPython]);
+  }, [exercise.id, canViewCanonicalPython]);
 
   const effectivePython =
     decryptedPython ||
@@ -198,22 +211,26 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                 >
                   {language === 'es' ? `Intentos (${studentAttempts.length})` : `Attempts (${studentAttempts.length})`}
                 </button>
-                <button
-                  type="button"
-                  className={`btn-code-toggle ${codeMode === 'python' ? 'active' : ''}`}
-                  onClick={() => setCodeMode('python')}
-                  aria-pressed={codeMode === 'python'}
-                >
-                  {language === 'es' ? 'Python 3 (Docentes)' : 'Python 3 (Faculty)'}
-                </button>
-                <button
-                  type="button"
-                  className={`btn-code-toggle ${codeMode === 'pseudocode' ? 'active' : ''}`}
-                  onClick={() => setCodeMode('pseudocode')}
-                  aria-pressed={codeMode === 'pseudocode'}
-                >
-                  {language === 'es' ? 'Pseudocódigo (Docentes)' : 'Pseudocode (Faculty)'}
-                </button>
+                {isFacultyAuthenticated && (
+                  <>
+                    <button
+                      type="button"
+                      className={`btn-code-toggle ${codeMode === 'python' ? 'active' : ''}`}
+                      onClick={() => setCodeMode('python')}
+                      aria-pressed={codeMode === 'python'}
+                    >
+                      {language === 'es' ? 'Python (Docente)' : 'Python (Faculty)'}
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn-code-toggle ${codeMode === 'pseudocode' ? 'active' : ''}`}
+                      onClick={() => setCodeMode('pseudocode')}
+                      aria-pressed={codeMode === 'pseudocode'}
+                    >
+                      {language === 'es' ? 'Pseudocódigo (Docente)' : 'Pseudocode (Faculty)'}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -272,8 +289,11 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                         marginBottom: '0.75rem',
                         fontSize: '0.82rem'
                       }}>
-                        <span style={{ color: '#22c55e', fontWeight: 600 }}>
-                          ✓ {language === 'es' ? 'Código Aprobado por la Batería de Pruebas' : 'Code Approved by Test Suite'}
+                        <span style={{ color: '#22c55e', fontWeight: 600, display: 'inline-flex', alignItems: 'center' }}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginRight: '6px' }}>
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                          {language === 'es' ? 'Código Aprobado por la Batería de Pruebas' : 'Code Approved by Test Suite'}
                         </span>
                         <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
                           {approvedSolution.passedTestsCount} {language === 'es' ? 'tests superados' : 'tests passed'} · {new Date(approvedSolution.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -282,7 +302,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                       <div className="code-editor-card canonical-ide-card" style={{ width: '100%', margin: '0 0 1rem 0' }}>
                         <div className="code-editor-header">
                           <div className="editor-header-left" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span className="editor-lang-badge">Python 3</span>
+                            <span className="editor-lang-badge">Python</span>
                             <span className="editor-filename">{language === 'es' ? 'mi_solucion_aprobada.py' : 'my_approved_solution.py'}</span>
                           </div>
                           <button
@@ -299,7 +319,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                             }}
                           >
                             {copiedCodeMode === 'student'
-                              ? (language === 'es' ? '✓ Copiado' : '✓ Copied')
+                              ? (language === 'es' ? 'Copiado' : 'Copied')
                               : (language === 'es' ? 'Copiar Código' : 'Copy Code')}
                           </button>
                         </div>
@@ -410,7 +430,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                             : 'formal_pseudocode.algo';
                       const activeLangBadge =
                         codeMode === 'python'
-                          ? 'Python 3'
+                          ? 'Python'
                           : language === 'es'
                             ? 'Pseudocódigo'
                             : 'Pseudocode';
@@ -436,7 +456,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
                               }}
                             >
                               {copiedCodeMode === codeMode
-                                ? (language === 'es' ? '✓ Copiado' : '✓ Copied')
+                                ? (language === 'es' ? 'Copiado' : 'Copied')
                                 : (language === 'es' ? 'Copiar Código' : 'Copy Code')}
                             </button>
                           </div>

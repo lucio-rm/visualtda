@@ -268,8 +268,8 @@ export const TRANSLATIONS: TranslationsDictionary = {
     en: 'Python Solution'
   },
   understandPython3: {
-    es: 'Python 3',
-    en: 'Python 3'
+    es: 'Python',
+    en: 'Python'
   },
   understandPseudocode: {
     es: 'Pseudocódigo',

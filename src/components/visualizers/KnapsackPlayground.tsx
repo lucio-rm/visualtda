@@ -419,7 +419,7 @@ export const KnapsackPlayground: React.FC = () => {
             disabled={selectedIds.length === 0}
             style={{ fontWeight: 600 }}
           >
-            {language === 'es' ? '✓ Verificar Mochila' : '✓ Verify Knapsack'}
+            {language === 'es' ? 'Verificar Mochila' : 'Verify Knapsack'}
           </button>
           {selectedIds.length > 0 && (
             <button

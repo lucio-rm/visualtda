@@ -315,7 +315,7 @@ export const KruskalPlayground: React.FC = () => {
             onClick={handleVerify}
             style={{ fontWeight: 700 }}
           >
-            {language === 'es' ? '✓ Verificar AGM' : '✓ Check MST'}
+            {language === 'es' ? 'Verificar AGM' : 'Check MST'}
           </button>
           <button type="button" className="btn-tool" onClick={handleReset}>
             {language === 'es' ? 'Limpiar Selección ↺' : 'Reset Selection ↺'}

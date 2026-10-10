@@ -27,7 +27,7 @@ const PRESETS: Preset[] = [
     array: [-5, -2, -8]
   },
   {
-    name: { es: 'Clásico Bentley / LeetCode (Kadane vs DyC)', en: 'Classic Bentley / LeetCode' },
+    name: { es: 'Clásico Bentley (Kadane vs DyC)', en: 'Classic Bentley Benchmark' },
     array: [-2, 1, -3, 4, -1, 2, 1, -5, 4]
   }
 ];

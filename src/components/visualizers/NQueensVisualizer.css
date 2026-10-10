@@ -117,29 +117,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.75rem;
+  padding: 1rem 1.5rem;
   background-color: var(--canvas-bg);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  min-height: 440px;
+  min-height: 340px;
+  max-height: min(500px, calc(100vh - 300px));
 }
 
 /* Chessboard SVG Elements */
 .nqueens-board-wrapper {
   display: flex;
   justify-content: center;
-  width: 100%;
-  max-width: 100%;
+  align-items: center;
+  width: auto;
+  max-width: min(100%, 450px, calc(100vh - 320px));
+  max-height: min(450px, calc(100vh - 320px));
+  margin: 0 auto;
 }
 
 .nqueens-board-svg {
   width: 100%;
+  max-width: min(100%, 450px, calc(100vh - 320px));
+  max-height: min(450px, calc(100vh - 320px));
   height: auto;
   aspect-ratio: 1 / 1;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-radius: var(--radius-sm);
   border: 2.5px solid var(--board-border-strong);
   background-color: var(--board-bg);
+  display: block;
 }
 
 /* Cells */

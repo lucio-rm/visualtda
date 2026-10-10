@@ -254,7 +254,7 @@ export const CurriculumKnowledgeGraph: React.FC<CurriculumKnowledgeGraphProps> =
             <span className="ckg-paradigm-pill">
               {isEs ? 'Mapa de Reducciones y Técnicas' : 'Reductions & Techniques Skill Tree'}
             </span>
-            <span className="ckg-book-reference">Kleinberg & Tardos Chapters 4 – 11</span>
+            <span className="ckg-book-reference">{isEs ? 'Capítulos 4 – 11' : 'Chapters 4 – 11'}</span>
           </div>
           <h3 className="ckg-title">
             {isEs
@@ -284,7 +284,7 @@ export const CurriculumKnowledgeGraph: React.FC<CurriculumKnowledgeGraphProps> =
         {hoveredEdge ? (
           <div className="ckg-edge-detail animate-fade-in">
             <span className="ckg-edge-badge ckg-edge-badge-active">
-              🔗 {isEs ? 'Transición Teórica:' : 'Theoretical Transition:'} {hoveredEdge.label[language]}
+              {isEs ? 'Transición Teórica:' : 'Theoretical Transition:'} {hoveredEdge.label[language]}
             </span>
             <p className="ckg-edge-insight">{hoveredEdge.insight[language]}</p>
           </div>
@@ -303,7 +303,7 @@ export const CurriculumKnowledgeGraph: React.FC<CurriculumKnowledgeGraphProps> =
                     </div>
                   </div>
                   <span className={`ckg-status-pill ${isCompleted(node.id) ? 'completed' : 'pending'}`}>
-                    {isCompleted(node.id) ? (isEs ? '✓ Completado' : '✓ Completed') : (isEs ? 'Pendiente' : 'Pending')}
+                    {isCompleted(node.id) ? (isEs ? 'Completado' : 'Completed') : (isEs ? 'Pendiente' : 'Pending')}
                   </span>
                 </div>
               );
@@ -311,7 +311,7 @@ export const CurriculumKnowledgeGraph: React.FC<CurriculumKnowledgeGraphProps> =
           </div>
         ) : (
           <div className="ckg-idle-hint">
-            💡 {isEs
+            {isEs
               ? 'Pasá el cursor sobre cualquier nodo o flecha para inspeccionar su justificación pedagógica y clic para ingresar al ejercicio.'
               : 'Hover over any node or arrow to inspect its pedagogical argument, and click to enter the exercise.'}
           </div>

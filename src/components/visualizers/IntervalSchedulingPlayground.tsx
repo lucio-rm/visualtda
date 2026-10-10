@@ -365,7 +365,7 @@ export const IntervalSchedulingPlayground: React.FC = () => {
               >
                 {showBulkModal
                   ? (language === 'es' ? 'Cerrar Carga Masiva' : 'Close Bulk Input')
-                  : (language === 'es' ? '📋 Carga Masiva' : '📋 Bulk Input')}
+                  : (language === 'es' ? 'Carga Masiva' : 'Bulk Input')}
               </button>
               <button
                 type="button"

@@ -294,7 +294,7 @@ export const SudokuPlayground: React.FC = () => {
                   : 'MRV heuristic assistance unlocks upon completing the exercise or in Instructor Mode.'
               }
             >
-              🔒 MRV
+              {language === 'es' ? 'MRV (Bloqueado)' : 'MRV (Locked)'}
             </span>
           )}
           <button
@@ -303,7 +303,7 @@ export const SudokuPlayground: React.FC = () => {
             onClick={handleVerify}
             style={{ fontWeight: 700, backgroundColor: 'var(--accent-solid, var(--accent))', color: 'var(--accent-contrast, #ffffff)' }}
           >
-            {language === 'es' ? '✓ Verificar Tablero' : '✓ Check Board'}
+            {language === 'es' ? 'Verificar Tablero' : 'Check Board'}
           </button>
         </div>
       </div>

@@ -312,18 +312,11 @@ def solve(items):
       expect(container.textContent).toContain('Tu Solución');
       expect(container.textContent).toContain('Intentos (0)');
 
-      // Clicking faculty tabs reveals locked message
+      // Non-faculty students must NOT see faculty tabs at all (zero teaser to prevent hacking)
       const facultyPythonBtn = Array.from(container.querySelectorAll('.btn-code-toggle')).find(
-        (b) => b.textContent?.includes('Python 3 (Docentes)')
-      ) as HTMLButtonElement;
-      expect(facultyPythonBtn).toBeDefined();
-
-      await act(async () => {
-        facultyPythonBtn.click();
-      });
-
-      expect(container.querySelector('.solution-locked-card')).not.toBeNull();
-      expect(container.textContent).toContain('Acceso Exclusivo Docente');
+        (b) => b.textContent?.includes('Docente')
+      );
+      expect(facultyPythonBtn).toBeUndefined();
       expect(container.textContent).not.toContain('CANONICAL_HIDDEN_CODE');
     });
 
@@ -467,7 +460,7 @@ def solve(items):
       // Does not show MRV showcase button to uncompleted student
       expect(container.textContent).not.toContain('Demostración MRV');
       // Shows lock indicator instead of active MRV toggle
-      expect(container.textContent).toContain('🔒 MRV');
+      expect(container.textContent).toContain('MRV (Bloqueado)');
       // Board SVG does not render "MRV" badge text on any cell
       expect(container.querySelector('svg')?.textContent).not.toContain('MRV');
       // Status bar shows locked hint notice

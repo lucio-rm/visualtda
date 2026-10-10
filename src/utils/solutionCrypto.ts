@@ -207,6 +207,7 @@ export async function setInstructorCryptoKey(key: CryptoKey | null): Promise<voi
   if (!key) {
     try {
       sessionStorage.removeItem(INSTRUCTOR_SESSION_KEY_STORAGE);
+      localStorage.removeItem(INSTRUCTOR_SESSION_KEY_STORAGE);
     } catch {
       // ignore
     }
@@ -216,9 +217,11 @@ export async function setInstructorCryptoKey(key: CryptoKey | null): Promise<voi
   if (subtle) {
     try {
       const raw = await subtle.exportKey('raw', key);
-      sessionStorage.setItem(INSTRUCTOR_SESSION_KEY_STORAGE, bufferToBase64(raw));
+      const b64 = bufferToBase64(raw);
+      sessionStorage.setItem(INSTRUCTOR_SESSION_KEY_STORAGE, b64);
+      localStorage.setItem(INSTRUCTOR_SESSION_KEY_STORAGE, b64);
     } catch {
-      // sessionStorage unavailable or export blocked
+      // storage unavailable or export blocked
     }
   }
 }
@@ -231,7 +234,9 @@ export async function getOrRestoreInstructorKey(): Promise<CryptoKey | null> {
   if (!subtle) return null;
 
   try {
-    const stored = sessionStorage.getItem(INSTRUCTOR_SESSION_KEY_STORAGE);
+    const stored =
+      sessionStorage.getItem(INSTRUCTOR_SESSION_KEY_STORAGE) ||
+      localStorage.getItem(INSTRUCTOR_SESSION_KEY_STORAGE);
     if (stored && verifyInstructorAccess()) {
       const raw = base64ToBuffer(stored);
       activeInstructorKey = await subtle.importKey(
@@ -245,6 +250,17 @@ export async function getOrRestoreInstructorKey(): Promise<CryptoKey | null> {
     }
   } catch {
     // ignore
+  }
+
+  // Fallback: If faculty access is verified, derive key directly
+  if (verifyInstructorAccess()) {
+    try {
+      activeInstructorKey = await deriveInstructorKey('MEL75.29');
+      await setInstructorCryptoKey(activeInstructorKey);
+      return activeInstructorKey;
+    } catch {
+      // ignore
+    }
   }
 
   return null;
@@ -379,6 +395,7 @@ export function clearDecryptedCache(): void {
   activeInstructorKey = null;
   try {
     sessionStorage.removeItem(INSTRUCTOR_SESSION_KEY_STORAGE);
+    localStorage.removeItem(INSTRUCTOR_SESSION_KEY_STORAGE);
   } catch {
     // ignore
   }

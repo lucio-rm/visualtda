@@ -29,7 +29,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['divide-and-conquer'],
     trackNumber: 1,
     title: { es: 'División y Conquista', en: 'Divide & Conquer' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 5', en: 'Kleinberg & Tardos — Chapter 5' },
+    bookReference: { es: 'Capítulo 5', en: 'Chapter 5' },
     description: {
       es: 'Descomposición en subproblemas disjuntos, resolución recursiva y recombinación en tiempo lineal u O(N log N).',
       en: 'Decompose into disjoint subproblems, recursive solve, and recombination in linear or O(N log N) time.'
@@ -41,7 +41,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['greedy'],
     trackNumber: 2,
     title: { es: 'Algoritmos Greedy', en: 'Greedy Algorithms' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 4', en: 'Kleinberg & Tardos — Chapter 4' },
+    bookReference: { es: 'Capítulo 4', en: 'Chapter 4' },
     description: {
       es: 'Elección local óptima irrevocable demostrada formalmente mediante argumento de intercambio o Greedy Stays Ahead.',
       en: 'Irrevocable locally optimal choice proved optimal via exchange arguments or Greedy Stays Ahead.'
@@ -53,7 +53,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['backtracking'],
     trackNumber: 3,
     title: { es: 'Backtracking y Ramificación', en: 'Backtracking & Branching' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
+    bookReference: { es: 'Capítulo 8', en: 'Chapter 8' },
     description: {
       es: 'Exploración sistemática del espacio de búsqueda en profundidad con poda inmediata de ramas que violan restricciones.',
       en: 'Systematic depth-first search space exploration with immediate pruning of violating candidate branches.'
@@ -65,7 +65,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['dynamic-programming'],
     trackNumber: 4,
     title: { es: 'Programación Dinámica', en: 'Dynamic Programming' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 6', en: 'Kleinberg & Tardos — Chapter 6' },
+    bookReference: { es: 'Capítulo 6', en: 'Chapter 6' },
     description: {
       es: 'Subestructura óptima y subproblemas superpuestos tabulados sistemáticamente evitando recomputación exponencial.',
       en: 'Optimal substructure and overlapping subproblems tabulated to eliminate exponential recomputation.'
@@ -77,7 +77,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['linear-programming'],
     trackNumber: 5,
     title: { es: 'Programación Lineal', en: 'Linear Programming' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 11', en: 'Kleinberg & Tardos — Chapter 11' },
+    bookReference: { es: 'Capítulo 11', en: 'Chapter 11' },
     description: {
       es: 'Optimización de una función objetivo continua sujeta a un poliedro convexo de restricciones lineales.',
       en: 'Continuous objective function optimization subject to a convex polyhedron of linear constraints.'
@@ -89,7 +89,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['network-flow'],
     trackNumber: 6,
     title: { es: 'Redes de Flujo', en: 'Network Flow' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 7', en: 'Kleinberg & Tardos — Chapter 7' },
+    bookReference: { es: 'Capítulo 7', en: 'Chapter 7' },
     description: {
       es: 'Conservación de flujo, capacidades residuales, teorema de flujo máximo y corte mínimo (Max-Flow Min-Cut).',
       en: 'Flow conservation, residual capacities, and the Max-Flow Min-Cut theorem on directed networks.'
@@ -101,7 +101,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['reductions'],
     trackNumber: 7,
     title: { es: 'Reducciones de Problemas y NP-Completitud', en: 'Problem Reductions & NP-Completeness' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 8', en: 'Kleinberg & Tardos — Chapter 8' },
+    bookReference: { es: 'Capítulo 8', en: 'Chapter 8' },
     description: {
       es: 'Mapeos polinomiales (X ≤_p Y) entre problemas para caracterizar intratabilidad computacional y completitud.',
       en: 'Polynomial-time mappings (X ≤_p Y) to classify computational intractability and completeness.'
@@ -113,7 +113,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['approximation'],
     trackNumber: 8,
     title: { es: 'Algoritmos de Aproximación', en: 'Approximation Algorithms' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 11', en: 'Kleinberg & Tardos — Chapter 11' },
+    bookReference: { es: 'Capítulo 11', en: 'Chapter 11' },
     description: {
       es: 'Garantías matemáticas de rendimiento acotado (factor ρ-aproximación) en tiempo polinomial para problemas NP-hard.',
       en: 'Provable bounded performance guarantees (ρ-approximation factor) in polynomial time for NP-hard problems.'
@@ -125,7 +125,7 @@ const PARADIGM_TRACKS: ParadigmTrackDef[] = [
     categoryIds: ['randomized'],
     trackNumber: 9,
     title: { es: 'Algoritmos Randomizados', en: 'Randomized Algorithms' },
-    bookReference: { es: 'Kleinberg & Tardos — Capítulo 13', en: 'Kleinberg & Tardos — Chapter 13' },
+    bookReference: { es: 'Capítulo 13', en: 'Chapter 13' },
     description: {
       es: 'Uso de variables aleatorias e independencia probabilística para simplificar algoritmos o acotar tiempos esperados.',
       en: 'Harnessing random variables and probabilistic independence for simplicity and bounded expected runtime.'

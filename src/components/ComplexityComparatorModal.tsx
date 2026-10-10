@@ -27,8 +27,8 @@ function formatOps(n: number | string): string {
 function formatTime(secs: number | string, lang: 'es' | 'en'): string {
   if (typeof secs === 'string') return secs;
   const isEs = lang === 'es';
-  if (secs < 1e-6) return `< 1 µs (${isEs ? 'instantáneo' : 'instant'})`;
-  if (secs < 1e-3) return `${(secs * 1e6).toFixed(1)} µs`;
+  if (secs < 1e-6) return isEs ? '< 0.001 ms (instantáneo)' : '< 0.001 ms (instant)';
+  if (secs < 1e-3) return `${(secs * 1000).toFixed(3)} ms`;
   if (secs < 1) return `${(secs * 1000).toFixed(1)} ms`;
   if (secs < 60) return `${secs.toFixed(2)} s`;
   if (secs < 3600) return `${(secs / 60).toFixed(1)} min`;
@@ -155,8 +155,8 @@ export const ComplexityComparatorModal: React.FC<ComplexityComparatorModalProps>
         <div className="complexity-modal-body">
           <p className="complexity-modal-intro">
             {isEs
-              ? 'Analizá el crecimiento del número de operaciones y tiempo estimado a 1 GHz (10⁹ ops/seg) según Kleinberg & Tardos (Capítulo 2).'
-              : 'Analyze operation growth and estimated 1 GHz wall-clock execution time based on Kleinberg & Tardos (Chapter 2).'}
+              ? 'Analizá el crecimiento del número de operaciones y tiempo estimado a 1 GHz (10⁹ ops/seg) según el modelo RAM estándar de complejidad asintótica.'
+              : 'Analyze operation growth and estimated 1 GHz wall-clock execution time based on the standard RAM asymptotic model.'}
           </p>
 
           {/* Controls bar */}
@@ -238,10 +238,10 @@ export const ComplexityComparatorModal: React.FC<ComplexityComparatorModalProps>
 
           {nValue >= 30 && (
             <div className="complexity-intractable-banner">
-              ⚠️ <strong>{isEs ? 'Barrera de Intratabilidad' : 'Intractability Boundary'}:</strong>{' '}
+              <strong>{isEs ? 'Barrera de Intratabilidad Computacional' : 'Computational Intractability Barrier'}:</strong>{' '}
               {isEs
-                ? `Para n = ${nValue}, las soluciones de fuerza bruta O(2ⁿ) y O(n!) superan los recursos computacionales del universo. Por ello, en Visual TDA estudiamos Programación Dinámica, Algoritmos Voraces y Técnicas de Aproximación.`
-                : `For n = ${nValue}, brute-force algorithms O(2ⁿ) and O(n!) exceed universe computational limits. That is why Visual TDA focuses on Dynamic Programming, Greedy, and Approximation.`}
+                ? `Para n = ${nValue}, el volumen de operaciones de algoritmos en O(2ⁿ) y O(n!) excede 10¹⁴ pasos elementales, volviendo físicamente inviable la búsqueda exhaustiva en hardware convencional sin podas de frontera o memorización.`
+                : `For n = ${nValue}, operations in O(2ⁿ) and O(n!) exceed 10¹⁴ elementary steps, rendering brute-force computation physically intractable on standard hardware without branch pruning or memoization.`}
             </div>
           )}
         </div>

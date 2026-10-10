@@ -119,7 +119,12 @@ export const VisualTestFailureInspector: React.FC<VisualTestFailureInspectorProp
       <div className="test-failure-inspector-card">
         <header className="test-failure-inspector-header">
           <div className="test-failure-header-title-row">
-            <span className="test-failure-icon" aria-hidden="true">🔍</span>
+            <span className="test-failure-icon" aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </span>
             <div>
               <h3 id="inspector-dialog-title" className="test-failure-title">
                 {isEs ? 'Diagnóstico Pedagógico de Caso Fallido' : 'Pedagogical Failure Inspector'}
@@ -171,7 +176,13 @@ export const VisualTestFailureInspector: React.FC<VisualTestFailureInspectorProp
           {/* Pedagogical Diagnostic Reasoning */}
           <div className="pedagogical-diagnosis-card">
             <div className="diagnosis-badge-title">
-              <span className="diagnosis-sparkle" aria-hidden="true">💡</span>
+              <span className="diagnosis-sparkle" aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </span>
               <h4>{diagnosis.title}</h4>
             </div>
             <p className="diagnosis-explanation">{diagnosis.explanation}</p>

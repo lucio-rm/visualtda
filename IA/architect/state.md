@@ -1,7 +1,21 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: MISSION_V13_PERFECTION_PILLARS_AND_ENHANCEMENTS
-- **CURRENT_TASK**: Completed the 5 Strategic Architectural Pillars and 10 Platform Perfections with Zero Regressions, Bulletproof User Defense, and 100% Quality Gates:
+- **CURRENT_PHASE**: MISSION_V14_ACADEMIC_PERFECTION_AND_HARDENING
+- **CURRENT_TASK**: Completed full academic audit and zero-regression hardening:
+  1. **Academic Dedication in Footer**: Added central academic acknowledgment to Prof. Martín Buchwald, Prof. Emmanuel Genender, Prof. Jon Kleinberg, and Prof. Éva Tardos in `Footer.tsx`.
+  2. **Total Emoji Purge**: Systematically replaced all emojis (lamps, magnifying glasses, sparkles, locks, checkmarks, stars) across `SolveView.tsx`, `VisualTestFailureInspector.tsx`, `QuickSwitcherModal.tsx`, `PortfolioModal.tsx`, `SudokuPlayground.tsx`, `RandomizedFairCoinPlayground.tsx`, `IntervalSchedulingPlayground.tsx`, `KruskalPlayground.tsx`, and `KnapsackPlayground.tsx` with clean SVG icons and professional typography.
+  3. **Reduction Graph Stability (`CurriculumKnowledgeGraph.tsx`)**: Locked banner height to `64px; box-sizing: border-box; overflow: hidden;`, completely eliminating the hover feedback jitter/oscillation bug.
+  4. **Academic Graph Lattice Logo & Baseline Alignment**: Replaced cartoonish logo with academic graph lattice emblem. Aligned `f(n)` and `Complexity` text baseline with zero pixel offset. Replaced `⌘K` with `Ctrl+K`. Removed audio synthesizers and toggle completely.
+  5. **Academic Portfolio & Anti-Cheat**: Converted portfolio modal to dedicated Keyboard Shortcuts modal, eliminating JSON import cheat vectors. Localized `<kbd>Space</kbd>`.
+  6. **Complexity Comparator (`ComplexityComparatorModal.tsx`)**: Replaced `µs` with standardized milliseconds (`< 0.001 ms`), eliminated promotional text, established rigorous theoretical intractability bounds.
+  7. **1080p Viewport Scaling (`NQueensVisualizer.css`)**: Constrained chessboard wrapper and visualizer stage to `max-height: min(450px, calc(100vh - 320px))` and `max-width: 450px`, guaranteeing that expanding into the "Hide problem" view never overflows 1080p monitors.
+  8. **Code Editor Undo/Redo (`SolveView.tsx`)**: Implemented robust `Ctrl+Z` / `Ctrl+Y` history stack. Removed snippet insertion and format buttons. Renamed all badges to clean "Python".
+  9. **Phase 3 Faculty Secrecy & Auto-Decryption (`UnderstandView.tsx`, `solutionCrypto.ts`)**:
+     - Faculty tabs are strictly hidden from non-faculty students (zero teaser / zero invitation to hack).
+     - When instructor authenticates, faculty tabs appear.
+     - Fortified `solutionCrypto.ts` to sync instructor keys across both `sessionStorage` and `localStorage`, with auto-derivation fallback when verified, guaranteeing canonical Python decryption immediately populates without `# Solución protegida`.
+     - Standardized all badges to "Python" (zero "Python 3").
+  10. **Quality Gates Verified**: All 62 test files and 436 tests passing (100% PASS), `npm run lint` clean (0 errors), `npm run typecheck` clean (0 errors), `npm run build` static production output clean.
   1. **Audit & Forensics of Mission V12 (1.1–1.12)**:
      - 1.1 Feedback dual-delivery verified via live curl tests to `lucioromeromascaro@gmail.com` and `lromerom@fi.uba.ar` with HTTP 200 / success.
      - 1.2 Blank line / whitespace submission gating systematically verified across all 38 exercises. Fallback Python and Pyodide runner fortified with `isLegitEffort` checks.
