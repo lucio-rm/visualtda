@@ -1,21 +1,29 @@
 # Visual TDA — Current Repository State
 
-- **CURRENT_PHASE**: MISSION_V15_UNIVERSAL_VIEWPORT_SCALING_AND_PLAYGROUND_CONTAINMENT
-- **CURRENT_TASK**: Completed universal viewport scaling and hardening across all 38 exercises:
-  1. **Universal 1080p Viewport Scaling**:
-     - Systematically audited and clamped all visualizers, playgrounds, boards, and canvases so that **NONE** of the 38 exercises overflow vertically on standard 1080p monitors (or smaller laptop/mobile viewports) when the problem statement is collapsed or in full-width mode.
-     - Decoupled `App.css` `.expanded-fullwidth` from forcing `width: 100%` on SVG canvases with intrinsic aspect ratios (which previously exploded board height to 1200px–1400px).
-     - Applied `max-height: min(450px, calc(100vh - 320px))` and `max-width: min(100%, 450px, calc(100vh - 320px))` to all square grid/chessboard components (N-Queens, Sudoku, Knight's Tour), keeping them centered and visible in their entirety without requiring zoom-out (Ctrl+scroll) or vertical scrolling.
-     - Constrained all graph and geometrical canvases (Dijkstra, Bellman-Ford, Max Flow, Graph Coloring, Hamiltonian Cycle, Kruskal, Reduction IS/VC, Vertex Cover Approx, TSP B&B, Closest Pair, Linear Programming) with proportional aspect ratios and strict `max-height: min(340px-360px, calc(100vh - 340px))`.
-     - Constrained tree and timeline visualizers (Huffman Tree, Knapsack B&B, Karatsuba, Interval Scheduling, Interval Partitioning, Minimize Lateness, Segmented Least Squares, RNA Structure, Median of Medians, Majority Element) with centered, bounded stages.
-     - Added `max-height: min(440px, calc(100vh - 320px))` and `overflow-y: auto` to DP table matrices (Knapsack DP, LCS).
-  2. **Phase 3 Responsive Controls**:
-     - Enhanced `.code-view-header` and `.code-toggle-group` with responsive flex-wrap and mobile column orientation (`@media (max-width: 640px)`), ensuring that faculty and student tabs adapt cleanly to any screen size without wrapping awkwardly.
-  3. **Zero-Regression Verification**:
+- **CURRENT_PHASE**: MISSION_V16_DEPLOYMENT_READINESS
+- **CURRENT_TASK**: Completed deployment readiness preparation for custom domain visualtda.ar and static hosting:
+  1. **Vite Build Configuration for Root-Domain Deploy (Step 1)**:
+     - Configured `base: '/'` explicitly in `vite.config.ts` (matching root domain deploy at `visualtda.ar`).
+     - Verified `dist/index.html` asset tags generate absolute root-relative paths (`/assets/*`).
+  2. **SPA Routing Architecture Analysis (Step 2)**:
+     - The application is strictly single-route (`/` is the only browser URL; all screen transitions, categories, exercises, and pedagogical phases are managed via pure in-page React state).
+     - No path-based client-side routing library (e.g. React Router) or `pushState`/`replaceState` is used.
+     - Deep-linking or path rewriting is not required for client-side navigation.
+  3. **FormSubmit Endpoint & CSP Security Header Audit (Step 3)**:
+     - Decoded both obfuscated FormSubmit endpoints in `FeedbackModal.tsx`:
+       - Primary: `https://formsubmit.co/ajax/lucioromeromascaro@gmail.com`
+       - Secondary: `https://formsubmit.co/ajax/lromerom@fi.uba.ar`
+     - Verified no hardcoded `localhost` or origin overrides exist in the submission logic.
+     - Identified and resolved critical CSP barrier: `index.html` `<meta http-equiv="Content-Security-Policy">` lacked `https://formsubmit.co` in `connect-src`, causing browser-level network blocking on form submission. Added `https://formsubmit.co` to `connect-src`.
+  4. **Codebase Grep for Localhost / Dev-Only Assumptions (Step 4)**:
+     - Zero occurrences of `localhost`, `127.0.0.1`, or unencrypted `http://` found in production code (`src/`, `public/`, `index.html`, `vite.config.ts`, `package.json`).
+     - Pyodide Web Worker runtime loads from HTTPS CDN `https://cdn.jsdelivr.net` with matching CSP directives.
+  5. **Verification & Quality Gates**:
      - All 62 test files and 436 tests passing (100% PASS).
      - `npm run lint` clean (0 errors).
      - `npm run typecheck` clean (0 errors).
-     - `npm run build` static output clean (1.70s).
+     - `npm run build` clean (dist/ built in 1.75s).
+     - Ready for Step 5 (live verification) once human deploys to Vercel and activates `visualtda.ar`.
 
   1. **Audit & Forensics of Mission V12 (1.1–1.12)**:
      - 1.1 Feedback dual-delivery verified via live curl tests to `lucioromeromascaro@gmail.com` and `lromerom@fi.uba.ar` with HTTP 200 / success.
