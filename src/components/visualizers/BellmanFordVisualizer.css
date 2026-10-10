@@ -61,7 +61,12 @@
 
 .bf-svg-canvas {
   width: 100%;
+  max-width: min(100%, 540px, calc((100vh - 340px) * 1.8));
+  max-height: min(320px, calc(100vh - 340px));
   height: auto;
+  aspect-ratio: 510 / 280;
+  display: block;
+  margin: 0 auto;
   border-radius: 4px;
   background-color: var(--canvas-bg);
   border: 1px solid var(--border);

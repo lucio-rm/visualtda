@@ -115,6 +115,8 @@
 
 .lcs-grid-container {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: min(440px, calc(100vh - 320px));
   padding: 0.5rem 0;
 }
 

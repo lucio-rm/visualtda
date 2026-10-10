@@ -109,6 +109,8 @@
 /* DP Table Grid */
 .dp-table-wrapper {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: min(440px, calc(100vh - 320px));
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-lg);
   background: var(--surface);

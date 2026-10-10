@@ -1017,23 +1017,21 @@ select option,
 }
 
 .interactive-playground-card.expanded-fullwidth .algorithm-playground,
-.interactive-playground-card.expanded-fullwidth .playground-timeline-svg,
-.interactive-playground-card.expanded-fullwidth .cp-svg-canvas,
-.interactive-playground-card.expanded-fullwidth .kt-canvas-container,
-.interactive-playground-card.expanded-fullwidth .kt-canvas-container svg,
-.interactive-playground-card.expanded-fullwidth .me-canvas-container,
-.interactive-playground-card.expanded-fullwidth .me-canvas-container svg,
-.interactive-playground-card.expanded-fullwidth .closest-pair-playground svg,
-.interactive-playground-card.expanded-fullwidth .interval-partitioning-playground svg,
 .interactive-playground-card.expanded-fullwidth .interval-playground-box,
 .interactive-playground-card.expanded-fullwidth .inversion-playground,
-.interactive-playground-card.expanded-fullwidth .graph-canvas,
-.interactive-playground-card.expanded-fullwidth .matrix-table,
 .interactive-playground-card.expanded-fullwidth .dp-table-container,
-.interactive-playground-card.expanded-fullwidth .visualizer-container,
-.interactive-playground-card.expanded-fullwidth .visualizer-container svg {
-  max-width: 100% !important;
+.interactive-playground-card.expanded-fullwidth .visualizer-container {
   width: 100%;
+}
+
+/* Guard against vertically overflowing canvases and visualizer stages on 1080p / responsive screens */
+.interactive-playground-card .visualizer-stage,
+.understand-visualizer-container .visualizer-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-height: min(480px, calc(100vh - 300px));
 }
 
 /* Prevent accidental text selection / highlighting on interactive playgrounds and SVGs */
@@ -1732,6 +1730,22 @@ select option,
   border-radius: var(--radius-md);
   padding: 0.25rem;
   max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .code-view-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .code-toggle-group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .btn-code-toggle {
+    flex: 1 1 auto;
+    text-align: center;
+  }
 }
 
 .btn-code-toggle {

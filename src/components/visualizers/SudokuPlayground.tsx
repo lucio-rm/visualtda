@@ -359,10 +359,21 @@ export const SudokuPlayground: React.FC = () => {
       {solvedMessage && <div className="sdk-success-banner" role="status">{solvedMessage}</div>}
 
       {/* SVG Board */}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className="sdk-board-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
         <svg
           viewBox={`-8 -8 ${boardWidth + 16} ${boardWidth + 16}`}
-          style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
+          className="sdk-svg-board"
+          style={{
+            maxWidth: 'min(100%, 450px, calc(100vh - 320px))',
+            maxHeight: 'min(450px, calc(100vh - 320px))',
+            width: '100%',
+            height: 'auto',
+            aspectRatio: '1 / 1',
+            display: 'block',
+            margin: '0 auto',
+            borderRadius: '8px',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Tablero de Sudoku interactivo con heurística MRV' : 'Interactive Sudoku board with MRV heuristic'}
         >

@@ -329,9 +329,13 @@ export const ClosestPairPlayground: React.FC = () => {
           onClick={handleCanvasClick}
           onMouseMove={handleMouseMove}
           style={{
-            maxWidth: '100%',
+            maxWidth: 'min(100%, 540px, calc((100vh - 340px) * 1.78))',
+            maxHeight: 'min(340px, calc(100vh - 340px))',
             width: '100%',
             height: 'auto',
+            aspectRatio: '500 / 280',
+            display: 'block',
+            margin: '0 auto',
             borderRadius: '8px',
             backgroundColor: 'var(--canvas-bg, var(--surface-light))',
             border: '1.5px solid var(--border)',

@@ -52,12 +52,17 @@
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
+  width: 100%;
 }
 
 .cp-svg-canvas {
-  max-width: 100%;
   width: 100%;
+  max-width: min(100%, 540px, calc((100vh - 340px) * 1.78));
+  max-height: min(340px, calc(100vh - 340px));
   height: auto;
+  aspect-ratio: 500 / 280;
+  display: block;
+  margin: 0 auto;
   border-radius: 8px;
   background-color: var(--canvas-bg, var(--surface-light));
   border: 1.5px solid var(--border);

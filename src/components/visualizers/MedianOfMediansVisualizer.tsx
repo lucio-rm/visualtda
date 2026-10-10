@@ -88,7 +88,14 @@ export const MedianOfMediansVisualizer: React.FC = () => {
       <div className="mom-canvas-container">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 640px)',
+            maxHeight: 'min(320px, calc(100vh - 340px))',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Matriz de grupos de 5 y fila de medianas' : 'Groups of 5 matrix and medians row'}
         >

@@ -49,8 +49,12 @@
 
 .gc-svg-canvas {
   width: 100%;
-  max-width: 100%;
+  max-width: min(100%, 540px, calc((100vh - 340px) * 1.35));
+  max-height: min(360px, calc(100vh - 340px));
   height: auto;
+  aspect-ratio: 500 / 370;
+  display: block;
+  margin: 0 auto;
 }
 
 .gc-edge {

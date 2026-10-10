@@ -18,7 +18,8 @@
 
 .approx-interactive-svg {
   width: 100%;
-  max-width: 100%;
+  max-width: min(100%, 560px, calc((100vh - 340px) * 1.8));
+  max-height: min(340px, calc(100vh - 340px));
   height: auto;
   aspect-ratio: 540 / 300;
   background-color: var(--canvas-bg);

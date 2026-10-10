@@ -239,7 +239,14 @@ export const LinearProgrammingPlayground: React.FC = () => {
           >
             <svg
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              style={{ maxWidth: '100%', width: '100%', height: 'auto' }}
+              style={{
+                maxWidth: 'min(100%, 520px, calc((100vh - 340px) * 1.4))',
+                maxHeight: 'min(360px, calc(100vh - 340px))',
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                margin: '0 auto'
+              }}
               role="img"
               aria-label={
                 language === 'es'

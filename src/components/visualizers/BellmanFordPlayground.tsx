@@ -297,9 +297,12 @@ export const BellmanFordPlayground: React.FC = () => {
           ref={svgRef}
           viewBox="0 0 460 260"
           style={{
-            maxWidth: '100%',
+            maxWidth: 'min(100%, 540px, calc((100vh - 340px) * 1.76))',
+            maxHeight: 'min(320px, calc(100vh - 340px))',
             width: '100%',
             height: 'auto',
+            display: 'block',
+            margin: '0 auto',
             borderRadius: 'var(--radius-md)',
             backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',

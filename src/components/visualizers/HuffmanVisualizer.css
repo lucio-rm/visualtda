@@ -275,6 +275,7 @@
   overflow-x: auto;
   display: flex;
   justify-content: center;
+  align-items: center;
   background: var(--canvas-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -283,9 +284,12 @@
 
 .huff-tree-svg {
   width: 100%;
-  max-width: 100%;
+  max-width: min(100%, 680px, calc((100vh - 340px) * 2));
+  max-height: min(360px, calc(100vh - 340px));
   height: auto;
-  min-height: 250px;
+  min-height: 200px;
+  display: block;
+  margin: 0 auto;
 }
 
 .huff-edge-line {

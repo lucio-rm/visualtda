@@ -229,7 +229,15 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
         <svg
           ref={svgRef}
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', height: 'auto', display: 'block', margin: '0 auto', userSelect: 'none' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 640px)',
+            maxHeight: 'min(360px, calc(100vh - 340px))',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto',
+            userSelect: 'none'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Gráfico interactivo de Mínimos Cuadrados Segmentados' : 'Interactive Segmented Least Squares chart'}
           onMouseMove={handleSvgMouseMove}

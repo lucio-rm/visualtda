@@ -182,7 +182,14 @@ export const MedianOfMediansPlayground: React.FC = () => {
 
         <svg
           viewBox={`0 0 ${Math.max(460, groups.length * 64 + 40)} 200`}
-          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 640px)',
+            maxHeight: 'min(320px, calc(100vh - 340px))',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Matriz de columnas de 5 del algoritmo BFPRT' : 'BFPRT columns of 5 matrix'}
         >

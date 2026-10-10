@@ -291,10 +291,21 @@ export const KnightsTourPlayground: React.FC = () => {
       )}
 
       {/* Chessboard SVG Canvas */}
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
+      <div className="kt-board-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0', width: '100%' }}>
         <svg
           viewBox={`-24 -24 ${boardSize + 48} ${boardSize + 48}`}
-          style={{ maxWidth: '100%', width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
+          className="kt-svg-board"
+          style={{
+            maxWidth: 'min(100%, 450px, calc(100vh - 320px))',
+            maxHeight: 'min(450px, calc(100vh - 320px))',
+            width: '100%',
+            height: 'auto',
+            aspectRatio: '1 / 1',
+            display: 'block',
+            margin: '0 auto',
+            borderRadius: '8px',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.18)'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Tablero de ajedrez interactivo para el Recorrido del Caballo' : "Interactive chessboard for Knight's Tour"}
         >

@@ -16,8 +16,11 @@
 
 .interval-chart-svg {
   width: 100%;
-  max-width: 100%;
+  max-width: min(100%, 720px);
+  max-height: min(360px, calc(100vh - 340px));
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .grid-line {

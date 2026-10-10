@@ -72,8 +72,12 @@
 
 .gc-playground-svg {
   width: 100%;
-  max-width: 100%;
+  max-width: min(100%, 540px, calc((100vh - 340px) * 1.43));
+  max-height: min(350px, calc(100vh - 340px));
   height: auto;
+  aspect-ratio: 500 / 350;
+  display: block;
+  margin: 0 auto;
 }
 
 .gc-interactive-node,

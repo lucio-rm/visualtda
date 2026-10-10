@@ -366,7 +366,15 @@ export const DijkstraPlayground: React.FC = () => {
           <svg
             ref={svgRef}
             viewBox="0 0 460 260"
-            style={{ width: '100%', height: 'auto', display: 'block', touchAction: 'none' }}
+            style={{
+              width: '100%',
+              maxWidth: 'min(100%, 560px, calc((100vh - 340px) * 1.76))',
+              maxHeight: 'min(340px, calc(100vh - 340px))',
+              height: 'auto',
+              display: 'block',
+              margin: '0 auto',
+              touchAction: 'none'
+            }}
             role="img"
             aria-label={language === 'es' ? 'Grafo interactivo de Dijkstra' : 'Interactive Dijkstra graph'}
             onPointerMove={handlePointerMove}

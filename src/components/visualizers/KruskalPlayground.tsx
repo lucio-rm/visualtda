@@ -359,7 +359,16 @@ export const KruskalPlayground: React.FC = () => {
           <svg
             ref={svgRef}
             viewBox="0 0 460 280"
-            style={{ width: '100%', height: 'auto', display: 'block', touchAction: 'none' }}
+            style={{
+              width: '100%',
+              maxWidth: 'min(100%, 520px, calc((100vh - 340px) * 1.64))',
+              maxHeight: 'min(340px, calc(100vh - 340px))',
+              height: 'auto',
+              aspectRatio: '460 / 280',
+              display: 'block',
+              margin: '0 auto',
+              touchAction: 'none'
+            }}
             role="img"
             aria-label={language === 'es' ? 'Grafo interactivo para seleccionar aristas del AGM' : 'Interactive graph to select MST edges'}
             onPointerMove={handlePointerMove}

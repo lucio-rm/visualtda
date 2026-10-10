@@ -90,7 +90,15 @@ export const TspBranchAndBoundVisualizer: React.FC = () => {
       <div className="tsp-canvas-container">
         <svg
           viewBox="0 0 460 260"
-          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 520px, calc((100vh - 340px) * 1.76))',
+            maxHeight: 'min(320px, calc(100vh - 340px))',
+            height: 'auto',
+            aspectRatio: '460 / 260',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Mapa de ciudades y tour de TSP' : 'Cities map and TSP tour'}
         >

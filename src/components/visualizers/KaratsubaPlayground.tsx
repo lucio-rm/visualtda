@@ -156,7 +156,15 @@ export const KaratsubaPlayground: React.FC = () => {
 
         <svg
           viewBox="0 0 540 180"
-          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 580px, calc((100vh - 340px) * 3))',
+            maxHeight: 'min(240px, calc(100vh - 340px))',
+            height: 'auto',
+            aspectRatio: '540 / 180',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Modelo de áreas de Karatsuba' : 'Karatsuba area model'}
         >

@@ -91,7 +91,14 @@ export const RnaSecondaryStructureVisualizer: React.FC = () => {
       <div className="rna-canvas-container">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 640px)',
+            maxHeight: 'min(340px, calc(100vh - 340px))',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Diagrama de arcos de la estructura de ARN' : 'RNA structure arc diagram'}
         >

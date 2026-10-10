@@ -502,8 +502,10 @@ export const HamiltonianCyclePlayground: React.FC = () => {
           viewBox="0 0 500 350"
           style={{
             width: '100%',
-            maxWidth: '100%',
+            maxWidth: 'min(100%, 540px, calc((100vh - 340px) * 1.43))',
+            maxHeight: 'min(350px, calc(100vh - 340px))',
             height: 'auto',
+            aspectRatio: '500 / 350',
             display: 'block',
             margin: '0 auto',
             touchAction: 'none'

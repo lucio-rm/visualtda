@@ -312,7 +312,15 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
 
         <svg
           viewBox="0 0 720 340"
-          style={{ width: '100%', minWidth: '600px', height: 'auto', display: 'block' }}
+          style={{
+            width: '100%',
+            maxWidth: 'min(100%, 640px, calc((100vh - 340px) * 2.1))',
+            maxHeight: 'min(360px, calc(100vh - 340px))',
+            height: 'auto',
+            aspectRatio: '720 / 340',
+            display: 'block',
+            margin: '0 auto'
+          }}
           role="img"
           aria-label={language === 'es' ? 'Árbol de búsqueda de Branch and Bound' : 'Branch and Bound search tree'}
         >
