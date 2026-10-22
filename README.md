@@ -157,7 +157,7 @@ Visual TDA ha sido desarrollado en consonancia con los contenidos y la rigurosid
 
 Agradecimiento especial a los profesores y referentes académicos de la cátedra:
 - **Prof. Martín Buchwald**
-- **Prof. Federico Genender**
+- **Prof. Ezequiel Genender**
 - **Prof. Jon Kleinberg** y **Prof. Éva Tardos** (autores de *Algorithm Design*)
 
 ---
