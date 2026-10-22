@@ -143,9 +143,9 @@ npm run test:browser
 | `Espacio` | Pausar / reanudar reproducción de traza | Fase Comprender |
 | `Flecha Izquierda` | Retroceder un paso en la traza | Fase Comprender |
 | `Flecha Derecha` | Avanzar un paso en la traza | Fase Comprender |
+| `R` | Reiniciar traza al paso inicial | Fase Comprender |
 | `Inicio` (`Home`) | Saltar al paso inicial de la traza | Fase Comprender |
 | `Fin` (`End`) | Saltar al paso final de la traza | Fase Comprender |
-| `1`, `2`, `3` | Navegar entre fases (Descubrir, Resolver, Comprender) | Vista de ejercicio (fuera del editor) |
 | `Ctrl + Enter` | Ejecutar pruebas sobre la solución en Python | Editor de código en Fase Resolver |
 | `Escape` | Cerrar cualquier modal abierto | Global |
 

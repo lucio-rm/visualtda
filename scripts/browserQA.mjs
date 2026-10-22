@@ -352,6 +352,11 @@ server.listen(PORT, async () => {
         throw new Error(`Editor missing canonical starter code: ${editor?.slice(0, 50)}`);
       }
       await captureScreenshot('05-solve-view-editor.png');
+      await setViewport(390, 844);
+      await new Promise((r) => setTimeout(r, 200));
+      await captureScreenshot('05-solve-view-mobile-390x844.png');
+      await setViewport(1920, 1080);
+      await new Promise((r) => setTimeout(r, 200));
     });
 
     // ----------------------------------------------------

@@ -51,3 +51,14 @@ Thumbs.db
 .vscode/
 *.sublime-project
 *.sublime-workspace
+
+# Internal developer notes, AI sessions & prompts (hidden from public repo)
+IA/
+.agents/
+.antigravity/
+sessions/
+master_mission_*.md
+prompt_v*.md
+boceto_*.md
+*.session.md
+*.agent.md

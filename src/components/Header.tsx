@@ -71,19 +71,13 @@ export const Header: React.FC<HeaderProps> = ({
             className="brand-logo"
             width="38"
             height="38"
-            viewBox="0 0 44 44"
+            viewBox="0 0 40 40"
             fill="none"
             aria-hidden="true"
             style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
           >
-            <rect x="3" y="3" width="38" height="38" rx="8" fill="var(--surface-hover)" stroke="var(--accent-solid, var(--accent))" strokeWidth="1.75" />
-            <path d="M12 12 L22 32 L32 12" stroke="var(--accent-solid, var(--accent))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="12" cy="12" r="3.25" fill="var(--surface)" stroke="var(--accent)" strokeWidth="2" />
-            <circle cx="32" cy="12" r="3.25" fill="var(--surface)" stroke="var(--accent)" strokeWidth="2" />
-            <circle cx="22" cy="32" r="3.25" fill="var(--accent-solid, var(--accent))" stroke="var(--surface)" strokeWidth="1.5" />
-            <path d="M12 12 L32 12" stroke="var(--border-strong, #94a3b8)" strokeWidth="1.25" strokeDasharray="2 2" opacity="0.6" />
-            <circle cx="22" cy="20" r="2.25" fill="var(--text-muted)" opacity="0.8" />
-            <line x1="22" y1="20" x2="22" y2="32" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="2 2" opacity="0.75" />
+            <rect width="40" height="40" rx="9" fill="var(--accent-solid, #3e63dd)" />
+            <text x="20" y="25" fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" fontSize="12.5" fontWeight="900" fill="#ffffff" textAnchor="middle" letterSpacing="-0.3px">P?=NP</text>
           </svg>
           <div className="brand-text">
             <span className="brand-title">Visual TDA</span>

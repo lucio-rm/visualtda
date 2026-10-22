@@ -33,3 +33,6 @@
 - **[Criterios y Compuertas de Calidad](criterios-calidad.md)**: Definición formal de compuertas G1 a G15 (build estático, tipos estrictos, linteo, tests unitarios, browser QA, contraste y rendimiento).
 - **[Historial de Problemas Resueltos](problemas-conocidos.md)**: Registro técnico forense de defectos identificados durante el desarrollo y su resolución definitiva.
 - **[Hoja de Ruta (Roadmap)](roadmap.md)**: Estado de hitos del proyecto y evolución planificada.
+
+### 5. Guías para Desarrolladores y Contribución
+- **[Guía Paso a Paso para Agregar un Nuevo Ejercicio](guia-agregar-ejercicio.md)**: Manual exhaustivo de contribución: estructura de archivos, esquemas JSON, solución canónica en Python, demostración matemática de invariantes, generador de trazas, validadores y componentes visuales en SVG.
