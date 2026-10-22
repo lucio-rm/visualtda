@@ -67,7 +67,7 @@ function parseTokens(cssBlock: string): Record<string, string> {
   return resolved;
 }
 
-describe('Visual Design System & WCAG Contrast Quality Gate (Mission V11 Radix Scale)', () => {
+describe('Visual Design System & WCAG Contrast Quality Gate (Radix Scale)', () => {
   const variablesPath = path.resolve('src/styles/variables.css');
   const variablesContent = fs.readFileSync(variablesPath, 'utf-8');
 

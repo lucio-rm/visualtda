@@ -16,7 +16,7 @@ import { generateSudokuTrace } from '../src/engine/algorithms/sudokuTrace';
 import { generateKnapsackBBTrace } from '../src/engine/algorithms/knapsackBranchAndBoundTrace';
 import { generateTspBBTrace } from '../src/engine/algorithms/tspBranchAndBoundTrace';
 
-describe('Extended Trace Generators Verification (Mission V4 Section 47 & 68)', () => {
+describe('Extended Trace Generators Verification', () => {
   describe('1. Dijkstra Greedy Trace', () => {
     it('produces valid step timeline and computes shortest path to destination', () => {
       const trace = generateDijkstraTrace();

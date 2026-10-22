@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { DEFAULT_KRUSKAL_GRAPH } from '../src/engine/algorithms/kruskalTrace';
 
-describe('Minimization and Maximization Direction Invariants (Mission V12 §1.3 & §2.2)', () => {
+describe('Minimization and Maximization Direction Invariants', () => {
   describe('Minimization Problems (Lower is strictly better)', () => {
     it('Kruskal / MST: recognizes weight 9 as optimal and strictly rejects weight 10 as suboptimal', () => {
       const { nodes, edges } = DEFAULT_KRUSKAL_GRAPH;

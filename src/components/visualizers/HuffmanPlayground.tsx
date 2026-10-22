@@ -391,7 +391,7 @@ export const HuffmanPlayground: React.FC = () => {
               <div className="huff-codes-grid">
                 {Object.entries(constructedCodes).map(([char, code]) => (
                   <div key={char} className="huff-code-badge">
-                    <span className="huff-char-pill">{char === ' ' ? '␣ (Espacio)' : char}</span>
+                    <span className="huff-char-pill">{char === ' ' ? (language === 'es' ? '␣ (Espacio)' : '␣ (Space)') : char}</span>
                     <span className="huff-bits-mono">{code}</span>
                     <span className="huff-len-tag">{code.length} {language === 'es' ? 'bits' : 'bits'}</span>
                   </div>

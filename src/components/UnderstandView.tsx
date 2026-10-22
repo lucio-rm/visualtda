@@ -607,7 +607,7 @@ export const UnderstandView: React.FC<UnderstandViewProps> = ({
           </div>
         </div>
 
-        {/* Cross-Exercise Connections & Technique Comparisons (Mission V4 Section 30 & 31) */}
+        {/* Cross-Exercise Connections & Technique Comparisons */}
         {relatedExercises.length > 0 && (
           <div className="card-panel related-exercises-section" style={{ marginTop: '2rem' }}>
             <div className="related-section-header" style={{ marginBottom: '1.25rem' }}>

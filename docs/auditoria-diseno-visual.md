@@ -2,7 +2,7 @@
 
 **Date**: 2026-09-22  
 **Standard**: WCAG 2.1 AA Compliance, 8px Spacing Grid, Strict CSS Variable Tokens  
-**Authority**: Master Engineering Mission V3 (Section 3.3)
+**Scope**: Visual TDA Design System & Ergonomics Audit
 
 ---
 
@@ -76,7 +76,7 @@ All layout paddings, margins, and gaps strictly align to multiples of 8px (with 
 
 ## 5. Before vs. After Audit Summary
 
-| Area | Before Mission V3 | After Mission V3 |
+| Area | Initial Implementation | Refactored Implementation |
 |---|---|---|
 | **N-Queens Playground** | Displayed confusing out-of-bounds error on unplaced rows when placing $\ge 2$ safe queens. | Partial validation cleanly distinguishes unplaced rows from attack collisions; conflicting queens glow red with ray line. |
 | **Huffman Coding** | Only rendered array cards for min-heap; zero tree SVG rendered. | Fully responsive SVG prefix tree forest rendered dynamically at every step with labeled '0'/'1' branch edges. |

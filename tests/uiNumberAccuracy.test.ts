@@ -12,7 +12,7 @@ import { generateKnapsackBBTrace } from '../src/engine/algorithms/knapsackBranch
 import { generateTspBBTrace } from '../src/engine/algorithms/tspBranchAndBoundTrace';
 import { generateRoadAntennasTrace } from '../src/engine/algorithms/roadAntennasTrace';
 
-describe('UI Number Accuracy & Consistency Regression Sweep (Mission V6 §1.2)', () => {
+describe('UI Number Accuracy & Consistency Regression Sweep', () => {
   it('1. Inversion Counting: preset array [1, 5, 2, 6, 3, 4] has exactly 5 inversions', () => {
     const arr = [1, 5, 2, 6, 3, 4];
     const inv = countInversions(arr);

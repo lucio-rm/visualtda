@@ -1,7 +1,7 @@
 # Visual TDA — Curriculum Academic Audit (20 Foundational Exercises)
 
 **Document Version**: 1.0  
-**Authority**: Visual TDA Engineering Rules (`AGENTS.md`) — Principles P11 (*Educational Correctness > Visual Spectacle*) & P12 (*Explain the Why*)  
+**Scope**: Auditoría Curricular y Cobertura Académica de Visual TDA — Principios de Rigor Pedagógico y Explicación del *Por Qué*  
 **Academic References**:
 - Jon Kleinberg & Éva Tardos, *Algorithm Design*, Pearson / Addison-Wesley.
 - Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein, *Introduction to Algorithms (CLRS)*, 3rd/4th Edition, MIT Press.
