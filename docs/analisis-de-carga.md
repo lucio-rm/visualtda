@@ -26,21 +26,21 @@ $$\text{Static Assets on CDN} \longrightarrow \text{Browser Web Worker} \longrig
 
 ### Benchmark 1: Fresh Load (Cold Cache, 100 Simultaneous Students)
 - **Concurrent Users**: 100 students
-- **Total Requests**: 800 requests across all HTML, JS, and CSS chunks
+- **Total Requests**: 2000 requests across all HTML, JS, and CSS chunks
 - **Success Rate**: **100.0% (200 OK)**
-- **Total Transferred Data**: **82.06 MB**
-- **Throughput**: **2203.2 requests/second**
+- **Total Transferred Data**: **222.29 MB**
+- **Throughput**: **2874.4 requests/second**
 - **Latency Distribution**:
-  - p50: **5.49 ms**
-  - p95: **232.93 ms**
-  - p99: **295.48 ms**
-  - Max: **312.88 ms**
+  - p50: **9.61 ms**
+  - p95: **81.99 ms**
+  - p99: **461.73 ms**
+  - Max: **520.59 ms**
 
 ### Benchmark 2: Repeat Visit (Warm Cache / ETag 304 Validation)
-- **Cache Hits**: **800 / 800 (100% 304 Not Modified)**
+- **Cache Hits**: **2000 / 2000 (100% 304 Not Modified)**
 - **Bandwidth**: **~0 MB** (HTTP headers only, assets served from local disk cache)
-- **Throughput**: **5769.3 requests/second**
-- **Latency p50**: **1.94 ms**
+- **Throughput**: **7266.5 requests/second**
+- **Latency p50**: **4.33 ms**
 
 ---
 

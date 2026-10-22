@@ -74,10 +74,10 @@ To ensure maximum student comprehension in real time, every 2D visualizer in Vis
 
 1. **Immediate State Visibility**: All relevant state (arrays, pointers, queues, tables, trees) is visible on a single non-scrolling or cleanly sectioned canvas.
 2. **Color Semantics with Meaning**:
-   - 🔵 **Primary Blue (`var(--accent)`)**: Currently evaluated candidate / active pointer.
-   - 🟢 **Emerald Green (`var(--success)`)**: Committed solution / satisfied constraint / valid state.
-   - 🔴 **Crimson Red (`var(--error)`)**: Violated constraint / pruned branch / collision ray.
-   - 🟡 **Amber Orange (`var(--warning)`)**: Pending comparison / min-heap extract candidate.
+   - **Azul Primario (`var(--accent)`)**: Candidato evaluado actualmente / puntero activo.
+   - **Verde Esmeralda (`var(--success)`)**: Solución confirmada / restricción satisfecha / estado válido.
+   - **Rojo Carmesí (`var(--error)`)**: Restricción violada / rama podada / rayo de conflicto.
+   - **Ámbar (`var(--warning)`)**: Comparación pendiente / candidato extraído del min-heap.
 3. **Synchronized Dual-View**:
    - The graphic visualizer is strictly synchronized with the canonical code line highlighting and the explanatory natural-language step banner.
 4. **Interactive Timeline Controls**:
