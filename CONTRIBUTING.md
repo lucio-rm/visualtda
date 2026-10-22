@@ -26,6 +26,8 @@ Cada ejercicio implementa exactamente tres fases secuenciales:
 
 ## 3. Guía Paso a Paso para Agregar un Ejercicio
 
+> Para consultar el manual completo con ejemplos de código, esquemas JSON y validadores, ver: **[`docs/guia-agregar-ejercicio.md`](./docs/guia-agregar-ejercicio.md)**.
+
 Gracias a la arquitectura modular basada en el patrón Strategy/Registry, agregar un nuevo ejercicio requiere pasos aislados y predecibles:
 
 ### Paso 1: Documentación Canónica (`exercises/<id>/`)

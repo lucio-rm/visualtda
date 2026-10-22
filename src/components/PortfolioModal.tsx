@@ -163,6 +163,11 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                       <td>{language === 'es' ? 'Fase Comprender' : 'Understand Phase'}</td>
                     </tr>
                     <tr>
+                      <td><kbd>Home</kbd> / <kbd>End</kbd></td>
+                      <td>{language === 'es' ? 'Saltar al inicio / fin de la traza' : 'Jump to start / end of trace'}</td>
+                      <td>{language === 'es' ? 'Fase Comprender' : 'Understand Phase'}</td>
+                    </tr>
+                    <tr>
                       <td><kbd>?</kbd></td>
                       <td>{language === 'es' ? 'Abrir este menú de atajos de teclado' : 'Open keyboard shortcuts menu'}</td>
                       <td>{language === 'es' ? 'Global' : 'Global'}</td>
