@@ -8,7 +8,7 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ### Issue 3.1 — N-Queens: False attack conflict error on non-attacking partial queen placement
 
-- **Reported Behavior**: In the Discover phase playground for N-Queens, placing two queens in non-attacking cells (for example, a knight's move / L-shape like `(0, 1)` and `(1, 3)`) immediately showed a red warning banner: `"⚠️ Conflicto detectado: Posición inválida en la fila 2: columna -1 fuera de rango [0, 3]"`.
+- **Reported Behavior**: In the Discover phase playground for N-Queens, placing two queens in non-attacking cells (for example, a knight's move / L-shape like `(0, 1)` and `(1, 3)`) immediately showed a red warning banner: `"Conflicto detectado: Posición inválida en la fila 2: columna -1 fuera de rango [0, 3]"`.
 - **Severity**: High (Blocks learner intuition and exploration during the Discover phase).
 - **Status**: **RESOLVED** (`3b0042c`).
 - **Root Cause Analysis**:
@@ -68,7 +68,7 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
-### Issue 3.5 — Premature answer leaks in stubs and playgrounds (Mission V4 §18, §26)
+### Issue 3.5 — Premature answer leaks in stubs and playgrounds
 
 - **Reported Behavior**: In starter code comments and test error messages for Dynamic Programming and Divide & Conquer exercises, the explicit recurrence formulas were given away before the student reasoned about the subproblems. Similarly, the Juan el Vago playground printed the exact recommended days array.
 - **Severity**: High (Pedagogical leak; invalidated the Solve phase).
@@ -183,7 +183,7 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 ### Issue 3.13 — Playgrounds lacked physical manipulation, Gantt charts, regression plots, and geometric area models
 
 - **Reported Behavior**: Several playgrounds (Closest Pair, Segmented Least Squares, Majority Element, Interval Partitioning, Minimize Lateness, Karatsuba, Median of Medians, RNA Structure) relied primarily on text tables, basic forms, or numeric inputs without interactive graphical representations.
-- **Severity**: High (Violation of Prompt V5 §18, §48, §49, §350: lack of direct manipulation and visual cognitive aids).
+- **Severity**: High (Pedagogical defect: lack of direct manipulation and visual cognitive aids).
 - **Status**: **RESOLVED** (`d1694d9`).
 - **Resolution**:
   - `ClosestPairPlayground.tsx`: Added interactive SVG canvas supporting mouse drag-and-drop of 2D points with real-time recalculation of $\delta$, $x = L$ divider, and corridor points count.
@@ -414,13 +414,13 @@ This document tracks ground-truth defect reports, architectural audits, and visu
 
 ---
 
-### Issue 3.23 — Surface Differentiation Failures Across Board Squares, Catalog Cards, and Interactive Buttons (Mission V11)
+### Issue 3.23 — Surface Differentiation Failures Across Board Squares, Catalog Cards, and Interactive Buttons
 - **Reported Behavior**:
   1. **Board Squares Contrast Failure**: In Light Mode, chessboard square pairing `#e2e8f0` vs `#829ab1` achieved only 2.364:1 contrast (below WCAG 1.4.11 non-text UI 3:1 minimum). In Dark Mode, `#334155` vs `#0f172a` achieved only 1.724:1. Light cells against canvas `#f8fafc` had only 1.178:1 contrast, causing cells to blend into the board background.
   2. **Catalog/Exercise-Selector Cards vs Background**: In Light Mode, `.exercise-card` (`#ffffff`) against page background (`#f1f5f9`) achieved only 1.096:1 contrast with border `#cbd5e1` at 1.355:1. In Dark Mode, card (`#111827`) against background (`#090d16`) achieved 1.095:1 with border `#1f2937` at 1.324:1. Students cannot visually differentiate the exercise selection cards and category selector tabs from the page background.
   3. **Interactive Buttons & Control Legibility**: Secondary buttons, preset buttons (`.btn-preset` at `#f8fafc` with text `#0f172a` and border `#cbd5e1`), and interactive chips in visualizers blend into card backgrounds or canvas without sufficient edge contrast, making button labels hard to discern.
 - **Severity**: High (WCAG AA non-text contrast violation and visual accessibility barrier).
-- **Status**: **RESOLVED** (Mission V11 systematic overhaul).
+- **Status**: **RESOLVED** (Radix Colors systematic overhaul).
 - **Root Cause**:
   Four previous iterations of hand-picking individual hex colors failed to guarantee systematic contrast relationships across surfaces and themes.
 - **Resolution**:

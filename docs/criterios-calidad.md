@@ -1,7 +1,7 @@
 # Visual TDA — Quality Gates Specification & Status Matrix
 
 **Document Version**: 2.0  
-**Authority**: Mandate from Orchestrator; subordinate to `AGENTS.md`  
+**Scope**: Especificación y compuertas de calidad técnica y pedagógica de Visual TDA  
 **Standard**: Multi-dimensional verification status distinguishing:
 - `AUTOMATED`: Verified via deterministic script/test in CI or test runner.
 - `EMPIRICAL`: Verified via live browser/runtime observation.

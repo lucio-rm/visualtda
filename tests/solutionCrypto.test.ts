@@ -10,7 +10,7 @@ import {
 } from '../src/utils/solutionCrypto';
 import { ENCRYPTED_SOLUTIONS } from '../src/engine/encryptedSolutions';
 
-describe('Canonical Solution Encryption (Mission V6 Section 2)', () => {
+describe('Canonical Solution Encryption', () => {
   beforeEach(() => {
     clearDecryptedCache();
   });

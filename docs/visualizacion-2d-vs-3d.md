@@ -1,7 +1,7 @@
 # Visual TDA — 2D vs. 3D Algorithmic Visualization Analysis
 
 **Document Version**: 1.0  
-**Authority**: Visual TDA Engineering Rules (`AGENTS.md`) — Principles P1 (*KISS*), P8 (*Accessibility by Default*), P10 (*Portable Deployment*), P11 (*Educational Correctness > Visual Spectacle*), & P12 (*Explain the Why*)  
+**Scope**: Justificación Pedagógica y Técnica de la Visualización 2D SVG sobre 3D en Visual TDA  
 **Academic Alignment**: Kleinberg & Tardos (*Algorithm Design*), CLRS (*Introduction to Algorithms*), Cátedras de Algoritmos FIUBA.
 
 ---

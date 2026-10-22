@@ -287,10 +287,10 @@ export const MedianOfMediansPlayground: React.FC = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--canvas-bg)' }}>
-              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Grupo (5)</th>
-              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Elementos</th>
-              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>Mediana del Grupo</th>
-              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>¿Es Pivote Global?</th>
+              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Grupo (5)' : 'Group (5)'}</th>
+              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Elementos' : 'Elements'}</th>
+              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? 'Mediana del Grupo' : 'Group Median'}</th>
+              <th style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>{language === 'es' ? '¿Es Pivote Global?' : 'Is Global Pivot?'}</th>
             </tr>
           </thead>
           <tbody>
@@ -316,7 +316,7 @@ export const MedianOfMediansPlayground: React.FC = () => {
                   </td>
                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
                     {isPiv ? (
-                      <strong style={{ color: 'var(--warning)' }}>PIVOTE ({pivot})</strong>
+                      <strong style={{ color: 'var(--warning)' }}>{language === 'es' ? 'PIVOTE' : 'PIVOT'} ({pivot})</strong>
                     ) : (
                       <span style={{ color: 'var(--text-muted)' }}>—</span>
                     )}

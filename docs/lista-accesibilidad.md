@@ -2,7 +2,7 @@
 
 **Standard**: WCAG 2.1 Level AA Compliance  
 **Date**: 2026-09-22  
-**Authority**: Master Engineering Mission V3 (Section 8) & Principle P8 (*Accessibility by Default*)
+**Scope**: Verification Checklist & Accessibility Matrix
 
 ---
 
@@ -19,7 +19,7 @@ Every interactive component, visualizer, and playground in Visual TDA must satis
    - High visibility across both light and dark theme modes.
 3. **Non-Color State Indicators (WCAG 1.4.1)**:
    - Color is never used as the sole conveyor of information.
-   - Status indicators pair colors with text labels, icons, or symbols (e.g. `✓`, `⚠️`, `+`, `w:15`, `[101]`).
+   - Status indicators pair colors with text labels, icons, or symbols (e.g. `✓`, `[!]`, `+`, `w:15`, `[101]`).
 4. **Color Contrast (WCAG 1.4.3)**:
    - Text contrast ratio $\ge 4.5:1$ against surface/background.
    - Large text ($\ge 18$pt or $\ge 14$pt bold) contrast $\ge 3:1$.
@@ -42,7 +42,7 @@ Every interactive component, visualizer, and playground in Visual TDA must satis
 | 3 | Interval Scheduling | `IntervalSchedulingPlayground` | Yes (`tabIndex={0}`, Enter/Space) | Yes | Time labels `[s, f]`, checkmark badges | `aria-pressed`, `role="button"` | PASS |
 | 4 | Weighted Interval | `WeightedIntervalVisualizer` | Yes (timeline scrubber + buttons) | Yes | Weight values `$w`, arrow indices | `role="region"`, `aria-label` | PASS |
 | 5 | Knapsack (Greedy) | `KnapsackGreedyVisualizer` | Yes (speed + timeline buttons) | Yes | Ratio values `v/w`, capacity meter | `aria-label="Item X"` | PASS |
-| 6 | Knapsack (DP) | `KnapsackPlayground` | Yes (`tabIndex={0}`, Enter/Space) | Yes | Weight & Value badges, `🎒 ✓` | `aria-pressed`, `aria-label` | PASS |
+| 6 | Knapsack (DP) | `KnapsackPlayground` | Yes (`tabIndex={0}`, Enter/Space) | Yes | Weight & Value badges, `[Mochila] ✓` | `aria-pressed`, `aria-label` | PASS |
 | 7 | Merge Sort | `MergeSortVisualizer` | Yes (step controls + keyboard) | Yes | Array indices, partition brackets | `role="region"` | PASS |
 | 8 | Inversion Counting | `InversionCountingPlayground` | Yes (number chip buttons) | Yes | Pair count badges, delta badges | `aria-pressed`, `aria-label` | PASS |
 | 9 | Peak Finding | `PeakFindingPlayground` | Yes (grid buttons + controls) | Yes | Slope indicators `▲/▼`, peak crown | `role="button"`, `aria-label` | PASS |

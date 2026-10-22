@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { CROSS_EXERCISE_RELATIONS, getRelatedExercisesFor } from '../src/engine/crossExerciseConnections';
 import { registry } from '../src/engine/registry';
 
-describe('Cross-Exercise Connections & Technique Comparisons (Mission V4 Section 30 & 31)', () => {
+describe('Cross-Exercise Connections & Technique Comparisons', () => {
   it('ensures every source exercise exists in the registry', () => {
     const allRegisteredIds = new Set(registry.getExercises().map((e) => e.id));
 

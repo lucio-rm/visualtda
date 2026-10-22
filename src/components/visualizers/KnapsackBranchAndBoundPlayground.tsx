@@ -428,7 +428,7 @@ export const KnapsackBranchAndBoundPlayground: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
             <h5 style={{ margin: 0, color: 'var(--text)' }}>
               {language === 'es' ? 'Inspección de Estado de Rama' : 'Branch State Inspection'}:{' '}
-              <code>{selectedNode.id === 'root' ? 'Nodo Raíz (Sin ítems)' : selectedNode.id}</code>
+              <code>{selectedNode.id === 'root' ? (language === 'es' ? 'Nodo Raíz (Sin ítems)' : 'Root Node (No items)') : selectedNode.id}</code>
             </h5>
             <span
               style={{

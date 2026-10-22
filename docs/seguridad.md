@@ -1,7 +1,7 @@
 # Visual TDA — Security Specification & Threat Model
 
 **Document Version**: 2.0  
-**Authority**: Mandate from Orchestrator; subordinate to `AGENTS.md`  
+**Scope**: Especificación formal de seguridad y modelo de amenazas de Visual TDA  
 **Target Architecture**: Client-Side Static Application (SPA) with In-Browser Pyodide Execution  
 
 ---
@@ -127,7 +127,7 @@ To maintain honest, transparent engineering standards, the following limitations
 
 ---
 
-## 8. Cryptographic Defense: UI Anti-Tamper & Payload Encryption (Mission V6 Section 2)
+## 8. Cryptographic Defense: UI Anti-Tamper & Payload Encryption
 
 ### 8.1 The Core Challenge: Data Protection vs Client-Side Constraints
 In a pure static client application (zero backend servers), any data shipped to the browser is physically on the client device. Previous iterations secured the application's UI state (detecting when an attacker flips `isInstructorMode` or `solutionUnlocked` to `true` in React DevTools), but left `solution.py?raw` strings bundled in plaintext within the static JavaScript chunks. A student could inspect the Network tab or unzip `dist/` and read every algorithm without solving or authenticating.

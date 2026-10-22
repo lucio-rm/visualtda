@@ -49,7 +49,7 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 - **Ejercicio/Módulo**: `src/app/App.tsx` y `src/components/ExerciseView.tsx`
 - **Severidad**: **P1**
 - **Evidencia**: Para un estudiante nuevo con 0 ejercicios completados, la tarjeta sugería comenzar por *N-Reinas* (Backtracking). Además, al hacer clic en cualquier recomendación, el sistema abría el ejercicio pero no definía explícitamente a qué fase pedagógica debía ir el estudiante (`discover`, `solve`, `understand`).
-- **Impacto Pedagógico**: Proponer N-Reinas como primer ejercicio asusta a principiantes con complejidad exponencial factorial. Además, violaba la Sección 11 del Prompt V5: *"Si la interfaz dice 'Te recomendamos practicar X', el CTA debe llevar a X en la fase correspondiente."*
+- **Impacto Pedagógico**: Proponer N-Reinas como primer ejercicio asusta a principiantes con complejidad exponencial factorial. La interfaz debe guiar con claridad hacia el ejercicio formativo inicial y llevar directamente a la fase pedagógica correspondiente (`discover`).
 - **Impacto UX**: Incoherencia en la navegación guiada.
 - **Solución Propuesta**:
   1. Cambiar el punto de partida sugerido a *Selección de Intervalos* (Greedy, K&T Cap. 4), el problema formativo paradigmático para comprender heurísticas locales vs. argumentos de intercambio.
@@ -80,7 +80,7 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 - **Pantalla**: Discover & Understand en Ejercicios de Mochila (`knapsack-dp`, `knapsack-greedy`)
 - **Ejercicio/Módulo**: `src/components/visualizers/KnapsackPlayground.tsx`, `KnapsackDpVisualizer.tsx`
 - **Severidad**: **P1**
-- **Evidencia**: Tal como señaló la directiva del Prompt V5 (§22): *"Si en el problema de la mochila no hay una puta mochila, ¿de qué te sirve?"* El playground y el visualizador se limitaban a una lista de tarjetas de texto y una barra de progreso genérica de porcentaje.
+- **Evidencia**: El problema de la mochila requiere una representación gráfica tangible de la capacidad y el empaquetado. El playground y el visualizador se limitaban a una lista de tarjetas de texto y una barra de progreso genérica de porcentaje.
 - **Impacto Pedagógico**: El estudiante no construía el modelo mental de contención física, peso, valor acumulado y "holgura ociosa" (slack capacity) que explica por qué la heurística Greedy fracasa en enteros.
 - **Impacto UX**: Falta de identidad visual y experiencia táctil.
 - **Solución Propuesta**: Crear un componente dedicado `KnapsackVisualBag.tsx` que represente una mochila auténtica con:
@@ -181,5 +181,5 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 1. La plataforma cuenta ahora con una barrera de seguridad criptográfica robusta anti-tamper en el Modo Docente, protegiendo las soluciones canónicas de cualquier inspección superficial de DevTools.
 2. Todos los playgrounds prioritarios han sido enriquecidos con interacción física táctil (arrastre 2D de nodos, ciudades y antenas, arrastre de rectángulos de tareas y clases, y drag & drop de monedas).
 3. 293/293 tests pasan sin error, el typecheck estricto no reporta problemas (`tsc --noEmit` 0 errores), `npm run lint` pasa con 0 errores y el build estático se completa en ~1.6 segundos.
-4. El proceso de auditoría y refinamiento continuará de acuerdo con las directivas del Prompt V5.
+4. El proceso de auditoría y refinamiento continuará de acuerdo con los principios de calidad de la plataforma.
 

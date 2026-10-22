@@ -8,7 +8,7 @@ import { INSTRUCTOR_AUTH_STORAGE_KEY, INSTRUCTOR_AUTH_TOKEN, resetInstructorSess
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-describe('Instructor Mode & Honest Skip Modal (Mission V3 Section 4)', () => {
+describe('Instructor Mode & Honest Skip Modal', () => {
   let container: HTMLDivElement;
   let root: Root;
 

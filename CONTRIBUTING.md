@@ -2,7 +2,7 @@
 
 Visual TDA es una plataforma educativa interactiva orientada a la enseñanza y visualización de algoritmos complejos para estudiantes universitarios (especialmente alineada con Teoría de Algoritmos en FIUBA).
 
-Toda contribución debe regirse por la autoridad suprema del repositorio: [`AGENTS.md`](./AGENTS.md).
+Toda contribución debe alinearse con la arquitectura y principios de ingeniería documentados en [`docs/arquitectura.md`](./docs/arquitectura.md) y [`docs/principios-diseno.md`](./docs/principios-diseno.md).
 
 ---
 

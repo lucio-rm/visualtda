@@ -7,7 +7,7 @@ import { TheoryMarkdown, formatMathText } from '../src/components/common/TheoryM
 // @ts-expect-error React act environment declaration for happy-dom
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-describe('TheoryMarkdown & Mathematical Typography Engine (Mission V4 Section 23 & 43)', () => {
+describe('TheoryMarkdown & Mathematical Typography Engine', () => {
   let container: HTMLDivElement;
 
   beforeEach(() => {
