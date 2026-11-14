@@ -166,6 +166,10 @@ El proyecto adopta una política estricta de **Issues Only**:
 - **Canal Primario**: Utilizar el botón integrado de **Feedback ("Consejos, Mejoras y Bugs")** dentro de la aplicación web de Visual TDA (en el pie de página).
 - **Canal Secundario**: Abrir un Issue en [GitHub Issues](https://github.com/lucio-rm/visualtda/issues).
 - No se aceptan Pull Requests externos, bifurcaciones de código ni modificaciones directas al repositorio. Para más información, consultar [CONTRIBUTING.md](CONTRIBUTING.md).
+Agradecimiento especial a los profesores y referentes académicos de la cátedra:
+- **Prof. Martín Buchwald**
+- **Prof. Ezequiel Genender**
+- **Prof. Jon Kleinberg** y **Prof. Éva Tardos** (autores de *Algorithm Design*)
 
 ---
 
