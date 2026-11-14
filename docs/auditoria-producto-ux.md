@@ -128,7 +128,7 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 - **Impacto UX**: Falta de protección contra manipulación accidental o intencional del árbol de componentes.
 - **Solución Propuesta y Ejecutada**:
   1. Diseñar e implementar `cryptoAuth.ts`: suite criptográfica cliente basada en Web Crypto API con fallback determinístico SHA-256.
-  2. Almacenamiento seguro: la contraseña docente de 8 caracteres (`MEL75.29`, Martin Ezequiel Lucio / Cátedra 75.29) **NUNCA** se almacena en texto plano en la aplicación; solo se verifica su digest SHA-256 irreversible `be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`.
+  2. Almacenamiento seguro: la contraseña docente de 8 caracteres (Cátedra 75.29) **NUNCA** se almacena en texto plano en la aplicación; solo se verifica su digest SHA-256 irreversible `be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`.
   3. Firma de sesión efímera in-memory: se genera entropía criptográfica (`SESSION_SECRET_SALT`) por recarga de ventana para firmar sesiones docentes válidas.
   4. Autoridad Anti-Tamper `isExerciseSolutionAuthorized`: si un usuario altera manualmente los flags booleanos de estado en DevTools sin poseer la firma de sesión de cátedra ni un token de aprobación de tests Pyodide, el componente `UnderstandView` rechaza el renderizado, inserta una tarjeta de bloqueo (`.solution-tamper-card`: *"Firma Criptográfica Inválida: Acceso Bloqueado contra Manipulación"*) y jamás inyecta el código Python canónico en el DOM.
 - **Estado de Verificación**: **VERIFICADO** (Tests unitarios automatizados dedicados en `tests/instructorMode.test.tsx` 7/7 PASS, incluyendo rechazo de flag tampering en DevTools).

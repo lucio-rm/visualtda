@@ -501,19 +501,19 @@ This document tracks ground-truth defect reports, architectural audits, and visu
   2. **Road Antennas Cursor & Hit-Test Overhaul**: Completely removed the orange cursor marker (`.road-cursor-marker`). Added 32px hit-targets to all houses and added a 1-click house chip removal bar with safety timeouts, preventing accidental additions or deletions.
   3. **Bilingual Copy Purity**: Localized Huffman merged parent text (`+ New Parent` / `+ Nuevo Padre`) and upgraded `SolveView.tsx` with full English starter code function signatures and parameter names across all 38 exercises, backed by backward-compatible aliases and `pyodideWorker` runtime alias resolution.
   4. **Light Mode Elevation & Text Contrast**: Elevated light mode canvas contrast (`--bg: #dbe0ea`) with crisp `#ffffff` cards, distinct borders, embedded difficulty pills, and replaced dark text with high-contrast white text on colored blocks in `IntervalPartitioningVisualizer` and `MinimizeLatenessVisualizer`.
-  5. **Platform Author Footer & Feedback Modal**: Replaced footer with `Author — Lucio Romero Mascaró`, GitHub profile button (`lucio-rm`), and `FeedbackModal` enabling students to submit bug reports and suggestions directly to `lromerom@fi.uba.ar`.
+  5. **Platform Footer & Feedback Modal**: Replaced footer with sovereign institutional attribution, repository link (`visualtda`), and `FeedbackModal` enabling students to submit bug reports and suggestions directly to maintainers.
   6. **Verification**: 47 test files passing (368/368 tests), 22/22 real Chromium browser scenarios passing, zero lint errors, clean static production build.
 
 ### Issue 3.27 — Feedback Channel FormSubmit Silent Non-Delivery & Activation Invariant
 - **Reported Behavior**:
-  Submissions via `FeedbackModal` appeared successful in the UI (`status: sent`), but no emails arrived in the destination inbox (`lromerom@fi.uba.ar`).
+  Submissions via `FeedbackModal` appeared successful in the UI (`status: sent`), but no emails arrived in the destination inbox.
 - **Severity**: High (Silent communications black hole).
 - **Status**: **RESOLVED** (dual delivery + FormSubmit activation trigger).
 - **Root Cause Analysis**:
   FormSubmit requires an initial "Activate Form" confirmation email to be clicked for each destination address. Until clicked, FormSubmit returns `{"success":"false","message":"This form needs Activation..."}` while HTTP client fetch does not throw, leading client-side UI to report success. Mocked tests verifying `fetch()` proved the request was dispatched, but cannot prove external delivery.
 - **Resolution**:
-  1. Triggered FormSubmit activation requests to both `lucioromeromascaro@gmail.com` and `lromerom@fi.uba.ar`.
-  2. Updated `FeedbackModal.tsx` to dual-dispatch to both primary personal inbox (`lucioromeromascaro@gmail.com`) and secondary institutional inbox (`lromerom@fi.uba.ar`) via `Promise.allSettled`.
+  1. Triggered FormSubmit activation requests to configured maintainer inboxes.
+  2. Updated `FeedbackModal.tsx` to dual-dispatch to configured inboxes with explicit HTTP status and JSON response verification.
   3. Added standing manual verification protocol: Delivery to a real inbox must be periodically re-verified by hand, as mock tests cannot inspect third-party mailer delivery.
 
 ---
