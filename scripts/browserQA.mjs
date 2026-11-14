@@ -891,7 +891,7 @@ server.listen(PORT, async () => {
         const ssPath = await captureScreenshot(`22-responsive-${vp.name}-${vp.w}x${vp.h}.png`);
 
         if (hasHorizontalOverflow) {
-          console.warn(`    ⚠️ Warning: Viewport ${vp.w}x${vp.h} has horizontal overflow`);
+          console.warn(`    [ADVERTENCIA] Warning: Viewport ${vp.w}x${vp.h} has horizontal overflow`);
         } else {
           console.log(`    Viewport ${vp.w}x${vp.h} (${vp.name}): Layout OK, Screenshot saved (${path.basename(ssPath)})`);
         }

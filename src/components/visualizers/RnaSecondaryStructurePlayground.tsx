@@ -61,7 +61,7 @@ export const RnaSecondaryStructurePlayground: React.FC = () => {
     A: 'var(--accent)', // sky
     U: 'var(--warning)', // amber
     C: 'var(--success)', // emerald
-    G: '#ec4899'  // pink
+    G: '#0d9488'  // teal
   };
 
   const handlePreset = (seq: string) => {

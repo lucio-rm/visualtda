@@ -81,9 +81,9 @@ describe('Playground Drag vs Click Movement Threshold (5px) Verification', () =>
     const vertexG = container.querySelector('svg g g[style*="cursor"]');
     expect(vertexG).not.toBeNull();
 
-    // The selection indicator circle has stroke: #8b5cf6 when in VC (not selected in IS)
+    // The selection indicator circle has stroke: var(--accent) when in VC (not selected in IS)
     const selectionRing = vertexG?.querySelector('circle[r="28"]');
-    expect(selectionRing?.getAttribute('stroke')).toBe('#8b5cf6');
+    expect(selectionRing?.getAttribute('stroke')).toBe('var(--accent)');
 
     // Plain click selects it into Independent Set (stroke becomes var(--success))
     await act(async () => {

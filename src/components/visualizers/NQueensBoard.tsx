@@ -54,15 +54,6 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
         aria-label={language === 'es' ? `Tablero de ajedrez ${n} por ${n}` : `Chessboard ${n} by ${n}`}
         role="img"
       >
-        <defs>
-          <filter id="queen-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2563eb" floodOpacity="0.4" />
-          </filter>
-          <filter id="conflict-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#dc2626" floodOpacity="0.5" />
-          </filter>
-        </defs>
-
         {/* Board squares */}
         {Array.from({ length: n }).map((_, r) =>
           Array.from({ length: n }).map((__, c) => {
@@ -146,7 +137,6 @@ export const NQueensBoard: React.FC<NQueensBoardProps> = ({
                       cy={r * cellSize + cellSize / 2}
                       r={cellSize * 0.38}
                       className={`queen-bg-circle ${isSolution ? 'solution-circle' : ''} ${isConflictSource || isConflictTarget ? 'conflict-circle' : ''}`}
-                      filter={isConflictSource || isConflictTarget ? 'url(#conflict-glow)' : 'url(#queen-glow)'}
                     />
                     <text
                       x={c * cellSize + cellSize / 2}

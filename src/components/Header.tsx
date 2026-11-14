@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeMode } from '../app/App';
+import { ThemeMode } from '../types/theme';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useInstructorMode } from '../context/InstructorModeContext';
 import { InstructorAuthModal } from './InstructorAuthModal';

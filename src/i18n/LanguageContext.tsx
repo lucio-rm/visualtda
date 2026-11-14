@@ -19,10 +19,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (saved === 'es' || saved === 'en') {
       return saved;
     }
-    // Check navigator
-    if (typeof navigator !== 'undefined' && navigator.language?.startsWith('en')) {
-      return 'en';
-    }
     return 'es';
   });
 

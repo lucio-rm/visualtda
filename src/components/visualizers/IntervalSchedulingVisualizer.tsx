@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateIntervalSchedulingTrace,
   IntervalSchedulingStepData
@@ -166,14 +167,13 @@ export const IntervalSchedulingVisualizer: React.FC = () => {
       {/* Playback Controls Toolbar */}
       <div className="timeline-toolbar">
         <div className="timeline-scrubber">
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="scrubber-slider"
-            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
           />
         </div>
 

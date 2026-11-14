@@ -196,9 +196,9 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: coinState.flip1 === 1 ? 'linear-gradient(135deg, var(--warning), #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
-                border: '3px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
+                background: coinState.flip1 === 1 ? 'var(--warning)' : '#475569',
+                border: '2px solid var(--border-strong)',
+                boxShadow: 'var(--shadow-sm)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -213,7 +213,9 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
               {coinState.flip1}
             </div>
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-              {coinState.flip1 === 1 ? 'Cara (1)' : 'Cruz (0)'}
+              {coinState.flip1 === 1
+                ? (language === 'es' ? 'Cara (1)' : 'Heads (1)')
+                : (language === 'es' ? 'Cruz (0)' : 'Tails (0)')}
             </span>
           </div>
 
@@ -229,9 +231,9 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: coinState.flip2 === 1 ? 'linear-gradient(135deg, var(--warning), #d97706)' : 'linear-gradient(135deg, #64748b, #475569)',
-                border: '3px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
+                background: coinState.flip2 === 1 ? 'var(--warning)' : '#475569',
+                border: '2px solid var(--border-strong)',
+                boxShadow: 'var(--shadow-sm)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -246,7 +248,9 @@ export const RandomizedFairCoinPlayground: React.FC = () => {
               {coinState.flip2}
             </div>
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-              {coinState.flip2 === 1 ? 'Cara (1)' : 'Cruz (0)'}
+              {coinState.flip2 === 1
+                ? (language === 'es' ? 'Cara (1)' : 'Heads (1)')
+                : (language === 'es' ? 'Cruz (0)' : 'Tails (0)')}
             </span>
           </div>
 

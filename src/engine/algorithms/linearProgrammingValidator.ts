@@ -131,7 +131,7 @@ export class LinearProgrammingValidator implements Validator<LP2DInput, LP2DOutp
 
     if (optimal.feasible && candidateValue < optimal.optimalValue - 1e-4) {
       errors.push(
-        `Solución subóptima: El punto (${x}, ${y}) tiene valor ${candidateValue}, pero el valor óptimo es ${optimal.optimalValue} en (${optimal.optimalPoint?.[0]}, ${optimal.optimalPoint?.[1]}).`
+        `Solución subóptima: El punto (${x}, ${y}) tiene valor ${candidateValue}, pero el valor óptimo es ${optimal.optimalValue}.`
       );
     }
 

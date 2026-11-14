@@ -167,7 +167,7 @@
 .tag-skip {
   font-size: 0.8125rem;
   font-weight: 700;
-  background-color: #8b5cf6;
+  background-color: var(--accent);
   color: white;
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
@@ -176,14 +176,14 @@
 .tag-work {
   font-size: 0.8125rem;
   font-weight: 700;
-  background-color: #ec4899;
+  background-color: var(--success);
   color: white;
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
 }
 
 .dp-cell.filled {
-  background-color: rgba(99, 102, 241, 0.05);
+  background-color: var(--surface-subtle);
 }
 
 .dp-cell.active-cell {
@@ -192,13 +192,13 @@
 }
 
 .dp-cell.ante-skip {
-  border-color: #8b5cf6;
-  background-color: rgba(139, 92, 246, 0.12);
+  border-color: var(--accent);
+  background-color: var(--state-candidate-bg);
 }
 
 .dp-cell.ante-work {
-  border-color: #ec4899;
-  background-color: rgba(236, 72, 153, 0.12);
+  border-color: var(--success);
+  background-color: var(--state-solution-bg);
 }
 
 .dp-cell.recon-cell {
@@ -225,12 +225,12 @@
 }
 
 .decision-col.col-skip {
-  border-left: 3px solid #8b5cf6;
+  border-left: 3px solid var(--accent);
   padding-left: 0.75rem;
 }
 
 .decision-col.col-work {
-  border-left: 3px solid #ec4899;
+  border-left: 3px solid var(--success);
   padding-left: 0.75rem;
 }
 
@@ -271,8 +271,8 @@
 }
 
 .choice-badge.skip {
-  background-color: rgba(139, 92, 246, 0.15);
-  color: #8b5cf6;
+  background-color: var(--state-candidate-bg);
+  color: var(--accent);
 }
 
 .narrative-box {

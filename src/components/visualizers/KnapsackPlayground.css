@@ -18,7 +18,7 @@
 
 @media (max-width: 900px) {
   .knapsack-dual-workspace {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -26,6 +26,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  min-width: 0;
 }
 
 .shelf-column-header h5 {
@@ -43,6 +44,15 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .knapsack-playground-box {
+    padding: 0.75rem;
+  }
+  .knapsack-items-shelf {
+    grid-template-columns: 1fr;
+  }
 }
 
 .knapsack-shelf-column.shelf-drag-over {

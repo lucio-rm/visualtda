@@ -5,6 +5,9 @@ import { juanElVagoValidator } from '../../engine/algorithms/juanElVagoValidator
 import { coinChangeValidator } from '../../engine/algorithms/coinChangeValidator';
 import { lcsValidator } from '../../engine/algorithms/lcsValidator';
 import { weightedIntervalValidator, WeightedInterval } from '../../engine/algorithms/weightedIntervalValidator';
+import { segmentedLeastSquaresValidator } from '../../engine/algorithms/segmentedLeastSquaresValidator';
+import { rnaSecondaryStructureValidator } from '../../engine/algorithms/rnaSecondaryStructureValidator';
+import { bellmanFordValidator } from '../../engine/algorithms/bellmanFordValidator';
 
 export const dpRunners: Record<string, PythonTestStrategy> = {
   'knapsack-dp': async (code, service) => {
@@ -40,12 +43,24 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
             const tupleRes = res.result as [number, { id: string; peso: number; valor: number }[]];
             const valMax = Array.isArray(tupleRes) ? tupleRes[0] : null;
             const chosenItems = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
-            const domainItems: KnapsackItem[] = chosenItems.map((it) => ({
-              id: it.id,
-              name: it.id,
-              weight: it.peso,
-              value: it.valor
-            }));
+            const domainItems: KnapsackItem[] = chosenItems.map((rawIt: unknown) => {
+              if (Array.isArray(rawIt)) {
+                return {
+                  id: String(rawIt[0]),
+                  name: String(rawIt[0]),
+                  weight: Number(rawIt[1]),
+                  value: Number(rawIt[2])
+                };
+              }
+              const it = (typeof rawIt === 'object' && rawIt !== null ? rawIt : {}) as Record<string, unknown>;
+              const id = String(it.id || it.name || it.nombre || '');
+              return {
+                id,
+                name: id,
+                weight: Number(it.peso ?? it.weight ?? 0),
+                value: Number(it.valor ?? it.value ?? 0)
+              };
+            });
 
             const originalKnapsackItems: KnapsackItem[] = items.map((it) => ({
               id: it.id,
@@ -429,6 +444,7 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
 
     const tupleRes1 = res1.result as [number, number[]];
     const cost1 = Array.isArray(tupleRes1) ? tupleRes1[0] : Number(tupleRes1);
+    const val1 = segmentedLeastSquaresValidator.validate({ points: pts1, penaltyC: 5.0 }, tupleRes1);
 
     results.push({
       testId: 'py-sls-collinear',
@@ -436,9 +452,9 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
         es: 'Puntos colineales [(1,1), (2,2), (3,3)] con C=5.0: Costo óptimo = 5.0 (1 recta sin error).',
         en: 'Collinear points with C=5.0: Optimal cost = 5.0.'
       },
-      passed: Math.abs(cost1 - 5.0) < 0.01,
+      passed: val1.valid,
       expected: '5.0',
-      actual: String(cost1)
+      actual: val1.valid ? String(cost1) : val1.errors.join('; ')
     });
 
     // Test 2: Two horizontal step levels with C=1.0 -> 2 lines, error=0 -> cost = 2.0
@@ -447,6 +463,7 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const tupleRes2 = res2.result as [number, number[]];
     const cost2 = Array.isArray(tupleRes2) ? tupleRes2[0] : Number(tupleRes2);
+    const val2 = segmentedLeastSquaresValidator.validate({ points: pts2, penaltyC: 1.0 }, tupleRes2);
 
     results.push({
       testId: 'py-sls-two-steps',
@@ -454,9 +471,9 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
         es: 'Dos escalones horizontales [(0,0),(1,0),(2,10),(3,10)] con C=1.0: Costo = 2.0.',
         en: 'Two horizontal steps with C=1.0: Cost = 2.0.'
       },
-      passed: Math.abs(cost2 - 2.0) < 0.01,
+      passed: val2.valid,
       expected: '2.0',
-      actual: String(cost2)
+      actual: val2.valid ? String(cost2) : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -493,30 +510,34 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
     }
 
     const pairs1 = Number(res1.result);
+    const val1 = rnaSecondaryStructureValidator.validate('ACCCCU', pairs1);
+
     results.push({
       testId: 'py-rna-hairpin',
       description: {
         es: 'Horquilla "ACCCCU": Par A(0)-U(5) con separación 5 > 4: 1 par óptimo.',
         en: 'Hairpin "ACCCCU": Pair A(0)-U(5) with gap 5 > 4: 1 optimal pair.'
       },
-      passed: pairs1 === 1,
+      passed: val1.valid,
       expected: '1',
-      actual: String(pairs1)
+      actual: val1.valid ? String(pairs1) : val1.errors.join('; ')
     });
 
     // Test 2: Sequence too short "ACGU" (< 5) -> 0 pairs
     const res2 = await service.executePython(code, 'estructura_secundaria_arn', ['ACGU']);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const pairs2 = Number(res2.result);
+    const val2 = rnaSecondaryStructureValidator.validate('ACGU', pairs2);
+
     results.push({
       testId: 'py-rna-short',
       description: {
         es: 'Secuencia corta "ACGU": Separación insuficiente para formar horquillas (0 pares).',
         en: 'Short sequence "ACGU": Insufficient separation for hairpins (0 pairs).'
       },
-      passed: pairs2 === 0,
+      passed: val2.valid,
       expected: '0',
-      actual: String(pairs2)
+      actual: val2.valid ? String(pairs2) : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -561,13 +582,7 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
     const tupleRes1 = res1.result as [Record<string, number>, boolean];
     const dists1 = Array.isArray(tupleRes1) ? tupleRes1[0] : null;
     const hasNegCycle1 = Array.isArray(tupleRes1) ? tupleRes1[1] : false;
-
-    const pass1 =
-      dists1 !== null &&
-      Number(dists1['0']) === 0 &&
-      Number(dists1['1']) === -1 &&
-      Number(dists1['2']) === 2 &&
-      hasNegCycle1 === false;
+    const val1 = bellmanFordValidator.validate({ numVertices: 3, edges: edges1, source: 0 }, tupleRes1);
 
     results.push({
       testId: 'py-bf-negative-edge-correct',
@@ -575,9 +590,9 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
         es: 'Grafo con arista negativa sin ciclo: Distancias desde 0: {0: 0, 1: -1, 2: 2}, ciclo=False.',
         en: 'Graph with negative edge and no cycle: Distances from 0: {0: 0, 1: -1, 2: 2}, cycle=False.'
       },
-      passed: Boolean(pass1),
+      passed: val1.valid,
       expected: 'dist[2] == 2 y tiene_ciclo == False',
-      actual: `dist: ${JSON.stringify(dists1)}, ciclo_negativo: ${hasNegCycle1}`
+      actual: val1.valid ? `dist: ${JSON.stringify(dists1)}, ciclo_negativo: ${hasNegCycle1}` : val1.errors.join('; ')
     });
 
     // Test 2: Graph with negative cycle: 0 -> 1 (1), 1 -> 2 (-3), 2 -> 0 (-1) -> sum = -3 < 0
@@ -590,6 +605,7 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const tupleRes2 = res2.result as [Record<string, number>, boolean];
     const hasNegCycle2 = Array.isArray(tupleRes2) ? tupleRes2[1] : false;
+    const val2 = bellmanFordValidator.validate({ numVertices: 3, edges: edges2, source: 0 }, tupleRes2);
 
     results.push({
       testId: 'py-bf-detects-negative-cycle',
@@ -597,9 +613,9 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
         es: 'Detección de ciclo de costo negativo: Debe retornar tiene_ciclo_negativo == True.',
         en: 'Negative cycle detection: Must return has_negative_cycle == True.'
       },
-      passed: hasNegCycle2 === true,
+      passed: val2.valid && hasNegCycle2 === true,
       expected: 'tiene_ciclo_negativo == True',
-      actual: `tiene_ciclo_negativo == ${hasNegCycle2}`
+      actual: val2.valid ? `tiene_ciclo_negativo == ${hasNegCycle2}` : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;

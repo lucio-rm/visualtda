@@ -70,7 +70,7 @@
 .inv-phase-pill.compare { background: #0d9488; }
 .inv-phase-pill.count_split { background: #d97706; color: #fff; animation: pulse 1s infinite alternate; }
 .inv-phase-pill.merge_done { background: #16a34a; }
-.inv-phase-pill.complete { background: #8b5cf6; }
+.inv-phase-pill.complete { background: var(--accent); }
 
 @keyframes pulse {
   from { transform: scale(1); box-shadow: 0 0 0 rgba(217, 119, 6, 0); }
@@ -167,7 +167,7 @@
 }
 
 .inv-half-box.right {
-  border-left: 3px solid #a855f7;
+  border-left: 3px solid #0d9488;
 }
 
 .inv-half-header {
@@ -245,9 +245,9 @@
 }
 
 [data-theme='dark'] .inv-cell.active-right {
-  background: rgba(168, 85, 247, 0.25);
-  border-color: #a855f7;
-  color: #d8b4fe;
+  background: rgba(13, 148, 136, 0.25);
+  border-color: #0d9488;
+  color: #5eead4;
 }
 
 [data-theme='dark'] .inv-cell.inversion-cause {

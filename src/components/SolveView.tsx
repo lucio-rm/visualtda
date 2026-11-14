@@ -483,7 +483,10 @@ export const SolveView: React.FC<SolveViewProps> = ({
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     if (content?.runTests) {
+      const startTime = performance.now();
       const evaluation = await content.runTests(code);
+      const elapsedMs = Math.max(1, Math.round(performance.now() - startTime));
+      setExecutionTimeMs(elapsedMs);
       const effort = analyzeStudentCodeEffort(code, rawStarter);
       const isLegitEffort = effort.hasRealLogic && effort.meaningfulLinesAdded >= 2;
       setTestResults(evaluation.results);
@@ -529,13 +532,16 @@ export const SolveView: React.FC<SolveViewProps> = ({
           totalTestsCount: evaluation.totalTests,
           meaningfulLinesCount: effort.meaningfulLinesAdded,
           engine: 'ts',
-          executionTimeMs: null
+          executionTimeMs: elapsedMs
         });
         setAttempts(getStudentAttempts(exercise.id));
       }
     } else {
       // Evaluate against Python test runner with real test cases
+      const startTime = performance.now();
       const evalResult = await runPythonTests(exercise.id, code);
+      const elapsedMs = Math.max(1, Math.round(performance.now() - startTime));
+      setExecutionTimeMs(elapsedMs);
       const effort = analyzeStudentCodeEffort(code, rawStarter);
       const isLegitEffort = effort.hasRealLogic && effort.meaningfulLinesAdded >= 2;
       setTestResults(evalResult.results);
@@ -580,7 +586,7 @@ export const SolveView: React.FC<SolveViewProps> = ({
           totalTestsCount: evalResult.totalTests,
           meaningfulLinesCount: effort.meaningfulLinesAdded,
           engine: 'ts',
-          executionTimeMs: null
+          executionTimeMs: elapsedMs
         });
         setAttempts(getStudentAttempts(exercise.id));
       }

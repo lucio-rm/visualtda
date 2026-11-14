@@ -23,4 +23,4 @@ Estado y planificación de los hitos del proyecto:
 | **P12: Pyodide Web Worker Sandbox** | Ejecución de Python en navegador sin dependencias de backend, con captura de `stdout`, watchdog de bucles infinitos y visualización de trazas de error. | **Completado** |
 | **P13: Reducción de Problemas** | Demostración formal de $IS \le_P VC$ (Kleinberg & Tardos 8.1), grafo SVG y laboratorio interactivo de dualidad. | **Completado** |
 | **P14: Algoritmos de Aproximación** | 2-Aproximación greedy para Cobertura de Vértices vía Matching Maximal (K&T 11.1) con cota inferior $|C^*| \ge |M|$. | **Completado** |
-| **P15: Catálogo Completo (38 Ejercicios)** | Expansión del catálogo académico a 38 ejercicios interactivos cubriendo Algoritmos Randomizados, Programación Lineal, Branch & Bound, y más. | **Completado** |
+| **P15: Catálogo Completo (37 Ejercicios)** | Expansión del catálogo académico a 37 ejercicios interactivos cubriendo Algoritmos Randomizados, Programación Lineal, Branch & Bound, y más. | **Completado** |

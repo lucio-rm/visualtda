@@ -336,14 +336,14 @@ export const CoinChangePlayground: React.FC = () => {
                     width: '56px',
                     height: '56px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle at 35% 35%, #fbbf24, #d97706)',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.25), inset 0 2px 2px rgba(255,255,255,0.4)',
-                    border: '2px solid #b45309',
+                    background: 'var(--state-candidate-bg)',
+                    boxShadow: 'var(--shadow-xs)',
+                    border: '2px solid var(--warning)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    color: '#78350f',
+                    color: 'var(--text)',
                     fontWeight: '800',
                     fontFamily: 'var(--font-mono)',
                     userSelect: 'none',
@@ -449,13 +449,13 @@ export const CoinChangePlayground: React.FC = () => {
                   gap: '0.35rem',
                   padding: '0.3rem 0.6rem',
                   borderRadius: '20px',
-                  background: 'radial-gradient(circle at 35% 35%, #fbbf24, #d97706)',
-                  color: '#78350f',
-                  border: '1px solid #b45309',
+                  background: 'var(--state-candidate-bg)',
+                  color: 'var(--text)',
+                  border: '1px solid var(--warning)',
                   fontWeight: '800',
                   fontSize: '0.85rem',
                   cursor: 'pointer',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
+                  boxShadow: 'var(--shadow-xs)'
                 }}
                 title={language === 'es' ? 'Hacé clic para remover' : 'Click to remove'}
               >

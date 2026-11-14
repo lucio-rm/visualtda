@@ -125,7 +125,7 @@ try:
             'k_esimo_elemento': ['kth_element', 'select_kth'],
             'elemento_mayoritario': ['majority_element'],
             'seleccion_intervalos': ['interval_scheduling', 'select_intervals'],
-            'mochila_fraccionaria': ['fractional_knapsack'],
+            'mochila_fraccionaria': ['mochila_fraccionaria', 'fractional_knapsack_greedy', 'fractional_knapsack'],
             'construir_antenas': ['build_antennas', 'road_antennas'],
             'particionar_intervalos': ['interval_partitioning', 'partition_intervals'],
             'codificar_huffman': ['huffman_encoding', 'huffman_coding', 'build_huffman'],

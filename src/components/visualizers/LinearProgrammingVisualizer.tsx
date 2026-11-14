@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateLinearProgrammingTrace,
   LPStepData,
@@ -328,14 +329,13 @@ export const LinearProgrammingVisualizer: React.FC = () => {
         <button className="btn-control" onClick={stepForward} disabled={currentStepIndex === totalSteps - 1} title={language === 'es' ? 'Paso siguiente (→)' : 'Step forward (→)'} aria-label={language === 'es' ? 'Paso siguiente' : 'Step forward'}>→</button>
 
         <div className="timeline-slider-wrapper">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
-            className="timeline-slider"
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
           />
           <span className="step-counter">{currentStepIndex + 1} / {totalSteps}</span>
         </div>

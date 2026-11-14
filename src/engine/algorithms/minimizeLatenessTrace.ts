@@ -26,8 +26,8 @@ const PALETTE = [
   '#38bdf8', // sky
   '#f59e0b', // amber
   '#10b981', // emerald
-  '#a855f7', // purple
-  '#ec4899', // pink
+  '#0284c7', // deep sky
+  '#0d9488', // teal
   '#f97316'  // orange
 ];
 

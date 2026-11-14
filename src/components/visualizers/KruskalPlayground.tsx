@@ -7,9 +7,9 @@ const COMPONENT_COLORS: Record<string, string> = {
   A: 'var(--success)',
   B: 'var(--accent)',
   C: 'var(--warning)',
-  D: '#06b6d4',
-  E: '#ec4899',
-  F: '#8b5cf6'
+  D: '#0284c7',
+  E: '#0d9488',
+  F: '#b45309'
 };
 
 export const KruskalPlayground: React.FC = () => {

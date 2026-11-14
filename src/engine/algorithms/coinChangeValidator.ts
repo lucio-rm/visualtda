@@ -99,7 +99,7 @@ export class CoinChangeValidator implements Validator<CoinChangeInput, number[]>
     if (optimal.length > 0) {
       if (result.length > optimal.length) {
         errors.push(
-          `La cantidad de monedas (${result.length}) no es óptima. La Programación Dinámica resuelve este caso con solo ${optimal.length} moneda(s): [${optimal.join(', ')}].`
+          `La cantidad de monedas (${result.length}) no es óptima. La Programación Dinámica resuelve este caso con solo ${optimal.length} moneda(s).`
         );
       }
     } else if (result.length > 0) {

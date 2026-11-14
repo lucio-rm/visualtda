@@ -30,7 +30,17 @@ export const InvariantInspectorCallout: React.FC<InvariantInspectorCalloutProps>
     <div className={`invariant-callout-box ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="invariant-callout-header">
         <div className="invariant-header-left">
-          <span className="invariant-sparkle-icon" aria-hidden="true">📐</span>
+          <span className="invariant-sparkle-icon" aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 21h18L3 3v18z" />
+              <path d="M9 21v-4" />
+              <path d="M13 21v-2" />
+              <path d="M17 21v-4" />
+              <path d="M3 9h4" />
+              <path d="M3 13h2" />
+              <path d="M3 17h4" />
+            </svg>
+          </span>
           <span className="invariant-title">{displayTitle}</span>
           <span className="invariant-step-pill">
             {isEs ? `Paso ${currentStep + 1} de ${totalSteps}` : `Step ${currentStep + 1} of ${totalSteps}`}

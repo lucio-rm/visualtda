@@ -82,7 +82,7 @@ export const SegmentedLeastSquaresPlayground: React.FC = () => {
     return Math.round((minY + normalized * (maxY - minY)) * 10) / 10;
   };
 
-  const segmentColors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#ec4899', '#a855f7', '#06b6d4'];
+  const segmentColors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#0d9488', '#0284c7', '#b45309'];
 
   const handlePresetC = (cVal: number) => {
     setCostC(cVal);

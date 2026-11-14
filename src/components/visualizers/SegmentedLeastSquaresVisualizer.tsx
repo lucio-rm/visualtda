@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateSegmentedLeastSquaresTrace,
   SegmentedLeastSquaresStepData,
@@ -56,7 +57,7 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
   const scaleX = (x: number) => padLeft + ((x - minX) / (maxX - minX)) * (svgWidth - padLeft - padRight);
   const scaleY = (y: number) => svgHeight - padBottom - ((y - minY) / (maxY - minY)) * (svgHeight - padTop - padBottom);
 
-  const colors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#ec4899'];
+  const colors = ['var(--accent)', 'var(--success)', 'var(--warning)', '#0d9488'];
 
   return (
     <div
@@ -292,13 +293,13 @@ export const SegmentedLeastSquaresVisualizer: React.FC = () => {
         </div>
 
         <div className="trace-scrubber">
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {language === 'es' ? 'Paso' : 'Step'} {currentStepIndex + 1} / {totalSteps}

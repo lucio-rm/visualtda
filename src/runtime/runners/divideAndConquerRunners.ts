@@ -4,6 +4,10 @@ import { mergeSortValidator } from '../../engine/algorithms/mergeSortValidator';
 import { maxSubarrayValidator } from '../../engine/algorithms/maxSubarrayValidator';
 import { peakFindingValidator } from '../../engine/algorithms/peakFindingValidator';
 import { inversionCountingValidator } from '../../engine/algorithms/inversionCountingValidator';
+import { closestPairValidator } from '../../engine/algorithms/closestPairValidator';
+import { karatsubaValidator } from '../../engine/algorithms/karatsubaValidator';
+import { medianOfMediansValidator } from '../../engine/algorithms/medianOfMediansValidator';
+import { majorityElementValidator } from '../../engine/algorithms/majorityElementValidator';
 
 export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
   'merge-sort': async (code, service) => {
@@ -262,7 +266,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     const results: TestCaseResult[] = [];
     let capturedStdout = '';
 
-    const pts1 = [[0, 0], [3, 4], [1, 1]];
+    const pts1: [number, number][] = [[0, 0], [3, 4], [1, 1]];
     const res1 = await service.executePython(code, 'par_mas_cercano', [pts1]);
     if (res1.stdout) capturedStdout += res1.stdout + '\n';
     if (!res1.success) {
@@ -283,7 +287,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     }
 
     const dist1 = typeof res1.result === 'number' ? res1.result : NaN;
-    const pass1 = Math.abs(dist1 - Math.SQRT2) < 0.001;
+    const val1 = closestPairValidator.validate(pts1, dist1);
 
     results.push({
       testId: 'py-closest-pair-triangle',
@@ -291,17 +295,17 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Triángulo [(0,0), (3,4), (1,1)]: Distancia mínima calculada ≈ 1.4142.',
         en: 'Triangle [(0,0), (3,4), (1,1)]: Minimal distance ≈ 1.4142.'
       },
-      passed: pass1,
+      passed: val1.valid,
       expected: '1.4142',
-      actual: String(dist1)
+      actual: val1.valid ? String(dist1) : val1.errors.join('; ')
     });
 
     // Test 2: Horizontal strip split
-    const pts2 = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]];
+    const pts2: [number, number][] = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]];
     const res2 = await service.executePython(code, 'par_mas_cercano', [pts2]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const dist2 = typeof res2.result === 'number' ? res2.result : NaN;
-    const pass2 = Math.abs(dist2 - Math.SQRT2) < 0.001;
+    const val2 = closestPairValidator.validate(pts2, dist2);
 
     results.push({
       testId: 'py-closest-pair-strip',
@@ -309,9 +313,9 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Puntos cruzando la franja: Distancia mínima ≈ 1.4142 entre (2,3) y (3,4).',
         en: 'Points crossing central strip: Minimal distance ≈ 1.4142.'
       },
-      passed: pass2,
+      passed: val2.valid,
       expected: '1.4142',
-      actual: String(dist2)
+      actual: val2.valid ? String(dist2) : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -347,7 +351,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     }
 
     const val1 = Number(res1.result);
-    const pass1 = val1 === 1234 * 5678;
+    const check1 = karatsubaValidator.validate([1234, 5678], val1);
 
     results.push({
       testId: 'py-karatsuba-4digits',
@@ -355,15 +359,16 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Producto 1234 × 5678 = 7006652.',
         en: 'Product 1234 × 5678 = 7006652.'
       },
-      passed: pass1,
+      passed: check1.valid,
       expected: '7006652',
-      actual: String(val1)
+      actual: check1.valid ? String(val1) : check1.errors.join('; ')
     });
 
     // Test 2: Base case
     const res2 = await service.executePython(code, 'multiplicar_karatsuba', [6, 7]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const val2 = Number(res2.result);
+    const check2 = karatsubaValidator.validate([6, 7], val2);
 
     results.push({
       testId: 'py-karatsuba-base-case',
@@ -371,9 +376,9 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Caso base un dígito: 6 × 7 = 42.',
         en: 'Base case single digit: 6 × 7 = 42.'
       },
-      passed: val2 === 42,
+      passed: check2.valid,
       expected: '42',
-      actual: String(val2)
+      actual: check2.valid ? String(val2) : check2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -410,6 +415,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     }
 
     const val1 = Number(res1.result);
+    const check1 = medianOfMediansValidator.validate({ array: arr1, k: 0 }, val1);
 
     results.push({
       testId: 'py-mom-min',
@@ -417,15 +423,16 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Elemento mínimo (k = 0) en [12, 3, 5, 7, 4, 19, 26]: Retorna 3.',
         en: 'Minimum element (k = 0) in [12, 3, 5, 7, 4, 19, 26]: Returns 3.'
       },
-      passed: val1 === 3,
+      passed: check1.valid,
       expected: '3',
-      actual: String(val1)
+      actual: check1.valid ? String(val1) : check1.errors.join('; ')
     });
 
     // Test 2: Median (k = 3)
     const res2 = await service.executePython(code, 'k_esimo_elemento', [arr1, 3]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const val2 = Number(res2.result);
+    const check2 = medianOfMediansValidator.validate({ array: arr1, k: 3 }, val2);
 
     results.push({
       testId: 'py-mom-median',
@@ -433,9 +440,9 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Mediana (k = 3) en [12, 3, 5, 7, 4, 19, 26]: Retorna 7.',
         en: 'Median (k = 3) in [12, 3, 5, 7, 4, 19, 26]: Returns 7.'
       },
-      passed: val2 === 7,
+      passed: check2.valid,
       expected: '7',
-      actual: String(val2)
+      actual: check2.valid ? String(val2) : check2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -472,6 +479,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     }
 
     const val1 = res1.result as number | null;
+    const check1 = majorityElementValidator.validate(arr1, val1);
 
     results.push({
       testId: 'py-majority-winner',
@@ -479,9 +487,9 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Arreglo [3, 3, 4, 2, 4, 4, 2, 4, 4]: Mayoritario absoluto es 4 (5 apariciones de 9).',
         en: 'Array [3, 3, 4, 2, 4, 4, 2, 4, 4]: Absolute majority is 4.'
       },
-      passed: val1 === 4,
+      passed: check1.valid,
       expected: '4',
-      actual: String(val1)
+      actual: check1.valid ? String(val1) : check1.errors.join('; ')
     });
 
     // Test 2: No majority
@@ -489,6 +497,7 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
     const res2 = await service.executePython(code, 'elemento_mayoritario', [arr2]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const val2 = res2.result as number | null;
+    const check2 = majorityElementValidator.validate(arr2, val2);
 
     results.push({
       testId: 'py-majority-none',
@@ -496,9 +505,9 @@ export const divideAndConquerRunners: Record<string, PythonTestStrategy> = {
         es: 'Arreglo sin ganador [1, 2, 3, 4, 5]: Debe retornar None.',
         en: 'Array without winner [1, 2, 3, 4, 5]: Must return None.'
       },
-      passed: val2 === null || val2 === undefined,
+      passed: check2.valid,
       expected: 'None',
-      actual: val2 === null || val2 === undefined ? 'None' : String(val2)
+      actual: check2.valid ? (val2 === null || val2 === undefined ? 'None' : String(val2)) : check2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;

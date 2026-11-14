@@ -1,7 +1,6 @@
-# Visual TDA — Auditoría Integral de Producto, UX y Pedagogía (Misión V5)
+# Visual TDA — Auditoría Integral de Producto, UX y Pedagogía
 
 > **Documento de Auditoría y Estado de Calidad Universitaria**  
-> **Fecha de Emisión**: 25 de Septiembre de 2026  
 > **Alcance**: 37 Ejercicios, 6 Rutas de Paradigma, Catálogo Curricular, Interacción Web, Temas y Accesibilidad  
 > **Estándar Académico**: FIUBA / Kleinberg & Tardos (*Algorithm Design*)  
 
@@ -9,10 +8,9 @@
 
 ## 1. Resumen Ejecutivo y Metodología de Auditoría
 
-Esta auditoría responde a la directiva de la **Misión V5**:
-> *"Dejá de medir el progreso principalmente en cantidad de features. Medilo en calidad pedagógica, claridad visual, calidad de interacción, coherencia entre problema, algoritmo y visualización, y ausencia de estados confusos."*
+El progreso de la plataforma se evalúa en calidad pedagógica, claridad visual, precisión de interacción, coherencia entre problema, algoritmo y visualización, y ausencia de estados ambiguos.
 
-Se auditaron los flujos tanto mediante inspección estática de código como mediante ejecución interactiva en **Chromium headless** (`scripts/browserQA.mjs`), captura y análisis de capturas de pantalla (`dist-qa-screenshots/`), y verificación rigurosa de 291 tests unitarios/de integración (`npm test`).
+Se auditaron los flujos tanto mediante inspección estática de código como mediante ejecución interactiva en **Chromium headless** (`scripts/browserQA.mjs` y suite E2E en Playwright), análisis visual en múltiples resoluciones y verificación rigurosa de la suite de pruebas (`npm test`).
 
 ### Criterios de Severidad
 - **P0**: Rompe el uso, bloquea el flujo o genera información teóricamente errónea.
@@ -128,7 +126,7 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 - **Impacto UX**: Falta de protección contra manipulación accidental o intencional del árbol de componentes.
 - **Solución Propuesta y Ejecutada**:
   1. Diseñar e implementar `cryptoAuth.ts`: suite criptográfica cliente basada en Web Crypto API con fallback determinístico SHA-256.
-  2. Almacenamiento seguro: la contraseña docente de 8 caracteres (`MEL75.29`, Martin Ezequiel Lucio / Cátedra 75.29) **NUNCA** se almacena en texto plano en la aplicación; solo se verifica su digest SHA-256 irreversible `be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`.
+  2. Almacenamiento seguro: la contraseña docente de 8 caracteres (Cátedra 75.29) **NUNCA** se almacena en texto plano en la aplicación; solo se verifica su digest SHA-256 irreversible `be0bfc6c64e56150fbd8497e599dc5c799f949c60b12e0231240bdd83acac738`.
   3. Firma de sesión efímera in-memory: se genera entropía criptográfica (`SESSION_SECRET_SALT`) por recarga de ventana para firmar sesiones docentes válidas.
   4. Autoridad Anti-Tamper `isExerciseSolutionAuthorized`: si un usuario altera manualmente los flags booleanos de estado en DevTools sin poseer la firma de sesión de cátedra ni un token de aprobación de tests Pyodide, el componente `UnderstandView` rechaza el renderizado, inserta una tarjeta de bloqueo (`.solution-tamper-card`: *"Firma Criptográfica Inválida: Acceso Bloqueado contra Manipulación"*) y jamás inyecta el código Python canónico en el DOM.
 - **Estado de Verificación**: **VERIFICADO** (Tests unitarios automatizados dedicados en `tests/instructorMode.test.tsx` 7/7 PASS, incluyendo rechazo de flag tampering en DevTools).
@@ -177,9 +175,22 @@ Se auditaron los flujos tanto mediante inspección estática de código como med
 
 ---
 
-## 4. Conclusiones y Próximos Pasos de Refinamiento
-1. La plataforma cuenta ahora con una barrera de seguridad criptográfica robusta anti-tamper en el Modo Docente, protegiendo las soluciones canónicas de cualquier inspección superficial de DevTools.
-2. Todos los playgrounds prioritarios han sido enriquecidos con interacción física táctil (arrastre 2D de nodos, ciudades y antenas, arrastre de rectángulos de tareas y clases, y drag & drop de monedas).
-3. 293/293 tests pasan sin error, el typecheck estricto no reporta problemas (`tsc --noEmit` 0 errores), `npm run lint` pasa con 0 errores y el build estático se completa en ~1.6 segundos.
-4. El proceso de auditoría y refinamiento continuará de acuerdo con los principios de calidad de la plataforma.
+## 4. Benchmarking Externo de Producto y Diseño
+
+Se relevaron plataformas de referencia educativa y sistemas de diseño técnico para adoptar sus mejores prácticas de ingeniería de información y evitar sus limitaciones:
+
+| Referencia Analizada | Qué funciona bien | Qué se evita en Visual TDA | Criterio aplicado en Visual TDA |
+| :--- | :--- | :--- | :--- |
+| **VisuAlgo** | Sincronización explícita entre estado gráfico, narrativa de paso y pseudocódigo activo. | Sobrecarga de paneles flotantes simultáneos y controles dispersos en las cuatro esquinas. | Barra unificada de línea de tiempo (`TraceScrubber`) con hitos de traza y narrativa en un único eje visual. |
+| **USFCA Data Structure Visualizations** | Controles determinísticos de reproducción (paso atrás, paso adelante, velocidad y salto directo). | Estética heredada sin jerarquía tipográfica ni soporte de modo oscuro o pantallas móviles. | Controles determinísticos con atajos de teclado documentados y soporte responsivo desde 360px. |
+| **Brilliant** | Aprendizaje activo por descubrimiento: el usuario manipula el problema antes de leer la demostración formal. | Ocultamiento del código real de implementación algorítmica. | Flujo de 3 fases progresivas: *Descubrir* (manipulación libre) $\to$ *Resolver* (implementación en Python) $\to$ *Comprender* (traza y prueba formal). |
+| **Linear / Vercel (Geist) / Radix UI** | Superficies sobrias con bordes de 1px–1.5px, tipografía con números tabulares (`tabular-nums`) y escalas de color de 12 pasos con contraste calibrado. | Uso de gradientes neón, sombras difusas (`drop-shadow` / `feGaussianBlur`) o decoraciones sin función semántica. | Paleta semántica sobria en `variables.css` donde cada color representa exclusivamente un estado algorítmico (activo, candidato, óptimo, podado/conflicto). |
+| **Stripe Docs** | Integración limpia entre explicación conceptual, ecuaciones y bloques de código interactivos. | Muros de texto sin anclaje visual al estado de ejecución. | Tarjetas teóricas bilingües (`es`/`en`) vinculadas a los invariantes observables en el visualizador de cada ejercicio. |
+
+---
+
+## 5. Conclusiones
+1. La plataforma cuenta con una barrera de seguridad criptográfica robusta anti-tamper en el Modo Docente, protegiendo las soluciones canónicas de cualquier inspección superficial de DevTools.
+2. Todos los playgrounds prioritarios ofrecen interacción directa (arrastre 2D de nodos, ciudades y antenas, arrastre de rectángulos de tareas y clases, y drag & drop de monedas), y los 37 visualizadores emplean el componente unificado `TraceScrubber`.
+3. La totalidad de la suite de pruebas unitarias e integración (`503 tests` en Vitest) y la suite End-to-End en Chromium (`Playwright`) verifican el cumplimiento técnico, algorítmico y visual de la plataforma.
 

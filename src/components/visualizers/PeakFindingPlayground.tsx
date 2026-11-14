@@ -355,7 +355,7 @@ export const PeakFindingPlayground: React.FC = () => {
                   ? (language === 'es' ? '▶ Paso a Paso DyC' : '▶ Step DyC')
                   : dcState.foundPeak !== null
                   ? (language === 'es' ? '✓ Pico Hallado' : '✓ Peak Found')
-                  : (language === 'es' ? `Siguiente Paso (${dcState.stepCount + 1}) ⏭` : `Next Step (${dcState.stepCount + 1}) ⏭`)}
+                  : (language === 'es' ? `Siguiente Paso (${dcState.stepCount + 1}) →` : `Next Step (${dcState.stepCount + 1}) →`)}
               </button>
               {dcState && (
                 <button

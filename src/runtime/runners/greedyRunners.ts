@@ -5,6 +5,10 @@ import { knapsackGreedyValidator, FractionalAssignment } from '../../engine/algo
 import { KnapsackItem } from '../../engine/algorithms/knapsackDpValidator';
 import { roadAntennasValidator } from '../../engine/algorithms/roadAntennasValidator';
 import { huffmanValidator } from '../../engine/algorithms/huffmanValidator';
+import { intervalPartitioningValidator } from '../../engine/algorithms/intervalPartitioningValidator';
+import { minimizeLatenessValidator } from '../../engine/algorithms/minimizeLatenessValidator';
+import { dijkstraValidator } from '../../engine/algorithms/dijkstraValidator';
+import { kruskalValidator } from '../../engine/algorithms/kruskalValidator';
 
 export const greedyRunners: Record<string, PythonTestStrategy> = {
   'interval-scheduling': async (code, service) => {
@@ -96,13 +100,35 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
               };
             }
 
-            const tupleRes = res.result as [number, { id?: string; itemId?: string; fraccion?: number; fraction?: number }[]];
+            const tupleRes = res.result as [number, unknown[]];
             const totalVal = Array.isArray(tupleRes) ? tupleRes[0] : null;
             const rawAssignments = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
-            const assignments: FractionalAssignment[] = rawAssignments.map((a) => ({
-              itemId: a.itemId || a.id || '',
-              fraction: a.fraction ?? a.fraccion ?? 1.0
-            }));
+            const assignments: FractionalAssignment[] = rawAssignments.map((rawA: unknown) => {
+              if (Array.isArray(rawA)) {
+                const item = rawA[0];
+                const fraction = typeof rawA[1] === 'number' ? rawA[1] : 1.0;
+                const itemId = Array.isArray(item)
+                  ? String(item[0])
+                  : typeof item === 'object' && item !== null
+                    ? String((item as Record<string, unknown>).id || (item as Record<string, unknown>).itemId || (item as Record<string, unknown>).name || (item as Record<string, unknown>).nombre || '')
+                    : String(item ?? '');
+                return { itemId, fraction };
+              }
+              const a = (typeof rawA === 'object' && rawA !== null ? rawA : {}) as Record<string, unknown>;
+              const itemObj = (typeof a.item === 'object' && a.item !== null ? a.item : {}) as Record<string, unknown>;
+              const itemId = String(
+                a.itemId ||
+                a.id ||
+                itemObj.id ||
+                itemObj.itemId ||
+                itemObj.name ||
+                itemObj.nombre ||
+                (Array.isArray(a.item) ? a.item[0] : '') ||
+                ''
+              );
+              const fraction = typeof a.fraction === 'number' ? a.fraction : typeof a.fraccion === 'number' ? a.fraccion : 1.0;
+              return { itemId, fraction };
+            });
 
             const originalItems: KnapsackItem[] = items.map((it) => ({
               id: it.id,
@@ -302,15 +328,17 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
     }
 
     const classrooms1 = Number(res1.result);
+    const val1 = intervalPartitioningValidator.validate(int1, classrooms1);
+
     results.push({
       testId: 'py-partitioning-depth-2',
       description: {
         es: 'Intervalos [[1,4], [2,5], [6,8]]: Solapamiento máximo = 2 aulas.',
         en: 'Intervals [[1,4], [2,5], [6,8]]: Maximum overlap = 2 classrooms.'
       },
-      passed: classrooms1 === 2,
+      passed: val1.valid,
       expected: '2',
-      actual: String(classrooms1)
+      actual: val1.valid ? String(classrooms1) : val1.errors.join('; ')
     });
 
     // Test 2: Mutually overlapping (depth 3)
@@ -318,15 +346,17 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
     const res2 = await service.executePython(code, 'particionar_intervalos', [int2]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const classrooms2 = Number(res2.result);
+    const val2 = intervalPartitioningValidator.validate(int2, classrooms2);
+
     results.push({
       testId: 'py-partitioning-depth-3',
       description: {
         es: '3 tareas mutuamente solapadas: Requiere exactamente 3 aulas.',
         en: '3 mutually overlapping tasks: Requires exactly 3 classrooms.'
       },
-      passed: classrooms2 === 3,
+      passed: val2.valid,
       expected: '3',
-      actual: String(classrooms2)
+      actual: val2.valid ? String(classrooms2) : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -364,15 +394,17 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
     }
 
     const lateness1 = Number(res1.result);
+    const val1 = minimizeLatenessValidator.validate(jobs1, lateness1);
+
     results.push({
       testId: 'py-lateness-zero',
       description: {
         es: 'Tareas compatibles sin retraso: Retorna 0.',
         en: 'Jobs compatible without lateness: Returns 0.'
       },
-      passed: lateness1 === 0,
+      passed: val1.valid,
       expected: '0',
-      actual: String(lateness1)
+      actual: val1.valid ? String(lateness1) : val1.errors.join('; ')
     });
 
     // Test 2: Inevitable lateness: (3, 2) and (2, 4) -> start 0, job1 finishes at 3 (deadline 2 -> lateness 1), job2 finishes at 5 (deadline 4 -> lateness 1) -> max lateness = 1
@@ -380,15 +412,17 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
     const res2 = await service.executePython(code, 'minimizar_retraso_maximo', [jobs2]);
     if (res2.stdout) capturedStdout += res2.stdout + '\n';
     const lateness2 = Number(res2.result);
+    const val2 = minimizeLatenessValidator.validate(jobs2, lateness2);
+
     results.push({
       testId: 'py-lateness-inevitable',
       description: {
         es: 'Tareas con retraso inevitable: Retraso máximo óptimo = 1.',
         en: 'Jobs with inevitable lateness: Optimal maximum lateness = 1.'
       },
-      passed: lateness2 === 1,
+      passed: val2.valid,
       expected: '1',
-      actual: String(lateness2)
+      actual: val2.valid ? String(lateness2) : val2.errors.join('; ')
     });
 
     const totalPassed = results.filter((r) => r.passed).length;
@@ -430,7 +464,7 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
     }
 
     const dists = res1.result as Record<string, number>;
-    const pass1 = dists && dists['A'] === 0 && dists['B'] === 1 && dists['C'] === 3 && dists['D'] === 4;
+    const val = dijkstraValidator.validate({ graph: graph1, source: 'A' }, dists);
 
     results.push({
       testId: 'py-dijkstra-4nodes',
@@ -438,9 +472,9 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
         es: 'Grafo 4 nodos: Distancias mínimas desde A: A=0, B=1, C=3, D=4.',
         en: '4-node graph: Minimal distances from A: A=0, B=1, C=3, D=4.'
       },
-      passed: Boolean(pass1),
+      passed: val.valid,
       expected: '{"A": 0, "B": 1, "C": 3, "D": 4}',
-      actual: JSON.stringify(dists)
+      actual: val.valid ? JSON.stringify(dists) : val.errors.join('; ')
     });
 
     // Test 2: Source to itself
@@ -450,7 +484,7 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
         es: 'Distancia origen hacia sí mismo es estrictamente 0.',
         en: 'Distance from source to itself is strictly 0.'
       },
-      passed: dists && dists['A'] === 0,
+      passed: Boolean(dists && dists['A'] === 0),
       expected: '0',
       actual: String(dists ? dists['A'] : 'undefined')
     });
@@ -493,9 +527,10 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
       };
     }
 
-    const tupleRes = res1.result as [number, unknown[]];
+    const tupleRes = res1.result as [number, [number, number, number][]];
     const totalCost = Array.isArray(tupleRes) ? tupleRes[0] : Number(tupleRes);
     const mstEdges = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
+    const val = kruskalValidator.validate({ numVertices: 3, edges: edges1 }, tupleRes);
 
     results.push({
       testId: 'py-kruskal-triangle-cost',
@@ -503,9 +538,9 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
         es: 'Triángulo 3 vértices: Costo total del Árbol Generador Mínimo = 3.',
         en: 'Triangle 3 vertices: Total cost of Minimum Spanning Tree = 3.'
       },
-      passed: totalCost === 3,
+      passed: val.valid && totalCost === 3,
       expected: '3',
-      actual: String(totalCost)
+      actual: val.valid ? String(totalCost) : val.errors.join('; ')
     });
 
     results.push({
@@ -514,7 +549,7 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
         es: 'Invariante de MST: Un árbol generador de V vértices contiene exactamente V - 1 aristas (2 aristas).',
         en: 'MST invariant: Spanning tree of V vertices contains exactly V - 1 edges (2 edges).'
       },
-      passed: mstEdges.length === 2,
+      passed: val.valid && mstEdges.length === 2,
       expected: '2 aristas',
       actual: `${mstEdges.length} aristas`
     });
