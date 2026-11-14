@@ -64,3 +64,6 @@ boceto_*.md
 *.agent.md
 AGENTS.md
 docs/proyecto.md
+PROJECT.md
+TEST_INFRA.md
+TEST_READY.md
