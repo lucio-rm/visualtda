@@ -66,11 +66,11 @@ describe('CurriculumKnowledgeGraph Component', () => {
       );
     });
 
-    expect(container.textContent).toContain('Reduction');
-    expect(container.textContent).toContain('DIVIDE & CONQUER');
-    expect(container.textContent).toContain('GREEDY ALGORITHMS');
-    expect(container.textContent).toContain('DYNAMIC PROGRAMMING');
-    expect(container.textContent).toContain('FLOW & REDUCTIONS');
+    expect(container.textContent).toContain('Reducciones');
+    expect(container.textContent).toContain('DIVISIÓN Y CONQUISTA');
+    expect(container.textContent).toContain('ALGORITMOS GREEDY');
+    expect(container.textContent).toContain('PROGRAMACIÓN DINÁMICA');
+    expect(container.textContent).toContain('FLUJO & REDUCCIONES');
 
     // Click on a node
     const nodeGroups = container.querySelectorAll('.ckg-node-group');
