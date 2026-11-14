@@ -1,90 +1,40 @@
-# Guía de Contribución a Visual TDA
+# Política de Contribución y Reporte de Issues — Visual TDA
 
-Visual TDA es una plataforma educativa interactiva orientada a la enseñanza y visualización de algoritmos complejos para estudiantes universitarios (especialmente alineada con Teoría de Algoritmos en FIUBA).
-
-Toda contribución debe alinearse con la arquitectura y principios de ingeniería documentados en [`docs/arquitectura.md`](./docs/arquitectura.md) y [`docs/principios-diseno.md`](./docs/principios-diseno.md).
+Visual TDA es una plataforma universitaria especializada para la enseñanza y comprensión rigurosa de Teoría y Diseño de Algoritmos.
 
 ---
 
-## 1. Principios Fundamentales (P1 – P12)
+## 1. Política de Modificaciones: Issues Only (Sin Pull Requests Externos)
 
-- **Desacoplamiento Estricto**: $\text{Algoritmo} \to \text{Eventos de Traza} \to \text{Visualizador} \to \text{UI}$.
-- **Zero Backend**: Todo se ejecuta de forma estática en el navegador del estudiante (React 19 + TypeScript + Pyodide WebAssembly en Web Worker).
-- **KISS & No Abstracción Prematura**: Se prefiere la solución más simple que resuelva el problema de forma robusta.
-- **Accesibilidad por Defecto (WCAG 2.1 AA)**: Navegación completa por teclado, indicadores no basados únicamente en color, y etiquetas ARIA descriptivas.
+Este repositorio opera bajo una **política estricta de solo issues (Issues Only)** y licenciamiento propietario (*All Rights Reserved*):
 
----
-
-## 2. Flujo Pedagógico de 3 Fases
-
-Cada ejercicio implementa exactamente tres fases secuenciales:
-1. **Descubrir (`discover`)**: Planteo intuitivo y laboratorio interactivo antes de escribir código.
-2. **Resolver (`solve`)**: Enunciado formal, pistas graduales, editor de código Python y ejecución en Pyodide.
-3. **Comprender (`understand`)**: Solución canónica, reproducción paso a paso de la traza, demostración formal de invariantes y complejidad asintótica.
+- **Prohibición de modificaciones directas y Pull Requests**: No se aceptan contribuciones de código directas, Pull Requests (PRs), bifurcaciones (*forks*) ni alteraciones manuales del repositorio por parte de terceros o colaboradores externos.
+- **Integridad y autoría centralizada**: La arquitectura pedagógica, los algoritmos de referencia, las pruebas y los visualizadores se mantienen de forma centralizada para garantizar la consistencia académica y la rigurosidad curricular.
 
 ---
 
-## 3. Guía Paso a Paso para Agregar un Ejercicio
+## 2. Canales Autorizados para Sugerencias, Mejoras y Reportes
 
-> Para consultar el manual completo con ejemplos de código, esquemas JSON y validadores, ver: **[`docs/guia-agregar-ejercicio.md`](./docs/guia-agregar-ejercicio.md)**.
+Cualquier persona, estudiante o docente que desee señalar un error, sugerir mejoras visuales o proponer ejercicios cuenta con dos canales exclusivos:
 
-Gracias a la arquitectura modular basada en el patrón Strategy/Registry, agregar un nuevo ejercicio requiere pasos aislados y predecibles:
+### Canal Primario: Botón Integrado de Feedback en la Aplicación Web
+El mecanismo principal y prioritario para enviar comentarios, reportar comportamientos inesperados o sugerir mejoras es el **botón de Feedback ("Consejos, Mejoras y Bugs")** disponible de forma permanente en el pie de página de la aplicación web de Visual TDA.
+- **Destino directo**: Este formulario despacha las sugerencias directamente a la casilla del equipo de mantenimiento.
+- **Contexto automático**: Permite asociar automáticamente el ejercicio en curso, facilitando una respuesta y resolución más ágiles.
+- **Opciones de privacidad**: Permite envíos con correo electrónico de contacto o de forma completamente anónima.
 
-### Paso 1: Documentación Canónica (`exercises/<id>/`)
-Crear el directorio `exercises/<id>/` con sus 4 archivos requeridos:
-- `exercise.json`: Metadatos del problema (título, descripción, dificultad, paradigma).
-- `solution.py`: Implementación de referencia en Python con tipado estricto.
-- `pseudocode.md`: Pseudocódigo de alto nivel para comprensión conceptual.
-- `theory.md`: Demostración matemática formal, invariantes de ciclo o corte y análisis $O$.
+### Canal Secundario: Apertura de un GitHub Issue
+Si se accede a través del repositorio en GitHub (`https://github.com/lucio-rm/visualtda`) y se desea reportar un inconveniente o formular una propuesta en lugar de utilizar el formulario web, el **único mecanismo habilitado es la apertura de un Issue**:
+- Enlace directo: [https://github.com/lucio-rm/visualtda/issues](https://github.com/lucio-rm/visualtda/issues)
+- Toda sugerencia debe describirse detalladamente indicando:
+  1. Ejercicio o módulo afectado.
+  2. Descripción clara del comportamiento observado frente al esperado.
+  3. Pasos para reproducir el escenario o contraejemplo matemático/algorítmico relevante.
 
-### Paso 2: Motor de Traza y Validador (`src/engine/algorithms/`)
-- `<id>Trace.ts`: Función pura que genera un `TraceTimeline<T>` con eventos determinísticos paso a paso.
-- `<id>Validator.ts`: Validador puro en TypeScript que verifica si una salida arbitraria satisface las restricciones del problema.
-
-### Paso 3: Registro de Metadatos (`src/engine/registry.ts`)
-Agregar la entrada en `EXERCISES_REGISTRY` asignando ID, categoría, orden y dificultad.
-
-### Paso 4: Contenido Didáctico (`src/engine/content/`)
-Agregar el código de inicio (starter code), pistas graduales y runner heurístico en el archivo del paradigma correspondiente (`backtrackingContent.ts`, `greedyContent.ts`, `dpContent.ts`, `divideAndConquerContent.ts`, o `advancedContent.ts`).
-
-### Paso 5: Estrategia de Evaluación Python (`src/runtime/runners/`)
-Implementar la estrategia de prueba en el módulo de paradigma respectivo (`backtrackingRunners.ts`, `greedyRunners.ts`, etc.) invocando `service.executePython()` y validando con el validador TypeScript.
-
-### Paso 6: Visualizador Interactivo (`src/components/visualizers/`)
-- Crear `<Id>Visualizer.tsx` (consumiendo trazas de la fase Comprender).
-- Opcionalmente crear `<Id>Playground.tsx` (para la fase Descubrir).
-- Registrar ambas vistas en `src/engine/exerciseViewRegistry.tsx`.
-
-### Paso 7: Pruebas Automatizadas (`tests/<id>.test.ts`)
-Implementar tests unitarios en Vitest verificando casos típicos, bordes extremos (edge cases), e invariantes.
+Cualquier Pull Request no solicitado abierto en este repositorio será cerrado sin revisión previa, invitando al autor a canalizar sus observaciones a través de los canales antes indicados.
 
 ---
 
-## 4. Quality Gates y Verificación Obligatoria
+## 3. Licencia y Derechos de Autor
 
-Antes de enviar cualquier cambio, la suite completa debe pasar con 0 errores:
-
-```bash
-# 1. Verificación de tipos TypeScript estricto
-npm run typecheck
-
-# 2. Análisis estático ESLint (sin warnings ni errores)
-npm run lint
-
-# 3. Suite de pruebas unitarias Vitest
-npm test
-
-# 4. Compilación estática de producción
-npm run build
-
-# 5. Suite de aseguramiento en navegador real Chromium (CDP)
-npm run test:browser
-```
-
----
-
-## 5. Convenciones de Git
-
-- Usar Conventional Commits: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
-- Nunca ejecutar comandos destructivos (`push --force`, `reset --hard`).
-- Trabajar siempre en ramas de trabajo aisladas.
+Todo el contenido de este repositorio está protegido por derechos de autor (*All Rights Reserved*). Queda expresamente prohibida la copia, reproducción, distribución o modificación no autorizada sin el consentimiento expreso y por escrito del titular.

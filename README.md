@@ -3,7 +3,7 @@
 **Plataforma Interactiva para la Enseñanza y Comprensión Rigurosa de Teoría y Diseño de Algoritmos**  
 *Facultad de Ingeniería, Universidad de Buenos Aires (FIUBA)*
 
-Visual TDA es una aplicación web educativa de código abierto, puramente del lado del cliente y sin dependencias de backend, diseñada para el aprendizaje profundo de algoritmos universitarios avanzados. Combina experimentación visual interactiva en el navegador, codificación práctica en Python mediante WebAssembly (Pyodide en Web Workers dedicados) y formalismo académico riguroso: invariantes de corrección, argumentos de intercambio, cotas de corte y análisis asintótico de tiempo y espacio.
+Visual TDA es una aplicación web educativa, puramente del lado del cliente y sin dependencias de backend, diseñada para el aprendizaje profundo de algoritmos universitarios avanzados. Combina experimentación visual interactiva en el navegador, codificación práctica en Python mediante WebAssembly (Pyodide en Web Workers dedicados) y formalismo académico riguroso: invariantes de corrección, argumentos de intercambio, cotas de corte y análisis asintótico de tiempo y espacio.
 
 ---
 
@@ -63,7 +63,7 @@ Visual TDA sigue un conjunto estricto de invariantes arquitectónicos:
 ## Estructura del Repositorio
 
 ```text
-visual-tda/
+visualtda/
 ├── exercises/          # Metadatos, soluciones canónicas, teoría e invariantes de los 38 ejercicios
 ├── src/
 │   ├── app/            # Componente raíz App, layout principal y estilos CSS
@@ -99,8 +99,8 @@ visual-tda/
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/lucio-rm/visual_tda.git
-cd visual_tda
+git clone https://github.com/lucio-rm/visualtda.git
+cd visualtda
 
 # 2. Instalar dependencias
 npm install
@@ -151,17 +151,21 @@ npm run test:browser
 
 ---
 
-## Reconocimientos Académicos
+## Marco Curricular e Institucional
 
-Visual TDA ha sido desarrollado en consonancia con los contenidos y la rigurosidad pedagógica de la materia **Teoría de Algoritmos** del Departamento de Computación de la Facultad de Ingeniería de la Universidad de Buenos Aires (FIUBA).
+Visual TDA ha sido desarrollado en consonancia con los contenidos y la rigurosidad pedagógica de la currícula universitaria de ciencias de la computación e ingeniería informática, alineado con la materia **Teoría de Algoritmos** del Departamento de Computación de la Facultad de Ingeniería de la Universidad de Buenos Aires (FIUBA).
 
-Agradecimiento especial a los profesores y referentes académicos de la cátedra:
-- **Prof. Martín Buchwald**
-- **Prof. Federico Genender**
-- **Prof. Jon Kleinberg** y **Prof. Éva Tardos** (autores de *Algorithm Design*)
+---
+
+## Contribución y Reporte de Inconvenientes
+
+El proyecto adopta una política estricta de **Issues Only**:
+- **Canal Primario**: Utilizar el botón integrado de **Feedback ("Consejos, Mejoras y Bugs")** dentro de la aplicación web de Visual TDA (en el pie de página).
+- **Canal Secundario**: Abrir un Issue en [GitHub Issues](https://github.com/lucio-rm/visualtda/issues).
+- No se aceptan Pull Requests externos, bifurcaciones de código ni modificaciones directas al repositorio. Para más información, consultar [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
 ## Licencia
 
-Este proyecto se distribuye bajo los términos de la Licencia [GNU General Public License v3.0 (GPL-3.0)](LICENSE).
+Todos los derechos reservados (*All Rights Reserved*). Prohibida la copia, reproducción, distribución o modificación no autorizada de este software sin el consentimiento expreso por escrito del titular de los derechos de autor. Consulte [LICENSE](LICENSE) para más detalles.
