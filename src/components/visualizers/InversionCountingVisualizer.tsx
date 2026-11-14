@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateInversionTrace,
   InversionStepData
@@ -363,14 +364,13 @@ export const InversionCountingVisualizer: React.FC = () => {
         </button>
 
         <div className="timeline-scrubber" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
-            style={{ width: '100%' }}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo de ejecución' : 'Execution timeline'}
           />
           <span style={{ fontSize: '0.8rem', minWidth: '4rem', color: 'var(--text-muted, #94a3b8)' }}>
             {currentStepIndex + 1} / {totalSteps}

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateKnapsackGreedyTrace,
   KnapsackGreedyStepData,
@@ -255,14 +256,13 @@ export const KnapsackGreedyVisualizer: React.FC = () => {
         </div>
 
         <div className="timeline-slider-wrapper">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="timeline-slider"
-            aria-label={language === 'es' ? 'Línea de tiempo de estados' : 'State timeline'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo de estados' : 'State timeline'}
           />
         </div>
 

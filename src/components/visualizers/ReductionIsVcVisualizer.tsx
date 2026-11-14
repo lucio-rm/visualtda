@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateReductionTrace,
   ReductionTraceState,
@@ -166,14 +167,13 @@ export const ReductionIsVcVisualizer: React.FC = () => {
       {/* Timeline Controls */}
       <div className="timeline-controls-card">
         <div className="timeline-slider-row">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="timeline-progress-bar"
-            aria-label={language === 'es' ? 'Paso de la reducción' : 'Reduction step'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Paso de la reducción' : 'Reduction step'}
           />
           <span className="step-counter">
             {currentStepIndex + 1} / {totalSteps}

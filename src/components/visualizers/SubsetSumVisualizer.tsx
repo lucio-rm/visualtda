@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { generateSubsetSumTrace, SubsetSumStepData } from '../../engine/algorithms/subsetSumTrace';
@@ -270,15 +271,14 @@ export const SubsetSumVisualizer: React.FC<SubsetSumVisualizerProps> = ({
           <label htmlFor="subset-timeline-slider" style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Paso:' : 'Step:'}
           </label>
-          <input
+          <TraceScrubber
             id="subset-timeline-slider"
-            type="range"
-            min="0"
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo de pasos' : 'Step timeline'}
-            style={{ width: '130px' }}
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo de pasos' : 'Step timeline'}
           />
           <div className="segmented-control speed-segmented-control" role="group" aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}>
             {[0.5, 1, 2].map((spd) => (

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateSudokuTrace,
   SudokuStepData,
@@ -238,14 +239,13 @@ export const SudokuVisualizer: React.FC = () => {
         </div>
 
         <div className="timeline-scrubber-group">
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            className="scrubber-slider"
-            aria-label={language === 'es' ? 'Progreso de pasos del algoritmo' : 'Algorithm step progress'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Progreso de pasos del algoritmo' : 'Algorithm step progress'}
           />
           <span className="step-tag">
             {language === 'es' ? `Paso ${currentStepIndex + 1} / ${totalSteps}` : `Step ${currentStepIndex + 1} / ${totalSteps}`}

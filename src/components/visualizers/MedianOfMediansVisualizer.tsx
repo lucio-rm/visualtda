@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateMedianOfMediansTrace,
   MedianOfMediansStepData,
@@ -257,13 +258,13 @@ export const MedianOfMediansVisualizer: React.FC = () => {
         </div>
 
         <div className="trace-scrubber">
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {language === 'es' ? 'Paso' : 'Step'} {currentStepIndex + 1} / {totalSteps}

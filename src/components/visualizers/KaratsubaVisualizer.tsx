@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateKaratsubaTrace,
   KaratsubaStepData
@@ -185,10 +186,10 @@ export const KaratsubaVisualizer: React.FC = () => {
             />
             <text x={390} y={224} textAnchor="middle" fill="var(--text)" fontSize="13px" fontWeight="600" fontFamily="var(--font-mono)">
               {language === 'es' ? '4. Término Medio:' : '4. Middle Term:'} z₁ ={' '}
-              <tspan fill="#8b5cf6" fontWeight="700">P</tspan> -{' '}
+              <tspan fill="#0d9488" fontWeight="700">P</tspan> -{' '}
               <tspan fill="var(--accent)" fontWeight="700">z₂</tspan> -{' '}
               <tspan fill="var(--success)" fontWeight="700">z₀</tspan> = ({' '}
-              <tspan fill="#8b5cf6" fontWeight="700">{zSum ?? 'P'}</tspan> -{' '}
+              <tspan fill="#0d9488" fontWeight="700">{zSum ?? 'P'}</tspan> -{' '}
               <tspan fill="var(--accent)" fontWeight="700">{z2 ?? 'z₂'}</tspan> -{' '}
               <tspan fill="var(--success)" fontWeight="700">{z0 ?? 'z₀'}</tspan> ) ={' '}
               <tspan fill="var(--warning)" fontWeight="800">
@@ -240,8 +241,8 @@ export const KaratsubaVisualizer: React.FC = () => {
           <span className="kt-term-val" style={{ color: 'var(--accent)' }}>{z2 !== null ? z2 : '—'}</span>
         </div>
         <div className={`kt-term-card kt-term-zsum ${subcalc === 'ZSUM' ? 'active' : ''}`}>
-          <span className="kt-term-title" style={{ color: '#8b5cf6' }}>{language === 'es' ? 'P = (x₁+x₀)(y₁+y₀)' : 'P = (x₁+x₀)(y₁+y₀)'}</span>
-          <span className="kt-term-val" style={{ color: '#8b5cf6' }}>{zSum !== null ? zSum : '—'}</span>
+          <span className="kt-term-title" style={{ color: '#0d9488' }}>{language === 'es' ? 'P = (x₁+x₀)(y₁+y₀)' : 'P = (x₁+x₀)(y₁+y₀)'}</span>
+          <span className="kt-term-val" style={{ color: '#0d9488' }}>{zSum !== null ? zSum : '—'}</span>
         </div>
         <div className={`kt-term-card kt-term-z1 ${subcalc === 'Z1' ? 'active' : ''}`}>
           <span className="kt-term-title" style={{ color: 'var(--warning)' }}>z₁ = P - z₂ - z₀</span>
@@ -301,13 +302,13 @@ export const KaratsubaVisualizer: React.FC = () => {
         </div>
 
         <div className="trace-scrubber">
-          <input
-            type="range"
-            min={0}
-            max={Math.max(0, totalSteps - 1)}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Línea de tiempo del paso' : 'Step timeline'}
           />
           <span className="step-counter">
             {language === 'es' ? 'Paso' : 'Step'} {currentStepIndex + 1} / {totalSteps}

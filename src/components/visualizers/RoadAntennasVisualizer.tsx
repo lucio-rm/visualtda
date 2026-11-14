@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useTraceTimeline } from '../../hooks/useTraceTimeline';
 import { generateRoadAntennasTrace, RoadAntennasTraceStep } from '../../engine/algorithms/roadAntennasTrace';
@@ -115,15 +116,11 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           aria-label={language === 'es' ? 'Visualización de carretera con antenas y casas' : 'Road visualization with antennas and houses'}
         >
           <defs>
-            {/* Antenna range gradient */}
+            {/* Antenna range fill */}
             <linearGradient id="antennaGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.06" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           {/* Background Sky / Landscape tint */}
@@ -214,7 +211,7 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
                   strokeWidth="1.5"
                 />
                 {/* Antenna Transmitter Tip */}
-                <circle cx={antX} cy={roadY - 75} r="5" fill="var(--error)" filter="url(#glow)" />
+                <circle cx={antX} cy={roadY - 75} r="5" fill="var(--error)" />
                 {/* Antenna Radio Waves */}
                 <path
                   d={`M ${antX - 8} ${roadY - 82} A 10 10 0 0 1 ${antX + 8} ${roadY - 82}`}
@@ -400,15 +397,14 @@ export const RoadAntennasVisualizer: React.FC<RoadAntennasVisualizerProps> = ({
           <label htmlFor="road-timeline-slider" style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
             {language === 'es' ? 'Paso:' : 'Step:'}
           </label>
-          <input
+          <TraceScrubber
             id="road-timeline-slider"
-            type="range"
-            min="0"
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Control de línea de tiempo' : 'Timeline scrubber'}
-            style={{ width: '130px' }}
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Control de línea de tiempo' : 'Timeline scrubber'}
           />
           <div className="segmented-control speed-segmented-control" role="group" aria-label={language === 'es' ? 'Velocidad de reproducción' : 'Playback speed'}>
             {[0.5, 1, 2].map((spd) => (

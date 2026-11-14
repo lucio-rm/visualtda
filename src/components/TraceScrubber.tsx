@@ -9,6 +9,8 @@ export interface TraceScrubberProps {
   getStepLabel?: (stepIndex: number) => string | undefined;
   language?: 'es' | 'en';
   ariaLabel?: string;
+  showCounter?: boolean;
+  id?: string;
 }
 
 export const TraceScrubber: React.FC<TraceScrubberProps> = ({
@@ -17,7 +19,9 @@ export const TraceScrubber: React.FC<TraceScrubberProps> = ({
   onSeek,
   getStepLabel,
   language = 'es',
-  ariaLabel
+  ariaLabel,
+  showCounter = true,
+  id
 }) => {
   const [hoverStep, setHoverStep] = useState<number | null>(null);
   const [hoverXPercent, setHoverXPercent] = useState<number>(0);
@@ -101,6 +105,7 @@ export const TraceScrubber: React.FC<TraceScrubberProps> = ({
 
         {/* Real Range Input */}
         <input
+          id={id}
           type="range"
           min={0}
           max={totalSteps > 0 ? totalSteps - 1 : 0}
@@ -110,7 +115,8 @@ export const TraceScrubber: React.FC<TraceScrubberProps> = ({
             onSeek(val);
             playStepPitch(val, totalSteps);
           }}
-          className="trace-scrubber-input"
+          className="trace-scrubber-input scrubber-slider timeline-slider timeline-progress-bar"
+          aria-label={ariaLabel || (language === 'es' ? 'Deslizador de pasos de la traza' : 'Trace step slider')}
           aria-valuenow={currentStepIndex + 1}
           aria-valuemin={1}
           aria-valuemax={totalSteps}
@@ -125,11 +131,13 @@ export const TraceScrubber: React.FC<TraceScrubberProps> = ({
         />
       </div>
 
-      <div className="trace-scrubber-counter">
-        <span className="scrubber-counter-current">{currentStepIndex + 1}</span>
-        <span className="scrubber-counter-divider">/</span>
-        <span className="scrubber-counter-total">{totalSteps}</span>
-      </div>
+      {showCounter && (
+        <div className="trace-scrubber-counter scrubber-label">
+          <span className="scrubber-counter-current">{currentStepIndex + 1}</span>
+          <span className="scrubber-counter-divider">/</span>
+          <span className="scrubber-counter-total">{totalSteps}</span>
+        </div>
+      )}
     </div>
   );
 };

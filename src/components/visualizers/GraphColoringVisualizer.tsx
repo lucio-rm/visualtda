@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TraceScrubber } from '../TraceScrubber';
 import {
   generateGraphColoringTrace,
   GraphColoringStepData,
@@ -236,13 +237,13 @@ export const GraphColoringVisualizer: React.FC = () => {
 
         {/* Scrubber */}
         <div className="gc-scrubber">
-          <input
-            type="range"
-            min={0}
-            max={totalSteps - 1}
-            value={currentStepIndex}
-            onChange={(e) => goToStep(Number(e.target.value))}
-            aria-label={language === 'es' ? 'Paso de la traza' : 'Trace step scrubber'}
+          <TraceScrubber
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            onSeek={goToStep}
+            language={language}
+            showCounter={false}
+            ariaLabel={language === 'es' ? 'Paso de la traza' : 'Trace step scrubber'}
           />
           <span className="gc-step-counter">
             {currentStepIndex + 1} / {totalSteps}
