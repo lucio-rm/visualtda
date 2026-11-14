@@ -7,9 +7,11 @@ export interface FeedbackModalProps {
   currentExerciseId?: string | null;
 }
 
-// Obfuscated FormSubmit delivery endpoints (primary: lucioromeromascaro@gmail.com, secondary: lromerom@fi.uba.ar)
+// Obfuscated delivery endpoints for maintainer inbox notification
 const PRIMARY_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHVjaW9yb21lcm9tYXNjYXJvQGdtYWlsLmNvbQ==');
 const SECONDARY_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvbHJvbWVyb21AZmkudWJhLmFy');
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
@@ -21,12 +23,18 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [category, setCategory] = useState<'bug' | 'ui' | 'algorithm' | 'suggestion'>('bug');
   const [message, setMessage] = useState('');
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'sent'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'sent' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [copyFeedbackNotice, setCopyFeedbackNotice] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setStatus('idle');
+      setErrorMessage(null);
+      setValidationError(null);
+      setCopyFeedbackNotice(false);
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
       };
@@ -44,56 +52,124 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     suggestion: { es: 'Comentario General / Otro', en: 'General Feedback / Other' }
   };
 
+  const validatePayload = (trimmedMsg: string, trimmedEmail: string): string | null => {
+    if (!trimmedMsg || trimmedMsg.length < 3) {
+      return language === 'es'
+        ? 'El mensaje debe contener al menos 3 caracteres.'
+        : 'The message must contain at least 3 characters.';
+    }
+    if (trimmedMsg.length > 2000) {
+      return language === 'es'
+        ? 'El mensaje no puede superar los 2000 caracteres.'
+        : 'The message cannot exceed 2000 characters.';
+    }
+    if (!isAnonymous) {
+      if (!trimmedEmail) {
+        return language === 'es'
+          ? 'Por favor, ingresá un correo de contacto o activá el envío anónimo.'
+          : 'Please enter a contact email or enable anonymous submission.';
+      }
+      if (!EMAIL_REGEX.test(trimmedEmail)) {
+        return language === 'es'
+          ? 'Por favor, ingresá una dirección de correo electrónico válida.'
+          : 'Please enter a valid email address.';
+      }
+    }
+    return null;
+  };
+
+  const submitToEndpoint = async (url: string, payloadData: unknown) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payloadData)
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+
+    const json = await res.json().catch(() => ({ success: true }));
+    if (json && (json.success === 'false' || json.success === false)) {
+      throw new Error(json.message || 'Submission rejected by provider');
+    }
+
+    return json;
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
-    if (!isAnonymous && !email.trim()) return;
+    setValidationError(null);
+    setErrorMessage(null);
+
+    const trimmedMsg = message.trim();
+    const trimmedEmail = email.trim();
+
+    const validation = validatePayload(trimmedMsg, trimmedEmail);
+    if (validation) {
+      setValidationError(validation);
+      return;
+    }
 
     setStatus('submitting');
     const catName = categoryLabels[category][language];
-    const senderEmail = isAnonymous ? 'anonimo@visual-tda.org' : email.trim();
+    const senderEmail = isAnonymous ? 'anonimo@visualtda.org' : trimmedEmail;
     const senderName = isAnonymous
       ? (language === 'es' ? 'Estudiante Anónimo' : 'Anonymous Student')
-      : (email.trim().split('@')[0] || 'Estudiante');
+      : (trimmedEmail.split('@')[0] || 'Estudiante');
 
     const payload = {
       name: senderName,
       email: senderEmail,
       category: catName,
       exercise: currentExerciseId || 'Inicio',
-      message: message.trim(),
+      message: trimmedMsg,
       _subject: `[Visual TDA Feedback] ${catName}${currentExerciseId ? ` - ${currentExerciseId}` : ''}`,
       _template: 'table'
     };
 
     try {
-      await Promise.allSettled([
-        fetch(PRIMARY_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }),
-        fetch(SECONDARY_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        })
+      const results = await Promise.allSettled([
+        submitToEndpoint(PRIMARY_ENDPOINT, payload),
+        submitToEndpoint(SECONDARY_ENDPOINT, payload)
       ]);
-    } catch {
-      // Graceful fallback for offline / adblocker: copy message text to clipboard
-      try {
-        navigator.clipboard.writeText(`[Visual TDA - ${catName}]\n${message.trim()}`);
-      } catch {
-        // Ignored
+
+      const anyFulfilled = results.some((r) => r.status === 'fulfilled');
+
+      if (!anyFulfilled) {
+        const rejected = results.find((r) => r.status === 'rejected') as PromiseRejectedResult | undefined;
+        const detail = rejected?.reason instanceof Error ? rejected.reason.message : 'Error en la conexión';
+        throw new Error(detail);
       }
-    } finally {
+
       setStatus('sent');
+      setErrorMessage(null);
+    } catch (err: unknown) {
+      setStatus('error');
+      const detail = err instanceof Error ? err.message : String(err);
+      setErrorMessage(
+        language === 'es'
+          ? `No se pudo enviar el feedback (${detail}). Podés reintentar o copiar el texto para conservarlo.`
+          : `Failed to deliver feedback (${detail}). You can retry or copy your text to preserve it.`
+      );
+      try {
+        navigator.clipboard?.writeText(`[Visual TDA - ${catName}]\n${trimmedMsg}`);
+      } catch {
+        // Clipboard access can be restricted; safe fallback
+      }
+    }
+  };
+
+  const handleCopyText = async () => {
+    try {
+      await navigator.clipboard.writeText(`[Visual TDA - ${categoryLabels[category][language]}]\n${message.trim()}`);
+      setCopyFeedbackNotice(true);
+      setTimeout(() => setCopyFeedbackNotice(false), 3000);
+    } catch {
+      // Ignored
     }
   };
 
@@ -173,6 +249,63 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           </div>
         ) : (
           <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+            {validationError && (
+              <div
+                role="alert"
+                style={{
+                  padding: '0.65rem 0.85rem',
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid var(--error, #ef4444)',
+                  borderRadius: 'var(--radius-sm)',
+                  color: 'var(--error, #ef4444)',
+                  fontSize: '0.8125rem'
+                }}
+              >
+                {validationError}
+              </div>
+            )}
+
+            {status === 'error' && errorMessage && (
+              <div
+                role="alert"
+                style={{
+                  padding: '0.75rem 0.9rem',
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid var(--error, #ef4444)',
+                  borderRadius: 'var(--radius-sm)',
+                  color: 'var(--error, #ef4444)',
+                  fontSize: '0.8125rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.4rem'
+                }}
+              >
+                <strong>
+                  {language === 'es' ? 'Inconveniente en la entrega:' : 'Delivery problem:'}
+                </strong>
+                <span>{errorMessage}</span>
+                <div style={{ marginTop: '0.2rem' }}>
+                  <button
+                    type="button"
+                    onClick={handleCopyText}
+                    style={{
+                      background: 'none',
+                      border: '1px solid var(--error, #ef4444)',
+                      borderRadius: 'var(--radius-xs, 4px)',
+                      color: 'var(--error, #ef4444)',
+                      padding: '0.2rem 0.5rem',
+                      fontSize: '0.75rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {copyFeedbackNotice
+                      ? (language === 'es' ? 'Texto copiado al portapapeles' : 'Text copied to clipboard')
+                      : (language === 'es' ? 'Copiar texto del reporte' : 'Copy report text')}
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
                 <label
@@ -192,7 +325,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     checked={isAnonymous}
                     onChange={(e) => {
                       setIsAnonymous(e.target.checked);
-                      if (e.target.checked) setEmail('');
+                      if (e.target.checked) {
+                        setEmail('');
+                        setValidationError(null);
+                      }
                     }}
                     style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: '15px', height: '15px' }}
                   />
@@ -208,7 +344,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 required={!isAnonymous}
                 disabled={isAnonymous}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (validationError) setValidationError(null);
+                }}
                 placeholder={
                   isAnonymous
                     ? (language === 'es' ? '(Envío anónimo activado - no se solicita correo)' : '(Anonymous mode enabled - no email required)')
@@ -253,15 +392,24 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="fb-msg" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.25rem' }}>
-                {language === 'es' ? 'Descripción del Bug o Sugerencia:' : 'Description of Bug or Suggestion:'}
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
+                <label htmlFor="fb-msg" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)' }}>
+                  {language === 'es' ? 'Descripción del Bug o Sugerencia:' : 'Description of Bug or Suggestion:'}
+                </label>
+                <span style={{ fontSize: '0.75rem', color: message.length > 2000 ? 'var(--error, #ef4444)' : 'var(--text-muted)' }}>
+                  {message.length}/2000
+                </span>
+              </div>
               <textarea
                 id="fb-msg"
                 required
                 rows={4}
+                maxLength={2000}
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  if (validationError) setValidationError(null);
+                }}
                 placeholder={
                   language === 'es'
                     ? 'Describí qué anduvo mal, qué comportamiento esperabas o qué mejora proponés...'
@@ -293,7 +441,9 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               <button type="submit" className="btn-primary" disabled={status === 'submitting'}>
                 {status === 'submitting'
                   ? (language === 'es' ? 'Enviando...' : 'Sending...')
-                  : (language === 'es' ? 'Enviar Mensaje' : 'Send Feedback')}
+                  : status === 'error'
+                    ? (language === 'es' ? 'Reintentar Envío' : 'Retry Sending')
+                    : (language === 'es' ? 'Enviar Mensaje' : 'Send Feedback')}
               </button>
             </div>
           </form>
