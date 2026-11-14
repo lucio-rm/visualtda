@@ -22,9 +22,9 @@ La plataforma estructura cada problema en tres fases formativas progresivas y de
 
 ---
 
-## Catálogo de 38 Ejercicios por Paradigma Algorítmico
+## Catálogo de 37 Ejercicios por Paradigma Algorítmico
 
-Visual TDA abarca 38 ejercicios fundamentales distribuidos en 9 ejes temáticos de la currícula universitaria de ciencias de la computación e ingeniería informática:
+Visual TDA abarca 37 ejercicios fundamentales distribuidos en 9 ejes temáticos de la currícula universitaria de ciencias de la computación e ingeniería informática:
 
 | Paradigma | Cantidad | Ejercicios Cubiertos | Referencia Sugerida |
 |---|:---:|---|---|
@@ -53,10 +53,10 @@ Visual TDA sigue un conjunto estricto de invariantes arquitectónicos:
   Al ser un artefacto estático distribuido mediante CDN, el costo computacional de ejecutar algoritmos o pruebas recae 100% en el procesador del cliente. La plataforma soporta con idéntica latencia a 1, 100, 1.000 o 100.000 estudiantes simultáneos.
 - **Ejecución Segura con Pyodide en Web Workers**:
   El código Python ingresado por el usuario se compila y ejecuta dentro de un Web Worker independiente sin acceso a `window`, `document` ni tokens de almacenamiento, protegido por un temporizador de interrupción (*watchdog*) de 5 segundos contra ciclos infinitos.
-- **Sistema de Color Calibrado (Radix Colors)**:
-  Diseño sobrio de alto contraste que cumple con las pautas de accesibilidad WCAG 2.1 AA en temas Claro y Oscuro, prescindiendo de frameworks CSS pesados.
+- **Sistema de Color Calibrado y Sobrio**:
+  Diseño académico de alto contraste que cumple con las pautas de accesibilidad WCAG 2.1 AA en temas Claro y Oscuro, prescindiendo de frameworks CSS pesados y ornamentos distractores.
 - **Protección Criptográfica de Soluciones Canónicas**:
-  Las 38 soluciones oficiales en Python se almacenan cifradas en reposo mediante AES-256-GCM y derivación de clave PBKDF2 (SHA-256 con 100.000 iteraciones). Los estudiantes acceden a la solución tras verificar su intento o de forma voluntaria, mientras que los docentes pueden desbloquear el catálogo completo mediante credencial de cátedra.
+  Las 37 soluciones oficiales en Python se almacenan cifradas en reposo mediante AES-256-GCM y derivación de clave PBKDF2 (SHA-256 con 100.000 iteraciones). Los estudiantes acceden a la solución tras verificar su intento o de forma voluntaria, mientras que los docentes pueden desbloquear el catálogo completo mediante credencial de cátedra.
 
 ---
 
@@ -64,10 +64,10 @@ Visual TDA sigue un conjunto estricto de invariantes arquitectónicos:
 
 ```text
 visualtda/
-├── exercises/          # Metadatos, soluciones canónicas, teoría e invariantes de los 38 ejercicios
+├── exercises/          # Metadatos, soluciones canónicas, teoría e invariantes de los 37 ejercicios
 ├── src/
 │   ├── app/            # Componente raíz App, layout principal y estilos CSS
-│   ├── components/     # Vistas de fases (Descubrir, Resolver, Comprender), navegación y 38 visualizadores
+│   ├── components/     # Vistas de fases (Descubrir, Resolver, Comprender), navegación y 37 visualizadores
 │   │   ├── illustrations/ # Diagramas SVG vectoriales para encabezados
 │   │   └── visualizers/   # Tableros, grafos, árboles y lienzos SVG determinísticos
 │   ├── context/        # Estado de React (progreso del alumno, modo docente)
@@ -76,9 +76,9 @@ visualtda/
 │   │   └── content/    # Pistas pedagógicas y código base por paradigma
 │   ├── i18n/           # Sistema de internacionalización estricto (Español / Inglés)
 │   ├── runtime/        # Web Worker de Pyodide y runners de validación
-│   ├── styles/         # Variables CSS, paleta Radix Colors y estilos base
+│   ├── styles/         # Variables CSS, tokens semánticos de diseño y estilos base
 │   └── utils/          # Criptografía Web Crypto, formateo de código y utilidades
-├── tests/              # 62 suites de pruebas unitarias y de integración (436 tests en Vitest)
+├── tests/              # 69 suites de pruebas unitarias/integración (503 tests en Vitest) y suite E2E (Playwright)
 ├── scripts/            # Suite de aseguramiento en navegador real Chromium, cifrado y pruebas de carga
 ├── docs/               # Documentación técnica, registros de decisiones de arquitectura (ADR) y guías
 ├── public/             # Favicons y activos estáticos
@@ -122,13 +122,16 @@ npm run typecheck
 # 2. Análisis estático de código (ESLint)
 npm run lint
 
-# 3. Suite completa de pruebas unitarias e integración (436 pruebas en Vitest)
+# 3. Suite completa de pruebas unitarias e integración (503 pruebas en Vitest)
 npm test
 
 # 4. Generación del bundle estático de producción (dist/)
 npm run build
 
-# 5. Suite de pruebas funcionales en navegador real Chromium (CDP headless)
+# 5. Suite de pruebas End-to-End en navegador real Chromium (Playwright)
+npm run test:e2e
+
+# 6. Suite de pruebas funcionales en navegador real Chromium (CDP headless)
 npm run test:browser
 ```
 

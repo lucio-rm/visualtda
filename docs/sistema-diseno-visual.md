@@ -1,15 +1,15 @@
 # Visual TDA — Sistema de Diseño Visual y Jerarquía de Información
 
 > **Especificación Formal de Diseño Visual, Tokens y Semántica de Estados**  
-> **Versión**: 2.0 (Misión V11 — Radix Colors Systematic Scale)  
+> **Versión**: 2.0 (Escala Sistemática de 12 Pasos y Tokens Semánticos)  
 > **Destinatarios**: Desarrolladores, Diseñadores de Información, Cátedra Universitaria  
 
 ---
 
 ## 1. Principios Fundamentales del Sistema Visual
 
-1. **Claridad Intelectual sobre Espectáculo**: Los gráficos y transiciones explican la causalidad e invariantes del algoritmo. Jamás se distorsiona la semántica matemática por adorno visual.
-2. **Escala Sistemática de 12 Pasos con Contraste Garantizado**: Se erradicó la selección manual de códigos hexadecimales arbitrarios. El sistema utiliza **Radix Colors** (`@radix-ui/colors`) estructurado en 12 pasos por escala con garantías matemáticas de contraste WCAG AA/AAA.
+1. **Claridad Intelectual sobre Espectáculo**: Los gráficos y transiciones explican la causalidad e invariantes del algoritmo. Jamás se distorsiona la semántica matemática por adorno visual, filtros de brillo ni gradientes decorativos.
+2. **Escala Sistemática de 12 Pasos con Contraste Garantizado**: Se erradicó la selección manual de códigos hexadecimales arbitrarios. El sistema utiliza una escala calibrada de 12 pasos en `src/styles/variables.css` con garantías matemáticas de contraste WCAG AA/AAA sin dependencias externas en tiempo de ejecución.
 3. **Refuerzo No Basado Exclusivamente en Color**: Cada estado semántico (candidato, seleccionado, óptimo, conflicto, podado) combina al menos dos canales perceptuales independientes: color + grosor de borde, icono/símbolo, estilo de trazo (sólido/discontinuo) o etiqueta textual explícita.
 4. **Ergonomía de Lectura y Alto Contraste**: Soporte completo de temas Claro (*Light*) y Oscuro (*Dark*) con pisos de contraste WCAG 2.1 AA ($\ge 4.5:1$ para texto y $\ge 3.0:1$ para elementos no textuales e interactivos).
 5. **Composición Adaptable**: Diseño responsivo y modular con disposición de dos columnas en escritorio ($\ge 900\text{px}$) y altura visual contenida para experimentación interactiva ágil.

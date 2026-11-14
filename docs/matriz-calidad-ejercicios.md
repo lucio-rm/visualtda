@@ -1,8 +1,8 @@
-# Visual TDA — Multidimensional Exercise Quality & Pedagogical Matrix
+# Visual TDA — Matriz Multidimensional de Calidad Pedagógica y Algorítmica
 
-Este documento constituye la auditoría multidimensional exhaustiva de los **37 ejercicios** que componen la currícula completa de Teoría y Diseño de Algoritmos (FIUBA / Kleinberg & Tardos standard), en cumplimiento estricto con la **Directiva V5 (§196, §197 y §319)**.
+Este documento constituye la auditoría multidimensional exhaustiva de los **37 ejercicios** que componen la currícula completa de Teoría y Diseño de Algoritmos (FIUBA / Kleinberg & Tardos standard).
 
-De acuerdo con el mandato V5, **la existencia de un componente SVG o el paso de un test unitario no equivale a calidad pedagógica**. Esta matriz evalúa cada ejercicio en 6 dimensiones cualitativas y cuantitativas (escala 1 a 5, donde 5 representa el estándar universitario *Flagship*):
+**La existencia de un componente SVG o el paso de un test unitario no equivale a calidad pedagógica**. Esta matriz evalúa cada ejercicio en 6 dimensiones cualitativas y cuantitativas (escala 1 a 5, donde 5 representa el estándar universitario *Flagship*):
 
 - **Pedagógica (Ped)**: Profundidad conceptual, explicitación de invariantes, argumentos de intercambio y costo asintótico ($O$).
 - **Visual (Vis)**: Composición espacial, legibilidad tipográfica, jerarquía, contraste WCAG y ausencia de saturación.
