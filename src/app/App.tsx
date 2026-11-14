@@ -11,10 +11,10 @@ import { InstructorModeProvider } from '../context/InstructorModeContext';
 import { StudentProgressProvider, useStudentProgress } from '../context/StudentProgressContext';
 import { formatTitleSpacing } from '../utils/textFormatting';
 import { Footer } from '../components/Footer';
+import { ThemeMode } from '../types/theme';
 import './App.css';
 
-
-export type ThemeMode = 'system' | 'light' | 'dark';
+export type { ThemeMode };
 
 const AppContent: React.FC = () => {
   const { t, dict, language } = useLanguage();
