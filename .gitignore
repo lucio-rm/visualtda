@@ -17,6 +17,8 @@ dist-qa-screenshots/
 coverage/
 .nyc_output/
 .pytest_cache/
+test-results/
+playwright-report/
 
 # Python artifacts
 __pycache__/

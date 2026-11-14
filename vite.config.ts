@@ -1,10 +1,25 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
 
 export default defineConfig({
-  base: '/',
-  plugins: [react()],
+  base: process.env.VITE_BASE_PATH || '/',
+  plugins: [
+    react(),
+    {
+      name: 'spa-404-fallback',
+      closeBundle() {
+        const outDir = path.resolve(__dirname, 'dist');
+        const indexHtml = path.join(outDir, 'index.html');
+        const notFoundHtml = path.join(outDir, '404.html');
+        if (fs.existsSync(indexHtml)) {
+          fs.copyFileSync(indexHtml, notFoundHtml);
+        }
+      }
+    }
+  ],
   build: {
     rollupOptions: {
       output: {
@@ -46,6 +61,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['tests/**/*.{test,spec}.{ts,tsx}']
+    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['node_modules/**', 'dist/**', 'tests/e2e/**']
   }
 });
