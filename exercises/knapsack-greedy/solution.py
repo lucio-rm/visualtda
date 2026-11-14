@@ -40,9 +40,61 @@ class Item(NamedTuple):
     def densidad(self) -> float:
         return self.density
 
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            if key in ('name', 'nombre', 'id'):
+                return self.name
+            if key in ('weight', 'peso'):
+                return self.weight
+            if key in ('value', 'valor'):
+                return self.value
+            if key in ('density', 'densidad'):
+                return self.density
+            raise KeyError(key)
+        return tuple.__getitem__(self, key)
+
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except (KeyError, TypeError, IndexError):
+            return default
+
+
+def _extract_item_weight(it) -> float:
+    if isinstance(it, dict):
+        w = it.get('weight', it.get('peso', 0.0))
+    else:
+        w = getattr(it, 'weight', getattr(it, 'peso', 0.0))
+    return float(w) if w is not None else 0.0
+
+
+def _extract_item_value(it) -> float:
+    if isinstance(it, dict):
+        v = it.get('value', it.get('valor', 0.0))
+    else:
+        v = getattr(it, 'value', getattr(it, 'valor', 0.0))
+    return float(v) if v is not None else 0.0
+
+
+def _extract_item_density(it) -> float:
+    if isinstance(it, dict):
+        if 'density' in it:
+            return float(it['density'])
+        if 'densidad' in it:
+            return float(it['densidad'])
+    else:
+        if hasattr(it, 'density'):
+            return float(it.density)
+        if hasattr(it, 'densidad'):
+            return float(it.densidad)
+    weight = _extract_item_weight(it)
+    if weight <= 0:
+        return 0.0
+    return _extract_item_value(it) / weight
+
 
 class ItemAssignment(NamedTuple):
-    item: Item
+    item: object  # Item or dict
     fraction: float  # Between 0.0 and 1.0
     weight_taken: float
     value_obtained: float
@@ -51,31 +103,35 @@ class ItemAssignment(NamedTuple):
 AsignacionItem = ItemAssignment
 
 
-def fractional_knapsack_greedy(items: list[Item], capacity: float) -> tuple[float, list[ItemAssignment]]:
+def fractional_knapsack_greedy(items: list, capacity: float) -> tuple[float, list[ItemAssignment]]:
     """
     Solves Fractional Knapsack using Greedy density ordering (value / weight).
+    Supports both Item objects and Python dict items gracefully.
     Provably optimal via the exchange argument.
     """
     # 1. Sort by descending density
-    sorted_items = sorted(items, key=lambda it: it.density, reverse=True)
+    sorted_items = sorted(items, key=_extract_item_density, reverse=True)
 
     total_value = 0.0
-    remaining_capacity = capacity
+    remaining_capacity = float(capacity)
     result: list[ItemAssignment] = []
 
     for it in sorted_items:
         if remaining_capacity <= 0:
             break
 
-        if it.weight <= remaining_capacity:
+        weight = _extract_item_weight(it)
+        value = _extract_item_value(it)
+
+        if weight <= remaining_capacity:
             # Take whole item (fraction 1.0)
-            result.append(ItemAssignment(item=it, fraction=1.0, weight_taken=it.weight, value_obtained=it.value))
-            total_value += it.value
-            remaining_capacity -= it.weight
+            result.append(ItemAssignment(item=it, fraction=1.0, weight_taken=weight, value_obtained=value))
+            total_value += value
+            remaining_capacity -= weight
         else:
             # Take fraction that fits into available capacity
-            fraction = remaining_capacity / it.weight
-            fraction_value = it.value * fraction
+            fraction = remaining_capacity / weight if weight > 0 else 0.0
+            fraction_value = value * fraction
             result.append(ItemAssignment(item=it, fraction=fraction, weight_taken=remaining_capacity, value_obtained=fraction_value))
             total_value += fraction_value
             remaining_capacity = 0.0
@@ -108,5 +164,6 @@ def counterexample_knapsack_01() -> dict:
 
 
 # Backward-compatible entry-point aliases
+mochila_fraccionaria = fractional_knapsack_greedy
 mochila_fraccionaria_greedy = fractional_knapsack_greedy
 contraejemplo_mochila_01 = counterexample_knapsack_01

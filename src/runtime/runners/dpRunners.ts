@@ -40,12 +40,23 @@ export const dpRunners: Record<string, PythonTestStrategy> = {
             const tupleRes = res.result as [number, { id: string; peso: number; valor: number }[]];
             const valMax = Array.isArray(tupleRes) ? tupleRes[0] : null;
             const chosenItems = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
-            const domainItems: KnapsackItem[] = chosenItems.map((it) => ({
-              id: it.id,
-              name: it.id,
-              weight: it.peso,
-              value: it.valor
-            }));
+            const domainItems: KnapsackItem[] = chosenItems.map((it: any) => {
+              if (Array.isArray(it)) {
+                return {
+                  id: String(it[0]),
+                  name: String(it[0]),
+                  weight: Number(it[1]),
+                  value: Number(it[2])
+                };
+              }
+              const id = String(it.id || it.name || it.nombre || '');
+              return {
+                id,
+                name: id,
+                weight: Number(it.peso ?? it.weight ?? 0),
+                value: Number(it.valor ?? it.value ?? 0)
+              };
+            });
 
             const originalKnapsackItems: KnapsackItem[] = items.map((it) => ({
               id: it.id,

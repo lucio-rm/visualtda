@@ -26,13 +26,47 @@ class Item(NamedTuple):
     def valor(self) -> int:
         return self.value
 
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            if key in ('name', 'nombre', 'id'):
+                return self.name
+            if key in ('weight', 'peso'):
+                return self.weight
+            if key in ('value', 'valor'):
+                return self.value
+            raise KeyError(key)
+        return tuple.__getitem__(self, key)
 
-def knapsack_dp(items: list[Item], capacity: int) -> tuple[int, list[Item]]:
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except (KeyError, TypeError, IndexError):
+            return default
+
+
+def _extract_weight(item) -> int:
+    if isinstance(item, dict):
+        w = item.get('weight', item.get('peso', 0))
+    else:
+        w = getattr(item, 'weight', getattr(item, 'peso', 0))
+    return int(w) if w is not None else 0
+
+
+def _extract_value(item) -> int:
+    if isinstance(item, dict):
+        v = item.get('value', item.get('valor', 0))
+    else:
+        v = getattr(item, 'value', getattr(item, 'valor', 0))
+    return int(v) if v is not None else 0
+
+
+def knapsack_dp(items: list, capacity: int) -> tuple[int, list]:
     """
     Solves the 0/1 Knapsack problem using bottom-up Dynamic Programming.
+    Gracefully handles both Item namedtuples and dictionary representations.
 
     Returns:
-        tuple[int, list[Item]]: (optimal_value, selected_items)
+        tuple[int, list]: (optimal_value, selected_items)
     """
     n = len(items)
     if n == 0 or capacity <= 0:
@@ -44,8 +78,8 @@ def knapsack_dp(items: list[Item], capacity: int) -> tuple[int, list[Item]]:
     # Bottom-up table construction
     for i in range(1, n + 1):
         item = items[i - 1]
-        item_weight = getattr(item, 'weight', getattr(item, 'peso', 0))
-        item_value = getattr(item, 'value', getattr(item, 'valor', 0))
+        item_weight = _extract_weight(item)
+        item_value = _extract_value(item)
 
         for w in range(capacity + 1):
             val_without = dp[i - 1][w]
@@ -57,14 +91,14 @@ def knapsack_dp(items: list[Item], capacity: int) -> tuple[int, list[Item]]:
 
     # Optimal solution reconstruction
     optimal_value = dp[n][capacity]
-    selected_items: list[Item] = []
+    selected_items: list = []
     remaining_capacity = capacity
 
     for i in range(n, 0, -1):
         if dp[i][remaining_capacity] != dp[i - 1][remaining_capacity]:
             included = items[i - 1]
             selected_items.append(included)
-            inc_weight = getattr(included, 'weight', getattr(included, 'peso', 0))
+            inc_weight = _extract_weight(included)
             remaining_capacity -= inc_weight
 
     selected_items.reverse()

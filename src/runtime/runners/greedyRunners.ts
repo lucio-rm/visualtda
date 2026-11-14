@@ -96,13 +96,32 @@ export const greedyRunners: Record<string, PythonTestStrategy> = {
               };
             }
 
-            const tupleRes = res.result as [number, { id?: string; itemId?: string; fraccion?: number; fraction?: number }[]];
+            const tupleRes = res.result as [number, unknown[]];
             const totalVal = Array.isArray(tupleRes) ? tupleRes[0] : null;
             const rawAssignments = Array.isArray(tupleRes) && Array.isArray(tupleRes[1]) ? tupleRes[1] : [];
-            const assignments: FractionalAssignment[] = rawAssignments.map((a) => ({
-              itemId: a.itemId || a.id || '',
-              fraction: a.fraction ?? a.fraccion ?? 1.0
-            }));
+            const assignments: FractionalAssignment[] = rawAssignments.map((a: any) => {
+              if (Array.isArray(a)) {
+                const item = a[0];
+                const fraction = typeof a[1] === 'number' ? a[1] : 1.0;
+                const itemId = Array.isArray(item)
+                  ? String(item[0])
+                  : typeof item === 'object' && item !== null
+                    ? String(item.id || item.itemId || item.name || item.nombre || '')
+                    : String(item ?? '');
+                return { itemId, fraction };
+              }
+              const itemId = String(
+                a.itemId ||
+                a.id ||
+                (typeof a.item === 'object' && a.item !== null
+                  ? a.item.id || a.item.itemId || a.item.name || a.item.nombre
+                  : '') ||
+                (Array.isArray(a.item) ? a.item[0] : '') ||
+                ''
+              );
+              const fraction = typeof a.fraction === 'number' ? a.fraction : typeof a.fraccion === 'number' ? a.fraccion : 1.0;
+              return { itemId, fraction };
+            });
 
             const originalItems: KnapsackItem[] = items.map((it) => ({
               id: it.id,
