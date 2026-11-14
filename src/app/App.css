@@ -3117,4 +3117,58 @@ select option,
   color: var(--success-contrast);
 }
 
+/* Responsive Flex/Grid Child Containment for Understand & Visualizer Views */
+.app-layout,
+main#main-content,
+.exercise-view-wrapper,
+.phase-view {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.trace-controls,
+.trace-scrubber,
+.timeline-controls-bar,
+.timeline-scrubber-group {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.understand-view,
+.understand-grid,
+.understand-grid > *,
+.card-panel,
+.complexity-dashboard-panel,
+.theory-card,
+.theory-body,
+.understand-visualizer-container {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.theory-body pre,
+.canonical-code-display {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.theory-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .card-panel,
+  .complexity-dashboard-panel,
+  .road-antennas-visualizer {
+    padding: 1rem;
+  }
+  .complexity-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 

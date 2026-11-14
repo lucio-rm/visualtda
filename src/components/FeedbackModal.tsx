@@ -248,7 +248,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+          <form onSubmit={handleSend} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
             {validationError && (
               <div
                 role="alert"
