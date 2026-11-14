@@ -187,15 +187,15 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 3px solid #d97706;
-  color: #b45309;
+  background: var(--state-candidate-bg);
+  border: 2px solid var(--warning);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-xs);
   user-select: none;
   transition: transform 0.15s, box-shadow 0.15s;
 }

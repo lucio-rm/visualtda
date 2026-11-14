@@ -55,7 +55,6 @@
 .task-bar-interactive.conflict rect {
   stroke: var(--error);
   stroke-width: 2px;
-  filter: drop-shadow(0 0 4px var(--state-conflict-bg));
 }
 
 .task-bar-interactive:focus-visible {

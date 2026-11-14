@@ -25,7 +25,7 @@ const ITEM_PALETTE = [
   { bg: 'var(--state-solution-bg)', border: 'var(--success)', text: 'var(--text)', badge: 'var(--success)' }, // Emerald
   { bg: 'var(--state-candidate-bg)', border: 'var(--warning)', text: 'var(--text)', badge: 'var(--warning)' }, // Amber
   { bg: 'rgba(2, 132, 199, 0.12)', border: '#0284c7', text: 'var(--text)', badge: '#0284c7' }, // Sky
-  { bg: 'rgba(139, 92, 246, 0.12)', border: '#8b5cf6', text: 'var(--text)', badge: '#8b5cf6' }, // Violet
+  { bg: 'rgba(13, 148, 136, 0.12)', border: '#0d9488', text: 'var(--text)', badge: '#0d9488' }, // Teal
   { bg: 'rgba(244, 63, 94, 0.12)', border: '#f43f5e', text: 'var(--text)', badge: '#f43f5e' }, // Rose
   { bg: 'rgba(6, 182, 212, 0.12)', border: '#06b6d4', text: 'var(--text)', badge: '#06b6d4' }, // Cyan
   { bg: 'rgba(234, 88, 12, 0.12)', border: '#ea580c', text: 'var(--text)', badge: '#ea580c' }, // Orange

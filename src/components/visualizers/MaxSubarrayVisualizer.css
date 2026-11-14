@@ -130,14 +130,14 @@
 }
 
 .subarray-cell.left-scan {
-  border-color: #8b5cf6;
-  background-color: rgba(139, 92, 246, 0.15);
+  border-color: var(--accent);
+  background-color: var(--state-candidate-bg);
   transform: translateY(-4px);
 }
 
 .subarray-cell.right-scan {
-  border-color: #ec4899;
-  background-color: rgba(236, 72, 153, 0.15);
+  border-color: #0d9488;
+  background-color: rgba(13, 148, 136, 0.14);
   transform: translateY(-4px);
 }
 
@@ -165,7 +165,7 @@
 }
 
 .candidate-card.left-box {
-  border-left: 4px solid #8b5cf6;
+  border-left: 4px solid var(--accent);
 }
 
 .candidate-card.cross-box {
@@ -173,7 +173,7 @@
 }
 
 .candidate-card.right-box {
-  border-left: 4px solid #ec4899;
+  border-left: 4px solid #0d9488;
 }
 
 .cand-title {

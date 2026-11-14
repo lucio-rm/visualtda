@@ -36,7 +36,7 @@
 .action-init { border-left-color: #64748b; }
 .action-sort_deadlines { border-left-color: var(--accent); }
 .action-schedule_job { border-left-color: var(--warning); }
-.action-evaluate_lateness { border-left-color: #ec4899; }
+.action-evaluate_lateness { border-left-color: #0d9488; }
 .action-complete { border-left-color: var(--success); }
 
 .ml-canvas-container {

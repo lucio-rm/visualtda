@@ -189,15 +189,6 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
               : 'SVG graphic visualization of Huffman binary tree with 0 and 1 branch edges'
           }
         >
-          <defs>
-            <filter id="huff-glow-selected" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="var(--warning)" floodOpacity="0.8" />
-            </filter>
-            <filter id="huff-glow-merged" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#3b82f6" floodOpacity="0.8" />
-            </filter>
-          </defs>
-
           {/* Edges */}
           {edges.map((edge) => {
             const midX = (edge.fromX + edge.toX) / 2;
@@ -247,7 +238,6 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
                   key={node.id}
                   className={`huff-leaf-group ${isSelected ? 'selected' : ''}`}
                   transform={`translate(${node.x}, ${node.y})`}
-                  filter={isSelected ? 'url(#huff-glow-selected)' : undefined}
                 >
                   {/* Leaf Card */}
                   <rect
@@ -298,7 +288,6 @@ export const HuffmanTreeSvg: React.FC<HuffmanTreeSvgProps> = ({
                 key={node.id}
                 className={`huff-internal-group ${isSelected ? 'selected' : ''} ${isMerged ? 'merged' : ''}`}
                 transform={`translate(${node.x}, ${node.y})`}
-                filter={isSelected ? 'url(#huff-glow-selected)' : isMerged ? 'url(#huff-glow-merged)' : undefined}
               >
                 <circle
                   cx={0}

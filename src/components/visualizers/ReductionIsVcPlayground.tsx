@@ -426,8 +426,8 @@ export const ReductionIsVcPlayground: React.FC = () => {
                 fillColor = 'var(--success)';
                 strokeColor = isConflict ? 'var(--error)' : '#059669';
               } else if (inVC) {
-                fillColor = '#8b5cf6';
-                strokeColor = '#7c3aed';
+                fillColor = 'var(--accent)';
+                strokeColor = 'var(--accent)';
               }
 
               return (
@@ -475,7 +475,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                       cy={pos.y}
                       r={28}
                       fill="none"
-                      stroke={inIS ? 'var(--success)' : '#8b5cf6'}
+                      stroke={inIS ? 'var(--success)' : 'var(--accent)'}
                       strokeWidth={2.5}
                       opacity={0.5}
                     />
@@ -508,7 +508,7 @@ export const ReductionIsVcPlayground: React.FC = () => {
                     x={pos.x}
                     y={pos.y - 25}
                     textAnchor="middle"
-                    fill={inIS ? 'var(--success)' : '#8b5cf6'}
+                    fill={inIS ? 'var(--success)' : 'var(--accent)'}
                     fontSize="13px"
                     fontWeight="800"
                     fontFamily="var(--font-mono)"

@@ -239,7 +239,7 @@ export const KaratsubaPlayground: React.FC = () => {
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--text)', background: 'var(--canvas-bg, var(--surface-light))', padding: '0.75rem 1rem', borderRadius: '6px', border: '1px solid var(--border)', lineHeight: 1.6 }}>
             <div>
-              <span style={{ color: '#8b5cf6', fontWeight: 700 }}>{language === 'es' ? 'Producto Cruzado P:' : 'Cross Product P:'}</span> ({x1} + {x0}) × ({y1} + {y0}) = {x1 + x0} × {y1 + y0} = <strong style={{ color: '#8b5cf6' }}>{zSum}</strong>
+              <span style={{ color: '#0d9488', fontWeight: 700 }}>{language === 'es' ? 'Producto Cruzado P:' : 'Cross Product P:'}</span> ({x1} + {x0}) × ({y1} + {y0}) = {x1 + x0} × {y1 + y0} = <strong style={{ color: '#0d9488' }}>{zSum}</strong>
             </div>
             <div style={{ marginTop: '0.35rem' }}>
               <span style={{ color: 'var(--warning)', fontWeight: 700 }}>{language === 'es' ? 'Término Medio z₁:' : 'Middle Term z₁:'}</span> P - z₂ - z₀ = {zSum} - {z2} - {z0} = <strong style={{ color: 'var(--warning)', fontSize: '1.05rem' }}>{z1}</strong>

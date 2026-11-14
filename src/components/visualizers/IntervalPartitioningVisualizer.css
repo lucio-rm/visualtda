@@ -37,7 +37,7 @@
 .action-sort_intervals { border-left-color: var(--accent); }
 .action-examine_interval { border-left-color: var(--warning); }
 .action-reuse_classroom { border-left-color: var(--success); }
-.action-open_new_classroom { border-left-color: #ec4899; }
+.action-open_new_classroom { border-left-color: #0d9488; }
 .action-complete { border-left-color: var(--success); }
 
 .ip-canvas-container {

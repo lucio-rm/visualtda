@@ -45,7 +45,7 @@
 .road-svg-container {
   width: 100%;
   overflow-x: auto;
-  background: radial-gradient(circle at 50% 50%, rgba(var(--color-primary-rgb, 59, 130, 246), 0.04) 0%, transparent 80%);
+  background: var(--canvas-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-4) var(--space-2);
@@ -54,8 +54,9 @@
 .road-svg {
   display: block;
   margin: 0 auto;
-  min-width: 600px;
+  width: 100%;
   max-width: 100%;
+  height: auto;
 }
 
 .road-legend {

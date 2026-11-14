@@ -100,8 +100,8 @@
 }
 
 .vertex-chip.current-eval {
-  border-color: #ec4899;
-  background-color: rgba(236, 72, 153, 0.1);
+  border-color: var(--warning);
+  background-color: var(--state-candidate-bg);
   transform: translateY(-2px);
 }
 

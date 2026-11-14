@@ -57,7 +57,6 @@
 .flow-edge-line.augmenting {
   stroke: var(--warning);
   stroke-width: 4.5;
-  filter: drop-shadow(0 0 5px var(--state-candidate-bg));
 }
 
 .flow-edge-line.mincut-crossing {
@@ -104,8 +103,8 @@
 }
 
 .graph-node-circle.sink {
-  stroke: #8b5cf6;
-  fill: rgba(139, 92, 246, 0.1);
+  stroke: var(--accent);
+  fill: var(--state-candidate-bg);
 }
 
 .graph-node-circle.in-cut-s {

@@ -46,8 +46,8 @@ const PRESET_INSTANCES: InstancePreset[] = [
       { id: 'm1', name: 'Algoritmos I', start: 9, end: 11, color: 'var(--accent)' },
       { id: 'm2', name: 'Sistemas Operativos', start: 9, end: 12, color: 'var(--warning)' },
       { id: 'm3', name: 'Redes de Datos', start: 10, end: 13, color: 'var(--success)' },
-      { id: 'm4', name: 'Bases de Datos', start: 10, end: 11.5, color: '#ec4899' },
-      { id: 'm5', name: 'Probabilidad y Estadística', start: 12, end: 14, color: '#a855f7' },
+      { id: 'm4', name: 'Bases de Datos', start: 10, end: 11.5, color: '#0d9488' },
+      { id: 'm5', name: 'Probabilidad y Estadística', start: 12, end: 14, color: '#0284c7' },
       { id: 'm6', name: 'Taller de Programación', start: 14, end: 17, color: '#06b6d4' }
     ]
   },
@@ -58,7 +58,7 @@ const PRESET_INSTANCES: InstancePreset[] = [
       { id: 's1', name: 'Clase Teórica A', start: 8, end: 10, color: 'var(--accent)' },
       { id: 's2', name: 'Clase Práctica B', start: 10, end: 12, color: 'var(--success)' },
       { id: 's3', name: 'Laboratorio C', start: 13, end: 15, color: 'var(--warning)' },
-      { id: 's4', name: 'Seminario D', start: 15, end: 17.5, color: '#ec4899' }
+      { id: 's4', name: 'Seminario D', start: 15, end: 17.5, color: '#0d9488' }
     ]
   }
 ];
