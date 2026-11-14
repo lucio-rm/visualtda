@@ -4,6 +4,7 @@ import { maxFlowValidator, FlowNetworkInput } from '../../engine/algorithms/maxF
 import { linearProgrammingValidator } from '../../engine/algorithms/linearProgrammingValidator';
 import { vertexCoverApproxValidator } from '../../engine/algorithms/vertexCoverApproxValidator';
 import { randomizedFairCoinValidator } from '../../engine/algorithms/randomizedFairCoinValidator';
+import { reductionIsVcValidator } from '../../engine/algorithms/reductionIsVcValidator';
 
 export const advancedRunners: Record<string, PythonTestStrategy> = {
   'max-flow': async (code, service) => {
@@ -207,8 +208,10 @@ export const advancedRunners: Record<string, PythonTestStrategy> = {
 
             const resRecovery = await service.executePython(code, 'transformar_solucion_vc_a_is', [vertices, ['B', 'C', 'E']]);
             const recoveredS = Array.isArray(resRecovery.result) ? resRecovery.result as string[] : [];
-            const isSet = new Set(recoveredS);
-            const passRecovery = resRecovery.success && isSet.size === 2 && isSet.has('A') && isSet.has('D');
+            const validation = reductionIsVcValidator.validate(
+              { vertices, edges, k },
+              { independentSet: recoveredS, vertexCover: ['B', 'C', 'E'], reductionKPrime: retKPrime ?? 0 }
+            );
 
             results.push({
               testId: 'py-reduction-recovery',
@@ -216,9 +219,9 @@ export const advancedRunners: Record<string, PythonTestStrategy> = {
                 es: 'Recuperación de solución: Reconstruye S = {A, D} a partir de C = {B, C, E}.',
                 en: 'Solution recovery: Reconstructs S = {A, D} from C = {B, C, E}.'
               },
-              passed: passRecovery,
+              passed: resRecovery.success && validation.valid,
               expected: 'S = {A, D}',
-              actual: JSON.stringify(recoveredS)
+              actual: validation.valid ? JSON.stringify(recoveredS) : validation.errors.join('; ')
             });
 
     const totalPassed = results.filter((r) => r.passed).length;

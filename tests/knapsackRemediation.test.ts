@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { knapsackGreedyValidator } from '../src/engine/algorithms/knapsackGreedyValidator';
-import { knapsackDpValidator } from '../src/engine/algorithms/knapsackDpValidator';
 import { greedyRunners } from '../src/runtime/runners/greedyRunners';
 import { dpRunners } from '../src/runtime/runners/dpRunners';
 import { PythonExecutionService } from '../src/runtime/pythonExecutionService';
